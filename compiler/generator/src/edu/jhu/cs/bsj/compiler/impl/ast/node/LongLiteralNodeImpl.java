@@ -124,8 +124,8 @@ public class LongLiteralNodeImpl extends LiteralNodeImpl<Long> implements LongLi
     {
         return factory.makeLongLiteralNode(
                 getValue(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

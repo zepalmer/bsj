@@ -141,8 +141,8 @@ public class TypeDeclarationListNodeImpl extends ListNodeImpl<TypeDeclarationNod
         
         return factory.makeTypeDeclarationListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

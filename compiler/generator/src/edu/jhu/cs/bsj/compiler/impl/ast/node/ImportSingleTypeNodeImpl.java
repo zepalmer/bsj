@@ -182,8 +182,8 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
     {
         return factory.makeImportSingleTypeNode(
                 getName()==null?null:getName().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

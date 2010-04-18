@@ -141,8 +141,8 @@ public class VariableListNodeImpl extends ListNodeImpl<VariableNode> implements 
         
         return factory.makeVariableListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

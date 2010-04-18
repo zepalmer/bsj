@@ -298,8 +298,8 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
                 getType()==null?null:getType().deepCopy(factory),
                 getName()==null?null:getName().deepCopy(factory),
                 getInitializer()==null?null:getInitializer().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

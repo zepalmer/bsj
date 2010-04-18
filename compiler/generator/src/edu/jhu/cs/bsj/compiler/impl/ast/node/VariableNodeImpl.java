@@ -296,8 +296,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
                 getModifiers()==null?null:getModifiers().deepCopy(factory),
                 getType()==null?null:getType().deepCopy(factory),
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

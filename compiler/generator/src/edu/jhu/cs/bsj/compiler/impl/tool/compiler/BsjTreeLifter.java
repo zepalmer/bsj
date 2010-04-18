@@ -318,10 +318,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTypeArguments() != null ?
                         node.getTypeArguments().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -330,8 +330,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftArguments,
                                 liftTypeArguments,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -344,10 +344,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotation() != null ?
                         node.getAnnotation().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -355,8 +355,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeAnnotationAnnotationValueNode"),
                         factory.makeExpressionListNode(
                                 liftAnnotation,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -369,10 +369,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getValues() != null ?
                         node.getValues().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -380,8 +380,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeAnnotationArrayValueNode"),
                         factory.makeExpressionListNode(
                                 liftValues,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -394,10 +394,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMembers() != null ?
                         node.getMembers().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -405,8 +405,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeAnnotationBodyNode"),
                         factory.makeExpressionListNode(
                                 liftMembers,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -431,10 +431,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -445,8 +445,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBody,
                                 liftIdentifier,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -463,10 +463,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -492,8 +492,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnnotationElementNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -510,10 +510,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getValue() != null ?
                         node.getValue().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -522,8 +522,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftIdentifier,
                                 liftValue,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -536,10 +536,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getExpression() != null ?
                         node.getExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -547,8 +547,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeAnnotationExpressionValueNode"),
                         factory.makeExpressionListNode(
                                 liftExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -565,10 +565,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -594,8 +594,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnnotationNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -612,10 +612,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -641,8 +641,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnnotationMemberNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -655,10 +655,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMetaprogram() != null ?
                         node.getMetaprogram().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -666,8 +666,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeAnnotationMemberMetaprogramAnchorNode"),
                         factory.makeExpressionListNode(
                                 liftMetaprogram,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -696,10 +696,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -711,8 +711,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftIdentifier,
                                 liftDefaultValue,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -729,10 +729,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -741,8 +741,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -765,10 +765,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -780,8 +780,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStrictfpFlagValue),
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -798,10 +798,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -827,8 +827,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnnotationValueNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -841,10 +841,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMembers() != null ?
                         node.getMembers().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -852,8 +852,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeAnonymousClassBodyNode"),
                         factory.makeExpressionListNode(
                                 liftMembers,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -870,10 +870,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -899,8 +899,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnonymousClassMemberNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -913,10 +913,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMetaprogram() != null ?
                         node.getMetaprogram().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -924,8 +924,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeAnonymousClassMemberMetaprogramAnchorNode"),
                         factory.makeExpressionListNode(
                                 liftMetaprogram,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -942,10 +942,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getIndexExpression() != null ?
                         node.getIndexExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -954,8 +954,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftArrayExpression,
                                 liftIndexExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -974,10 +974,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeNullLiteralNode();
         int liftArrayLevelsValue = 
                 node.getArrayLevels();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -987,8 +987,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftInitializer,
                                 liftBaseType,
                                 expressionizeInt(liftArrayLevelsValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1001,10 +1001,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getInitializers() != null ?
                         node.getInitializers().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1012,8 +1012,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeArrayInitializerNode"),
                         factory.makeExpressionListNode(
                                 liftInitializers,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1032,10 +1032,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeNullLiteralNode();
         int liftArrayLevelsValue = 
                 node.getArrayLevels();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1045,8 +1045,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftDimExpressions,
                                 liftBaseType,
                                 expressionizeInt(liftArrayLevelsValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1059,10 +1059,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getType() != null ?
                         node.getType().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1070,8 +1070,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeArrayTypeNode"),
                         factory.makeExpressionListNode(
                                 liftType,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1088,10 +1088,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMessageExpression() != null ?
                         node.getMessageExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1100,8 +1100,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftTestExpression,
                                 liftMessageExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1120,10 +1120,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getExpression() != null ?
                         node.getExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1133,8 +1133,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftVariable,
                                 expressionizeAssignmentOperator(liftOperatorValue),
                                 liftExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1153,10 +1153,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeNullLiteralNode();
         BinaryOperator liftOperatorValue = 
                 node.getOperator();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1166,8 +1166,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftLeftOperand,
                                 liftRightOperand,
                                 expressionizeBinaryOperator(liftOperatorValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1180,10 +1180,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStatements() != null ?
                         node.getStatements().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1191,8 +1191,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeBlockNode"),
                         factory.makeExpressionListNode(
                                 liftStatements,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1209,10 +1209,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1238,8 +1238,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("BlockStatementNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1252,10 +1252,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMetaprogram() != null ?
                         node.getMetaprogram().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1263,8 +1263,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeBlockStatementMetaprogramAnchorNode"),
                         factory.makeExpressionListNode(
                                 liftMetaprogram,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1275,10 +1275,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         Boolean liftValueValue = 
                 node.getValue();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1286,8 +1286,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeBooleanLiteralNode"),
                         factory.makeExpressionListNode(
                                 expressionizeBoolean(liftValueValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1300,10 +1300,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getLabel() != null ?
                         node.getLabel().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1311,8 +1311,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeBreakNode"),
                         factory.makeExpressionListNode(
                                 liftLabel,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1329,10 +1329,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1358,8 +1358,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("CaseNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1376,10 +1376,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStatements() != null ?
                         node.getStatements().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1388,8 +1388,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftExpression,
                                 liftStatements,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1406,10 +1406,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1435,8 +1435,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("CatchNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1453,10 +1453,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getParameter() != null ?
                         node.getParameter().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1465,8 +1465,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftBlock,
                                 liftParameter,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1477,10 +1477,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         Character liftValueValue = 
                 node.getValue();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1488,8 +1488,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeCharLiteralNode"),
                         factory.makeExpressionListNode(
                                 expressionizeCharacter(liftValueValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1502,10 +1502,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMembers() != null ?
                         node.getMembers().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1513,8 +1513,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeClassBodyNode"),
                         factory.makeExpressionListNode(
                                 liftMembers,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1551,10 +1551,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1568,8 +1568,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeParameters,
                                 liftIdentifier,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1582,10 +1582,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getValue() != null ?
                         node.getValue().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1593,8 +1593,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeClassLiteralNode"),
                         factory.makeExpressionListNode(
                                 liftValue,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1611,10 +1611,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1640,8 +1640,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("ClassMemberNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1654,10 +1654,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMetaprogram() != null ?
                         node.getMetaprogram().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1665,8 +1665,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeClassMemberMetaprogramAnchorNode"),
                         factory.makeExpressionListNode(
                                 liftMetaprogram,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1693,10 +1693,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1710,8 +1710,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStrictfpFlagValue),
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1724,10 +1724,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getValue() != null ?
                         node.getValue().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1735,8 +1735,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeCodeLiteralNode"),
                         factory.makeExpressionListNode(
                                 liftValue,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1763,10 +1763,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTypeDecls() != null ?
                         node.getTypeDecls().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1778,8 +1778,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMetaimports,
                                 liftImports,
                                 liftTypeDecls,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1800,10 +1800,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getFalseExpression() != null ?
                         node.getFalseExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1813,8 +1813,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftCondition,
                                 liftTrueExpression,
                                 liftFalseExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1831,10 +1831,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStatements() != null ?
                         node.getStatements().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1843,8 +1843,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftConstructorInvocation,
                                 liftStatements,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1885,10 +1885,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1903,8 +1903,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftThrowTypes,
                                 liftTypeParameters,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1923,10 +1923,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1936,8 +1936,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeAccessModifier(liftAccessValue),
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1950,10 +1950,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getLabel() != null ?
                         node.getLabel().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -1961,8 +1961,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeContinueNode"),
                         factory.makeExpressionListNode(
                                 liftLabel,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -1979,10 +1979,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2008,8 +2008,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("DeclaredTypeNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2026,10 +2026,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStatement() != null ?
                         node.getStatement().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2038,8 +2038,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftCondition,
                                 liftStatement,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2050,10 +2050,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         Double liftValueValue = 
                 node.getValue();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2061,8 +2061,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeDoubleLiteralNode"),
                         factory.makeExpressionListNode(
                                 expressionizeDouble(liftValueValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2083,10 +2083,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStatement() != null ?
                         node.getStatement().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2096,8 +2096,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftVariable,
                                 liftExpression,
                                 liftStatement,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2114,10 +2114,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMembers() != null ?
                         node.getMembers().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2126,8 +2126,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftConstants,
                                 liftMembers,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2144,10 +2144,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2173,8 +2173,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("EnumConstantDeclarationNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2207,10 +2207,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2223,8 +2223,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftArguments,
                                 liftBody,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2253,10 +2253,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2268,8 +2268,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBody,
                                 liftIdentifier,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2290,10 +2290,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2304,8 +2304,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStrictfpFlagValue),
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2322,10 +2322,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2351,8 +2351,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("ExpressionNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2365,10 +2365,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getExpression() != null ?
                         node.getExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2376,8 +2376,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeExpressionStatementNode"),
                         factory.makeExpressionListNode(
                                 liftExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2394,10 +2394,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getIdentifier() != null ?
                         node.getIdentifier().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2406,8 +2406,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftExpression,
                                 liftIdentifier,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2420,10 +2420,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2431,8 +2431,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeFieldAccessByNameNode"),
                         factory.makeExpressionListNode(
                                 liftName,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2453,10 +2453,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2466,8 +2466,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftModifiers,
                                 liftDeclarators,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2494,10 +2494,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2511,8 +2511,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftVolatileFlagValue),
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2523,10 +2523,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         Float liftValueValue = 
                 node.getValue();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2534,8 +2534,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeFloatLiteralNode"),
                         factory.makeExpressionListNode(
                                 expressionizeFloat(liftValueValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2548,10 +2548,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getDeclaration() != null ?
                         node.getDeclaration().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2559,8 +2559,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeForInitializerDeclarationNode"),
                         factory.makeExpressionListNode(
                                 liftDeclaration,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2573,10 +2573,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getExpressions() != null ?
                         node.getExpressions().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2584,8 +2584,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeForInitializerExpressionNode"),
                         factory.makeExpressionListNode(
                                 liftExpressions,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2610,10 +2610,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStatement() != null ?
                         node.getStatement().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2624,8 +2624,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftCondition,
                                 liftUpdate,
                                 liftStatement,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2642,10 +2642,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2671,8 +2671,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("IdentifierNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2683,10 +2683,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         String liftIdentifierValue = 
                 node.getIdentifier();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2694,8 +2694,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeIdentifierNode"),
                         factory.makeExpressionListNode(
                                 expressionizeString(liftIdentifierValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2716,10 +2716,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getElseStatement() != null ?
                         node.getElseStatement().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2729,8 +2729,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftCondition,
                                 liftThenStatement,
                                 liftElseStatement,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2747,10 +2747,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2776,8 +2776,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("ImportNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2790,10 +2790,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2801,8 +2801,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeImportOnDemandNode"),
                         factory.makeExpressionListNode(
                                 liftName,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2815,10 +2815,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2826,8 +2826,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeImportSingleTypeNode"),
                         factory.makeExpressionListNode(
                                 liftName,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2842,10 +2842,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getBody() != null ?
                         node.getBody().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2854,8 +2854,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 expressionizeBoolean(liftStaticInitializerValue),
                                 liftBody,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2868,10 +2868,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getDeclaration() != null ?
                         node.getDeclaration().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2879,8 +2879,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeInlineTypeDeclarationNode"),
                         factory.makeExpressionListNode(
                                 liftDeclaration,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2897,10 +2897,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getType() != null ?
                         node.getType().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2909,8 +2909,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftExpression,
                                 liftType,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2921,10 +2921,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         Integer liftValueValue = 
                 node.getValue();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2932,8 +2932,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeIntLiteralNode"),
                         factory.makeExpressionListNode(
                                 expressionizeInteger(liftValueValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2946,10 +2946,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMembers() != null ?
                         node.getMembers().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -2957,8 +2957,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeInterfaceBodyNode"),
                         factory.makeExpressionListNode(
                                 liftMembers,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -2991,10 +2991,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3007,8 +3007,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeParameters,
                                 liftIdentifier,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3025,10 +3025,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3054,8 +3054,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("InterfaceMemberNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3068,10 +3068,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMetaprogram() != null ?
                         node.getMetaprogram().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3079,8 +3079,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeInterfaceMemberMetaprogramAnchorNode"),
                         factory.makeExpressionListNode(
                                 liftMetaprogram,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3103,10 +3103,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3118,8 +3118,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStrictfpFlagValue),
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3130,10 +3130,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         String liftTextValue = 
                 node.getText();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3141,8 +3141,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeJavadocNode"),
                         factory.makeExpressionListNode(
                                 expressionizeString(liftTextValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3159,10 +3159,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStatement() != null ?
                         node.getStatement().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3171,8 +3171,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftLabel,
                                 liftStatement,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3183,10 +3183,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         Long liftValueValue = 
                 node.getValue();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3194,8 +3194,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeLongLiteralNode"),
                         factory.makeExpressionListNode(
                                 expressionizeLong(liftValueValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3208,10 +3208,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getValues() != null ?
                         node.getValues().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3219,8 +3219,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeMetaAnnotationArrayValueNode"),
                         factory.makeExpressionListNode(
                                 liftValues,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3237,10 +3237,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3266,8 +3266,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("MetaAnnotationElementNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3284,10 +3284,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getValue() != null ?
                         node.getValue().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3296,8 +3296,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftIdentifier,
                                 liftValue,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3310,10 +3310,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getExpression() != null ?
                         node.getExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3321,8 +3321,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeMetaAnnotationExpressionValueNode"),
                         factory.makeExpressionListNode(
                                 liftExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3339,10 +3339,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3368,8 +3368,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("MetaAnnotationNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3382,10 +3382,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotation() != null ?
                         node.getAnnotation().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3393,8 +3393,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeMetaAnnotationMetaAnnotationValueNode"),
                         factory.makeExpressionListNode(
                                 liftAnnotation,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3403,18 +3403,18 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     @Override
     public ExpressionNode executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeMetaAnnotationMetaprogramAnchorNode"),
                         factory.makeExpressionListNode(
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3431,10 +3431,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3460,8 +3460,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("MetaAnnotationValueNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3474,10 +3474,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTargetNames() != null ?
                         node.getTargetNames().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3485,8 +3485,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeMetaprogramDependsNode"),
                         factory.makeExpressionListNode(
                                 liftTargetNames,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3503,10 +3503,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3532,8 +3532,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("MetaprogramImportNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3546,10 +3546,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getImportNode() != null ?
                         node.getImportNode().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3557,8 +3557,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeMetaprogramImportNode"),
                         factory.makeExpressionListNode(
                                 liftImportNode,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3575,10 +3575,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getBody() != null ?
                         node.getBody().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3587,8 +3587,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftPreamble,
                                 liftBody,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3613,10 +3613,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getDepends() != null ?
                         node.getDepends().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3628,8 +3628,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeMetaprogramPackageMode(liftPackageModeValue),
                                 liftTarget,
                                 liftDepends,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3642,10 +3642,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTargets() != null ?
                         node.getTargets().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3653,8 +3653,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeMetaprogramTargetNode"),
                         factory.makeExpressionListNode(
                                 liftTargets,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3699,10 +3699,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getJavadoc() != null ?
                         node.getJavadoc().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3718,8 +3718,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftThrowTypes,
                                 liftTypeParameters,
                                 liftJavadoc,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3744,10 +3744,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTypeArguments() != null ?
                         node.getTypeArguments().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3758,8 +3758,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftIdentifier,
                                 liftArguments,
                                 liftTypeArguments,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3780,10 +3780,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTypeArguments() != null ?
                         node.getTypeArguments().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3793,8 +3793,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftName,
                                 liftArguments,
                                 liftTypeArguments,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3825,10 +3825,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3844,8 +3844,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStrictfpFlagValue),
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3862,10 +3862,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3891,8 +3891,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("NameNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3901,18 +3901,18 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     @Override
     public ExpressionNode executeNoOperationNode(NoOperationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeNoOperationNode"),
                         factory.makeExpressionListNode(
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3929,10 +3929,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotationType() != null ?
                         node.getAnnotationType().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3941,8 +3941,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftArguments,
                                 liftAnnotationType,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3959,10 +3959,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotationType() != null ?
                         node.getAnnotationType().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -3971,8 +3971,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftArguments,
                                 liftAnnotationType,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -3981,18 +3981,18 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     @Override
     public ExpressionNode executeNullLiteralNode(NullLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeNullLiteralNode"),
                         factory.makeExpressionListNode(
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4013,10 +4013,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4026,8 +4026,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftName,
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4040,10 +4040,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4051,8 +4051,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makePackageNode"),
                         factory.makeExpressionListNode(
                                 liftName,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4069,10 +4069,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTypeArguments() != null ?
                         node.getTypeArguments().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4081,8 +4081,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftBaseType,
                                 liftTypeArguments,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4099,10 +4099,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getSelect() != null ?
                         node.getSelect().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4111,8 +4111,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftBase,
                                 liftSelect,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4125,10 +4125,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getExpression() != null ?
                         node.getExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4136,8 +4136,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeParenthesizedExpressionNode"),
                         factory.makeExpressionListNode(
                                 liftExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4148,10 +4148,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         PrimitiveType liftPrimitiveTypeValue = 
                 node.getPrimitiveType();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4159,8 +4159,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makePrimitiveTypeNode"),
                         factory.makeExpressionListNode(
                                 expressionizePrimitiveType(liftPrimitiveTypeValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4193,10 +4193,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getBody() != null ?
                         node.getBody().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4209,8 +4209,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftConstructorTypeArguments,
                                 liftArguments,
                                 liftBody,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4229,10 +4229,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeNullLiteralNode();
         NameCategory liftCategoryValue = 
                 node.getCategory();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4242,8 +4242,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBase,
                                 liftIdentifier,
                                 expressionizeNameCategory(liftCategoryValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4260,10 +4260,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4289,8 +4289,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("ReferenceTypeNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4303,10 +4303,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getExpression() != null ?
                         node.getExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4314,8 +4314,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeReturnNode"),
                         factory.makeExpressionListNode(
                                 liftExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4330,10 +4330,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeNullLiteralNode();
         NameCategory liftCategoryValue = 
                 node.getCategory();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4342,8 +4342,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftIdentifier,
                                 expressionizeNameCategory(liftCategoryValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4360,10 +4360,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotationType() != null ?
                         node.getAnnotationType().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4372,8 +4372,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftValue,
                                 liftAnnotationType,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4390,10 +4390,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotationType() != null ?
                         node.getAnnotationType().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4402,8 +4402,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftValue,
                                 liftAnnotationType,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4420,10 +4420,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getIdentifier() != null ?
                         node.getIdentifier().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4432,8 +4432,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftName,
                                 liftIdentifier,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4450,10 +4450,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4479,8 +4479,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("StatementExpressionNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4493,10 +4493,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4504,8 +4504,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeStaticImportOnDemandNode"),
                         factory.makeExpressionListNode(
                                 liftName,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4516,10 +4516,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         String liftValueValue = 
                 node.getValue();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4527,8 +4527,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeStringLiteralNode"),
                         factory.makeExpressionListNode(
                                 expressionizeString(liftValueValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4545,10 +4545,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getIdentifier() != null ?
                         node.getIdentifier().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4557,8 +4557,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftType,
                                 liftIdentifier,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4583,10 +4583,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTypeArguments() != null ?
                         node.getTypeArguments().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4597,8 +4597,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftIdentifier,
                                 liftArguments,
                                 liftTypeArguments,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4619,10 +4619,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTypeArguments() != null ?
                         node.getTypeArguments().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4632,8 +4632,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftQualifyingExpression,
                                 liftArguments,
                                 liftTypeArguments,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4650,10 +4650,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getCases() != null ?
                         node.getCases().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4662,8 +4662,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftExpression,
                                 liftCases,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4680,10 +4680,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getBlock() != null ?
                         node.getBlock().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4692,8 +4692,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftExpression,
                                 liftBlock,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4706,10 +4706,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getType() != null ?
                         node.getType().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4717,8 +4717,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeThisNode"),
                         factory.makeExpressionListNode(
                                 liftType,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4731,10 +4731,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getExpression() != null ?
                         node.getExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4742,8 +4742,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeThrowNode"),
                         factory.makeExpressionListNode(
                                 liftExpression,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4764,10 +4764,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getFinallyBlock() != null ?
                         node.getFinallyBlock().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4777,8 +4777,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBlock,
                                 liftCatches,
                                 liftFinallyBlock,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4795,10 +4795,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4824,8 +4824,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("TypeArgumentNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4842,10 +4842,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getType() != null ?
                         node.getType().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4854,8 +4854,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftExpression,
                                 liftType,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4872,10 +4872,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4901,8 +4901,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("TypeDeclarationNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4915,10 +4915,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getMetaprogram() != null ?
                         node.getMetaprogram().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4926,8 +4926,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeTypeDeclarationMetaprogramAnchorNode"),
                         factory.makeExpressionListNode(
                                 liftMetaprogram,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4944,10 +4944,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -4973,8 +4973,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("TypeParameterNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -4991,10 +4991,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getBounds() != null ?
                         node.getBounds().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5003,8 +5003,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftIdentifier,
                                 liftBounds,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5019,10 +5019,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeNullLiteralNode();
         UnaryOperator liftOperatorValue = 
                 node.getOperator();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5031,8 +5031,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftExpression,
                                 expressionizeUnaryOperator(liftOperatorValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5047,10 +5047,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeNullLiteralNode();
         UnaryStatementOperator liftOperatorValue = 
                 node.getOperator();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5059,8 +5059,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftExpression,
                                 expressionizeUnaryStatementOperator(liftOperatorValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5077,10 +5077,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5106,8 +5106,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("UnparameterizedTypeNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5120,10 +5120,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5131,8 +5131,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeUnparameterizedTypeNode"),
                         factory.makeExpressionListNode(
                                 liftName,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5157,10 +5157,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getBody() != null ?
                         node.getBody().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5171,8 +5171,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftConstructorTypeArguments,
                                 liftArguments,
                                 liftBody,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5189,10 +5189,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getDeclarators() != null ?
                         node.getDeclarators().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5201,8 +5201,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftModifiers,
                                 liftDeclarators,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5219,10 +5219,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5248,8 +5248,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("VariableDeclaratorNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5270,10 +5270,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getInitializer() != null ?
                         node.getInitializer().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5283,8 +5283,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftType,
                                 liftName,
                                 liftInitializer,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5301,10 +5301,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5330,8 +5330,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("VariableInitializerNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5348,10 +5348,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         			        listval.executeOperation(this,factoryNode) :
                             null);
         }
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5377,8 +5377,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("VariableNode"),
                                                                 NameCategory.TYPE)))),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5397,10 +5397,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5410,8 +5410,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftFinalFlagValue),
                                 liftMetaAnnotations,
                                 liftAnnotations,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5432,10 +5432,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getIdentifier() != null ?
                         node.getIdentifier().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5445,8 +5445,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftModifiers,
                                 liftType,
                                 liftIdentifier,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5455,18 +5455,18 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     @Override
     public ExpressionNode executeVoidTypeNode(VoidTypeNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeVoidTypeNode"),
                         factory.makeExpressionListNode(
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5483,10 +5483,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStatement() != null ?
                         node.getStatement().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5495,8 +5495,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftCondition,
                                 liftStatement,
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;
@@ -5511,10 +5511,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeNullLiteralNode();
         boolean liftUpperBoundValue = 
                 node.getUpperBound();
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
         
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
@@ -5523,8 +5523,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftBound,
                                 expressionizeBoolean(liftUpperBoundValue),
-                                liftStartLocationMetaClone,
-                                liftStopLocationMetaClone),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
         
         return ret;

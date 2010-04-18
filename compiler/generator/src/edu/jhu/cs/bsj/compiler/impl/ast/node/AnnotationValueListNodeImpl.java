@@ -141,8 +141,8 @@ public class AnnotationValueListNodeImpl extends ListNodeImpl<AnnotationValueNod
         
         return factory.makeAnnotationValueListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

@@ -141,8 +141,8 @@ public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> i
         
         return factory.makeReferenceTypeListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

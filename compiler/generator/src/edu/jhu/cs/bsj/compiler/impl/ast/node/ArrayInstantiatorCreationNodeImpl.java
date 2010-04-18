@@ -193,8 +193,8 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
                 getDimExpressions()==null?null:getDimExpressions().deepCopy(factory),
                 getBaseType()==null?null:getBaseType().deepCopy(factory),
                 getArrayLevels(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

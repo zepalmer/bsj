@@ -339,8 +339,8 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
                 getBody()==null?null:getBody().deepCopy(factory),
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getJavadoc()==null?null:getJavadoc().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

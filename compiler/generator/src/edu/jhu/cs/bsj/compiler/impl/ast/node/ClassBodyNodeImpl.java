@@ -182,8 +182,8 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     {
         return factory.makeClassBodyNode(
                 getMembers()==null?null:getMembers().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

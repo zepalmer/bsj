@@ -414,8 +414,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getDefaultValue()==null?null:getDefaultValue().deepCopy(factory),
                 getJavadoc()==null?null:getJavadoc().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

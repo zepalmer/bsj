@@ -223,8 +223,8 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         return factory.makeWildcardTypeNode(
                 getBound()==null?null:getBound().deepCopy(factory),
                 getUpperBound(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

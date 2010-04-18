@@ -182,8 +182,8 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     {
         return factory.makeThisNode(
                 getType()==null?null:getType().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

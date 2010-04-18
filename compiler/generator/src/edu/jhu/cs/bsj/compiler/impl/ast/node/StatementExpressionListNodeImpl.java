@@ -141,8 +141,8 @@ public class StatementExpressionListNodeImpl extends ListNodeImpl<StatementExpre
         
         return factory.makeStatementExpressionListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

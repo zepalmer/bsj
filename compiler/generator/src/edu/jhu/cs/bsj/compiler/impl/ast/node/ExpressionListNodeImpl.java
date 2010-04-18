@@ -141,8 +141,8 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
         
         return factory.makeExpressionListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

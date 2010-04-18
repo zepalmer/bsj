@@ -124,8 +124,8 @@ public class StringLiteralNodeImpl extends LiteralNodeImpl<String> implements St
     {
         return factory.makeStringLiteralNode(
                 getValue(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

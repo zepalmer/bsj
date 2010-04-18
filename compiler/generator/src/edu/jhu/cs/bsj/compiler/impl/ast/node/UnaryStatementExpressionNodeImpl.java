@@ -226,8 +226,8 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
         return factory.makeUnaryStatementExpressionNode(
                 getExpression()==null?null:getExpression().deepCopy(factory),
                 getOperator(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

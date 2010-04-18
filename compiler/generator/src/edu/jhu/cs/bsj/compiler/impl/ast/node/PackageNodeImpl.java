@@ -176,8 +176,8 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     {
         return factory.makePackageNode(
                 getName()==null?null:getName().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

@@ -184,8 +184,8 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     {
         return factory.makeArrayTypeNode(
                 getType()==null?null:getType().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

@@ -304,8 +304,8 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
                 getModifiers()==null?null:getModifiers().deepCopy(factory),
                 getDeclarators()==null?null:getDeclarators().deepCopy(factory),
                 getJavadoc()==null?null:getJavadoc().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

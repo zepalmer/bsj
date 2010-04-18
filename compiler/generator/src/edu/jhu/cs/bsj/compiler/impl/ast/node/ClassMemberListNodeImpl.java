@@ -141,8 +141,8 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
         
         return factory.makeClassMemberListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

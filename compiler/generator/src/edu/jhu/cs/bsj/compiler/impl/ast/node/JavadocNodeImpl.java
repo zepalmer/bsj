@@ -163,8 +163,8 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     {
         return factory.makeJavadocNode(
                 getText(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

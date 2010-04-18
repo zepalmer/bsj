@@ -240,8 +240,8 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         return factory.makeEnumBodyNode(
                 getConstants()==null?null:getConstants().deepCopy(factory),
                 getMembers()==null?null:getMembers().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

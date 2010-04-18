@@ -141,8 +141,8 @@ public class CaseListNodeImpl extends ListNodeImpl<CaseNode> implements CaseList
         
         return factory.makeCaseListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

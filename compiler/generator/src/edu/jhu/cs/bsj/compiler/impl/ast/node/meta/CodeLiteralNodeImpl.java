@@ -125,8 +125,8 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     {
         return factory.makeCodeLiteralNode(
                 getValue()==null?null:getValue().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

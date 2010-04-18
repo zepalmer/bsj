@@ -381,8 +381,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
                 getPackageMode(),
                 getTarget()==null?null:getTarget().deepCopy(factory),
                 getDepends()==null?null:getDepends().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

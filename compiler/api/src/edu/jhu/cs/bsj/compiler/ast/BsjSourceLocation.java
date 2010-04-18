@@ -5,8 +5,6 @@ package edu.jhu.cs.bsj.compiler.ast;
  * 
  * @author Zachary Palmer
  */
-// TODO: create an abstraction.  The sibling to this class would be one that indicates "generated from", such as when
-// a metaprogram generates code and inserts it into the AST.
 public class BsjSourceLocation implements Comparable<BsjSourceLocation>, Cloneable
 {
 	/**
@@ -28,6 +26,13 @@ public class BsjSourceLocation implements Comparable<BsjSourceLocation>, Cloneab
 	 */
 	private int column;
 
+	/**
+	 * Creates a new source location.
+	 * 
+	 * @param resourceName The name of the resource.
+	 * @param line The line number of this location.
+	 * @param column The column number of this location.
+	 */
 	public BsjSourceLocation(String resourceName, int line, int column)
 	{
 		super();
@@ -82,6 +87,40 @@ public class BsjSourceLocation implements Comparable<BsjSourceLocation>, Cloneab
 		if (getColumn() > o.getColumn())
 			return 1;
 		return 0;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + column;
+		result = prime * result + line;
+		result = prime * result + ((resourceName == null) ? 0 : resourceName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BsjSourceLocation other = (BsjSourceLocation) obj;
+		if (column != other.column)
+			return false;
+		if (line != other.line)
+			return false;
+		if (resourceName == null)
+		{
+			if (other.resourceName != null)
+				return false;
+		} else if (!resourceName.equals(other.resourceName))
+			return false;
+		return true;
 	}
 
 	@Override

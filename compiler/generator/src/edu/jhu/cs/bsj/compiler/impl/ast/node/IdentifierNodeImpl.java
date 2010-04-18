@@ -153,8 +153,8 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     {
         return factory.makeIdentifierNode(
                 getIdentifier(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

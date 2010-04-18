@@ -182,8 +182,8 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     {
         return factory.makeAnonymousClassBodyNode(
                 getMembers()==null?null:getMembers().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

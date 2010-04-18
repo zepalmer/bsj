@@ -142,8 +142,8 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
         
         return factory.makeMetaAnnotationValueListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

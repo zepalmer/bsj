@@ -240,8 +240,8 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         return factory.makeParameterizedTypeNode(
                 getBaseType()==null?null:getBaseType().deepCopy(factory),
                 getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

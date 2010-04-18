@@ -182,8 +182,8 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     {
         return factory.makeBlockNode(
                 getStatements()==null?null:getStatements().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

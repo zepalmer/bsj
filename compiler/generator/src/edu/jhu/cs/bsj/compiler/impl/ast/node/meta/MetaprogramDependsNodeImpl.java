@@ -181,8 +181,8 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
     {
         return factory.makeMetaprogramDependsNode(
                 getTargetNames()==null?null:getTargetNames().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

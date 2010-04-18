@@ -127,8 +127,8 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         return factory.makeSimpleNameNode(
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getCategory(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

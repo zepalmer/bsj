@@ -121,8 +121,8 @@ public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
     public NoOperationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeNoOperationNode(
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

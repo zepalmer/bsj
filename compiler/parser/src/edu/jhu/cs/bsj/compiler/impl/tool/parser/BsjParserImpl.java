@@ -43,27 +43,22 @@ public class BsjParserImpl implements BsjParser
 	}
 
 	/**
-	 * This method generates a BSJ heterogeneous AST from the provided source stream.
-	 * 
-	 * @param name The name of the compilation unit being parsed.
-	 * @param reader The {@link Reader} to use to read the input file.
-	 * @param diagnosticListener The listener to which diagnostics are reported. If <code>null</code>, a default
-	 *            listener is used which reports messages to standard error.
-	 * @throws IOException If an I/O error occurs.
+	 * {@inheritDoc}
 	 */
-	public CompilationUnitNode parse(String name, Reader reader, DiagnosticListener<BsjSourceLocation> diagnosticListener)
-			throws IOException
+	public CompilationUnitNode parse(String name, Reader reader,
+			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException
 	{
-		if (diagnosticListener==null)
+		if (diagnosticListener == null)
 		{
 			diagnosticListener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
 		}
 		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRReaderStream(new JavaUnicodeEscapeReader(reader)));
 		lexer.setDiagnosticListener(diagnosticListener);
+		lexer.setResourceName(name);
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
 		parser.setDiagnosticListener(diagnosticListener);
-		parser.setFactory(factory);
 		parser.setResourceName(name);
+		parser.setFactory(factory);
 
 		CompilationUnitNode compilationUnitNode;
 		try
@@ -71,7 +66,7 @@ public class BsjParserImpl implements BsjParser
 			compilationUnitNode = parser.compilationUnit(name);
 		} catch (RecognitionException re)
 		{
-			throw new RuntimeException(re); // throw an exception of our own instead (to avoid passing ANTLR deps)
+			throw new RuntimeException(re); // TODO: throw an exception of our own instead (to avoid passing ANTLR deps)
 		}
 
 		return compilationUnitNode;

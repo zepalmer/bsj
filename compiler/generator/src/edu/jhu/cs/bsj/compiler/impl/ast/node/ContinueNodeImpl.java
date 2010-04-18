@@ -182,8 +182,8 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     {
         return factory.makeContinueNode(
                 getLabel()==null?null:getLabel().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

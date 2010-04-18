@@ -342,8 +342,8 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
                 getVolatileFlag(),
                 getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getAnnotations()==null?null:getAnnotations().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

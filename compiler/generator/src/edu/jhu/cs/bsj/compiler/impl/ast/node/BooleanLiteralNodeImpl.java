@@ -124,8 +124,8 @@ public class BooleanLiteralNodeImpl extends LiteralNodeImpl<Boolean> implements 
     {
         return factory.makeBooleanLiteralNode(
                 getValue(),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

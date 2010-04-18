@@ -141,8 +141,8 @@ public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberN
         
         return factory.makeAnnotationMemberListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

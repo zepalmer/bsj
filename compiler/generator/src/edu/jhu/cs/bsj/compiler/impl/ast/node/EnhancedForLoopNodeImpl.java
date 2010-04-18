@@ -298,8 +298,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
                 getVariable()==null?null:getVariable().deepCopy(factory),
                 getExpression()==null?null:getExpression().deepCopy(factory),
                 getStatement()==null?null:getStatement().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

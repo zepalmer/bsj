@@ -141,8 +141,8 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
         
         return factory.makeBlockStatementListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

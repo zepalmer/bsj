@@ -141,8 +141,8 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
         
         return factory.makeImportListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

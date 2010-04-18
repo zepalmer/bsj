@@ -141,8 +141,8 @@ public class VariableDeclaratorListNodeImpl extends ListNodeImpl<VariableDeclara
         
         return factory.makeVariableDeclaratorListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

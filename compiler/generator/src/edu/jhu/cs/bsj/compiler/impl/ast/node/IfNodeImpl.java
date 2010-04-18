@@ -297,8 +297,8 @@ public class IfNodeImpl extends NodeImpl implements IfNode
                 getCondition()==null?null:getCondition().deepCopy(factory),
                 getThenStatement()==null?null:getThenStatement().deepCopy(factory),
                 getElseStatement()==null?null:getElseStatement().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

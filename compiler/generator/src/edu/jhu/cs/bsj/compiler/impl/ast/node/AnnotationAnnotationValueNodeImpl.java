@@ -182,8 +182,8 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
     {
         return factory.makeAnnotationAnnotationValueNode(
                 getAnnotation()==null?null:getAnnotation().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

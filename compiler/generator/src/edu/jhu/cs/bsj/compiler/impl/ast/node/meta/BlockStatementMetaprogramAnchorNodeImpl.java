@@ -131,8 +131,8 @@ public class BlockStatementMetaprogramAnchorNodeImpl extends ExplicitMetaprogram
     {
         return factory.makeBlockStatementMetaprogramAnchorNode(
                 getMetaprogram()==null?null:getMetaprogram().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

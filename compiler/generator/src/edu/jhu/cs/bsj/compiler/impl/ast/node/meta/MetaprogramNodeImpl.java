@@ -239,8 +239,8 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         return factory.makeMetaprogramNode(
                 getPreamble()==null?null:getPreamble().deepCopy(factory),
                 getBody()==null?null:getBody().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

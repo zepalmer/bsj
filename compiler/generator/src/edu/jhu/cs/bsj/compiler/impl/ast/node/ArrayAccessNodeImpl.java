@@ -240,8 +240,8 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         return factory.makeArrayAccessNode(
                 getArrayExpression()==null?null:getArrayExpression().deepCopy(factory),
                 getIndexExpression()==null?null:getIndexExpression().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

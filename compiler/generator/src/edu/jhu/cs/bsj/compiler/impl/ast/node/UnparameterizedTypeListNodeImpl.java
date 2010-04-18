@@ -141,8 +141,8 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
         
         return factory.makeUnparameterizedTypeListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

@@ -142,8 +142,8 @@ public class MetaprogramImportListNodeImpl extends ListNodeImpl<MetaprogramImpor
         
         return factory.makeMetaprogramImportListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

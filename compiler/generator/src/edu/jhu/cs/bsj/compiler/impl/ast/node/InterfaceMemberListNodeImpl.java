@@ -141,8 +141,8 @@ public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNod
         
         return factory.makeInterfaceMemberListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

@@ -181,8 +181,8 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     {
         return factory.makeMetaprogramTargetNode(
                 getTargets()==null?null:getTargets().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

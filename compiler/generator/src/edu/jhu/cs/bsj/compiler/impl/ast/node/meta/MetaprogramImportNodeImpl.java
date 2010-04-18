@@ -181,8 +181,8 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     {
         return factory.makeMetaprogramImportNode(
                 getImportNode()==null?null:getImportNode().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

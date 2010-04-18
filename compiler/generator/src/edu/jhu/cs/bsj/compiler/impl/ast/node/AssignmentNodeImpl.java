@@ -281,8 +281,8 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
                 getVariable()==null?null:getVariable().deepCopy(factory),
                 getOperator(),
                 getExpression()==null?null:getExpression().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

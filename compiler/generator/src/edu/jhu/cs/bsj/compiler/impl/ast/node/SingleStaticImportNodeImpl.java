@@ -240,8 +240,8 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         return factory.makeSingleStaticImportNode(
                 getName()==null?null:getName().deepCopy(factory),
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

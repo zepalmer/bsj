@@ -188,8 +188,8 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         return factory.makeNormalAnnotationNode(
                 getArguments()==null?null:getArguments().deepCopy(factory),
                 getAnnotationType()==null?null:getAnnotationType().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

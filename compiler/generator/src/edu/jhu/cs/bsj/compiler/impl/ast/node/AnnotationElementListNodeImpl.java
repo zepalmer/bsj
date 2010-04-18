@@ -141,8 +141,8 @@ public class AnnotationElementListNodeImpl extends ListNodeImpl<AnnotationElemen
         
         return factory.makeAnnotationElementListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

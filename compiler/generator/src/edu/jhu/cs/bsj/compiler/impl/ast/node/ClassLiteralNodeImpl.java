@@ -125,8 +125,8 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     {
         return factory.makeClassLiteralNode(
                 getValue()==null?null:getValue().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

@@ -46,6 +46,8 @@ public class SourceGenerator
 			"PrimitiveType", "UnaryOperator", "UnaryStatementOperator"));
 	/** Types which can be "deep copied" by reference copy because the instance is global to a compilation operation. */
 	private static final Set<String> COMPILE_GLOBAL_TYPES = new HashSet<String>(Arrays.asList("PackageNodeCallback"));
+	/** Immutable types which may be shared. */
+	private static final Set<String> IMMUTABLE_TYPES = new HashSet<String>(Arrays.asList("BsjSourceLocation"));
 
 	/** Names the types of objects which are "deep copied" by simply copying the reference. */
 	private static final Set<String> DIRECT_COPY_NAMES;
@@ -57,6 +59,7 @@ public class SourceGenerator
 		directCopy.addAll(PRIMITIVE_CONTAINER_TYPES);
 		directCopy.addAll(ENUM_TYPES);
 		directCopy.addAll(COMPILE_GLOBAL_TYPES);
+		directCopy.addAll(IMMUTABLE_TYPES);
 		DIRECT_COPY_NAMES = Collections.unmodifiableSet(directCopy);
 	}
 
@@ -64,7 +67,7 @@ public class SourceGenerator
 	 * Names the types of objects which are deep copied by passing them as a single argument to their constructor.
 	 */
 	private static final Set<String> CLONEABLE_NAMES = Collections.unmodifiableSet(new HashSet<String>(
-			Arrays.asList(new String[] { "BsjSourceLocation", })));
+			Arrays.<String>asList()));
 
 	private Set<DefinitionHandler> handlers = new HashSet<DefinitionHandler>();
 

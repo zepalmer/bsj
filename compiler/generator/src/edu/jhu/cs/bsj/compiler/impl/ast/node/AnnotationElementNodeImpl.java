@@ -238,8 +238,8 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         return factory.makeAnnotationElementNode(
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getValue()==null?null:getValue().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

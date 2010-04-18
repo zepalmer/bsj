@@ -184,8 +184,8 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     {
         return factory.makeUnparameterizedTypeNode(
                 getName()==null?null:getName().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

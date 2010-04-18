@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 
 /**
  * This interface is used to parse BSJ source into a BSJ AST.
+ * 
  * @author Zachary Palmer
  */
 public interface BsjParser
@@ -25,5 +26,4 @@ public interface BsjParser
 	 */
 	public CompilationUnitNode parse(String name, Reader reader,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException;
-
 }

@@ -315,8 +315,8 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
                 getConstructorTypeArguments()==null?null:getConstructorTypeArguments().deepCopy(factory),
                 getArguments()==null?null:getArguments().deepCopy(factory),
                 getBody()==null?null:getBody().deepCopy(factory),
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.

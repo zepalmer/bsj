@@ -141,8 +141,8 @@ public class NameListNodeImpl extends ListNodeImpl<NameNode> implements NameList
         
         return factory.makeNameListNode(
                 childrenCopy,
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation(),
+                getStopLocation());
     }
     /**
      * Performs replacement for this node.
