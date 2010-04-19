@@ -5,6 +5,8 @@ import java.util.Collections;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
@@ -12,6 +14,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
@@ -35,7 +39,12 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     
     public MakeObservable()
     {
-        super(Arrays.asList("observable"), Collections.<String> emptyList());
+        // using INSERT package mode so we can generate the listener interface 
+        super(
+                Arrays.asList("observable"), 
+                Collections.<String> emptyList(), 
+                MetaprogramLocalMode.INSERT, 
+                MetaprogramPackageMode.INSERT);
     }
     
     @BsjMetaAnnotationElementGetter
@@ -65,8 +74,6 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     @Override
     protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
     {
-        // TODO test listening
-
         // get all the members of our enclosing class
         ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
         
@@ -109,9 +116,18 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     private void generateListenerInterface(
             Context<MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
     {
-        // Find our enclosing compilation unit.
-        CompilationUnitNode enclosingCompilationUnit = context.getAnchor().getNearestAncestorOfType(
-                CompilationUnitNode.class);
+        // get the primary package node
+        PackageNode enclosingPackage = context.getAnchor().getNearestAncestorOfType(
+                PackageNode.class);
+        
+        // get the compilation unit for the observable class, so we can copy its package declaration
+        CompilationUnitNode  enclosingCompilationUnit = context.getAnchor().getNearestAncestorOfType(
+            CompilationUnitNode.class);
+        PackageDeclarationNode packageDeclaration = null;
+        if (enclosingCompilationUnit.getPackageDeclaration() != null)
+        {
+            packageDeclaration = enclosingCompilationUnit.getPackageDeclaration().deepCopy(factory);
+        }
         
         // public void ~:eventOccurredName:~(~:eventName:~ e);
         InterfaceBodyNode interfaceBody = factory.makeInterfaceBodyNode(
@@ -135,11 +151,16 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
                 interfaceBody, 
                 factory.makeTypeParameterListNode(), 
                 factory.makeIdentifierNode(listenerName), 
-                factory.makeJavadocNode("Interface " + listenerName + "."));
+                factory.makeJavadocNode(
+                        "Interface " + listenerName + ".\n" +
+                		"Listens for " + eventName + " events."));
         
-        // add the interface to our compilation unit
-        //TODO permission problem here?
-        enclosingCompilationUnit.getTypeDecls().addLast(interfaceDecl);
+        // add the interface to our current package
+        enclosingPackage.addCompilationUnitNode(factory.makeCompilationUnitNode(
+                listenerName, 
+                packageDeclaration, 
+                factory.makeImportListNode(), 
+                factory.makeTypeDeclarationListNode(interfaceDecl)));
     }
 
     private ClassMemberNode generateAddListenerMethod(

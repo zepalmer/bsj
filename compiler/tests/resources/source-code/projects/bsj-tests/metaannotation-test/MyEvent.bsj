@@ -1,7 +1,13 @@
 public class MyEvent
 {
-    public MyEvent()
+    private int x;
+    public MyEvent(int x)
     {
-        
+        this.x = x;
+    }
+    
+    public String toString()
+    {
+        return "x=" + x;
     }
 }
