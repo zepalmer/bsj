@@ -34,6 +34,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
+import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
@@ -50,8 +51,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
 
     public ComparedBy()
     {
-        //TODO remove dependency on toString, keep property and equalsAndHashCode
-        super(Arrays.asList("comparedBy"), Arrays.asList("property", "equalsAndHashCode", "toString"));
+        super(Arrays.asList("comparedBy"), Arrays.asList("property", "equalsAndHashCode"));
     }
 
     @BsjMetaAnnotationElementGetter
@@ -75,13 +75,10 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
         // get the properties to be used in comparison
         List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
         Map<String, MethodDeclarationNode> methodMap = new HashMap<String, MethodDeclarationNode>();
-        for (ClassMemberNode member : members)
+        for (ClassMemberNode member : members.filter(new GetterFilter()))
         {
-            if (member instanceof MethodDeclarationNode)
-            {
-                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-                methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
-            }
+            MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+            methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
         }
         for (String propName : this.properties)
         {
@@ -140,7 +137,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
     private ClassMemberNode generateCompareTo(Context<MetaAnnotationMetaprogramAnchorNode> context,
             List<Pair<String, TypeNode>> getters, IdentifierNode className)
     {
-        // TODO finish
+        // TODO add support for Comparable non-primitive fields?
         
         BsjNodeFactory factory = context.getFactory();        
         List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
@@ -193,12 +190,10 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
             {
                 throw new IllegalStateException();
             }
-
             
             // if (this.getX() < o.getX()) {return -1;}
             statements.add(factory.makeIfNode(lessThanExpression, 
-                    factory.makeReturnNode(factory.makeIntLiteralNode(-1))));            
-            
+                    factory.makeReturnNode(factory.makeIntLiteralNode(-1))));  
             
             // if (this.getX() > o.getX()) {return 1;}
             statements.add(factory.makeIfNode(greaterThanExpression, 

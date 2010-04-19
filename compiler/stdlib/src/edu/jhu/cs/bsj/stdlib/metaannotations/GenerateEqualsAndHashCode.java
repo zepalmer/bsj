@@ -206,8 +206,11 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("equals"),
 				factory.makeVariableListNode(factory.makeVariableNode(
 						factory.makeUnparameterizedTypeNode(factory.parseNameNode("java.lang.Object")),
-						factory.makeIdentifierNode("o"))), factory.makePrimitiveTypeNode(PrimitiveType.BOOLEAN), null);
-		// TODO: javadoc
+						factory.makeIdentifierNode("o"))), factory.makePrimitiveTypeNode(PrimitiveType.BOOLEAN), 
+						factory.makeJavadocNode(
+						        "Overrides the default equals method.\n" +
+						        "@param o the object for comparison.\n" +
+								"@return true if equal to this object, false otherwise."));
 	}
 
 	private MethodDeclarationNode generateHashCode(Context<MetaAnnotationMetaprogramAnchorNode> context,
@@ -287,8 +290,10 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		// Create hashCode method
 		return factory.makeMethodDeclarationNode(factory.makeBlockNode(factory.makeBlockStatementListNode(statements)),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("hashCode"),
-				factory.makeVariableListNode(), factory.makePrimitiveTypeNode(PrimitiveType.INT), null);
-		// TODO: javadoc
+				factory.makeVariableListNode(), factory.makePrimitiveTypeNode(PrimitiveType.INT), 
+				factory.makeJavadocNode(
+                        "Overrides the default hashCode method.\n" +
+                        "@return the hashcode for this object."));
 	}
 
 	@Override
