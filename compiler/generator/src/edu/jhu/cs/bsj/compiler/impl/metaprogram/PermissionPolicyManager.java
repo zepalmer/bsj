@@ -22,12 +22,12 @@ public class PermissionPolicyManager
 	
 	/**
 	 * Creates a new permission policy manager with read-only permission to all nodes.
-	 * @param rootPackage The node for the root package.
+	 * @param root The node for the root of the AST.
 	 */
-	public PermissionPolicyManager(Node rootPackage)
+	public PermissionPolicyManager(Node root)
 	{
 		this.thresholdMap = new HashMap<Node, NodePermission>();
-		this.thresholdMap.put(rootPackage, NodePermission.READ);
+		this.thresholdMap.put(root, NodePermission.READ);
 	}
 	
 	/**

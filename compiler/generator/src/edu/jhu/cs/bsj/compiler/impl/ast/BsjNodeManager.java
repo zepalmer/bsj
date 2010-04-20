@@ -33,8 +33,6 @@ public class BsjNodeManager
 	/** A logger for this object. */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 
-	/** The current permission policy manager for nodes. If this manager is null, any mutation is permitted. */
-	private PermissionPolicyManager permissionPolicyManager;
 	/**
 	 * The current dependency manager for metaprogram dependency analysis. If null, all metaprograms are assumed to
 	 * cooperate.
@@ -50,6 +48,11 @@ public class BsjNodeManager
 	 * running metaprograms (by pushing <code>null</code> onto the stack).
 	 */
 	private Stack<Integer> metaprogramIdStack;
+	/**
+	 * The stack of permission policy managers for nodes.  If this manager is <code>null</code>, any mutation is
+	 * permitted.
+	 */
+	private Stack<PermissionPolicyManager> permissionPolicyStack;
 
 	/**
 	 * Creates a new node manager.
@@ -57,17 +60,28 @@ public class BsjNodeManager
 	public BsjNodeManager()
 	{
 		this.metaprogramIdStack = new Stack<Integer>();
-		this.permissionPolicyManager = null;
+		this.permissionPolicyStack = new Stack<PermissionPolicyManager>();
 	}
 
 	public PermissionPolicyManager getPermissionPolicyManager()
 	{
-		return permissionPolicyManager;
+		if (this.permissionPolicyStack.isEmpty())
+		{
+			return null;
+		} else
+		{
+			return permissionPolicyStack.peek();
+		}
 	}
 
-	public void setPermissionPolicyManager(PermissionPolicyManager permissionPolicyManager)
+	public void pushPermissionPolicyManager(PermissionPolicyManager permissionPolicyManager)
 	{
-		this.permissionPolicyManager = permissionPolicyManager;
+		this.permissionPolicyStack.push(permissionPolicyManager);
+	}
+	
+	public void popPermissionPolicyManager()
+	{
+		this.permissionPolicyStack.pop();
 	}
 
 	public DependencyManager getDependencyManager()
@@ -112,12 +126,12 @@ public class BsjNodeManager
 		if (node.isBinary())
 		{
 			return NodePermission.READ;
-		} else if (this.permissionPolicyManager == null)
+		} else if (this.getPermissionPolicyManager() == null)
 		{
 			return NodePermission.MUTATE;
 		} else
 		{
-			return this.permissionPolicyManager.getPermission(node);
+			return this.getPermissionPolicyManager().getPermission(node);
 		}
 	}
 

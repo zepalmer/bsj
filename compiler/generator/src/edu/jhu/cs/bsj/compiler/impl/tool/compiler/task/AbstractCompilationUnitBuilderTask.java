@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
@@ -36,8 +35,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 		
 		// Suspend policy management and conflict detection for a moment to allow the compilation unit to be created
 		// This might be necessary if we are within the scope of a metaprogram (such as with a call to PackageNode.load)
-		PermissionPolicyManager policyManager = context.getNodeManager().getPermissionPolicyManager();
-		context.getNodeManager().setPermissionPolicyManager(null);
+		context.getNodeManager().pushPermissionPolicyManager(null);
 		context.getNodeManager().pushCurrentMetaprogramId(null);
 		
 		// Parse the file into a compilation unit
@@ -56,7 +54,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 		packageNode.addCompilationUnitNode(node);
 
 		// Reinstate policy management and conflict detection
-		context.getNodeManager().setPermissionPolicyManager(policyManager);
+		context.getNodeManager().popPermissionPolicyManager();
 		context.getNodeManager().popCurrentMetaprogramId();
 
 		// Enqueue the compilation unit for name categorization

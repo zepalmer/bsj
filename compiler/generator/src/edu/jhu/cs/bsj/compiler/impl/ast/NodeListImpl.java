@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.NodeList;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.ProxyList;
 
 /**
@@ -210,6 +211,10 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		{
 			LOGGER.trace(uid + ".filter(" + filter + ")");
 		}
+		
+		PermissionPolicyManager permissionPolicyManager = new PermissionPolicyManager(
+				this.parent.getFurthestAncestor());
+		this.manager.pushPermissionPolicyManager(permissionPolicyManager);
 
 		Set<T> ret = new HashSet<T>();
 		for (T t : this.backing)
@@ -219,6 +224,9 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 				ret.add(t);
 			}
 		}
+		
+		this.manager.popPermissionPolicyManager();
+		
 		if (this.manager.getCurrentMetaprogramId() != null)
 		{
 			addKnowledge(new PredicateKnowledge<T>(this.manager.getCurrentMetaprogramId(), filter));
