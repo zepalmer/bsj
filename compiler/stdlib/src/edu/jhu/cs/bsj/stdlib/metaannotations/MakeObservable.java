@@ -83,7 +83,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
 
         BsjNodeFactory factory = context.getFactory(); 
         
-        // private Set<FooListener> fooListeners;
+        // private Set<FooListener> fooListeners = new HashMap<FooListener>();
         members.add(factory.makeFieldDeclarationNode(
                 factory.makeFieldModifiersNode(AccessModifier.PRIVATE), 
                 factory.makeVariableDeclaratorListNode(

@@ -3,13 +3,17 @@ package edu.jhu.cs.bsj.stdlib.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
@@ -102,5 +106,48 @@ public class TypeDeclUtils
             throw new MetaprogramExecutionFailureException();
         }
         return members;
+    }
+
+    public static ReferenceTypeNode autoBoxPrimitives(TypeNode inType, BsjNodeFactory factory)
+    {
+        // only process primitives
+        if (inType instanceof PrimitiveTypeNode)
+        {
+            PrimitiveTypeNode primitive = (PrimitiveTypeNode)inType;
+            String name = "Void";
+            switch (primitive.getPrimitiveType())
+            {
+                case BOOLEAN:
+                    name = "Boolean";
+                    break;
+                case BYTE:
+                    name = "Byte";
+                    break;
+                case CHAR:
+                    name = "Character";
+                    break;
+                case DOUBLE:
+                    name = "Double";
+                    break;
+                case FLOAT:
+                    name = "Float";
+                    break;
+                case INT:
+                    name = "Integer";
+                    break;
+                case LONG:
+                    name = "Long";
+                    break;
+                case SHORT:
+                    name = "Short";
+                    break;
+                case VOID:
+                    name = "Void";
+                    break;
+            }
+            return factory.makeUnparameterizedTypeNode(factory.parseNameNode(name));
+        }
+        
+        return (ReferenceTypeNode)inType.deepCopy(factory);
     }
 }

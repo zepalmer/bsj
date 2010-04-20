@@ -1,0 +1,15 @@
+#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
+
+public class MemoizedClass
+{
+    public MemoizedClass()
+    {
+        
+    }
+    
+    @@Memoized
+    public int foo(int x)
+    {
+        return 5;
+    }
+}

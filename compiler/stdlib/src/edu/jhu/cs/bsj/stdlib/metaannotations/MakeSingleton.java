@@ -15,6 +15,12 @@ import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
+/**
+ * This meta-annotation metaprogram makes a class into a Singleton.  The static method
+ * getInstance() is added for access to the single instance of the class.
+ * 
+ * @author Joseph Riley
+ */
 public class MakeSingleton extends AbstractBsjMetaAnnotationMetaprogram
 {
     private final String singletonName = "INSTANCE";
