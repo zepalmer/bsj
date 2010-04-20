@@ -1,0 +1,7 @@
+#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
+
+@@MakeSingleton
+public class SingletonClass
+{
+    @@Property private int x;
+}

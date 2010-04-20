@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.stdlib.metaannotations;
 import java.util.Arrays;
 import java.util.Collections;
 
+import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
@@ -31,35 +33,55 @@ public class MakeSingleton extends AbstractBsjMetaAnnotationMetaprogram
         // get the name of this class
         String className = TypeDeclUtils.getEnclosingTypeName(context, this).getIdentifier();
         
+        BsjNodeFactory factory = context.getFactory();   
+        
         // private static final Singleton INSTANCE = new Singleton();
-        members.add(generateSingletonField(className, context));
+        members.add(generateSingletonField(className, factory));
         
         // TODO check for prior existence
-        members.add(generatePrivateConstructor(className, context));
+        members.add(generatePrivateConstructor(className, factory));
         
         // public static Singleton getInstance() {return INSTANCE;}
-        members.add(generateSingletonGetter(className, context));
+        members.add(generateSingletonGetter(className, factory));
     }
 
     private MethodDeclarationNode generateSingletonGetter(String className,
-            Context<MetaAnnotationMetaprogramAnchorNode> context)
+            BsjNodeFactory factory)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return factory.makeMethodDeclarationNode(
+                factory.makeBlockNode(factory.makeBlockStatementListNode(
+                        factory.makeReturnNode(factory.makeFieldAccessByNameNode(
+                                factory.parseNameNode(singletonName))))), 
+                factory.makeMethodModifiersNode(AccessModifier.PUBLIC, false, true, false, false, false, false, factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()), 
+                factory.makeIdentifierNode("getInstance"), 
+                factory.makeVariableListNode(), 
+                factory.makeUnparameterizedTypeNode(factory.parseNameNode(className)), 
+                factory.makeJavadocNode("Singleton getter.\n@return the singleton instance for this class."));
     }
 
     private ConstructorDeclarationNode generatePrivateConstructor(String className,
-            Context<MetaAnnotationMetaprogramAnchorNode> context)
+            BsjNodeFactory factory)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return factory.makeConstructorDeclarationNode(
+                factory.makeIdentifierNode(className), 
+                factory.makeConstructorBodyNode(null, factory.makeBlockStatementListNode()), 
+                factory.makeConstructorModifiersNode(AccessModifier.PRIVATE), 
+                factory.makeVariableListNode(), 
+                factory.makeJavadocNode("Private constructor prevents direct instantiation."));
     }
 
     private FieldDeclarationNode generateSingletonField(String className,
-            Context<MetaAnnotationMetaprogramAnchorNode> context)
+            BsjNodeFactory factory)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return factory.makeFieldDeclarationNode(
+                factory.makeFieldModifiersNode(AccessModifier.PRIVATE, true, true, false, false, factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()), 
+                factory.makeVariableDeclaratorListNode(
+                        factory.makeVariableDeclaratorNode(
+                                factory.makeUnparameterizedTypeNode(factory.parseNameNode(className)), 
+                                factory.makeIdentifierNode(singletonName), 
+                                factory.makeUnqualifiedClassInstantiationNode(
+                                        factory.makeUnparameterizedTypeNode(factory.parseNameNode(className))))), 
+                factory.makeJavadocNode("Singleton instance of this class."));
     }
 
     @Override
