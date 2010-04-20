@@ -34,13 +34,13 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	private static final String INVARIANT_LEFT = "╙";
 	/** The Unicode character we will use to represent the right delimiter of invariants. */
 	private static final String INVARIANT_RIGHT = "╜";
-	
+
 	/** The logger to use for this class. */
 	private static final Logger LOGGER = Logger.getLogger(NodeListImpl.class);
-	
+
 	/** The next UID to give to a list node implementation. */
 	private static final AtomicLong NEXT_UID = new AtomicLong(0);
-	
+
 	/** The UID for this list. */
 	private final long uid = NEXT_UID.getAndIncrement();
 
@@ -121,7 +121,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		{
 			LOGGER.trace(uid + ".addAfter(" + member + "," + node + ")");
 		}
-		
+
 		if (member == null)
 			throw new NullPointerException();
 		if (node == null)
@@ -211,22 +211,24 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		{
 			LOGGER.trace(uid + ".filter(" + filter + ")");
 		}
-		
-		PermissionPolicyManager permissionPolicyManager = new PermissionPolicyManager(
-				this.parent.getFurthestAncestor());
+
+		PermissionPolicyManager permissionPolicyManager = new PermissionPolicyManager(this.parent.getFurthestAncestor());
 		this.manager.pushPermissionPolicyManager(permissionPolicyManager);
 
 		Set<T> ret = new HashSet<T>();
 		for (T t : this.backing)
 		{
-			if (filter.filter(t))
+			// TODO: catch the permission exceptions that fall out of this call and translate to a more contextual
+			// error.  (Instead of "no permission on node X", we should have "predicate P tried to modify node X".)
+			boolean use = filter.filter(t);
+			if (use)
 			{
 				ret.add(t);
 			}
 		}
-		
+
 		this.manager.popPermissionPolicyManager();
-		
+
 		if (this.manager.getCurrentMetaprogramId() != null)
 		{
 			addKnowledge(new PredicateKnowledge<T>(this.manager.getCurrentMetaprogramId(), filter));
@@ -338,7 +340,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		{
 			LOGGER.trace(uid + ".getLast()");
 		}
-		
+
 		T ret;
 		SymbolicValue<T> value;
 		if (this.backing.size() > 0)
@@ -365,7 +367,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		{
 			LOGGER.trace(uid + ".remove(" + node + ")");
 		}
-		
+
 		boolean ret = this.backing.remove(node);
 		if (this.manager.getCurrentMetaprogramId() != null)
 		{
@@ -420,7 +422,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		{
 			LOGGER.trace("Adding knowledge " + knowledgeSet + " to knowledge base " + this.base);
 		}
-		
+
 		// Calculate the set of knowledge for non-cooperating metaprograms
 		Set<Knowledge<T>> uncooperativeMetaprogramKnowledge = calculateUncooperativeMetaprogramKnowledge();
 
