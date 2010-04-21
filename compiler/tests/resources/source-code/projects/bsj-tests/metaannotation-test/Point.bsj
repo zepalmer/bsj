@@ -2,17 +2,12 @@
 
 @@ComparedBy(properties={"y","x"})
 @@GenerateToString()
+@@GenerateConstructorFromProperties()
 @@GenerateEqualsAndHashCode(properties={"x","y"})
 public class Point
 {
 	@@Property private double x;
 	@@Property private double y;
-	
-	public Point(int x, int y)
-	{
-		this.x = x;
-		this.y = y;
-	}
 	
 	public double getDistance(Point p)
 	{
