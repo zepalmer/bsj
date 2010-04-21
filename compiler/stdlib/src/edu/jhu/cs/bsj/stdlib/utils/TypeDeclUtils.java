@@ -108,6 +108,12 @@ public class TypeDeclUtils
         return members;
     }
 
+    /**
+     * Turns primitives into their non-primitive counterparts, leaves all other types unchanged.
+     * @param inType the type to autobox.
+     * @param factory the factory to use for new type creation.
+     * @return the autoboxed (if necessary) type.
+     */
     public static ReferenceTypeNode autoBoxPrimitives(TypeNode inType, BsjNodeFactory factory)
     {
         // only process primitives
