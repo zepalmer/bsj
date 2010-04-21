@@ -8,8 +8,8 @@ public class MemoizedClass
     }
     
     @@Memoized
-    public int foo(int x)
+    public int foo(int x, int y)
     {
-        return 5;
+        return (x+y)*2;
     }
 }
