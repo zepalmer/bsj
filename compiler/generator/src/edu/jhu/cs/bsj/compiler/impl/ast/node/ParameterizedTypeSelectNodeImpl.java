@@ -73,15 +73,9 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BASE, Attribute.AccessType.WRITE);
         }
-        if (this.base instanceof NodeImpl)
-        {
-            ((NodeImpl)this.base).setParent(null);
-        }
+        setAsChild(base, false);
         this.base = base;
-        if (this.base instanceof NodeImpl)
-        {
-            ((NodeImpl)this.base).setParent(this);
-        }
+        setAsChild(base, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.SELECT, Attribute.AccessType.WRITE);
         }
-        if (this.select instanceof NodeImpl)
-        {
-            ((NodeImpl)this.select).setParent(null);
-        }
+        setAsChild(select, false);
         this.select = select;
-        if (this.select instanceof NodeImpl)
-        {
-            ((NodeImpl)this.select).setParent(this);
-        }
+        setAsChild(select, true);
     }
     
     /**

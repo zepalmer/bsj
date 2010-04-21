@@ -12,7 +12,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends MetaprogramAnchorNodeImpl<T> implements ExplicitMetaprogramAnchorNode<T>
@@ -65,15 +64,9 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.WRITE);
         }
-        if (this.metaprogram instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaprogram).setParent(null);
-        }
+        setAsChild(metaprogram, false);
         this.metaprogram = metaprogram;
-        if (this.metaprogram instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaprogram).setParent(this);
-        }
+        setAsChild(metaprogram, true);
     }
     
     /**

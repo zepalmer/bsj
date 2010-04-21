@@ -73,15 +73,9 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         }
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(null);
-        }
+        setAsChild(type, false);
         this.type = type;
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(this);
-        }
+        setAsChild(type, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**

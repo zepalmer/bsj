@@ -80,15 +80,9 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         }
-        if (this.condition instanceof NodeImpl)
-        {
-            ((NodeImpl)this.condition).setParent(null);
-        }
+        setAsChild(condition, false);
         this.condition = condition;
-        if (this.condition instanceof NodeImpl)
-        {
-            ((NodeImpl)this.condition).setParent(this);
-        }
+        setAsChild(condition, true);
     }
     
     /**
@@ -117,15 +111,9 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.WRITE);
         }
-        if (this.thenStatement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.thenStatement).setParent(null);
-        }
+        setAsChild(thenStatement, false);
         this.thenStatement = thenStatement;
-        if (this.thenStatement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.thenStatement).setParent(this);
-        }
+        setAsChild(thenStatement, true);
     }
     
     /**
@@ -154,15 +142,9 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.WRITE);
         }
-        if (this.elseStatement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.elseStatement).setParent(null);
-        }
+        setAsChild(elseStatement, false);
         this.elseStatement = elseStatement;
-        if (this.elseStatement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.elseStatement).setParent(this);
-        }
+        setAsChild(elseStatement, true);
     }
     
     /**

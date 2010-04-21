@@ -73,15 +73,9 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.arrayExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arrayExpression).setParent(null);
-        }
+        setAsChild(arrayExpression, false);
         this.arrayExpression = arrayExpression;
-        if (this.arrayExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arrayExpression).setParent(this);
-        }
+        setAsChild(arrayExpression, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.indexExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.indexExpression).setParent(null);
-        }
+        setAsChild(indexExpression, false);
         this.indexExpression = indexExpression;
-        if (this.indexExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.indexExpression).setParent(this);
-        }
+        setAsChild(indexExpression, true);
     }
     
     /**

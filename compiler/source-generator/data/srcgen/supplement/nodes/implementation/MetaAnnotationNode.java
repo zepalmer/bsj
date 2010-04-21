@@ -24,10 +24,7 @@ public class MetaAnnotationNodeImpl implements MetaAnnotationNode
 			if (this.metaAnnotationObject instanceof BsjMetaAnnotationMetaprogram)
 			{
 				this.metaprogramAnchor = getManager().instantiateMetaAnnotationMetaprogramAnchor(this);
-				if (this.metaprogramAnchor instanceof NodeImpl)
-				{
-					((NodeImpl)this.metaprogramAnchor).setParent(this);
-				}
+				setAsChild(this.metaprogramAnchor, true);
 			}
 		}
 	}

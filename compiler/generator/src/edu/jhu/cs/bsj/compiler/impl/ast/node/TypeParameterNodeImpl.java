@@ -73,15 +73,9 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.WRITE);
         }
-        if (this.bounds instanceof NodeImpl)
-        {
-            ((NodeImpl)this.bounds).setParent(null);
-        }
+        setAsChild(bounds, false);
         this.bounds = bounds;
-        if (this.bounds instanceof NodeImpl)
-        {
-            ((NodeImpl)this.bounds).setParent(this);
-        }
+        setAsChild(bounds, true);
     }
     
     /**

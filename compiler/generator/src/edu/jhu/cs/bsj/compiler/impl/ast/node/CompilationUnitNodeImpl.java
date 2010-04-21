@@ -106,15 +106,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.WRITE);
         }
-        if (this.packageDeclaration instanceof NodeImpl)
-        {
-            ((NodeImpl)this.packageDeclaration).setParent(null);
-        }
+        setAsChild(packageDeclaration, false);
         this.packageDeclaration = packageDeclaration;
-        if (this.packageDeclaration instanceof NodeImpl)
-        {
-            ((NodeImpl)this.packageDeclaration).setParent(this);
-        }
+        setAsChild(packageDeclaration, true);
     }
     
     /**
@@ -143,15 +137,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.WRITE);
         }
-        if (this.metaimports instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaimports).setParent(null);
-        }
+        setAsChild(metaimports, false);
         this.metaimports = metaimports;
-        if (this.metaimports instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaimports).setParent(this);
-        }
+        setAsChild(metaimports, true);
     }
     
     /**
@@ -180,15 +168,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.WRITE);
         }
-        if (this.imports instanceof NodeImpl)
-        {
-            ((NodeImpl)this.imports).setParent(null);
-        }
+        setAsChild(imports, false);
         this.imports = imports;
-        if (this.imports instanceof NodeImpl)
-        {
-            ((NodeImpl)this.imports).setParent(this);
-        }
+        setAsChild(imports, true);
     }
     
     /**
@@ -217,15 +199,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.WRITE);
         }
-        if (this.typeDecls instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeDecls).setParent(null);
-        }
+        setAsChild(typeDecls, false);
         this.typeDecls = typeDecls;
-        if (this.typeDecls instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeDecls).setParent(this);
-        }
+        setAsChild(typeDecls, true);
     }
     
     /**

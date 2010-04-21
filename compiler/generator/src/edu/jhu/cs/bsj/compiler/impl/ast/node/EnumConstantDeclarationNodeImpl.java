@@ -105,15 +105,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
         }
-        if (this.metaAnnotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaAnnotations).setParent(null);
-        }
+        setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
-        if (this.metaAnnotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaAnnotations).setParent(this);
-        }
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -142,15 +136,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
         }
-        if (this.annotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotations).setParent(null);
-        }
+        setAsChild(annotations, false);
         this.annotations = annotations;
-        if (this.annotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotations).setParent(this);
-        }
+        setAsChild(annotations, true);
     }
     
     /**
@@ -179,15 +167,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**
@@ -216,15 +198,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.arguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arguments).setParent(null);
-        }
+        setAsChild(arguments, false);
         this.arguments = arguments;
-        if (this.arguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arguments).setParent(this);
-        }
+        setAsChild(arguments, true);
     }
     
     /**
@@ -253,15 +229,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(null);
-        }
+        setAsChild(body, false);
         this.body = body;
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(this);
-        }
+        setAsChild(body, true);
     }
     
     /**
@@ -290,15 +260,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         }
-        if (this.javadoc instanceof NodeImpl)
-        {
-            ((NodeImpl)this.javadoc).setParent(null);
-        }
+        setAsChild(javadoc, false);
         this.javadoc = javadoc;
-        if (this.javadoc instanceof NodeImpl)
-        {
-            ((NodeImpl)this.javadoc).setParent(this);
-        }
+        setAsChild(javadoc, true);
     }
     
     /**

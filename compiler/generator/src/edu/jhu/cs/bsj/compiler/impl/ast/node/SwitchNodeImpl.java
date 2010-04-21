@@ -73,15 +73,9 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(null);
-        }
+        setAsChild(expression, false);
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(this);
-        }
+        setAsChild(expression, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.CASES, Attribute.AccessType.WRITE);
         }
-        if (this.cases instanceof NodeImpl)
-        {
-            ((NodeImpl)this.cases).setParent(null);
-        }
+        setAsChild(cases, false);
         this.cases = cases;
-        if (this.cases instanceof NodeImpl)
-        {
-            ((NodeImpl)this.cases).setParent(this);
-        }
+        setAsChild(cases, true);
     }
     
     /**

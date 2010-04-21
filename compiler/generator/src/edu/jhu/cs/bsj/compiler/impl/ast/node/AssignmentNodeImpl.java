@@ -80,15 +80,9 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.WRITE);
         }
-        if (this.variable instanceof NodeImpl)
-        {
-            ((NodeImpl)this.variable).setParent(null);
-        }
+        setAsChild(variable, false);
         this.variable = variable;
-        if (this.variable instanceof NodeImpl)
-        {
-            ((NodeImpl)this.variable).setParent(this);
-        }
+        setAsChild(variable, true);
     }
     
     /**
@@ -146,15 +140,9 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(null);
-        }
+        setAsChild(expression, false);
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(this);
-        }
+        setAsChild(expression, true);
     }
     
     /**

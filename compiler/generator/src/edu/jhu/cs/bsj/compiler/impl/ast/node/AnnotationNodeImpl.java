@@ -62,15 +62,9 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.WRITE);
         }
-        if (this.annotationType instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotationType).setParent(null);
-        }
+        setAsChild(annotationType, false);
         this.annotationType = annotationType;
-        if (this.annotationType instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotationType).setParent(this);
-        }
+        setAsChild(annotationType, true);
     }
     
     /**

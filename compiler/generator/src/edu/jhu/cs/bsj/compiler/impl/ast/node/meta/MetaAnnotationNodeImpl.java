@@ -74,15 +74,9 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.WRITE);
         }
-        if (this.annotationType instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotationType).setParent(null);
-        }
+        setAsChild(annotationType, false);
         this.annotationType = annotationType;
-        if (this.annotationType instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotationType).setParent(this);
-        }
+        setAsChild(annotationType, true);
     }
     
     /**
@@ -207,10 +201,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
 			if (this.metaAnnotationObject instanceof BsjMetaAnnotationMetaprogram)
 			{
 				this.metaprogramAnchor = getManager().instantiateMetaAnnotationMetaprogramAnchor(this);
-				if (this.metaprogramAnchor instanceof NodeImpl)
-				{
-					((NodeImpl)this.metaprogramAnchor).setParent(this);
-				}
+				setAsChild(this.metaprogramAnchor, true);
 			}
 		}
 	}

@@ -81,15 +81,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         }
-        if (this.modifiers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.modifiers).setParent(null);
-        }
+        setAsChild(modifiers, false);
         this.modifiers = modifiers;
-        if (this.modifiers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.modifiers).setParent(this);
-        }
+        setAsChild(modifiers, true);
     }
     
     /**
@@ -118,15 +112,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.WRITE);
         }
-        if (this.declarators instanceof NodeImpl)
-        {
-            ((NodeImpl)this.declarators).setParent(null);
-        }
+        setAsChild(declarators, false);
         this.declarators = declarators;
-        if (this.declarators instanceof NodeImpl)
-        {
-            ((NodeImpl)this.declarators).setParent(this);
-        }
+        setAsChild(declarators, true);
     }
     
     /**
@@ -155,15 +143,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         }
-        if (this.javadoc instanceof NodeImpl)
-        {
-            ((NodeImpl)this.javadoc).setParent(null);
-        }
+        setAsChild(javadoc, false);
         this.javadoc = javadoc;
-        if (this.javadoc instanceof NodeImpl)
-        {
-            ((NodeImpl)this.javadoc).setParent(this);
-        }
+        setAsChild(javadoc, true);
     }
     
     /**

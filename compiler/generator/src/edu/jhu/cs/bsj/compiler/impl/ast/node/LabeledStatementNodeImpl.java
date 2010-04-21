@@ -73,15 +73,9 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
         }
-        if (this.label instanceof NodeImpl)
-        {
-            ((NodeImpl)this.label).setParent(null);
-        }
+        setAsChild(label, false);
         this.label = label;
-        if (this.label instanceof NodeImpl)
-        {
-            ((NodeImpl)this.label).setParent(this);
-        }
+        setAsChild(label, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         }
-        if (this.statement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statement).setParent(null);
-        }
+        setAsChild(statement, false);
         this.statement = statement;
-        if (this.statement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statement).setParent(this);
-        }
+        setAsChild(statement, true);
     }
     
     /**

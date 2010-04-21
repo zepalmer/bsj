@@ -126,14 +126,8 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
 	{
 		// TODO: some kind of control on this; setReplacement should probably only be called one time?
 		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.WRITE);
-		if (this.replacement instanceof NodeImpl)
-		{
-			((NodeImpl)this.replacement).setParent(null);
-		}
+		setAsChild(this.replacement, false);
 		this.replacement = replacement;
-		if (this.replacement instanceof NodeImpl)
-		{
-			((NodeImpl)this.replacement).setParent(this);
-		}
+		setAsChild(this.replacement, true);
 	}
 }

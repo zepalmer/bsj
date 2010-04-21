@@ -73,15 +73,9 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         }
-        if (this.name instanceof NodeImpl)
-        {
-            ((NodeImpl)this.name).setParent(null);
-        }
+        setAsChild(name, false);
         this.name = name;
-        if (this.name instanceof NodeImpl)
-        {
-            ((NodeImpl)this.name).setParent(this);
-        }
+        setAsChild(name, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**

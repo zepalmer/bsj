@@ -81,15 +81,9 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         }
-        if (this.name instanceof NodeImpl)
-        {
-            ((NodeImpl)this.name).setParent(null);
-        }
+        setAsChild(name, false);
         this.name = name;
-        if (this.name instanceof NodeImpl)
-        {
-            ((NodeImpl)this.name).setParent(this);
-        }
+        setAsChild(name, true);
     }
     
     /**
@@ -118,15 +112,9 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
         }
-        if (this.metaAnnotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaAnnotations).setParent(null);
-        }
+        setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
-        if (this.metaAnnotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaAnnotations).setParent(this);
-        }
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -155,15 +143,9 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
         }
-        if (this.annotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotations).setParent(null);
-        }
+        setAsChild(annotations, false);
         this.annotations = annotations;
-        if (this.annotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotations).setParent(this);
-        }
+        setAsChild(annotations, true);
     }
     
     /**

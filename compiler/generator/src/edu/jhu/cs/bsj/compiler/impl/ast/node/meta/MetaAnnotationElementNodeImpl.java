@@ -74,15 +74,9 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**
@@ -111,15 +105,9 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
         }
-        if (this.value instanceof NodeImpl)
-        {
-            ((NodeImpl)this.value).setParent(null);
-        }
+        setAsChild(value, false);
         this.value = value;
-        if (this.value instanceof NodeImpl)
-        {
-            ((NodeImpl)this.value).setParent(this);
-        }
+        setAsChild(value, true);
     }
     
     /**

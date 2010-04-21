@@ -74,15 +74,9 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.PREAMBLE, Attribute.AccessType.WRITE);
         }
-        if (this.preamble instanceof NodeImpl)
-        {
-            ((NodeImpl)this.preamble).setParent(null);
-        }
+        setAsChild(preamble, false);
         this.preamble = preamble;
-        if (this.preamble instanceof NodeImpl)
-        {
-            ((NodeImpl)this.preamble).setParent(this);
-        }
+        setAsChild(preamble, true);
     }
     
     /**
@@ -111,15 +105,9 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(null);
-        }
+        setAsChild(body, false);
         this.body = body;
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(this);
-        }
+        setAsChild(body, true);
     }
     
     /**

@@ -80,15 +80,9 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.LEFT_OPERAND, Attribute.AccessType.WRITE);
         }
-        if (this.leftOperand instanceof NodeImpl)
-        {
-            ((NodeImpl)this.leftOperand).setParent(null);
-        }
+        setAsChild(leftOperand, false);
         this.leftOperand = leftOperand;
-        if (this.leftOperand instanceof NodeImpl)
-        {
-            ((NodeImpl)this.leftOperand).setParent(this);
-        }
+        setAsChild(leftOperand, true);
     }
     
     /**
@@ -117,15 +111,9 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.RIGHT_OPERAND, Attribute.AccessType.WRITE);
         }
-        if (this.rightOperand instanceof NodeImpl)
-        {
-            ((NodeImpl)this.rightOperand).setParent(null);
-        }
+        setAsChild(rightOperand, false);
         this.rightOperand = rightOperand;
-        if (this.rightOperand instanceof NodeImpl)
-        {
-            ((NodeImpl)this.rightOperand).setParent(this);
-        }
+        setAsChild(rightOperand, true);
     }
     
     /**

@@ -73,15 +73,9 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         }
-        if (this.block instanceof NodeImpl)
-        {
-            ((NodeImpl)this.block).setParent(null);
-        }
+        setAsChild(block, false);
         this.block = block;
-        if (this.block instanceof NodeImpl)
-        {
-            ((NodeImpl)this.block).setParent(this);
-        }
+        setAsChild(block, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.WRITE);
         }
-        if (this.parameter instanceof NodeImpl)
-        {
-            ((NodeImpl)this.parameter).setParent(null);
-        }
+        setAsChild(parameter, false);
         this.parameter = parameter;
-        if (this.parameter instanceof NodeImpl)
-        {
-            ((NodeImpl)this.parameter).setParent(this);
-        }
+        setAsChild(parameter, true);
     }
     
     /**

@@ -16,7 +16,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl implements NormalMetaAnnotationNode
@@ -70,15 +69,9 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.arguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arguments).setParent(null);
-        }
+        setAsChild(arguments, false);
         this.arguments = arguments;
-        if (this.arguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arguments).setParent(this);
-        }
+        setAsChild(arguments, true);
     }
     
     /**

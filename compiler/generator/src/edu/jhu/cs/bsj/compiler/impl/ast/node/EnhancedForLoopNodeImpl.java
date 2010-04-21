@@ -81,15 +81,9 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.WRITE);
         }
-        if (this.variable instanceof NodeImpl)
-        {
-            ((NodeImpl)this.variable).setParent(null);
-        }
+        setAsChild(variable, false);
         this.variable = variable;
-        if (this.variable instanceof NodeImpl)
-        {
-            ((NodeImpl)this.variable).setParent(this);
-        }
+        setAsChild(variable, true);
     }
     
     /**
@@ -118,15 +112,9 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(null);
-        }
+        setAsChild(expression, false);
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(this);
-        }
+        setAsChild(expression, true);
     }
     
     /**
@@ -155,15 +143,9 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         }
-        if (this.statement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statement).setParent(null);
-        }
+        setAsChild(statement, false);
         this.statement = statement;
-        if (this.statement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statement).setParent(this);
-        }
+        setAsChild(statement, true);
     }
     
     /**

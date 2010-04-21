@@ -65,15 +65,9 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.INITIALIZERS, Attribute.AccessType.WRITE);
         }
-        if (this.initializers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.initializers).setParent(null);
-        }
+        setAsChild(initializers, false);
         this.initializers = initializers;
-        if (this.initializers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.initializers).setParent(this);
-        }
+        setAsChild(initializers, true);
     }
     
     /**

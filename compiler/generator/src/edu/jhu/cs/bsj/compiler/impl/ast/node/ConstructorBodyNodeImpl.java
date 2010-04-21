@@ -73,15 +73,9 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.CONSTRUCTOR_INVOCATION, Attribute.AccessType.WRITE);
         }
-        if (this.constructorInvocation instanceof NodeImpl)
-        {
-            ((NodeImpl)this.constructorInvocation).setParent(null);
-        }
+        setAsChild(constructorInvocation, false);
         this.constructorInvocation = constructorInvocation;
-        if (this.constructorInvocation instanceof NodeImpl)
-        {
-            ((NodeImpl)this.constructorInvocation).setParent(this);
-        }
+        setAsChild(constructorInvocation, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.statements instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statements).setParent(null);
-        }
+        setAsChild(statements, false);
         this.statements = statements;
-        if (this.statements instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statements).setParent(this);
-        }
+        setAsChild(statements, true);
     }
     
     /**

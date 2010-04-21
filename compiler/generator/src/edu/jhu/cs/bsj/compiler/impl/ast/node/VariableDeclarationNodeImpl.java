@@ -73,15 +73,9 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         }
-        if (this.modifiers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.modifiers).setParent(null);
-        }
+        setAsChild(modifiers, false);
         this.modifiers = modifiers;
-        if (this.modifiers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.modifiers).setParent(this);
-        }
+        setAsChild(modifiers, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.WRITE);
         }
-        if (this.declarators instanceof NodeImpl)
-        {
-            ((NodeImpl)this.declarators).setParent(null);
-        }
+        setAsChild(declarators, false);
         this.declarators = declarators;
-        if (this.declarators instanceof NodeImpl)
-        {
-            ((NodeImpl)this.declarators).setParent(this);
-        }
+        setAsChild(declarators, true);
     }
     
     /**

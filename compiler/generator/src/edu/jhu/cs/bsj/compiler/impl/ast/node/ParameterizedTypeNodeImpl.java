@@ -73,15 +73,9 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.WRITE);
         }
-        if (this.baseType instanceof NodeImpl)
-        {
-            ((NodeImpl)this.baseType).setParent(null);
-        }
+        setAsChild(baseType, false);
         this.baseType = baseType;
-        if (this.baseType instanceof NodeImpl)
-        {
-            ((NodeImpl)this.baseType).setParent(this);
-        }
+        setAsChild(baseType, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.typeArguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeArguments).setParent(null);
-        }
+        setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;
-        if (this.typeArguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeArguments).setParent(this);
-        }
+        setAsChild(typeArguments, true);
     }
     
     /**

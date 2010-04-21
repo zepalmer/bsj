@@ -79,15 +79,9 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         }
-        if (this.condition instanceof NodeImpl)
-        {
-            ((NodeImpl)this.condition).setParent(null);
-        }
+        setAsChild(condition, false);
         this.condition = condition;
-        if (this.condition instanceof NodeImpl)
-        {
-            ((NodeImpl)this.condition).setParent(this);
-        }
+        setAsChild(condition, true);
     }
     
     /**
@@ -116,15 +110,9 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.trueExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.trueExpression).setParent(null);
-        }
+        setAsChild(trueExpression, false);
         this.trueExpression = trueExpression;
-        if (this.trueExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.trueExpression).setParent(this);
-        }
+        setAsChild(trueExpression, true);
     }
     
     /**
@@ -153,15 +141,9 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.falseExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.falseExpression).setParent(null);
-        }
+        setAsChild(falseExpression, false);
         this.falseExpression = falseExpression;
-        if (this.falseExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.falseExpression).setParent(this);
-        }
+        setAsChild(falseExpression, true);
     }
     
     /**

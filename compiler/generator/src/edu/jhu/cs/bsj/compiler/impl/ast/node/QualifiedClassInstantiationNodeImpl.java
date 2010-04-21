@@ -86,15 +86,9 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ENCLOSING_EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.enclosingExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.enclosingExpression).setParent(null);
-        }
+        setAsChild(enclosingExpression, false);
         this.enclosingExpression = enclosingExpression;
-        if (this.enclosingExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.enclosingExpression).setParent(this);
-        }
+        setAsChild(enclosingExpression, true);
     }
     
     /**
@@ -123,15 +117,9 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**
@@ -160,15 +148,9 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.typeArguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeArguments).setParent(null);
-        }
+        setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;
-        if (this.typeArguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeArguments).setParent(this);
-        }
+        setAsChild(typeArguments, true);
     }
     
     /**

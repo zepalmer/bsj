@@ -98,15 +98,9 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.WRITE);
         }
-        if (this.imports instanceof NodeImpl)
-        {
-            ((NodeImpl)this.imports).setParent(null);
-        }
+        setAsChild(imports, false);
         this.imports = imports;
-        if (this.imports instanceof NodeImpl)
-        {
-            ((NodeImpl)this.imports).setParent(this);
-        }
+        setAsChild(imports, true);
     }
     
     /**
@@ -193,15 +187,9 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TARGET, Attribute.AccessType.WRITE);
         }
-        if (this.target instanceof NodeImpl)
-        {
-            ((NodeImpl)this.target).setParent(null);
-        }
+        setAsChild(target, false);
         this.target = target;
-        if (this.target instanceof NodeImpl)
-        {
-            ((NodeImpl)this.target).setParent(this);
-        }
+        setAsChild(target, true);
     }
     
     /**
@@ -230,15 +218,9 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.DEPENDS, Attribute.AccessType.WRITE);
         }
-        if (this.depends instanceof NodeImpl)
-        {
-            ((NodeImpl)this.depends).setParent(null);
-        }
+        setAsChild(depends, false);
         this.depends = depends;
-        if (this.depends instanceof NodeImpl)
-        {
-            ((NodeImpl)this.depends).setParent(this);
-        }
+        setAsChild(depends, true);
     }
     
     /**

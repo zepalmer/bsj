@@ -73,15 +73,9 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(null);
-        }
+        setAsChild(expression, false);
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(this);
-        }
+        setAsChild(expression, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         }
-        if (this.block instanceof NodeImpl)
-        {
-            ((NodeImpl)this.block).setParent(null);
-        }
+        setAsChild(block, false);
         this.block = block;
-        if (this.block instanceof NodeImpl)
-        {
-            ((NodeImpl)this.block).setParent(this);
-        }
+        setAsChild(block, true);
     }
     
     /**

@@ -16,7 +16,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SingleElementMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl implements SingleElementMetaAnnotationNode
@@ -70,15 +69,9 @@ public class SingleElementMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl 
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
         }
-        if (this.value instanceof NodeImpl)
-        {
-            ((NodeImpl)this.value).setParent(null);
-        }
+        setAsChild(value, false);
         this.value = value;
-        if (this.value instanceof NodeImpl)
-        {
-            ((NodeImpl)this.value).setParent(this);
-        }
+        setAsChild(value, true);
     }
     
     /**

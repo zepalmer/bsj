@@ -67,15 +67,9 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
         }
-        if (this.value instanceof NodeImpl)
-        {
-            ((NodeImpl)this.value).setParent(null);
-        }
+        setAsChild(value, false);
         this.value = value;
-        if (this.value instanceof NodeImpl)
-        {
-            ((NodeImpl)this.value).setParent(this);
-        }
+        setAsChild(value, true);
     }
     
     /**

@@ -41,11 +41,7 @@ public class PackageNodeImpl
 		}
 		getManager().assertInsertable(this);
 		this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
-		if (packageNode instanceof PackageNodeImpl)
-		{
-			// TODO: exception if the node in question already has a parent
-			((PackageNodeImpl) packageNode).setParent(this);
-		}
+		setAsChild(packageNode, true);
 	}
 
 	/**
@@ -58,10 +54,7 @@ public class PackageNodeImpl
 		{
 			BsjNodeFactory factory = packageNodeCallback.getFactory();
 			packageNode = factory.makePackageNode(factory.makeIdentifierNode(name));
-			if (packageNode instanceof PackageNodeImpl)
-			{
-				((PackageNodeImpl) packageNode).setParent(this);
-			}
+			setAsChild(packageNode, true);
 			this.packageNodes.put(name, packageNode);
 		}
 		return packageNode;
@@ -78,11 +71,7 @@ public class PackageNodeImpl
 		}
 		getManager().assertInsertable(this);
 		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);
-		if (compilationUnit instanceof CompilationUnitNodeImpl)
-		{
-			// TODO: exception if the node in question already has a parent
-			((CompilationUnitNodeImpl) compilationUnit).setParent(this);
-		}
+		setAsChild(compilationUnit, true);
 	}
 
 	/**

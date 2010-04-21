@@ -81,15 +81,9 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         }
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(null);
-        }
+        setAsChild(type, false);
         this.type = type;
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(this);
-        }
+        setAsChild(type, true);
     }
     
     /**
@@ -118,15 +112,9 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         }
-        if (this.name instanceof NodeImpl)
-        {
-            ((NodeImpl)this.name).setParent(null);
-        }
+        setAsChild(name, false);
         this.name = name;
-        if (this.name instanceof NodeImpl)
-        {
-            ((NodeImpl)this.name).setParent(this);
-        }
+        setAsChild(name, true);
     }
     
     /**
@@ -155,15 +143,9 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
         }
-        if (this.initializer instanceof NodeImpl)
-        {
-            ((NodeImpl)this.initializer).setParent(null);
-        }
+        setAsChild(initializer, false);
         this.initializer = initializer;
-        if (this.initializer instanceof NodeImpl)
-        {
-            ((NodeImpl)this.initializer).setParent(this);
-        }
+        setAsChild(initializer, true);
     }
     
     /**

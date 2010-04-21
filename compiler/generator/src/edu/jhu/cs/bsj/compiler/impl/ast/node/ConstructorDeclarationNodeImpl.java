@@ -121,15 +121,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**
@@ -158,15 +152,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(null);
-        }
+        setAsChild(body, false);
         this.body = body;
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(this);
-        }
+        setAsChild(body, true);
     }
     
     /**
@@ -195,15 +183,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         }
-        if (this.modifiers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.modifiers).setParent(null);
-        }
+        setAsChild(modifiers, false);
         this.modifiers = modifiers;
-        if (this.modifiers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.modifiers).setParent(this);
-        }
+        setAsChild(modifiers, true);
     }
     
     /**
@@ -232,15 +214,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.WRITE);
         }
-        if (this.parameters instanceof NodeImpl)
-        {
-            ((NodeImpl)this.parameters).setParent(null);
-        }
+        setAsChild(parameters, false);
         this.parameters = parameters;
-        if (this.parameters instanceof NodeImpl)
-        {
-            ((NodeImpl)this.parameters).setParent(this);
-        }
+        setAsChild(parameters, true);
     }
     
     /**
@@ -269,15 +245,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.WRITE);
         }
-        if (this.varargParameter instanceof NodeImpl)
-        {
-            ((NodeImpl)this.varargParameter).setParent(null);
-        }
+        setAsChild(varargParameter, false);
         this.varargParameter = varargParameter;
-        if (this.varargParameter instanceof NodeImpl)
-        {
-            ((NodeImpl)this.varargParameter).setParent(this);
-        }
+        setAsChild(varargParameter, true);
     }
     
     /**
@@ -306,15 +276,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.WRITE);
         }
-        if (this.throwTypes instanceof NodeImpl)
-        {
-            ((NodeImpl)this.throwTypes).setParent(null);
-        }
+        setAsChild(throwTypes, false);
         this.throwTypes = throwTypes;
-        if (this.throwTypes instanceof NodeImpl)
-        {
-            ((NodeImpl)this.throwTypes).setParent(this);
-        }
+        setAsChild(throwTypes, true);
     }
     
     /**
@@ -343,15 +307,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.WRITE);
         }
-        if (this.typeParameters instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeParameters).setParent(null);
-        }
+        setAsChild(typeParameters, false);
         this.typeParameters = typeParameters;
-        if (this.typeParameters instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeParameters).setParent(this);
-        }
+        setAsChild(typeParameters, true);
     }
     
     /**
@@ -380,15 +338,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         }
-        if (this.javadoc instanceof NodeImpl)
-        {
-            ((NodeImpl)this.javadoc).setParent(null);
-        }
+        setAsChild(javadoc, false);
         this.javadoc = javadoc;
-        if (this.javadoc instanceof NodeImpl)
-        {
-            ((NodeImpl)this.javadoc).setParent(this);
-        }
+        setAsChild(javadoc, true);
     }
     
     /**

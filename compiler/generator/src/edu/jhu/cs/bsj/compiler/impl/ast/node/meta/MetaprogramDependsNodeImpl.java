@@ -66,15 +66,9 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TARGET_NAMES, Attribute.AccessType.WRITE);
         }
-        if (this.targetNames instanceof NodeImpl)
-        {
-            ((NodeImpl)this.targetNames).setParent(null);
-        }
+        setAsChild(targetNames, false);
         this.targetNames = targetNames;
-        if (this.targetNames instanceof NodeImpl)
-        {
-            ((NodeImpl)this.targetNames).setParent(this);
-        }
+        setAsChild(targetNames, true);
     }
     
     /**

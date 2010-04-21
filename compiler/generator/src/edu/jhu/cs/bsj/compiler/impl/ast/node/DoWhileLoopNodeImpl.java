@@ -73,15 +73,9 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         }
-        if (this.condition instanceof NodeImpl)
-        {
-            ((NodeImpl)this.condition).setParent(null);
-        }
+        setAsChild(condition, false);
         this.condition = condition;
-        if (this.condition instanceof NodeImpl)
-        {
-            ((NodeImpl)this.condition).setParent(this);
-        }
+        setAsChild(condition, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         }
-        if (this.statement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statement).setParent(null);
-        }
+        setAsChild(statement, false);
         this.statement = statement;
-        if (this.statement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statement).setParent(this);
-        }
+        setAsChild(statement, true);
     }
     
     /**

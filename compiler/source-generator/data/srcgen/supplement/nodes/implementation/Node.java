@@ -122,6 +122,22 @@ public abstract class NodeImpl
 	}
 	
 	/**
+	 * Convenience function for marking a node as this node's child or not.
+	 * @param node The node to use.  If <code>null</code>, nothing happens.
+	 * @param child <code>true</code> if the node is this node's child; <code>false</code> if it is not.
+	 */
+	protected void setAsChild(Node node, boolean child)
+	{
+		if (node instanceof NodeImpl)
+		{
+			((NodeImpl)node).setParent(child ? this : null);
+		} else if (node != null)
+		{
+			// TODO: throw an exception indicating a heterogeneous tree?
+		}
+	}
+	
+	/**
 	 * A convenience method which retrieves the nearest ancestor of this node of the specified type.  Note that a node
 	 * is not its own ancestor; thus, providing this node's type as the node class will not retrieve this node.
 	 * @param nodeClass The class of ancestor to retrieve.

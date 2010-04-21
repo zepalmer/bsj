@@ -65,15 +65,9 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         }
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(null);
-        }
+        setAsChild(type, false);
         this.type = type;
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(this);
-        }
+        setAsChild(type, true);
     }
     
     /**

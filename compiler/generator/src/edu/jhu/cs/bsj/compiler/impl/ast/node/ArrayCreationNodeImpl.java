@@ -69,15 +69,9 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.WRITE);
         }
-        if (this.baseType instanceof NodeImpl)
-        {
-            ((NodeImpl)this.baseType).setParent(null);
-        }
+        setAsChild(baseType, false);
         this.baseType = baseType;
-        if (this.baseType instanceof NodeImpl)
-        {
-            ((NodeImpl)this.baseType).setParent(this);
-        }
+        setAsChild(baseType, true);
     }
     
     /**

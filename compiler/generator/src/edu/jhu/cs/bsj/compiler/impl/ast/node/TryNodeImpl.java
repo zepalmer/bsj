@@ -80,15 +80,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         }
-        if (this.block instanceof NodeImpl)
-        {
-            ((NodeImpl)this.block).setParent(null);
-        }
+        setAsChild(block, false);
         this.block = block;
-        if (this.block instanceof NodeImpl)
-        {
-            ((NodeImpl)this.block).setParent(this);
-        }
+        setAsChild(block, true);
     }
     
     /**
@@ -117,15 +111,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.CATCHES, Attribute.AccessType.WRITE);
         }
-        if (this.catches instanceof NodeImpl)
-        {
-            ((NodeImpl)this.catches).setParent(null);
-        }
+        setAsChild(catches, false);
         this.catches = catches;
-        if (this.catches instanceof NodeImpl)
-        {
-            ((NodeImpl)this.catches).setParent(this);
-        }
+        setAsChild(catches, true);
     }
     
     /**
@@ -154,15 +142,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.WRITE);
         }
-        if (this.finallyBlock instanceof NodeImpl)
-        {
-            ((NodeImpl)this.finallyBlock).setParent(null);
-        }
+        setAsChild(finallyBlock, false);
         this.finallyBlock = finallyBlock;
-        if (this.finallyBlock instanceof NodeImpl)
-        {
-            ((NodeImpl)this.finallyBlock).setParent(this);
-        }
+        setAsChild(finallyBlock, true);
     }
     
     /**

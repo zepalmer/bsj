@@ -73,15 +73,9 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(null);
-        }
+        setAsChild(expression, false);
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(this);
-        }
+        setAsChild(expression, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**

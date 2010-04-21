@@ -73,15 +73,9 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(null);
-        }
+        setAsChild(expression, false);
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.expression).setParent(this);
-        }
+        setAsChild(expression, true);
     }
     
     /**
@@ -110,15 +104,9 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.statements instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statements).setParent(null);
-        }
+        setAsChild(statements, false);
         this.statements = statements;
-        if (this.statements instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statements).setParent(this);
-        }
+        setAsChild(statements, true);
     }
     
     /**

@@ -1,7 +1,7 @@
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassDeclarationNodeImpl.LocalAttribute;
 
-public interface MetaprogramAnchorNode
+public class MetaprogramAnchorNodeImpl
 {
 	/* GEN:start */
 	/**
@@ -22,15 +22,9 @@ public interface MetaprogramAnchorNode
 	{
 		// TODO: some kind of control on this; setReplacement should probably only be called one time?
 		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.WRITE);
-		if (this.replacement instanceof NodeImpl)
-		{
-			((NodeImpl)this.replacement).setParent(null);
-		}
+		setAsChild(this.replacement, false);
 		this.replacement = replacement;
-		if (this.replacement instanceof NodeImpl)
-		{
-			((NodeImpl)this.replacement).setParent(this);
-		}
+		setAsChild(this.replacement, true);
 	}
 	/* GEN:stop */
 }

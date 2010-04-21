@@ -72,15 +72,9 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.testExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.testExpression).setParent(null);
-        }
+        setAsChild(testExpression, false);
         this.testExpression = testExpression;
-        if (this.testExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.testExpression).setParent(this);
-        }
+        setAsChild(testExpression, true);
     }
     
     /**
@@ -109,15 +103,9 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.WRITE);
         }
-        if (this.messageExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.messageExpression).setParent(null);
-        }
+        setAsChild(messageExpression, false);
         this.messageExpression = messageExpression;
-        if (this.messageExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.messageExpression).setParent(this);
-        }
+        setAsChild(messageExpression, true);
     }
     
     /**

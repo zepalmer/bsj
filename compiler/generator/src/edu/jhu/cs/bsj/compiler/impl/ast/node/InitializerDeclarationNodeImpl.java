@@ -101,15 +101,9 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(null);
-        }
+        setAsChild(body, false);
         this.body = body;
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(this);
-        }
+        setAsChild(body, true);
     }
     
     /**

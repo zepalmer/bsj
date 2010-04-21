@@ -78,15 +78,9 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.constructorTypeArguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.constructorTypeArguments).setParent(null);
-        }
+        setAsChild(constructorTypeArguments, false);
         this.constructorTypeArguments = constructorTypeArguments;
-        if (this.constructorTypeArguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.constructorTypeArguments).setParent(this);
-        }
+        setAsChild(constructorTypeArguments, true);
     }
     
     /**
@@ -115,15 +109,9 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.arguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arguments).setParent(null);
-        }
+        setAsChild(arguments, false);
         this.arguments = arguments;
-        if (this.arguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arguments).setParent(this);
-        }
+        setAsChild(arguments, true);
     }
     
     /**
@@ -152,15 +140,9 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(null);
-        }
+        setAsChild(body, false);
         this.body = body;
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(this);
-        }
+        setAsChild(body, true);
     }
     
     /**

@@ -89,15 +89,9 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
         }
-        if (this.initializer instanceof NodeImpl)
-        {
-            ((NodeImpl)this.initializer).setParent(null);
-        }
+        setAsChild(initializer, false);
         this.initializer = initializer;
-        if (this.initializer instanceof NodeImpl)
-        {
-            ((NodeImpl)this.initializer).setParent(this);
-        }
+        setAsChild(initializer, true);
     }
     
     /**
@@ -126,15 +120,9 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         }
-        if (this.condition instanceof NodeImpl)
-        {
-            ((NodeImpl)this.condition).setParent(null);
-        }
+        setAsChild(condition, false);
         this.condition = condition;
-        if (this.condition instanceof NodeImpl)
-        {
-            ((NodeImpl)this.condition).setParent(this);
-        }
+        setAsChild(condition, true);
     }
     
     /**
@@ -163,15 +151,9 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.WRITE);
         }
-        if (this.update instanceof NodeImpl)
-        {
-            ((NodeImpl)this.update).setParent(null);
-        }
+        setAsChild(update, false);
         this.update = update;
-        if (this.update instanceof NodeImpl)
-        {
-            ((NodeImpl)this.update).setParent(this);
-        }
+        setAsChild(update, true);
     }
     
     /**
@@ -200,15 +182,9 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         }
-        if (this.statement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statement).setParent(null);
-        }
+        setAsChild(statement, false);
         this.statement = statement;
-        if (this.statement instanceof NodeImpl)
-        {
-            ((NodeImpl)this.statement).setParent(this);
-        }
+        setAsChild(statement, true);
     }
     
     /**

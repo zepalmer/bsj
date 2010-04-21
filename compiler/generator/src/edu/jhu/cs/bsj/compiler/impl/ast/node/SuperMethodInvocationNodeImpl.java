@@ -89,15 +89,9 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         }
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(null);
-        }
+        setAsChild(type, false);
         this.type = type;
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(this);
-        }
+        setAsChild(type, true);
     }
     
     /**
@@ -126,15 +120,9 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
+        setAsChild(identifier, false);
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        setAsChild(identifier, true);
     }
     
     /**
@@ -163,15 +151,9 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.arguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arguments).setParent(null);
-        }
+        setAsChild(arguments, false);
         this.arguments = arguments;
-        if (this.arguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.arguments).setParent(this);
-        }
+        setAsChild(arguments, true);
     }
     
     /**
@@ -200,15 +182,9 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             getManager().assertMutatable(this);
             recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        if (this.typeArguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeArguments).setParent(null);
-        }
+        setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;
-        if (this.typeArguments instanceof NodeImpl)
-        {
-            ((NodeImpl)this.typeArguments).setParent(this);
-        }
+        setAsChild(typeArguments, true);
     }
     
     /**
