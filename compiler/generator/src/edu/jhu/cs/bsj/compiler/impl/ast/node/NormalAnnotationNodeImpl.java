@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -87,6 +88,14 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         {
             this.arguments.receive(visitor);
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -103,6 +112,14 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         if (this.arguments != null)
         {
             this.arguments.receiveTyped(visitor);
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
         }
     }
     

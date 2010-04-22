@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -231,6 +232,14 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         {
             this.typeDecls.receive(visitor);
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -259,6 +268,14 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (this.typeDecls != null)
         {
             this.typeDecls.receiveTyped(visitor);
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
         }
     }
     

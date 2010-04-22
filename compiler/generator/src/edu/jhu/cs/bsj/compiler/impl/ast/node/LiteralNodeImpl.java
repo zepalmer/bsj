@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -8,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -75,6 +77,14 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -88,6 +98,14 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
+        }
     }
     
     @Override

@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -50,6 +51,14 @@ public class MetaprogramImportListNodeImpl extends ListNodeImpl<MetaprogramImpor
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -63,6 +72,14 @@ public class MetaprogramImportListNodeImpl extends ListNodeImpl<MetaprogramImpor
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
+        }
     }
     
     @Override

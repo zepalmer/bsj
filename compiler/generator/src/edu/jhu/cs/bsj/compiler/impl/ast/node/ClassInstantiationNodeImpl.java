@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -10,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
@@ -168,6 +170,14 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         {
             this.body.receive(visitor);
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -192,6 +202,14 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         if (this.body != null)
         {
             this.body.receiveTyped(visitor);
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
         }
     }
     

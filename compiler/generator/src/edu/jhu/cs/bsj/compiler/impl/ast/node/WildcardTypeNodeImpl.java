@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -121,6 +122,14 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         {
             this.bound.receive(visitor);
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -137,6 +146,14 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         if (this.bound != null)
         {
             this.bound.receiveTyped(visitor);
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
         }
     }
     

@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -128,6 +129,14 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         {
             this.bounds.receive(visitor);
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -148,6 +157,14 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         if (this.bounds != null)
         {
             this.bounds.receiveTyped(visitor);
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
         }
     }
     

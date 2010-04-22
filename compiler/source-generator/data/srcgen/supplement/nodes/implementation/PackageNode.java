@@ -105,6 +105,18 @@ public class PackageNodeImpl
 	}
 
 	/**
+	 * Used to allow visitation over the children of this package.
+	 * @return An iterator which iterates over the compilation units in this package and all of its subpackages.
+	 */
+	protected Iterator<? extends Node> getHiddenVisitorChildren()
+	{
+		List<Iterator<? extends Node>> iterators = new ArrayList<Iterator<? extends Node>>();
+		iterators.add(super.getHiddenVisitorChildren());
+		iterators.add(getRecursiveCompilationUnitIterator());
+		return new CompoundIterator<Node>(iterators.iterator());
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public PackageNode getSubpackageByQualifiedName(String name)

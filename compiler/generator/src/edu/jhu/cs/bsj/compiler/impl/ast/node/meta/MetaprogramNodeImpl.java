@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -129,6 +130,14 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         {
             this.body.receive(visitor);
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -149,6 +158,14 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         if (this.body != null)
         {
             this.body.receiveTyped(visitor);
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
         }
     }
     

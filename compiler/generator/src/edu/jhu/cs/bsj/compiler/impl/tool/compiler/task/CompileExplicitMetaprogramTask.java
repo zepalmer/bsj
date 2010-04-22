@@ -83,6 +83,14 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 	protected MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>> buildProfile(
 			MetacompilationContext metacompilationContext) throws IOException
 	{
+		// It is possible for this task to be added several times for a given metaprogram node before it is executed.
+		// If true, all executions after the first are redundant; the metaprogram anchor will have a nullary metaprogram
+		// node.  So check that and bail if we're unnecessary.
+		if (this.anchor.getMetaprogram() == null)
+		{
+			return null;
+		}
+		
 		// TODO: this whole name building process relies on strings - fix it
 		// this is a bit of a hack because it allows type and package name collision
 		// suppose the existence of a package foo with subpackage bar and class Baz

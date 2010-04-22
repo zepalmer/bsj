@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -86,6 +87,14 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
         {
             this.annotation.receive(visitor);
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -102,6 +111,14 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
         if (this.annotation != null)
         {
             this.annotation.receiveTyped(visitor);
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
         }
     }
     

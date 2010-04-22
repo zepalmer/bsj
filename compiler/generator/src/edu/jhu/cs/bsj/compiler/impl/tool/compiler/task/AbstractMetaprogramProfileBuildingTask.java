@@ -43,11 +43,7 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 		MetaprogramProfile<?> profile = buildProfile(context);
 		if (profile == null)
 		{
-			if (LOGGER.isTraceEnabled())
-			{
-				LOGGER.trace("Metaprogram at " + this.anchor.getStartLocation() + " could not be profiled.");
-				return;
-			}
+			return;
 		}
 		if (LOGGER.isTraceEnabled())
 		{

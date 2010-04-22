@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
@@ -17,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MultipleParentNodeExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.utils.EmptyIterator;
 import edu.jhu.cs.bsj.compiler.impl.utils.HashMultiMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -90,6 +92,14 @@ public abstract class NodeImpl implements Node
      */
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -101,6 +111,14 @@ public abstract class NodeImpl implements Node
      */
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
+        }
     }
     
     public void receiveTyped(BsjTypedNodeVisitor visitor)
@@ -221,6 +239,17 @@ public abstract class NodeImpl implements Node
 		visitor.visitStart(this);
 		receiveToChildren(visitor);
 		visitor.visitStop(this);
+	}
+	
+	/**
+	 * Used to obtain an iterator of additional children of this node that visitors should visit.  The default
+	 * implementation specifies no additional children.
+	 * @return An iterator of children that visitors to this node should visit.  If <code>null</code>, no additional
+	 * children are used.
+	 */
+	protected Iterator<? extends Node> getHiddenVisitorChildren()
+	{
+		return new EmptyIterator<Node>();
 	}
 	
 	/**

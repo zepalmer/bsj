@@ -70,6 +70,10 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 
 	private void finishMetaprogramExecutionPhase(MetacompilationContext context)
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("No metaprograms left to run.  Adding tasks to strip meta-annotations from sources.");
+		}
 		Iterator<CompilationUnitNode> it = context.getRootPackage().getRecursiveCompilationUnitIterator();
 		while (it.hasNext())
 		{
@@ -124,17 +128,28 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
 		}
 
+//		// Pass the affected part of the AST back to allow name analysis, etc.
+//		// TODO: what if more than just this compilation unit was changed? Need name analysis on inserted CUs too
+//		if (replacement != null)
+//		{
+//			Node target = replacement.getNearestAncestorOfType(CompilationUnitNode.class);
+//			if (target == null)
+//			{
+//				target = replacement.getFurthestAncestor();
+//			}
+//			context.registerTask(new CategorizeNamesTask(target, profile));
+//		}
 		// Pass the affected part of the AST back to allow name analysis, etc.
-		// TODO: what if more than just this compilation unit was changed? Need name analysis on inserted CUs too
+		// TODO: make the following a little bit more palatable by only analyzing those trees that changed
+		Node target;
 		if (replacement != null)
 		{
-			Node target = replacement.getNearestAncestorOfType(CompilationUnitNode.class);
-			if (target == null)
-			{
-				target = replacement.getFurthestAncestor();
-			}
-			context.registerTask(new CategorizeNamesTask(target, profile));
+			target = replacement.getFurthestAncestor();
+		} else
+		{
+			target = profile.getAnchor().getFurthestAncestor();
 		}
+		context.registerTask(new CategorizeNamesTask(target, profile));
 
 		// Re-enqueue this task so we can execute the next metaprogram when the time comes (which is probably right now)
 		context.registerTask(this);

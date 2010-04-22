@@ -88,6 +88,17 @@ public abstract class NodeImpl
 	}
 	
 	/**
+	 * Used to obtain an iterator of additional children of this node that visitors should visit.  The default
+	 * implementation specifies no additional children.
+	 * @return An iterator of children that visitors to this node should visit.  If <code>null</code>, no additional
+	 * children are used.
+	 */
+	protected Iterator<? extends Node> getHiddenVisitorChildren()
+	{
+		return new EmptyIterator<Node>();
+	}
+	
+	/**
 	 * Retrieves the unique ID number of this node.
 	 */
 	public long getUid()

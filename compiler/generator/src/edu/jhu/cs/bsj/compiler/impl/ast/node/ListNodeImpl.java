@@ -78,6 +78,14 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
                 node.receive(visitor);
             }
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -96,6 +104,14 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
             for (Node node : this.children)
             {
                 node.receiveTyped(visitor);
+            }
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
             }
         }
     }

@@ -67,7 +67,7 @@ public class SourceGenerator
 	 * Names the types of objects which are deep copied by passing them as a single argument to their constructor.
 	 */
 	private static final Set<String> CLONEABLE_NAMES = Collections.unmodifiableSet(new HashSet<String>(
-			Arrays.<String>asList()));
+			Arrays.<String> asList()));
 
 	private Set<DefinitionHandler> handlers = new HashSet<DefinitionHandler>();
 
@@ -1013,6 +1013,16 @@ public class SourceGenerator
 					ps.println("}");
 				}
 			}
+			ps.println("Iterator<? extends Node> extras = getHiddenVisitorChildren();");
+			ps.println("if (extras != null)");
+			ps.println("{");
+			ps.incPrependCount();
+			ps.println("while (extras.hasNext())");
+			ps.println("{");
+			ps.println("    extras.next().receive(visitor);");
+			ps.println("}");
+			ps.decPrependCount();
+			ps.println("}");
 			ps.decPrependCount();
 			ps.println("}");
 			ps.println();
@@ -1031,31 +1041,43 @@ public class SourceGenerator
 			}
 			ps.println("protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)");
 			ps.println("{");
+			ps.incPrependCount();
 			if (def.getBaseSuperName() != null)
 			{
-				ps.println("    super.receiveTypedToChildren(visitor);");
+				ps.println("super.receiveTypedToChildren(visitor);");
 			}
 			for (ModalPropertyDefinition<?> p : def.getProperties())
 			{
 				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
-					ps.println("    if (this." + p.getName() + " != null)");
-					ps.println("    {");
-					ps.println("        this." + p.getName() + ".receiveTyped(visitor);");
-					ps.println("    }");
+					ps.println("if (this." + p.getName() + " != null)");
+					ps.println("{");
+					ps.println("    this." + p.getName() + ".receiveTyped(visitor);");
+					ps.println("}");
 				} else if (p.getBaseType().equals("List"))
 				{
 					// Let's assume that the list contains node objects!
 					// TODO: this is pretty shoddy - can we improve on this?
-					ps.println("    if (this." + p.getName() + " != null)");
+					ps.println("if (this." + p.getName() + " != null)");
+					ps.println("{");
+					ps.println("    for (Node node : this." + p.getName() + ")");
 					ps.println("    {");
-					ps.println("        for (Node node : this." + p.getName() + ")");
-					ps.println("        {");
-					ps.println("            node.receiveTyped(visitor);");
-					ps.println("        }");
+					ps.println("        node.receiveTyped(visitor);");
 					ps.println("    }");
+					ps.println("}");
 				}
 			}
+			ps.println("Iterator<? extends Node> extras = getHiddenVisitorChildren();");
+			ps.println("if (extras != null)");
+			ps.println("{");
+			ps.incPrependCount();
+			ps.println("while (extras.hasNext())");
+			ps.println("{");
+			ps.println("    extras.next().receiveTyped(visitor);");
+			ps.println("}");
+			ps.decPrependCount();
+			ps.println("}");
+			ps.decPrependCount();
 			ps.println("}");
 			ps.println();
 			if (def.getBaseSuperName() != null)

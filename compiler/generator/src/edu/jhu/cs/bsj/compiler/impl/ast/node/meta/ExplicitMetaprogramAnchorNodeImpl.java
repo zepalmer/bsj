@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -84,6 +85,14 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
         {
             this.metaprogram.receive(visitor);
         }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receive(visitor);
+            }
+        }
     }
     
     /**
@@ -100,6 +109,14 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
         if (this.metaprogram != null)
         {
             this.metaprogram.receiveTyped(visitor);
+        }
+        Iterator<? extends Node> extras = getHiddenVisitorChildren();
+        if (extras != null)
+        {
+            while (extras.hasNext())
+            {
+                extras.next().receiveTyped(visitor);
+            }
         }
     }
     
