@@ -34,7 +34,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
@@ -129,10 +130,13 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 				}
 			}
 
-			for (MetaprogramDependsNode dependency : metaprogramPreambleNode.getDependencies())
+			for (MetaprogramDependencyDeclarationNode dependencyDeclaration : metaprogramPreambleNode.getDependencies())
 			{
-				for (NameNode dependsName : dependency.getTargetNames().getChildren())
+				for (MetaprogramDependencyNode dependency : dependencyDeclaration.getTargets())
 				{
+					NameNode dependsName = dependency.getTargetName();
+					// TODO: address weakness of dependencies
+					
 					// We need a fully-qualified name
 					String qualifiedDependsName;
 					if (dependsName instanceof SimpleNameNode)

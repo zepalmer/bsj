@@ -6,10 +6,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
 /**
- * Represents a list of {@link MetaprogramDependsNode}s.
+ * Represents a list of {@link MetaprogramDependencyDeclarationNode}s.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramDependsListNode extends ListNode<MetaprogramDependsNode>
+public interface MetaprogramDependencyDeclarationListNode extends ListNode<MetaprogramDependencyDeclarationNode>
 {
     /**
      * Generates a deep copy of this node.
@@ -17,5 +17,5 @@ public interface MetaprogramDependsListNode extends ListNode<MetaprogramDependsN
      * @return The resulting deep copy node.
      */
     @Override
-    public MetaprogramDependsListNode deepCopy(BsjNodeFactory factory);
+    public MetaprogramDependencyDeclarationListNode deepCopy(BsjNodeFactory factory);
 }

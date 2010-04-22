@@ -21,8 +21,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -2344,50 +2346,116 @@ public interface BsjNodeFactory
             MetaAnnotationValueNode... childrenElements);
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            List<MetaprogramDependsNode> children);
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            List<MetaprogramDependencyDeclarationNode> children);
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            MetaprogramDependsNode... childrenElements);
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            MetaprogramDependencyDeclarationNode... childrenElements);
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The specified start and stop locations are used.
      */
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            List<MetaprogramDependsNode> children,
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            List<MetaprogramDependencyDeclarationNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The specified start and stop locations are used.
      */
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            MetaprogramDependsNode... childrenElements);
+            MetaprogramDependencyDeclarationNode... childrenElements);
     
     /**
-     * Creates a MetaprogramDependsNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramDependsNode makeMetaprogramDependsNode(
-            NameListNode targetNames);
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            MetaprogramDependencyListNode targets);
     
     /**
-     * Creates a MetaprogramDependsNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The specified start and stop locations are used.
      */
-    public MetaprogramDependsNode makeMetaprogramDependsNode(
-            NameListNode targetNames,
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            MetaprogramDependencyListNode targets,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            List<MetaprogramDependencyNode> children);
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            MetaprogramDependencyNode... childrenElements);
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            List<MetaprogramDependencyNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaprogramDependencyNode... childrenElements);
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
+            boolean weak);
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
+            boolean weak,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName);
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -2466,7 +2534,7 @@ public interface BsjNodeFactory
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies);
+            MetaprogramDependencyDeclarationListNode dependencies);
     
     /**
      * Creates a MetaprogramPreambleNode.
@@ -2477,7 +2545,7 @@ public interface BsjNodeFactory
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies,
+            MetaprogramDependencyDeclarationListNode dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -2488,7 +2556,7 @@ public interface BsjNodeFactory
     public MetaprogramPreambleNode makeMetaprogramPreambleNode(
             MetaprogramImportListNode imports,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies);
+            MetaprogramDependencyDeclarationListNode dependencies);
     
     /**
      * Creates a MetaprogramPreambleNode.
@@ -2497,7 +2565,7 @@ public interface BsjNodeFactory
     public MetaprogramPreambleNode makeMetaprogramPreambleNode(
             MetaprogramImportListNode imports,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies,
+            MetaprogramDependencyDeclarationListNode dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     

@@ -22,8 +22,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -1303,24 +1305,46 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type MetaprogramDependsListNode.
+     * Starts a visit for nodes of type MetaprogramDependencyDeclarationListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitMetaprogramDependsListNodeStart(MetaprogramDependsListNode node, boolean mostSpecific)
+    public void visitMetaprogramDependencyDeclarationListNodeStart(MetaprogramDependencyDeclarationListNode node, boolean mostSpecific)
     {
     }
 
     /**
-     * Starts a visit for nodes of type MetaprogramDependsNode.
+     * Starts a visit for nodes of type MetaprogramDependencyDeclarationNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitMetaprogramDependsNodeStart(MetaprogramDependsNode node, boolean mostSpecific)
+    public void visitMetaprogramDependencyDeclarationNodeStart(MetaprogramDependencyDeclarationNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MetaprogramDependencyListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramDependencyListNodeStart(MetaprogramDependencyListNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MetaprogramDependencyNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramDependencyNodeStart(MetaprogramDependencyNode node, boolean mostSpecific)
     {
     }
 
@@ -3350,24 +3374,46 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type MetaprogramDependsListNode.
+     * Stops a visit for nodes of type MetaprogramDependencyDeclarationListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitMetaprogramDependsListNodeStop(MetaprogramDependsListNode node, boolean mostSpecific)
+    public void visitMetaprogramDependencyDeclarationListNodeStop(MetaprogramDependencyDeclarationListNode node, boolean mostSpecific)
     {
     }
 
     /**
-     * Stops a visit for nodes of type MetaprogramDependsNode.
+     * Stops a visit for nodes of type MetaprogramDependencyDeclarationNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitMetaprogramDependsNodeStop(MetaprogramDependsNode node, boolean mostSpecific)
+    public void visitMetaprogramDependencyDeclarationNodeStop(MetaprogramDependencyDeclarationNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MetaprogramDependencyListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramDependencyListNodeStop(MetaprogramDependencyListNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MetaprogramDependencyNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramDependencyNodeStop(MetaprogramDependencyNode node, boolean mostSpecific)
     {
     }
 

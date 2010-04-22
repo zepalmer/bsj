@@ -34,8 +34,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -3470,10 +3472,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
-    public ExpressionNode executeMetaprogramDependsListNode(MetaprogramDependsListNode node, ExpressionNode factoryNode)
+    public ExpressionNode executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, ExpressionNode factoryNode)
     {
         List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
-        for (MetaprogramDependsNode listval : node.getChildren())
+        for (MetaprogramDependencyDeclarationNode listval : node.getChildren())
         {
             liftChildrenList.add(
                     listval != null ? 
@@ -3488,7 +3490,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeMetaprogramDependsListNode"),
+                        factory.makeIdentifierNode("makeMetaprogramDependencyDeclarationListNode"),
                         factory.makeExpressionListNode(
                                 factory.makeMethodInvocationByNameNode(
                                         factory.makeQualifiedNameNode(
@@ -3507,7 +3509,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaprogramDependsNode"),
+                                                                factory.makeIdentifierNode("MetaprogramDependencyDeclarationNode"),
                                                                 NameCategory.TYPE)))),
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
@@ -3517,11 +3519,11 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
-    public ExpressionNode executeMetaprogramDependsNode(MetaprogramDependsNode node, ExpressionNode factoryNode)
+    public ExpressionNode executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode liftTargetNames = 
-                node.getTargetNames() != null ?
-                        node.getTargetNames().executeOperation(this,factoryNode) :
+        ExpressionNode liftTargets = 
+                node.getTargets() != null ?
+                        node.getTargets().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
         BsjSourceLocation liftStartLocationValue = 
                 node.getStartLocation();
@@ -3531,9 +3533,84 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeMetaprogramDependsNode"),
+                        factory.makeIdentifierNode("makeMetaprogramDependencyDeclarationNode"),
                         factory.makeExpressionListNode(
-                                liftTargetNames,
+                                liftTargets,
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, ExpressionNode factoryNode)
+    {
+        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
+        for (MetaprogramDependencyNode listval : node.getChildren())
+        {
+            liftChildrenList.add(
+                    listval != null ? 
+        			        listval.executeOperation(this,factoryNode) :
+                            null);
+        }
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaprogramDependencyListNode"),
+                        factory.makeExpressionListNode(
+                                factory.makeMethodInvocationByNameNode(
+                                        factory.makeQualifiedNameNode(
+                                                factory.makeQualifiedNameNode(
+                                                        factory.makeQualifiedNameNode(
+                                                                factory.makeSimpleNameNode(
+                                                                        factory.makeIdentifierNode("java"),
+                                                                        NameCategory.PACKAGE),
+                                                                factory.makeIdentifierNode("util"),
+                                                                NameCategory.PACKAGE),
+                                                        factory.makeIdentifierNode("Arrays"),
+                                                        NameCategory.TYPE),
+                                                factory.makeIdentifierNode("asList"),
+                                                NameCategory.METHOD),
+                                        factory.makeExpressionListNode(liftChildrenList),
+                                        factory.makeReferenceTypeListNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("MetaprogramDependencyNode"),
+                                                                NameCategory.TYPE)))),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaprogramDependencyNode(MetaprogramDependencyNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftTargetName = 
+                node.getTargetName() != null ?
+                        node.getTargetName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        boolean liftWeakValue = 
+                node.getWeak();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaprogramDependencyNode"),
+                        factory.makeExpressionListNode(
+                                liftTargetName,
+                                expressionizeBoolean(liftWeakValue),
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());

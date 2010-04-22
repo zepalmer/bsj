@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.node.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -13,19 +12,19 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramDependsNode extends Node
+public interface MetaprogramDependencyDeclarationNode extends Node
 {
     /**
      * Gets the names of the metaprogram targets on which to depend.
      * @return The names of the metaprogram targets on which to depend.
      */
-    public NameListNode getTargetNames();
+    public MetaprogramDependencyListNode getTargets();
     
     /**
      * Changes the names of the metaprogram targets on which to depend.
-     * @param targetNames The names of the metaprogram targets on which to depend.
+     * @param targets The names of the metaprogram targets on which to depend.
      */
-    public void setTargetNames(NameListNode targetNames);
+    public void setTargets(MetaprogramDependencyListNode targets);
     
     /**
      * Generates a deep copy of this node.
@@ -33,5 +32,5 @@ public interface MetaprogramDependsNode extends Node
      * @return The resulting deep copy node.
      */
     @Override
-    public MetaprogramDependsNode deepCopy(BsjNodeFactory factory);
+    public MetaprogramDependencyDeclarationNode deepCopy(BsjNodeFactory factory);
 }

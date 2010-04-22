@@ -17,8 +17,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -800,20 +802,36 @@ public interface BsjNodeOperation<P,R>
     public R executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, P p);
 
     /**
-     * Executes this operation against a MetaprogramDependsListNode.
-     * @param node The MetaprogramDependsListNode in question.
+     * Executes this operation against a MetaprogramDependencyDeclarationListNode.
+     * @param node The MetaprogramDependencyDeclarationListNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
-    public R executeMetaprogramDependsListNode(MetaprogramDependsListNode node, P p);
+    public R executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, P p);
 
     /**
-     * Executes this operation against a MetaprogramDependsNode.
-     * @param node The MetaprogramDependsNode in question.
+     * Executes this operation against a MetaprogramDependencyDeclarationNode.
+     * @param node The MetaprogramDependencyDeclarationNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
-    public R executeMetaprogramDependsNode(MetaprogramDependsNode node, P p);
+    public R executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, P p);
+
+    /**
+     * Executes this operation against a MetaprogramDependencyListNode.
+     * @param node The MetaprogramDependencyListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, P p);
+
+    /**
+     * Executes this operation against a MetaprogramDependencyNode.
+     * @param node The MetaprogramDependencyNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaprogramDependencyNode(MetaprogramDependencyNode node, P p);
 
     /**
      * Executes this operation against a MetaprogramImportListNode.

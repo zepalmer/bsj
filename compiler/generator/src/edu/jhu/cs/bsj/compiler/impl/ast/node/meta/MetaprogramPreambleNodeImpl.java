@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
@@ -37,7 +37,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     private MetaprogramTargetListNode targets;
     
     /** The dependencies for this metaprogram. */
-    private MetaprogramDependsListNode dependencies;
+    private MetaprogramDependencyDeclarationListNode dependencies;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
@@ -59,7 +59,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies,
+            MetaprogramDependencyDeclarationListNode dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -197,7 +197,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      * Gets the dependencies for this metaprogram.
      * @return The dependencies for this metaprogram.
      */
-    public MetaprogramDependsListNode getDependencies()
+    public MetaprogramDependencyDeclarationListNode getDependencies()
     {
         recordAccess(LocalAttribute.DEPENDENCIES, Attribute.AccessType.READ);
         return this.dependencies;
@@ -207,12 +207,12 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      * Changes the dependencies for this metaprogram.
      * @param dependencies The dependencies for this metaprogram.
      */
-    public void setDependencies(MetaprogramDependsListNode dependencies)
+    public void setDependencies(MetaprogramDependencyDeclarationListNode dependencies)
     {
             setDependencies(dependencies, true);
     }
     
-    private void setDependencies(MetaprogramDependsListNode dependencies, boolean checkPermissions)
+    private void setDependencies(MetaprogramDependencyDeclarationListNode dependencies, boolean checkPermissions)
     {
         if (checkPermissions)
         {
@@ -405,9 +405,9 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             setTargets((MetaprogramTargetListNode)after);
             return true;
         }
-        if (before.equals(this.getDependencies()) && (after instanceof MetaprogramDependsListNode))
+        if (before.equals(this.getDependencies()) && (after instanceof MetaprogramDependencyDeclarationListNode))
         {
-            setDependencies((MetaprogramDependsListNode)after);
+            setDependencies((MetaprogramDependencyDeclarationListNode)after);
             return true;
         }
         return false;

@@ -10,14 +10,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 
 /**
@@ -188,7 +187,7 @@ public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
         
         // ***** A name is syntactically qualified as a MetaprogramTargetName in these contexts:
         // *** In a metaprogram dependency declaration.
-        if (hasAncestry(node, NameListNode.class, MetaprogramDependsNode.class))
+        if (hasAncestry(node, MetaprogramDependencyNode.class))
         {
         	return NameCategory.METAPROGRAM_TARGET;
         }

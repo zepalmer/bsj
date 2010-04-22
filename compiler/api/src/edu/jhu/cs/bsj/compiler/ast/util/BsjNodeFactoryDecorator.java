@@ -32,8 +32,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -4162,91 +4164,213 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            List<MetaprogramDependsNode> children)
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            List<MetaprogramDependencyDeclarationNode> children)
     {
         this.before();
-        MetaprogramDependsListNode node = factory.makeMetaprogramDependsListNode(children);
+        MetaprogramDependencyDeclarationListNode node = factory.makeMetaprogramDependencyDeclarationListNode(children);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            MetaprogramDependsNode... childrenElements)
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            MetaprogramDependencyDeclarationNode... childrenElements)
     {
         this.before();
-        MetaprogramDependsListNode node = factory.makeMetaprogramDependsListNode(childrenElements);
+        MetaprogramDependencyDeclarationListNode node = factory.makeMetaprogramDependencyDeclarationListNode(childrenElements);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            List<MetaprogramDependsNode> children,
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            List<MetaprogramDependencyDeclarationNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        MetaprogramDependsListNode node = factory.makeMetaprogramDependsListNode(children, startLocation, stopLocation);
+        MetaprogramDependencyDeclarationListNode node = factory.makeMetaprogramDependencyDeclarationListNode(children, startLocation, stopLocation);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            MetaprogramDependsNode... childrenElements)
+            MetaprogramDependencyDeclarationNode... childrenElements)
     {
         this.before();
-        MetaprogramDependsListNode node = factory.makeMetaprogramDependsListNode(startLocation, stopLocation, childrenElements);
+        MetaprogramDependencyDeclarationListNode node = factory.makeMetaprogramDependencyDeclarationListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MetaprogramDependsNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramDependsNode makeMetaprogramDependsNode(
-            NameListNode targetNames)
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            MetaprogramDependencyListNode targets)
     {
         this.before();
-        MetaprogramDependsNode node = factory.makeMetaprogramDependsNode(targetNames);
+        MetaprogramDependencyDeclarationNode node = factory.makeMetaprogramDependencyDeclarationNode(targets);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MetaprogramDependsNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MetaprogramDependsNode makeMetaprogramDependsNode(
-            NameListNode targetNames,
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            MetaprogramDependencyListNode targets,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        MetaprogramDependsNode node = factory.makeMetaprogramDependsNode(targetNames, startLocation, stopLocation);
+        MetaprogramDependencyDeclarationNode node = factory.makeMetaprogramDependencyDeclarationNode(targets, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            List<MetaprogramDependencyNode> children)
+    {
+        this.before();
+        MetaprogramDependencyListNode node = factory.makeMetaprogramDependencyListNode(children);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            MetaprogramDependencyNode... childrenElements)
+    {
+        this.before();
+        MetaprogramDependencyListNode node = factory.makeMetaprogramDependencyListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            List<MetaprogramDependencyNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramDependencyListNode node = factory.makeMetaprogramDependencyListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaprogramDependencyNode... childrenElements)
+    {
+        this.before();
+        MetaprogramDependencyListNode node = factory.makeMetaprogramDependencyListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
+            boolean weak)
+    {
+        this.before();
+        MetaprogramDependencyNode node = factory.makeMetaprogramDependencyNode(targetName, weak);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
+            boolean weak,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramDependencyNode node = factory.makeMetaprogramDependencyNode(targetName, weak, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName)
+    {
+        this.before();
+        MetaprogramDependencyNode node = factory.makeMetaprogramDependencyNode(targetName);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramDependencyNode node = factory.makeMetaprogramDependencyNode(targetName, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4383,7 +4507,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies)
+            MetaprogramDependencyDeclarationListNode dependencies)
     {
         this.before();
         MetaprogramPreambleNode node = factory.makeMetaprogramPreambleNode(imports, localMode, packageMode, targets, dependencies);
@@ -4401,7 +4525,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies,
+            MetaprogramDependencyDeclarationListNode dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4419,7 +4543,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public MetaprogramPreambleNode makeMetaprogramPreambleNode(
             MetaprogramImportListNode imports,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies)
+            MetaprogramDependencyDeclarationListNode dependencies)
     {
         this.before();
         MetaprogramPreambleNode node = factory.makeMetaprogramPreambleNode(imports, targets, dependencies);
@@ -4435,7 +4559,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public MetaprogramPreambleNode makeMetaprogramPreambleNode(
             MetaprogramImportListNode imports,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies,
+            MetaprogramDependencyDeclarationListNode dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

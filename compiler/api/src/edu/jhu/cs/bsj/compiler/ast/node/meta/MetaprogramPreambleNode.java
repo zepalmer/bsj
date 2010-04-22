@@ -65,13 +65,13 @@ public interface MetaprogramPreambleNode extends Node
      * Gets the dependencies for this metaprogram.
      * @return The dependencies for this metaprogram.
      */
-    public MetaprogramDependsListNode getDependencies();
+    public MetaprogramDependencyDeclarationListNode getDependencies();
     
     /**
      * Changes the dependencies for this metaprogram.
      * @param dependencies The dependencies for this metaprogram.
      */
-    public void setDependencies(MetaprogramDependsListNode dependencies);
+    public void setDependencies(MetaprogramDependencyDeclarationListNode dependencies);
     
     /**
      * Generates a deep copy of this node.

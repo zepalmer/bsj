@@ -22,8 +22,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -1624,12 +1626,12 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeMetaprogramDependsListNode(MetaprogramDependsListNode node, PrependablePrintStream p)
+		public Void executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, PrependablePrintStream p)
 		{
 			before(node);
 			try
 			{
-				return super.executeMetaprogramDependsListNode(node, p);
+				return super.executeMetaprogramDependencyDeclarationListNode(node, p);
 			} finally
 			{
 				after(node);
@@ -1637,13 +1639,38 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeMetaprogramDependsNode(MetaprogramDependsNode node, PrependablePrintStream p)
+		public Void executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
-				return super.executeMetaprogramDependsNode(node, p);
+				return super.executeMetaprogramDependencyDeclarationNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
+		public Void executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, PrependablePrintStream p)
+		{
+			before(node);
+			try
+			{
+				return super.executeMetaprogramDependencyListNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
+		public Void executeMetaprogramDependencyNode(MetaprogramDependencyNode node, PrependablePrintStream p)
+		{
+			before(node);
+			try
+			{
+				return super.executeMetaprogramDependencyNode(node, p);
 			} finally
 			{
 				after(node);

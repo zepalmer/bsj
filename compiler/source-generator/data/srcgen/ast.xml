@@ -2177,9 +2177,27 @@
         </type>
 
         <!-- ====================== PREAMBLE NODES ====================== -->
+        
+        <type name="MetaprogramDependencyNode" super="Node">
+            <prop name="targetName" type="NameNode" desc="the name of the metaprogram target on which to depend" />
+            <prop name="weak" type="boolean" default="false" desc="whether or not this dependency is weak"/>
+            <doc><![CDATA[
+                Represents a single metaprogram dependency in a dependency declaration, as in
+                <pre>
+                com.example.Foo.target
+                </pre>
+                or
+                <pre>
+                #weak com.example.Foo.target
+                </pre>
+            ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
+        </type>
 
-        <type name="MetaprogramDependsNode" super="Node">
-            <prop name="targetNames" type="NameListNode" desc="the names of the metaprogram targets on which to depend" />
+        <type name="MetaprogramDependencyDeclarationNode" super="Node">
+            <prop name="targets" type="MetaprogramDependencyListNode" desc="the names of the metaprogram targets on which to depend" />
             <doc><![CDATA[
                 Represents a metaprogram dependency declaration, as in
                 <pre>
@@ -2209,7 +2227,7 @@
             <prop name="packageMode" type="MetaprogramPackageMode" default="MetaprogramPackageMode.READ_ONLY"
                 desc="the metaprogram package mode" />
             <prop name="targets" type="MetaprogramTargetListNode" desc="the targets for this metaprogram" />
-            <prop name="dependencies" type="MetaprogramDependsListNode" desc="the dependencies for this metaprogram" />
+            <prop name="dependencies" type="MetaprogramDependencyDeclarationListNode" desc="the dependencies for this metaprogram" />
             <doc><![CDATA[
                 This node represents a metaprogram's preamble.
             ]]></doc>
@@ -2426,11 +2444,19 @@
             ]]></doc>
         </type>
 
-        <type name="MetaprogramDependsListNode" super="ListNode" superTypeArg="MetaprogramDependsNode">
+        <type name="MetaprogramDependencyListNode" super="ListNode" superTypeArg="MetaprogramDependencyNode">
             <constant name="alwaysOrdered" type="boolean" default="false"
                 desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
-                Represents a list of {@link MetaprogramDependsNode}s.
+                Represents a list of {@link MetaprogramDependencyNode}s.
+            ]]></doc>
+        </type>
+        
+        <type name="MetaprogramDependencyDeclarationListNode" super="ListNode" superTypeArg="MetaprogramDependencyDeclarationNode">
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
+            <doc><![CDATA[
+                Represents a list of {@link MetaprogramDependencyDeclarationNode}s.
             ]]></doc>
         </type>
         

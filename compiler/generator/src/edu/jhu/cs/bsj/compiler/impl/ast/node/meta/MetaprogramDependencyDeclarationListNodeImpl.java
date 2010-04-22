@@ -12,17 +12,17 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ListNodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class MetaprogramDependsListNodeImpl extends ListNodeImpl<MetaprogramDependsNode> implements MetaprogramDependsListNode
+public class MetaprogramDependencyDeclarationListNodeImpl extends ListNodeImpl<MetaprogramDependencyDeclarationNode> implements MetaprogramDependencyDeclarationListNode
 {
     /** General constructor. */
-    public MetaprogramDependsListNodeImpl(
-            List<MetaprogramDependsNode> children,
+    public MetaprogramDependencyDeclarationListNodeImpl(
+            List<MetaprogramDependencyDeclarationNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -86,7 +86,7 @@ public class MetaprogramDependsListNodeImpl extends ListNodeImpl<MetaprogramDepe
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitMetaprogramDependsListNodeStart(this, true);
+        visitor.visitMetaprogramDependencyDeclarationListNodeStart(this, true);
         visitor.visitListNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
@@ -94,7 +94,7 @@ public class MetaprogramDependsListNodeImpl extends ListNodeImpl<MetaprogramDepe
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
         visitor.visitListNodeStop(this);
-        visitor.visitMetaprogramDependsListNodeStop(this, true);
+        visitor.visitMetaprogramDependencyDeclarationListNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -140,7 +140,7 @@ public class MetaprogramDependsListNodeImpl extends ListNodeImpl<MetaprogramDepe
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeMetaprogramDependsListNode(this, p);
+        return operation.executeMetaprogramDependencyDeclarationListNode(this, p);
     }
     
     /**
@@ -149,15 +149,15 @@ public class MetaprogramDependsListNodeImpl extends ListNodeImpl<MetaprogramDepe
      * @return The resulting deep copy node.
      */
     @Override
-    public MetaprogramDependsListNode deepCopy(BsjNodeFactory factory)
+    public MetaprogramDependencyDeclarationListNode deepCopy(BsjNodeFactory factory)
     {
-        List<MetaprogramDependsNode> childrenCopy = new ArrayList<MetaprogramDependsNode>(getChildren().size());
-        for (MetaprogramDependsNode element : getChildren())
+        List<MetaprogramDependencyDeclarationNode> childrenCopy = new ArrayList<MetaprogramDependencyDeclarationNode>(getChildren().size());
+        for (MetaprogramDependencyDeclarationNode element : getChildren())
         {
             childrenCopy.add(element.deepCopy(factory));
         }
         
-        return factory.makeMetaprogramDependsListNode(
+        return factory.makeMetaprogramDependencyDeclarationListNode(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -174,11 +174,11 @@ public class MetaprogramDependsListNodeImpl extends ListNodeImpl<MetaprogramDepe
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (after instanceof MetaprogramDependsNode)
+        if (after instanceof MetaprogramDependencyDeclarationNode)
         {
             int index = getChildren().indexOf(before);
             if (index != -1)
-                getChildren().set(index, (MetaprogramDependsNode)after);
+                getChildren().set(index, (MetaprogramDependencyDeclarationNode)after);
         }
         return false;
     }

@@ -33,8 +33,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -59,8 +61,10 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationMetaAnnotationValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationValueListNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependsListNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependsNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependencyDeclarationListNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependencyDeclarationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependencyListNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependencyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramNodeImpl;
@@ -3698,80 +3702,186 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            List<MetaprogramDependsNode> children)
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            List<MetaprogramDependencyDeclarationNode> children)
     {
-        MetaprogramDependsListNode ret = new MetaprogramDependsListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyDeclarationListNode ret = new MetaprogramDependencyDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            MetaprogramDependsNode... childrenElements)
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            MetaprogramDependencyDeclarationNode... childrenElements)
     {
-        List<MetaprogramDependsNode> children = Arrays.asList(childrenElements);
-        return makeMetaprogramDependsListNode(children, startLocation, stopLocation);
+        List<MetaprogramDependencyDeclarationNode> children = Arrays.asList(childrenElements);
+        return makeMetaprogramDependencyDeclarationListNode(children, startLocation, stopLocation);
     }
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
-            List<MetaprogramDependsNode> children,
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
+            List<MetaprogramDependencyDeclarationNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramDependsListNode ret = new MetaprogramDependsListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyDeclarationListNode ret = new MetaprogramDependencyDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MetaprogramDependsListNode.
+     * Creates a MetaprogramDependencyDeclarationListNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MetaprogramDependsListNode makeMetaprogramDependsListNode(
+    public MetaprogramDependencyDeclarationListNode makeMetaprogramDependencyDeclarationListNode(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            MetaprogramDependsNode... childrenElements)
+            MetaprogramDependencyDeclarationNode... childrenElements)
     {
-        List<MetaprogramDependsNode> children = Arrays.asList(childrenElements);
-        return makeMetaprogramDependsListNode(children, startLocation, stopLocation);
+        List<MetaprogramDependencyDeclarationNode> children = Arrays.asList(childrenElements);
+        return makeMetaprogramDependencyDeclarationListNode(children, startLocation, stopLocation);
     }
     
     /**
-     * Creates a MetaprogramDependsNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramDependsNode makeMetaprogramDependsNode(
-            NameListNode targetNames)
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            MetaprogramDependencyListNode targets)
     {
-        MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(targets, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MetaprogramDependsNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MetaprogramDependsNode makeMetaprogramDependsNode(
-            NameListNode targetNames,
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            MetaprogramDependencyListNode targets,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(targets, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            List<MetaprogramDependencyNode> children)
+    {
+        MetaprogramDependencyListNode ret = new MetaprogramDependencyListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            MetaprogramDependencyNode... childrenElements)
+    {
+        List<MetaprogramDependencyNode> children = Arrays.asList(childrenElements);
+        return makeMetaprogramDependencyListNode(children, startLocation, stopLocation);
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            List<MetaprogramDependencyNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaprogramDependencyListNode ret = new MetaprogramDependencyListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyListNode makeMetaprogramDependencyListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaprogramDependencyNode... childrenElements)
+    {
+        List<MetaprogramDependencyNode> children = Arrays.asList(childrenElements);
+        return makeMetaprogramDependencyListNode(children, startLocation, stopLocation);
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
+            boolean weak)
+    {
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, weak, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
+            boolean weak,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, weak, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName)
+    {
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, false, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NameNode targetName,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, false, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3891,7 +4001,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies)
+            MetaprogramDependencyDeclarationListNode dependencies)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, targets, dependencies, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3907,7 +4017,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies,
+            MetaprogramDependencyDeclarationListNode dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3923,7 +4033,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramPreambleNode makeMetaprogramPreambleNode(
             MetaprogramImportListNode imports,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies)
+            MetaprogramDependencyDeclarationListNode dependencies)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, targets, dependencies, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3937,7 +4047,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramPreambleNode makeMetaprogramPreambleNode(
             MetaprogramImportListNode imports,
             MetaprogramTargetListNode targets,
-            MetaprogramDependsListNode dependencies,
+            MetaprogramDependencyDeclarationListNode dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

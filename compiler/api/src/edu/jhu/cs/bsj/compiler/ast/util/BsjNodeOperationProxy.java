@@ -18,8 +18,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -1301,10 +1303,10 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeMetaprogramDependsListNode(MetaprogramDependsListNode node, PNew p)
+    public RNew executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, PNew p)
     {
         POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeMetaprogramDependsListNode(node, porig);
+        ROrig rorig = this.backingOp.executeMetaprogramDependencyDeclarationListNode(node, porig);
         return after(rorig);
     }
 
@@ -1314,10 +1316,36 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeMetaprogramDependsNode(MetaprogramDependsNode node, PNew p)
+    public RNew executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, PNew p)
     {
         POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeMetaprogramDependsNode(node, porig);
+        ROrig rorig = this.backingOp.executeMetaprogramDependencyDeclarationNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaprogramDependencyListNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaprogramDependencyNode(MetaprogramDependencyNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaprogramDependencyNode(node, porig);
         return after(rorig);
     }
 

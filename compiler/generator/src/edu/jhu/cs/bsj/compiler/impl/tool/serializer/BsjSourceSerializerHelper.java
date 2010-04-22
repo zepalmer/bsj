@@ -21,8 +21,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -1806,18 +1808,36 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeMetaprogramDependsListNode(MetaprogramDependsListNode node, PrependablePrintStream p)
+	public Void executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, PrependablePrintStream p)
 	{
 		this.handleListNode(node, "", "\n", "\n", p, true);
 		return null;
 	}
 
 	@Override
-	public Void executeMetaprogramDependsNode(MetaprogramDependsNode node, PrependablePrintStream p)
+	public Void executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, PrependablePrintStream p)
 	{
 		p.print("#depends ");
-		this.handleListNode(node.getTargetNames(), "", ",", "", p, true);
+		node.getTargets().executeOperation(this, p);
 		p.println(";");
+		return null;
+	}
+
+	@Override
+	public Void executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, PrependablePrintStream p)
+	{
+		this.handleListNode(node, "", ",", "", p, true);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaprogramDependencyNode(MetaprogramDependencyNode node, PrependablePrintStream p)
+	{
+		if (node.getWeak())
+		{
+			p.print("#weak ");
+		}
+		node.getTargetName().executeOperation(this, p);
 		return null;
 	}
 
