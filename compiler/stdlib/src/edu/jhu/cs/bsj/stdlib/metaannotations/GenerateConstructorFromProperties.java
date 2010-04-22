@@ -60,6 +60,7 @@ public class GenerateConstructorFromProperties extends
             List<Pair<String, TypeNode>> fieldDescriptions,
             BsjNodeFactory factory)
     {
+    	// TODO: superclass properties via constructor arguments?
         StringBuilder javadoc = new StringBuilder("Constructor.\n");        
         List<BlockStatementNode> constructorStatements = new ArrayList<BlockStatementNode>();
         VariableListNode parameters = factory.makeVariableListNode();
