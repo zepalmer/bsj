@@ -5,9 +5,7 @@ public abstract class NamedTypeDeclarationNodeImpl<T extends Node>
 {
 	/* GEN:start */
 	/**
-	 * Retrieves the specified member type declaration from this node.
-	 * @param name The simple name of the member type declaration to retrieve.
-	 * @return The declaration of that type or <code>null</code> if no such declaration exists.
+	 * {@inheritDoc}
 	 */
 	public NamedTypeDeclarationNode<?> getTypeDeclaration(String name)
 	{
@@ -24,6 +22,34 @@ public abstract class NamedTypeDeclarationNodeImpl<T extends Node>
 		}
 		return null;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getFullyQualifiedName()
+	{
+		String id = this.getIdentifier().getIdentifier();
+		
+		NamedTypeDeclarationNode<?> enclosingType = this.getNearestAncestorOfType(NamedTypeDeclarationNode.class);
+		if (enclosingType != null)
+		{
+			return enclosingType.getFullyQualifiedName() + "." + id;
+		}
+		
+		PackageNode enclosingPackage = this.getNearestAncestorOfType(PackageNode.class);
+		if (enclosingPackage != null)
+		{
+			String packageName = ((PackageNode)enclosingPackage).getFullyQualifiedName();
+			if (packageName.length()>0)
+			{
+				return packageName + "." + id;
+			} else
+			{
+				return id;
+			}
+		}
 
+		return null;
+	}
 	/* GEN:stop */
 }

@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -371,9 +372,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     }
     
 	/**
-	 * Retrieves the specified member type declaration from this node.
-	 * @param name The simple name of the member type declaration to retrieve.
-	 * @return The declaration of that type or <code>null</code> if no such declaration exists.
+	 * {@inheritDoc}
 	 */
 	public NamedTypeDeclarationNode<?> getTypeDeclaration(String name)
 	{
@@ -390,5 +389,33 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
 		}
 		return null;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getFullyQualifiedName()
+	{
+		String id = this.getIdentifier().getIdentifier();
+		
+		NamedTypeDeclarationNode<?> enclosingType = this.getNearestAncestorOfType(NamedTypeDeclarationNode.class);
+		if (enclosingType != null)
+		{
+			return enclosingType.getFullyQualifiedName() + "." + id;
+		}
+		
+		PackageNode enclosingPackage = this.getNearestAncestorOfType(PackageNode.class);
+		if (enclosingPackage != null)
+		{
+			String packageName = ((PackageNode)enclosingPackage).getFullyQualifiedName();
+			if (packageName.length()>0)
+			{
+				return packageName + "." + id;
+			} else
+			{
+				return id;
+			}
+		}
 
+		return null;
+	}
 }

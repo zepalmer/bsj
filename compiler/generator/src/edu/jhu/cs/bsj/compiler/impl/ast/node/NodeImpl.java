@@ -282,7 +282,13 @@ public abstract class NodeImpl implements Node
 		{
 			throw new MultipleParentNodeExceptionImpl(node, this);
 		}
-		recordAccess(this.parentAttribute, Attribute.AccessType.WRITE);
+		// The first write to the parent property of a node is not recorded for the same reason that writes when a node
+		// is created are not recorded.  This allows list predicate filters to move up a pristine subtree without
+		// causing a conflict.
+		if (this.parent != null || accessRecordMap.getAll(this.parentAttribute).size() > 0)
+		{
+			recordAccess(this.parentAttribute, Attribute.AccessType.WRITE);
+		}
 		this.parent = node;
 	}
 	

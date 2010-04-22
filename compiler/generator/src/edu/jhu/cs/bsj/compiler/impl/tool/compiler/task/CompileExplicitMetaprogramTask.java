@@ -160,7 +160,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 							return null;
 						} else
 						{
-							qualifiedDependsName = metaprogramTypeName + "."
+							qualifiedDependsName = namedTypeDeclarationNode.getFullyQualifiedName() + "."
 									+ dependsName.getIdentifier().getIdentifier();
 						}
 					} else
@@ -171,7 +171,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 					if (LOGGER.isTraceEnabled())
 					{
-						LOGGER.trace("Metaprogram for anchor " + anchor.getUid() + " has " + (weak ? "weak " : "")
+						LOGGER.trace("Metaprogram at " + anchor.getStartLocation() + " has " + (weak ? "weak " : "")
 								+ "dependency " + qualifiedDependsName);
 					}
 
