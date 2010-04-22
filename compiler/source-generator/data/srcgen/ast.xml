@@ -2208,8 +2208,8 @@
                 desc="the metaprogram local mode" />
             <prop name="packageMode" type="MetaprogramPackageMode" default="MetaprogramPackageMode.READ_ONLY"
                 desc="the metaprogram package mode" />
-            <prop name="target" type="MetaprogramTargetNode" desc="the targets for this metaprogram" />
-            <prop name="depends" type="MetaprogramDependsNode" desc="the dependencies for this metaprogram" />
+            <prop name="targets" type="MetaprogramTargetListNode" desc="the targets for this metaprogram" />
+            <prop name="dependencies" type="MetaprogramDependsListNode" desc="the dependencies for this metaprogram" />
             <doc><![CDATA[
                 This node represents a metaprogram's preamble.
             ]]></doc>
@@ -2426,6 +2426,14 @@
             ]]></doc>
         </type>
 
+        <type name="MetaprogramDependsListNode" super="ListNode" superTypeArg="MetaprogramDependsNode">
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
+            <doc><![CDATA[
+                Represents a list of {@link MetaprogramDependsNode}s.
+            ]]></doc>
+        </type>
+        
         <type name="MetaprogramImportListNode" super="ListNode" superTypeArg="MetaprogramImportNode">
             <constant name="alwaysOrdered" type="boolean" default="false"
                 desc="whether or not this list's contents are always order-dependent" />
@@ -2433,7 +2441,15 @@
                 Represents a list of {@link MetaprogramImportNode}s.
             ]]></doc>
         </type>
-
+        
+        <type name="MetaprogramTargetListNode" super="ListNode" superTypeArg="MetaprogramTargetNode">
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
+            <doc><![CDATA[
+                Represents a list of {@link MetaprogramTargetNode}s.
+            ]]></doc>
+        </type>
+        
         <!-- ======================== OTHER NODES ======================= -->
 
         <type name="CodeLiteralNode" super="LiteralNode" superTypeArg="Node">

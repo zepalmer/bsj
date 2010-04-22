@@ -34,9 +34,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.LocationTranslatingDiagnosticListener;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramDependencyTypeNameResolutionDiagnosticImpl;
@@ -113,10 +115,10 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 			localMode = metaprogramPreambleNode.getLocalMode();
 			packageMode = metaprogramPreambleNode.getPackageMode();
 
-			if (metaprogramPreambleNode.getTarget() != null)
+			for (MetaprogramTargetNode target : metaprogramPreambleNode.getTargets())
 			{
 				// determine qualifying prefix
-				for (IdentifierNode id : metaprogramPreambleNode.getTarget().getTargets().getChildren())
+				for (IdentifierNode id : target.getTargets().getChildren())
 				{
 					String targetName = metaprogramTypeName + "." + id.getIdentifier();
 					if (LOGGER.isTraceEnabled())
@@ -127,9 +129,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 				}
 			}
 
-			if (metaprogramPreambleNode.getDepends() != null)
+			for (MetaprogramDependsNode dependency : metaprogramPreambleNode.getDependencies())
 			{
-				for (NameNode dependsName : metaprogramPreambleNode.getDepends().getTargetNames().getChildren())
+				for (NameNode dependsName : dependency.getTargetNames().getChildren())
 				{
 					// We need a fully-qualified name
 					String qualifiedDependsName;

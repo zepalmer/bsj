@@ -13,10 +13,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
@@ -34,10 +34,10 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     private MetaprogramPackageMode packageMode;
     
     /** The targets for this metaprogram. */
-    private MetaprogramTargetNode target;
+    private MetaprogramTargetListNode targets;
     
     /** The dependencies for this metaprogram. */
-    private MetaprogramDependsNode depends;
+    private MetaprogramDependsListNode dependencies;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
@@ -47,10 +47,10 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         LOCAL_MODE,
         /** Attribute for the packageMode property. */
         PACKAGE_MODE,
-        /** Attribute for the target property. */
-        TARGET,
-        /** Attribute for the depends property. */
-        DEPENDS,
+        /** Attribute for the targets property. */
+        TARGETS,
+        /** Attribute for the dependencies property. */
+        DEPENDENCIES,
     }
     
     /** General constructor. */
@@ -58,8 +58,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             MetaprogramImportListNode imports,
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
-            MetaprogramTargetNode target,
-            MetaprogramDependsNode depends,
+            MetaprogramTargetListNode targets,
+            MetaprogramDependsListNode dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -69,8 +69,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         setImports(imports, false);
         this.localMode = localMode;
         this.packageMode = packageMode;
-        setTarget(target, false);
-        setDepends(depends, false);
+        setTargets(targets, false);
+        setDependencies(dependencies, false);
     }
     
     /**
@@ -166,62 +166,62 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      * Gets the targets for this metaprogram.
      * @return The targets for this metaprogram.
      */
-    public MetaprogramTargetNode getTarget()
+    public MetaprogramTargetListNode getTargets()
     {
-        recordAccess(LocalAttribute.TARGET, Attribute.AccessType.READ);
-        return this.target;
+        recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.READ);
+        return this.targets;
     }
     
     /**
      * Changes the targets for this metaprogram.
-     * @param target The targets for this metaprogram.
+     * @param targets The targets for this metaprogram.
      */
-    public void setTarget(MetaprogramTargetNode target)
+    public void setTargets(MetaprogramTargetListNode targets)
     {
-            setTarget(target, true);
+            setTargets(targets, true);
     }
     
-    private void setTarget(MetaprogramTargetNode target, boolean checkPermissions)
+    private void setTargets(MetaprogramTargetListNode targets, boolean checkPermissions)
     {
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TARGET, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.WRITE);
         }
-        setAsChild(target, false);
-        this.target = target;
-        setAsChild(target, true);
+        setAsChild(targets, false);
+        this.targets = targets;
+        setAsChild(targets, true);
     }
     
     /**
      * Gets the dependencies for this metaprogram.
      * @return The dependencies for this metaprogram.
      */
-    public MetaprogramDependsNode getDepends()
+    public MetaprogramDependsListNode getDependencies()
     {
-        recordAccess(LocalAttribute.DEPENDS, Attribute.AccessType.READ);
-        return this.depends;
+        recordAccess(LocalAttribute.DEPENDENCIES, Attribute.AccessType.READ);
+        return this.dependencies;
     }
     
     /**
      * Changes the dependencies for this metaprogram.
-     * @param depends The dependencies for this metaprogram.
+     * @param dependencies The dependencies for this metaprogram.
      */
-    public void setDepends(MetaprogramDependsNode depends)
+    public void setDependencies(MetaprogramDependsListNode dependencies)
     {
-            setDepends(depends, true);
+            setDependencies(dependencies, true);
     }
     
-    private void setDepends(MetaprogramDependsNode depends, boolean checkPermissions)
+    private void setDependencies(MetaprogramDependsListNode dependencies, boolean checkPermissions)
     {
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DEPENDS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.DEPENDENCIES, Attribute.AccessType.WRITE);
         }
-        setAsChild(depends, false);
-        this.depends = depends;
-        setAsChild(depends, true);
+        setAsChild(dependencies, false);
+        this.dependencies = dependencies;
+        setAsChild(dependencies, true);
     }
     
     /**
@@ -239,13 +239,13 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         {
             this.imports.receive(visitor);
         }
-        if (this.target != null)
+        if (this.targets != null)
         {
-            this.target.receive(visitor);
+            this.targets.receive(visitor);
         }
-        if (this.depends != null)
+        if (this.dependencies != null)
         {
-            this.depends.receive(visitor);
+            this.dependencies.receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -272,13 +272,13 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         {
             this.imports.receiveTyped(visitor);
         }
-        if (this.target != null)
+        if (this.targets != null)
         {
-            this.target.receiveTyped(visitor);
+            this.targets.receiveTyped(visitor);
         }
-        if (this.depends != null)
+        if (this.dependencies != null)
         {
-            this.depends.receiveTyped(visitor);
+            this.dependencies.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -316,8 +316,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         list.add(getImports());
         list.add(getLocalMode());
         list.add(getPackageMode());
-        list.add(getTarget());
-        list.add(getDepends());
+        list.add(getTargets());
+        list.add(getDependencies());
         return list;
     }
     
@@ -339,11 +339,11 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         sb.append("packageMode=");
         sb.append(String.valueOf(this.getPackageMode()) + ":" + (this.getPackageMode() != null ? this.getPackageMode().getClass().getSimpleName() : "null"));
         sb.append(',');
-        sb.append("target=");
-        sb.append(this.getTarget() == null? "null" : this.getTarget().getClass().getSimpleName());
+        sb.append("targets=");
+        sb.append(this.getTargets() == null? "null" : this.getTargets().getClass().getSimpleName());
         sb.append(',');
-        sb.append("depends=");
-        sb.append(this.getDepends() == null? "null" : this.getDepends().getClass().getSimpleName());
+        sb.append("dependencies=");
+        sb.append(this.getDependencies() == null? "null" : this.getDependencies().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -378,8 +378,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
                 getImports()==null?null:getImports().deepCopy(factory),
                 getLocalMode(),
                 getPackageMode(),
-                getTarget()==null?null:getTarget().deepCopy(factory),
-                getDepends()==null?null:getDepends().deepCopy(factory),
+                getTargets()==null?null:getTargets().deepCopy(factory),
+                getDependencies()==null?null:getDependencies().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -400,14 +400,14 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             setImports((MetaprogramImportListNode)after);
             return true;
         }
-        if (before.equals(this.getTarget()) && (after instanceof MetaprogramTargetNode))
+        if (before.equals(this.getTargets()) && (after instanceof MetaprogramTargetListNode))
         {
-            setTarget((MetaprogramTargetNode)after);
+            setTargets((MetaprogramTargetListNode)after);
             return true;
         }
-        if (before.equals(this.getDepends()) && (after instanceof MetaprogramDependsNode))
+        if (before.equals(this.getDependencies()) && (after instanceof MetaprogramDependsListNode))
         {
-            setDepends((MetaprogramDependsNode)after);
+            setDependencies((MetaprogramDependsListNode)after);
             return true;
         }
         return false;

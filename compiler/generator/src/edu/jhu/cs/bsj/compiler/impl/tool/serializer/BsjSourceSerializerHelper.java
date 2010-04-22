@@ -21,11 +21,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
@@ -1804,6 +1806,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeMetaprogramDependsListNode(MetaprogramDependsListNode node, PrependablePrintStream p)
+	{
+		this.handleListNode(node, "", "\n", "\n", p, true);
+		return null;
+	}
+
+	@Override
 	public Void executeMetaprogramDependsNode(MetaprogramDependsNode node, PrependablePrintStream p)
 	{
 		p.print("#depends ");
@@ -1848,10 +1857,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeMetaprogramPreambleNode(MetaprogramPreambleNode node, PrependablePrintStream p)
 	{
 		handleListNode(node.getImports(), "", "\n", "\n", p, true);
-		if (node.getTarget() != null)
-			node.getTarget().executeOperation(this, p);
-		if (node.getDepends() != null)
-			node.getDepends().executeOperation(this, p);
+		node.getTargets().executeOperation(this, p);
+		node.getDependencies().executeOperation(this, p);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaprogramTargetListNode(MetaprogramTargetListNode node, PrependablePrintStream p)
+	{
+		this.handleListNode(node, "", "\n", "\n", p, true);
 		return null;
 	}
 

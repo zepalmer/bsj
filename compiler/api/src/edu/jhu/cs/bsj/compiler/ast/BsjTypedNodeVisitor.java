@@ -21,11 +21,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
@@ -1112,6 +1114,15 @@ public interface BsjTypedNodeVisitor
     public void visitMetaprogramAnchorNodeStart(MetaprogramAnchorNode<?> node);
 
     /**
+     * Starts a visit for nodes of type MetaprogramDependsListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramDependsListNodeStart(MetaprogramDependsListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type MetaprogramDependsNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1155,6 +1166,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMetaprogramPreambleNodeStart(MetaprogramPreambleNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaprogramTargetListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramTargetListNodeStart(MetaprogramTargetListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type MetaprogramTargetNode.
@@ -2747,6 +2767,15 @@ public interface BsjTypedNodeVisitor
     public void visitMetaprogramAnchorNodeStop(MetaprogramAnchorNode<?> node);
 
     /**
+     * Stops a visit for nodes of type MetaprogramDependsListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramDependsListNodeStop(MetaprogramDependsListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type MetaprogramDependsNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2790,6 +2819,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMetaprogramPreambleNodeStop(MetaprogramPreambleNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaprogramTargetListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramTargetListNodeStop(MetaprogramTargetListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type MetaprogramTargetNode.

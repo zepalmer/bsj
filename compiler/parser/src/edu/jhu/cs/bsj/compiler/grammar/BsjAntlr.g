@@ -713,8 +713,8 @@ preamble returns [MetaprogramPreambleNode ret]
             List<MetaprogramImportNode> list = new ArrayList<MetaprogramImportNode>();
             MetaprogramPackageMode packageMode = MetaprogramPackageMode.READ_ONLY;
             MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;
-            MetaprogramTargetNode target = null;
-            MetaprogramDependsNode depends = null;
+            MetaprogramTargetListNode target = factory.makeMetaprogramTargetListNode();
+            MetaprogramDependsListNode depends = factory.makeMetaprogramDependsListNode();
         }
         @after {
             $ret = factory.makeMetaprogramPreambleNode(factory.makeMetaprogramImportListNode(list),
@@ -736,15 +736,15 @@ preamble returns [MetaprogramPreambleNode ret]
             }
         )?
         (
-            metaprogramTarget
+            metaprogramTargetList
             {
-                target = $metaprogramTarget.ret;
+                target = $metaprogramTargetList.ret;
             }
         )?
         (
-            metaprogramDependency
+            metaprogramDependencyList
             {
-                depends = $metaprogramDependency.ret;
+                depends = $metaprogramDependencyList.ret;
             }
         )?
     ;
@@ -797,6 +797,25 @@ metaprogramMode returns [MetaprogramPackageMode packageMode, MetaprogramLocalMod
         ';'
     ;
 
+metaprogramDependencyList returns [MetaprogramDependsListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramDependencyList");
+            List<MetaprogramDependsNode> list = new ArrayList<MetaprogramDependsNode>();
+        }
+        @after {
+            $ret = factory.makeMetaprogramDependsListNode(list);
+            ruleStop();
+        }
+    :   
+        (
+            metaprogramDependency
+	        {
+	            list.add($metaprogramDependency.ret);
+	        }
+        )
+    ;
+
 metaprogramDependency returns [MetaprogramDependsNode ret]
         scope Rule;
         @init {
@@ -814,10 +833,29 @@ metaprogramDependency returns [MetaprogramDependsNode ret]
         }
     ;
 
+metaprogramTargetList returns [MetaprogramTargetListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramTargetList");
+            List<MetaprogramTargetNode> list = new ArrayList<MetaprogramTargetNode>();
+        }
+        @after {
+            $ret = factory.makeMetaprogramTargetListNode(list);
+            ruleStop();
+        }
+    :   
+        (
+            metaprogramTarget
+            {
+                list.add($metaprogramTarget.ret);
+            }
+        )
+    ;
+
 metaprogramTarget returns [MetaprogramTargetNode ret]
         scope Rule;
         @init {
-            ruleStart("metaprogramTargetNode");
+            ruleStart("metaprogramTarget");
         }
         @after {
             ruleStop();

@@ -22,11 +22,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
@@ -1622,6 +1624,19 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
+		public Void executeMetaprogramDependsListNode(MetaprogramDependsListNode node, PrependablePrintStream p)
+		{
+			before(node);
+			try
+			{
+				return super.executeMetaprogramDependsListNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
 		public Void executeMetaprogramDependsNode(MetaprogramDependsNode node, PrependablePrintStream p)
 		{
 
@@ -1685,6 +1700,19 @@ public class NodeMappingSerializationOperation extends
 			try
 			{
 				return super.executeMetaprogramPreambleNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
+		public Void executeMetaprogramTargetListNode(MetaprogramTargetListNode node, PrependablePrintStream p)
+		{
+			before(node);
+			try
+			{
+				return super.executeMetaprogramTargetListNode(node, p);
 			} finally
 			{
 				after(node);

@@ -53,25 +53,25 @@ public interface MetaprogramPreambleNode extends Node
      * Gets the targets for this metaprogram.
      * @return The targets for this metaprogram.
      */
-    public MetaprogramTargetNode getTarget();
+    public MetaprogramTargetListNode getTargets();
     
     /**
      * Changes the targets for this metaprogram.
-     * @param target The targets for this metaprogram.
+     * @param targets The targets for this metaprogram.
      */
-    public void setTarget(MetaprogramTargetNode target);
+    public void setTargets(MetaprogramTargetListNode targets);
     
     /**
      * Gets the dependencies for this metaprogram.
      * @return The dependencies for this metaprogram.
      */
-    public MetaprogramDependsNode getDepends();
+    public MetaprogramDependsListNode getDependencies();
     
     /**
      * Changes the dependencies for this metaprogram.
-     * @param depends The dependencies for this metaprogram.
+     * @param dependencies The dependencies for this metaprogram.
      */
-    public void setDepends(MetaprogramDependsNode depends);
+    public void setDependencies(MetaprogramDependsListNode dependencies);
     
     /**
      * Generates a deep copy of this node.
