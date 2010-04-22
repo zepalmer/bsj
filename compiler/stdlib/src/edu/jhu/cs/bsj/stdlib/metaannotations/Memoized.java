@@ -6,12 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
-import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
-import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
@@ -74,64 +70,24 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
     private ClassDeclarationNode generateTupleClassDeclaration(
             MethodDeclarationNode method, BsjNodeFactory factory)
     {
-        // TODO cleanup and use @@Property and @@GenerateEqualsAndHashCode
-        
         String methodName = method.getIdentifier().getIdentifier();
         tupleClassName =  Character.toUpperCase(methodName.charAt(0)) + methodName.substring(1) + "ParamTuple";
         ClassMemberListNode members = factory.makeClassMemberListNode();
-        List<BlockStatementNode> constructorStatements = new ArrayList<BlockStatementNode>();
-        List<BlockStatementNode> equalsStatements = new ArrayList<BlockStatementNode>();
-        
-        // if (this == o) return true;
-        equalsStatements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(factory.makeThisNode(),
-                factory.makeFieldAccessByNameNode(factory.parseNameNode("o")), BinaryOperator.EQUAL),
-                factory.makeReturnNode(factory.makeBooleanLiteralNode(true))));
-
-        // if (obj == null) return false;
-        equalsStatements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
-                factory.makeFieldAccessByNameNode(factory.parseNameNode("o")), factory.makeNullLiteralNode(),
-                BinaryOperator.EQUAL), factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
-
-        // if (getClass() != obj.getClass()) return false;
-        equalsStatements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
-                factory.makeMethodInvocationByNameNode(factory.parseNameNode("getClass")),
-                factory.makeMethodInvocationByExpressionNode(
-                        factory.makeFieldAccessByNameNode(factory.parseNameNode("o")),
-                        factory.makeIdentifierNode("getClass")), BinaryOperator.NOT_EQUAL),
-                factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
-        
-        // MyClass other = (MyClass) o;
-        equalsStatements.add(factory.makeVariableDeclarationNode(factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
-                factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)),
-                factory.makeIdentifierNode("other"),
-                factory.makeTypeCastNode(
-                        factory.makeFieldAccessByNameNode(factory.parseNameNode("o")),
-                        factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)))))));
         
         // make fields in the tuple for each parameter in the memoized method
         for (VariableNode param : method.getParameters())
         {
-            // build the constructor assignment statements as we go
-            constructorStatements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                    factory.makeFieldAccessByExpressionNode(
-                            factory.makeThisNode(), param.getIdentifier().deepCopy(factory)), 
-                    AssignmentOperator.ASSIGNMENT, 
-                    factory.makeFieldAccessByNameNode(factory.parseNameNode(param.getIdentifier().getIdentifier())))));
-            
-            // build the equals method as we go
-            equalsStatements.add(factory.makeIfNode(
-                    factory.makeBinaryExpressionNode(factory.makeFieldAccessByExpressionNode(
-                            factory.makeThisNode(), param.getIdentifier().deepCopy(factory)), factory.makeFieldAccessByExpressionNode(
-                                    factory.makeFieldAccessByNameNode(factory.parseNameNode("other")), param.getIdentifier().deepCopy(factory)), BinaryOperator.NOT_EQUAL), 
-                    factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
-            
-            //TODO how come adding @@Property doesn't work?
+            // adding @@Property to this field
             MetaAnnotationNode metaAnnotation = factory.makeNormalMetaAnnotationNode(
                     factory.makeMetaAnnotationElementListNode(), 
                     factory.makeUnparameterizedTypeNode(factory.parseNameNode("Property")));
             
+            // add the actual field
             members.add(factory.makeFieldDeclarationNode(
-                    factory.makeFieldModifiersNode(AccessModifier.PRIVATE, false, false, false, false, factory.makeMetaAnnotationListNode(metaAnnotation), factory.makeAnnotationListNode()), 
+                    factory.makeFieldModifiersNode(
+                            AccessModifier.PRIVATE, false, false, false, false, 
+                            factory.makeMetaAnnotationListNode(metaAnnotation), 
+                            factory.makeAnnotationListNode()), 
                     factory.makeVariableDeclaratorListNode(
                             factory.makeVariableDeclaratorNode(
                                     param.getType().deepCopy(factory), 
@@ -140,29 +96,21 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
                     null));
         }
         
-        // create the constructor for the tuple
-        members.add(factory.makeConstructorDeclarationNode(
-                factory.makeIdentifierNode(tupleClassName), 
-                factory.makeConstructorBodyNode(null, factory.makeBlockStatementListNode(constructorStatements)), 
-                factory.makeConstructorModifiersNode(AccessModifier.PUBLIC), 
-                method.getParameters().deepCopy(factory), 
-                null));
-        
-        // create a basic equals() for the tuple
-        equalsStatements.add(factory.makeReturnNode(factory.makeBooleanLiteralNode(true)));
-        members.add(factory.makeMethodDeclarationNode(
-                factory.makeBlockNode(factory.makeBlockStatementListNode(equalsStatements)), 
-                factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
-                factory.makeIdentifierNode("equals"), 
-                factory.makeVariableListNode(factory.makeVariableNode(
-                        factory.makeUnparameterizedTypeNode(factory.parseNameNode("java.lang.Object")),
-                        factory.makeIdentifierNode("o"))), 
-                factory.makePrimitiveTypeNode(PrimitiveType.BOOLEAN), 
-                null));
+        // add @@GenerateConstructorFromProperties and @@GenerateEqualsAndHashCode
+        List<MetaAnnotationNode> tupleMetaAnnotations = new ArrayList<MetaAnnotationNode>();
+//        tupleMetaAnnotations.add(factory.makeNormalMetaAnnotationNode(
+//                    factory.makeMetaAnnotationElementListNode(), 
+//                    factory.makeUnparameterizedTypeNode(factory.parseNameNode("GenerateConstructorFromProperties"))));
+        tupleMetaAnnotations.add(factory.makeNormalMetaAnnotationNode(
+                factory.makeMetaAnnotationElementListNode(), 
+                factory.makeUnparameterizedTypeNode(factory.parseNameNode("GenerateEqualsAndHashCode"))));
         
         // return the entire class declaration
         return factory.makeClassDeclarationNode(
-                factory.makeClassModifiersNode(AccessModifier.PRIVATE),
+                factory.makeClassModifiersNode(
+                        AccessModifier.PRIVATE, false, false, false, false, 
+                        factory.makeMetaAnnotationListNode(tupleMetaAnnotations), 
+                        factory.makeAnnotationListNode()),
                 null, 
                 factory.makeDeclaredTypeListNode(), 
                 factory.makeClassBodyNode(members), 
