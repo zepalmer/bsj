@@ -1,0 +1,10 @@
+[:
+	#depends #weak foo;
+:]
+
+public class WeakDependencySuccess
+{
+	public static void main(String[] arg)
+	{
+	}
+}

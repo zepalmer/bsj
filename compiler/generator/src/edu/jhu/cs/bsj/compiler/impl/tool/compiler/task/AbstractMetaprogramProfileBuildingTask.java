@@ -48,7 +48,7 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " created with deps "
-					+ profile.getDependencyNames() + " and targets " + profile.getTargetNames());
+					+ profile.getDependencies() + " and targets " + profile.getTargetNames());
 		}
 
 		// Register the metaprogram profile with the metacompilation manager

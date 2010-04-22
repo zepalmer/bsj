@@ -42,7 +42,8 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         // using INSERT package mode so we can generate the listener interface 
         super(
                 Arrays.asList("observable"), 
-                Collections.<String> emptyList(), 
+                Collections.<String> emptyList(),
+                Collections.<String> emptyList(),
                 MetaprogramLocalMode.INSERT, 
                 MetaprogramPackageMode.INSERT);
     }

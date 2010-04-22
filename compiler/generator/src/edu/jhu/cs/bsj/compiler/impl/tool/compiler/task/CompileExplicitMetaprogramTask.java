@@ -48,6 +48,7 @@ import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.Dependency;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
@@ -88,12 +89,12 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 	{
 		// It is possible for this task to be added several times for a given metaprogram node before it is executed.
 		// If true, all executions after the first are redundant; the metaprogram anchor will have a nullary metaprogram
-		// node.  So check that and bail if we're unnecessary.
+		// node. So check that and bail if we're unnecessary.
 		if (this.anchor.getMetaprogram() == null)
 		{
 			return null;
 		}
-		
+
 		// TODO: this whole name building process relies on strings - fix it
 		// this is a bit of a hack because it allows type and package name collision
 		// suppose the existence of a package foo with subpackage bar and class Baz
@@ -105,7 +106,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;
 		MetaprogramPackageMode packageMode = MetaprogramPackageMode.READ_ONLY;
 		List<String> qualifiedTargetNames = new ArrayList<String>();
-		List<String> dependencyNames = new ArrayList<String>();
+		List<Dependency> dependencies = new ArrayList<Dependency>();
 		final String metaprogramTypeName = getMetaprogramTypeName();
 
 		// if there's a preamble, deal with it
@@ -135,8 +136,8 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 				for (MetaprogramDependencyNode dependency : dependencyDeclaration.getTargets())
 				{
 					NameNode dependsName = dependency.getTargetName();
-					// TODO: address weakness of dependencies
-					
+					boolean weak = dependency.getWeak();
+
 					// We need a fully-qualified name
 					String qualifiedDependsName;
 					if (dependsName instanceof SimpleNameNode)
@@ -170,10 +171,11 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 					if (LOGGER.isTraceEnabled())
 					{
-						LOGGER.trace("Metaprogram for anchor " + anchor.getUid() + " has dependency "
-								+ qualifiedDependsName);
+						LOGGER.trace("Metaprogram for anchor " + anchor.getUid() + " has " + (weak ? "weak " : "")
+								+ "dependency " + qualifiedDependsName);
 					}
-					dependencyNames.add(qualifiedDependsName);
+
+					dependencies.add(new Dependency(qualifiedDependsName, weak));
 				}
 			}
 		}
@@ -188,13 +190,13 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 		Metaprogram<ExplicitMetaprogramAnchorNode<R>> metaprogram = compileMetaprogram(metaprogramNode,
 				anchor.getClass().getName(), this.metacompilationContext.getDiagnosticListener());
-		
+
 		if (metaprogram == null)
 		{
 			return null;
 		}
 
-		return new MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>>(metaprogram, anchor, dependencyNames,
+		return new MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>>(metaprogram, anchor, dependencies,
 				qualifiedTargetNames, localMode, packageMode, context);
 	}
 
@@ -336,8 +338,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 		BsjCompiler compiler = toolkit.getCompiler();
 		CountingDiagnosticProxyListener<BsjSourceLocation> wrappingDiagnosticListener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
-				new LocationTranslatingDiagnosticListener(
-						diagnosticListener, nodeMap));
+				new LocationTranslatingDiagnosticListener(diagnosticListener, nodeMap));
 		compiler.compile(Arrays.asList(metaprogramSourceFile), wrappingDiagnosticListener);
 		if (wrappingDiagnosticListener.getCount(Kind.ERROR) > 0)
 		{

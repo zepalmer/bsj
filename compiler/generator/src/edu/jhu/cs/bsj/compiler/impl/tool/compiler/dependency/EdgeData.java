@@ -5,7 +5,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency;
  * 
  * @author Zachary Palmer
  */
-public class EdgeData
+public abstract class EdgeData
 {
 	/** Whether or not this edge was inferred from a metaprogram injection. */
 	private boolean inferred;

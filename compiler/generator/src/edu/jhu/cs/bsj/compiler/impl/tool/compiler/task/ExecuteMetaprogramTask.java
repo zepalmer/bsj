@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 import java.io.IOException;
 import java.util.Iterator;
 
+import javax.tools.Diagnostic.Kind;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
@@ -33,6 +35,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramExceptionDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramExecutionFailureDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
@@ -58,7 +61,14 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	@Override
 	public void execute(MetacompilationContext context) throws IOException
 	{
-		MetaprogramProfile<?> profile = context.getDependencyManager().getNextMetaprogram();
+		CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
+				context.getDiagnosticListener());
+		MetaprogramProfile<?> profile = context.getDependencyManager().getNextMetaprogram(listener);
+		if (listener.getCount(Kind.ERROR) > 0)
+		{
+			return;
+		}
+
 		if (profile == null)
 		{
 			finishMetaprogramExecutionPhase(context);
@@ -100,14 +110,14 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			LOGGER.trace("Executing metaprogram " + profile.getMetaprogram().getID());
 		}
 		BsjDiagnostic diagnostic = doExecute(profile);
-		
+
 		// Release the managers
 		context.getNodeManager().popPermissionPolicyManager();
 		context.getNodeManager().popCurrentMetaprogramId();
 		context.getNodeManager().setDependencyManager(null);
 
 		// Respond to error as necessary
-		if (diagnostic!=null)
+		if (diagnostic != null)
 		{
 			context.getDiagnosticListener().report(diagnostic);
 		}
@@ -128,17 +138,17 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
 		}
 
-//		// Pass the affected part of the AST back to allow name analysis, etc.
-//		// TODO: what if more than just this compilation unit was changed? Need name analysis on inserted CUs too
-//		if (replacement != null)
-//		{
-//			Node target = replacement.getNearestAncestorOfType(CompilationUnitNode.class);
-//			if (target == null)
-//			{
-//				target = replacement.getFurthestAncestor();
-//			}
-//			context.registerTask(new CategorizeNamesTask(target, profile));
-//		}
+		// // Pass the affected part of the AST back to allow name analysis, etc.
+		// // TODO: what if more than just this compilation unit was changed? Need name analysis on inserted CUs too
+		// if (replacement != null)
+		// {
+		// Node target = replacement.getNearestAncestorOfType(CompilationUnitNode.class);
+		// if (target == null)
+		// {
+		// target = replacement.getFurthestAncestor();
+		// }
+		// context.registerTask(new CategorizeNamesTask(target, profile));
+		// }
 		// Pass the affected part of the AST back to allow name analysis, etc.
 		// TODO: make the following a little bit more palatable by only analyzing those trees that changed
 		Node target;
@@ -379,15 +389,15 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	{
 		Context<A> context = profile.getContext();
 		Metaprogram<A> metaprogram = profile.getMetaprogram();
-		if (context==null)
+		if (context == null)
 		{
 			throw new IllegalStateException("Attempted to execute metaprogram profile with null context!");
 		}
-		if (metaprogram==null)
+		if (metaprogram == null)
 		{
 			throw new IllegalStateException("Attempted to execute metaprogram profile with null metaprogram!");
 		}
-		
+
 		BsjSourceLocation sourceLocation = profile.getLocation();
 		try
 		{
@@ -403,7 +413,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			// The metaprogram threw something unexpected (like NullPointerException); handle it.
 			return new MetaprogramExceptionDiagnosticImpl(sourceLocation, e);
 		}
-		
+
 		return null;
 	}
 }

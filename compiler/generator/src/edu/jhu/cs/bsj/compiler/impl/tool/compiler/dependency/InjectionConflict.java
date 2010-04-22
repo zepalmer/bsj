@@ -11,24 +11,24 @@ public class InjectionConflict
 	/**
 	 * The target which caused the conflict.
 	 */
-	private BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> target;
+	private BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> target;
 	/**
 	 * The metaprogram over which the conflict occurred.
 	 */
-	private BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injectedMetaprogram;
+	private BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> injectedMetaprogram;
 	/**
 	 * The original metaprogram which is in conflict.
 	 */
-	private BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> conflictedMetaprogram;
+	private BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> conflictedMetaprogram;
 	/**
 	 * The candidates for removing the conflict.
 	 */
-	private Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> conflictingMetaprograms;
+	private Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> conflictingMetaprograms;
 	
-	public InjectionConflict(BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> target,
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injectedMetaprogram,
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> conflictedMetaprogram,
-			Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> conflictingMetaprograms)
+	public InjectionConflict(BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> target,
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> injectedMetaprogram,
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> conflictedMetaprogram,
+			Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> conflictingMetaprograms)
 	{
 		super();
 		this.target = target;
@@ -37,22 +37,22 @@ public class InjectionConflict
 		this.conflictingMetaprograms = conflictingMetaprograms;
 	}
 
-	public BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> getTarget()
+	public BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> getTarget()
 	{
 		return target;
 	}
 
-	public BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> getInjectedMetaprogram()
+	public BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> getInjectedMetaprogram()
 	{
 		return injectedMetaprogram;
 	}
 
-	public BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> getConflictedMetaprogram()
+	public BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> getConflictedMetaprogram()
 	{
 		return conflictedMetaprogram;
 	}
 
-	public Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> getConflictingMetaprograms()
+	public Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> getConflictingMetaprograms()
 	{
 		return conflictingMetaprograms;
 	}

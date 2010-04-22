@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.Dependency;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 /**
@@ -24,7 +25,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	private T anchor;
 	
 	/** The fully-qualified names of the targets on which the metaprogram in this profile depends. */
-	private Collection<String> dependencyNames;
+	private Collection<Dependency> dependencies;
 	/** The fully-qualified names of the targets in which the metaprogram in this profile participates. */
 	private Collection<String> targetNames;
 	/** The local mode of this metaprogram. */
@@ -34,14 +35,14 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	/** The context in which to execute the metaprogram. */
 	private Context<T> context;
 	
-	public MetaprogramProfile(Metaprogram<T> metaprogram, T anchor, Collection<String> dependencyNames,
+	public MetaprogramProfile(Metaprogram<T> metaprogram, T anchor, Collection<Dependency> dependencies,
 			Collection<String> targetNames, MetaprogramLocalMode localMode, MetaprogramPackageMode packageMode,
 			Context<T> context)
 	{
 		super();
 		this.metaprogram = metaprogram;
 		this.anchor = anchor;
-		this.dependencyNames = dependencyNames;
+		this.dependencies = dependencies;
 		this.targetNames = targetNames;
 		this.localMode = localMode;
 		this.packageMode = packageMode;
@@ -58,9 +59,9 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 		return anchor;
 	}
 
-	public Collection<String> getDependencyNames()
+	public Collection<Dependency> getDependencies()
 	{
-		return dependencyNames;
+		return dependencies;
 	}
 
 	public Collection<String> getTargetNames()

@@ -185,6 +185,16 @@
                     not be resolved.
                 ]]></doc>
             </diagnostic>
+            
+            <diagnostic name="MetaprogramEmptyDependencyDiagnostic" super="BsjCompilerDiagnostic"
+                code="bsj.compiler.metaprogram.dependency.empty">
+                <prop name="name" type="String" desc="the name of the target on which the metaprogram depends"/>
+                <doc><![CDATA[
+                    A diagnostic indicating that a metaprogram's dependency list contains a non-weak target in which
+                    no metaprograms participate.  This usually indicates that the name of the target contains a
+                    typographical error.
+                ]]></doc>
+            </diagnostic>
 
             <diagnostic name="InvalidMetaAnnotationDefinitionDiagnostic" super="BsjCompilerDiagnostic">
                 <prop name="metaAnnotationClass" type="Class&lt;? extends BsjMetaAnnotation&gt;" desc="the type of the meta-annotation" />

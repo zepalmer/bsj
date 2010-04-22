@@ -35,6 +35,15 @@ public interface BsjMetaprogram<T extends MetaprogramAnchorNode<?>>
 	public List<String> getDependencies();
 
 	/**
+	 * Obtains a list of the targets on which this metaprogram depends. The metaprogram object is obligated to return
+	 * the same list with the same contents throughout its lifetime. The targets should be qualified names (containing
+	 * only legal Java identifier characters in groups separated by dots).
+	 * 
+	 * @return The list of targets on which this metaprogram depends.
+	 */
+	public List<String> getWeakDependencies();
+
+	/**
 	 * Obtains the local mode for this metaprogram. The metaprogram object is obligated to return the same mode
 	 * throughout its lifetime.
 	 * 

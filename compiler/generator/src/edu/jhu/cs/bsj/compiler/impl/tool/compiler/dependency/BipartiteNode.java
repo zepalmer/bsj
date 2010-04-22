@@ -159,6 +159,26 @@ public class BipartiteNode<T, U, TE, UE>
 		}
 		return ret;
 	}
+	
+	/**
+	 * Retrieves all children of this node. Changing this set will have no effect on the
+	 * connectivity of the graph.
+	 * @return The children of this node.
+	 */
+	public Set<BipartiteNode<U, T, UE, TE>> getChildren()
+	{
+		return new HashSet<BipartiteNode<U,T,UE,TE>>(this.children.keySet());
+	}
+
+	/**
+	 * Retrieves all parents of this node. Changing this set will have no effect on the
+	 * connectivity of the graph.
+	 * @return The parents of this node.
+	 */
+	public Set<BipartiteNode<U, T, UE, TE>> getParents()
+	{
+		return new HashSet<BipartiteNode<U,T,UE,TE>>(this.parents.keySet());
+	}
 
 	/**
 	 * Retrieves all of the second level children of this node. Changing this set will have no effect on the

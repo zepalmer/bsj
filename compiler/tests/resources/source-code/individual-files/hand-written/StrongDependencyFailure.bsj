@@ -1,0 +1,10 @@
+[:
+	#depends foo;
+:]
+
+public class StrongDependencyFailure
+{
+	public static void main(String[] arg)
+	{
+	}
+}

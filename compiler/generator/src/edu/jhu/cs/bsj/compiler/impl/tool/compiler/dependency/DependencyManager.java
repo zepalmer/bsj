@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InjectionConfictDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.DependencyCycleDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InjectionConfictDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramEmptyDependencyDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.utils.HashMultiMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
@@ -35,11 +36,11 @@ public class DependencyManager
 	/** A mapping from metaprogram IDs to the profiles of those metaprograms. */
 	private Map<Integer, MetaprogramProfile<?>> idMap;
 	/** A mapping from metaprogram profiles to the nodes containing them. */
-	private Map<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> profileToNodeMap;
+	private Map<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> profileToNodeMap;
 	/** A mapping from target names to the nodes representing them. */
-	private Map<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>> nameToTargetNodeMap;
+	private Map<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>> nameToTargetNodeMap;
 	/** A collection containing all of the metaprogram nodes representing metaprograms which have yet to be executed. */
-	private Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> waitingNodes;
+	private Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> waitingNodes;
 	/** A multimap from compilation units to the metaprograms which were registered in them. */
 	private MultiMap<CompilationUnitNode, MetaprogramProfile<?>> compilationUnitMap;
 
@@ -67,9 +68,9 @@ public class DependencyManager
 	public DependencyManager(Random r)
 	{
 		this.idMap = new HashMap<Integer, MetaprogramProfile<?>>();
-		this.profileToNodeMap = new HashMap<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
-		this.nameToTargetNodeMap = new HashMap<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>>();
-		this.waitingNodes = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
+		this.profileToNodeMap = new HashMap<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
+		this.nameToTargetNodeMap = new HashMap<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>>();
+		this.waitingNodes = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
 		this.cooperationCache = new HashMap<Pair<Integer, Integer>, Boolean>();
 		this.compilationUnitMap = new HashMultiMap<CompilationUnitNode, MetaprogramProfile<?>>();
 		this.random = r;
@@ -88,23 +89,23 @@ public class DependencyManager
 			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		// Create a node for the profile
-		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = new BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>(
+		BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> metaprogramNode = new BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>(
 				new MetaprogramNodeData(profile));
 
 		// For each target in the profile, add an edge from the target to this new node showing the target's dependency
 		// on us.
 		for (String targetName : profile.getTargetNames())
 		{
-			BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> targetNode = getTargetNode(targetName);
-			targetNode.addChild(metaprogramNode, new EdgeData(false));
+			BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> targetNode = getTargetNode(targetName);
+			targetNode.addChild(metaprogramNode, new TargetEdgeData(false));
 		}
 
 		// For each dependency in the profile, add an edge from this new node to that target node showing our
 		// dependency on that target
-		for (String dependencyName : profile.getDependencyNames())
+		for (Dependency dependency : profile.getDependencies())
 		{
-			BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> targetNode = getTargetNode(dependencyName);
-			targetNode.addParent(metaprogramNode, new EdgeData(false));
+			BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> targetNode = getTargetNode(dependency.getName());
+			targetNode.addParent(metaprogramNode, new MetaprogramEdgeData(false, dependency.isWeak()));
 		}
 
 		// Add this metaprogram node to the collection of waiting metaprograms
@@ -167,7 +168,7 @@ public class DependencyManager
 	 * @return <code>true</code> if any conflicts were found; <code>false</code> otherwise.
 	 */
 	private boolean checkForInjectionConflict(
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode,
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> metaprogramNode,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		boolean found = false;
@@ -176,9 +177,9 @@ public class DependencyManager
 		Collection<InjectionConflict> conflicts;
 
 		// Possibility 1: an injected program causes an injection conflict
-		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> grandparent : metaprogramNode.getFilteredGrandparents(
-				new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(false),
-				new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(false)))
+		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> grandparent : metaprogramNode.getFilteredGrandparents(
+				new TargetNodeParentInferenceStateFilteringFunction(false),
+				new MetaprogramNodeParentInferenceStateFilteringFunction(false)))
 		{
 			conflicts = injectionConflictDetector.findImmediateInjectionConflict(grandparent);
 			if (conflicts != null)
@@ -232,12 +233,12 @@ public class DependencyManager
 	private void inferDependency(MetaprogramProfile<?> profile, MetaprogramProfile<?> parentProfile)
 	{
 		// Get parent profile's metaprogram node
-		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injector = this.profileToNodeMap.get(parentProfile);
+		BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> injector = this.profileToNodeMap.get(parentProfile);
 		// Get inferred target for the parent profile's metaprogram
-		BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> target = getTargetNode(getInferredTargetName(parentProfile));
+		BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> target = getTargetNode(getInferredTargetName(parentProfile));
 		// Create edges as appropriate
-		injector.addParent(target, new EdgeData(true));
-		this.profileToNodeMap.get(profile).addChild(target, new EdgeData(true));
+		injector.addParent(target, new TargetEdgeData(true));
+		this.profileToNodeMap.get(profile).addChild(target, new MetaprogramEdgeData(true, false));
 	}
 
 	/**
@@ -248,11 +249,11 @@ public class DependencyManager
 	 * @return The resulting diagnostic.
 	 */
 	private InjectionConfictDiagnostic getInjectionConfictDiagnostic(
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogram,
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> metaprogram,
 			InjectionConflict conflict)
 	{
 		Set<BsjSourceLocation> injectorLocations = new HashSet<BsjSourceLocation>();
-		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injector : conflict.getConflictingMetaprograms())
+		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> injector : conflict.getConflictingMetaprograms())
 		{
 			injectorLocations.add(injector.getData().getProfile().getLocation());
 		}
@@ -279,16 +280,15 @@ public class DependencyManager
 	 * @param targetName The name of the target.
 	 * @return The target node of that name.
 	 */
-	private BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> getTargetNode(String targetName)
+	private BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> getTargetNode(
+			String targetName)
 	{
-		// TODO: how do we check an empty target for compile-time errors? If a metaprogram explicitly depends on a
-		// target that doesn't exist, that should be a problem (as it probably represents a typo
-		BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> targetNode = this.nameToTargetNodeMap.get(targetName);
+		BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> targetNode = this.nameToTargetNodeMap.get(targetName);
 		if (targetNode == null)
 		{
 			// If the target does not exist, infer it
-			targetNode = new BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>(new TargetNodeData(
-					targetName));
+			targetNode = new BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>(
+					new TargetNodeData(targetName));
 			this.nameToTargetNodeMap.put(targetName, targetNode);
 		}
 		return targetNode;
@@ -308,9 +308,10 @@ public class DependencyManager
 	 * Retrieves a metaprogram which should be executed. The returned metaprogram will not have any dependencies which
 	 * are outstanding; it will be safe to execute immediately.
 	 * 
+	 * @param diagnosticListener The diagnostic listener to which to report an error if an error occurs.
 	 * @return The next metaprogram to execute or <code>null</code> if no metaprograms remain.
 	 */
-	public MetaprogramProfile<?> getNextMetaprogram()
+	public MetaprogramProfile<?> getNextMetaprogram(DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		if (this.waitingNodes.size() == 0)
 			return null;
@@ -319,7 +320,7 @@ public class DependencyManager
 		// the tricky part is that the graph is not static
 
 		// Pick a starting metaprogram
-		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode;
+		BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> metaprogramNode;
 
 		if (this.random == null)
 		{
@@ -327,7 +328,7 @@ public class DependencyManager
 		} else
 		{
 			int count = this.random.nextInt(this.waitingNodes.size());
-			Iterator<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> it = waitingNodes.iterator();
+			Iterator<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> it = waitingNodes.iterator();
 			metaprogramNode = it.next();
 			for (int i = 0; i < count; i++)
 			{
@@ -340,15 +341,27 @@ public class DependencyManager
 		{
 			// Determine whether or not this metaprogram has any targets containing metaprograms which have not yet run
 			found = false;
-			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependencyNode : metaprogramNode.getGrandchildren())
+			for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>, MetaprogramEdgeData> targetDependency : metaprogramNode.getChildEdges())
 			{
-				if (this.waitingNodes.contains(dependencyNode))
+				Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> dependencies = targetDependency.getFirst().getChildren();
+				if (dependencies.size() == 0 && !targetDependency.getSecond().isWeak())
 				{
-					// This metaprogram hasn't run yet; it's the new candidate for execution
-					// TODO: add the old one to a list; if we ever see it again, that's a cycle
-					metaprogramNode = dependencyNode;
-					found = true;
-					break;
+					// In this case, the metaprogram has declared a strong dependency and is ready to run but no
+					// metaprograms participate in its target. Complain.
+					diagnosticListener.report(new MetaprogramEmptyDependencyDiagnosticImpl(
+							metaprogramNode.getData().getProfile().getLocation(),
+							targetDependency.getFirst().getData().getTarget()));
+					// But don't bail out just in case there are others.
+				}
+				for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> dependencyNode : dependencies)
+				{
+					if (this.waitingNodes.contains(dependencyNode))
+					{
+						// This metaprogram hasn't run yet; it's the new candidate for execution
+						metaprogramNode = dependencyNode;
+						found = true;
+						break;
+					}
 				}
 			}
 		} while (found);
@@ -394,8 +407,8 @@ public class DependencyManager
 						+ " given as second metaprogram in path check (" + a + "," + b + ")!");
 			}
 
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> nodeA = this.profileToNodeMap.get(ma);
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> nodeB = this.profileToNodeMap.get(mb);
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> nodeA = this.profileToNodeMap.get(ma);
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> nodeB = this.profileToNodeMap.get(mb);
 
 			value = checkPath(nodeA, nodeB) || checkPath(nodeB, nodeA);
 			this.cooperationCache.put(key, value);
@@ -412,13 +425,14 @@ public class DependencyManager
 	 * @return <code>true</code> if a path exists from the first metaprogram to the second; <code>false</code>
 	 *         otherwise.
 	 */
-	private boolean checkPath(BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> from,
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> to)
+	private boolean checkPath(
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> from,
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> to)
 	{
 		if (from.getData().getProfile().getMetaprogram().getID() == to.getData().getProfile().getMetaprogram().getID())
 			return true;
 
-		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependencyNode : from.getGrandchildren())
+		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> dependencyNode : from.getGrandchildren())
 		{
 			if (checkPath(dependencyNode, to))
 			{
@@ -463,7 +477,7 @@ public class DependencyManager
 	public void assertNoInjectionConflict()
 	{
 		InjectionConflictDetector detector = new InjectionConflictDetector();
-		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode : this.profileToNodeMap.values())
+		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> metaprogramNode : this.profileToNodeMap.values())
 		{
 			Collection<InjectionConflict> conflicts = detector.findImmediateInjectionConflict(metaprogramNode);
 			if (conflicts != null)
@@ -579,24 +593,24 @@ public class DependencyManager
 		 * @return The set of detected conflicts or <code>null</code> if no injection conflict occurs.
 		 */
 		public Collection<InjectionConflict> findImmediateInjectionConflict(
-				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> node)
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> node)
 		{
 			Collection<InjectionConflict> ret = null;
 			// Calculate all of the metaprograms which are reachable from this one using explicit edges
-			Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> allDependencies = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
-			Stack<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> explorationStack = new Stack<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
+			Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> allDependencies = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
+			Stack<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> explorationStack = new Stack<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
 			explorationStack.add(node);
 			while (explorationStack.size() > 0)
 			{
-				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> current = explorationStack.pop();
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> current = explorationStack.pop();
 				// We need to find all grandchildren of the current node which can be reached without using inferred
 				// edges
-				for (BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> explicitChild : current.getFilteredChildren(new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(
+				for (BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> explicitChild : current.getFilteredChildren(new TargetNodeChildInferenceStateFilteringFunction(
 						false)))
 				{
-					Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> explicitGrandchildren = explicitChild.getFilteredChildren(new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(
+					Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> explicitGrandchildren = explicitChild.getFilteredChildren(new MetaprogramNodeChildInferenceStateFilteringFunction(
 							false));
-					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> grandchild : explicitGrandchildren)
+					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> grandchild : explicitGrandchildren)
 					{
 						explorationStack.push(grandchild);
 					}
@@ -605,23 +619,23 @@ public class DependencyManager
 			}
 
 			// Get the first-level explicit dependencies
-			for (BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> targetDependency : node.getFilteredChildren(new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(
+			for (BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> targetDependency : node.getFilteredChildren(new TargetNodeChildInferenceStateFilteringFunction(
 					false)))
 			{
-				for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependency : targetDependency.getFilteredChildren(new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(
+				for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> dependency : targetDependency.getFilteredChildren(new MetaprogramNodeChildInferenceStateFilteringFunction(
 						false)))
 				{
 					// For each dependency, determine whether or not a conflict can be found
 					boolean hasInferredChildren = false;
 					boolean explicitDependencyExists = false;
 
-					Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> injectors = dependency.getFilteredGrandchildren(
-							new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(true),
-							new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(true));
+					Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> injectors = dependency.getFilteredGrandchildren(
+							new TargetNodeChildInferenceStateFilteringFunction(true),
+							new MetaprogramNodeChildInferenceStateFilteringFunction(true));
 
 					// For each dependency, find an inferred dependency edge and follow back to get an original
 					// metaprogram
-					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injector : injectors)
+					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> injector : injectors)
 					{
 						// Mark down that we need a dependency
 						hasInferredChildren = true;
@@ -656,10 +670,13 @@ public class DependencyManager
 	 * @author Zachary Palmer
 	 * @param <D> The type data which is stored at nodes provided to this function.
 	 * @param <ND> The type of data which is stored at nodes adjacent to the nodes provided to this function.
+	 * @param <E> The type of edge data leaving the nodes provided to this function.
+	 * @param <NE> The type of edge data entering the nodes provided to this function.
+	 * @param <RE> The type of edge data over which the returned function operates.
 	 */
-	private static class InferenceStateFilteringFunction<D, ND>
+	private static class InferenceStateFilteringFunction<D, ND, E extends EdgeData, NE extends EdgeData, RE extends EdgeData>
 			implements
-			Function<BipartiteNode<? super D, ? super ND, ? super EdgeData, ? super EdgeData>, Function<? super EdgeData, Boolean>>
+			Function<BipartiteNode<? super D, ? super ND, ? super E, ? super NE>, Function<? super RE, Boolean>>
 	{
 		/** The desired inference state for nodes that pass the filter. */
 		private boolean inferred;
@@ -671,17 +688,68 @@ public class DependencyManager
 		}
 
 		@Override
-		public Function<EdgeData, Boolean> execute(
-				BipartiteNode<? super D, ? super ND, ? super EdgeData, ? super EdgeData> argument)
+		public Function<RE, Boolean> execute(BipartiteNode<? super D, ? super ND, ? super E, ? super NE> argument)
 		{
-			return new Function<EdgeData, Boolean>()
+			return new Function<RE, Boolean>()
 			{
 				@Override
-				public Boolean execute(EdgeData argument)
+				public Boolean execute(RE argument)
 				{
 					return argument.isInferred() == InferenceStateFilteringFunction.this.inferred;
 				}
 			};
+		}
+	}
+
+	/**
+	 * A convenience type for an inference state filtering function that works on target nodes.
+	 */
+	private static class TargetNodeParentInferenceStateFilteringFunction
+			extends
+			InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData, TargetEdgeData>
+	{
+		public TargetNodeParentInferenceStateFilteringFunction(boolean inferred)
+		{
+			super(inferred);
+		}
+	}
+
+	/**
+	 * A convenience type for an inference state filtering function that works on target nodes.
+	 */
+	private static class MetaprogramNodeParentInferenceStateFilteringFunction
+			extends
+			InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData, MetaprogramEdgeData>
+	{
+		public MetaprogramNodeParentInferenceStateFilteringFunction(boolean inferred)
+		{
+			super(inferred);
+		}
+	}
+
+	/**
+	 * A convenience type for an inference state filtering function that works on target nodes.
+	 */
+	private static class TargetNodeChildInferenceStateFilteringFunction
+			extends
+			InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData, MetaprogramEdgeData>
+	{
+		public TargetNodeChildInferenceStateFilteringFunction(boolean inferred)
+		{
+			super(inferred);
+		}
+	}
+
+	/**
+	 * A convenience type for an inference state filtering function that works on target nodes.
+	 */
+	private static class MetaprogramNodeChildInferenceStateFilteringFunction
+			extends
+			InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData, TargetEdgeData>
+	{
+		public MetaprogramNodeChildInferenceStateFilteringFunction(boolean inferred)
+		{
+			super(inferred);
 		}
 	}
 }
