@@ -6,18 +6,17 @@ import java.util.Locale;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramErrorException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramConflictDiagnostic;
 
 
 /**
- * Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
- * attribute of a given node.
+ * Indicates that two metaprograms are in conflict due to some access.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class MetaprogramConflictDiagnosticImpl extends MetaprogramDetectedErrorDiagnosticImpl<MetaprogramConflictException> implements MetaprogramConflictDiagnostic
+public abstract class MetaprogramConflictDiagnosticImpl<T extends MetaprogramErrorException> extends MetaprogramDetectedErrorDiagnosticImpl<T> implements MetaprogramConflictDiagnostic<T>
 {
     /** The anchor of the first metaprogram that conflicted. */
     private MetaprogramAnchorNode<?> firstAnchor;
@@ -30,12 +29,14 @@ public class MetaprogramConflictDiagnosticImpl extends MetaprogramDetectedErrorD
     
     public MetaprogramConflictDiagnosticImpl(
             BsjSourceLocation source,
-            MetaprogramConflictException exception,
+            String code,
+            javax.tools.Diagnostic.Kind kind,
+            T exception,
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
             Node conflictNode)
     {
-        super(source, MetaprogramConflictDiagnostic.CODE, Kind.ERROR, exception);
+        super(source, code, kind, exception);
         this.firstAnchor = firstAnchor;
         this.secondAnchor = secondAnchor;
         this.conflictNode = conflictNode;
@@ -73,11 +74,6 @@ public class MetaprogramConflictDiagnosticImpl extends MetaprogramDetectedErrorD
         args.add(this.secondAnchor);
         args.add(this.conflictNode);
         return args;
-    }
-    
-    public MetaprogramConflictDiagnosticImpl(BsjSourceLocation source, MetaprogramConflictException exception)
-    {
-        this(source, exception, exception.getFirstAnchor(), exception.getSecondAnchor(), exception.getConflictNode());
     }
     
 }

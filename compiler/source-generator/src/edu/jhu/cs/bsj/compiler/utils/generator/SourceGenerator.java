@@ -2607,7 +2607,8 @@ public class SourceGenerator
 			String exceptionPackage = "edu.jhu.cs.bsj.compiler.ast.exception";
 			String exceptionImplPackage = "edu.jhu.cs.bsj.compiler.impl.ast.exception";
 
-			String docString = "/**\n * " + def.getException().getDocString().replaceAll("\n", "\n * ") + "\n */";
+			String docString = (def.getException().getDocString() == null) ? def.getDocString() : def.getException().getDocString();
+			docString = "/**\n * " + docString.replaceAll("\n", "\n * ") + "\n */";
 
 			Project ifaceProject = def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT);
 			Project classProject = def.getProfile().getProperty(GenerationProfile.IMPLEMENTATION_PROJECT);

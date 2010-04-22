@@ -14,6 +14,12 @@ import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.NodeList;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramChangedReferenceNodeListConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramChangedValueNodeListConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramInsertionOrderListConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramPredicateListConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramPresenceChangedListConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramReadWriteListConflictExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.ProxyList;
@@ -219,7 +225,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		for (T t : this.backing)
 		{
 			// TODO: catch the permission exceptions that fall out of this call and translate to a more contextual
-			// error.  (Instead of "no permission on node X", we should have "predicate P tried to modify node X".)
+			// error. (Instead of "no permission on node X", we should have "predicate P tried to modify node X".)
 			boolean use = filter.filter(t);
 			if (use)
 			{
@@ -643,13 +649,15 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	/**
-	 * Calculates ╙P╜m ∧ ╙e∈*╜n ∧ P(e)
+	 * Calculates ╙P╜m ∧ ╓e∈*╖n ∧ P(e)
 	 */
 	private void checkPredicateMatch(PredicateKnowledge<T> kk, EffectInKnowledge<T> ukk, int metaprogramID)
 	{
 		if (kk.getFilter().filter(ukk.getElement().getValue()))
 		{
-			this.manager.assertCooperation(metaprogramID, this.parent);
+			throw new MetaprogramPredicateListConflictExceptionImpl(this.manager.getAnchorByID(kk.getMetaprogramID()),
+					this.manager.getAnchorByID(ukk.getMetaprogramID()), this.parent, kk.getFilter(),
+					ukk.getElement().getValue());
 		}
 	}
 
@@ -661,7 +669,10 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		if (kk.getSecond().equals(ukk.getSecond()) && isOrderDependent(kk.getSecond().getValue())
 				&& isOrderDependent(ukk.getSecond().getValue()))
 		{
-			this.manager.assertCooperation(ukk.getMetaprogramID(), this.parent);
+			throw new MetaprogramInsertionOrderListConflictExceptionImpl(
+					this.manager.getAnchorByID(kk.getMetaprogramID()),
+					this.manager.getAnchorByID(ukk.getMetaprogramID()), this.parent, false, kk.getSecond().getValue(),
+					kk.getFirst().getValue(), ukk.getFirst().getValue());
 		}
 	}
 
@@ -673,7 +684,10 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		if (kk.getSecond().equals(ukk.getSecond()) && isOrderDependent(kk.getSecond().getValue())
 				&& isOrderDependent(ukk.getSecond().getValue()))
 		{
-			this.manager.assertCooperation(ukk.getMetaprogramID(), this.parent);
+			throw new MetaprogramInsertionOrderListConflictExceptionImpl(
+					this.manager.getAnchorByID(kk.getMetaprogramID()),
+					this.manager.getAnchorByID(ukk.getMetaprogramID()), this.parent, true, kk.getSecond().getValue(),
+					kk.getFirst().getValue(), ukk.getFirst().getValue());
 		}
 	}
 
@@ -685,7 +699,8 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	{
 		if (ek.getSecond().equals(ik.getSecond()))
 		{
-			this.manager.assertCooperation(metaprogramID, this.parent);
+			throw new MetaprogramReadWriteListConflictExceptionImpl(this.manager.getAnchorByID(ek.getMetaprogramID()),
+					this.manager.getAnchorByID(ik.getMetaprogramID()), this.parent, false, ek.getSecond().getValue());
 		}
 	}
 
@@ -697,7 +712,8 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	{
 		if (ek.getSecond().equals(ik.getSecond()))
 		{
-			this.manager.assertCooperation(metaprogramID, this.parent);
+			throw new MetaprogramReadWriteListConflictExceptionImpl(this.manager.getAnchorByID(ek.getMetaprogramID()),
+					this.manager.getAnchorByID(ik.getMetaprogramID()), this.parent, true, ek.getSecond().getValue());
 		}
 	}
 
@@ -709,7 +725,18 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	{
 		if (rel.getFirst().equals(in.getElement()) || (rel.getSecond().equals(in.getElement())))
 		{
-			this.manager.assertCooperation(metaprogramID, this.parent);
+			if (in.getElement().equals(rel.getSecond()))
+			{
+				throw new MetaprogramChangedReferenceNodeListConflictExceptionImpl(
+						this.manager.getAnchorByID(rel.getMetaprogramID()),
+						this.manager.getAnchorByID(in.getMetaprogramID()), this.parent, rel.getSecond().getValue());
+			} else
+			{
+				throw new MetaprogramChangedValueNodeListConflictExceptionImpl(
+						this.manager.getAnchorByID(rel.getMetaprogramID()),
+						this.manager.getAnchorByID(in.getMetaprogramID()), this.parent, rel.getSecond().getValue(),
+						rel.getFirst().getValue());
+			}
 		}
 	}
 
@@ -719,13 +746,26 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	 */
 	private void checkDualContainment(InKnowledge<T> kk, InKnowledge<T> ukk)
 	{
-		if (!(kk instanceof EffectInKnowledge<?>) && !(ukk instanceof EffectInKnowledge<?>))
-		{
-			throw new IllegalStateException();
-		}
 		if (kk.getElement().equals(ukk.getElement()))
 		{
-			this.manager.assertCooperation(ukk.getMetaprogramID(), this.parent);
+			EffectInKnowledge<?> eik;
+			InKnowledge<?> ik;
+			if (kk instanceof EffectInKnowledge<?>)
+			{
+				eik = (EffectInKnowledge<?>) kk;
+				ik = ukk;
+			} else if (ukk instanceof EffectInKnowledge<?>)
+			{
+				eik = (EffectInKnowledge<?>) ukk;
+				ik = kk;
+			} else
+			{
+				throw new IllegalStateException("neither argument was an effect knowledge");
+			}
+
+			throw new MetaprogramPresenceChangedListConflictExceptionImpl(
+					this.manager.getAnchorByID(eik.getMetaprogramID()),
+					this.manager.getAnchorByID(ik.getMetaprogramID()), this.parent, eik.getElement().getValue());
 		}
 	}
 

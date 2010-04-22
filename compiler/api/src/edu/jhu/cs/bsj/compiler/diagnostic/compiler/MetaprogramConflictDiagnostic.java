@@ -2,19 +2,15 @@ package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
 import javax.annotation.Generated;
 
-import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramErrorException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 /**
- * Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
- * attribute of a given node.
+ * Indicates that two metaprograms are in conflict due to some access.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramConflictDiagnostic extends MetaprogramDetectedErrorDiagnostic<MetaprogramConflictException>
+public interface MetaprogramConflictDiagnostic<T extends MetaprogramErrorException> extends MetaprogramDetectedErrorDiagnostic<T>
 {
-    /** The code for this diagnostic. */
-    public static final String CODE = "bsj.compiler.metaprogram.failure.accessConflict";
-    
     /**
      * Retrieves the anchor of the first metaprogram that conflicted.
      * @return The anchor of the first metaprogram that conflicted.

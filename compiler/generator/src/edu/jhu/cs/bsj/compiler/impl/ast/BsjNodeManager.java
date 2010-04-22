@@ -14,9 +14,11 @@ import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.InsufficientPermissionExceptionImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramAttributeConflictExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -49,7 +51,7 @@ public class BsjNodeManager
 	 */
 	private Stack<Integer> metaprogramIdStack;
 	/**
-	 * The stack of permission policy managers for nodes.  If this manager is <code>null</code>, any mutation is
+	 * The stack of permission policy managers for nodes. If this manager is <code>null</code>, any mutation is
 	 * permitted.
 	 */
 	private Stack<PermissionPolicyManager> permissionPolicyStack;
@@ -78,7 +80,7 @@ public class BsjNodeManager
 	{
 		this.permissionPolicyStack.push(permissionPolicyManager);
 	}
-	
+
 	public void popPermissionPolicyManager()
 	{
 		this.permissionPolicyStack.pop();
@@ -104,12 +106,12 @@ public class BsjNodeManager
 			return metaprogramIdStack.peek();
 		}
 	}
-	
+
 	public void pushCurrentMetaprogramId(Integer id)
 	{
 		this.metaprogramIdStack.push(id);
 	}
-	
+
 	public void popCurrentMetaprogramId()
 	{
 		this.metaprogramIdStack.pop();
@@ -181,6 +183,19 @@ public class BsjNodeManager
 	}
 
 	/**
+	 * Retrieves a metaprogram anchor by metaprogram ID. This method should only be called for the purposes of creating
+	 * diagnostics.
+	 * 
+	 * @param id The ID to use.
+	 * @return The metaprogram anchor for that ID.
+	 */
+	public MetaprogramAnchorNode<?> getAnchorByID(int id)
+	{
+		MetaprogramProfile<?> profile = this.dependencyManager.getMetaprogramProfileByID(id);
+		return profile == null ? null : profile.getAnchor();
+	}
+
+	/**
 	 * Determines whether or not the metaprogram with the specified ID cooperates with the current metaprogram.
 	 * 
 	 * @param id The ID of the metaprogram to check.
@@ -214,7 +229,7 @@ public class BsjNodeManager
 				LOGGER.debug("Attempted to assert cooperation between " + id + " and " + getCurrentMetaprogramId()
 						+ " over node " + node.getUid() + " and failed.");
 			}
-			throw new MetaprogramConflictExceptionImpl(
+			throw new MetaprogramAttributeConflictExceptionImpl(
 					this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
 					this.dependencyManager.getMetaprogramProfileByID(getCurrentMetaprogramId()).getAnchor(), node);
 		}
@@ -232,7 +247,7 @@ public class BsjNodeManager
 	{
 		return this.instantiator.instantiateMetaAnnotationMetaprogramAnchor(node);
 	}
-	
+
 	/**
 	 * Instantiates a meta-annotation object for a meta-annotation node. This method is separated from the
 	 * {@link MetaAnnotationNode} implementation to allow multiple invocations of the same meta-annotation class to

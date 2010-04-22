@@ -9,8 +9,7 @@ import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramConflictDiagnostic;
 
 /**
- * Indicates that two metaprograms are in conflict because of the manner in which they accessed the
- * same attribute of a given node.
+ * Indicates that two metaprograms are in conflict due to some access.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class MetaprogramConflictException extends MetaprogramDetectedErrorException
@@ -69,5 +68,5 @@ public abstract class MetaprogramConflictException extends MetaprogramDetectedEr
      * @param location The source location to report as the cause for the diagnostic.
      * @return A suitable diagnostic.
      */
-    public abstract MetaprogramConflictDiagnostic getDiagnostic(BsjSourceLocation location);
+    public abstract MetaprogramConflictDiagnostic<?> getDiagnostic(BsjSourceLocation location);
 }

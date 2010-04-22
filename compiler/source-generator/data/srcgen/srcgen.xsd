@@ -146,7 +146,7 @@
 
     <xs:complexType name="diagnosticException_T">
         <xs:sequence>
-            <xs:element name="doc" type="doc_T" />
+            <xs:element name="doc" type="doc_T" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="prop" type="xs:string" use="optional" default="exception" />
     </xs:complexType>
