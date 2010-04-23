@@ -629,20 +629,23 @@ public class DependencyManager
 					boolean hasInferredChildren = false;
 					boolean explicitDependencyExists = false;
 
-					Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> injectors = dependency.getFilteredGrandchildren(
-							new TargetNodeChildInferenceStateFilteringFunction(true),
-							new MetaprogramNodeChildInferenceStateFilteringFunction(true));
-
-					// For each dependency, find an inferred dependency edge and follow back to get an original
-					// metaprogram
-					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> injector : injectors)
+					// For each dependency, we check each of its injectors for a potentially legal route
+					for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>, MetaprogramEdgeData> targetEdge : dependency.getChildEdges())
 					{
-						// Mark down that we need a dependency
-						hasInferredChildren = true;
-						// If we see a dependency, everything is fine
-						if (allDependencies.contains(injector))
+						if (targetEdge.getSecond().isInferred())
 						{
-							explicitDependencyExists = true;
+							// We have an inferred target
+							for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> injector : targetEdge.getFirst().getChildren())
+							{
+								// Mark down that we need a dependency
+								hasInferredChildren = true;
+								// Determine whether or not we can reach the injector without using the implicit edge
+								// from the injectee to the injector's implicit target
+								if (checkPath(node, injector, targetEdge.getSecond()))
+								{
+									explicitDependencyExists = true;
+								}
+							}
 						}
 					}
 
@@ -653,6 +656,9 @@ public class DependencyManager
 						{
 							ret = new ArrayList<InjectionConflict>();
 						}
+						Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> injectors = dependency.getFilteredGrandchildren(
+								new TargetNodeChildInferenceStateFilteringFunction(true),
+								new MetaprogramNodeChildInferenceStateFilteringFunction(true));
 						ret.add(new InjectionConflict(targetDependency, dependency, node, injectors));
 					}
 
@@ -660,6 +666,40 @@ public class DependencyManager
 			}
 
 			return ret;
+		}
+
+		/**
+		 * Determines whether or not a path exists on the dependency graph from the first metaprogram to the second.
+		 * 
+		 * @param from The node for the first metaprogram.
+		 * @param to The node for the second metaprogram.
+		 * @param disallowed The edge which is not permitted to be used in finding the path. Note that this edge is
+		 *            compared by identity, not using {@link Object#equals(Object)}.
+		 * @return <code>true</code> if a path exists from the first metaprogram to the second; <code>false</code>
+		 *         otherwise.
+		 */
+		private boolean checkPath(
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> from,
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> to,
+				MetaprogramEdgeData disallowed)
+		{
+			if (from.getData().getProfile().getMetaprogram().getID() == to.getData().getProfile().getMetaprogram().getID())
+				return true;
+
+			for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>, MetaprogramEdgeData> targetNodeEdge : from.getChildEdges())
+			{
+				if (targetNodeEdge.getSecond() != disallowed)
+				{
+					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> dependencyNode : targetNodeEdge.getFirst().getChildren())
+					{
+						if (checkPath(dependencyNode, to, disallowed))
+						{
+							return true;
+						}
+					}
+				}
+			}
+			return false;
 		}
 	}
 
