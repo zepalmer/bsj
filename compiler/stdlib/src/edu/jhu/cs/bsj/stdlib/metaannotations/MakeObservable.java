@@ -157,7 +157,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
                 		"Listens for " + eventName + " events."));
         
         // add the interface to our current package
-        enclosingPackage.addCompilationUnitNode(factory.makeCompilationUnitNode(
+        enclosingPackage.addCompilationUnit(factory.makeCompilationUnitNode(
                 listenerName, 
                 packageDeclaration, 
                 factory.makeImportListNode(), 

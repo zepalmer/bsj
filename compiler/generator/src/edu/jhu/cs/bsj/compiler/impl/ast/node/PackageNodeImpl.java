@@ -220,11 +220,74 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 * call to {@link #addPackageNode(PackageNode)} which is caused by {@link #load(String)} from causing a loop.
 	 */
 	private Set<String> unloadableCompilationUnitNames = new HashSet<String>();
-
+	
+	/**
+	 * Represents an attribute for accessing a specific compilation unit within this package node.
+	 */
+	private static class CompilationUnitAttribute implements Attribute
+	{
+		/** The name of the compilation unit. */
+		private String name;
+		/**
+		 * Creates a new compilation unit attribute.
+		 * @param name The compilation unit's  name. 
+		 */
+		public CompilationUnitAttribute(String name)
+		{
+			this.name = name;
+		}
+		/**
+		 * Compares this attribute to another.
+		 */
+		public boolean equals(Object o)
+		{
+			if (o == null)
+				return false;
+			if (o.getClass() != this.getClass())
+				return false;
+			CompilationUnitAttribute other = (CompilationUnitAttribute)o;
+			return this.name.equals(other.name);
+		}
+		/**
+		 * Creates a hashcode for this attribute.
+		 */
+		public int hashCode()
+		{
+			return this.name.hashCode();
+		}
+	}
+	
+	/**
+	 * Represents an attribute for accessing iteration of compilation units within this package node.  This attribute
+	 * is used to control the state of iterators.  Creation of an iterator reads this attribute; writing any
+	 * compilation unit writes this attribute.
+	 */
+	private static class IteratorAttribute implements Attribute
+	{
+		/**
+		 * Compares this attribute to another.
+		 */
+		public boolean equals(Object o)
+		{
+			if (o == null)
+				return false;
+			if (o.getClass() != this.getClass())
+				return false;
+			return true;
+		}
+		/**
+		 * Creates a hashcode for this attribute.
+		 */
+		public int hashCode()
+		{
+			return 0;
+		}
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addPackageNode(PackageNode packageNode)
+	public void addPackage(PackageNode packageNode)
 	{
 		if (this.packageNodes.containsKey(packageNode.getName().getIdentifier()))
 		{
@@ -254,13 +317,15 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	/**
 	 * {@inheritDoc}
 	 */
-	public void addCompilationUnitNode(CompilationUnitNode compilationUnit)
+	public void addCompilationUnit(CompilationUnitNode compilationUnit)
 	{
+		getManager().assertInsertable(this);
+		recordAccess(new CompilationUnitAttribute(compilationUnit.getName()), Attribute.AccessType.WRITE);
+		recordAccess(new IteratorAttribute(), Attribute.AccessType.WRITE);
 		if (this.load(compilationUnit.getName()) != null)
 		{
 			throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
 		}
-		getManager().assertInsertable(this);
 		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);
 		setAsChild(compilationUnit, true);
 	}
@@ -270,6 +335,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public CompilationUnitNode getCompilationUnit(String name)
 	{
+		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.READ);
 		return this.compilationUnitNodes.get(name);
 	}
 
@@ -278,6 +344,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public Iterator<CompilationUnitNode> getCompilationUnitIterator()
 	{
+		recordAccess(new IteratorAttribute(), Attribute.AccessType.READ);
 		return Collections.unmodifiableMap(compilationUnitNodes).values().iterator();
 	}
 
@@ -431,6 +498,8 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public boolean contains(String name)
 	{
+		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.READ);
+		recordAccess(new IteratorAttribute(), Attribute.AccessType.READ);
 		if (compilationUnitNodes.get(name) != null)
 		{
 			return true;
@@ -443,6 +512,10 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public CompilationUnitNode load(String name)
 	{
+		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.READ);
+		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.WRITE);
+		recordAccess(new IteratorAttribute(), Attribute.AccessType.WRITE);
+		
 		CompilationUnitNode compilationUnitNode;
 
 		if (compilationUnitNodes.get(name) != null)

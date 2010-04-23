@@ -7,7 +7,7 @@ public interface PackageNode
 	 * @param packageNode The package node to add.
 	 * @throws DuplicatePackageMemberException If a subpackage with the same name as the provided node already exists.
 	 */
-	public void addPackageNode(PackageNode packageNode);
+	public void addPackage(PackageNode packageNode);
 
 	/**
 	 * Retrieves a subpackage of this package.
@@ -24,7 +24,7 @@ public interface PackageNode
 	 * @throws DuplicatePackageMemberException If a compilation unit with the same name as the provided node already
 	 *             exists.
 	 */
-	public void addCompilationUnitNode(CompilationUnitNode compilationUnit);
+	public void addCompilationUnit(CompilationUnitNode compilationUnit);
 
 	/**
 	 * Retrieves a compilation unit in this package.
@@ -91,6 +91,7 @@ public interface PackageNode
 	 * <li>When a source file exists on the source path which defines the compilation unit.</li>
 	 * <li>When a node created by a metaprogram has been explicitly added to this package.</li>
 	 * </ul>
+	 * This operation conflicts with all write operations.
 	 * 
 	 * @param name The name of the compilation unit to check.
 	 * @return <code>true</code> if the compilation unit exists; <code>false</code> otherwise.

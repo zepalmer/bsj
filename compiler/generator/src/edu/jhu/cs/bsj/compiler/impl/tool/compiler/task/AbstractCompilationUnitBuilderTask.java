@@ -51,7 +51,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 		}
 
 		// Add the compilation unit
-		packageNode.addCompilationUnitNode(node);
+		packageNode.addCompilationUnit(node);
 
 		// Reinstate policy management and conflict detection
 		context.getNodeManager().popPermissionPolicyManager();
