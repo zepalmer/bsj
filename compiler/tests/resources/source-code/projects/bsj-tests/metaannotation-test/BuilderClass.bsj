@@ -1,0 +1,12 @@
+#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
+
+@@GenerateBuilder
+public class BuilderClass
+{
+    private int x;
+    private int y = 3;
+    public BuilderClass()
+    {
+        
+    }
+}
