@@ -30,20 +30,22 @@ import edu.jhu.cs.bsj.stdlib.utils.MethodDeclUtils;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
- * This meta-annotation metaprogram adds memoization for a method.  
- * 
- * TODO finish
+ * This meta-annotation metaprogram adds memoization for a method.  This is performed by creating a private
+ * class which serves as a tuple to encapsulate the method's parameters.  This tuple is used as a key for a 
+ * map which stores previous results of the method.  The original method is renamed and put in its place is
+ * a wrapper method which performed memoization checking before calling out to the original method.
  * 
  * @author Joseph Riley
  */
 public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
 {
+    /** The name of the map for storing memoized results. */
     private String hashMapName;
     
+    /** The name of the class that represents the methods parameters. */
     private String tupleClassName;    
     
-    private String tupleInstanceName;
-    
+    /** The name of the method that will hold the original version of the memoized method. */
     private String newMethodName;
     
     public Memoized()
@@ -88,10 +90,14 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
 
     private MethodDeclarationNode generateNewMethod(MethodDeclarationNode method, BsjNodeFactory factory)
     {
+        // rename the original method and change its access to private
         newMethodName = method.getIdentifier().getIdentifier() + "Original";
         MethodModifiersNode modifiers = method.getModifiers().deepCopy(factory);
         modifiers.setAccess(AccessModifier.PRIVATE);
+        
+        // remove @@Memoized annotation (otherwise we would recurse)
         modifiers.setMetaAnnotations(factory.makeMetaAnnotationListNode());
+        
         return factory.makeMethodDeclarationNode(
                 method.getBody().deepCopy(factory), 
                 modifiers, 
@@ -106,7 +112,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
         BlockStatementListNode statements = method.getBody().getStatements();
         statements.clear();
         ExpressionListNode arguments = factory.makeExpressionListNode();
-        tupleInstanceName = Character.toLowerCase(tupleClassName.charAt(0)) + tupleClassName.substring(1) + "Instance";
+        String tupleInstanceName = Character.toLowerCase(tupleClassName.charAt(0)) + tupleClassName.substring(1) + "Instance";
         
         // use parameters for arguments in tuple constructor
         for (VariableNode variable : method.getParameters())
@@ -189,7 +195,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
         // return the entire class declaration
         return factory.makeClassDeclarationNode(
                 factory.makeClassModifiersNode(
-                        AccessModifier.PRIVATE, false, false, false, false, 
+                        AccessModifier.PRIVATE, false, true, false, false, 
                         factory.makeMetaAnnotationListNode(tupleMetaAnnotations), 
                         factory.makeAnnotationListNode()),
                 null, 
