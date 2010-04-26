@@ -8,8 +8,10 @@ import java.util.List;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
@@ -35,6 +37,8 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
     private String hashMapName;
     
     private String tupleClassName;    
+    
+    private String tupleInstanceName;
     
     public Memoized()
     {
@@ -64,14 +68,53 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
         // generate the hash map that will stored previous results of the method
         members.add(generateHashMapDeclaration(method, factory));
         
-        //TODO add memoization code to method body
+        // add memoization code to method body
+        addMemoizationCode(method, factory);
+    }
+
+    private void addMemoizationCode(MethodDeclarationNode method, BsjNodeFactory factory)
+    {
+        // TODO finish
+        List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
+        List<ExpressionNode> arguments = new ArrayList<ExpressionNode>();
+        tupleInstanceName = Character.toLowerCase(tupleClassName.charAt(0)) + tupleClassName.substring(1) + "Instance";
+        
+        // use parameters for arguments in tuple constructor
+        for (VariableNode variable : method.getParameters())
+        {
+            arguments.add(factory.makeFieldAccessByNameNode(
+                    factory.parseNameNode(variable.getIdentifier().getIdentifier())));
+        }
+        
+        // FooParamTuple fooParamTupleInstance = new FooParamTuple(~:arguments:~);
+        statements.add(factory.makeVariableDeclarationNode(
+                factory.makeVariableDeclaratorListNode(
+                        factory.makeVariableDeclaratorNode(
+                                factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)), 
+                                factory.makeIdentifierNode(tupleInstanceName), 
+                                factory.makeUnqualifiedClassInstantiationNode(
+                                        factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)), 
+                                        factory.makeExpressionListNode(arguments))))));
+        
+        // if (hashMap.containsKey(fooParamTupleInstance)) {return hashMap.get(fooParamTupleInstance);}
+        statements.add(factory.makeIfNode(
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeFieldAccessByNameNode(factory.parseNameNode(hashMapName)), 
+                        factory.makeIdentifierNode("containsKey"), 
+                        factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode(tupleInstanceName)))), 
+                factory.makeReturnNode(factory.makeMethodInvocationByExpressionNode(
+                        factory.makeFieldAccessByNameNode(factory.parseNameNode(hashMapName)), 
+                        factory.makeIdentifierNode("get"), 
+                        factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode(tupleInstanceName)))))));
+        
+        method.getBody().getStatements().addAll(0, statements);
     }
 
     private ClassDeclarationNode generateTupleClassDeclaration(
             MethodDeclarationNode method, BsjNodeFactory factory)
     {
         String methodName = method.getIdentifier().getIdentifier();
-        tupleClassName =  Character.toUpperCase(methodName.charAt(0)) + methodName.substring(1) + "ParamTuple";
+        tupleClassName = Character.toUpperCase(methodName.charAt(0)) + methodName.substring(1) + "ParamTuple";
         ClassMemberListNode members = factory.makeClassMemberListNode();
         
         // make fields in the tuple for each parameter in the memoized method
@@ -98,9 +141,9 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
         
         // add @@GenerateConstructorFromProperties and @@GenerateEqualsAndHashCode
         List<MetaAnnotationNode> tupleMetaAnnotations = new ArrayList<MetaAnnotationNode>();
-//        tupleMetaAnnotations.add(factory.makeNormalMetaAnnotationNode(
-//                    factory.makeMetaAnnotationElementListNode(), 
-//                    factory.makeUnparameterizedTypeNode(factory.parseNameNode("GenerateConstructorFromProperties"))));
+        tupleMetaAnnotations.add(factory.makeNormalMetaAnnotationNode(
+                    factory.makeMetaAnnotationElementListNode(), 
+                    factory.makeUnparameterizedTypeNode(factory.parseNameNode("GenerateConstructorFromProperties"))));
         tupleMetaAnnotations.add(factory.makeNormalMetaAnnotationNode(
                 factory.makeMetaAnnotationElementListNode(), 
                 factory.makeUnparameterizedTypeNode(factory.parseNameNode("GenerateEqualsAndHashCode"))));
@@ -125,7 +168,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
         hashMapName = method.getIdentifier().getIdentifier() + "MemoizedMap";
         
         ReferenceTypeNode returnType = TypeDeclUtils.autoBoxPrimitives(method.getReturnType(), factory);        
-        ReferenceTypeNode paramType = TypeDeclUtils.autoBoxPrimitives(method.getParameters().getFirst().getType(), factory);
+        ReferenceTypeNode paramType = factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName));
 
        // private Map<paramType, returnType> ~:hashMapName:~ = new HashMap<paramType, returnType>();
        return factory.makeFieldDeclarationNode(
