@@ -3,6 +3,10 @@ public class MemoizedMain
 	public static void main(String[] arg)
 	{
 	    MemoizedClass mc = new MemoizedClass();
-	    System.out.println(mc.foo(2,3));
+	    Integer i = mc.foo(2000,3000);
+	    if (i == mc.foo(2000,3000))
+	    {
+	        System.out.println("SUCCESS");
+	    }
 	}
 }

@@ -8,8 +8,14 @@ public class MemoizedClass
     }
     
     @@Memoized
-    public int foo(int x, int y)
+    public Integer foo(int x, int y)
     {
         return (x+y)*2;
+    }
+    
+    //@@Memoized
+    public String bar(String s)
+    {
+        return "new" + s;
     }
 }
