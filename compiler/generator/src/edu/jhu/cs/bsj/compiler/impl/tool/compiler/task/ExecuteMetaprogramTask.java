@@ -98,6 +98,22 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	private <A extends MetaprogramAnchorNode<?>> void execute(MetaprogramProfile<A> profile,
 			MetacompilationContext context)
 	{
+		// Log metaprogram execution
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Executing metaprogram " + profile.getMetaprogram().getID());
+			CompilationUnitNode compilationUnitNode = profile.getAnchor().getNearestAncestorOfType(
+					CompilationUnitNode.class);
+			if (compilationUnitNode == null)
+			{
+				LOGGER.trace("Metaprogram anchor is detached!");
+			} else
+			{
+				LOGGER.trace("Metaprogram's source unit currently looks like this:\n"
+						+ compilationUnitNode.executeOperation(context.getToolkit().getSerializer(), null));
+			}
+		}
+		
 		// Set up the permission policy manager and dependency manager for this metaprogram
 		PermissionPolicyManager policyManager = createPermissionPolicyManager(profile, context.getRootPackage());
 		context.getNodeManager().pushPermissionPolicyManager(policyManager);
@@ -105,10 +121,6 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		context.getNodeManager().setDependencyManager(context.getDependencyManager());
 
 		// Run the metaprogram
-		if (LOGGER.isTraceEnabled())
-		{
-			LOGGER.trace("Executing metaprogram " + profile.getMetaprogram().getID());
-		}
 		BsjDiagnostic diagnostic = doExecute(profile);
 
 		// Release the managers
@@ -127,6 +139,16 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " execution complete.");
+			CompilationUnitNode compilationUnitNode = profile.getAnchor().getNearestAncestorOfType(
+					CompilationUnitNode.class);
+			if (compilationUnitNode == null)
+			{
+				LOGGER.trace("Metaprogram anchor is detached!");
+			} else
+			{
+				LOGGER.trace("Metaprogram's source unit currently looks like this:\n"
+						+ compilationUnitNode.executeOperation(context.getToolkit().getSerializer(), null));
+			}
 		}
 
 		// Have the metaprogram replace itself with its replacement node
