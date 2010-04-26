@@ -7,8 +7,10 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -42,7 +44,12 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
     
     public Memoized()
     {
-        super(Arrays.asList("memoized"), Collections.<String> emptyList());
+        super(
+                Arrays.asList("memoized"), 
+                Collections.<String> emptyList(), 
+                Collections.<String> emptyList(), 
+                MetaprogramLocalMode.MUTATE,
+                MetaprogramPackageMode.READ_ONLY);
     }
     
     @Override
@@ -75,7 +82,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
     private void addMemoizationCode(MethodDeclarationNode method, BsjNodeFactory factory)
     {
         // TODO finish
-        List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
+        BlockStatementListNode statements = method.getBody().getStatements();
         List<ExpressionNode> arguments = new ArrayList<ExpressionNode>();
         tupleInstanceName = Character.toLowerCase(tupleClassName.charAt(0)) + tupleClassName.substring(1) + "Instance";
         
@@ -87,7 +94,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
         }
         
         // FooParamTuple fooParamTupleInstance = new FooParamTuple(~:arguments:~);
-        statements.add(factory.makeVariableDeclarationNode(
+        statements.add(0, factory.makeVariableDeclarationNode(
                 factory.makeVariableDeclaratorListNode(
                         factory.makeVariableDeclaratorNode(
                                 factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)), 
@@ -97,7 +104,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
                                         factory.makeExpressionListNode(arguments))))));
         
         // if (hashMap.containsKey(fooParamTupleInstance)) {return hashMap.get(fooParamTupleInstance);}
-        statements.add(factory.makeIfNode(
+        statements.add(1, factory.makeIfNode(
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeFieldAccessByNameNode(factory.parseNameNode(hashMapName)), 
                         factory.makeIdentifierNode("containsKey"), 
@@ -107,7 +114,9 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
                         factory.makeIdentifierNode("get"), 
                         factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode(tupleInstanceName)))))));
         
-        method.getBody().getStatements().addAll(0, statements);
+        // TODO proxy method
+        
+        
     }
 
     private ClassDeclarationNode generateTupleClassDeclaration(
