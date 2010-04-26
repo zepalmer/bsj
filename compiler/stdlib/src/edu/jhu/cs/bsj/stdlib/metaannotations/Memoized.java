@@ -9,13 +9,15 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
@@ -41,6 +43,8 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
     private String tupleClassName;    
     
     private String tupleInstanceName;
+    
+    private String newMethodName;
     
     public Memoized()
     {
@@ -69,6 +73,9 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
             throw new MetaprogramExecutionFailureException("Memoized methods require return values");
         }
         
+        // create a new method to hold the contents of the original method, which will become a wrapper
+        members.add(generateNewMethod(method, factory));
+        
         // generate the tuple class that will store method parameters
         members.add(generateTupleClassDeclaration(method, factory));
         
@@ -79,11 +86,26 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
         addMemoizationCode(method, factory);
     }
 
+    private MethodDeclarationNode generateNewMethod(MethodDeclarationNode method, BsjNodeFactory factory)
+    {
+        newMethodName = method.getIdentifier().getIdentifier() + "Original";
+        MethodModifiersNode modifiers = method.getModifiers().deepCopy(factory);
+        modifiers.setAccess(AccessModifier.PRIVATE);
+        modifiers.setMetaAnnotations(factory.makeMetaAnnotationListNode());
+        return factory.makeMethodDeclarationNode(
+                method.getBody().deepCopy(factory), 
+                modifiers, 
+                factory.makeIdentifierNode(newMethodName), 
+                method.getParameters().deepCopy(factory), 
+                method.getReturnType().deepCopy(factory), 
+                method.getJavadoc() == null ? null : method.getJavadoc().deepCopy(factory));
+    }
+
     private void addMemoizationCode(MethodDeclarationNode method, BsjNodeFactory factory)
     {
-        // TODO finish
         BlockStatementListNode statements = method.getBody().getStatements();
-        List<ExpressionNode> arguments = new ArrayList<ExpressionNode>();
+        statements.clear();
+        ExpressionListNode arguments = factory.makeExpressionListNode();
         tupleInstanceName = Character.toLowerCase(tupleClassName.charAt(0)) + tupleClassName.substring(1) + "Instance";
         
         // use parameters for arguments in tuple constructor
@@ -92,31 +114,38 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
             arguments.add(factory.makeFieldAccessByNameNode(
                     factory.parseNameNode(variable.getIdentifier().getIdentifier())));
         }
-        
+
         // FooParamTuple fooParamTupleInstance = new FooParamTuple(~:arguments:~);
-        statements.add(0, factory.makeVariableDeclarationNode(
+        statements.add(factory.makeVariableDeclarationNode(
                 factory.makeVariableDeclaratorListNode(
                         factory.makeVariableDeclaratorNode(
                                 factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)), 
                                 factory.makeIdentifierNode(tupleInstanceName), 
                                 factory.makeUnqualifiedClassInstantiationNode(
                                         factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)), 
-                                        factory.makeExpressionListNode(arguments))))));
+                                        arguments.deepCopy(factory))))));
         
-        // if (hashMap.containsKey(fooParamTupleInstance)) {return hashMap.get(fooParamTupleInstance);}
-        statements.add(1, factory.makeIfNode(
+        // if (!hashMap.containsKey(fooParamTupleInstance)) {hashMap.put(fooParamTupleInstance, originalMethod(~:arguments:~));}
+        statements.add(factory.makeIfNode(factory.makeUnaryExpressionNode(
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeFieldAccessByNameNode(factory.parseNameNode(hashMapName)), 
                         factory.makeIdentifierNode("containsKey"), 
-                        factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode(tupleInstanceName)))), 
-                factory.makeReturnNode(factory.makeMethodInvocationByExpressionNode(
+                        factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode(tupleInstanceName)))), UnaryOperator.LOGICAL_COMPLEMENT), 
+                factory.makeExpressionStatementNode(factory.makeMethodInvocationByExpressionNode(
+                        factory.makeFieldAccessByNameNode(factory.parseNameNode(hashMapName)), 
+                        factory.makeIdentifierNode("put"), 
+                        factory.makeExpressionListNode(
+                                factory.makeFieldAccessByNameNode(factory.parseNameNode(tupleInstanceName)),
+                                factory.makeMethodInvocationByNameNode(
+                                        factory.parseNameNode(newMethodName), 
+                                        arguments.deepCopy(factory)))))));
+        
+        // return hashMap.get(fooParamTupleInstance);
+        statements.add(factory.makeReturnNode(
+                factory.makeMethodInvocationByExpressionNode(
                         factory.makeFieldAccessByNameNode(factory.parseNameNode(hashMapName)), 
                         factory.makeIdentifierNode("get"), 
-                        factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode(tupleInstanceName)))))));
-        
-        // TODO proxy method
-        
-        
+                        factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode(tupleInstanceName))))));
     }
 
     private ClassDeclarationNode generateTupleClassDeclaration(
