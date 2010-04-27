@@ -8,6 +8,6 @@ import javax.annotation.Generated;
 public interface GeneralLexerFailureDiagnostic extends BsjLexerDiagnostic
 {
     /** The code for this diagnostic. */
-    public static final String CODE = "lexer.error.generalFailure";
+    public static final String CODE = "bsj.lexer.error.generalFailure";
     
 }

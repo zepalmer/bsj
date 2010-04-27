@@ -10,7 +10,7 @@
                 ]]></doc>
             </diagnostic>
 
-            <diagnostic name="GeneralLexerFailureDiagnostic" code="lexer.error.generalFailure"
+            <diagnostic name="GeneralLexerFailureDiagnostic" code="bsj.lexer.error.generalFailure"
                 super="BsjLexerDiagnostic">
                 <doc><![CDATA[
                     A diagnostic indicating a general lexer failure.
