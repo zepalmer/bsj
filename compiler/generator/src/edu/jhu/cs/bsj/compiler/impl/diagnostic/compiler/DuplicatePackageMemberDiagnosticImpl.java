@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -10,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.exception.DuplicatePackageMemberException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.DuplicatePackageMemberDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -66,12 +68,15 @@ public class DuplicatePackageMemberDiagnosticImpl extends MetaprogramDetectedErr
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.packageNode);
-        args.add(this.duplicateMember);
-        args.add(this.duplicateMemberName);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.packageNode);
+        args.getSecond().put("packageNode", args.getFirst().size());
+        args.getFirst().add(this.duplicateMember);
+        args.getSecond().put("duplicateMember", args.getFirst().size());
+        args.getFirst().add(this.duplicateMemberName);
+        args.getSecond().put("duplicateMemberName", args.getFirst().size());
         return args;
     }
     

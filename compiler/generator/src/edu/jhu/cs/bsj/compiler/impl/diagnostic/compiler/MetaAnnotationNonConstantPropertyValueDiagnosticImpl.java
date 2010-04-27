@@ -2,12 +2,14 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationNonConstantPropertyValueDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 
@@ -53,11 +55,13 @@ public class MetaAnnotationNonConstantPropertyValueDiagnosticImpl extends Invali
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.value);
-        args.add(this.node);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.value);
+        args.getSecond().put("value", args.getFirst().size());
+        args.getFirst().add(this.node);
+        args.getSecond().put("node", args.getFirst().size());
         return args;
     }
     

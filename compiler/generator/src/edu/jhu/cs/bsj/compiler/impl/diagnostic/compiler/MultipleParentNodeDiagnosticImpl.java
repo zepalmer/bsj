@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -9,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.exception.MultipleParentNodeException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MultipleParentNodeDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -52,11 +54,13 @@ public class MultipleParentNodeDiagnosticImpl extends MetaprogramDetectedErrorDi
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.parent);
-        args.add(this.child);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.parent);
+        args.getSecond().put("parent", args.getFirst().size());
+        args.getFirst().add(this.child);
+        args.getSecond().put("child", args.getFirst().size());
         return args;
     }
     

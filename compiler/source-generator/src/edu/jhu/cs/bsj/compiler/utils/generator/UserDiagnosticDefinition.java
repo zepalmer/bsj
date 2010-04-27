@@ -11,7 +11,7 @@ public class UserDiagnosticDefinition extends AbstractDiagnosticDefinition<UserD
 {
 	public UserDiagnosticDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			GenerationProfile profile, List<DiagnosticPropertyDefinition> properties,
-			List<String> messagePropertyExpressions, String docString, String code)
+			List<MessagePropertyExpressionDefinition> messagePropertyExpressions, String docString, String code)
 	{
 		super(baseName, typeParameter, superName, superTypeArg, profile, properties, messagePropertyExpressions,
 				docString, code);

@@ -2,11 +2,13 @@ package edu.jhu.cs.bsj.stdlib.diagnostic.impl;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 import javax.tools.Diagnostic.Kind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidEnclosingTypeDiagnostic;
 
@@ -52,12 +54,15 @@ public class InvalidEnclosingTypeDiagnosticImpl extends InvalidMetaAnnotationUse
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.node);
-        args.add(this.legalTypes);
-        args.add(node!=null?node.getClass().getName():null);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.node);
+        args.getSecond().put("node", args.getFirst().size());
+        args.getFirst().add(this.legalTypes);
+        args.getSecond().put("legalTypes", args.getFirst().size());
+        args.getFirst().add(node!=null?node.getClass().getName():null);
+        args.getSecond().put("enclosingTypeName", args.getFirst().size());
         return args;
     }
     

@@ -13,8 +13,8 @@ public class DiagnosticDefinition extends AbstractDiagnosticDefinition<Diagnosti
 
 	public DiagnosticDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			GenerationProfile profile, DiagnosticExceptionDefinition exception,
-			List<DiagnosticPropertyDefinition> properties, List<String> messagePropertyExpressions, String docString,
-			String code)
+			List<DiagnosticPropertyDefinition> properties,
+			List<MessagePropertyExpressionDefinition> messagePropertyExpressions, String docString, String code)
 	{
 		super(baseName, typeParameter, superName, superTypeArg, profile, properties, messagePropertyExpressions,
 				docString, code);

@@ -2,11 +2,13 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.parser;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.MissingTokenDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -36,10 +38,11 @@ public class MissingTokenDiagnosticImpl extends BsjParserDiagnosticImpl implemen
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.tokenType);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.tokenType);
+        args.getSecond().put("tokenType", args.getFirst().size());
         return args;
     }
     

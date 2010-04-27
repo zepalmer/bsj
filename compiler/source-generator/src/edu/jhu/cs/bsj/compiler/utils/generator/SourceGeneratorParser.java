@@ -612,7 +612,7 @@ public class SourceGeneratorParser
 			String superName = getAttributeValue(e, "super");
 			String superArg = getAttributeValue(e, "superTypeArg");
 			List<DiagnosticPropertyDefinition> props = new ArrayList<DiagnosticPropertyDefinition>();
-			List<String> messagePropertyExpressions = new ArrayList<String>();
+			List<MessagePropertyExpressionDefinition> messagePropertyExpressions = new ArrayList<MessagePropertyExpressionDefinition>();
 			String docString = null;
 			String code = getAttributeValue(e, "code");
 
@@ -634,7 +634,9 @@ public class SourceGeneratorParser
 						props.add(handler.handle(childElement));
 					} else if (childTag.equals("messageProp"))
 					{
-						messagePropertyExpressions.add(childElement.getAttribute("expression"));
+						String exprName = childElement.getAttribute("name");
+						String expr = childElement.getAttribute("expression");
+						messagePropertyExpressions.add(new MessagePropertyExpressionDefinition(exprName, expr));
 					} else if (childTag.equals("doc"))
 					{
 						docString = unindent(childElement.getTextContent());
@@ -707,7 +709,7 @@ public class SourceGeneratorParser
 			String superName = getAttributeValue(e, "super");
 			String superArg = getAttributeValue(e, "superTypeArg");
 			List<DiagnosticPropertyDefinition> props = new ArrayList<DiagnosticPropertyDefinition>();
-			List<String> messagePropertyExpressions = new ArrayList<String>();
+			List<MessagePropertyExpressionDefinition> messagePropertyExpressions = new ArrayList<MessagePropertyExpressionDefinition>();
 			String docString = null;
 			String code = getAttributeValue(e, "code");
 
@@ -725,7 +727,9 @@ public class SourceGeneratorParser
 						props.add(handler.handle(childElement));
 					} else if (childTag.equals("messageProp"))
 					{
-						messagePropertyExpressions.add(childElement.getAttribute("expression"));
+						String exprName = childElement.getAttribute("name");
+						String expr = childElement.getAttribute("expression");
+						messagePropertyExpressions.add(new MessagePropertyExpressionDefinition(exprName, expr));
 					} else if (childTag.equals("doc"))
 					{
 						docString = unindent(childElement.getTextContent());

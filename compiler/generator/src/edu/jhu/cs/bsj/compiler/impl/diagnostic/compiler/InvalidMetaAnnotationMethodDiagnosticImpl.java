@@ -2,12 +2,14 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InvalidMetaAnnotationMethodDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationMethodType;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 
@@ -54,11 +56,13 @@ public abstract class InvalidMetaAnnotationMethodDiagnosticImpl extends InvalidM
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.methodType);
-        args.add(this.methodName);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.methodType);
+        args.getSecond().put("methodType", args.getFirst().size());
+        args.getFirst().add(this.methodName);
+        args.getSecond().put("methodName", args.getFirst().size());
         return args;
     }
     

@@ -2,11 +2,13 @@ package edu.jhu.cs.bsj.stdlib.diagnostic.impl;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 import javax.tools.Diagnostic.Kind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidAnnotatedDeclarationDiagnostic;
 
@@ -51,12 +53,15 @@ public class InvalidAnnotatedDeclarationDiagnosticImpl extends InvalidMetaAnnota
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.annotatedNode);
-        args.add(this.legalTypes);
-        args.add(annotatedNode!=null?annotatedNode.getClass().getName():null);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.annotatedNode);
+        args.getSecond().put("annotatedNode", args.getFirst().size());
+        args.getFirst().add(this.legalTypes);
+        args.getSecond().put("legalTypes", args.getFirst().size());
+        args.getFirst().add(annotatedNode!=null?annotatedNode.getClass().getName():null);
+        args.getSecond().put("annotatedNodeTypeName", args.getFirst().size());
         return args;
     }
     

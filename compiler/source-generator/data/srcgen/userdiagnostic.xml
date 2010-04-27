@@ -15,7 +15,7 @@
                 <prop name="annotatedNode" type="Node" desc="the node that was annotated" />
                 <prop name="legalTypes" type="List&lt;Class&lt;? extends Node&gt;&gt;"
                     desc="the legal types that could be annotated by the meta-annotation" />
-                <messageProp expression="annotatedNode!=null?annotatedNode.getClass().getName():null" />
+                <messageProp name="annotatedNodeTypeName" expression="annotatedNode!=null?annotatedNode.getClass().getName():null" />
                 <doc><![CDATA[
                     Indicates that the meta-annotation cannot be used on the specified type of node.  The
                     <code>annotatedNode</code> field is a hint and may be <code>null</code>.
@@ -27,22 +27,22 @@
                 <prop name="node" type="TypeDeclarationNode" desc="the enclosing type declaration" />
                 <prop name="legalTypes" type="List&lt;Class&lt;? extends TypeDeclarationNode&gt;&gt;"
                     desc="the legal types that could be annotated by the meta-annotation" />
-                <messageProp expression="node!=null?node.getClass().getName():null" />
+                <messageProp name="enclosingTypeName" expression="node!=null?node.getClass().getName():null" />
                 <doc><![CDATA[
                     Indicates that the meta-annotation cannot be used in the enclosing type in which it is found.  The
                     <code>enclosingNode</code> field is a hint and may be <code>null</code> (especially if the
                     meta-annotation is attached to a code fragment and not a descendent of the root package).
                 ]]></doc>
             </userDiagnostic>
-            
+
             <userDiagnostic name="MissingDeclarationDiagnostic" super="BsjUtilDiagnostic">
-                <prop name="node" type="Node" desc="the node from which the declaration is missing"/>
-                <prop name="name" type="String" desc="the name of the declaration which is missing"/>
+                <prop name="node" type="Node" desc="the node from which the declaration is missing" />
+                <prop name="name" type="String" desc="the name of the declaration which is missing" />
                 <doc><![CDATA[
                     A diagnostic indicating that an expected declaration is missing.
                 ]]></doc>
             </userDiagnostic>
-            
+
             <userDiagnostic name="MissingMethodDeclarationDiagnostic" super="MissingDeclarationDiagnostic"
                 code="bsj.stdlib.metaannotation.declaration.missing.method">
                 <doc><![CDATA[

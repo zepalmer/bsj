@@ -152,6 +152,7 @@
     </xs:complexType>
 
     <xs:complexType name="diagnosticMessageProp_T">
+        <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="expression" type="xs:string" use="required" />
     </xs:complexType>
 

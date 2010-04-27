@@ -2,11 +2,13 @@ package edu.jhu.cs.bsj.stdlib.diagnostic.impl;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 import javax.tools.Diagnostic.Kind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.stdlib.diagnostic.MissingMethodDeclarationDiagnostic;
 
 
@@ -24,9 +26,9 @@ public class MissingMethodDeclarationDiagnosticImpl extends MissingDeclarationDi
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
         return args;
     }
     

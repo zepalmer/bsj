@@ -1,12 +1,15 @@
 package edu.jhu.cs.bsj.stdlib.diagnostic.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.stdlib.diagnostic.MissingDeclarationDiagnostic;
 
 
@@ -50,11 +53,13 @@ public abstract class MissingDeclarationDiagnosticImpl extends BsjUtilDiagnostic
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = new ArrayList<Object>();
-        args.add(this.node);
-        args.add(this.name);
+        Pair<List<Object>,Map<String,Integer>> args = new Pair<List<Object>,Map<String,Integer>>(new ArrayList<Object>(), new HashMap<String,Integer>());
+        args.getFirst().add(this.node);
+        args.getSecond().put("node", args.getFirst().size());
+        args.getFirst().add(this.name);
+        args.getSecond().put("name", args.getFirst().size());
         return args;
     }
     

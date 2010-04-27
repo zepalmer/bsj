@@ -2,11 +2,13 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.tools.Diagnostic;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.impl.utils.i18n.InternationalizationUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.i18n.PropertyBasedStringRepository;
 
@@ -94,19 +96,21 @@ public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 	{
 		return this.location != null ? this.location.getLine() : Diagnostic.NOPOS;
 	}
-	
+
 	/**
 	 * Retrieves a message for this diagnostic. The message is generated from a classpath properties file's format
 	 * string (see {@link PropertyBasedStringRepository}) using this diagnostic's code. The format strings make use of
 	 * positional format arguments where necessary to ensure that the appropriate information is used.
+	 * 
 	 * @param locale The locale for which to format the message.
 	 * @return The resulting message.
 	 */
 	@Override
 	public String getMessage(Locale locale)
 	{
+		Pair<List<Object>, Map<String, Integer>> args = getMessageArgs(locale);
 		String message = InternationalizationUtilities.MESSAGE_REPOSITORY.getFormattedMessage(locale, getCode(),
-				getMessageArgs(locale));
+				args.getFirst(), args.getSecond());
 
 		StringBuilder sb = new StringBuilder();
 		if (this.location == null)
@@ -127,7 +131,7 @@ public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 	 * @param locale The locale for which to prepare these arguments (for recursive formatting if necessary).
 	 * @return The arguments to use.
 	 */
-	protected abstract List<Object> getMessageArgs(Locale locale);
+	protected abstract Pair<List<Object>, Map<String, Integer>> getMessageArgs(Locale locale);
 
 	/**
 	 * Retrieves the character index from the beginning of the file at which the event occurred.

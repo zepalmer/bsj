@@ -161,7 +161,7 @@
                 typeParam="T extends JavaFileObject" code="bsj.compiler.compilation.java.error">
                 <prop name="diagnostic" type="Diagnostic" typeArg="T"
                     desc="the underlying Java compiler diagnostic" />
-                <messageProp expression="diagnostic.getMessage(locale)" />
+                <messageProp name="diagnosticMessage" expression="diagnostic.getMessage(locale)" />
                 <doc><![CDATA[
                     A diagnostic indicating that a Java compilation error occurred.
                 ]]></doc>
@@ -171,7 +171,7 @@
                 typeParam="T extends BsjSourceLocation" code="bsj.compiler.metaprogram.subcompilation.failure">
                 <prop name="diagnostic" type="Diagnostic" typeArg="T"
                     desc="the underlying BSJ compiler diagnostic" />
-                <messageProp expression="diagnostic.getMessage(locale)" />
+                <messageProp name="diagnosticMessage" expression="diagnostic.getMessage(locale)" />
                 <doc><![CDATA[
                     A diagnostic indicating that a subcompilation of a metaprogram failed.
                 ]]></doc>
@@ -352,7 +352,8 @@
             <diagnostic name="DependencyCycleDiagnostic" super="BsjCompilerDiagnostic" code="bsj.compiler.dependency.cycle">
                 <prop name="targets" type="List&lt;String&gt;" desc="the targets in the cycle" />
                 <prop name="metaprograms" type="List&lt;BsjSourceLocation&gt;" desc="the locations of the metaprograms in the cycle" />
-                <messageProp expression="DiagnosticMessageUtilities.getDependencyString(getMetaprograms(),getTargets())" />
+                <messageProp name="dependencyString"
+                    expression="DiagnosticMessageUtilities.getDependencyString(getMetaprograms(),getTargets())" />
                 <doc><![CDATA[
                     A diagnostic indicating that a cycle was found in the dependency graph.  The list of metaprograms is
                     always one larger than the list of targets and contains the same metaprogram at the beginning and
@@ -370,7 +371,8 @@
             <diagnostic name="MetaprogramExceptionDiagnostic" super="MetaprogramErrorDiagnostic"
                 code="bsj.compiler.metaprogram.failure.exception">
                 <prop name="exception" type="Exception" desc="the exception which was raised by the metaprogram" />
-                <messageProp expression="DiagnosticMessageUtilities.getIndentedStackTraceString(exception)" />
+                <messageProp name="stackTrace"
+                    expression="DiagnosticMessageUtilities.getIndentedStackTraceString(exception)" />
                 <doc><![CDATA[
                     This diagnostic indicates that the body of a metaprogram terminated by raising an exception.
                 ]]></doc>
@@ -379,7 +381,8 @@
             <diagnostic name="MetaprogramExecutionFailureDiagnostic" super="MetaprogramErrorDiagnostic"
                 code="bsj.compiler.metaprogram.failure.general">
                 <prop name="exception" type="MetaprogramExecutionFailureException" desc="the exception which was raised to indicate failure" />
-                <messageProp expression="DiagnosticMessageUtilities.getIndentedStackTraceString(exception)" />
+                <messageProp name="stackTrace"
+                    expression="DiagnosticMessageUtilities.getIndentedStackTraceString(exception)" />
                 <doc><![CDATA[
                     A diagnostic indicating that the execution of a metaprogram failed due to the metaprogram itself
                     raising a {@link MetaprogramExecutionFailureException}.  The exception is provided to allow the
@@ -509,10 +512,10 @@
                     front or back of the list.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="MetaprogramChangedReferenceNodeListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
                 superTypeArg="MetaprogramChangedReferenceNodeListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.changed.reference">
-                <exception/>
+                <exception />
                 <prop name="element" type="Node" desc="the reference node" />
                 <doc><![CDATA[
                     Indicates that the first metaprogram used the specified reference node for some operation and the
@@ -530,7 +533,7 @@
 
             <diagnostic name="MetaprogramChangedValueNodeListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
                 superTypeArg="MetaprogramChangedValueNodeListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.changed.value">
-                <exception/>
+                <exception />
                 <prop name="element" type="Node" desc="the reference node" />
                 <prop name="value" type="Node" desc="the affected value" />
                 <doc><![CDATA[
@@ -546,11 +549,11 @@
                     </ul>
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="MetaprogramPresenceChangedListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
                 superTypeArg="MetaprogramPresenceChangedListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.changed.presence">
-                <exception/>
-                <prop name="element" type="Node" desc="the element in question"/>
+                <exception />
+                <prop name="element" type="Node" desc="the element in question" />
                 <doc><![CDATA[
                     Indicates that the first metaprogram changed whether or not an element was in the list while the
                     second metaprogram either made a similar change or observed that the element was in the list.

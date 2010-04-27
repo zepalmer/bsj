@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -10,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramPresenceChangedListConfl
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramPresenceChangedListConflictDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -49,10 +51,11 @@ public class MetaprogramPresenceChangedListConflictDiagnosticImpl extends Metapr
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.element);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.element);
+        args.getSecond().put("element", args.getFirst().size());
         return args;
     }
     

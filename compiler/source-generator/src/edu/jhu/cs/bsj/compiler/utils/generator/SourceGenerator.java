@@ -2306,7 +2306,8 @@ public class SourceGenerator
 				+ "import edu.jhu.cs.bsj.compiler.metaprogram.*;\n" + "import javax.tools.Diagnostic.Kind;\n"
 				+ "import javax.tools.*\n;";
 		protected final String CLASS_IMPORTS = INTERFACE_IMPORTS
-				+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n";
+				+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n"
+				+ "import edu.jhu.cs.bsj.compiler.impl.utils.*;\n";
 
 		protected void handleAbstractDiagnosticDefinition(T def) throws IOException
 		{
@@ -2406,20 +2407,20 @@ public class SourceGenerator
 
 			// Write message argument implementation
 			classPs.println("@Override");
-			classPs.println("protected List<Object> getMessageArgs(Locale locale)");
+			classPs.println("protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)");
 			classPs.println("{");
 			classPs.incPrependCount();
-			classPs.print("List<Object> args = ");
+			classPs.print("Pair<List<Object>,Map<String,Integer>> args = ");
 			if (def.getSuperName().equals(getTopAncestorName()))
 			{
-				classPs.println("new ArrayList<Object>();");
+				classPs.println("new Pair<List<Object>,Map<String,Integer>>(new ArrayList<Object>(), new HashMap<String,Integer>());");
 			} else
 			{
 				classPs.println("super.getMessageArgs(locale);");
 			}
 			for (DiagnosticPropertyDefinition prop : def.getProperties())
 			{
-				classPs.print("args.add(");
+				classPs.print("args.getFirst().add(");
 				if (prop.getMessageExpression() != null)
 				{
 					classPs.print(prop.getMessageExpression().replaceAll("\\$", "this." + prop.getName()));
@@ -2428,10 +2429,14 @@ public class SourceGenerator
 					classPs.print("this." + prop.getName());
 				}
 				classPs.println(");");
+				// NOTE: this is correct because arguments in the format string are 1-based
+				classPs.println("args.getSecond().put(\"" + prop.getName() + "\", args.getFirst().size());");
 			}
-			for (String messagePropertyExpression : def.getMessagePropertyExpressions())
+			for (MessagePropertyExpressionDefinition messagePropertyExpression : def.getMessagePropertyExpressions())
 			{
-				classPs.println("args.add(" + messagePropertyExpression + ");");
+				classPs.println("args.getFirst().add(" + messagePropertyExpression.getExpression() + ");");
+				// NOTE: this is correct because arguments in the format string are 1-based
+				classPs.println("args.getSecond().put(\"" + messagePropertyExpression.getName() + "\", args.getFirst().size());");
 			}
 			classPs.println("return args;");
 			classPs.decPrependCount();

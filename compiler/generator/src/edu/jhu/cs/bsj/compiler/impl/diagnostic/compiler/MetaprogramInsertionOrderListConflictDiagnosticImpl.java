@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -10,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramInsertionOrderListConfli
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramInsertionOrderListConflictDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -88,13 +90,17 @@ public class MetaprogramInsertionOrderListConflictDiagnosticImpl extends Metapro
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.after);
-        args.add(this.element);
-        args.add(this.firstInsert);
-        args.add(this.secondInsert);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.after);
+        args.getSecond().put("after", args.getFirst().size());
+        args.getFirst().add(this.element);
+        args.getSecond().put("element", args.getFirst().size());
+        args.getFirst().add(this.firstInsert);
+        args.getSecond().put("firstInsert", args.getFirst().size());
+        args.getFirst().add(this.secondInsert);
+        args.getSecond().put("secondInsert", args.getFirst().size());
         return args;
     }
     

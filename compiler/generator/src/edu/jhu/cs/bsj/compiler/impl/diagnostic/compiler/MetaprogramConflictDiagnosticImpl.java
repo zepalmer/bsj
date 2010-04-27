@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -10,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramErrorException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramConflictDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -67,12 +69,15 @@ public abstract class MetaprogramConflictDiagnosticImpl<T extends MetaprogramErr
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.firstAnchor);
-        args.add(this.secondAnchor);
-        args.add(this.conflictNode);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.firstAnchor);
+        args.getSecond().put("firstAnchor", args.getFirst().size());
+        args.getFirst().add(this.secondAnchor);
+        args.getSecond().put("secondAnchor", args.getFirst().size());
+        args.getFirst().add(this.conflictNode);
+        args.getSecond().put("conflictNode", args.getFirst().size());
         return args;
     }
     

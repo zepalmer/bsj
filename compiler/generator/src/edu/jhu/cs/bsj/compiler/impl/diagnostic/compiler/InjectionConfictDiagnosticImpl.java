@@ -2,12 +2,14 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InjectionConfictDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -75,13 +77,17 @@ public class InjectionConfictDiagnosticImpl extends BsjCompilerDiagnosticImpl im
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.injectingMetaprogramLocations);
-        args.add(this.injectedMetaprogramLocation);
-        args.add(this.dependentMetaprogramLocation);
-        args.add(this.injectionTarget);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.injectingMetaprogramLocations);
+        args.getSecond().put("injectingMetaprogramLocations", args.getFirst().size());
+        args.getFirst().add(this.injectedMetaprogramLocation);
+        args.getSecond().put("injectedMetaprogramLocation", args.getFirst().size());
+        args.getFirst().add(this.dependentMetaprogramLocation);
+        args.getSecond().put("dependentMetaprogramLocation", args.getFirst().size());
+        args.getFirst().add(this.injectionTarget);
+        args.getSecond().put("injectionTarget", args.getFirst().size());
         return args;
     }
     

@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -10,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.NodePermission;
 import edu.jhu.cs.bsj.compiler.ast.exception.InsufficientPermissionException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InsufficientPermissionDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -65,12 +67,15 @@ public class InsufficientPermissionDiagnosticImpl extends MetaprogramDetectedErr
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.node);
-        args.add(this.requiredPermission);
-        args.add(this.availablePermission);
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.node);
+        args.getSecond().put("node", args.getFirst().size());
+        args.getFirst().add(this.requiredPermission);
+        args.getSecond().put("requiredPermission", args.getFirst().size());
+        args.getFirst().add(this.availablePermission);
+        args.getSecond().put("availablePermission", args.getFirst().size());
         return args;
     }
     

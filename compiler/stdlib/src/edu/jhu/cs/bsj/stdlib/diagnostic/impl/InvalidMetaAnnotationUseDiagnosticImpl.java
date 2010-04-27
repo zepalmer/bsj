@@ -1,11 +1,14 @@
 package edu.jhu.cs.bsj.stdlib.diagnostic.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidMetaAnnotationUseDiagnostic;
 
@@ -37,10 +40,11 @@ public abstract class InvalidMetaAnnotationUseDiagnosticImpl extends BsjUtilDiag
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = new ArrayList<Object>();
-        args.add(this.metaAnnotationClass);
+        Pair<List<Object>,Map<String,Integer>> args = new Pair<List<Object>,Map<String,Integer>>(new ArrayList<Object>(), new HashMap<String,Integer>());
+        args.getFirst().add(this.metaAnnotationClass);
+        args.getSecond().put("metaAnnotationClass", args.getFirst().size());
         return args;
     }
     

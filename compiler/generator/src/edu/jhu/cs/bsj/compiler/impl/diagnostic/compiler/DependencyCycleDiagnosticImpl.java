@@ -2,11 +2,13 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.DependencyCycleDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
@@ -50,12 +52,15 @@ public class DependencyCycleDiagnosticImpl extends BsjCompilerDiagnosticImpl imp
     }
     
     @Override
-    protected List<Object> getMessageArgs(Locale locale)
+    protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs(locale);
-        args.add(this.targets);
-        args.add(this.metaprograms);
-        args.add(DiagnosticMessageUtilities.getDependencyString(getMetaprograms(),getTargets()));
+        Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
+        args.getFirst().add(this.targets);
+        args.getSecond().put("targets", args.getFirst().size());
+        args.getFirst().add(this.metaprograms);
+        args.getSecond().put("metaprograms", args.getFirst().size());
+        args.getFirst().add(DiagnosticMessageUtilities.getDependencyString(getMetaprograms(),getTargets()));
+        args.getSecond().put("dependencyString", args.getFirst().size());
         return args;
     }
     

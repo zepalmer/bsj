@@ -14,7 +14,7 @@ public class AbstractDiagnosticDefinition<T extends AbstractDiagnosticDefinition
 {
 	private GenerationProfile profile;
 	private List<DiagnosticPropertyDefinition> properties;
-	private List<String> messagePropertyExpressions;
+	private List<MessagePropertyExpressionDefinition> messagePropertyExpressions;
 	private String docString;
 	private String code;
 
@@ -23,7 +23,7 @@ public class AbstractDiagnosticDefinition<T extends AbstractDiagnosticDefinition
 
 	public AbstractDiagnosticDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			GenerationProfile profile, List<DiagnosticPropertyDefinition> properties,
-			List<String> messagePropertyExpressions, String docString, String code)
+			List<MessagePropertyExpressionDefinition> messagePropertyExpressions, String docString, String code)
 	{
 		super(baseName, typeParameter, superName, superTypeArg, Collections.<TagReferenceDefinition> emptyList());
 		this.profile = profile;
@@ -75,7 +75,7 @@ public class AbstractDiagnosticDefinition<T extends AbstractDiagnosticDefinition
 		this.namespaceMap = namespaceMap;
 	}
 
-	public List<String> getMessagePropertyExpressions()
+	public List<MessagePropertyExpressionDefinition> getMessagePropertyExpressions()
 	{
 		return messagePropertyExpressions;
 	}
