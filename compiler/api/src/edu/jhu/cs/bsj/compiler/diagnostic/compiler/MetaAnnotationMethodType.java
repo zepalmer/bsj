@@ -5,7 +5,22 @@ package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
  * @author Zachary Palmer
  */
 public enum MetaAnnotationMethodType
-{
-	GETTER,
-	SETTER
+{	
+	GETTER("bsj.string.MetaAnnotationMethodType.GETTER"),
+	SETTER("bsj.string.MetaAnnotationMethodType.SETTER");
+	
+	private String code;
+	
+	private MetaAnnotationMethodType(String code)
+	{
+		this.code = code;
+	}
+
+	/**
+	 * Retrieves the code for the string describing this object.
+	 */
+	public String getCode()
+	{
+		return code;
+	}
 }

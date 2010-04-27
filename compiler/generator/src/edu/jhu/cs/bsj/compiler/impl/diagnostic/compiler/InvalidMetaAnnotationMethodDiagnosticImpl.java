@@ -63,6 +63,8 @@ public abstract class InvalidMetaAnnotationMethodDiagnosticImpl extends InvalidM
         args.getSecond().put("methodType", args.getFirst().size());
         args.getFirst().add(this.methodName);
         args.getSecond().put("methodName", args.getFirst().size());
+        args.getFirst().add(methodType.getCode());
+        args.getSecond().put("methodTypeCode", args.getFirst().size());
         return args;
     }
     

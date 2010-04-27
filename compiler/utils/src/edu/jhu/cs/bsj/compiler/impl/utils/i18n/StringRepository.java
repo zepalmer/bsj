@@ -37,6 +37,32 @@ public interface StringRepository
 	/**
 	 * Retrieves a string in the message repository and uses it as a format string for the given arguments. If the
 	 * specified string cannot be found, a human-readable error string containing the arguments is returned.
+	 * <p/>
+	 * If a non-null <code>argmap</code> parameter is supplied, an extended format is permitted.  Strings of the form
+	 * <code>%{name}$...</code> are permitted and correspond to strings of the form <code>%nn$...</code> where
+	 * <code>name</code> maps to <code>nn</code> in the provided argument map.
+	 * <p/>
+	 * This extended format also allows the name which appears to be prefixed with a <code>#</code> character, which
+	 * indicates name indirection.  If a <code>#</code> character appears at the prefix of the name, the argument in the
+	 * list which is indicated by the argument map is a code string.  This code is then used to create another formatted
+	 * string.  That formatted string is then used as a new argument to the list and this name corresponds to that
+	 * argument.
+	 * <p/>
+	 * For example, consider the string mapping
+	 * <ul>
+	 * <li>foo.bar=Hello, world!</li>
+	 * </ul>
+	 * the argument map
+	 * <ul>
+	 * <li>happy &rarr; 1</li>
+	 * </ul>
+	 * the argument list
+	 * <ul>
+	 * <li><pre>foo.bar</pre></li>
+	 * </ul>
+	 * and the format string <code>I said "%{#happy}"</code>.  The name <pre>happy</pre> maps to the argument
+	 * <pre>foo.bar</pre>, which corresponds in the repository to the string <code>Hello, world!</code>.  Thus, the
+	 * result would be the string <code>I said "Hello, world!"</code>.
 	 * 
 	 * @param locale The locale to use or <code>null</code> for the default locale.
 	 * @param key The key to use.

@@ -2,13 +2,15 @@ package edu.jhu.cs.bsj.compiler.impl.utils.i18n;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
-import edu.jhu.cs.bsj.compiler.impl.diagnostic.DiagnosticUtilities;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This {@link StringRepository} retrieves strings from a resource file on the classpath of this repository's
@@ -117,12 +119,48 @@ public class PropertyBasedStringRepository implements StringRepository
 			}
 			formatString = "(no strings found for language=" + locale.getDisplayLanguage() + ") " + formatString;
 		}
-		
+
 		if (map != null)
 		{
-			formatString = DiagnosticUtilities.convertMessageToFormatString(formatString, map);
+			args = new ArrayList<Object>(args);
+			map = new HashMap<String, Integer>(map);
+			formatString = convertMessageToFormatString(formatString, map, args, locale);
 		}
 
 		return String.format(locale, formatString, args.toArray());
+	}
+
+	/** The regexp pattern used to match names of the form %{name}. */
+	private static final Pattern NAME_PATTERN = Pattern.compile("%\\{[^}]+?\\}");
+
+	private String convertMessageToFormatString(String string, Map<String, Integer> map, List<Object> args, Locale locale)
+	{
+		Matcher m = NAME_PATTERN.matcher(string);
+		int index = 0;
+		while (m.find(index))
+		{
+			String name = string.substring(m.start() + 2, m.end() - 1);
+			if (!map.containsKey(name) && name.startsWith("#"))
+			{
+				// Perform indirection lookup.
+				String iname = name.substring(1);
+				Integer id = map.get(iname);
+				if (id != null)
+				{
+					String code = args.get(id-1).toString();
+					String value = getFormattedMessage(locale, code, Collections.emptyList());
+					args.add(value);
+					map.put(name, args.size());
+				}
+			}
+			Integer id = map.get(name);
+			if (id == null)
+			{
+				index = m.end();
+			}
+			string = string.substring(0, m.start()) + "%" + id + string.substring(m.end());
+			m = NAME_PATTERN.matcher(string);
+		}
+		return string;
 	}
 }

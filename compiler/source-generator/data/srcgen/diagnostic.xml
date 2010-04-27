@@ -206,6 +206,7 @@
             <diagnostic name="InvalidMetaAnnotationMethodDiagnostic" super="InvalidMetaAnnotationDefinitionDiagnostic">
                 <prop name="methodType" type="MetaAnnotationMethodType" desc="the type of method with which there is a problem" />
                 <prop name="methodName" type="String" desc="the name of the method with which there is a problem" />
+                <messageProp name="methodTypeCode" expression="methodType.getCode()"/>
                 <doc><![CDATA[
                     A diagnostic which represents some problem in the definition of a meta-annotation type's getter or
                     setter methods.
@@ -254,6 +255,7 @@
             <diagnostic name="MetaAnnotationPropertyMissingMethodDiagnostic" super="InvalidMetaAnnotationPropertyDiagnostic"
                 code="bsj.compiler.metaAnnotation.property.missingMethod">
                 <prop name="methodType" type="MetaAnnotationMethodType" desc="the type of method missing" />
+                <messageProp name="methodTypeCode" expression="methodType.getCode()"/>
                 <doc><![CDATA[
                     A diagnostic indicating that a property's getter or setter is missing.
                 ]]></doc>
