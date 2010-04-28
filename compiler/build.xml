@@ -1,0 +1,112 @@
+<project name="BSJ Project" default="build" basedir=".">
+    <!-- A fileset including the classpath resources of all projects -->
+    <fileset id="build.classes" dir=".">
+        <include name="api/bin/**"/>
+        <include name="api/classpath/**"/>
+        <include name="utils/bin/**"/>
+        <include name="utils/classpath/**"/>
+        <include name="parser/bin/**"/>
+        <include name="parser/classpath/**"/>
+        <include name="generator/bin/**"/>
+        <include name="generator/classpath/**"/>
+        <include name="stdlib/bin/**"/>
+        <include name="stdlib/classpath/**"/>
+        <include name="parser/.gen/bin/**"/>
+    </fileset>
+    
+    <!-- A fileset including all of the projects' libraries. -->
+    <fileset id="build.libs" dir=".">
+        <include name="api/lib/**"/>
+        <include name="utils/lib/**"/>
+        <include name="parser/lib/**"/>
+        <include name="generator/lib/**"/>
+        <include name="stdlib/lib/**"/>
+    </fileset>
+
+    <!-- A path containing each of the project build directories -->
+    <path id="build.bin">
+        <path id="api.bin">
+            <pathelement location="api/bin"/>
+            <fileset dir="api/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        <path id="utils.bin">
+            <pathelement location="utils/bin"/>
+            <fileset dir="utils/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        <path id="parser.bin">
+            <pathelement location="parser/bin"/>
+            <fileset dir="parser/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        <path id="generator.bin">
+            <pathelement location="generator/bin"/>
+            <fileset dir="generator/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        <path id="stdlib.bin">
+            <pathelement location="stdlib/bin"/>
+            <fileset dir="stdlib/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+    </path>
+    
+    <!-- Properties for build output -->
+    <property name="build.dist" location="dist"/>
+    <property name="build.dist.classes" location="dist/classes"/>
+    <property name="build.dist.libs" location="dist/libs"/>
+    <property name="build.full.jar" location="${build.dist}/bsj-full.jar"/>
+	
+	<!-- use magic properties to set source and binary compatibility for 1.6 JVMs -->
+	<property name="ant.build.javac.source" value="1.6"/>
+	<property name="ant.build.javac.target" value="1.6"/>
+	
+    <!-- Builds the project's binaries -->
+	<target name="build">
+		<ant antfile="build.xml" dir="api" target="build" inheritrefs="true"/>
+		<ant antfile="build.xml" dir="utils" target="build" inheritrefs="true"/>
+		<ant antfile="build.xml" dir="parser" target="build" inheritrefs="true"/>
+		<ant antfile="build.xml" dir="generator" target="build" inheritrefs="true"/>
+		<ant antfile="build.xml" dir="stdlib" target="build" inheritrefs="true"/>
+	</target>
+    
+    <!-- Builds the project's distribution -->
+    <target name="dist" depends="build">
+        <mkdir dir="${build.dist}"/>
+        <mkdir dir="${build.dist.classes}"/>
+        <copy todir="${build.dist.classes}">
+            <fileset refid="build.classes"/>
+            <chainedmapper>
+                <regexpmapper from="^[^/]+/(\.gen/)?bin/(.*)$$" to="\2"/>
+            </chainedmapper>
+        </copy>
+        <jar destfile="${build.full.jar}" basedir="${build.dist.classes}"/>
+        <delete dir="${build.dist.classes}"/>
+        
+        <mkdir dir="${build.dist.libs}"/>
+        <copy todir="${build.dist.libs}">
+            <fileset refid="build.libs"/>
+            <chainedmapper>
+                <regexpmapper from="^[^/]+/lib/(.*)$$" to="\1"/>
+            </chainedmapper>
+        </copy>
+    </target>
+	
+    <!-- Cleans the build environment -->
+	<target name="clean">
+        <delete dir="${build.dist}"/>
+        <delete dir="${build.dist.classes}"/>
+        <delete dir="${build.dist.libs}"/>
+		<ant antfile="build.xml" dir="api" target="clean" inheritrefs="true"/>
+		<ant antfile="build.xml" dir="utils" target="clean" inheritrefs="true"/>
+		<ant antfile="build.xml" dir="parser" target="clean" inheritrefs="true"/>
+		<ant antfile="build.xml" dir="generator" target="clean" inheritrefs="true"/>
+		<ant antfile="build.xml" dir="stdlib" target="clean" inheritrefs="true"/>
+	</target>
+</project>

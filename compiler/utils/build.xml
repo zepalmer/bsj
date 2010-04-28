@@ -1,0 +1,23 @@
+<project name="BSJ Utilities" default="build" basedir=".">
+	<property name="src" location="src"/>
+	<property name="bin" location="bin"/>
+	<property name="lib" location="lib"/>
+	
+	<path id="build.classpath">
+		<fileset dir="lib">
+			<include name="*.jar"/>
+		</fileset>
+		<path refid="api.bin"/>
+	</path>
+
+	<target name="build">
+        <mkdir dir="${bin}"/>
+		<javac srcdir="${src}" destdir="${bin}">
+			<classpath refid="build.classpath"/>
+		</javac>
+	</target>
+    
+	<target name="clean">
+		<delete dir="${bin}"/>
+	</target>
+</project>
