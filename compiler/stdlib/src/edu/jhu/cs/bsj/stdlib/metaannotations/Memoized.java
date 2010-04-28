@@ -61,7 +61,6 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
     @Override
     protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
     {
-        //TODO - issue with multiple @@Memoizeds
         ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
         MethodDeclarationNode method = MethodDeclUtils.getNearestMethodDeclaration(context, this);
         BsjNodeFactory factory = context.getFactory();
@@ -204,7 +203,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
                 factory.makeClassBodyNode(members), 
                 factory.makeTypeParameterListNode(), 
                 factory.makeIdentifierNode(tupleClassName), 
-                factory.makeJavadocNode("Tuple class for storing memoized method parameters."));
+                factory.makeJavadocNode("Tuple class for storing memoized parameters for method " + methodName + "."));
     }
 
     private FieldDeclarationNode generateHashMapDeclaration(

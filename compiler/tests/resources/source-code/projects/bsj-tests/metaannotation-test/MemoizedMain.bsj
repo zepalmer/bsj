@@ -8,5 +8,10 @@ public class MemoizedMain
 	    {
 	        System.out.println("SUCCESS");
 	    }
+	    String s = mc.bar("test");
+        if (s == mc.bar("test"))
+        {
+            System.out.println("SUCCESS");
+        }
 	}
 }
