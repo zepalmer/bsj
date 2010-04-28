@@ -13,7 +13,7 @@ public class MemoizedClass
         return (x+y)*2;
     }
     
-    //@@Memoized
+    @@Memoized
     public String bar(String s)
     {
         return "new" + s;

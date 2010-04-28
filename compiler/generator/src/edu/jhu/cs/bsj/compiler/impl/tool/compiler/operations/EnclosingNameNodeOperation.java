@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
@@ -13,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 public class EnclosingNameNodeOperation extends BsjDefaultNodeOperation<Void, NameNode>
 {
@@ -42,6 +44,8 @@ public class EnclosingNameNodeOperation extends BsjDefaultNodeOperation<Void, Na
 	{
 		// TODO: handle anonymous inner classes correctly (and their inner classes as well)
 		private NameNode node = null;
+		// The name components which are added
+		private List<Pair<String, NameCategory>> components = new ArrayList<Pair<String, NameCategory>>();
 
 		@Override
 		public Void executeDefault(Node node, List<Node> p)
@@ -51,17 +55,26 @@ public class EnclosingNameNodeOperation extends BsjDefaultNodeOperation<Void, Na
 
 		private void addComponent(String component, NameCategory category)
 		{
-			if (node == null)
-			{
-				node = factory.makeSimpleNameNode(factory.makeIdentifierNode(component), category);
-			} else
-			{
-				node = factory.makeQualifiedNameNode(node, factory.makeIdentifierNode(component), category);
-			}
+			components.add(0, new Pair<String, NameCategory>(component, category));
 		}
 
 		public NameNode getNode()
 		{
+			if (node == null)
+			{
+				for (Pair<String, NameCategory> component : this.components)
+				{
+					if (node == null)
+					{
+						node = factory.makeSimpleNameNode(factory.makeIdentifierNode(component.getFirst()),
+								component.getSecond());
+					} else
+					{
+						node = factory.makeQualifiedNameNode(node, factory.makeIdentifierNode(component.getFirst()),
+								component.getSecond());
+					}
+				}
+			}
 			return node;
 		}
 

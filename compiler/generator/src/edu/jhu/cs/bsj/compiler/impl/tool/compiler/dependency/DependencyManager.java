@@ -13,6 +13,8 @@ import java.util.Stack;
 
 import javax.tools.DiagnosticListener;
 
+import org.apache.log4j.Logger;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InjectionConfictDiagnostic;
@@ -33,6 +35,9 @@ import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
  */
 public class DependencyManager
 {
+	/** A logger for this object. */
+	private final Logger LOGGER = Logger.getLogger(getClass());
+
 	/** A mapping from metaprogram IDs to the profiles of those metaprograms. */
 	private Map<Integer, MetaprogramProfile<?>> idMap;
 	/** A mapping from metaprogram profiles to the nodes containing them. */
@@ -126,6 +131,12 @@ public class DependencyManager
 			inferDependency(profile, parentProfile);
 		}
 
+		// For debugging purposes, print out a description of the dependency graph
+		if (LOGGER.isTraceEnabled())
+		{
+			traceLogDependencyGraph();
+		}
+
 		// Determine whether or not we just caused a cycle
 		CycleDetector cycleDetector = new CycleDetector();
 		Set<BipartiteNode<?, ?, ?, ?>> allNodes = new HashSet<BipartiteNode<?, ?, ?, ?>>();
@@ -159,6 +170,38 @@ public class DependencyManager
 
 		// Determine whether or not we just caused an injection conflict
 		checkForInjectionConflict(metaprogramNode, diagnosticListener);
+	}
+
+	/**
+	 * Writes trace logs which describe the dependency graph.
+	 */
+	private void traceLogDependencyGraph()
+	{
+		LOGGER.trace("Dependency graph current appears as follows:");
+		Set<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>> targetsToVisit = new HashSet<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>>();
+		for (Map.Entry<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> entry : this.profileToNodeMap.entrySet())
+		{
+			MetaprogramProfile<?> profile = entry.getKey();
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> node = entry.getValue();
+			Set<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>> targets = node.getChildren();
+			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " at " + profile.getLocation() + " has "
+					+ targets.size() + " target dependencies");
+			for (BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> target : targets)
+			{
+				LOGGER.trace("    " + target.getData().getTarget());
+			}
+			targetsToVisit.addAll(targets);
+		}
+		for (BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> target : targetsToVisit)
+		{
+			Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> programs = target.getChildren();
+			LOGGER.trace("Target " + target.getData().getTarget() + " contains " + programs.size() + " metaprograms");
+			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> program : programs)
+			{
+				LOGGER.trace("    " + program.getData().getProfile().getMetaprogram().getID() + " at "
+						+ program.getData().getProfile().getLocation());
+			}
+		}
 	}
 
 	/**
