@@ -8,12 +8,12 @@
      Zachary Palmer                                                                
      ====================================================================== -->
 <project name="BSJ ANTLR Parser" default="antlr">
-    <description>
+	<description>
             The ANTLR parser used by the BSJ compiler.
     </description>
-	
+
 	<!-- Names the ANTLR grammar file. -->
-	<property name="grammar" value="src/edu/jhu/cs/bsj/compiler/grammar/BsjAntlr.g"/>
+	<property name="grammar" value="src/edu/jhu/cs/bsj/compiler/grammar/BsjAntlr.g" />
 	<!-- Names the directory which should contain the sources on which the parser depends. -->
 	<property name="presrc" value="src-pre" />
 	<!-- Names the directory which will contain the generated sources. -->
@@ -22,74 +22,75 @@
 	<property name="genbin" value=".gen/bin" />
 	<!-- Names the directory containing the parser's package. -->
 	<property name="parserPackage" value="${gensrc}/edu/jhu/cs/bsj/compiler/impl/tool/parser/antlr" />
-    <!-- Names the directory containing compiled binaries for the BSJ Compiler API. -->
-    <property name="compilerApiPath" value="../api/bin" />
-    <!-- Names the directory containing compiled binaries for the BSJ Utilities project. -->
-    <property name="utilsPath" value="../utils/bin" />
 	
+	<!-- Specify path for API binaries.  Useful when standing alone but overridden by the master build file. -->
+    <path id="api.bin">
+        <fileset dir="../api/lib">
+               <include name="*.jar" />
+        </fileset>
+        <pathelement location="../api/bin"/>
+    </path>
+    <path id="utils.bin">
+        <fileset dir="../utils/lib">
+               <include name="*.jar" />
+        </fileset>
+        <pathelement location="../utils/bin"/>
+    </path>
+
 	<!-- Indicates the classpath for a build of the parser. -->
 	<path id="parser.classpath">
-        <fileset dir="lib">
-            <include name="*.jar"/>
-        </fileset>
-		<pathelement path="${genbin}"/>
-		<pathelement path="${compilerApiPath}"/>
-		<pathelement path="${utilsPath}"/>
+		<fileset id="parser.lib" dir="lib">
+			<include name="*.jar" />
+		</fileset>
+		<path refid="api.bin" />
+		<path refid="utils.bin" />
+		<pathelement path="${genbin}" />
 	</path>
-	
+
 	<!-- Loads the ANTLR task -->
 	<taskdef name="antlr" classname="org.apache.tools.ant.antlr.ANTLR3">
 		<classpath>
 			<fileset dir="antlib">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 			<fileset dir="lib">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</classpath>
 	</taskdef>
-	
-    <!-- - - - - - - - - - - - - - - - - - 
+
+	<!-- - - - - - - - - - - - - - - - - - 
           target: prebuild                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="prebuild" description="Builds the sources on which the ANTLR parser depends">
-		<mkdir dir="${genbin}"/>
-		<javac
-		        destdir="${genbin}"
-		        srcdir="${presrc}"
-                debug="true">
-			<classpath refid="parser.classpath"/>
+		<mkdir dir="${genbin}" />
+		<javac destdir="${genbin}" srcdir="${presrc}" debug="true">
+			<classpath refid="parser.classpath" />
 		</javac>
 	</target>
 
-    <!-- - - - - - - - - - - - - - - - - - 
+	<!-- - - - - - - - - - - - - - - - - - 
           target: antlr                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="antlr" depends="prebuild" description="Uses ANTLR to generate the parser's source files">
-    	<mkdir dir="${parserPackage}"/>
-    	<antlr xmlns:antlr="antlib:org/apache/tools/ant/antlr"
-    	    target="${grammar}"
-    		outputdirectory="${parserPackage}"
-    		conversiontimeout="100000">
-    		<jvmarg value="-Xmx1024m"/>
-    	</antlr>
-    	<mkdir dir="${genbin}"/>
-    	<javac
-    		    destdir="${genbin}"
-    		    srcdir="${gensrc}"
-    		    debug="true">
-    		<classpath refid="parser.classpath"/>
-        </javac>
-    	
-    </target>
+	<target name="antlr" depends="prebuild" description="Uses ANTLR to generate the parser's source files">
+		<mkdir dir="${parserPackage}" />
+		<antlr xmlns:antlr="antlib:org/apache/tools/ant/antlr" target="${grammar}" outputdirectory="${parserPackage}" conversiontimeout="100000">
+			<jvmarg value="-Xmx1024m" />
+		</antlr>
+		<mkdir dir="${genbin}" />
+		<javac destdir="${genbin}" srcdir="${gensrc}" debug="true">
+			<classpath refid="parser.classpath" />
+		</javac>
 
-    <!-- - - - - - - - - - - - - - - - - - 
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
           target: clean                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="clean" description="Cleans the project">
-    	<delete dir="${gensrc}"/>
-    	<mkdir dir="${gensrc}"/>
-    	<delete dir="${genbin}"/>
-    	<mkdir dir="${genbin}"/>
-    </target>
+	<target name="clean" description="Cleans the project">
+		<delete dir="${gensrc}" />
+		<mkdir dir="${gensrc}" />
+		<delete dir="${genbin}" />
+		<mkdir dir="${genbin}" />
+	</target>
 </project>
