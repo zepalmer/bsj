@@ -3,10 +3,18 @@
 @@GenerateBuilder
 public class BuilderClass
 {
-    private int x;
-    private int y = 3;
+    // required vars
+    public int a;
+    public int b;
+    
+    // optional vars
+    public int x = 2;
+    public int y = 3;
+    public String s = "joe";
+    public char c = 'c';
+    public Object o = new Object();
+    
     public BuilderClass()
-    {
-        
+    {        
     }
 }

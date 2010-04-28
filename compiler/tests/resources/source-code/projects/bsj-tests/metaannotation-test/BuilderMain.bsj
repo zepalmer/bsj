@@ -2,6 +2,13 @@ public class BuilderMain
 {
 	public static void main(String[] arg)
 	{
-    
+	    Object obj = new Object();
+	    BuilderClass bc = new BuilderClass.Builder(1, 2).x(3).y(4).s("testing").c('j').o(obj).build();
+	    
+	    if (bc.a == 1 && bc.b == 2 && bc.x == 3 && bc.y == 4 
+	            && bc.s.equals("testing") && bc.c == 'j' && bc.o == obj)
+	    {
+	        System.out.println("SUCCESS");
+	    }
 	}
 }

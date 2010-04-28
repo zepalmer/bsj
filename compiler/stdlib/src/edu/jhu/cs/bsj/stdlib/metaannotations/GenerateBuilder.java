@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
@@ -18,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
@@ -25,9 +27,11 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
- * This meta-annotation metaprogram adds the Builder Pattern to a class.
- * 
- * TODO
+ * This meta-annotation metaprogram adds the Builder Pattern to a class by scanning the field
+ * declarations on the class and adding them all into an inner Builder class.  Fields without
+ * initializers are assumed to be required, and those with initializers are assumed to be
+ * optional.  If the @@Property metaprogram has been previously run, then only fields
+ * annotated with @@Property will be considered.
  * 
  * @author Joseph Riley
  */
@@ -108,6 +112,9 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
     private ClassDeclarationNode generateBuilderClass(List<VariableDeclaratorNode> variables, BsjNodeFactory factory)
     {
         List<ClassMemberNode> builderMembers = new ArrayList<ClassMemberNode>();
+        BlockStatementListNode constructorStatements = factory.makeBlockStatementListNode();
+        List<VariableNode> constructorVariables = new ArrayList<VariableNode>();
+        StringBuilder javadoc = new StringBuilder();
         
         for (VariableDeclaratorNode variable : variables)
         {
@@ -118,7 +125,15 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
             
             if (variable.getInitializer() == null)
             {
-                //TODO required variable, add to constructor
+                // required variable, add to constructor
+                constructorVariables.add(factory.makeVariableNode(
+                        variable.getType().deepCopy(factory), 
+                        variable.getName().deepCopy(factory)));
+                javadoc.append("@param " + variable.getName().getIdentifier());
+                constructorStatements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
+                        factory.makeFieldAccessByExpressionNode(factory.makeThisNode(), variable.getName().deepCopy(factory)), 
+                        AssignmentOperator.ASSIGNMENT, 
+                        factory.makeFieldAccessByNameNode(factory.parseNameNode(variable.getName().getIdentifier())))));
             }
             else
             {
@@ -138,10 +153,27 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
             }
         }
         
-        //TODO constructor
+        // public Builder (~:params:~) {...}
+        builderMembers.add(factory.makeConstructorDeclarationNode(
+                factory.makeIdentifierNode(builderName), 
+                factory.makeConstructorBodyNode(null, constructorStatements), 
+                factory.makeConstructorModifiersNode(AccessModifier.PUBLIC), 
+                factory.makeVariableListNode(constructorVariables), 
+                factory.makeJavadocNode("Builder constructor for required fields.\n" + javadoc.toString())));
         
-        //TODO build method
+        // public ~:className:~ build() {return new ~:className:~(this);}
+        builderMembers.add(factory.makeMethodDeclarationNode(
+                factory.makeBlockNode(factory.makeBlockStatementListNode(
+                        factory.makeReturnNode(factory.makeUnqualifiedClassInstantiationNode(
+                                factory.makeUnparameterizedTypeNode(factory.parseNameNode(className)), 
+                                factory.makeExpressionListNode(factory.makeThisNode()))))), 
+                factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
+                factory.makeIdentifierNode("build"), 
+                factory.makeVariableListNode(), 
+                factory.makeUnparameterizedTypeNode(factory.parseNameNode(className)), 
+                factory.makeJavadocNode("Builds the instance of the enclosing class.\n@return the built class.")));
         
+        // put it all together
         return factory.makeClassDeclarationNode(
                 factory.makeClassModifiersNode(
                         AccessModifier.PUBLIC, false, true, false, false, 
