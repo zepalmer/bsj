@@ -26,6 +26,7 @@
     <property name="compilerApiPath" value="../api/bin" />
     <!-- Names the directory containing compiled binaries for the BSJ Utilities project. -->
     <property name="utilsPath" value="../utils/bin" />
+	
 	<!-- Indicates the classpath for a build of the parser. -->
 	<path id="parser.classpath">
         <fileset dir="lib">
@@ -35,6 +36,18 @@
 		<pathelement path="${compilerApiPath}"/>
 		<pathelement path="${utilsPath}"/>
 	</path>
+	
+	<!-- Loads the ANTLR task -->
+	<taskdef name="antlr" classname="org.apache.tools.ant.antlr.ANTLR3">
+		<classpath>
+			<fileset dir="antlib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="lib">
+				<include name="*.jar"/>
+			</fileset>
+		</classpath>
+	</taskdef>
 	
     <!-- - - - - - - - - - - - - - - - - - 
           target: prebuild                      
@@ -54,12 +67,12 @@
          - - - - - - - - - - - - - - - - - -->
     <target name="antlr" depends="prebuild" description="Uses ANTLR to generate the parser's source files">
     	<mkdir dir="${parserPackage}"/>
-    	<antlr:antlr3 xmlns:antlr="antlib:org/apache/tools/ant/antlr"
+    	<antlr xmlns:antlr="antlib:org/apache/tools/ant/antlr"
     	    target="${grammar}"
     		outputdirectory="${parserPackage}"
     		conversiontimeout="100000">
     		<jvmarg value="-Xmx1024m"/>
-    	</antlr:antlr3>
+    	</antlr>
     	<mkdir dir="${genbin}"/>
     	<javac
     		    destdir="${genbin}"
