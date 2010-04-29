@@ -10,5 +10,7 @@ public class BuilderMain
 	    {
 	        System.out.println("SUCCESS");
 	    }
+	    
+	    BuilderClassOther bc2 = new BuilderClassOther.Builder().x(3).y(4).build();
 	}
 }

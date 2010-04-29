@@ -21,6 +21,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
@@ -30,15 +32,19 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * This meta-annotation metaprogram adds the Builder Pattern to a class by scanning the field
  * declarations on the class and adding them all into an inner Builder class.  Fields without
  * initializers are assumed to be required, and those with initializers are assumed to be
- * optional.  If the @@Property metaprogram has been previously run, then only fields
- * annotated with @@Property will be considered.
+ * optional.  If properties is available, then only fields named in properties will be used.
  * 
  * @author Joseph Riley
  */
 public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
 {
+    /** The explicitly-specified list of properties. */
+    private String[] properties = null;
+    
+    /** The name of the inner Builder class. */
     private String builderName = "Builder";
 
+    /** The name of the class for which a builder is being created. */
     private String className;
     
     public GenerateBuilder()
@@ -51,6 +57,18 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
                 MetaprogramPackageMode.READ_ONLY);
     }
     
+    @BsjMetaAnnotationElementGetter
+    public String[] getProperties()
+    {
+        return this.properties;
+    }
+
+    @BsjMetaAnnotationElementSetter
+    public void setProperties(String[] properties)
+    {
+        this.properties = properties;
+    }
+    
     @Override
     protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
     {
@@ -58,24 +76,47 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
         BsjNodeFactory factory = context.getFactory();
         className = TypeDeclUtils.getEnclosingTypeName(context, this).getIdentifier();
         
-        // find all the variables in this class
+        // all the variables in this class that we want to use 
         List<VariableDeclaratorNode> variables = new ArrayList<VariableDeclaratorNode>();
-        for (ClassMemberNode member : members)
+        
+        // if properties wasn't specified, just use all fields
+        if (properties == null)
         {
-            if (member instanceof FieldDeclarationNode)
+            for (ClassMemberNode member : members)
             {
-                FieldDeclarationNode field = (FieldDeclarationNode)member;
-                variables.addAll(field.getDeclarators());
+                if (member instanceof FieldDeclarationNode)
+                {
+                    FieldDeclarationNode field = (FieldDeclarationNode)member;
+                    variables.addAll(field.getDeclarators());
+                }
+            }
+        }
+        // otherwise, only use fields specifically noted in properties
+        else
+        {
+            List<String> propsList = Arrays.asList(properties);
+            for (ClassMemberNode member : members)
+            {
+                if (member instanceof FieldDeclarationNode)
+                {
+                    FieldDeclarationNode field = (FieldDeclarationNode)member;
+                    for (VariableDeclaratorNode var : field.getDeclarators())
+                    {
+                        if (propsList.contains(var.getName().getIdentifier()))
+                        {
+                            variables.add(var);
+                        }
+                    }
+                }
             }
         }
         
+        // sanity check
         if (variables.isEmpty())
         {
             throw new MetaprogramExecutionFailureException("Builder classes require properties");
         }
-        
-        //TODO handle @@Property(s) by filtering variables
-        
+                
         // add private static Builder class
         members.add(generateBuilderClass(variables, factory));
         

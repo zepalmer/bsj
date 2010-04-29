@@ -14,6 +14,6 @@ public class MetaAnnotationBuilderMetaprogramTest extends AbstractBsjCompilerTes
 	public void testBsjCompiler() throws Exception
 	{
 		performTest(new File(EXAMPLES + File.separator + "projects" + File.separator + "bsj-tests" + File.separator
-				+ "metaannotation-test"), "BuilderMain", "BuilderClass", "MyEvent");
+				+ "metaannotation-test"), "BuilderMain", "BuilderClass", "BuilderClassOther");
 	}
 }
