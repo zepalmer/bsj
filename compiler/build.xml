@@ -96,6 +96,10 @@
                 <regexpmapper from="^[^/]+/lib/(.*)$$" to="\1"/>
             </chainedmapper>
         </copy>
+
+        <copy todir="${build.dist}">
+            <fileset dir="dist-content"/>
+        </copy>
     </target>
 	
     <!-- Cleans the build environment -->
