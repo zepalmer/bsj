@@ -1,5 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  * A class for (very) general utility functions.
  * @author Zachary Palmer
@@ -22,5 +26,25 @@ public class Utilities
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Retrieves a resource in Java properties file format from the classpath.
+	 * @param path The name of the resource.
+	 * @return The resulting {@link Properties} object or <code>null</code> if the resource could not be accessed.
+	 */
+	public static Properties loadProperties(String path)
+	{
+		try
+		{
+			InputStream is = Utilities.class.getResourceAsStream(path);
+			Properties p = new Properties();
+			p.load(is);
+			is.close();
+			return p;
+		} catch (IOException e)
+		{
+			return null;
+		}
 	}
 }

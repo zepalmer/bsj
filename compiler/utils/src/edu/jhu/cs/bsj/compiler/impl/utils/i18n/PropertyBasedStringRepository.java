@@ -1,7 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.utils.i18n;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +9,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import edu.jhu.cs.bsj.compiler.impl.utils.Utilities;
 
 /**
  * This {@link StringRepository} retrieves strings from a resource file on the classpath of this repository's
@@ -48,18 +48,7 @@ public class PropertyBasedStringRepository implements StringRepository
 	 */
 	private Properties load(String code)
 	{
-		try
-		{
-			String path = basePath + '/' + code + ".properties";
-			InputStream is = getClass().getResourceAsStream(path);
-			Properties p = new Properties();
-			p.load(is);
-			is.close();
-			return p;
-		} catch (IOException e)
-		{
-			return null;
-		}
+		return Utilities.loadProperties(basePath + '/' + code + ".properties");
 	}
 
 	@Override
