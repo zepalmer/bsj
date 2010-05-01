@@ -241,7 +241,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		{
 			for (MetaprogramImportNode metaprogramImportNode : compilationUnitNode.getMetaimports().getChildren())
 			{
-				imports.add(metaprogramImportNode.getImportNode());
+				imports.add(metaprogramImportNode.getImportNode().deepCopy(factory));
 			}
 		}
 
