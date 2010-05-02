@@ -62,6 +62,9 @@
     <property name="build.dist.classes" location="dist/classes"/>
     <property name="build.dist.libs" location="dist/libs"/>
     <property name="build.full.jar" location="${build.dist}/bsj-full.jar"/>
+    
+    <!-- Set behavior of javac w.r.t. debugging symbols -->
+    <property name="build.debug" value="on"/>
 	
 	<!-- use magic properties to set source and binary compatibility for 1.6 JVMs -->
 	<property name="ant.build.javac.source" value="1.6"/>
@@ -82,9 +85,10 @@
         <mkdir dir="${build.dist.classes}"/>
         <copy todir="${build.dist.classes}">
             <fileset refid="build.classes"/>
-            <chainedmapper>
+            <compositemapper>
                 <regexpmapper from="^[^/]+/(\.gen/)?bin/(.*)$$" to="\2"/>
-            </chainedmapper>
+				<regexpmapper from="^[^/]+/classpath/(.*)$$" to="\1"/>
+            </compositemapper>
         </copy>
         <jar destfile="${build.full.jar}" basedir="${build.dist.classes}"/>
         <delete dir="${build.dist.classes}"/>

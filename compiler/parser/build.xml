@@ -15,7 +15,7 @@
 	<target name="build">
 		<ant antfile="antlr-build.xml" target="antlr"/>
         <mkdir dir="${bin}"/>
-		<javac srcdir="${src}" destdir="${bin}">
+        <javac srcdir="${src}" destdir="${bin}" debug="${build.debug}">
 			<classpath refid="build.classpath"/>
 		</javac>
 	</target>

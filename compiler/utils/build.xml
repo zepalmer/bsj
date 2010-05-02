@@ -12,7 +12,7 @@
 
 	<target name="build">
         <mkdir dir="${bin}"/>
-		<javac srcdir="${src}" destdir="${bin}">
+		<javac srcdir="${src}" destdir="${bin}" debug="${build.debug}">
 			<classpath refid="build.classpath"/>
 		</javac>
 	</target>
