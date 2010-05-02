@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.NodePermission;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramDetectedErrorException;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
@@ -113,7 +114,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 						+ compilationUnitNode.executeOperation(context.getToolkit().getSerializer(), null));
 			}
 		}
-		
+
 		// Set up the permission policy manager and dependency manager for this metaprogram
 		PermissionPolicyManager policyManager = createPermissionPolicyManager(profile, context.getRootPackage());
 		context.getNodeManager().pushPermissionPolicyManager(policyManager);
@@ -330,20 +331,25 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 						break;
 					}
 					// * If the metaprogram’s anchor is a member of a block of statements, then
-					if (node instanceof BlockStatementNode)
+					if (node instanceof BlockStatementNode && (node.getParent() instanceof BlockStatementListNode))
 					{
-						// + If the block serves as the body for a method or constructor declaration, then the
-						// metaprogram is given permission to that declaration.
-						if (node.getParent() instanceof MethodDeclarationNode
-								|| node.getParent() instanceof ConstructorDeclarationNode)
+						BlockStatementListNode listNode = (BlockStatementListNode) (node.getParent());
+						if (listNode.getParent() instanceof BlockNode)
 						{
-							targetNode = node.getParent();
-						} else
-						{
-							// + Otherwise, the metaprogram is given Insert permission to the block of statements.
-							targetNode = node;
+							BlockNode block = (BlockNode) (listNode.getParent());
+							// + If the block serves as the body for a method or constructor declaration, then the
+							// metaprogram is given permission to that declaration.
+							if (block.getParent() instanceof MethodDeclarationNode
+									|| block.getParent() instanceof ConstructorDeclarationNode)
+							{
+								targetNode = block.getParent();
+							} else
+							{
+								// + Otherwise, the metaprogram is given Insert permission to the block of statements.
+								targetNode = block;
+							}
+							break;
 						}
-						break;
 					}
 					node = node.getParent();
 				}
