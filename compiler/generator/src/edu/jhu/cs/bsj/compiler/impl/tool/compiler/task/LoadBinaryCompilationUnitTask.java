@@ -5,7 +5,6 @@ import java.io.IOException;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.classpath.bcel.BsjBinaryNodeLoader;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 public class LoadBinaryCompilationUnitTask extends AbstractCompilationUnitBuilderTask
@@ -15,9 +14,9 @@ public class LoadBinaryCompilationUnitTask extends AbstractCompilationUnitBuilde
 	 * 
 	 * @param file The source file to parse.
 	 */
-	public LoadBinaryCompilationUnitTask(BsjFileObject file, MetaprogramProfile<?> profile)
+	public LoadBinaryCompilationUnitTask(BsjFileObject file, InjectionInfo info)
 	{
-		super(TaskPriority.LOAD_BINARY, file,  profile);
+		super(TaskPriority.LOAD_BINARY, file, info);
 	}
 
 	@Override
@@ -26,7 +25,7 @@ public class LoadBinaryCompilationUnitTask extends AbstractCompilationUnitBuilde
 	{
 		BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(context.getToolkit().getNodeFactory());
 		CompilationUnitNode node = loader.loadNodesFromBinary(file);
-		
+
 		return node;
 	}
 }

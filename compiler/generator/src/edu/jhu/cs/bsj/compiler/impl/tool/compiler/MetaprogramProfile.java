@@ -23,7 +23,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	private Metaprogram<T> metaprogram;
 	/** The anchor for this metaprogram. */
 	private T anchor;
-	
+
 	/** The fully-qualified names of the targets on which the metaprogram in this profile depends. */
 	private Collection<Dependency> dependencies;
 	/** The fully-qualified names of the targets in which the metaprogram in this profile participates. */
@@ -34,10 +34,16 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	private MetaprogramPackageMode packageMode;
 	/** The context in which to execute the metaprogram. */
 	private Context<T> context;
-	
+	/**
+	 * Controls whether or not this metaprogram was purely injected. This is <code>true</code> if it was injected by
+	 * another metaprogram directly and <code>false</code> if it was loaded directly by the meta-compiler or by an
+	 * invocation of {@link PackageNode#load}.
+	 */
+	private boolean purelyInjected;
+
 	public MetaprogramProfile(Metaprogram<T> metaprogram, T anchor, Collection<Dependency> dependencies,
 			Collection<String> targetNames, MetaprogramLocalMode localMode, MetaprogramPackageMode packageMode,
-			Context<T> context)
+			Context<T> context, boolean purelyInjected)
 	{
 		super();
 		this.metaprogram = metaprogram;
@@ -47,6 +53,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 		this.localMode = localMode;
 		this.packageMode = packageMode;
 		this.context = context;
+		this.purelyInjected = purelyInjected;
 	}
 
 	public Metaprogram<T> getMetaprogram()
@@ -83,7 +90,12 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	{
 		return context;
 	}
-	
+
+	public boolean isPurelyInjected()
+	{
+		return purelyInjected;
+	}
+
 	/**
 	 * Retrieves the location in source code where the metaprogram indicated by this profile was declared.
 	 */
@@ -97,7 +109,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	{
 		if (obj instanceof MetaprogramProfile<?>)
 		{
-			return getMetaprogram().getID() == ((MetaprogramProfile<?>)obj).getMetaprogram().getID();
+			return getMetaprogram().getID() == ((MetaprogramProfile<?>) obj).getMetaprogram().getID();
 		} else
 		{
 			return false;

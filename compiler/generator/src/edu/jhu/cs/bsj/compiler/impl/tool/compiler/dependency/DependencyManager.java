@@ -684,7 +684,7 @@ public class DependencyManager
 								hasInferredChildren = true;
 								// Determine whether or not we can reach the injector without using the implicit edge
 								// from the injectee to the injector's implicit target
-								if (checkPath(node, injector, true))
+								if (checkInjectionPath(node, injector))
 								{
 									explicitDependencyExists = true;
 								}
@@ -712,30 +712,59 @@ public class DependencyManager
 		}
 
 		/**
-		 * Determines whether or not a path exists on the dependency graph from the first metaprogram to the second.
+		 * Determines whether or not a path exists on the dependency graph which satisfies the requirements of injection
+		 * conflict prevention from one node to another.
 		 * 
 		 * @param from The node for the first metaprogram.
 		 * @param to The node for the second metaprogram.
-		 * @param inferredAllowed The edge which is not permitted to be used in finding the path. Note that this edge is
-		 *            compared by identity, not using {@link Object#equals(Object)}.
+		 * @return <code>true</code> if such a path exists; <code>false</code> if it does not.
+		 */
+		private boolean checkInjectionPath(
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> from,
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> to)
+		{
+			if (checkExplicitPath(from, to))
+				return true;
+
+			// Otherwise, the source must be purely injected and every possible implicit edge must be recursed
+			if (!from.getData().getProfile().isPurelyInjected())
+				return false;
+
+			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> dependency : from.getFilteredGrandchildren(
+					new TargetNodeChildInferenceStateFilteringFunction(true),
+					new MetaprogramNodeChildInferenceStateFilteringFunction(true)))
+			{
+				if (!checkInjectionPath(dependency, to))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/**
+		 * Determines whether or not a path exists on the dependency graph from the first metaprogram to the second
+		 * which only includes explicit edges.
+		 * 
+		 * @param from The node for the first metaprogram.
+		 * @param to The node for the second metaprogram.
 		 * @return <code>true</code> if a path exists from the first metaprogram to the second; <code>false</code>
 		 *         otherwise.
 		 */
-		private boolean checkPath(
+		private boolean checkExplicitPath(
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> from,
-				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> to,
-				boolean inferredAllowed)
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> to)
 		{
 			if (from.getData().getProfile().getMetaprogram().getID() == to.getData().getProfile().getMetaprogram().getID())
 				return true;
 
 			for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>, MetaprogramEdgeData> targetNodeEdge : from.getChildEdges())
 			{
-				if (!targetNodeEdge.getSecond().isInferred() || inferredAllowed)
+				if (!targetNodeEdge.getSecond().isInferred())
 				{
 					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> dependencyNode : targetNodeEdge.getFirst().getChildren())
 					{
-						if (checkPath(dependencyNode, to, targetNodeEdge.getSecond().isInferred() && inferredAllowed))
+						if (checkExplicitPath(dependencyNode, to))
 						{
 							return true;
 						}

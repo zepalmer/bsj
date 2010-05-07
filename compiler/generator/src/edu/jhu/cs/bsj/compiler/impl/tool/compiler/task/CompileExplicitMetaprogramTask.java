@@ -78,9 +78,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 			"edu.jhu.cs.bsj.compiler.diagnostic.user", "edu.jhu.cs.bsj.compiler.ast.node",
 			"edu.jhu.cs.bsj.compiler.ast.node.meta", "edu.jhu.cs.bsj.compiler.metaprogram" };
 
-	public CompileExplicitMetaprogramTask(ExplicitMetaprogramAnchorNode<R> anchor, MetaprogramProfile<?> profile)
+	public CompileExplicitMetaprogramTask(ExplicitMetaprogramAnchorNode<R> anchor, InjectionInfo injectionInfo)
 	{
-		super(TaskPriority.COMPILE_EXPLICIT, anchor, profile);
+		super(TaskPriority.COMPILE_EXPLICIT, anchor, injectionInfo);
 	}
 
 	@Override
@@ -197,7 +197,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		}
 
 		return new MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>>(metaprogram, anchor, dependencies,
-				qualifiedTargetNames, localMode, packageMode, context);
+				qualifiedTargetNames, localMode, packageMode, context, injectionInfo.isPurelyInjected());
 	}
 
 	private <A extends ExplicitMetaprogramAnchorNode<? extends Node>> Metaprogram<A> compileMetaprogram(

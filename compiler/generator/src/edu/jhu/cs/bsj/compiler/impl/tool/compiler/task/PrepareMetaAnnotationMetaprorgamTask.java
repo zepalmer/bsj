@@ -25,9 +25,9 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 	private BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> metaprogramObject;
 
 	public PrepareMetaAnnotationMetaprorgamTask(MetaAnnotationMetaprogramAnchorNode anchor,
-			MetaprogramProfile<?> profile, BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> metaprogramObject)
+			InjectionInfo injectionInfo, BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> metaprogramObject)
 	{
-		super(TaskPriority.PREPARE_METAANNOTATION_METAPROGRAM, anchor, profile);
+		super(TaskPriority.PREPARE_METAANNOTATION_METAPROGRAM, anchor, injectionInfo);
 		this.metaprogramObject = metaprogramObject;
 	}
 
@@ -58,7 +58,7 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 		MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode>(
 				new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode>(this.metaprogramObject), this.anchor,
 				dependencies, targetNames, this.metaprogramObject.getLocalMode(),
-				this.metaprogramObject.getPackageMode(), context);
+				this.metaprogramObject.getPackageMode(), context, injectionInfo.isPurelyInjected());
 		return profile;
 	}
 

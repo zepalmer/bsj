@@ -26,6 +26,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.AbstractCompilationUnitBuilderTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ExecuteMetaprogramTask;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.InjectionInfo;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.LoadBinaryCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.SanityCheckTask;
@@ -158,12 +159,13 @@ public class MetacompilationManager implements MetacompilationContext
 
 		// pick a task based on whether or not the file appears to be a binary
 		AbstractCompilationUnitBuilderTask task;
+		InjectionInfo info = new InjectionInfo(getCurrentMetaprogram(), false);
 		if (file.getName().endsWith(".class"))
 		{
-			task = new LoadBinaryCompilationUnitTask(file, getCurrentMetaprogram());
+			task = new LoadBinaryCompilationUnitTask(file, info);
 		} else
 		{
-			task = new ParseCompilationUnitTask(file, getCurrentMetaprogram());
+			task = new ParseCompilationUnitTask(file, info);
 		}
 		this.registerTask(task);
 		return true;
@@ -224,12 +226,13 @@ public class MetacompilationManager implements MetacompilationContext
 		};
 
 		AbstractCompilationUnitBuilderTask task;
+		InjectionInfo info = new InjectionInfo(getCurrentMetaprogram(), false);
 		if (file.getSimpleName().endsWith(".class"))
 		{
-			task = new LoadBinaryCompilationUnitTask(file, getCurrentMetaprogram());
+			task = new LoadBinaryCompilationUnitTask(file, info);
 		} else
 		{
-			task = new ParseCompilationUnitTask(file, getCurrentMetaprogram());
+			task = new ParseCompilationUnitTask(file, info);
 		}
 		queue.offer(task);
 

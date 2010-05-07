@@ -11,7 +11,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaAnnotationMetaprogram;
 
@@ -19,8 +18,8 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 {
 	/** The node whose top-level descendent metaprograms should be extracted. */
 	private Node node;
-	/** The metaprogram which most recentlymodified that node's subtree. */
-	private MetaprogramProfile<?> profile;
+	/** The injection information for extracted metaprograms. */
+	private InjectionInfo injectionInfo;
 
 	/**
 	 * Creates a new task for metaprogram extraction.
@@ -29,11 +28,11 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 	 * @param profile The metaprogram which was most recently responsible for modifying that subtree or
 	 *            <code>null</code> if no metaprogram has modified it.
 	 */
-	public ExtractMetaprogramsTask(Node node, MetaprogramProfile<?> profile)
+	public ExtractMetaprogramsTask(Node node, InjectionInfo injectionInfo)
 	{
 		super(TaskPriority.EXTRACT);
 		this.node = node;
-		this.profile = profile;
+		this.injectionInfo = injectionInfo;
 	}
 
 	@Override
@@ -73,7 +72,7 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 							// register a task to build a metaprogram profile from this object
 							BsjMetaAnnotationMetaprogram metaprogramObject = (BsjMetaAnnotationMetaprogram) annotationObject;
 							context.registerTask(new PrepareMetaAnnotationMetaprorgamTask(metaAnnotationAnchor,
-									this.profile, metaprogramObject.getMetaprogram()));
+									this.injectionInfo, metaprogramObject.getMetaprogram()));
 							if (LOGGER.isTraceEnabled())
 							{
 								LOGGER.trace("Found meta-annotation metaprogram for "
@@ -100,7 +99,7 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 	private <R extends Node> CompileExplicitMetaprogramTask<R> createCompileExplicitMetaprogramTask(
 			ExplicitMetaprogramAnchorNode<R> anchor)
 	{
-		return new CompileExplicitMetaprogramTask<R>(anchor, this.profile);
+		return new CompileExplicitMetaprogramTask<R>(anchor, this.injectionInfo);
 	}
 
 	/**

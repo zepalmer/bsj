@@ -7,7 +7,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 
 /**
  * This task performs annotation object creation for a given AST.
@@ -17,8 +16,8 @@ public class InstantiateMetaAnnotationObjectTask extends AbstractBsjCompilerTask
 {
 	/** The node this task will use. */
 	private Node root;
-	/** The metaprogram which most recentlymodified that node's subtree. */
-	private MetaprogramProfile<?> profile;
+	/** The injection information to be passed to metaprograms which are extracted. */
+	private InjectionInfo injectionInfo;
 
 	/**
 	 * Creates an instance of this task.
@@ -26,11 +25,11 @@ public class InstantiateMetaAnnotationObjectTask extends AbstractBsjCompilerTask
 	 * @param profile The metaprogram which was most recently responsible for modifying that subtree or
 	 *            <code>null</code> if no metaprogram has modified it.
 	 */
-	public InstantiateMetaAnnotationObjectTask(Node root, MetaprogramProfile<?> profile)
+	public InstantiateMetaAnnotationObjectTask(Node root, InjectionInfo injectionInfo)
 	{
 		super(TaskPriority.CREATE_METAANNOTATION_OBJECT);
 		this.root = root;
-		this.profile = profile;
+		this.injectionInfo = injectionInfo;
 	}
 
 	@Override
@@ -53,6 +52,6 @@ public class InstantiateMetaAnnotationObjectTask extends AbstractBsjCompilerTask
 		});
 		
 		// Now enqueue for metaprogram extraction
-		context.registerTask(new ExtractMetaprogramsTask(this.root, this.profile));
+		context.registerTask(new ExtractMetaprogramsTask(this.root, this.injectionInfo));
 	}
 }
