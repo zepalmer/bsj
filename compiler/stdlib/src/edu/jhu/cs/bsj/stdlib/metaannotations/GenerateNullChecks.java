@@ -7,6 +7,8 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -36,7 +38,12 @@ public class GenerateNullChecks extends AbstractBsjMetaAnnotationMetaprogram
     
     public GenerateNullChecks()
     {
-        super(Arrays.asList("nullChecks"), Collections.<String> emptyList());
+        super(
+                Arrays.asList("nullChecks"), 
+                Collections.<String> emptyList(), 
+                Arrays.asList("memoized"), 
+                MetaprogramLocalMode.MUTATE,
+                MetaprogramPackageMode.READ_ONLY);
     }
     
     @BsjMetaAnnotationElementGetter
