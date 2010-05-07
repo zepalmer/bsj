@@ -684,7 +684,7 @@ public class DependencyManager
 								hasInferredChildren = true;
 								// Determine whether or not we can reach the injector without using the implicit edge
 								// from the injectee to the injector's implicit target
-								if (checkPath(node, injector, targetEdge.getSecond()))
+								if (checkPath(node, injector, true))
 								{
 									explicitDependencyExists = true;
 								}
@@ -716,7 +716,7 @@ public class DependencyManager
 		 * 
 		 * @param from The node for the first metaprogram.
 		 * @param to The node for the second metaprogram.
-		 * @param disallowed The edge which is not permitted to be used in finding the path. Note that this edge is
+		 * @param inferredAllowed The edge which is not permitted to be used in finding the path. Note that this edge is
 		 *            compared by identity, not using {@link Object#equals(Object)}.
 		 * @return <code>true</code> if a path exists from the first metaprogram to the second; <code>false</code>
 		 *         otherwise.
@@ -724,18 +724,18 @@ public class DependencyManager
 		private boolean checkPath(
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> from,
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> to,
-				MetaprogramEdgeData disallowed)
+				boolean inferredAllowed)
 		{
 			if (from.getData().getProfile().getMetaprogram().getID() == to.getData().getProfile().getMetaprogram().getID())
 				return true;
 
 			for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>, MetaprogramEdgeData> targetNodeEdge : from.getChildEdges())
 			{
-				if (targetNodeEdge.getSecond() != disallowed)
+				if (!targetNodeEdge.getSecond().isInferred() || inferredAllowed)
 				{
 					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> dependencyNode : targetNodeEdge.getFirst().getChildren())
 					{
-						if (checkPath(dependencyNode, to, disallowed))
+						if (checkPath(dependencyNode, to, targetNodeEdge.getSecond().isInferred() && inferredAllowed))
 						{
 							return true;
 						}
