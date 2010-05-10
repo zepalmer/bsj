@@ -2,15 +2,10 @@
     <!-- A fileset including the classpath resources of all projects -->
     <fileset id="build.classes" dir=".">
         <include name="api/bin/**"/>
-        <include name="api/classpath/**"/>
         <include name="utils/bin/**"/>
-        <include name="utils/classpath/**"/>
         <include name="parser/bin/**"/>
-        <include name="parser/classpath/**"/>
         <include name="generator/bin/**"/>
-        <include name="generator/classpath/**"/>
         <include name="stdlib/bin/**"/>
-        <include name="stdlib/classpath/**"/>
         <include name="parser/.gen/bin/**"/>
     </fileset>
     
@@ -87,7 +82,6 @@
             <fileset refid="build.classes"/>
             <compositemapper>
                 <regexpmapper from="^[^/]+/(\.gen/)?bin/(.*)$$" to="\2"/>
-				<regexpmapper from="^[^/]+/classpath/(.*)$$" to="\1"/>
             </compositemapper>
         </copy>
         <jar destfile="${build.full.jar}" basedir="${build.dist.classes}"/>
