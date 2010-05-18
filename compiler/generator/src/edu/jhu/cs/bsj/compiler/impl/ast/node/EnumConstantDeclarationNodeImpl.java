@@ -362,9 +362,11 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         visitor.visitStartBegin(this);
         visitor.visitEnumConstantDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitMetaAnnotatableNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitMetaAnnotatableNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitEnumConstantDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

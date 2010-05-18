@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface PackageDeclarationNode extends Node
+public interface PackageDeclarationNode extends Node, MetaAnnotatableNode
 {
     /**
      * Gets the name of the package.

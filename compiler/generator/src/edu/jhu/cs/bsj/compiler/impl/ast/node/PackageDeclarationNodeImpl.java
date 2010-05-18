@@ -221,9 +221,11 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         visitor.visitStartBegin(this);
         visitor.visitPackageDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitMetaAnnotatableNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitMetaAnnotatableNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitPackageDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

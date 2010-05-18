@@ -1193,6 +1193,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type MetaAnnotatableNode.
+     * @param node The node being visited.
+     */
+    public void visitMetaAnnotatableNodeStart(MetaAnnotatableNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type MetaAnnotationArrayValueNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -3258,6 +3266,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitLongLiteralNodeStop(LongLiteralNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotatableNode.
+     * @param node The node being visited.
+     */
+    public void visitMetaAnnotatableNodeStop(MetaAnnotatableNode node)
     {
     }
 

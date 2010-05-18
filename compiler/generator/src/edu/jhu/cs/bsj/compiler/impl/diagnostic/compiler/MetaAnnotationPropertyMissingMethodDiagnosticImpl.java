@@ -46,6 +46,8 @@ public class MetaAnnotationPropertyMissingMethodDiagnosticImpl extends InvalidMe
         Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
         args.getFirst().add(this.methodType);
         args.getSecond().put("methodType", args.getFirst().size());
+        args.getFirst().add(methodType.getCode());
+        args.getSecond().put("methodTypeCode", args.getFirst().size());
         return args;
     }
     

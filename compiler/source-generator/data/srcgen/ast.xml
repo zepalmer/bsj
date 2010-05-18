@@ -109,6 +109,14 @@
                 parameterized types may not be used to create literals; that is, <tt>Set&lt;String&gt;.class</tt> is illegal.
             ]]></doc>
         </type>
+        
+        <type name="MetaAnnotatableNode" super="Node" mode="tag">
+            <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations associated with this node"
+                default="makeMetaAnnotationListNode()"/>
+            <doc><![CDATA[
+                This tagging interface describes nodes which may be meta-annotated.
+            ]]></doc>
+        </type>
 
         <type name="NonAssignmentExpressionNode" super="Node" mode="tag">
             <tag name="ExpressionNode" />
@@ -393,6 +401,7 @@
         </type>
 
         <type name="ModifiersNode" super="Node" mode="abstract">
+            <tag name="MetaAnnotatableNode"/>
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations modifying the subject"
                 default="makeMetaAnnotationListNode()" />
             <prop name="annotations" type="AnnotationListNode" desc="the annotations modifying the subject"
@@ -1324,6 +1333,7 @@
         </type>
 
         <type name="EnumConstantDeclarationNode" super="Node">
+            <tag name="MetaAnnotatableNode"/>
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on this constant"
                 default="makeMetaAnnotationListNode()" />
             <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant"
@@ -2037,6 +2047,7 @@
         </type>
 
         <type name="PackageDeclarationNode" super="Node">
+            <tag name="MetaAnnotatableNode"/>
             <prop name="name" type="NameNode" desc="the name of the package" />
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on the package declaration"
                 default="makeMetaAnnotationListNode()" />

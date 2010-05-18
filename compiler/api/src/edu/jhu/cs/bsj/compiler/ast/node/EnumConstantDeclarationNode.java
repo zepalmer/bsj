@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
  * <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface EnumConstantDeclarationNode extends Node
+public interface EnumConstantDeclarationNode extends Node, MetaAnnotatableNode
 {
     /**
      * Gets the meta-annotations on this constant.

@@ -5,6 +5,7 @@ import java.util.Collection;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.Dependency;

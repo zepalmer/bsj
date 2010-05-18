@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
  * which flags are permitted for their parent nodes.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ModifiersNode extends Node
+public interface ModifiersNode extends Node, MetaAnnotatableNode
 {
     /**
      * Gets the meta-annotations modifying the subject.
