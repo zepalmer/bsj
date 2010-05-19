@@ -975,7 +975,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.print("static ");
 		}
+		p.println("{");
+		p.incPrependCount();
 		node.getBody().executeOperation(this, p);
+		p.decPrependCount();
+		p.println("}");
 		return null;
 	}
 
@@ -1451,7 +1455,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print("synchronized (");
 		node.getExpression().executeOperation(this, p);
 		p.print(")\n");
+		p.println("{");
+		p.incPrependCount();
 		node.getBody().executeOperation(this, p);
+		p.decPrependCount();
+		p.println("}");
 		return null;
 	}
 

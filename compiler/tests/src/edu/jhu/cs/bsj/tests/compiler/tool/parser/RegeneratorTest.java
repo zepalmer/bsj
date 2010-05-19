@@ -24,7 +24,13 @@ public class RegeneratorTest extends AbstractPerFileTest
 	@Override
 	protected boolean doFileTest(File file) throws Exception
 	{
-		return regenerateJavaFile(file);
+		if (file.getName().endsWith(".bsj") || file.getName().endsWith(".java"))
+		{
+			return regenerateJavaFile(file);
+		} else
+		{
+			return true;
+		}
 	}
 
 	/**
