@@ -21,11 +21,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnhancedForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableListNode;
@@ -257,34 +259,33 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 					// to that type declaration.
 					targetNode = node;
 				} else if (node instanceof FieldDeclarationNode || node instanceof MethodDeclarationNode
-						|| node instanceof ConstructorDeclarationNode)
+						|| node instanceof ConstructorDeclarationNode || node instanceof InitializerDeclarationNode)
 				{
-					// + If the meta-annotation annotates a field, method, or constructor declaration, then the
-					// metaprogram is given permission to the type declaration which encloses that field, method,
-					// or constructor declaration.
+					// + If the meta-annotation annotates a field, method, constructor declaration, static initializer
+					// or instance initializer, then the metaprogram is given Insert permission to the type declaration
+					// which encloses that node.
 					targetNode = node.getNearestAncestorOfType(TypeDeclarationNode.class);
-				} else if (node instanceof VariableDeclarationNode)
+				} else if (node instanceof VariableDeclarationNode || node instanceof StatementNode)
 				{
-					// + If the meta-annotation annotates a local variable, then
-					VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) node;
-					BlockNode enclosingBlock = variableDeclarationNode.getNearestAncestorOfType(BlockNode.class);
+					// + If the meta-annotation annotates a local variable declaration or statement, then
+					BlockNode enclosingBlock = node.getNearestAncestorOfType(BlockNode.class);
 					if (enclosingBlock != null
 							&& (enclosingBlock.getParent() instanceof MethodDeclarationNode || enclosingBlock.getParent() instanceof ConstructorDeclarationNode))
 					{
-						// . If the local variable is contained within a block of statements which serves as the body
-						// for a method or constructor declaration, then the metaprogram is given permission to that
-						// declaration.
+						// . If the local variable declaration or statement is contained within a block of statements
+						// which serves as the body for a method or constructor declaration, then the metaprogram is
+						// given permission to that declaration.
 						targetNode = enclosingBlock.getParent();
 					} else if (node.getParent() instanceof ForInitializerNode
 							&& node.getParent().getParent() instanceof ForLoopNode)
 					{
-						// . If the local variable is contained within the header for a standard for-loop, then the
-						// metaprogram is given permission to the for-loop.
+						// . If the local variable declaration or statement is contained within the header for a
+						// standard for-loop, then the metaprogram is given permission to the for-loop.
 						targetNode = node.getParent().getParent();
 					} else
 					{
 						// . Otherwise, the metaprogram is given permission to the block of statements which encloses
-						// the local variable declaration.
+						// the local variable declaration or statement.
 						targetNode = enclosingBlock;
 					}
 				} else if (node instanceof VariableNode)
