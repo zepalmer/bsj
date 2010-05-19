@@ -151,6 +151,7 @@
         </type>
 
         <type name="StatementExpressionNode" super="Node" mode="tag">
+            <tag name="MetaAnnotatableNode"/>
             <tag name="ExpressionNode" />
             <doc><![CDATA[
                 A tagging interface which marks all expressions which may be used as statements.
@@ -481,6 +482,9 @@
                 </pre>
                 where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="BinaryExpressionNode" super="Node">
@@ -607,6 +611,18 @@
                 <prop name="identifier" />
                 <prop name="arguments" />
             </factory-method>
+            <factory-method>
+                <prop name="expression" />
+                <prop name="identifier" />
+                <prop name="arguments" />
+                <prop name="typeArguments" />
+            </factory-method>
+            <factory-method>
+                <prop name="expression" />
+                <prop name="identifier" />
+                <prop name="arguments" />
+                <prop name="metaAnnotations" />
+            </factory-method>
         </type>
 
         <type name="MethodInvocationByNameNode" super="MethodInvocationNode">
@@ -629,6 +645,16 @@
             <factory-method>
                 <prop name="name" />
                 <prop name="arguments" />
+            </factory-method>
+            <factory-method>
+                <prop name="name" />
+                <prop name="arguments" />
+                <prop name="typeArguments" />
+            </factory-method>
+            <factory-method>
+                <prop name="name" />
+                <prop name="arguments" />
+                <prop name="metaAnnotations" />
             </factory-method>
         </type>
 
@@ -864,6 +890,12 @@
             <factory-method>
                 <prop name="type" />
                 <prop name="arguments" />
+            </factory-method>
+            <factory-method>
+                <prop name="type" />
+                <prop name="constructorTypeArguments" />
+                <prop name="arguments" />
+                <prop name="body" />
             </factory-method>
         </type>
 

@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -28,6 +29,9 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     /** The body of the anonymous class. */
     private AnonymousClassBodyNode body;
     
+    /** The meta-annotations associated with this node. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the constructorTypeArguments property. */
@@ -36,6 +40,8 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         ARGUMENTS,
         /** Attribute for the body property. */
         BODY,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
     }
     
     /** General constructor. */
@@ -43,6 +49,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             TypeArgumentListNode constructorTypeArguments,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -52,6 +59,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         setConstructorTypeArguments(constructorTypeArguments, false);
         setArguments(arguments, false);
         setBody(body, false);
+        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -145,6 +153,37 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         setAsChild(body, false);
         this.body = body;
         setAsChild(body, true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.
+     * @return The meta-annotations associated with this node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+        }
+        setAsChild(metaAnnotations, false);
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -263,6 +302,9 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         sb.append(',');
         sb.append("body=");
         sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

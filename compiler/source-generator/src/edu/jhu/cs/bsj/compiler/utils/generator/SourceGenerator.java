@@ -2279,7 +2279,7 @@ public class SourceGenerator
 			}
 			ps.println("),");
 			ps.decPrependCount(2);
-			ps.println("factory.makeReferenceTypeListNode());");
+			ps.println("factory.makeReferenceTypeListNode(), factory.makeMetaAnnotationListNode());");
 			ps.decPrependCount(4);
 			ps.println();
 			ps.println("return ret;");

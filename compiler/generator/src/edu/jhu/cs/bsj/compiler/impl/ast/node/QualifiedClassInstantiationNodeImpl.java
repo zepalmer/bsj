@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -50,12 +51,13 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             TypeArgumentListNode constructorTypeArguments,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        super(constructorTypeArguments, arguments, body, metaAnnotations, startLocation, stopLocation, manager, binary);
         setEnclosingExpression(enclosingExpression, false);
         setIdentifier(identifier, false);
         setTypeArguments(typeArguments, false);
@@ -278,6 +280,9 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         sb.append("body=");
         sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
         sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -314,6 +319,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
                 getConstructorTypeArguments()==null?null:getConstructorTypeArguments().deepCopy(factory),
                 getArguments()==null?null:getArguments().deepCopy(factory),
                 getBody()==null?null:getBody().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -357,6 +363,11 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         if (before.equals(this.getBody()) && (after instanceof AnonymousClassBodyNode))
         {
             setBody((AnonymousClassBodyNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;

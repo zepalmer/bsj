@@ -33,7 +33,7 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 			for (TagReferenceDefinition tag : this.getTags())
 			{
 				PropertyBasedHierarchyDefinition<T,U> tagDef = this.getNamespaceMap().get(tag.getName());
-				props.addAll(0, tagDef.getProperties());
+				props.addAll(0, tagDef.getResponsibleProperties(parentFirst));
 			}
 			props.addAll(0, this.getProperties());
 		} else
@@ -42,7 +42,7 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 			for (TagReferenceDefinition tag : this.getTags())
 			{
 				PropertyBasedHierarchyDefinition<T,U> tagDef = this.getNamespaceMap().get(tag.getName());
-				props.addAll(tagDef.getProperties());
+				props.addAll(tagDef.getResponsibleProperties(parentFirst));
 			}
 		}
 		eliminateDuplicates(props, parentFirst);
