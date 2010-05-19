@@ -7571,42 +7571,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public VariableDeclaratorNode makeVariableDeclaratorNode(
             TypeNode type,
             IdentifierNode name,
-            VariableInitializerNode initializer,
-            MetaAnnotationListNode metaAnnotations)
-    {
-        this.before();
-        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(type, name, initializer, metaAnnotations);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a VariableDeclaratorNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
-            IdentifierNode name,
-            VariableInitializerNode initializer,
-            MetaAnnotationListNode metaAnnotations,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(type, name, initializer, metaAnnotations, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a VariableDeclaratorNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
-            IdentifierNode name,
             VariableInitializerNode initializer)
     {
         this.before();

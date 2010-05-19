@@ -1188,7 +1188,6 @@
         </type>
 
         <type name="VariableDeclaratorNode" super="Node">
-            <tag name="StatementNode" />
             <prop name="type" type="TypeNode" desc="the type of this variable" />
             <prop name="name" type="IdentifierNode" desc="the name of this variable" />
             <prop name="initializer" type="VariableInitializerNode" desc="the initializer to use" />
@@ -1204,9 +1203,6 @@
                 Hence, type exists on this node instead of its parent.  If the variable is not initialized, the
                 <tt>initializer</tt> field is <tt>null</tt>.
             ]]></doc>
-            <factory-method>
-                <use-defaults />
-            </factory-method>
         </type>
 
         <type name="WhileLoopNode" super="Node">

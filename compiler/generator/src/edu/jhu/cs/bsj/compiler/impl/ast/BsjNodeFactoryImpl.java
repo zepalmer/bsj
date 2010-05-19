@@ -6685,41 +6685,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public VariableDeclaratorNode makeVariableDeclaratorNode(
             TypeNode type,
             IdentifierNode name,
-            VariableInitializerNode initializer,
-            MetaAnnotationListNode metaAnnotations)
-    {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, metaAnnotations, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableDeclaratorNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
-            IdentifierNode name,
-            VariableInitializerNode initializer,
-            MetaAnnotationListNode metaAnnotations,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, metaAnnotations, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableDeclaratorNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
-            IdentifierNode name,
             VariableInitializerNode initializer)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6735,7 +6703,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

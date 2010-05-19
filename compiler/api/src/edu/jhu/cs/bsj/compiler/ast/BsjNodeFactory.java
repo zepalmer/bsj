@@ -4268,28 +4268,6 @@ public interface BsjNodeFactory
     public VariableDeclaratorNode makeVariableDeclaratorNode(
             TypeNode type,
             IdentifierNode name,
-            VariableInitializerNode initializer,
-            MetaAnnotationListNode metaAnnotations);
-    
-    /**
-     * Creates a VariableDeclaratorNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
-            IdentifierNode name,
-            VariableInitializerNode initializer,
-            MetaAnnotationListNode metaAnnotations,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a VariableDeclaratorNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
-            IdentifierNode name,
             VariableInitializerNode initializer);
     
     /**

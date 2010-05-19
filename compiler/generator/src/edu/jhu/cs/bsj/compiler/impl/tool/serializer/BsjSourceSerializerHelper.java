@@ -267,6 +267,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAssertStatementNode(AssertStatementNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("assert ");
 		node.getTestExpression().executeOperation(this, p);
 		if (node.getMessageExpression() != null)
@@ -328,6 +329,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeBlockNode(BlockNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("{\n");
 		p.incPrependCount();
 		node.getStatements().executeOperation(this, p);
@@ -353,6 +355,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeBreakNode(BreakNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("break");
 		if (node.getLabel() != null)
 		{
@@ -626,6 +629,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeContinueNode(ContinueNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("continue");
 		if (node.getLabel() != null)
 		{
@@ -646,6 +650,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeDoWhileLoopNode(DoWhileLoopNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("do\n");
 		node.getStatement().executeOperation(this, p);
 		p.print("while (");
@@ -664,6 +669,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeEnhancedForLoopNode(EnhancedForLoopNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("for (");
 		node.getVariable().executeOperation(this, p);
 		p.print(" : ");
@@ -752,6 +758,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeExpressionStatementNode(ExpressionStatementNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		if (node.getExpression() != null)
 		{
 			node.getExpression().executeOperation(this, p);
@@ -875,6 +882,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeForLoopNode(ForLoopNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("for (");
 		if (node.getInitializer() != null)
 		{
@@ -909,6 +917,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeIfNode(IfNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("if (");
 		node.getCondition().executeOperation(this, p);
 		p.print(")\n");
@@ -1071,6 +1080,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeLabeledStatementNode(LabeledStatementNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		node.getLabel().executeOperation(this, p);
 		p.print(": ");
 		node.getStatement().executeOperation(this, p);
@@ -1206,6 +1216,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeNoOperationNode(NoOperationNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print(";");
 		return null;
 	}
@@ -1329,6 +1340,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeReturnNode(ReturnNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("return");
 		if (node.getExpression() != null)
 		{
@@ -1439,6 +1451,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeSwitchNode(SwitchNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("switch (");
 		node.getExpression().executeOperation(this, p);
 		p.print(")\n{\n");
@@ -1452,6 +1465,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeSynchronizedNode(SynchronizedNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("synchronized (");
 		node.getExpression().executeOperation(this, p);
 		p.print(")\n");
@@ -1478,6 +1492,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeThrowNode(ThrowNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("throw ");
 		node.getExpression().executeOperation(this, p);
 		p.print(";");
@@ -1487,6 +1502,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeTryNode(TryNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("try\n");
 		p.print("{\n");
 		p.incPrependCount();
@@ -1618,6 +1634,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeVariableDeclarationNode(VariableDeclarationNode node, PrependablePrintStream p)
 	{
+		// TODO: annotations, meta-annotations
 		boolean first = true;
 
 		for (Node item : node.getDeclarators().getChildren())
@@ -1701,6 +1718,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeWhileLoopNode(WhileLoopNode node, PrependablePrintStream p)
 	{
+		node.getMetaAnnotations().executeOperation(this, p);
 		p.print("while (");
 		node.getCondition().executeOperation(this, p);
 		p.print(")\n");
@@ -1796,7 +1814,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeMetaAnnotationListNode(MetaAnnotationListNode node, PrependablePrintStream p)
 	{
-		executeListNode(node, p);
+		handleListNode(node, "", " ", "\n", p, true);
 		return null;
 	}
 
@@ -1952,7 +1970,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, PrependablePrintStream p)
 	{
-		p.print("@");
+		p.print("@@");
 		node.getAnnotationType().executeOperation(this, p);
 		p.print("(");
 		node.getValue().executeOperation(this, p);

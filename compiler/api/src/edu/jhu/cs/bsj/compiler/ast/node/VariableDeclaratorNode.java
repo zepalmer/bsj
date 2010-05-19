@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * <tt>initializer</tt> field is <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface VariableDeclaratorNode extends Node, StatementNode
+public interface VariableDeclaratorNode extends Node
 {
     /**
      * Gets the type of this variable.

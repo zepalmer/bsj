@@ -15,7 +15,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -31,9 +30,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     /** The initializer to use. */
     private VariableInitializerNode initializer;
     
-    /** The meta-annotations associated with this node. */
-    private MetaAnnotationListNode metaAnnotations;
-    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the type property. */
@@ -42,8 +38,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         NAME,
         /** Attribute for the initializer property. */
         INITIALIZER,
-        /** Attribute for the metaAnnotations property. */
-        META_ANNOTATIONS,
     }
     
     /** General constructor. */
@@ -51,7 +45,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             TypeNode type,
             IdentifierNode name,
             VariableInitializerNode initializer,
-            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -61,7 +54,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         setType(type, false);
         setName(name, false);
         setInitializer(initializer, false);
-        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -158,37 +150,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     }
     
     /**
-     * Gets the meta-annotations associated with this node.
-     * @return The meta-annotations associated with this node.
-     */
-    public MetaAnnotationListNode getMetaAnnotations()
-    {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
-        return this.metaAnnotations;
-    }
-    
-    /**
-     * Changes the meta-annotations associated with this node.
-     * @param metaAnnotations The meta-annotations associated with this node.
-     */
-    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
-    {
-            setMetaAnnotations(metaAnnotations, true);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
-        }
-        setAsChild(metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
-        setAsChild(metaAnnotations, true);
-    }
-    
-    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -260,11 +221,9 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         visitor.visitStartBegin(this);
         visitor.visitVariableDeclaratorNodeStart(this, true);
         visitor.visitNodeStart(this);
-        visitor.visitStatementNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitStatementNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitVariableDeclaratorNodeStop(this, true);
         visitor.visitStopEnd(this);
@@ -303,9 +262,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         sb.append("initializer=");
         sb.append(this.getInitializer() == null? "null" : this.getInitializer().getClass().getSimpleName());
         sb.append(',');
-        sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
-        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -339,7 +295,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
                 getType()==null?null:getType().deepCopy(factory),
                 getName()==null?null:getName().deepCopy(factory),
                 getInitializer()==null?null:getInitializer().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -368,11 +323,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (before.equals(this.getInitializer()) && (after instanceof VariableInitializerNode))
         {
             setInitializer((VariableInitializerNode)after);
-            return true;
-        }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
-        {
-            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;
