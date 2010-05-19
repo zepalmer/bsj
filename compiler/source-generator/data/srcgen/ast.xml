@@ -151,7 +151,6 @@
         </type>
 
         <type name="StatementExpressionNode" super="Node" mode="tag">
-            <tag name="MetaAnnotatableNode" />
             <tag name="ExpressionNode" />
             <doc><![CDATA[
                 A tagging interface which marks all expressions which may be used as statements.
@@ -159,6 +158,7 @@
         </type>
 
         <type name="StatementNode" super="BlockStatementNode" mode="tag">
+            <tag name="MetaAnnotatableNode" />
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which represent statements.
             ]]></doc>
@@ -482,9 +482,6 @@
                 </pre>
                 where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
             ]]></doc>
-            <factory-method>
-                <use-defaults />
-            </factory-method>
         </type>
 
         <type name="BinaryExpressionNode" super="Node">
@@ -611,18 +608,6 @@
                 <prop name="identifier" />
                 <prop name="arguments" />
             </factory-method>
-            <factory-method>
-                <prop name="expression" />
-                <prop name="identifier" />
-                <prop name="arguments" />
-                <prop name="typeArguments" />
-            </factory-method>
-            <factory-method>
-                <prop name="expression" />
-                <prop name="identifier" />
-                <prop name="arguments" />
-                <prop name="metaAnnotations" />
-            </factory-method>
         </type>
 
         <type name="MethodInvocationByNameNode" super="MethodInvocationNode">
@@ -645,16 +630,6 @@
             <factory-method>
                 <prop name="name" />
                 <prop name="arguments" />
-            </factory-method>
-            <factory-method>
-                <prop name="name" />
-                <prop name="arguments" />
-                <prop name="typeArguments" />
-            </factory-method>
-            <factory-method>
-                <prop name="name" />
-                <prop name="arguments" />
-                <prop name="metaAnnotations" />
             </factory-method>
         </type>
 
@@ -717,14 +692,6 @@
                 }
                 </pre>
             ]]></doc>
-            <factory-method>
-                <prop name="enclosingExpression" />
-                <prop name="identifier" />
-                <prop name="typeArguments" />
-                <prop name="constructorTypeArguments" />
-                <prop name="arguments" />
-                <prop name="body" />
-            </factory-method>
             <factory-method>
                 <use-defaults />
             </factory-method>
@@ -809,12 +776,6 @@
                 <prop name="arguments" />
                 <prop name="typeArguments" />
             </factory-method>
-            <factory-method>
-                <prop name="type" />
-                <prop name="identifier" />
-                <prop name="arguments" />
-                <prop name="typeArguments" />
-            </factory-method>
         </type>
 
         <type name="ThisNode" super="Node">
@@ -890,9 +851,6 @@
                 Note that this node does not cover those unary expressions which cannot be used as statement expressions.  For
                 those expressions, nodes of type {@link UnaryExpressionNode} should be used.
             ]]></doc>
-            <factory-method>
-                <use-defaults />
-            </factory-method>
         </type>
 
         <type name="UnqualifiedClassInstantiationNode" super="ClassInstantiationNode">
@@ -910,12 +868,6 @@
             <factory-method>
                 <prop name="type" />
                 <prop name="arguments" />
-            </factory-method>
-            <factory-method>
-                <prop name="type" />
-                <prop name="constructorTypeArguments" />
-                <prop name="arguments" />
-                <prop name="body" />
             </factory-method>
         </type>
 
@@ -939,6 +891,10 @@
             <factory-method>
                 <use-defaults />
             </factory-method>
+            <factory-method>
+                <prop name="testExpression" />
+                <prop name="messageExpression" />
+            </factory-method>
         </type>
 
         <type name="BlockNode" super="Node">
@@ -953,6 +909,9 @@
                 }
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="BreakNode" super="Node">
@@ -965,6 +924,9 @@
                 </pre>
             ]]></doc>
             <factory-method />
+            <factory-method>
+                <prop name="label" />
+            </factory-method>
         </type>
 
         <type name="ContinueNode" super="Node">
@@ -977,6 +939,9 @@
                 </pre>
             ]]></doc>
             <factory-method />
+            <factory-method>
+                <prop name="label" />
+            </factory-method>
         </type>
 
         <type name="DoWhileLoopNode" super="Node">
@@ -989,6 +954,9 @@
                 do <i>body</i> while (<i>condition</i>);
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="EnhancedForLoopNode" super="Node">
@@ -1003,6 +971,9 @@
                     <i>body</i>
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="ExpressionStatementNode" super="Node">
@@ -1020,6 +991,9 @@
                 Note that not every expression can be used in Java as a statement.  For instance, <tt>~0</tt> and <tt>5+3</tt>
                 are not valid statements.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="ForLoopNode" super="Node">
@@ -1039,6 +1013,9 @@
                 loop has no termination condition, the <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt>
                 field should never be <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="IfNode" super="Node">
@@ -1052,6 +1029,11 @@
                 if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
                 </pre>
             ]]></doc>
+            <factory-method>
+                <prop name="condition" />
+                <prop name="thenStatement" />
+                <prop name="elseStatement" />
+            </factory-method>
             <factory-method>
                 <use-defaults />
             </factory-method>
@@ -1076,6 +1058,9 @@
                 <i>identifier</i>: <i>statement</i>
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="ReturnNode" super="Node">
@@ -1088,6 +1073,9 @@
                 <pre>return;</pre>
                 For void return statements, the <tt>expression</tt> is <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="SwitchNode" super="Node">
@@ -1103,12 +1091,15 @@
                 }
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="SynchronizedNode" super="Node">
             <tag name="StatementNode" />
             <prop name="expression" type="ExpressionNode" desc="the synchronization expression" />
-            <prop name="block" type="BlockNode" desc="the block of statements to synchronize" />
+            <prop name="body" type="BlockStatementListNode" desc="the block statements to synchronize" />
             <doc><![CDATA[
                 A node to represent synchronization statements, as in:
                 <pre>
@@ -1117,6 +1108,9 @@
                 }
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="ThrowNode" super="Node">
@@ -1128,36 +1122,44 @@
                 throw <i>expr</i>;
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="TryNode" super="Node">
             <tag name="StatementNode" />
-            <prop name="block" type="BlockNode" desc="the block in which to try" />
+            <prop name="body" type="BlockStatementListNode" desc="the block statements to try" />
             <prop name="catches" type="CatchListNode" desc="the catch conditions" default="makeCatchListNode()" />
-            <prop name="finallyBlock" type="BlockNode" desc="the finally block" default="null" />
+            <prop name="finallyBlock" type="BlockStatementListNode" desc="the finally block" default="makeBlockStatementListNode()" />
             <doc><![CDATA[
                 A node to represent a try-catch block, as in:
                 <pre>
-                try <i>block</i>
-                catch (<i>type name</i>) <i>block</i>
+                try { <i>statement</i> ... }
+                catch (<i>type name</i>) { <i>statement</i> ... }
                 </pre>
                 or
                 <pre>
                 try <i>block</i>
-                catch (<i>type name</i>) <i>block</i>
-                catch (<i>type name</i>) <i>block</i>
-                finally <i>block</i>
+                catch (<i>type name</i>) { <i>statement</i> ... }
+                catch (<i>type name</i>) { <i>statement</i> ... }
+                finally { <i>statement</i> ... }
                 </pre>
                 If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
-                <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
+                <tt>finally</tt> will contain no children.  At least one of these two lists must be non-empty.
             ]]></doc>
             <factory-method>
-                <prop name="block" />
+                <prop name="body" />
                 <prop name="finallyBlock" />
             </factory-method>
             <factory-method>
-                <prop name="block" />
+                <prop name="body" />
                 <prop name="catches" />
+            </factory-method>
+            <factory-method>
+                <prop name="body" />
+                <prop name="catches" />
+                <prop name="finallyBlock" />
             </factory-method>
         </type>
 
@@ -1202,6 +1204,9 @@
                 Hence, type exists on this node instead of its parent.  If the variable is not initialized, the
                 <tt>initializer</tt> field is <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="WhileLoopNode" super="Node">
@@ -1215,6 +1220,9 @@
                     statement
                 </pre>/
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <!-- ======================== TYPE NODES ======================== -->
@@ -1423,7 +1431,7 @@
             <tag name="AnonymousClassMemberNode" />
             <tag name="MetaAnnotatableNode" />
             <prop name="staticInitializer" type="boolean" desc="whether or not the initializer is static" />
-            <prop name="body" type="BlockNode" desc="the body of the initializer" />
+            <prop name="body" type="BlockStatementListNode" desc="the body of the initializer" />
             <doc><![CDATA[
                 Declares an initializer, whether static or otherwise, as in
                 <pre>
@@ -1441,7 +1449,7 @@
             <tag name="ClassMemberNode" />
             <tag name="InterfaceMemberNode" />
             <tag name="AnonymousClassMemberNode" />
-            <prop name="body" type="BlockNode" desc="the body of this method" />
+            <prop name="body" type="BlockStatementListNode" desc="the body of this method" />
             <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
             <prop name="identifier" type="IdentifierNode" desc="this method's name" />
             <prop name="parameters" type="VariableListNode" desc="the parameters declared by this method" />
@@ -1464,9 +1472,13 @@
                     public void foo(String... vararg)
                 </pre>
                 The type on the <tt>varargParameter</tt> node should be <tt>String</tt> in the above case (and <i>not</i>
-                <tt>String[]</tt>).  Also observe that methods with no body, such as the abstract method
+                <tt>String[]</tt>).
+                <p/>
+                Observe that methods with no body, such as the abstract method
                 <pre>public abstract void foo();</pre>
-                will have a <tt>null</tt> body.
+                will have a <tt>null</tt> body.  Also, methods which are representative of those declarations found in
+                binaries will have a <tt>null</tt> body.  This is an exception to the usual rule that lists are non-null
+                in the AST API.
             ]]></doc>
             <factory-method>
                 <use-defaults />
@@ -1975,13 +1987,15 @@
         </type>
 
         <type name="CatchNode" super="Node">
-            <prop name="block" type="BlockNode" desc="the block to execute when this catch occurs" />
+            <prop name="body" type="BlockStatementListNode" desc="the block statements to try" />
             <prop name="parameter" type="VariableNode" desc="this catch block's exception variable" />
             <doc><![CDATA[
                 A node representing a catch block, as in
                 <pre>
-                catch (<i>type identifier</i>)
-                    <i>block</i>
+                catch (<i>type identifier</i>) {
+                    <i>statement</i>
+                    ...
+                }
                 </pre>
             ]]></doc>
         </type>
@@ -2100,6 +2114,9 @@
                 This node may appear as a type declaration (in the top level of a compilation unit or as a type member)
                 or as a statement.  Either way, it has no effect.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="PackageDeclarationNode" super="Node">

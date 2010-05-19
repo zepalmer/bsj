@@ -109,7 +109,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
 
     private void addMemoizationCode(MethodDeclarationNode method, BsjNodeFactory factory)
     {
-        BlockStatementListNode statements = method.getBody().getStatements();
+        BlockStatementListNode statements = method.getBody();
         statements.clear();
         ExpressionListNode arguments = factory.makeExpressionListNode();
         String tupleInstanceName = Character.toLowerCase(tupleClassName.charAt(0)) + tupleClassName.substring(1) + "Instance";

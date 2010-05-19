@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
@@ -24,7 +24,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     private boolean staticInitializer;
     
     /** The body of the initializer. */
-    private BlockNode body;
+    private BlockStatementListNode body;
     
     /** The meta-annotations associated with this node. */
     private MetaAnnotationListNode metaAnnotations;
@@ -42,7 +42,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     /** General constructor. */
     public InitializerDeclarationNodeImpl(
             boolean staticInitializer,
-            BlockNode body,
+            BlockStatementListNode body,
             MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -88,7 +88,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      * Gets the body of the initializer.
      * @return The body of the initializer.
      */
-    public BlockNode getBody()
+    public BlockStatementListNode getBody()
     {
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
         return this.body;
@@ -98,12 +98,12 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      * Changes the body of the initializer.
      * @param body The body of the initializer.
      */
-    public void setBody(BlockNode body)
+    public void setBody(BlockStatementListNode body)
     {
             setBody(body, true);
     }
     
-    private void setBody(BlockNode body, boolean checkPermissions)
+    private void setBody(BlockStatementListNode body, boolean checkPermissions)
     {
         if (checkPermissions)
         {
@@ -296,9 +296,9 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBody()) && (after instanceof BlockNode))
+        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
         {
-            setBody((BlockNode)after);
+            setBody((BlockStatementListNode)after);
             return true;
         }
         if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))

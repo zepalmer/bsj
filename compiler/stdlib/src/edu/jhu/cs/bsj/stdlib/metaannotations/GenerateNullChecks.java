@@ -99,7 +99,7 @@ public class GenerateNullChecks extends AbstractBsjMetaAnnotationMetaprogram
         // insert the null checks in order starting at the beginning of the method body
         for (int i = 0; i < statements.size(); i++)
         {
-            method.getBody().getStatements().add(i, statements.get(i));
+            method.getBody().add(i, statements.get(i));
         }
     }
 

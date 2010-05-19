@@ -517,7 +517,7 @@ public class MetaAnnotationObjectInstantiator
 		// TODO: return type of the parameterized type specified by the meta-annotation declaration
 		// This will enforce generic type safety
 		MethodDeclarationNode methodNode = factory.makeMethodDeclarationNode(
-				factory.makeBlockNode(factory.makeBlockStatementListNode(factory.makeReturnNode(node))),
+				factory.makeBlockStatementListNode(factory.makeReturnNode(node)),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC, false, true, true, false, false, false,
 						factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()),
 				factory.makeIdentifierNode("evaluate"), factory.makeVariableListNode(),

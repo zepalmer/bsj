@@ -202,7 +202,7 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		statements.add(factory.makeReturnNode(factory.makeBooleanLiteralNode(false)));
 
 		// Return method enclosing this list of statements
-		return factory.makeMethodDeclarationNode(factory.makeBlockNode(factory.makeBlockStatementListNode(statements)),
+		return factory.makeMethodDeclarationNode(factory.makeBlockStatementListNode(statements),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("equals"),
 				factory.makeVariableListNode(factory.makeVariableNode(
 						factory.makeUnparameterizedTypeNode(factory.parseNameNode("java.lang.Object")),
@@ -288,7 +288,7 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		statements.add(factory.makeReturnNode(factory.makeFieldAccessByNameNode(factory.parseNameNode("result"))));
 
 		// Create hashCode method
-		return factory.makeMethodDeclarationNode(factory.makeBlockNode(factory.makeBlockStatementListNode(statements)),
+		return factory.makeMethodDeclarationNode(factory.makeBlockStatementListNode(statements),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("hashCode"),
 				factory.makeVariableListNode(), factory.makePrimitiveTypeNode(PrimitiveType.INT), 
 				factory.makeJavadocNode(

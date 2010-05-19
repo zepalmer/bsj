@@ -185,7 +185,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         
         // create a method declaration for toString()
         return factory.makeMethodDeclarationNode(
-                factory.makeBlockNode(factory.makeBlockStatementListNode(statements)), 
+                factory.makeBlockStatementListNode(statements), 
                 factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                 factory.makeIdentifierNode("toString"), 
                 factory.makeVariableListNode(), 

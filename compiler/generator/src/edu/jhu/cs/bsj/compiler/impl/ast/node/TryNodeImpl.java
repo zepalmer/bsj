@@ -10,80 +10,88 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TryNodeImpl extends NodeImpl implements TryNode
 {
-    /** The block in which to try. */
-    private BlockNode block;
+    /** The block statements to try. */
+    private BlockStatementListNode body;
     
     /** The catch conditions. */
     private CatchListNode catches;
     
     /** The finally block. */
-    private BlockNode finallyBlock;
+    private BlockStatementListNode finallyBlock;
+    
+    /** The meta-annotations associated with this node. */
+    private MetaAnnotationListNode metaAnnotations;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
-        /** Attribute for the block property. */
-        BLOCK,
+        /** Attribute for the body property. */
+        BODY,
         /** Attribute for the catches property. */
         CATCHES,
         /** Attribute for the finallyBlock property. */
         FINALLY_BLOCK,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
     }
     
     /** General constructor. */
     public TryNodeImpl(
-            BlockNode block,
+            BlockStatementListNode body,
             CatchListNode catches,
-            BlockNode finallyBlock,
+            BlockStatementListNode finallyBlock,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setBlock(block, false);
+        setBody(body, false);
         setCatches(catches, false);
         setFinallyBlock(finallyBlock, false);
+        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
-     * Gets the block in which to try.
-     * @return The block in which to try.
+     * Gets the block statements to try.
+     * @return The block statements to try.
      */
-    public BlockNode getBlock()
+    public BlockStatementListNode getBody()
     {
-        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.READ);
-        return this.block;
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        return this.body;
     }
     
     /**
-     * Changes the block in which to try.
-     * @param block The block in which to try.
+     * Changes the block statements to try.
+     * @param body The block statements to try.
      */
-    public void setBlock(BlockNode block)
+    public void setBody(BlockStatementListNode body)
     {
-            setBlock(block, true);
+            setBody(body, true);
     }
     
-    private void setBlock(BlockNode block, boolean checkPermissions)
+    private void setBody(BlockStatementListNode body, boolean checkPermissions)
     {
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        setAsChild(block, false);
-        this.block = block;
-        setAsChild(block, true);
+        setAsChild(body, false);
+        this.body = body;
+        setAsChild(body, true);
     }
     
     /**
@@ -121,7 +129,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Gets the finally block.
      * @return The finally block.
      */
-    public BlockNode getFinallyBlock()
+    public BlockStatementListNode getFinallyBlock()
     {
         recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.READ);
         return this.finallyBlock;
@@ -131,12 +139,12 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Changes the finally block.
      * @param finallyBlock The finally block.
      */
-    public void setFinallyBlock(BlockNode finallyBlock)
+    public void setFinallyBlock(BlockStatementListNode finallyBlock)
     {
             setFinallyBlock(finallyBlock, true);
     }
     
-    private void setFinallyBlock(BlockNode finallyBlock, boolean checkPermissions)
+    private void setFinallyBlock(BlockStatementListNode finallyBlock, boolean checkPermissions)
     {
         if (checkPermissions)
         {
@@ -146,6 +154,37 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         setAsChild(finallyBlock, false);
         this.finallyBlock = finallyBlock;
         setAsChild(finallyBlock, true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.
+     * @return The meta-annotations associated with this node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+        }
+        setAsChild(metaAnnotations, false);
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -159,9 +198,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.block != null)
+        if (this.body != null)
         {
-            this.block.receive(visitor);
+            this.body.receive(visitor);
         }
         if (this.catches != null)
         {
@@ -192,9 +231,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.block != null)
+        if (this.body != null)
         {
-            this.block.receiveTyped(visitor);
+            this.body.receiveTyped(visitor);
         }
         if (this.catches != null)
         {
@@ -239,7 +278,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getBlock());
+        list.add(getBody());
         list.add(getCatches());
         list.add(getFinallyBlock());
         return list;
@@ -254,14 +293,17 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("block=");
-        sb.append(this.getBlock() == null? "null" : this.getBlock().getClass().getSimpleName());
+        sb.append("body=");
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
         sb.append(',');
         sb.append("catches=");
         sb.append(this.getCatches() == null? "null" : this.getCatches().getClass().getSimpleName());
         sb.append(',');
         sb.append("finallyBlock=");
         sb.append(this.getFinallyBlock() == null? "null" : this.getFinallyBlock().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -293,9 +335,10 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public TryNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTryNode(
-                getBlock()==null?null:getBlock().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
                 getCatches()==null?null:getCatches().deepCopy(factory),
                 getFinallyBlock()==null?null:getFinallyBlock().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -311,9 +354,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBlock()) && (after instanceof BlockNode))
+        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
         {
-            setBlock((BlockNode)after);
+            setBody((BlockStatementListNode)after);
             return true;
         }
         if (before.equals(this.getCatches()) && (after instanceof CatchListNode))
@@ -321,9 +364,14 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             setCatches((CatchListNode)after);
             return true;
         }
-        if (before.equals(this.getFinallyBlock()) && (after instanceof BlockNode))
+        if (before.equals(this.getFinallyBlock()) && (after instanceof BlockStatementListNode))
         {
-            setFinallyBlock((BlockNode)after);
+            setFinallyBlock((BlockStatementListNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;

@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * This tagging interface is used to denote AST nodes which represent statements.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface StatementNode extends BlockStatementNode
+public interface StatementNode extends BlockStatementNode, MetaAnnotatableNode
 {
     /**
      * Generates a deep copy of this node.

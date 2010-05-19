@@ -181,7 +181,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         
         // build the method declaration
         return factory.makeMethodDeclarationNode(
-                factory.makeBlockNode(statement), 
+                statement, 
                 factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                 factory.makeIdentifierNode("add" + listenerName), 
                 factory.makeVariableListNode(factory.makeVariableNode(
@@ -208,7 +208,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         
         // build the method declaration
         return factory.makeMethodDeclarationNode(
-                factory.makeBlockNode(statement), 
+                statement, 
                 factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                 factory.makeIdentifierNode("remove" + listenerName), 
                 factory.makeVariableListNode(factory.makeVariableNode(
@@ -242,7 +242,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         
         // build the method declaration
         return factory.makeMethodDeclarationNode(
-                factory.makeBlockNode(statements), 
+                statements, 
                 factory.makeMethodModifiersNode(AccessModifier.PROTECTED), 
                 factory.makeIdentifierNode("fire" + eventName),
                 factory.makeVariableListNode(factory.makeVariableNode(

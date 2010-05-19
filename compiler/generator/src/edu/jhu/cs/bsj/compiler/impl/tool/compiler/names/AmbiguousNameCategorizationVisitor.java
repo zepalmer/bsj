@@ -303,7 +303,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 		@Override
 		public Node executeCatchNode(CatchNode node, List<Node> p)
 		{
-			if (p.get(p.size() - 1).equals(node.getBlock()))
+			if (p.get(p.size() - 1).equals(node.getBody()))
 			{
 				if (node.getParameter().getIdentifier().getIdentifier().equals(name))
 				{

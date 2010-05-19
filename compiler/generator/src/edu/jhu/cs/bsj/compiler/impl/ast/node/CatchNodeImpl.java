@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
@@ -20,23 +20,23 @@ import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CatchNodeImpl extends NodeImpl implements CatchNode
 {
-    /** The block to execute when this catch occurs. */
-    private BlockNode block;
+    /** The block statements to try. */
+    private BlockStatementListNode body;
     
     /** This catch block's exception variable. */
     private VariableNode parameter;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
-        /** Attribute for the block property. */
-        BLOCK,
+        /** Attribute for the body property. */
+        BODY,
         /** Attribute for the parameter property. */
         PARAMETER,
     }
     
     /** General constructor. */
     public CatchNodeImpl(
-            BlockNode block,
+            BlockStatementListNode body,
             VariableNode parameter,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -44,39 +44,39 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setBlock(block, false);
+        setBody(body, false);
         setParameter(parameter, false);
     }
     
     /**
-     * Gets the block to execute when this catch occurs.
-     * @return The block to execute when this catch occurs.
+     * Gets the block statements to try.
+     * @return The block statements to try.
      */
-    public BlockNode getBlock()
+    public BlockStatementListNode getBody()
     {
-        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.READ);
-        return this.block;
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        return this.body;
     }
     
     /**
-     * Changes the block to execute when this catch occurs.
-     * @param block The block to execute when this catch occurs.
+     * Changes the block statements to try.
+     * @param body The block statements to try.
      */
-    public void setBlock(BlockNode block)
+    public void setBody(BlockStatementListNode body)
     {
-            setBlock(block, true);
+            setBody(body, true);
     }
     
-    private void setBlock(BlockNode block, boolean checkPermissions)
+    private void setBody(BlockStatementListNode body, boolean checkPermissions)
     {
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        setAsChild(block, false);
-        this.block = block;
-        setAsChild(block, true);
+        setAsChild(body, false);
+        this.body = body;
+        setAsChild(body, true);
     }
     
     /**
@@ -121,9 +121,9 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.block != null)
+        if (this.body != null)
         {
-            this.block.receive(visitor);
+            this.body.receive(visitor);
         }
         if (this.parameter != null)
         {
@@ -150,9 +150,9 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.block != null)
+        if (this.body != null)
         {
-            this.block.receiveTyped(visitor);
+            this.body.receiveTyped(visitor);
         }
         if (this.parameter != null)
         {
@@ -191,7 +191,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getBlock());
+        list.add(getBody());
         list.add(getParameter());
         return list;
     }
@@ -205,8 +205,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("block=");
-        sb.append(this.getBlock() == null? "null" : this.getBlock().getClass().getSimpleName());
+        sb.append("body=");
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
         sb.append(',');
         sb.append("parameter=");
         sb.append(this.getParameter() == null? "null" : this.getParameter().getClass().getSimpleName());
@@ -241,7 +241,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public CatchNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeCatchNode(
-                getBlock()==null?null:getBlock().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
                 getParameter()==null?null:getParameter().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
@@ -258,9 +258,9 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBlock()) && (after instanceof BlockNode))
+        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
         {
-            setBlock((BlockNode)after);
+            setBody((BlockStatementListNode)after);
             return true;
         }
         if (before.equals(this.getParameter()) && (after instanceof VariableNode))

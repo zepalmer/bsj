@@ -180,12 +180,12 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
             {
                 // optional variable, add building method for it
                 builderMembers.add(factory.makeMethodDeclarationNode(
-                        factory.makeBlockNode(factory.makeBlockStatementListNode(
+                        factory.makeBlockStatementListNode(
                                 factory.makeExpressionStatementNode(factory.makeAssignmentNode(
                                         factory.makeFieldAccessByNameNode(factory.parseNameNode(variable.getName().getIdentifier())), 
                                         AssignmentOperator.ASSIGNMENT, 
                                         factory.makeFieldAccessByNameNode(factory.parseNameNode("val")))), 
-                                factory.makeReturnNode(factory.makeThisNode()))), 
+                                factory.makeReturnNode(factory.makeThisNode())), 
                         factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                         variable.getName().deepCopy(factory), 
                         factory.makeVariableListNode(factory.makeVariableNode(variable.getType().deepCopy(factory), factory.makeIdentifierNode("val"))), 
@@ -204,10 +204,10 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
         
         // public ~:className:~ build() {return new ~:className:~(this);}
         builderMembers.add(factory.makeMethodDeclarationNode(
-                factory.makeBlockNode(factory.makeBlockStatementListNode(
+                factory.makeBlockStatementListNode(
                         factory.makeReturnNode(factory.makeUnqualifiedClassInstantiationNode(
                                 factory.makeUnparameterizedTypeNode(factory.parseNameNode(className)), 
-                                factory.makeExpressionListNode(factory.makeThisNode()))))), 
+                                factory.makeExpressionListNode(factory.makeThisNode())))), 
                 factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                 factory.makeIdentifierNode("build"), 
                 factory.makeVariableListNode(), 

@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -26,18 +27,24 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     /** The loop's statement. */
     private StatementNode statement;
     
+    /** The meta-annotations associated with this node. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the condition property. */
         CONDITION,
         /** Attribute for the statement property. */
         STATEMENT,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
     }
     
     /** General constructor. */
     public WhileLoopNodeImpl(
             ExpressionNode condition,
             StatementNode statement,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -46,6 +53,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
         super(startLocation, stopLocation, manager, binary);
         setCondition(condition, false);
         setStatement(statement, false);
+        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -108,6 +116,37 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
         setAsChild(statement, false);
         this.statement = statement;
         setAsChild(statement, true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.
+     * @return The meta-annotations associated with this node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+        }
+        setAsChild(metaAnnotations, false);
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -213,6 +252,9 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
         sb.append("statement=");
         sb.append(this.getStatement() == null? "null" : this.getStatement().getClass().getSimpleName());
         sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -245,6 +287,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
         return factory.makeWhileLoopNode(
                 getCondition()==null?null:getCondition().deepCopy(factory),
                 getStatement()==null?null:getStatement().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -268,6 +311,11 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
         if (before.equals(this.getStatement()) && (after instanceof StatementNode))
         {
             setStatement((StatementNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;

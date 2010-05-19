@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -28,7 +28,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclarationNode
 {
     /** The body of this method. */
-    private BlockNode body;
+    private BlockStatementListNode body;
     
     /** The modifiers for this method. */
     private MethodModifiersNode modifiers;
@@ -78,7 +78,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     
     /** General constructor. */
     public MethodDeclarationNodeImpl(
-            BlockNode body,
+            BlockStatementListNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
             VariableListNode parameters,
@@ -108,7 +108,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Gets the body of this method.
      * @return The body of this method.
      */
-    public BlockNode getBody()
+    public BlockStatementListNode getBody()
     {
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
         return this.body;
@@ -118,12 +118,12 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Changes the body of this method.
      * @param body The body of this method.
      */
-    public void setBody(BlockNode body)
+    public void setBody(BlockStatementListNode body)
     {
             setBody(body, true);
     }
     
-    private void setBody(BlockNode body, boolean checkPermissions)
+    private void setBody(BlockStatementListNode body, boolean checkPermissions)
     {
         if (checkPermissions)
         {
@@ -628,9 +628,9 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBody()) && (after instanceof BlockNode))
+        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
         {
-            setBody((BlockNode)after);
+            setBody((BlockStatementListNode)after);
             return true;
         }
         if (before.equals(this.getModifiers()) && (after instanceof MethodModifiersNode))

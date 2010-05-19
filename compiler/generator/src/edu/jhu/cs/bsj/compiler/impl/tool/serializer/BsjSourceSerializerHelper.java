@@ -330,7 +330,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		p.print("{\n");
 		p.incPrependCount();
-		handleListNode(node.getStatements(), "", "\n", "\n", p, true);
+		node.getStatements().executeOperation(this, p);
 		p.decPrependCount();
 		p.print("}");
 		return null;
@@ -339,7 +339,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeBlockStatementListNode(BlockStatementListNode node, PrependablePrintStream p)
 	{
-		executeListNode(node, p);
+		handleListNode(node, "", "\n", "\n", p, true);
 		return null;
 	}
 
@@ -398,10 +398,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeCatchNode(CatchNode node, PrependablePrintStream p)
 	{
-		p.print("catch (");
+		p.print(" catch (");
 		node.getParameter().executeOperation(this, p);
 		p.print(")\n");
-		node.getBlock().executeOperation(this, p);
+		p.print("{\n");
+		p.incPrependCount();
+		node.getBody().executeOperation(this, p);
+		p.decPrependCount();
+		p.print("}");
 		return null;
 	}
 
@@ -1105,7 +1109,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		if (node.getBody() != null)
 		{
 			p.print("\n");
+			p.println("{");
+			p.incPrependCount();
 			node.getBody().executeOperation(this, p);
+			p.decPrependCount();
+			p.println("}");
 		} else
 		{
 			p.print(";");
@@ -1443,7 +1451,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print("synchronized (");
 		node.getExpression().executeOperation(this, p);
 		p.print(")\n");
-		node.getBlock().executeOperation(this, p);
+		node.getBody().executeOperation(this, p);
 		return null;
 	}
 
@@ -1472,12 +1480,20 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeTryNode(TryNode node, PrependablePrintStream p)
 	{
 		p.print("try\n");
-		node.getBlock().executeOperation(this, p);
+		p.print("{\n");
+		p.incPrependCount();
+		node.getBody().executeOperation(this, p);
+		p.decPrependCount();
+		p.print("} ");
 		handleListNode(node.getCatches(), "", "", "", p, true);
 		if (node.getFinallyBlock() != null)
 		{
 			p.print("finally\n");
+			p.print("{\n");
+			p.incPrependCount();
 			node.getFinallyBlock().executeOperation(this, p);
+			p.decPrependCount();
+			p.print("}\n");
 		}
 		return null;
 	}

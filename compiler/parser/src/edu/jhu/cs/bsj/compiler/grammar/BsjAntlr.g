@@ -2277,7 +2277,8 @@ initializerBlock returns [InitializerDeclarationNode ret]
         {
             $ret = factory.makeInitializerDeclarationNode(
                     $staticText!=null,
-                    $block.ret);
+                    $block.ret,
+                    $metaAnnotationList.ret);
         }
     ;
     
@@ -2472,7 +2473,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("methodDeclaration");
-            BlockNode blockNode = null;
+            BlockStatementListNode body = null;
             TypeParameterListNode typeParametersNode =
                     factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
             UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
@@ -2510,14 +2511,14 @@ methodDeclaration returns [MethodDeclarationNode ret]
         (        
             block   
             {
-                blockNode = $block.ret;
+                body = $block.ret;
             }
         |
             ';' 
         )
         {
             $ret = factory.makeMethodDeclarationNode(
-                    blockNode,
+                    body,
                     $methodModifiers.ret,
                     $id.ret,
                     $formalParameters.parameters,
@@ -3423,7 +3424,7 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         }
         ;
 
-block returns [BlockNode ret]
+block returns [BlockStatementListNode ret]
         scope Rule;
         @init {
             ruleStart("block");
@@ -3436,7 +3437,7 @@ block returns [BlockNode ret]
         blockStatementList
         '}'
         {
-            $ret = factory.makeBlockNode($blockStatementList.ret);
+            $ret = $blockStatementList.ret;
         }
     ;
 
@@ -3539,7 +3540,7 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
                     factory.makeVariableDeclaratorListNode(list));
         }
     ;
-
+    
 statement returns [StatementNode ret]
         scope Rule;
         @init{
@@ -3551,10 +3552,30 @@ statement returns [StatementNode ret]
         @after {
             ruleStop();
         }
+    :
+        metaAnnotationList
+        javaStatement[$metaAnnotationList.ret]
+        {
+            $ret = $javaStatement.ret;
+        }
+    ;   
+
+javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret]
+        scope Rule;
+        @init{
+            ruleStart("javaStatement");
+            IdentifierNode idNode = null;
+            ExpressionNode expNode = null;
+            StatementNode stmtNode = null;
+        }
+        @after {
+            ruleStop();
+        }
+        // TODO: do something with the metaAnnotations parameter
     :   
         block
         {
-            $ret = $block.ret;
+            $ret = factory.makeBlockNode($block.ret, metaAnnotations);
         }
     |   
         'assert' e1=expression 
@@ -3746,7 +3767,7 @@ trystatement returns [TryNode ret]
         @init {
             ruleStart("trystatement");
             CatchListNode catchList = factory.makeCatchListNode(new ArrayList<CatchNode>());
-            BlockNode finallyBlock = null;
+            BlockStatementListNode finallyBlock = null;
         }    
         @after {
             ruleStop();

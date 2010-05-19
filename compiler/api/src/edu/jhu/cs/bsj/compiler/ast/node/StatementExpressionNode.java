@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A tagging interface which marks all expressions which may be used as statements.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface StatementExpressionNode extends Node, MetaAnnotatableNode, ExpressionNode
+public interface StatementExpressionNode extends Node, ExpressionNode
 {
     /**
      * Generates a deep copy of this node.

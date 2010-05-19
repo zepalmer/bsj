@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -22,15 +23,21 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     /** The statements contained in this block statement. */
     private BlockStatementListNode statements;
     
+    /** The meta-annotations associated with this node. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the statements property. */
         STATEMENTS,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
     }
     
     /** General constructor. */
     public BlockNodeImpl(
             BlockStatementListNode statements,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +45,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     {
         super(startLocation, stopLocation, manager, binary);
         setStatements(statements, false);
+        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -69,6 +77,37 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         setAsChild(statements, false);
         this.statements = statements;
         setAsChild(statements, true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.
+     * @return The meta-annotations associated with this node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+        }
+        setAsChild(metaAnnotations, false);
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -162,6 +201,9 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         sb.append("statements=");
         sb.append(this.getStatements() == null? "null" : this.getStatements().getClass().getSimpleName());
         sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -193,6 +235,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     {
         return factory.makeBlockNode(
                 getStatements()==null?null:getStatements().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -211,6 +254,11 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         if (before.equals(this.getStatements()) && (after instanceof BlockStatementListNode))
         {
             setStatements((BlockStatementListNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;

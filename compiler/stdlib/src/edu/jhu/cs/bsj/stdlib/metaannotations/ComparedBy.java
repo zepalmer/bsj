@@ -205,7 +205,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
         
         // create a method declaration for compareTo(T o)
         return factory.makeMethodDeclarationNode(
-                factory.makeBlockNode(factory.makeBlockStatementListNode(statements)), 
+                factory.makeBlockStatementListNode(statements), 
                 factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                 factory.makeIdentifierNode("compareTo"), 
                 factory.makeVariableListNode(factory.makeVariableNode(

@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -30,6 +31,9 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     /** The loop's statement. */
     private StatementNode statement;
     
+    /** The meta-annotations associated with this node. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the variable property. */
@@ -38,6 +42,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         EXPRESSION,
         /** Attribute for the statement property. */
         STATEMENT,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
     }
     
     /** General constructor. */
@@ -45,6 +51,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             VariableNode variable,
             ExpressionNode expression,
             StatementNode statement,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -54,6 +61,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         setVariable(variable, false);
         setExpression(expression, false);
         setStatement(statement, false);
+        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -147,6 +155,37 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         setAsChild(statement, false);
         this.statement = statement;
         setAsChild(statement, true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.
+     * @return The meta-annotations associated with this node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+        }
+        setAsChild(metaAnnotations, false);
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -264,6 +303,9 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         sb.append("statement=");
         sb.append(this.getStatement() == null? "null" : this.getStatement().getClass().getSimpleName());
         sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -297,6 +339,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
                 getVariable()==null?null:getVariable().deepCopy(factory),
                 getExpression()==null?null:getExpression().deepCopy(factory),
                 getStatement()==null?null:getStatement().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -325,6 +368,11 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         if (before.equals(this.getStatement()) && (after instanceof StatementNode))
         {
             setStatement((StatementNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;

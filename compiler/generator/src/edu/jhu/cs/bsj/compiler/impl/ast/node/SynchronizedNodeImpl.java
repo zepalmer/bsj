@@ -10,10 +10,11 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -23,21 +24,27 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     /** The synchronization expression. */
     private ExpressionNode expression;
     
-    /** The block of statements to synchronize. */
-    private BlockNode block;
+    /** The block statements to synchronize. */
+    private BlockStatementListNode body;
+    
+    /** The meta-annotations associated with this node. */
+    private MetaAnnotationListNode metaAnnotations;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the expression property. */
         EXPRESSION,
-        /** Attribute for the block property. */
-        BLOCK,
+        /** Attribute for the body property. */
+        BODY,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
     }
     
     /** General constructor. */
     public SynchronizedNodeImpl(
             ExpressionNode expression,
-            BlockNode block,
+            BlockStatementListNode body,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -45,7 +52,8 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     {
         super(startLocation, stopLocation, manager, binary);
         setExpression(expression, false);
-        setBlock(block, false);
+        setBody(body, false);
+        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -80,34 +88,65 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     }
     
     /**
-     * Gets the block of statements to synchronize.
-     * @return The block of statements to synchronize.
+     * Gets the block statements to synchronize.
+     * @return The block statements to synchronize.
      */
-    public BlockNode getBlock()
+    public BlockStatementListNode getBody()
     {
-        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.READ);
-        return this.block;
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        return this.body;
     }
     
     /**
-     * Changes the block of statements to synchronize.
-     * @param block The block of statements to synchronize.
+     * Changes the block statements to synchronize.
+     * @param body The block statements to synchronize.
      */
-    public void setBlock(BlockNode block)
+    public void setBody(BlockStatementListNode body)
     {
-            setBlock(block, true);
+            setBody(body, true);
     }
     
-    private void setBlock(BlockNode block, boolean checkPermissions)
+    private void setBody(BlockStatementListNode body, boolean checkPermissions)
     {
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        setAsChild(block, false);
-        this.block = block;
-        setAsChild(block, true);
+        setAsChild(body, false);
+        this.body = body;
+        setAsChild(body, true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.
+     * @return The meta-annotations associated with this node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+        }
+        setAsChild(metaAnnotations, false);
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -125,9 +164,9 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         {
             this.expression.receive(visitor);
         }
-        if (this.block != null)
+        if (this.body != null)
         {
-            this.block.receive(visitor);
+            this.body.receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -154,9 +193,9 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         {
             this.expression.receiveTyped(visitor);
         }
-        if (this.block != null)
+        if (this.body != null)
         {
-            this.block.receiveTyped(visitor);
+            this.body.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -194,7 +233,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
-        list.add(getBlock());
+        list.add(getBody());
         return list;
     }
     
@@ -210,8 +249,11 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         sb.append("expression=");
         sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
         sb.append(',');
-        sb.append("block=");
-        sb.append(this.getBlock() == null? "null" : this.getBlock().getClass().getSimpleName());
+        sb.append("body=");
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -244,7 +286,8 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     {
         return factory.makeSynchronizedNode(
                 getExpression()==null?null:getExpression().deepCopy(factory),
-                getBlock()==null?null:getBlock().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -265,9 +308,14 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             setExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getBlock()) && (after instanceof BlockNode))
+        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
         {
-            setBlock((BlockNode)after);
+            setBody((BlockStatementListNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;

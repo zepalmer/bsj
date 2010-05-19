@@ -19,7 +19,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
@@ -261,11 +260,10 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		// Steal the method body from the metaprogram node
 		BlockStatementListNode metaprogramBody = metaprogramNode.getBody();
 		metaprogramNode.setBody(null);
-		BlockNode methodBlock = factory.makeBlockNode(metaprogramBody);
 
 		// Build the contents of the metaprogram class
 		MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(
-				methodBlock,
+				metaprogramBody,
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC),
 				factory.makeIdentifierNode("execute"),
 				factory.makeVariableListNode(factory.makeVariableNode(

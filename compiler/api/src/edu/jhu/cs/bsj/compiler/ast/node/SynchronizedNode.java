@@ -28,16 +28,16 @@ public interface SynchronizedNode extends Node, StatementNode
     public void setExpression(ExpressionNode expression);
     
     /**
-     * Gets the block of statements to synchronize.
-     * @return The block of statements to synchronize.
+     * Gets the block statements to synchronize.
+     * @return The block statements to synchronize.
      */
-    public BlockNode getBlock();
+    public BlockStatementListNode getBody();
     
     /**
-     * Changes the block of statements to synchronize.
-     * @param block The block of statements to synchronize.
+     * Changes the block statements to synchronize.
+     * @param body The block statements to synchronize.
      */
-    public void setBlock(BlockNode block);
+    public void setBody(BlockStatementListNode body);
     
     /**
      * Generates a deep copy of this node.

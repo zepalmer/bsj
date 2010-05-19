@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -29,6 +30,9 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     /** The else branch's statement. */
     private StatementNode elseStatement;
     
+    /** The meta-annotations associated with this node. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the condition property. */
@@ -37,6 +41,8 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         THEN_STATEMENT,
         /** Attribute for the elseStatement property. */
         ELSE_STATEMENT,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
     }
     
     /** General constructor. */
@@ -44,6 +50,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             ExpressionNode condition,
             StatementNode thenStatement,
             StatementNode elseStatement,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -53,6 +60,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         setCondition(condition, false);
         setThenStatement(thenStatement, false);
         setElseStatement(elseStatement, false);
+        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -146,6 +154,37 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         setAsChild(elseStatement, false);
         this.elseStatement = elseStatement;
         setAsChild(elseStatement, true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.
+     * @return The meta-annotations associated with this node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+        }
+        setAsChild(metaAnnotations, false);
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -263,6 +302,9 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         sb.append("elseStatement=");
         sb.append(this.getElseStatement() == null? "null" : this.getElseStatement().getClass().getSimpleName());
         sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -296,6 +338,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
                 getCondition()==null?null:getCondition().deepCopy(factory),
                 getThenStatement()==null?null:getThenStatement().deepCopy(factory),
                 getElseStatement()==null?null:getElseStatement().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -324,6 +367,11 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (before.equals(this.getElseStatement()) && (after instanceof StatementNode))
         {
             setElseStatement((StatementNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;

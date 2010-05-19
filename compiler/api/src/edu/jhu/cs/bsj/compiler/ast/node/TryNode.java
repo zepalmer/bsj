@@ -7,33 +7,33 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 /**
  * A node to represent a try-catch block, as in:
  * <pre>
- * try <i>block</i>
- * catch (<i>type name</i>) <i>block</i>
+ * try { <i>statement</i> ... }
+ * catch (<i>type name</i>) { <i>statement</i> ... }
  * </pre>
  * or
  * <pre>
  * try <i>block</i>
- * catch (<i>type name</i>) <i>block</i>
- * catch (<i>type name</i>) <i>block</i>
- * finally <i>block</i>
+ * catch (<i>type name</i>) { <i>statement</i> ... }
+ * catch (<i>type name</i>) { <i>statement</i> ... }
+ * finally { <i>statement</i> ... }
  * </pre>
  * If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
- * <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
+ * <tt>finally</tt> will contain no children.  At least one of these two lists must be non-empty.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface TryNode extends Node, StatementNode
 {
     /**
-     * Gets the block in which to try.
-     * @return The block in which to try.
+     * Gets the block statements to try.
+     * @return The block statements to try.
      */
-    public BlockNode getBlock();
+    public BlockStatementListNode getBody();
     
     /**
-     * Changes the block in which to try.
-     * @param block The block in which to try.
+     * Changes the block statements to try.
+     * @param body The block statements to try.
      */
-    public void setBlock(BlockNode block);
+    public void setBody(BlockStatementListNode body);
     
     /**
      * Gets the catch conditions.
@@ -51,13 +51,13 @@ public interface TryNode extends Node, StatementNode
      * Gets the finally block.
      * @return The finally block.
      */
-    public BlockNode getFinallyBlock();
+    public BlockStatementListNode getFinallyBlock();
     
     /**
      * Changes the finally block.
      * @param finallyBlock The finally block.
      */
-    public void setFinallyBlock(BlockNode finallyBlock);
+    public void setFinallyBlock(BlockStatementListNode finallyBlock);
     
     /**
      * Generates a deep copy of this node.

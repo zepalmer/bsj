@@ -1887,7 +1887,7 @@ public class SourceGenerator
 				} else
 				{
 					throw new IllegalStateException("Property " + p.getName()
-							+ " is invisible in factory method with no default.");
+							+ " is invisible in factory method of " + def.getBaseName() + " with no default.");
 				}
 			}
 			ps.print(")");
@@ -2279,7 +2279,7 @@ public class SourceGenerator
 			}
 			ps.println("),");
 			ps.decPrependCount(2);
-			ps.println("factory.makeReferenceTypeListNode(), factory.makeMetaAnnotationListNode());");
+			ps.println("factory.makeReferenceTypeListNode());");
 			ps.decPrependCount(4);
 			ps.println();
 			ps.println("return ret;");

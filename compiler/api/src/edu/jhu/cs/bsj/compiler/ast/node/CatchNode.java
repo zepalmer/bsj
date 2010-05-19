@@ -7,24 +7,26 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 /**
  * A node representing a catch block, as in
  * <pre>
- * catch (<i>type identifier</i>)
- *     <i>block</i>
+ * catch (<i>type identifier</i>) {
+ *     <i>statement</i>
+ *     ...
+ * }
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface CatchNode extends Node
 {
     /**
-     * Gets the block to execute when this catch occurs.
-     * @return The block to execute when this catch occurs.
+     * Gets the block statements to try.
+     * @return The block statements to try.
      */
-    public BlockNode getBlock();
+    public BlockStatementListNode getBody();
     
     /**
-     * Changes the block to execute when this catch occurs.
-     * @param block The block to execute when this catch occurs.
+     * Changes the block statements to try.
+     * @param body The block statements to try.
      */
-    public void setBlock(BlockNode block);
+    public void setBody(BlockStatementListNode body);
     
     /**
      * Gets this catch block's exception variable.

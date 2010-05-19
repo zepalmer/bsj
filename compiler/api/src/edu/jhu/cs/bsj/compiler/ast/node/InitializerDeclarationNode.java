@@ -31,13 +31,13 @@ public interface InitializerDeclarationNode extends Node, ClassMemberNode, Anony
      * Gets the body of the initializer.
      * @return The body of the initializer.
      */
-    public BlockNode getBody();
+    public BlockStatementListNode getBody();
     
     /**
      * Changes the body of the initializer.
      * @param body The body of the initializer.
      */
-    public void setBody(BlockNode body);
+    public void setBody(BlockStatementListNode body);
     
     /**
      * Generates a deep copy of this node.

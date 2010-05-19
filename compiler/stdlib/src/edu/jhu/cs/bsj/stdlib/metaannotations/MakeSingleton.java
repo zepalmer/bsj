@@ -55,9 +55,9 @@ public class MakeSingleton extends AbstractBsjMetaAnnotationMetaprogram
             BsjNodeFactory factory)
     {
         return factory.makeMethodDeclarationNode(
-                factory.makeBlockNode(factory.makeBlockStatementListNode(
+                factory.makeBlockStatementListNode(
                         factory.makeReturnNode(factory.makeFieldAccessByNameNode(
-                                factory.parseNameNode(singletonName))))), 
+                                factory.parseNameNode(singletonName)))), 
                 factory.makeMethodModifiersNode(AccessModifier.PUBLIC, false, true, false, false, false, false, factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()), 
                 factory.makeIdentifierNode("getInstance"), 
                 factory.makeVariableListNode(), 

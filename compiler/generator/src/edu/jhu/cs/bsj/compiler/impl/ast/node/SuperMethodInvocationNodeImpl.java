@@ -16,7 +16,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -35,9 +34,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     /** The type arguments for the method. */
     private ReferenceTypeListNode typeArguments;
     
-    /** The meta-annotations associated with this node. */
-    private MetaAnnotationListNode metaAnnotations;
-    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the type property. */
@@ -48,8 +44,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         ARGUMENTS,
         /** Attribute for the typeArguments property. */
         TYPE_ARGUMENTS,
-        /** Attribute for the metaAnnotations property. */
-        META_ANNOTATIONS,
     }
     
     /** General constructor. */
@@ -58,7 +52,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments,
-            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -69,7 +62,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         setIdentifier(identifier, false);
         setArguments(arguments, false);
         setTypeArguments(typeArguments, false);
-        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -194,37 +186,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;
         setAsChild(typeArguments, true);
-    }
-    
-    /**
-     * Gets the meta-annotations associated with this node.
-     * @return The meta-annotations associated with this node.
-     */
-    public MetaAnnotationListNode getMetaAnnotations()
-    {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
-        return this.metaAnnotations;
-    }
-    
-    /**
-     * Changes the meta-annotations associated with this node.
-     * @param metaAnnotations The meta-annotations associated with this node.
-     */
-    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
-    {
-            setMetaAnnotations(metaAnnotations, true);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
-        }
-        setAsChild(metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
-        setAsChild(metaAnnotations, true);
     }
     
     /**
@@ -356,9 +317,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         sb.append("typeArguments=");
         sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
         sb.append(',');
-        sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
-        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -393,7 +351,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getArguments()==null?null:getArguments().deepCopy(factory),
                 getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -427,11 +384,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
         {
             setTypeArguments((ReferenceTypeListNode)after);
-            return true;
-        }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
-        {
-            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;

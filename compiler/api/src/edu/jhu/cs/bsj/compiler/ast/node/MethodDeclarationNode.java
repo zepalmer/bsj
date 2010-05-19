@@ -15,9 +15,13 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  *     public void foo(String... vararg)
  * </pre>
  * The type on the <tt>varargParameter</tt> node should be <tt>String</tt> in the above case (and <i>not</i>
- * <tt>String[]</tt>).  Also observe that methods with no body, such as the abstract method
+ * <tt>String[]</tt>).
+ * <p/>
+ * Observe that methods with no body, such as the abstract method
  * <pre>public abstract void foo();</pre>
- * will have a <tt>null</tt> body.
+ * will have a <tt>null</tt> body.  Also, methods which are representative of those declarations found in
+ * binaries will have a <tt>null</tt> body.  This is an exception to the usual rule that lists are non-null
+ * in the AST API.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface MethodDeclarationNode extends Node, ClassMemberNode, InterfaceMemberNode, AnonymousClassMemberNode
@@ -26,13 +30,13 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode, InterfaceM
      * Gets the body of this method.
      * @return The body of this method.
      */
-    public BlockNode getBody();
+    public BlockStatementListNode getBody();
     
     /**
      * Changes the body of this method.
      * @param body The body of this method.
      */
-    public void setBody(BlockNode body);
+    public void setBody(BlockStatementListNode body);
     
     /**
      * Gets the modifiers for this method.

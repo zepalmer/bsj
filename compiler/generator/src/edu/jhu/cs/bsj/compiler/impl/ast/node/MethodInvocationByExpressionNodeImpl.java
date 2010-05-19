@@ -16,7 +16,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -43,13 +42,12 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments,
-            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(arguments, typeArguments, metaAnnotations, startLocation, stopLocation, manager, binary);
+        super(arguments, typeArguments, startLocation, stopLocation, manager, binary);
         setExpression(expression, false);
         setIdentifier(identifier, false);
     }
@@ -225,9 +223,6 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         sb.append("typeArguments=");
         sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
         sb.append(',');
-        sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
-        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -262,7 +257,6 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getArguments()==null?null:getArguments().deepCopy(factory),
                 getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -296,11 +290,6 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
         {
             setTypeArguments((ReferenceTypeListNode)after);
-            return true;
-        }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
-        {
-            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;
