@@ -1454,9 +1454,10 @@ noOp returns [NoOperationNode ret]
             ruleStop();
         }
     :
+        metaAnnotationList
         ';'
         {
-            $ret = factory.makeNoOperationNode();
+            $ret = factory.makeNoOperationNode($metaAnnotationList.ret);
         }
     ;
 
@@ -2172,32 +2173,6 @@ referenceTypeList returns [ReferenceTypeListNode ret]
             }
         )*
     ;
-
-/*
-TODO: remove?
-typeList returns [TypeListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeList");
-            List<TypeNode> list = new ArrayList<TypeNode>();
-        }
-        @after {
-            $ret = factory.makeTypeListNode(list);
-            ruleStop();
-        }
-    :   
-        a=type
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=type
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
-*/
 
 classBody returns [ClassBodyNode ret]
         scope Rule;
@@ -3571,7 +3546,6 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
         @after {
             ruleStop();
         }
-        // TODO: do something with the metaAnnotations parameter
     :   
         block
         {
@@ -3588,7 +3562,8 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
         {
             $ret = factory.makeAssertStatementNode(
                 $e1.ret,
-                expNode);
+                expNode,
+                metaAnnotations);
         }        
     |   
         'if' parExpression s1=statement 
@@ -3602,10 +3577,11 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
             $ret = factory.makeIfNode(
                 $parExpression.ret,
                 $s1.ret,
-                stmtNode);
+                stmtNode,
+                metaAnnotations);
         }   
     |   
-        forstatement
+        forstatement[metaAnnotations]
         {
             $ret = $forstatement.ret;
         }
@@ -3614,17 +3590,19 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
         {
             $ret = factory.makeWhileLoopNode(
                 $parExpression.ret,
-                $s.ret);
+                $s.ret,
+                metaAnnotations);
         }
     |   
         'do' s=statement 'while' parExpression ';'
         {
             $ret = factory.makeDoWhileLoopNode(
                 $parExpression.ret,
-                $s.ret);
+                $s.ret,
+                metaAnnotations);
         }
     |   
-        trystatement
+        trystatement[metaAnnotations]
         {
             $ret = $trystatement.ret;
         }
@@ -3633,14 +3611,16 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
         {
             $ret = factory.makeSwitchNode(
                 $parExpression.ret,
-                $switchBlockStatementGroups.ret);
+                $switchBlockStatementGroups.ret,
+                metaAnnotations);
         }
     |   
         'synchronized' parExpression block
         {
             $ret = factory.makeSynchronizedNode(
                 $parExpression.ret,
-                $block.ret);
+                $block.ret,
+                metaAnnotations);
         }
     |   
         'return' 
@@ -3651,13 +3631,13 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
             }
         )? ';'
         {
-            $ret = factory.makeReturnNode(expNode);
+            $ret = factory.makeReturnNode(expNode, metaAnnotations);
         }
     |   
         'throw' expression ';'
         {
             $ret = factory.makeThrowNode(
-                $expression.ret);
+                $expression.ret, metaAnnotations);
         }
     |   
         'break'
@@ -3668,7 +3648,7 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
             }
         )? ';'
         {
-            $ret = factory.makeBreakNode(idNode);
+            $ret = factory.makeBreakNode(idNode, metaAnnotations);
         }
     |   
         'continue' 
@@ -3679,24 +3659,25 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
             }
         )? ';'
         {
-            $ret = factory.makeContinueNode(idNode);
+            $ret = factory.makeContinueNode(idNode, metaAnnotations);
         }
     |   
         statementExpression  ';'  
         {
-            $ret = factory.makeExpressionStatementNode($statementExpression.ret);
+            $ret = factory.makeExpressionStatementNode($statementExpression.ret, metaAnnotations);
         }   
     |   
         a=identifier ':' s=statement
         {
             $ret = factory.makeLabeledStatementNode(
                 $a.ret,
-                $s.ret);
+                $s.ret,
+                metaAnnotations);
         }
     |   
-        noOp
+        ';'
         {
-            $ret = $noOp.ret;
+            $ret = factory.makeNoOperationNode(metaAnnotations);
         }
     ;
 
@@ -3762,7 +3743,7 @@ switchLabel returns [ExpressionNode ret]
     ;
 
 
-trystatement returns [TryNode ret]
+trystatement[MetaAnnotationListNode metaAnnotations] returns [TryNode ret]
         scope Rule;
         @init {
             ruleStart("trystatement");
@@ -3795,7 +3776,8 @@ trystatement returns [TryNode ret]
             $ret = factory.makeTryNode(
                     $b.ret,
                     catchList,
-                    finallyBlock);
+                    finallyBlock,
+                    metaAnnotations);
         }        
     ;
 
@@ -3875,7 +3857,7 @@ formalParameter returns [VariableNode ret]
         }
     ;
 
-forstatement returns [StatementNode ret]
+forstatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret]
         scope Rule;
         @init{
             ruleStart("forstatement");
@@ -3898,7 +3880,8 @@ forstatement returns [StatementNode ret]
                     $type.ret,
                     $id.ret),
                 $expression.ret,
-                $statement.ret);
+                $statement.ret,
+                metaAnnotations);
         }        
     |   
         // normal for loop
@@ -3928,7 +3911,8 @@ forstatement returns [StatementNode ret]
                     forInitNode, 
                     expNode,
                     expListNode,
-                    $statement.ret);
+                    $statement.ret,
+                    metaAnnotations);
         }                 
     ;
 
