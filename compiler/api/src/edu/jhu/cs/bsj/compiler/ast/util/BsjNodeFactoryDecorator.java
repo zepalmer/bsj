@@ -3431,6 +3431,40 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
+            BlockNode body,
+            MetaAnnotationListNode metaAnnotations)
+    {
+        this.before();
+        InitializerDeclarationNode node = factory.makeInitializerDeclarationNode(staticInitializer, body, metaAnnotations);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
+            BlockNode body,
+            MetaAnnotationListNode metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        InitializerDeclarationNode node = factory.makeInitializerDeclarationNode(staticInitializer, body, metaAnnotations, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
             BlockNode body)
     {
         this.before();
@@ -5642,6 +5676,80 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
+            AnonymousClassBodyNode body)
+    {
+        this.before();
+        QualifiedClassInstantiationNode node = factory.makeQualifiedClassInstantiationNode(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
+            AnonymousClassBodyNode body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        QualifiedClassInstantiationNode node = factory.makeQualifiedClassInstantiationNode(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments)
+    {
+        this.before();
+        QualifiedClassInstantiationNode node = factory.makeQualifiedClassInstantiationNode(enclosingExpression, identifier, typeArguments);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        QualifiedClassInstantiationNode node = factory.makeQualifiedClassInstantiationNode(enclosingExpression, identifier, typeArguments, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a QualifiedNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -6175,6 +6283,42 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         SuperMethodInvocationNode node = factory.makeSuperMethodInvocationNode(identifier, arguments, typeArguments, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            UnparameterizedTypeNode type,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            ReferenceTypeListNode typeArguments)
+    {
+        this.before();
+        SuperMethodInvocationNode node = factory.makeSuperMethodInvocationNode(type, identifier, arguments, typeArguments);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            UnparameterizedTypeNode type,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            ReferenceTypeListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        SuperMethodInvocationNode node = factory.makeSuperMethodInvocationNode(type, identifier, arguments, typeArguments, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -6829,6 +6973,38 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         UnaryStatementExpressionNode node = factory.makeUnaryStatementExpressionNode(expression, operator, metaAnnotations, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator)
+    {
+        this.before();
+        UnaryStatementExpressionNode node = factory.makeUnaryStatementExpressionNode(expression, operator);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        UnaryStatementExpressionNode node = factory.makeUnaryStatementExpressionNode(expression, operator, startLocation, stopLocation);
         this.after(node);
         return node;
     }

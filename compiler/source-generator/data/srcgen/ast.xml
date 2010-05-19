@@ -109,10 +109,10 @@
                 parameterized types may not be used to create literals; that is, <tt>Set&lt;String&gt;.class</tt> is illegal.
             ]]></doc>
         </type>
-        
+
         <type name="MetaAnnotatableNode" super="Node" mode="tag">
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations associated with this node"
-                default="makeMetaAnnotationListNode()"/>
+                default="makeMetaAnnotationListNode()" />
             <doc><![CDATA[
                 This tagging interface describes nodes which may be meta-annotated.
             ]]></doc>
@@ -151,7 +151,7 @@
         </type>
 
         <type name="StatementExpressionNode" super="Node" mode="tag">
-            <tag name="MetaAnnotatableNode"/>
+            <tag name="MetaAnnotatableNode" />
             <tag name="ExpressionNode" />
             <doc><![CDATA[
                 A tagging interface which marks all expressions which may be used as statements.
@@ -402,7 +402,7 @@
         </type>
 
         <type name="ModifiersNode" super="Node" mode="abstract">
-            <tag name="MetaAnnotatableNode"/>
+            <tag name="MetaAnnotatableNode" />
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations modifying the subject"
                 default="makeMetaAnnotationListNode()" />
             <prop name="annotations" type="AnnotationListNode" desc="the annotations modifying the subject"
@@ -483,7 +483,7 @@
                 where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -717,6 +717,17 @@
                 }
                 </pre>
             ]]></doc>
+            <factory-method>
+                <prop name="enclosingExpression" />
+                <prop name="identifier" />
+                <prop name="typeArguments" />
+                <prop name="constructorTypeArguments" />
+                <prop name="arguments" />
+                <prop name="body" />
+            </factory-method>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="SuperFieldAccessNode" super="Node">
@@ -798,6 +809,12 @@
                 <prop name="arguments" />
                 <prop name="typeArguments" />
             </factory-method>
+            <factory-method>
+                <prop name="type" />
+                <prop name="identifier" />
+                <prop name="arguments" />
+                <prop name="typeArguments" />
+            </factory-method>
         </type>
 
         <type name="ThisNode" super="Node">
@@ -873,6 +890,9 @@
                 Note that this node does not cover those unary expressions which cannot be used as statement expressions.  For
                 those expressions, nodes of type {@link UnaryExpressionNode} should be used.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="UnqualifiedClassInstantiationNode" super="ClassInstantiationNode">
@@ -1365,7 +1385,7 @@
         </type>
 
         <type name="EnumConstantDeclarationNode" super="Node">
-            <tag name="MetaAnnotatableNode"/>
+            <tag name="MetaAnnotatableNode" />
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on this constant"
                 default="makeMetaAnnotationListNode()" />
             <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant"
@@ -1401,6 +1421,7 @@
         <type name="InitializerDeclarationNode" super="Node">
             <tag name="ClassMemberNode" />
             <tag name="AnonymousClassMemberNode" />
+            <tag name="MetaAnnotatableNode" />
             <prop name="staticInitializer" type="boolean" desc="whether or not the initializer is static" />
             <prop name="body" type="BlockNode" desc="the body of the initializer" />
             <doc><![CDATA[
@@ -1411,6 +1432,9 @@
                 }
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="MethodDeclarationNode" super="Node">
@@ -2079,7 +2103,7 @@
         </type>
 
         <type name="PackageDeclarationNode" super="Node">
-            <tag name="MetaAnnotatableNode"/>
+            <tag name="MetaAnnotatableNode" />
             <prop name="name" type="NameNode" desc="the name of the package" />
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on the package declaration"
                 default="makeMetaAnnotationListNode()" />
@@ -2220,10 +2244,10 @@
         </type>
 
         <!-- ====================== PREAMBLE NODES ====================== -->
-        
+
         <type name="MetaprogramDependencyNode" super="Node">
             <prop name="targetName" type="NameNode" desc="the name of the metaprogram target on which to depend" />
-            <prop name="weak" type="boolean" default="false" desc="whether or not this dependency is weak"/>
+            <prop name="weak" type="boolean" default="false" desc="whether or not this dependency is weak" />
             <doc><![CDATA[
                 Represents a single metaprogram dependency in a dependency declaration, as in
                 <pre>
@@ -2235,7 +2259,7 @@
                 </pre>
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -2494,15 +2518,16 @@
                 Represents a list of {@link MetaprogramDependencyNode}s.
             ]]></doc>
         </type>
-        
-        <type name="MetaprogramDependencyDeclarationListNode" super="ListNode" superTypeArg="MetaprogramDependencyDeclarationNode">
+
+        <type name="MetaprogramDependencyDeclarationListNode" super="ListNode"
+            superTypeArg="MetaprogramDependencyDeclarationNode">
             <constant name="alwaysOrdered" type="boolean" default="false"
                 desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link MetaprogramDependencyDeclarationNode}s.
             ]]></doc>
         </type>
-        
+
         <type name="MetaprogramImportListNode" super="ListNode" superTypeArg="MetaprogramImportNode">
             <constant name="alwaysOrdered" type="boolean" default="false"
                 desc="whether or not this list's contents are always order-dependent" />
@@ -2510,7 +2535,7 @@
                 Represents a list of {@link MetaprogramImportNode}s.
             ]]></doc>
         </type>
-        
+
         <type name="MetaprogramTargetListNode" super="ListNode" superTypeArg="MetaprogramTargetNode">
             <constant name="alwaysOrdered" type="boolean" default="false"
                 desc="whether or not this list's contents are always order-dependent" />
@@ -2518,7 +2543,7 @@
                 Represents a list of {@link MetaprogramTargetNode}s.
             ]]></doc>
         </type>
-        
+
         <!-- ======================== OTHER NODES ======================= -->
 
         <type name="CodeLiteralNode" super="LiteralNode" superTypeArg="Node">

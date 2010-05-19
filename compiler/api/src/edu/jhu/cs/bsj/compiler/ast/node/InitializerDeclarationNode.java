@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InitializerDeclarationNode extends Node, ClassMemberNode, AnonymousClassMemberNode
+public interface InitializerDeclarationNode extends Node, ClassMemberNode, AnonymousClassMemberNode, MetaAnnotatableNode
 {
     /**
      * Gets whether or not the initializer is static.

@@ -3065,9 +3065,39 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
+            BlockNode body,
+            MetaAnnotationListNode metaAnnotations)
+    {
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, metaAnnotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
+            BlockNode body,
+            MetaAnnotationListNode metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, metaAnnotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
             BlockNode body)
     {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation, manager, binary);
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3082,7 +3112,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation, manager, binary);
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5000,6 +5030,72 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
+            AnonymousClassBodyNode body)
+    {
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
+            AnonymousClassBodyNode body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments)
+    {
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, makeTypeArgumentListNode(), makeExpressionListNode(), null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, makeTypeArgumentListNode(), makeExpressionListNode(), null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
      * Creates a QualifiedNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5466,6 +5562,38 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            UnparameterizedTypeNode type,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            ReferenceTypeListNode typeArguments)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            UnparameterizedTypeNode type,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            ReferenceTypeListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6036,6 +6164,34 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, metaAnnotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator)
+    {
+        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     

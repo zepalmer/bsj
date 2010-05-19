@@ -1948,6 +1948,26 @@ public interface BsjNodeFactory
      */
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
+            BlockNode body,
+            MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
+            BlockNode body,
+            MetaAnnotationListNode metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
             BlockNode body);
     
     /**
@@ -3194,6 +3214,52 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
+            AnonymousClassBodyNode body);
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
+            AnonymousClassBodyNode body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments);
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            TypeArgumentListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
      * Creates a QualifiedNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3487,6 +3553,28 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            ReferenceTypeListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            UnparameterizedTypeNode type,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            ReferenceTypeListNode typeArguments);
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments,
@@ -3850,6 +3938,24 @@ public interface BsjNodeFactory
             ExpressionNode expression,
             UnaryStatementOperator operator,
             MetaAnnotationListNode metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator);
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     

@@ -1045,6 +1045,28 @@ blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode 
         }
     ;
 
+// Parses a list of meta-annotations.  Note that this rule is not used for declarations, since meta-annotations can be
+// interspersed amongst annotations and modifiers.  This rule is used for meta-annotations which are applied to
+// statements and other constructs which only permit meta-annotations and not other modifiers.
+metaAnnotationList returns [MetaAnnotationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaAnnotationList");
+            List<MetaAnnotationNode> list = new ArrayList<MetaAnnotationNode>();
+        }
+        @after {
+            $ret = factory.makeMetaAnnotationListNode(list);
+            ruleStop();
+        }
+    :
+        (
+            metaAnnotation
+            {
+                list.add($metaAnnotation.ret);
+            }
+        )*
+    ;
+
 // Parses a meta-annotation.
 // For example, in
 //     @@Test("foo")
@@ -2249,6 +2271,7 @@ initializerBlock returns [InitializerDeclarationNode ret]
             ruleStop();
         }
     :
+        metaAnnotationList
         staticText='static'?
         block
         {

@@ -2851,6 +2851,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getBody() != null ?
                         node.getBody().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
         BsjSourceLocation liftStartLocationValue = 
                 node.getStartLocation();
         BsjSourceLocation liftStopLocationValue = 
@@ -2863,6 +2867,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 expressionizeBoolean(liftStaticInitializerValue),
                                 liftBody,
+                                liftMetaAnnotations,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode(), factory.makeMetaAnnotationListNode());

@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -25,18 +26,24 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     /** The body of the initializer. */
     private BlockNode body;
     
+    /** The meta-annotations associated with this node. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the staticInitializer property. */
         STATIC_INITIALIZER,
         /** Attribute for the body property. */
         BODY,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
     }
     
     /** General constructor. */
     public InitializerDeclarationNodeImpl(
             boolean staticInitializer,
             BlockNode body,
+            MetaAnnotationListNode metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -45,6 +52,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         super(startLocation, stopLocation, manager, binary);
         this.staticInitializer = staticInitializer;
         setBody(body, false);
+        setMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -108,6 +116,37 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     }
     
     /**
+     * Gets the meta-annotations associated with this node.
+     * @return The meta-annotations associated with this node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+        }
+        setAsChild(metaAnnotations, false);
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations, true);
+    }
+    
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -165,11 +204,13 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         visitor.visitNodeStart(this);
         visitor.visitClassMemberNodeStart(this);
         visitor.visitAnonymousClassMemberNodeStart(this);
+        visitor.visitMetaAnnotatableNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitClassMemberNodeStop(this);
         visitor.visitAnonymousClassMemberNodeStop(this);
+        visitor.visitMetaAnnotatableNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitInitializerDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
@@ -204,6 +245,9 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         sb.append("body=");
         sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
         sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -236,6 +280,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         return factory.makeInitializerDeclarationNode(
                 getStaticInitializer(),
                 getBody()==null?null:getBody().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -254,6 +299,11 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (before.equals(this.getBody()) && (after instanceof BlockNode))
         {
             setBody((BlockNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         return false;
