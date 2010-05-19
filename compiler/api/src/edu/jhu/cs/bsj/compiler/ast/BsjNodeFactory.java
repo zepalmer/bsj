@@ -120,6 +120,15 @@ public interface BsjNodeFactory
 	 * @throws IllegalArgumentException If the provided string was not a valid name.
 	 */
 	public NameNode parseNameNode(String name);
+	
+	/**
+	 * Creates an {@link ArrayTypeNode} based on the specified type and the given number of array levels.
+	 * @param type The base type to use.
+	 * @param levels The number of levels of depth to apply.  Must be at least 1.
+	 * @return The resulting array type.
+	 * @throws IllegalArgumentException If the provided level count is non-positive.
+	 */
+	public ArrayTypeNode wrapArrayLevels(TypeNode type, int levels);
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1776,6 +1785,7 @@ public interface BsjNodeFactory
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc);
     
@@ -1785,6 +1795,7 @@ public interface BsjNodeFactory
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -4201,6 +4212,7 @@ public interface BsjNodeFactory
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators);
     
     /**
@@ -4209,6 +4221,7 @@ public interface BsjNodeFactory
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -4218,6 +4231,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
+            TypeNode type,
             VariableDeclaratorListNode declarators);
     
     /**
@@ -4225,6 +4239,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -4266,7 +4281,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
+            IdentifierNode name,
+            int arrayLevels,
+            VariableInitializerNode initializer);
+    
+    /**
+     * Creates a VariableDeclaratorNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            IdentifierNode name,
+            int arrayLevels,
+            VariableInitializerNode initializer,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a VariableDeclaratorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
             IdentifierNode name,
             VariableInitializerNode initializer);
     
@@ -4275,7 +4309,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
             IdentifierNode name,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,

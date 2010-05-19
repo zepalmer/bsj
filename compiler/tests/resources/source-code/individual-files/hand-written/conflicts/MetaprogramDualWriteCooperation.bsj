@@ -12,9 +12,9 @@ public class MetaprogramDualWriteCooperation
 		body.getMembers().add(
 			factory.makeFieldDeclarationNode(
 					factory.makeFieldModifiersNode(AccessModifier.PUBLIC),
+					factory.makePrimitiveTypeNode(PrimitiveType.INT),
 					factory.makeVariableDeclaratorListNode(
 							factory.makeVariableDeclaratorNode(
-									factory.makePrimitiveTypeNode(PrimitiveType.INT),
 									factory.makeIdentifierNode("y"),
 									null)),
 					null));
@@ -27,9 +27,9 @@ public class MetaprogramDualWriteCooperation
 		body.getMembers().add(
 				factory.makeFieldDeclarationNode(
 						factory.makeFieldModifiersNode(AccessModifier.PUBLIC),
+						factory.makePrimitiveTypeNode(PrimitiveType.INT),
 						factory.makeVariableDeclaratorListNode(
 								factory.makeVariableDeclaratorNode(
-										factory.makePrimitiveTypeNode(PrimitiveType.INT),
 										factory.makeIdentifierNode("x"),
 										null)),
 						null));

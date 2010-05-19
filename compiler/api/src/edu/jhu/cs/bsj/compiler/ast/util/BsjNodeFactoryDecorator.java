@@ -173,7 +173,14 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 	{
 		return this.factory.parseNameNode(name);
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ArrayTypeNode wrapArrayLevels(TypeNode type, int levels)
+	{
+		return this.factory.wrapArrayLevels(type, levels);
+	}
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3119,11 +3126,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc)
     {
         this.before();
-        FieldDeclarationNode node = factory.makeFieldDeclarationNode(modifiers, declarators, javadoc);
+        FieldDeclarationNode node = factory.makeFieldDeclarationNode(modifiers, type, declarators, javadoc);
         this.after(node);
         return node;
     }
@@ -3135,13 +3143,14 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        FieldDeclarationNode node = factory.makeFieldDeclarationNode(modifiers, declarators, javadoc, startLocation, stopLocation);
+        FieldDeclarationNode node = factory.makeFieldDeclarationNode(modifiers, type, declarators, javadoc, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7448,10 +7457,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators)
     {
         this.before();
-        VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, declarators);
+        VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, type, declarators);
         this.after(node);
         return node;
     }
@@ -7463,12 +7473,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, declarators, startLocation, stopLocation);
+        VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, type, declarators, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7479,10 +7490,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
+            TypeNode type,
             VariableDeclaratorListNode declarators)
     {
         this.before();
-        VariableDeclarationNode node = factory.makeVariableDeclarationNode(declarators);
+        VariableDeclarationNode node = factory.makeVariableDeclarationNode(type, declarators);
         this.after(node);
         return node;
     }
@@ -7493,12 +7505,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableDeclarationNode node = factory.makeVariableDeclarationNode(declarators, startLocation, stopLocation);
+        VariableDeclarationNode node = factory.makeVariableDeclarationNode(type, declarators, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7569,12 +7582,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
             IdentifierNode name,
+            int arrayLevels,
             VariableInitializerNode initializer)
     {
         this.before();
-        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(type, name, initializer);
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(name, arrayLevels, initializer);
         this.after(node);
         return node;
     }
@@ -7585,14 +7598,46 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
+            IdentifierNode name,
+            int arrayLevels,
+            VariableInitializerNode initializer,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(name, arrayLevels, initializer, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableDeclaratorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            IdentifierNode name,
+            VariableInitializerNode initializer)
+    {
+        this.before();
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(name, initializer);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableDeclaratorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
             IdentifierNode name,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(type, name, initializer, startLocation, stopLocation);
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(name, initializer, startLocation, stopLocation);
         this.after(node);
         return node;
     }

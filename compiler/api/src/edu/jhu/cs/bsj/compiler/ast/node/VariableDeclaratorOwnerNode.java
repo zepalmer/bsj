@@ -5,23 +5,11 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * A node representing a field declaration.  Constants are represented by this node as well.
+ * A common supertype for all nodes which use variable declarators to declare a set of variables.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface FieldDeclarationNode extends Node, ClassMemberNode, InterfaceMemberNode, AnnotationMemberNode, AnonymousClassMemberNode, VariableDeclaratorOwnerNode
+public interface VariableDeclaratorOwnerNode extends Node
 {
-    /**
-     * Gets the modifiers for this field.
-     * @return The modifiers for this field.
-     */
-    public FieldModifiersNode getModifiers();
-    
-    /**
-     * Changes the modifiers for this field.
-     * @param modifiers The modifiers for this field.
-     */
-    public void setModifiers(FieldModifiersNode modifiers);
-    
     /**
      * Gets the type of the declared variables.
      * @return The type of the declared variables.
@@ -47,22 +35,10 @@ public interface FieldDeclarationNode extends Node, ClassMemberNode, InterfaceMe
     public void setDeclarators(VariableDeclaratorListNode declarators);
     
     /**
-     * Gets the associated javadoc comment for this node.
-     * @return The associated javadoc comment for this node.
-     */
-    public JavadocNode getJavadoc();
-    
-    /**
-     * Changes the associated javadoc comment for this node.
-     * @param javadoc The associated javadoc comment for this node.
-     */
-    public void setJavadoc(JavadocNode javadoc);
-    
-    /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
      * @return The resulting deep copy node.
      */
     @Override
-    public FieldDeclarationNode deepCopy(BsjNodeFactory factory);
+    public VariableDeclaratorOwnerNode deepCopy(BsjNodeFactory factory);
 }

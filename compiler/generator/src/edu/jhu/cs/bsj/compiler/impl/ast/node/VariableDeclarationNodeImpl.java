@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
@@ -23,6 +24,9 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     /** The modifiers for this variable. */
     private VariableModifiersNode modifiers;
     
+    /** The type of the declared variables. */
+    private TypeNode type;
+    
     /** The variable declarators for this node. */
     private VariableDeclaratorListNode declarators;
     
@@ -30,6 +34,8 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     {
         /** Attribute for the modifiers property. */
         MODIFIERS,
+        /** Attribute for the type property. */
+        TYPE,
         /** Attribute for the declarators property. */
         DECLARATORS,
     }
@@ -37,6 +43,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     /** General constructor. */
     public VariableDeclarationNodeImpl(
             VariableModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -45,6 +52,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     {
         super(startLocation, stopLocation, manager, binary);
         setModifiers(modifiers, false);
+        setType(type, false);
         setDeclarators(declarators, false);
     }
     
@@ -77,6 +85,37 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
+    }
+    
+    /**
+     * Gets the type of the declared variables.
+     * @return The type of the declared variables.
+     */
+    public TypeNode getType()
+    {
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
+        return this.type;
+    }
+    
+    /**
+     * Changes the type of the declared variables.
+     * @param type The type of the declared variables.
+     */
+    public void setType(TypeNode type)
+    {
+            setType(type, true);
+    }
+    
+    private void setType(TypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+        }
+        setAsChild(type, false);
+        this.type = type;
+        setAsChild(type, true);
     }
     
     /**
@@ -125,6 +164,10 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         {
             this.modifiers.receive(visitor);
         }
+        if (this.type != null)
+        {
+            this.type.receive(visitor);
+        }
         if (this.declarators != null)
         {
             this.declarators.receive(visitor);
@@ -154,6 +197,10 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         {
             this.modifiers.receiveTyped(visitor);
         }
+        if (this.type != null)
+        {
+            this.type.receiveTyped(visitor);
+        }
         if (this.declarators != null)
         {
             this.declarators.receiveTyped(visitor);
@@ -175,10 +222,12 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         visitor.visitVariableDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitBlockStatementNodeStart(this);
+        visitor.visitVariableDeclaratorOwnerNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitBlockStatementNodeStop(this);
+        visitor.visitVariableDeclaratorOwnerNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitVariableDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
@@ -194,6 +243,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     {
         List<Object> list = super.getChildObjects();
         list.add(getModifiers());
+        list.add(getType());
         list.add(getDeclarators());
         return list;
     }
@@ -209,6 +259,9 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("type=");
+        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
         sb.append(',');
         sb.append("declarators=");
         sb.append(this.getDeclarators() == null? "null" : this.getDeclarators().getClass().getSimpleName());
@@ -244,6 +297,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     {
         return factory.makeVariableDeclarationNode(
                 getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getType()==null?null:getType().deepCopy(factory),
                 getDeclarators()==null?null:getDeclarators().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
@@ -263,6 +317,11 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         if (before.equals(this.getModifiers()) && (after instanceof VariableModifiersNode))
         {
             setModifiers((VariableModifiersNode)after);
+            return true;
+        }
+        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        {
+            setType((TypeNode)after);
             return true;
         }
         if (before.equals(this.getDeclarators()) && (after instanceof VariableDeclaratorListNode))

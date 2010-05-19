@@ -86,16 +86,16 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         
         // private Set<FooListener> fooListeners = new HashMap<FooListener>();
         members.add(factory.makeFieldDeclarationNode(
-                factory.makeFieldModifiersNode(AccessModifier.PRIVATE), 
+                factory.makeFieldModifiersNode(AccessModifier.PRIVATE),
+                factory.makeParameterizedTypeNode(
+                        factory.makeUnparameterizedTypeNode(
+                                factory.parseNameNode("java.util.Set")), 
+                        factory.makeTypeArgumentListNode(
+                                factory.makeUnparameterizedTypeNode(
+                                        factory.parseNameNode(listenerName)))),                
                 factory.makeVariableDeclaratorListNode(
                         factory.makeVariableDeclaratorNode(
-                                factory.makeParameterizedTypeNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.parseNameNode("java.util.Set")), 
-                                        factory.makeTypeArgumentListNode(
-                                                factory.makeUnparameterizedTypeNode(
-                                                        factory.parseNameNode(listenerName)))), 
-                                factory.makeIdentifierNode(listenerListName), 
+                                factory.makeIdentifierNode(listenerListName),
                                 factory.makeUnqualifiedClassInstantiationNode(
                                         factory.makeParameterizedTypeNode(
                                                 factory.makeUnparameterizedTypeNode(

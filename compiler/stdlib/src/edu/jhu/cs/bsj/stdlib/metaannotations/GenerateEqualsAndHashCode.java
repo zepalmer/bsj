@@ -69,27 +69,27 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 	@Override
 	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
 	{
-	    // get the other members of our class
+		// get the other members of our class
 		ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
 
 		// Establish the list of properties we will be using
 		List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
 		if (this.properties == null)
 		{
-            for (ClassMemberNode member : members.filter(new GetterFilter()))
-            {
-                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-                getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
-                      methodDecl.getReturnType()));
-            }
+			for (ClassMemberNode member : members.filter(new GetterFilter()))
+			{
+				MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+				getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
+						methodDecl.getReturnType()));
+			}
 		} else
 		{
 			Map<String, MethodDeclarationNode> methodMap = new HashMap<String, MethodDeclarationNode>();
-            for (ClassMemberNode member : members.filter(new GetterFilter()))
-            {
-                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-                methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
-            }
+			for (ClassMemberNode member : members.filter(new GetterFilter()))
+			{
+				MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+				methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
+			}
 			for (String propName : this.properties)
 			{
 				String getterName = "get" + Character.toUpperCase(propName.charAt(0)) + propName.substring(1);
@@ -150,12 +150,13 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		NamedTypeDeclarationNode<?> enclosingDeclaration = context.getAnchor().getNearestAncestorOfType(
 				NamedTypeDeclarationNode.class);
 		// TODO: what if we have a type parameter?
-		statements.add(factory.makeVariableDeclarationNode(factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
+		statements.add(factory.makeVariableDeclarationNode(
 				factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())),
-				factory.makeIdentifierNode("other"),
-				factory.makeTypeCastNode(
-						factory.makeFieldAccessByNameNode(factory.parseNameNode("o")),
-						factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())))))));
+				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
+						factory.makeIdentifierNode("other"),
+						factory.makeTypeCastNode(
+								factory.makeFieldAccessByNameNode(factory.parseNameNode("o")),
+								factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())))))));
 
 		// For each property, do some kind of comparison on it
 		for (Pair<String, TypeNode> getter : getters)
@@ -206,11 +207,10 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("equals"),
 				factory.makeVariableListNode(factory.makeVariableNode(
 						factory.makeUnparameterizedTypeNode(factory.parseNameNode("java.lang.Object")),
-						factory.makeIdentifierNode("o"))), factory.makePrimitiveTypeNode(PrimitiveType.BOOLEAN), 
-						factory.makeJavadocNode(
-						        "Overrides the default equals method.\n" +
-						        "@param o the object for comparison.\n" +
-								"@return true if equal to this object, false otherwise."));
+						factory.makeIdentifierNode("o"))), factory.makePrimitiveTypeNode(PrimitiveType.BOOLEAN),
+				factory.makeJavadocNode("Overrides the default equals method.\n"
+						+ "@param o the object for comparison.\n"
+						+ "@return true if equal to this object, false otherwise."));
 	}
 
 	private MethodDeclarationNode generateHashCode(Context<MetaAnnotationMetaprogramAnchorNode> context,
@@ -222,14 +222,14 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		// final int prime = 31;
 		statements.add(factory.makeVariableDeclarationNode(factory.makeVariableModifiersNode(true,
 				factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()),
+				factory.makePrimitiveTypeNode(PrimitiveType.INT),
 				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
-						factory.makePrimitiveTypeNode(PrimitiveType.INT), factory.makeIdentifierNode("prime"),
-						factory.makeIntLiteralNode(31)))));
+						factory.makeIdentifierNode("prime"), factory.makeIntLiteralNode(31)))));
 
 		// int result = 1;
-		statements.add(factory.makeVariableDeclarationNode(factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
-				factory.makePrimitiveTypeNode(PrimitiveType.INT), factory.makeIdentifierNode("result"),
-				factory.makeIntLiteralNode(1)))));
+		statements.add(factory.makeVariableDeclarationNode(factory.makePrimitiveTypeNode(PrimitiveType.INT),
+				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
+						factory.makeIdentifierNode("result"), factory.makeIntLiteralNode(1)))));
 
 		// for each property, bring in some change to the hash
 		for (Pair<String, TypeNode> getter : getters)
@@ -290,10 +290,9 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		// Create hashCode method
 		return factory.makeMethodDeclarationNode(factory.makeBlockStatementListNode(statements),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("hashCode"),
-				factory.makeVariableListNode(), factory.makePrimitiveTypeNode(PrimitiveType.INT), 
-				factory.makeJavadocNode(
-                        "Overrides the default hashCode method.\n" +
-                        "@return the hashcode for this object."));
+				factory.makeVariableListNode(), factory.makePrimitiveTypeNode(PrimitiveType.INT),
+				factory.makeJavadocNode("Overrides the default hashCode method.\n"
+						+ "@return the hashcode for this object."));
 	}
 
 	@Override

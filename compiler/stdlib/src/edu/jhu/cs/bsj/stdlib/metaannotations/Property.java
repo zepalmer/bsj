@@ -99,7 +99,7 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 				factory.makeBlockStatementListNode(factory.makeReturnNode(factory.makeFieldAccessByExpressionNode(
 						factory.makeThisNode(), factory.makeIdentifierNode(varname)))),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), getterName, factory.makeVariableListNode(),
-				var.getType().deepCopy(factory), 
+				var.getEffectiveType(factory), 
 				factory.makeJavadocNode(
                         "Getter for " + varname + ".\n" +
                         "@return the value of " + varname + "."));
@@ -120,7 +120,7 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 								factory.makeIdentifierNode(varname), NameCategory.EXPRESSION))))),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), setterName,
 				factory.makeVariableListNode(factory.makeVariableNode(factory.makeVariableModifiersNode(),
-						var.getType().deepCopy(factory), factory.makeIdentifierNode(varname))),
+						var.getEffectiveType(factory), factory.makeIdentifierNode(varname))),
 				factory.makeVoidTypeNode(), 
 				factory.makeJavadocNode(
                         "Setter for " + varname + ".\n" +

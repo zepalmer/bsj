@@ -141,5 +141,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		}
 		return node;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ArrayTypeNode wrapArrayLevels(TypeNode type, int levels)
+	{
+		if (levels <= 0)
+		{
+			throw new IllegalArgumentException("Invalid level count: " + levels);
+		}
+		ArrayTypeNode ret = makeArrayTypeNode(type);
+		for (int i=1;i<levels;i++)
+		{
+			ret = makeArrayTypeNode(ret);
+		}
+		return ret;
+	}
 	/* GEN:stop */
 }

@@ -1734,6 +1734,12 @@ public interface BsjTypedNodeVisitor
     public void visitVariableDeclaratorNodeStart(VariableDeclaratorNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type VariableDeclaratorOwnerNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclaratorOwnerNodeStart(VariableDeclaratorOwnerNode node);
+
+    /**
      * Starts a visit for nodes of type VariableInitializerListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -3409,6 +3415,12 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitVariableDeclaratorNodeStop(VariableDeclaratorNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type VariableDeclaratorOwnerNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclaratorOwnerNodeStop(VariableDeclaratorOwnerNode node);
 
     /**
      * Stops a visit for nodes of type VariableInitializerListNode.

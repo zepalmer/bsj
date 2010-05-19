@@ -80,10 +80,10 @@ public class MakeSingleton extends AbstractBsjMetaAnnotationMetaprogram
             BsjNodeFactory factory)
     {
         return factory.makeFieldDeclarationNode(
-                factory.makeFieldModifiersNode(AccessModifier.PRIVATE, true, true, false, false, factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()), 
+                factory.makeFieldModifiersNode(AccessModifier.PRIVATE, true, true, false, false, factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()),
+                factory.makeUnparameterizedTypeNode(factory.parseNameNode(className)),
                 factory.makeVariableDeclaratorListNode(
                         factory.makeVariableDeclaratorNode(
-                                factory.makeUnparameterizedTypeNode(factory.parseNameNode(className)), 
                                 factory.makeIdentifierNode(singletonName), 
                                 factory.makeUnqualifiedClassInstantiationNode(
                                         factory.makeUnparameterizedTypeNode(factory.parseNameNode(className))))), 

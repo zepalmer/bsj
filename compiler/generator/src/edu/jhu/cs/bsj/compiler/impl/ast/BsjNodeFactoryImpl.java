@@ -216,6 +216,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		}
 		return node;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ArrayTypeNode wrapArrayLevels(TypeNode type, int levels)
+	{
+		if (levels <= 0)
+		{
+			throw new IllegalArgumentException("Invalid level count: " + levels);
+		}
+		ArrayTypeNode ret = makeArrayTypeNode(type);
+		for (int i=1;i<levels;i++)
+		{
+			ret = makeArrayTypeNode(ret);
+		}
+		return ret;
+	}
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2793,10 +2810,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2807,12 +2825,13 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6578,9 +6597,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation, manager, binary);
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6591,11 +6611,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation, manager, binary);
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6605,9 +6626,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
+            TypeNode type,
             VariableDeclaratorListNode declarators)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(makeVariableModifiersNode(), declarators, startLocation, stopLocation, manager, binary);
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(makeVariableModifiersNode(), type, declarators, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6617,11 +6639,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(makeVariableModifiersNode(), declarators, startLocation, stopLocation, manager, binary);
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(makeVariableModifiersNode(), type, declarators, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6683,11 +6706,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
             IdentifierNode name,
+            int arrayLevels,
             VariableInitializerNode initializer)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(name, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6697,13 +6720,41 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
+            IdentifierNode name,
+            int arrayLevels,
+            VariableInitializerNode initializer,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(name, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableDeclaratorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            IdentifierNode name,
+            VariableInitializerNode initializer)
+    {
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(name, 0, initializer, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableDeclaratorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
             IdentifierNode name,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(name, 0, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

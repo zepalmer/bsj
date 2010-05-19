@@ -14,36 +14,36 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDeclaratorNode
 {
-    /** The type of this variable. */
-    private TypeNode type;
-    
     /** The name of this variable. */
     private IdentifierNode name;
+    
+    /** The number of additional array levels added to the type of this variable. */
+    private int arrayLevels;
     
     /** The initializer to use. */
     private VariableInitializerNode initializer;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
-        /** Attribute for the type property. */
-        TYPE,
         /** Attribute for the name property. */
         NAME,
+        /** Attribute for the arrayLevels property. */
+        ARRAY_LEVELS,
         /** Attribute for the initializer property. */
         INITIALIZER,
     }
     
     /** General constructor. */
     public VariableDeclaratorNodeImpl(
-            TypeNode type,
             IdentifierNode name,
+            int arrayLevels,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -51,40 +51,9 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setType(type, false);
         setName(name, false);
+        this.arrayLevels = arrayLevels;
         setInitializer(initializer, false);
-    }
-    
-    /**
-     * Gets the type of this variable.
-     * @return The type of this variable.
-     */
-    public TypeNode getType()
-    {
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
-        return this.type;
-    }
-    
-    /**
-     * Changes the type of this variable.
-     * @param type The type of this variable.
-     */
-    public void setType(TypeNode type)
-    {
-            setType(type, true);
-    }
-    
-    private void setType(TypeNode type, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
-        }
-        setAsChild(type, false);
-        this.type = type;
-        setAsChild(type, true);
     }
     
     /**
@@ -116,6 +85,35 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         setAsChild(name, false);
         this.name = name;
         setAsChild(name, true);
+    }
+    
+    /**
+     * Gets the number of additional array levels added to the type of this variable.
+     * @return The number of additional array levels added to the type of this variable.
+     */
+    public int getArrayLevels()
+    {
+        recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.READ);
+        return this.arrayLevels;
+    }
+    
+    /**
+     * Changes the number of additional array levels added to the type of this variable.
+     * @param arrayLevels The number of additional array levels added to the type of this variable.
+     */
+    public void setArrayLevels(int arrayLevels)
+    {
+            setArrayLevels(arrayLevels, true);
+    }
+    
+    private void setArrayLevels(int arrayLevels, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.WRITE);
+        }
+        this.arrayLevels = arrayLevels;
     }
     
     /**
@@ -160,10 +158,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.type != null)
-        {
-            this.type.receive(visitor);
-        }
         if (this.name != null)
         {
             this.name.receive(visitor);
@@ -193,10 +187,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.type != null)
-        {
-            this.type.receiveTyped(visitor);
-        }
         if (this.name != null)
         {
             this.name.receiveTyped(visitor);
@@ -238,8 +228,8 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getType());
         list.add(getName());
+        list.add(getArrayLevels());
         list.add(getInitializer());
         return list;
     }
@@ -253,11 +243,11 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("type=");
-        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
-        sb.append(',');
         sb.append("name=");
         sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arrayLevels=");
+        sb.append(String.valueOf(this.getArrayLevels()) + ":" + ("int"));
         sb.append(',');
         sb.append("initializer=");
         sb.append(this.getInitializer() == null? "null" : this.getInitializer().getClass().getSimpleName());
@@ -292,8 +282,8 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     public VariableDeclaratorNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeVariableDeclaratorNode(
-                getType()==null?null:getType().deepCopy(factory),
                 getName()==null?null:getName().deepCopy(factory),
+                getArrayLevels(),
                 getInitializer()==null?null:getInitializer().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
@@ -310,11 +300,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getType()) && (after instanceof TypeNode))
-        {
-            setType((TypeNode)after);
-            return true;
-        }
         if (before.equals(this.getName()) && (after instanceof IdentifierNode))
         {
             setName((IdentifierNode)after);
@@ -328,4 +313,23 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         return false;
     }
     
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public TypeNode getEffectiveType(BsjNodeFactory factory)
+	{
+		VariableDeclaratorOwnerNode owner = this.getNearestAncestorOfType(VariableDeclaratorOwnerNode.class);
+		if (owner == null)
+		{
+			return null;
+		}
+		TypeNode t = owner.getType().deepCopy(factory);
+		for (int i=0;i<this.getArrayLevels();i++)
+		{
+			t = factory.makeArrayTypeNode(t);
+		}
+		return t;
+	}
+
 }

@@ -124,12 +124,12 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         
         // String ret = "ClassName [";
         statements.add(factory.makeVariableDeclarationNode(
+        		factory.makeUnparameterizedTypeNode(
+                        factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("String"), 
+                        NameCategory.TYPE)),
                 factory.makeVariableDeclaratorListNode(
-                        factory.makeVariableDeclaratorNode(
-                        factory.makeUnparameterizedTypeNode(
-                                factory.makeSimpleNameNode(
-                                factory.makeIdentifierNode("String"), 
-                                NameCategory.TYPE)), 
+                        factory.makeVariableDeclaratorNode( 
                                 factory.makeIdentifierNode("ret"),
                 factory.makeStringLiteralNode(classIdentifier.getIdentifier() + " [")))));
 

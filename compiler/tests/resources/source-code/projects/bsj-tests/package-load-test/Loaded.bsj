@@ -13,9 +13,9 @@ public class Loaded
 								context.getFactory().makeMetaAnnotationListNode(),
 								context.getFactory().makeAnnotationListNode()
 								),
+						context.getFactory().makePrimitiveTypeNode(PrimitiveType.INT),
 						context.getFactory().makeVariableDeclaratorListNode(
 								context.getFactory().makeVariableDeclaratorNode(
-										context.getFactory().makePrimitiveTypeNode(PrimitiveType.INT),
 										context.getFactory().makeIdentifierNode("x"),
 										null)),
 						null));

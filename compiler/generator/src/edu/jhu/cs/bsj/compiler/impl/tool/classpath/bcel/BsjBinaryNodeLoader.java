@@ -468,7 +468,8 @@ public class BsjBinaryNodeLoader
     {
         FieldDeclarationNode retNode =
             factory.makeFieldDeclarationNode(
-                    buildFieldModifiersNode(field), 
+                    buildFieldModifiersNode(field),
+                    buildTypeNode(field.getType()),
                     buildVariableDeclarators(field), 
                     null);
 
@@ -480,8 +481,8 @@ public class BsjBinaryNodeLoader
         //TODO fix: initializer left as null
         VariableDeclaratorNode retNode = 
             factory.makeVariableDeclaratorNode(
-                buildTypeNode(field.getType()), 
-                factory.makeIdentifierNode(field.getName()), 
+                factory.makeIdentifierNode(field.getName()),
+                0,
                 null);
         
         return factory.makeVariableDeclaratorListNode(retNode);

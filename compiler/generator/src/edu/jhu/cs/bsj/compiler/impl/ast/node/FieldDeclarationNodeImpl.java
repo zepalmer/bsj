@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
@@ -23,6 +24,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
 {
     /** The modifiers for this field. */
     private FieldModifiersNode modifiers;
+    
+    /** The type of the declared variables. */
+    private TypeNode type;
     
     /** The variable declarators for this node. */
     private VariableDeclaratorListNode declarators;
@@ -34,6 +38,8 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     {
         /** Attribute for the modifiers property. */
         MODIFIERS,
+        /** Attribute for the type property. */
+        TYPE,
         /** Attribute for the declarators property. */
         DECLARATORS,
         /** Attribute for the javadoc property. */
@@ -43,6 +49,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     /** General constructor. */
     public FieldDeclarationNodeImpl(
             FieldModifiersNode modifiers,
+            TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -52,6 +59,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     {
         super(startLocation, stopLocation, manager, binary);
         setModifiers(modifiers, false);
+        setType(type, false);
         setDeclarators(declarators, false);
         setJavadoc(javadoc, false);
     }
@@ -85,6 +93,37 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
+    }
+    
+    /**
+     * Gets the type of the declared variables.
+     * @return The type of the declared variables.
+     */
+    public TypeNode getType()
+    {
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
+        return this.type;
+    }
+    
+    /**
+     * Changes the type of the declared variables.
+     * @param type The type of the declared variables.
+     */
+    public void setType(TypeNode type)
+    {
+            setType(type, true);
+    }
+    
+    private void setType(TypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+        }
+        setAsChild(type, false);
+        this.type = type;
+        setAsChild(type, true);
     }
     
     /**
@@ -164,6 +203,10 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         {
             this.modifiers.receive(visitor);
         }
+        if (this.type != null)
+        {
+            this.type.receive(visitor);
+        }
         if (this.declarators != null)
         {
             this.declarators.receive(visitor);
@@ -197,6 +240,10 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         {
             this.modifiers.receiveTyped(visitor);
         }
+        if (this.type != null)
+        {
+            this.type.receiveTyped(visitor);
+        }
         if (this.declarators != null)
         {
             this.declarators.receiveTyped(visitor);
@@ -225,6 +272,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         visitor.visitInterfaceMemberNodeStart(this);
         visitor.visitAnnotationMemberNodeStart(this);
         visitor.visitAnonymousClassMemberNodeStart(this);
+        visitor.visitVariableDeclaratorOwnerNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
@@ -232,6 +280,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         visitor.visitInterfaceMemberNodeStop(this);
         visitor.visitAnnotationMemberNodeStop(this);
         visitor.visitAnonymousClassMemberNodeStop(this);
+        visitor.visitVariableDeclaratorOwnerNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitFieldDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
@@ -247,6 +296,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     {
         List<Object> list = super.getChildObjects();
         list.add(getModifiers());
+        list.add(getType());
         list.add(getDeclarators());
         list.add(getJavadoc());
         return list;
@@ -263,6 +313,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("type=");
+        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
         sb.append(',');
         sb.append("declarators=");
         sb.append(this.getDeclarators() == null? "null" : this.getDeclarators().getClass().getSimpleName());
@@ -301,6 +354,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     {
         return factory.makeFieldDeclarationNode(
                 getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getType()==null?null:getType().deepCopy(factory),
                 getDeclarators()==null?null:getDeclarators().deepCopy(factory),
                 getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation(),
@@ -321,6 +375,11 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         if (before.equals(this.getModifiers()) && (after instanceof FieldModifiersNode))
         {
             setModifiers((FieldModifiersNode)after);
+            return true;
+        }
+        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        {
+            setType((TypeNode)after);
             return true;
         }
         if (before.equals(this.getDeclarators()) && (after instanceof VariableDeclaratorListNode))

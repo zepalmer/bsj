@@ -123,9 +123,9 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
 
         // FooParamTuple fooParamTupleInstance = new FooParamTuple(~:arguments:~);
         statements.add(factory.makeVariableDeclarationNode(
+        		factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)),
                 factory.makeVariableDeclaratorListNode(
-                        factory.makeVariableDeclaratorNode(
-                                factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)), 
+                        factory.makeVariableDeclaratorNode( 
                                 factory.makeIdentifierNode(tupleInstanceName), 
                                 factory.makeUnqualifiedClassInstantiationNode(
                                         factory.makeUnparameterizedTypeNode(factory.parseNameNode(tupleClassName)), 
@@ -175,9 +175,9 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
                             AccessModifier.PRIVATE, false, false, false, false, 
                             factory.makeMetaAnnotationListNode(metaAnnotation), 
                             factory.makeAnnotationListNode()), 
+                    param.getType().deepCopy(factory), 
                     factory.makeVariableDeclaratorListNode(
                             factory.makeVariableDeclaratorNode(
-                                    param.getType().deepCopy(factory), 
                                     param.getIdentifier().deepCopy(factory), 
                                     null)), 
                     null));
@@ -217,12 +217,12 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
        // private Map<paramType, returnType> ~:hashMapName:~ = new HashMap<paramType, returnType>();
        return factory.makeFieldDeclarationNode(
                 factory.makeFieldModifiersNode(AccessModifier.PRIVATE), 
+                factory.makeParameterizedTypeNode(
+                        factory.makeUnparameterizedTypeNode(
+                                factory.parseNameNode("java.util.Map")), 
+                        factory.makeTypeArgumentListNode(paramType, returnType)), 
                 factory.makeVariableDeclaratorListNode(
                         factory.makeVariableDeclaratorNode(
-                                factory.makeParameterizedTypeNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.parseNameNode("java.util.Map")), 
-                                        factory.makeTypeArgumentListNode(paramType, returnType)), 
                                 factory.makeIdentifierNode(hashMapName), 
                                 factory.makeUnqualifiedClassInstantiationNode(
                                         factory.makeParameterizedTypeNode(

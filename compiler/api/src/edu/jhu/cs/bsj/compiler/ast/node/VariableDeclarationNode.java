@@ -19,7 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  *     </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface VariableDeclarationNode extends Node, BlockStatementNode
+public interface VariableDeclarationNode extends Node, BlockStatementNode, VariableDeclaratorOwnerNode
 {
     /**
      * Gets the modifiers for this variable.
@@ -32,6 +32,18 @@ public interface VariableDeclarationNode extends Node, BlockStatementNode
      * @param modifiers The modifiers for this variable.
      */
     public void setModifiers(VariableModifiersNode modifiers);
+    
+    /**
+     * Gets the type of the declared variables.
+     * @return The type of the declared variables.
+     */
+    public TypeNode getType();
+    
+    /**
+     * Changes the type of the declared variables.
+     * @param type The type of the declared variables.
+     */
+    public void setType(TypeNode type);
     
     /**
      * Gets the variable declarators for this node.

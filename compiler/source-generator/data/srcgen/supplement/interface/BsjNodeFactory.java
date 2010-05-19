@@ -85,5 +85,14 @@ public interface BsjNodeFactory
 	 * @throws IllegalArgumentException If the provided string was not a valid name.
 	 */
 	public NameNode parseNameNode(String name);
+	
+	/**
+	 * Creates an {@link ArrayTypeNode} based on the specified type and the given number of array levels.
+	 * @param type The base type to use.
+	 * @param levels The number of levels of depth to apply.  Must be at least 1.
+	 * @return The resulting array type.
+	 * @throws IllegalArgumentException If the provided level count is non-positive.
+	 */
+	public ArrayTypeNode wrapArrayLevels(TypeNode type, int levels);
 	/* GEN:stop */
 }

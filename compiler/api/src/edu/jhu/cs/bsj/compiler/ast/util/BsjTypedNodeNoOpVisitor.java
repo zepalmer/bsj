@@ -2071,6 +2071,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type VariableDeclaratorOwnerNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclaratorOwnerNodeStart(VariableDeclaratorOwnerNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type VariableInitializerListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -4144,6 +4152,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitVariableDeclaratorNodeStop(VariableDeclaratorNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VariableDeclaratorOwnerNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclaratorOwnerNodeStop(VariableDeclaratorOwnerNode node)
     {
     }
 

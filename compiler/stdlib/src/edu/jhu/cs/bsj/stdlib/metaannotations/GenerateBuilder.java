@@ -160,7 +160,8 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
         for (VariableDeclaratorNode variable : variables)
         {
             builderMembers.add(factory.makeFieldDeclarationNode(
-                    factory.makeFieldModifiersNode(AccessModifier.PRIVATE), 
+                    factory.makeFieldModifiersNode(AccessModifier.PRIVATE),
+                    variable.getEffectiveType(factory),
                     factory.makeVariableDeclaratorListNode(variable.deepCopy(factory)), 
                     null));
             
@@ -168,7 +169,7 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
             {
                 // required variable, add to constructor
                 constructorVariables.add(factory.makeVariableNode(
-                        variable.getType().deepCopy(factory), 
+                        variable.getEffectiveType(factory), 
                         variable.getName().deepCopy(factory)));
                 javadoc.append("@param " + variable.getName().getIdentifier());
                 constructorStatements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
@@ -188,7 +189,7 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
                                 factory.makeReturnNode(factory.makeThisNode())), 
                         factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                         variable.getName().deepCopy(factory), 
-                        factory.makeVariableListNode(factory.makeVariableNode(variable.getType().deepCopy(factory), factory.makeIdentifierNode("val"))), 
+                        factory.makeVariableListNode(factory.makeVariableNode(variable.getEffectiveType(factory), factory.makeIdentifierNode("val"))), 
                         factory.makeUnparameterizedTypeNode(factory.parseNameNode(builderName)), 
                         factory.makeJavadocNode("Builder parameter for " + variable.getName().getIdentifier() + ".")));
             }

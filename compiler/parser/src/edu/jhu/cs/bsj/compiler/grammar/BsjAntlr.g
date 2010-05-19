@@ -619,14 +619,13 @@ scope Rule {
  * ===========================================================================
  */
  
-// Represents the combination of an identifier and an initializer.  As the identifier can be followed with array type
-// indicators, an in/out type is also required.  This construct is necessary on its own to support the multiple
-// declaration sugar ("int x,y;").
-variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
+// Represents the combination of an identifier and an initializer.  This construct is necessary on its own to support
+// the multiple declaration sugar ("int x,y;").
+variableDeclarator returns [VariableDeclaratorNode ret]
         scope Rule;
         @init {
             ruleStart("variableDeclarator");
-            TypeNode type = inType==null ? null : inType.deepCopy(factory);
+            int arrayLevels = 0;
             VariableInitializerNode initializer = null;
         }
         @after {
@@ -641,9 +640,9 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
             }
         }
         (
-            arrayTypeIndicator[type]
+            arrayTypeCounter
             {
-                type = $arrayTypeIndicator.ret;
+                arrayLevels = $arrayTypeCounter.ret;
             }
         )?
         (
@@ -653,13 +652,35 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
             }
         )?
         {
-            $ret = factory.makeVariableDeclaratorNode(type, $id.ret, initializer);
+            $ret = factory.makeVariableDeclaratorNode($id.ret, arrayLevels, initializer);
         }
     ;
 
-// Represents the declaration of an array type over a normal type.  This construct only handles the parsing of the []
-// symbols and the modification of a type.  Note that this rule must parse at least one pair of brackets; thus, it
+// Represents the declaration of an array type over a normal type.  This construct parses the [] symbols and returns
+// a count of the number encountered.  Note that this rule must parse at least one pair of brackets; thus, it
 // should be optional anywhere that a non-array type is permissible.
+arrayTypeCounter returns [int ret]
+        scope Rule;
+        @init {
+            ruleStart("arrayTypeCounter");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        '[' ']'
+        {
+            $ret = 1;
+        }
+        (
+            '[' ']'
+            {
+                $ret++;
+            }
+        )*
+    ;
+
+// Performs type wrapping for a counted array type
 arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
         scope Rule;
         @init {
@@ -669,16 +690,10 @@ arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
             ruleStop();
         }
     :
-        '[' ']'
+        arrayTypeCounter
         {
-            $ret = factory.makeArrayTypeNode(inType);
+            $ret = factory.wrapArrayLevels(inType, $arrayTypeCounter.ret);
         }
-        (
-            '[' ']'
-            {
-                $ret = factory.makeArrayTypeNode($ret);
-            }
-        )*
     ;
 
 /* ===========================================================================
@@ -2517,12 +2532,12 @@ fieldDeclaration returns [FieldDeclarationNode ret]
     :   
         javadoc fieldModifiers
         type
-        a=variableDeclarator[$type.ret] // process type in case identifier has [] after it
+        a=variableDeclarator // process type in case identifier has [] after it
         {
             list.add($a.ret);
         }
         (
-            ',' b=variableDeclarator[$type.ret]
+            ',' b=variableDeclarator
             {
                 list.add($b.ret);
             }
@@ -2531,6 +2546,7 @@ fieldDeclaration returns [FieldDeclarationNode ret]
         {
             $ret = factory.makeFieldDeclarationNode(
                     $fieldModifiers.ret,
+                    $type.ret,
                     factory.makeVariableDeclaratorListNode(list),
                     $javadoc.ret);
         }
@@ -3499,12 +3515,12 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
         }
     :   
         variableModifiers type
-        a=variableDeclarator[$type.ret]
+        a=variableDeclarator
         {
             list.add($a.ret); 
         }
         (
-            ',' b=variableDeclarator[$type.ret]
+            ',' b=variableDeclarator
             {
                 list.add($b.ret); 
             }
@@ -3512,6 +3528,7 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
         {
             $ret = factory.makeVariableDeclarationNode(
                     $variableModifiers.ret,
+                    $type.ret,
                     factory.makeVariableDeclaratorListNode(list));
         }
     ;

@@ -127,6 +127,13 @@ public class BsjNodeFactoryDecorator implements BsjNodeFactory
 	{
 		return this.factory.parseNameNode(name);
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ArrayTypeNode wrapArrayLevels(TypeNode type, int levels)
+	{
+		return this.factory.wrapArrayLevels(type, levels);
+	}
 /* GEN:stop */
 }

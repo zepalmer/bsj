@@ -786,23 +786,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeFieldDeclarationNode(FieldDeclarationNode node, PrependablePrintStream p)
 	{
-		Node item = null;
-		for (int i = 0; i < node.getDeclarators().getChildren().size(); i++)
+		if (node.getJavadoc() != null)
 		{
-			item = node.getDeclarators().getChildren().get(i);
-			if (node.getJavadoc() != null)
-			{
-				node.getJavadoc().executeOperation(this, p);
-				p.print("\n");
-			}
-			node.getModifiers().executeOperation(this, p);
-			item.executeOperation(this, p);
-			p.print(";");
-			if (i != node.getDeclarators().getChildren().size() - 1)
-			{
-				p.print("\n");
-			}
+			node.getJavadoc().executeOperation(this, p);
+			p.println();
 		}
+		node.getModifiers().executeOperation(this, p);
+		node.getType().executeOperation(this, p);
+		p.print(' ');
+		node.getDeclarators().executeOperation(this, p);
+		p.println(";");
 		return null;
 	}
 
@@ -846,29 +839,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, PrependablePrintStream p)
 	{
-		boolean first = true;
-		node.getDeclaration().getModifiers().executeOperation(this, p);
-		
-		for (VariableDeclaratorNode item : node.getDeclaration().getDeclarators().getChildren())
-		{
-			if (first)
-			{
-				first = false;
-				item.getType().executeOperation(this, p);
-				p.print(" ");
-			} else
-			{
-				p.print(", ");
-			}
+		node.getDeclaration().executeOperation(this, p);
 
-			item.getName().executeOperation(this, p);
-			if (item.getInitializer() != null)
-			{
-				p.print(" = ");
-				item.getInitializer().executeOperation(this, p);
-			}
-		}
-		
 		return null;
 	}
 
@@ -1634,38 +1606,47 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeVariableDeclarationNode(VariableDeclarationNode node, PrependablePrintStream p)
 	{
-		// TODO: annotations, meta-annotations
+		node.getModifiers().executeOperation(this, p);
+		if (node.getModifiers().getFinalFlag() || node.getModifiers().getAnnotations().size() > 0 ||
+				node.getModifiers().getMetaAnnotations().size() > 0)
+		{
+			p.print(' ');
+		}
+		node.getType().executeOperation(this, p);
+		p.print(' ');
+
 		boolean first = true;
 
-		for (Node item : node.getDeclarators().getChildren())
+		for (VariableDeclaratorNode declarator : node.getDeclarators())
 		{
 			if (first)
 			{
 				first = false;
 			} else
 			{
-				p.print(";\n");
+				p.print(", ");
 			}
-			node.getModifiers().executeOperation(this, p);
-			item.executeOperation(this, p);
+			declarator.executeOperation(this, p);
 		}
-		p.print(";");
+		p.println(";");
 		return null;
 	}
 
 	@Override
 	public Void executeVariableDeclaratorListNode(VariableDeclaratorListNode node, PrependablePrintStream p)
 	{
-		executeListNode(node, p);
+		handleListNode(node, "", ", ", "", p, false);
 		return null;
 	}
 
 	@Override
 	public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, PrependablePrintStream p)
 	{
-		node.getType().executeOperation(this, p);
-		p.print(" ");
 		node.getName().executeOperation(this, p);
+		for (int i=0;i<node.getArrayLevels();i++)
+		{
+			p.print("[]");
+		}
 		if (node.getInitializer() != null)
 		{
 			p.print(" = ");
