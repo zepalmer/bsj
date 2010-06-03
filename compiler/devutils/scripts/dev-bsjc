@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cpath="$(
+if [ "$(basename "$0")" = "dev-bsjc" ]; then
+    cd "$(dirname "$0")/../.."
+fi
+d="$(pwd)/"
+for n in api generator parser stdlib utils; do
+    echo -n ":$d$n/bin"
+    ls -1 $n/lib/*.jar 2>/dev/null | while read line; do
+        echo -n ":$d$line"
+    done
+done
+echo -n ":${d}parser/.gen/bin"
+)"
+cpath="${cpath:1}"
+java -cp "$cpath" edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjC $*
