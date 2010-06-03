@@ -711,10 +711,10 @@ bsjMetaprogram returns [MetaprogramNode ret]
             ruleStop();
         }
     :
-        '[' ':'
+        '[:'
         preamble
         blockStatementList
-        ':' ']'
+        ':]'
         {
             $ret = factory.makeMetaprogramNode($preamble.ret, $blockStatementList.ret);
         }
