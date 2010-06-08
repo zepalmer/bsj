@@ -1,11 +1,21 @@
 #!/bin/bash
 
-cpath="$(
+basedir="."
 if [ "$(basename "$0")" = "dev-bsjc" ]; then
-    cd "$(dirname "$0")/../.."
+    basedir="$(dirname "$0")/../.."
 fi
+if [ -n "$BSJDEVHOME" ]; then
+    basedir="$BSJDEVHOME"
+fi
+
+cpath="$(
+cd "$basedir"
 d="$(pwd)/"
 for n in api generator parser stdlib utils; do
+    if [ ! -d "$n" ]; then
+        echo "Could not find directory $(pwd)/$n; is BSJDEVHOME set?" >&2
+        exit 1
+    fi
     echo -n ":$d$n/bin"
     ls -1 $n/lib/*.jar 2>/dev/null | while read line; do
         echo -n ":$d$line"
@@ -13,5 +23,7 @@ for n in api generator parser stdlib utils; do
 done
 echo -n ":${d}parser/.gen/bin"
 )"
+ec="$?"
+[ "$ec" -ne 0 ] && exit $ec
 cpath="${cpath:1}"
 java -cp "$cpath" edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjC $*
