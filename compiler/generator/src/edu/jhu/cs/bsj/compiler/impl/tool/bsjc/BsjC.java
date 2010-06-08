@@ -167,6 +167,7 @@ public class BsjC
 		List<BsjFileObject> sourceFiles = new ArrayList<BsjFileObject>();
 		for (String sourceFile : cmd.getArgs())
 		{
+			// TODO: respect absolute paths, etc.
 			try
 			{
 				// check for valid file extension ('.java' or '.bsj')
