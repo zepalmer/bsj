@@ -32,6 +32,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -3365,6 +3366,22 @@ public interface BsjNodeFactory
             NameNode base,
             IdentifierNode identifier,
             NameCategory category,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a RawCodeLiteralNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public RawCodeLiteralNode makeRawCodeLiteralNode(
+            String value);
+    
+    /**
+     * Creates a RawCodeLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    public RawCodeLiteralNode makeRawCodeLiteralNode(
+            String value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     

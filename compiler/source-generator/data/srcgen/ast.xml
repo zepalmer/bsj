@@ -2574,10 +2574,17 @@
         </type>
 
         <!-- ======================== OTHER NODES ======================= -->
+        
+        <type name="RawCodeLiteralNode" super="LiteralNode" superTypeArg="String">
+            <doc><![CDATA[
+                A node representing an unprocessed code literal.  This literal is not guaranteed to contain parseable
+                Java code and has not yet been assigned a type.
+            ]]></doc>
+        </type>
 
         <type name="CodeLiteralNode" super="LiteralNode" superTypeArg="Node">
             <doc><![CDATA[
-                A node representing a code literal.
+                A node representing a processed code literal.
             ]]></doc>
         </type>
     </srcgen>

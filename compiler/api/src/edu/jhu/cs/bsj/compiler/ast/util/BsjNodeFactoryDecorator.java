@@ -43,6 +43,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -5936,6 +5937,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         QualifiedNameNode node = factory.makeQualifiedNameNode(base, identifier, category, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a RawCodeLiteralNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public RawCodeLiteralNode makeRawCodeLiteralNode(
+            String value)
+    {
+        this.before();
+        RawCodeLiteralNode node = factory.makeRawCodeLiteralNode(value);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a RawCodeLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public RawCodeLiteralNode makeRawCodeLiteralNode(
+            String value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        RawCodeLiteralNode node = factory.makeRawCodeLiteralNode(value, startLocation, stopLocation);
         this.after(node);
         return node;
     }

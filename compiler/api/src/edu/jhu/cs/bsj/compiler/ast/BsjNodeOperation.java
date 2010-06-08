@@ -28,6 +28,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -1016,6 +1017,14 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeQualifiedNameNode(QualifiedNameNode node, P p);
+
+    /**
+     * Executes this operation against a RawCodeLiteralNode.
+     * @param node The RawCodeLiteralNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeRawCodeLiteralNode(RawCodeLiteralNode node, P p);
 
     /**
      * Executes this operation against a ReferenceTypeListNode.

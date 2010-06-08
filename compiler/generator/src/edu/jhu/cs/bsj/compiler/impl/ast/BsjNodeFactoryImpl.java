@@ -44,6 +44,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.*;
@@ -72,6 +73,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramPreambleNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramTargetListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramTargetNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.NormalMetaAnnotationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.RawCodeLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.SingleElementMetaAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TypeDeclarationMetaprogramAnchorNodeImpl;
 
@@ -5269,6 +5271,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a RawCodeLiteralNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public RawCodeLiteralNode makeRawCodeLiteralNode(
+            String value)
+    {
+        RawCodeLiteralNode ret = new RawCodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a RawCodeLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public RawCodeLiteralNode makeRawCodeLiteralNode(
+            String value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        RawCodeLiteralNode ret = new RawCodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

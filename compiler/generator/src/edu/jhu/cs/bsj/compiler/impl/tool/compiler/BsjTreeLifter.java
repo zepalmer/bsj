@@ -45,6 +45,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -4480,6 +4481,29 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBase,
                                 liftIdentifier,
                                 expressionizeNameCategory(liftCategoryValue),
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeRawCodeLiteralNode(RawCodeLiteralNode node, ExpressionNode factoryNode)
+    {
+        String liftValueValue = 
+                node.getValue();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeRawCodeLiteralNode"),
+                        factory.makeExpressionListNode(
+                                expressionizeString(liftValueValue),
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());

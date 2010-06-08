@@ -1246,6 +1246,175 @@ metaAnnotationElementValueArrayInitializer returns [MetaAnnotationArrayValueNode
         '}'
     ;
 
+// Parses a code literal
+codeLiteral returns [RawCodeLiteralNode ret]
+        scope Rule;
+        @init {
+            ruleStart("codeLiteral");
+            int startIndex = 0;
+            int endIndex = 0;
+        }
+        @after {
+            Token token = input.get(startIndex);
+            BsjSourceLocation startSourceLocation = new BsjSourceLocation(
+                    getResourceName(), token.getLine(), token.getCharPositionInLine() + 1);
+            token = input.get(endIndex-1);
+            BsjSourceLocation stopSourceLocation = new BsjSourceLocation(
+                    getResourceName(), token.getLine(),
+                    token.getCharPositionInLine() + token.getText().length() + 1);
+                    
+            StringBuilder sb = new StringBuilder();
+            for (int i=startIndex;i<endIndex;i++)
+            {
+                sb.append(input.get(i).getText());
+            }
+            String code = sb.toString();
+            
+            factory.setStartSourceLocation(startSourceLocation);
+            factory.setStopSourceLocation(stopSourceLocation);
+            factorySourceLocationOverride = true;
+            $ret = factory.makeRawCodeLiteralNode(code);
+            factorySourceLocationOverride = false;
+            
+            ruleStop();
+        }
+    :
+        CODELITERAL_START
+        {
+            // Set startIndex to the index of the next token
+            startIndex = input.index();
+        }
+        (
+            (
+                anyNonCodeLiteralToken
+            |
+                codeLiteral
+            )
+            {
+                endIndex = input.index();
+            }
+        )+
+        CODELITERAL_STOP
+    ;
+
+// This rule matches exactly one token which is not a code literal delimiter
+anyNonCodeLiteralToken
+        scope Rule;
+        @init {
+            ruleStart("anyNonCodeLiteralToken");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        METAIMPORT
+    |   METATARGET
+    |   METADEPENDS
+    |   METAWEAK
+    |   METAPROGRAM_START
+    |   METAPROGRAM_STOP
+    |   LONGLITERAL
+    |   INTLITERAL
+    |   FLOATLITERAL
+    |   DOUBLELITERAL
+    |   CHARLITERAL
+    |   STRINGLITERAL
+    |   ABSTRACT
+    |   ASSERT
+    |   BOOLEAN
+    |   BREAK
+    |   BYTE
+    |   CASE
+    |   CATCH
+    |   CHAR
+    |   CLASS
+    |   CONST
+    |   CONTINUE
+    |   DEFAULT
+    |   DO
+    |   DOUBLE
+    |   ELSE
+    |   ENUM
+    |   EXTENDS
+    |   FINAL
+    |   FINALLY
+    |   FLOAT
+    |   FOR
+    |   GOTO
+    |   IF
+    |   IMPLEMENTS
+    |   IMPORT
+    |   INSTANCEOF
+    |   INT
+    |   INTERFACE
+    |   LONG
+    |   NATIVE
+    |   NEW
+    |   PACKAGE
+    |   PRIVATE
+    |   PROTECTED
+    |   PUBLIC
+    |   RETURN
+    |   SHORT
+    |   STATIC
+    |   STRICTFP
+    |   SUPER
+    |   SWITCH
+    |   SYNCHRONIZED
+    |   THIS
+    |   THROW
+    |   THROWS
+    |   TRANSIENT
+    |   TRY
+    |   VOID
+    |   VOLATILE
+    |   WHILE
+    |   TRUE
+    |   FALSE
+    |   NULL
+    |   LPAREN
+    |   RPAREN
+    |   LBRACE
+    |   RBRACE
+    |   LBRACKET
+    |   RBRACKET
+    |   SEMI
+    |   COMMA
+    |   DOT
+    |   ELLIPSIS
+    |   EQ
+    |   BANG
+    |   TILDE
+    |   QUES
+    |   COLON
+    |   EQEQ
+    |   AMPAMP
+    |   BARBAR
+    |   PLUSPLUS
+    |   SUBSUB
+    |   PLUS
+    |   SUB
+    |   STAR
+    |   SLASH
+    |   AMP
+    |   BAR
+    |   CARET
+    |   PERCENT
+    |   PLUSEQ
+    |   SUBEQ
+    |   STAREQ
+    |   SLASHEQ
+    |   AMPEQ
+    |   BAREQ
+    |   CARETEQ
+    |   PERCENTEQ
+    |   MONKEYS_AT
+    |   BANGEQ
+    |   GT
+    |   LT
+    |   IDENTIFIER
+    ;
+
 /* ===========================================================================
  * These are the Java grammar rules.
  * ===========================================================================
@@ -5480,6 +5649,11 @@ lexicalLiteral returns [LiteralNode<?> ret]
         {
             $ret = factory.makeNullLiteralNode();
         }
+    |
+        codeLiteral
+        {
+            $ret = $codeLiteral.ret;
+        }
     ;
 
 identifier returns [IdentifierNode ret]
@@ -5546,6 +5720,34 @@ localVariableHeader
 
 METAIMPORT
     :   '#import'
+    ;
+
+METATARGET
+    :   '#target'
+    ;
+
+METADEPENDS
+    :   '#depends'
+    ;
+
+METAWEAK
+    :   '#weak'
+    ;
+
+METAPROGRAM_START
+    :   '[:'
+    ;
+    
+METAPROGRAM_STOP
+    :   ':]'
+    ;
+    
+CODELITERAL_START
+    :   '<:'
+    ;
+
+CODELITERAL_STOP
+    :   ':>'
     ;
 
 /* *** Java lexer rules *************************************************** */

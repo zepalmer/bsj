@@ -33,6 +33,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjNodeOperationProxy;
@@ -1994,6 +1995,19 @@ public class NodeMappingSerializationOperation extends
 			try
 			{
 				return super.executeQualifiedNameNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
+		public Void executeRawCodeLiteralNode(RawCodeLiteralNode node, PrependablePrintStream p)
+		{
+			before(node);
+			try
+			{
+				return super.executeRawCodeLiteralNode(node, p);
 			} finally
 			{
 				after(node);

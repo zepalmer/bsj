@@ -4,13 +4,13 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
- * A node representing a processed code literal.
+ * A node representing an unprocessed code literal.  This literal is not guaranteed to contain parseable
+ * Java code and has not yet been assigned a type.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface CodeLiteralNode extends LiteralNode<Node>
+public interface RawCodeLiteralNode extends LiteralNode<String>
 {
     /**
      * Generates a deep copy of this node.
@@ -18,5 +18,5 @@ public interface CodeLiteralNode extends LiteralNode<Node>
      * @return The resulting deep copy node.
      */
     @Override
-    public CodeLiteralNode deepCopy(BsjNodeFactory factory);
+    public RawCodeLiteralNode deepCopy(BsjNodeFactory factory);
 }

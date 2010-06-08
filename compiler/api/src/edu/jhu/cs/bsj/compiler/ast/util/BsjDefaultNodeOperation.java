@@ -29,6 +29,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -1255,6 +1256,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeQualifiedNameNode(QualifiedNameNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeRawCodeLiteralNode(RawCodeLiteralNode node, P p)
     {
         return executeDefault(node, p);
     }
