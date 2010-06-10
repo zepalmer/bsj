@@ -61,8 +61,9 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	/** Indicates whether or not the contents of this list are implicitly order dependent. */
 	private boolean orderDependent;
 
-	/** Indicates whether or not permission checks are currently occurring. */
-	private boolean permissionCheck;
+	/** Indicates whether or not the list is in the process of initializing.  If not, permission checks occur and
+	 *  history is recorded.  During initialization, these events do not occur. */
+	private boolean initializing;
 
 	public NodeListImpl(BsjNodeManager manager, Node parent, boolean orderDepedent, List<T> initial)
 	{
@@ -76,7 +77,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			@Override
 			protected void elementAdded(int index, T element, boolean replaced)
 			{
-				if (NodeListImpl.this.permissionCheck)
+				if (NodeListImpl.this.initializing)
 				{
 					NodeListImpl.this.manager.assertInsertable(NodeListImpl.this.parent);
 				}
@@ -89,7 +90,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			@Override
 			protected void elementRemoved(int index, T element, boolean replaced)
 			{
-				if (NodeListImpl.this.permissionCheck)
+				if (NodeListImpl.this.initializing)
 				{
 					NodeListImpl.this.manager.assertMutatable(NodeListImpl.this.parent);
 				}
@@ -112,12 +113,23 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		this.base = new HashSet<Knowledge<T>>();
 
 		// initialize the list
-		this.permissionCheck = false;
+		this.initializing = false;
 		for (T t : initial)
 		{
 			addLast(t);
 		}
-		this.permissionCheck = true;
+		this.initializing = true;
+	}
+	
+	/**
+	 * Used to determine whether or not list operations record knowledge.  If the manipulations are occurring because
+	 * of the BSJ compiler itself or if this list is still in initialization, knowledge recording will produce false
+	 * positives in the conflict detection system.
+	 * @return <code>true</code> to record knowledge; <code>false</code> otherwise.
+	 */
+	private boolean isRecordingKnowledge()
+	{
+		return this.manager.getCurrentMetaprogramId() != null && !this.initializing;
 	}
 
 	@Override
@@ -138,7 +150,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			throw new IllegalArgumentException(member + " is not a member of this list");
 		}
 		this.backing.add(index + 1, node);
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new EffectAfterKnowledge<T>(this.manager.getCurrentMetaprogramId(), new ElementValue<T>(node),
 					new ElementValue<T>(member)), new EffectInKnowledge<T>(this.manager.getCurrentMetaprogramId(),
@@ -164,7 +176,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			throw new IllegalArgumentException(member + " is not a member of this list");
 		}
 		this.backing.add(index, node);
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new EffectBeforeKnowledge<T>(this.manager.getCurrentMetaprogramId(),
 					new ElementValue<T>(node), new ElementValue<T>(member)), new EffectInKnowledge<T>(
@@ -183,7 +195,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		if (node == null)
 			throw new NullPointerException();
 		this.backing.add(0, node);
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new EffectAfterKnowledge<T>(this.manager.getCurrentMetaprogramId(), new ElementValue<T>(node),
 					new StartValue<T>()), new EffectInKnowledge<T>(this.manager.getCurrentMetaprogramId(),
@@ -202,7 +214,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		if (node == null)
 			throw new NullPointerException();
 		this.backing.add(node);
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new EffectBeforeKnowledge<T>(this.manager.getCurrentMetaprogramId(),
 					new ElementValue<T>(node), new EndValue<T>()), new EffectInKnowledge<T>(
@@ -235,7 +247,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 
 		this.manager.popPermissionPolicyManager();
 
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new PredicateKnowledge<T>(this.manager.getCurrentMetaprogramId(), filter));
 		}
@@ -268,7 +280,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			ret = this.backing.get(index + 1);
 			value = new ElementValue<T>(ret);
 		}
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new InvariantInKnowledge<T>(this.manager.getCurrentMetaprogramId(), value),
 					new InvariantAfterKnowledge<T>(this.manager.getCurrentMetaprogramId(), value, new ElementValue<T>(
@@ -303,7 +315,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			ret = this.backing.get(index - 1);
 			value = new ElementValue<T>(ret);
 		}
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new InvariantInKnowledge<T>(this.manager.getCurrentMetaprogramId(), value),
 					new InvariantBeforeKnowledge<T>(this.manager.getCurrentMetaprogramId(), value, new ElementValue<T>(
@@ -331,7 +343,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			ret = null;
 			value = new EndValue<T>();
 		}
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new InvariantAfterKnowledge<T>(this.manager.getCurrentMetaprogramId(), value,
 					new StartValue<T>()), new InvariantInKnowledge<T>(this.manager.getCurrentMetaprogramId(), value));
@@ -358,7 +370,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			ret = null;
 			value = new StartValue<T>();
 		}
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new InvariantBeforeKnowledge<T>(this.manager.getCurrentMetaprogramId(), value,
 					new EndValue<T>()), new InvariantInKnowledge<T>(this.manager.getCurrentMetaprogramId(), value));
@@ -375,7 +387,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		}
 
 		boolean ret = this.backing.remove(node);
-		if (this.manager.getCurrentMetaprogramId() != null)
+		if (isRecordingKnowledge())
 		{
 			addKnowledge(new EffectInKnowledge<T>(this.manager.getCurrentMetaprogramId(), new ElementValue<T>(node)));
 		}
