@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
@@ -49,11 +50,11 @@ import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
  * 
  * @author Nathan Krasnopoler
  */
-
+// TODO make multiple @@Forwarders not conflict, and make it so that each one can only take a single methodName and forwardedMethodName
 public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	
 	private String[] methodNames = null;
-	private String nameToForward = null; 
+	private String[] forwardedMethodNames = null; 
 	private MetaAnnotationMetaprogramAnchorNode anchor;
 	private BsjNodeFactory factory;
 
@@ -76,13 +77,13 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	
 
 	@BsjMetaAnnotationElementGetter
-	public String getNameToForward() {
-		return nameToForward;
+	public String[] getForwardedMethodNames() {
+		return forwardedMethodNames;
 	}
 	
 	@BsjMetaAnnotationElementSetter
-	public void setNameToForward(String forwardedMethodName) {
-		this.nameToForward = forwardedMethodName;
+	public void setForwardedMethodNames(String[] forwardedMethodNames) {
+		this.forwardedMethodNames = forwardedMethodNames;
 	}
 	
 	@Override
@@ -106,21 +107,23 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			FieldDeclarationNode fieldNode = anchor.getNearestAncestorOfType(FieldDeclarationNode.class);
 			
 			// Throw an error if none can be found
-			if (fieldNode == null)			{
+			if (fieldNode == null) {
 				context.getDiagnosticListener().report(
 						new InvalidAnnotatedDeclarationDiagnosticImpl(getClass(), null,
 								Collections.<Class<? extends Node>> singletonList(FieldDeclarationNode.class)));
 				throw new MetaprogramExecutionFailureException();
 			}
 			
-			List<VariableDeclaratorNode> variableDeclarations = fieldNode.getDeclarators().getChildren();
-			List<MethodDeclarationNode> methodsToAdd = new ArrayList<MethodDeclarationNode>();
-			for (VariableDeclaratorNode variableDeclaration : variableDeclarations)	{
+			List<ClassMemberNode> classDeclarationList = classDeclaration.getBody().getMembers().getChildren();
+			for (VariableDeclaratorNode variableDeclaration : fieldNode.getDeclarators().getChildren())	{
+				int i = 0;
 				for (String methodName : getMethodNames()) {
-					methodsToAdd.addAll(createForwardedMethod(variableDeclaration, methodName));
+					String fieldName = variableDeclaration.getName().getIdentifier();
+					String forwardedMethodName = getForwardedMethodName(fieldName, i);
+					classDeclarationList.addAll(createForwardedMethod(variableDeclaration, methodName, forwardedMethodName));
+					i++;
 				}
 			}
-			classDeclaration.getBody().getMembers().getChildren().addAll(methodsToAdd);
 			// for each method in the argument list,
 				// Let methodName be the method in the argument list
 				// Let forwardedMethodName = fieldName + capitalizeFirstLetter(methodName)
@@ -134,7 +137,15 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 				// Let forwardedMethodName = accessorName + capitalizeFirstLetter(methodName)
 				// make a new method declaration node called forwardedMethodName, make it public, 
 					// and make it simply call methodName on accessorName(). 
-		
+	}
+	
+	public String getForwardedMethodName(String fieldName, int i) {
+		String methodName = getMethodNames()[i];
+		if (forwardedMethodNames != null && forwardedMethodNames[i] != null) {
+			return forwardedMethodNames[i];
+		} else {
+			return fieldName + upcaseFirstLetter(methodName);
+		}
 	}
 	
 	private static String upcaseFirstLetter(String name) 	{
@@ -145,16 +156,17 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	public void complete() throws InvalidMetaAnnotationConfigurationException 	{
 	}
 	
-	private List<MethodDeclarationNode> createForwardedMethod(VariableDeclaratorNode variableDeclaration, String methodName) {
+	private List<MethodDeclarationNode> createForwardedMethod(VariableDeclaratorNode variableDeclaration, String methodName, String forwardedMethodName) {
 		// Let fieldName be the name of the field
 		List<MethodDeclarationNode> methodsToAdd = new ArrayList<MethodDeclarationNode>();
-		String fieldName = variableDeclaration.getName().getIdentifier();
+		int i = 0;
 
 		for (MethodDeclarationNode methodToAdd : getMethodsToForward(variableDeclaration.getEffectiveType(factory), methodName)) {
-			if (nameToForward == null) {
-				nameToForward = fieldName + upcaseFirstLetter(methodName);
-			}
-			IdentifierNode forwardedMethodNameIdentifier = factory.makeIdentifierNode(nameToForward);
+			//String forwardedMethodName = "";
+			
+	
+			IdentifierNode forwardedMethodNameIdentifier = factory.makeIdentifierNode(forwardedMethodName);
+			i++;
 			VariableListNode parameters = methodToAdd.getParameters();
 			
 			/* return ~:fieldName:~.~:methodName:~(~:someArgs:~) */
