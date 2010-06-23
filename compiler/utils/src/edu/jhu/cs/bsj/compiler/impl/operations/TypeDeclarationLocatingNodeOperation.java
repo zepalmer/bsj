@@ -303,7 +303,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 			{
 				if (node instanceof NamedTypeDeclarationNode<?>)
 				{
-					NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) node;
+					NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) node; // TODO make this use filter
 					if (namedTypeDeclarationNode.getIdentifier().getIdentifier().equals(this.name))
 					{
 						return namedTypeDeclarationNode;
