@@ -6,19 +6,27 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
-//import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
-
+import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
@@ -31,7 +39,9 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnosticImpl;
+import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
 
 
 /**
@@ -43,9 +53,13 @@ import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnost
 public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	
 	private String[] methodNames = null;
+	private MetaAnnotationMetaprogramAnchorNode anchor;
 
+	/**
+	 * 
+	 */
 	public Forwarder() 	{
-		super(Collections.singletonList("forwarder"), Arrays.asList("property"));
+        super(Arrays.asList("forwarder"), new ArrayList<String>()/*, Arrays.asList("property")*/);
 	}
 	
 	@BsjMetaAnnotationElementGetter
@@ -58,15 +72,13 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		this.methodNames = methodNames;
 	}
 	
-	//TODO make this take a string array of arguments
-
 	@Override
 	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context) 	{
 		// Prelude/preparation
 			// get anchor and such
 		// This is the factory that allows us to build new AST parts. 
 		BsjNodeFactory factory = context.getFactory();
-		MetaAnnotationMetaprogramAnchorNode anchor = context.getAnchor(); 
+		this.anchor = context.getAnchor(); 
 		ClassDeclarationNode classDeclaration = anchor.getNearestAncestorOfType(ClassDeclarationNode.class);
 		
 		// TODO Currently this assumes we are on a field, 
@@ -100,10 +112,6 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 				// Let forwardedMethodName = fieldName + capitalizeFirstLetter(methodName)
 				// make a new method declaration node called forwardedMethodName, make it public, 
 					// and make it simply call methodName on fieldName. 
-//		} else {
-//			
-//		}
-			
 		// else
 			// we are on a method
 			// Let accessorName be the name of the method
@@ -112,9 +120,6 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 				// Let forwardedMethodName = accessorName + capitalizeFirstLetter(methodName)
 				// make a new method declaration node called forwardedMethodName, make it public, 
 					// and make it simply call methodName on accessorName(). 
-	
-
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -130,21 +135,70 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		// Let fieldName be the name of the field
 		List<MethodDeclarationNode> methodsToAdd = new ArrayList<MethodDeclarationNode>();
 		String fieldName = variableDeclaration.getName().getIdentifier();
-		IdentifierNode forwardedMethodName = factory.makeIdentifierNode(fieldName + upcaseFirstLetter(methodName));
-		VariableListNode parameters = null;
-		BlockStatementListNode body = null;
-		MethodModifiersNode modifiers = null;
-		VariableNode varargParameter = null;
-		UnparameterizedTypeListNode throwTypes = null;
-		TypeParameterListNode typeParameters = null;
-		JavadocNode javadoc = null;
-		for (TypeNode returnType : getMethodType(variableDeclaration.getEffectiveType(factory), methodName)) {
+
+		for (MethodDeclarationNode methodToAdd : getMethodsToForward(variableDeclaration.getEffectiveType(factory), methodName)) {
+//			methodsToAdd.add(methodToAdd);
+			IdentifierNode forwardedMethodName = factory.makeIdentifierNode(fieldName + upcaseFirstLetter(methodName));
+			VariableListNode parameters = methodToAdd.getParameters();
+			//IdentifierNode fieldIdentifier, NameCategory.AMBIGUOUS;
+			NameCategory category = NameCategory.AMBIGUOUS;
+			IdentifierNode fieldIdentifier = factory.makeIdentifierNode(variableDeclaration.getName().getIdentifier());
+			PrimaryExpressionNode fieldExpression = factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(fieldIdentifier, category)); // TODO
+			List<ExpressionNode> listOfArguments = new ArrayList<ExpressionNode>();
+			for (VariableNode parameter : parameters.getChildren()) {
+				NameNode name = factory.makeSimpleNameNode(parameter.getIdentifier(), category);
+				listOfArguments.add(factory.makeFieldAccessByNameNode(name));
+			}
+			ExpressionListNode someArgs = factory.makeExpressionListNode(listOfArguments); // TODO
+			ReturnNode returnNode = factory.makeReturnNode(
+					factory.makeMethodInvocationByExpressionNode(fieldExpression, factory.makeIdentifierNode(methodName), someArgs));
+			List<BlockStatementNode> listOfStatements = new ArrayList<BlockStatementNode>();
+			listOfStatements.add(returnNode);
+			// BlockStatementListNode body = methodToAdd.getBody();
+			/* return (~:returnType:~)this.~:fieldName:~.~:methodName:~(~:someArgs:~) */
+			BlockStatementListNode body = factory.makeBlockStatementListNode(listOfStatements);
+			MethodModifiersNode modifiers = factory.makeMethodModifiersNode(AccessModifier.PUBLIC);
+			VariableNode varargParameter = methodToAdd.getVarargParameter();
+			UnparameterizedTypeListNode throwTypes = methodToAdd.getThrowTypes();
+			TypeParameterListNode typeParameters = methodToAdd.getTypeParameters();
+			JavadocNode javadocNode = methodToAdd.getJavadoc();
+			String javadocString;
+			if (javadocNode == null) {
+				javadocString = "";
+			} else {
+				javadocString = javadocNode.getText();
+			}
+			JavadocNode javadoc = factory.makeJavadocNode("forwarded: " + javadocString);
+			TypeNode returnType = methodToAdd.getReturnType();
 			methodsToAdd.add(factory.makeMethodDeclarationNode(body, modifiers, forwardedMethodName, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc));
 		}
 		return methodsToAdd;
 	}
 	
-	private List<TypeNode> getMethodType(TypeNode callerType, String methodName) {
-		return null;
+	private List<MethodDeclarationNode> getMethodsToForward(TypeNode callerType, String methodName) {
+		
+
+		List<MethodDeclarationNode> returnValue = new ArrayList<MethodDeclarationNode>();
+
+		NameNode name = getNameFromType(callerType);
+		NamedTypeDeclarationNode<?> type = new TypeDeclarationLocatingNodeOperation(name).executeDefault(anchor, null);
+		TypeBodyNode<?> typeBody = type.getBody();
+		ListNode<? extends Node> listOfMembers = typeBody.getMembers();
+		for (Node node : listOfMembers.filter(new FilterByMethodName(methodName))) {
+			if (node instanceof MethodDeclarationNode) {
+				MethodDeclarationNode methodNode = (MethodDeclarationNode) node;
+				returnValue.add(methodNode);
+			}
+		}
+		return returnValue;
+	}
+	
+	private NameNode getNameFromType(TypeNode type) {
+		if (type instanceof UnparameterizedTypeNode) {
+			return ((UnparameterizedTypeNode)type).getName();
+		} else {
+			System.out.println("Couldn't find type");
+			return null;
+		}
 	}
 }
