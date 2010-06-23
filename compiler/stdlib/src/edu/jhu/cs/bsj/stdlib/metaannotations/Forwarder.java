@@ -53,7 +53,9 @@ import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
 public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	
 	private String[] methodNames = null;
+	private String nameToForward = null; 
 	private MetaAnnotationMetaprogramAnchorNode anchor;
+	private BsjNodeFactory factory;
 
 	/**
 	 * 
@@ -72,6 +74,17 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		this.methodNames = methodNames;
 	}
 	
+
+	@BsjMetaAnnotationElementGetter
+	public String getNameToForward() {
+		return nameToForward;
+	}
+	
+	@BsjMetaAnnotationElementSetter
+	public void setNameToForward(String forwardedMethodName) {
+		this.nameToForward = forwardedMethodName;
+	}
+	
 	@Override
 	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context) 	{
 		// Prelude/preparation
@@ -79,6 +92,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		// This is the factory that allows us to build new AST parts. 
 		BsjNodeFactory factory = context.getFactory();
 		this.anchor = context.getAnchor(); 
+		this.factory = factory;
 		ClassDeclarationNode classDeclaration = anchor.getNearestAncestorOfType(ClassDeclarationNode.class);
 		
 		// TODO Currently this assumes we are on a field, 
@@ -103,7 +117,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			List<MethodDeclarationNode> methodsToAdd = new ArrayList<MethodDeclarationNode>();
 			for (VariableDeclaratorNode variableDeclaration : variableDeclarations)	{
 				for (String methodName : getMethodNames()) {
-					methodsToAdd.addAll(createForwardedMethod(factory, variableDeclaration, methodName));
+					methodsToAdd.addAll(createForwardedMethod(variableDeclaration, methodName));
 				}
 			}
 			classDeclaration.getBody().getMembers().getChildren().addAll(methodsToAdd);
@@ -131,32 +145,34 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	public void complete() throws InvalidMetaAnnotationConfigurationException 	{
 	}
 	
-	private List<MethodDeclarationNode> createForwardedMethod(BsjNodeFactory factory, VariableDeclaratorNode variableDeclaration, String methodName) {
+	private List<MethodDeclarationNode> createForwardedMethod(VariableDeclaratorNode variableDeclaration, String methodName) {
 		// Let fieldName be the name of the field
 		List<MethodDeclarationNode> methodsToAdd = new ArrayList<MethodDeclarationNode>();
 		String fieldName = variableDeclaration.getName().getIdentifier();
 
 		for (MethodDeclarationNode methodToAdd : getMethodsToForward(variableDeclaration.getEffectiveType(factory), methodName)) {
-//			methodsToAdd.add(methodToAdd);
-			IdentifierNode forwardedMethodName = factory.makeIdentifierNode(fieldName + upcaseFirstLetter(methodName));
+			if (nameToForward == null) {
+				nameToForward = fieldName + upcaseFirstLetter(methodName);
+			}
+			IdentifierNode forwardedMethodNameIdentifier = factory.makeIdentifierNode(nameToForward);
 			VariableListNode parameters = methodToAdd.getParameters();
-			//IdentifierNode fieldIdentifier, NameCategory.AMBIGUOUS;
+			
+			/* return ~:fieldName:~.~:methodName:~(~:someArgs:~) */
 			NameCategory category = NameCategory.AMBIGUOUS;
 			IdentifierNode fieldIdentifier = factory.makeIdentifierNode(variableDeclaration.getName().getIdentifier());
-			PrimaryExpressionNode fieldExpression = factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(fieldIdentifier, category)); // TODO
+			PrimaryExpressionNode fieldExpression = factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(fieldIdentifier, category)); 
 			List<ExpressionNode> listOfArguments = new ArrayList<ExpressionNode>();
 			for (VariableNode parameter : parameters.getChildren()) {
 				NameNode name = factory.makeSimpleNameNode(parameter.getIdentifier(), category);
 				listOfArguments.add(factory.makeFieldAccessByNameNode(name));
 			}
-			ExpressionListNode someArgs = factory.makeExpressionListNode(listOfArguments); // TODO
+			ExpressionListNode someArgs = factory.makeExpressionListNode(listOfArguments); 
 			ReturnNode returnNode = factory.makeReturnNode(
 					factory.makeMethodInvocationByExpressionNode(fieldExpression, factory.makeIdentifierNode(methodName), someArgs));
 			List<BlockStatementNode> listOfStatements = new ArrayList<BlockStatementNode>();
 			listOfStatements.add(returnNode);
-			// BlockStatementListNode body = methodToAdd.getBody();
-			/* return (~:returnType:~)this.~:fieldName:~.~:methodName:~(~:someArgs:~) */
 			BlockStatementListNode body = factory.makeBlockStatementListNode(listOfStatements);
+			
 			MethodModifiersNode modifiers = factory.makeMethodModifiersNode(AccessModifier.PUBLIC);
 			VariableNode varargParameter = methodToAdd.getVarargParameter();
 			UnparameterizedTypeListNode throwTypes = methodToAdd.getThrowTypes();
@@ -170,7 +186,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			}
 			JavadocNode javadoc = factory.makeJavadocNode("forwarded: " + javadocString);
 			TypeNode returnType = methodToAdd.getReturnType();
-			methodsToAdd.add(factory.makeMethodDeclarationNode(body, modifiers, forwardedMethodName, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc));
+			methodsToAdd.add(factory.makeMethodDeclarationNode(body, modifiers, forwardedMethodNameIdentifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc));
 		}
 		return methodsToAdd;
 	}
@@ -197,8 +213,9 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		if (type instanceof UnparameterizedTypeNode) {
 			return ((UnparameterizedTypeNode)type).getName();
 		} else {
-			System.out.println("Couldn't find type");
-			return null;
+			return null; // TODO throw an error
 		}
 	}
+
+
 }
