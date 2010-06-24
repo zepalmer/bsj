@@ -64,7 +64,7 @@ public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

@@ -64,7 +64,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;

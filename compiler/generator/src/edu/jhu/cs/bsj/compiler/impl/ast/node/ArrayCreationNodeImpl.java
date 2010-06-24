@@ -69,7 +69,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(baseType, false);
         this.baseType = baseType;
@@ -100,7 +100,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.STRONG_WRITE);
         }
         this.arrayLevels = arrayLevels;
     }

@@ -10,7 +10,8 @@ public interface Attribute
 	public static enum AccessType
 	{
 		READ,
-		WRITE;
+		WEAK_WRITE,
+		STRONG_WRITE;
 
 		/**
 		 * Determines whether or not this access type conflicts with the specified access type.
@@ -28,15 +29,27 @@ public interface Attribute
 					{
 						case READ:
 							return false;
-						case WRITE:
+						case WEAK_WRITE:
+						case STRONG_WRITE:
 							return true;
 					}
 					break;
-				case WRITE:
+				case WEAK_WRITE:
 					switch (accessType)
 					{
 						case READ:
-						case WRITE:
+							return true;
+						case WEAK_WRITE:
+							return false;
+						case STRONG_WRITE:
+							return true;
+					}
+				case STRONG_WRITE:
+					switch (accessType)
+					{
+						case READ:
+						case WEAK_WRITE:
+						case STRONG_WRITE:
 							return true;
 					}
 					break;

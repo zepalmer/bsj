@@ -264,7 +264,7 @@ public class MetacompilationManager implements MetacompilationContext
 		{
 			compilationUnitName = binaryName;
 		}
-		return packageNode.getCompilationUnit(compilationUnitName);
+		return packageNode.load(compilationUnitName);
 	}
 
 	/**

@@ -64,7 +64,7 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;

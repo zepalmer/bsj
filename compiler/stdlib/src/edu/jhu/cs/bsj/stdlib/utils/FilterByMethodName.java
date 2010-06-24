@@ -1,8 +1,8 @@
 package edu.jhu.cs.bsj.stdlib.utils;
 
 import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 public class FilterByMethodName implements NodeFilter<Node> {
 

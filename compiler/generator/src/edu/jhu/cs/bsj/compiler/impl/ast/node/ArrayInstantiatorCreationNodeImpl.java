@@ -67,7 +67,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DIM_EXPRESSIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.DIM_EXPRESSIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(dimExpressions, false);
         this.dimExpressions = dimExpressions;

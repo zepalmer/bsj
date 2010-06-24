@@ -72,7 +72,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TARGET_NAME, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TARGET_NAME, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(targetName, false);
         this.targetName = targetName;
@@ -103,7 +103,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.WEAK, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.WEAK, Attribute.AccessType.STRONG_WRITE);
         }
         this.weak = weak;
     }

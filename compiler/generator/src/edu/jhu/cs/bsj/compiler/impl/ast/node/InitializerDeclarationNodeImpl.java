@@ -79,7 +79,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         }
         this.staticInitializer = staticInitializer;
     }
@@ -108,7 +108,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -139,7 +139,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

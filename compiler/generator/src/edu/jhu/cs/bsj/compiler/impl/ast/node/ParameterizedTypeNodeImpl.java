@@ -72,7 +72,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(baseType, false);
         this.baseType = baseType;
@@ -103,7 +103,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;

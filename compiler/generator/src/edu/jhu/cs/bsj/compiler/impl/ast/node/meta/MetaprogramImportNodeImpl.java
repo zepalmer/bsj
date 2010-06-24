@@ -65,7 +65,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPORT_NODE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IMPORT_NODE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(importNode, false);
         this.importNode = importNode;

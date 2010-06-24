@@ -96,7 +96,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -127,7 +127,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(type, false);
         this.type = type;
@@ -158,7 +158,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -189,7 +189,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(defaultValue, false);
         this.defaultValue = defaultValue;
@@ -220,7 +220,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

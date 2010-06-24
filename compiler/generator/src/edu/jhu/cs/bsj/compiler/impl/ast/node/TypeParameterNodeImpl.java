@@ -72,7 +72,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -103,7 +103,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(bounds, false);
         this.bounds = bounds;

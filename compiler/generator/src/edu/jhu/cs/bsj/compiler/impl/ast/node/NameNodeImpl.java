@@ -79,7 +79,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;

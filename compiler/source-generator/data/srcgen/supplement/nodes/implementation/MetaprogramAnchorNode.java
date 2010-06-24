@@ -21,7 +21,7 @@ public class MetaprogramAnchorNodeImpl
 	public void setReplacement(T replacement)
 	{
 		// TODO: some kind of control on this; setReplacement should probably only be called one time?
-		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.WRITE);
+		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.STRONG_WRITE);
 		setAsChild(this.replacement, false);
 		this.replacement = replacement;
 		setAsChild(this.replacement, true);

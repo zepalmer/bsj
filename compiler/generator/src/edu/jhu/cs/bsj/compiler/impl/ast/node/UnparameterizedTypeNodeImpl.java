@@ -64,7 +64,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(name, false);
         this.name = name;

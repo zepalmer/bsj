@@ -96,7 +96,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(initializer, false);
         this.initializer = initializer;
@@ -127,7 +127,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(condition, false);
         this.condition = condition;
@@ -158,7 +158,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(update, false);
         this.update = update;
@@ -189,7 +189,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(statement, false);
         this.statement = statement;
@@ -220,7 +220,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

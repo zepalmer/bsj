@@ -78,7 +78,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(condition, false);
         this.condition = condition;
@@ -109,7 +109,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(trueExpression, false);
         this.trueExpression = trueExpression;
@@ -140,7 +140,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(falseExpression, false);
         this.falseExpression = falseExpression;

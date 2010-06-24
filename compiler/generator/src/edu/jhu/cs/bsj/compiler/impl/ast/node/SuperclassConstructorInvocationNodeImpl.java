@@ -68,7 +68,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.QUALIFYING_EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.QUALIFYING_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(qualifyingExpression, false);
         this.qualifyingExpression = qualifyingExpression;

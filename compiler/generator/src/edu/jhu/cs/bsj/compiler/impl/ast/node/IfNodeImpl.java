@@ -87,7 +87,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(condition, false);
         this.condition = condition;
@@ -118,7 +118,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(thenStatement, false);
         this.thenStatement = thenStatement;
@@ -149,7 +149,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(elseStatement, false);
         this.elseStatement = elseStatement;
@@ -180,7 +180,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

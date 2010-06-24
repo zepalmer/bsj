@@ -78,7 +78,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(constructorTypeArguments, false);
         this.constructorTypeArguments = constructorTypeArguments;
@@ -109,7 +109,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(arguments, false);
         this.arguments = arguments;
@@ -140,7 +140,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(body, false);
         this.body = body;

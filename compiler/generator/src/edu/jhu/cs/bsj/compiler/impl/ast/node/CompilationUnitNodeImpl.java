@@ -105,7 +105,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(packageDeclaration, false);
         this.packageDeclaration = packageDeclaration;
@@ -136,7 +136,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaimports, false);
         this.metaimports = metaimports;
@@ -167,7 +167,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(imports, false);
         this.imports = imports;
@@ -198,7 +198,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(typeDecls, false);
         this.typeDecls = typeDecls;

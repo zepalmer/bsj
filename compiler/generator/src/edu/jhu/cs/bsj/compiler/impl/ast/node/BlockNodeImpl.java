@@ -72,7 +72,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(statements, false);
         this.statements = statements;
@@ -103,7 +103,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

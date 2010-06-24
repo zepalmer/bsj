@@ -72,7 +72,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;
@@ -103,7 +103,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
         }
         this.operator = operator;
     }

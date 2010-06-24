@@ -64,7 +64,7 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(name, false);
         this.name = name;

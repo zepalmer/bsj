@@ -72,7 +72,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;
@@ -103,7 +103,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

@@ -80,7 +80,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(name, false);
         this.name = name;
@@ -111,7 +111,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.STRONG_WRITE);
         }
         this.arrayLevels = arrayLevels;
     }
@@ -140,7 +140,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(initializer, false);
         this.initializer = initializer;

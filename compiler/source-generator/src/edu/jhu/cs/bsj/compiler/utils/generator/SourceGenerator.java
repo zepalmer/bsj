@@ -955,7 +955,7 @@ public class SourceGenerator
 						ps.println("    getManager().assertMutatable(this);");
 						ps.println("    recordAccess(LocalAttribute."
 								+ StringUtilities.convertCamelCaseToUpperCase(p.getName())
-								+ ", Attribute.AccessType.WRITE);");
+								+ ", Attribute.AccessType.STRONG_WRITE);");
 						ps.println("}");
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{

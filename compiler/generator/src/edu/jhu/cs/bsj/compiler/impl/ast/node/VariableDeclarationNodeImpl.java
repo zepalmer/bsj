@@ -80,7 +80,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -111,7 +111,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(type, false);
         this.type = type;
@@ -142,7 +142,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(declarators, false);
         this.declarators = declarators;

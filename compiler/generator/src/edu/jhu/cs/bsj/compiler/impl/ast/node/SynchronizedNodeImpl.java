@@ -80,7 +80,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;
@@ -111,7 +111,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -142,7 +142,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

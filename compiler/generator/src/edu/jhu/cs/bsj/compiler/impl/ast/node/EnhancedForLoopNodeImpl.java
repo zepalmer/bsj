@@ -88,7 +88,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(variable, false);
         this.variable = variable;
@@ -119,7 +119,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;
@@ -150,7 +150,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(statement, false);
         this.statement = statement;
@@ -181,7 +181,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

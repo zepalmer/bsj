@@ -70,7 +70,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(arguments, false);
         this.arguments = arguments;
@@ -101,7 +101,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;

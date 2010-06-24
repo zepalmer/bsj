@@ -97,7 +97,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(imports, false);
         this.imports = imports;
@@ -128,7 +128,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.LOCAL_MODE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.LOCAL_MODE, Attribute.AccessType.STRONG_WRITE);
         }
         this.localMode = localMode;
     }
@@ -157,7 +157,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PACKAGE_MODE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.PACKAGE_MODE, Attribute.AccessType.STRONG_WRITE);
         }
         this.packageMode = packageMode;
     }
@@ -186,7 +186,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(targets, false);
         this.targets = targets;
@@ -217,7 +217,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DEPENDENCIES, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.DEPENDENCIES, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(dependencies, false);
         this.dependencies = dependencies;

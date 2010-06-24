@@ -64,7 +64,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(type, false);
         this.type = type;

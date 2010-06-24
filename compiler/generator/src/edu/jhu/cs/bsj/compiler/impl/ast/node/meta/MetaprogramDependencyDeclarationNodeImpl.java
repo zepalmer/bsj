@@ -65,7 +65,7 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(targets, false);
         this.targets = targets;

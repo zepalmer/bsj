@@ -73,7 +73,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -104,7 +104,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(value, false);
         this.value = value;

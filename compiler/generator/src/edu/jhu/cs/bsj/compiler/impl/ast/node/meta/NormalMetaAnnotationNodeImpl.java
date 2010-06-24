@@ -68,7 +68,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(arguments, false);
         this.arguments = arguments;

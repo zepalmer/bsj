@@ -72,7 +72,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;
@@ -103,7 +103,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(statements, false);
         this.statements = statements;

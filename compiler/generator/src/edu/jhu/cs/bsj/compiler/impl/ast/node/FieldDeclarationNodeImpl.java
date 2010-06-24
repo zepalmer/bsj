@@ -88,7 +88,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -119,7 +119,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(type, false);
         this.type = type;
@@ -150,7 +150,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(declarators, false);
         this.declarators = declarators;
@@ -181,7 +181,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

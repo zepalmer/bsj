@@ -320,8 +320,8 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	public void addCompilationUnit(CompilationUnitNode compilationUnit)
 	{
 		getManager().assertInsertable(this);
-		recordAccess(new CompilationUnitAttribute(compilationUnit.getName()), Attribute.AccessType.WRITE);
-		recordAccess(new IteratorAttribute(), Attribute.AccessType.WRITE);
+		recordAccess(new CompilationUnitAttribute(compilationUnit.getName()), Attribute.AccessType.STRONG_WRITE);
+		recordAccess(new IteratorAttribute(), Attribute.AccessType.WEAK_WRITE);
 		if (this.load(compilationUnit.getName()) != null)
 		{
 			throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
@@ -512,9 +512,8 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public CompilationUnitNode load(String name)
 	{
-		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.READ);
-		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.WRITE);
-		recordAccess(new IteratorAttribute(), Attribute.AccessType.WRITE);
+		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.WEAK_WRITE);
+		recordAccess(new IteratorAttribute(), Attribute.AccessType.WEAK_WRITE);
 		
 		CompilationUnitNode compilationUnitNode;
 

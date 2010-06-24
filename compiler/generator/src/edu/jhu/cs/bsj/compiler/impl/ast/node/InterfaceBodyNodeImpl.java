@@ -64,7 +64,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(members, false);
         this.members = members;

@@ -64,7 +64,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ANNOTATION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ANNOTATION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(annotation, false);
         this.annotation = annotation;

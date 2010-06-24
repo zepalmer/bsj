@@ -135,7 +135,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 	private static NamedTypeDeclarationNode<?> findTopLevelTypeDeclarationInPackage(PackageNode packageNode,
 			List<String> components)
 	{
-		CompilationUnitNode compilationUnitNode = packageNode.getCompilationUnit(components.get(0));
+		CompilationUnitNode compilationUnitNode = packageNode.load(components.get(0));
 		if (compilationUnitNode != null)
 		{
 			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(compilationUnitNode,

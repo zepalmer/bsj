@@ -72,7 +72,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -103,7 +103,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(parameter, false);
         this.parameter = parameter;

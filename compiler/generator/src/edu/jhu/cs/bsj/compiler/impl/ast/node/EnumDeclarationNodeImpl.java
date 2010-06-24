@@ -98,7 +98,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -129,7 +129,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(implementsClause, false);
         this.implementsClause = implementsClause;
@@ -160,7 +160,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -191,7 +191,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -222,7 +222,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

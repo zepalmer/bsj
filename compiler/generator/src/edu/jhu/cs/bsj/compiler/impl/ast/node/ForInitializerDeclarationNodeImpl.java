@@ -64,7 +64,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(declaration, false);
         this.declaration = declaration;

@@ -64,7 +64,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(declaration, false);
         this.declaration = declaration;

@@ -120,7 +120,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -151,7 +151,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -182,7 +182,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -213,7 +213,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(parameters, false);
         this.parameters = parameters;
@@ -244,7 +244,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(varargParameter, false);
         this.varargParameter = varargParameter;
@@ -275,7 +275,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(throwTypes, false);
         this.throwTypes = throwTypes;
@@ -306,7 +306,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(typeParameters, false);
         this.typeParameters = typeParameters;
@@ -337,7 +337,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

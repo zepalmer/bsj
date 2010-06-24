@@ -79,7 +79,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(testExpression, false);
         this.testExpression = testExpression;
@@ -110,7 +110,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(messageExpression, false);
         this.messageExpression = messageExpression;
@@ -141,7 +141,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

@@ -79,7 +79,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(variable, false);
         this.variable = variable;
@@ -110,7 +110,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
         }
         this.operator = operator;
     }
@@ -139,7 +139,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;

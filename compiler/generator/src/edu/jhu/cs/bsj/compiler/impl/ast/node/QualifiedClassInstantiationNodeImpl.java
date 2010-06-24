@@ -85,7 +85,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ENCLOSING_EXPRESSION, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ENCLOSING_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(enclosingExpression, false);
         this.enclosingExpression = enclosingExpression;
@@ -116,7 +116,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -147,7 +147,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;

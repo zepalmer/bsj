@@ -104,7 +104,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
@@ -135,7 +135,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(annotations, false);
         this.annotations = annotations;
@@ -166,7 +166,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -197,7 +197,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(arguments, false);
         this.arguments = arguments;
@@ -228,7 +228,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -259,7 +259,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

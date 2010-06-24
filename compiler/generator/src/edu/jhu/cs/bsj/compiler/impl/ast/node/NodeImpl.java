@@ -290,7 +290,7 @@ public abstract class NodeImpl implements Node
 		// causing a conflict.
 		if (this.parent != null || accessRecordMap.getAll(this.parentAttribute).size() > 0)
 		{
-			recordAccess(this.parentAttribute, Attribute.AccessType.WRITE);
+			recordAccess(this.parentAttribute, Attribute.AccessType.STRONG_WRITE);
 		}
 		this.parent = node;
 	}

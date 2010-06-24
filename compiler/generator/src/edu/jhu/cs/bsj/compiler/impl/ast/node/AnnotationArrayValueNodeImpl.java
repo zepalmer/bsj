@@ -64,7 +64,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VALUES, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.VALUES, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(values, false);
         this.values = values;

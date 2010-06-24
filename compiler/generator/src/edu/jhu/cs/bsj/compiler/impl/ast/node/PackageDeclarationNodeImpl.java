@@ -80,7 +80,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(name, false);
         this.name = name;
@@ -111,7 +111,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
@@ -142,7 +142,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
+            recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         }
         setAsChild(annotations, false);
         this.annotations = annotations;
