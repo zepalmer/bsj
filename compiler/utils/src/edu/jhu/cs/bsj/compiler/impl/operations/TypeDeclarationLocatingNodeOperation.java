@@ -32,6 +32,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 
+// TODO: this class does not properly handle the implicitly imported contents of java.lang
+
 /**
  * This node operation locates the in-scope type declaration for the specified type name.
  * 
