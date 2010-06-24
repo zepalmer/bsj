@@ -11,6 +11,9 @@ import edu.jhu.cs.bsj.compiler.ast.NodeList;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.utils.SubList;
 
+// TODO: clear() likely does not behave properly if it is called against an empty list; it does not assert mutability
+// because it relies upon the proxy list inside of NodeListImpl to handle the job
+
 /**
  * This wrapper class allows a {@link NodeList} to be accessed as if it were a Java {@link List}.
  * 
