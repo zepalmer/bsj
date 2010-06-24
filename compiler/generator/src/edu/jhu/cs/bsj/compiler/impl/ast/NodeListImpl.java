@@ -77,7 +77,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			@Override
 			protected void elementAdded(int index, T element, boolean replaced)
 			{
-				if (NodeListImpl.this.initializing)
+				if (!NodeListImpl.this.initializing)
 				{
 					NodeListImpl.this.manager.assertInsertable(NodeListImpl.this.parent);
 				}
@@ -90,7 +90,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 			@Override
 			protected void elementRemoved(int index, T element, boolean replaced)
 			{
-				if (NodeListImpl.this.initializing)
+				if (!NodeListImpl.this.initializing)
 				{
 					NodeListImpl.this.manager.assertMutatable(NodeListImpl.this.parent);
 				}
@@ -113,12 +113,12 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		this.base = new HashSet<Knowledge<T>>();
 
 		// initialize the list
-		this.initializing = false;
+		this.initializing = true;
 		for (T t : initial)
 		{
 			addLast(t);
 		}
-		this.initializing = true;
+		this.initializing = false;
 	}
 	
 	/**
