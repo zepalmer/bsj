@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -12,8 +14,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
@@ -21,9 +23,20 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     /** The identifier contained in this node. */
     private String identifier;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the identifier property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(IdentifierNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
     }
     
@@ -45,7 +58,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
      */
     public String getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -63,7 +76,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.identifier = identifier;
     }

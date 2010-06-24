@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -10,8 +12,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -20,9 +22,20 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     /** The replacement node for this metaprogram. */
     private T replacement;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the replacement property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaprogramAnchorNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the replacement property. */
         REPLACEMENT,
     }
     
@@ -131,7 +144,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
 	 */
 	public T getReplacement()
 	{
-		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.READ);
+		getAttribute(LocalAttribute.REPLACEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
 		return this.replacement;
 	}
 	
@@ -142,7 +155,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
 	public void setReplacement(T replacement)
 	{
 		// TODO: some kind of control on this; setReplacement should probably only be called one time?
-		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.STRONG_WRITE);
+		getAttribute(LocalAttribute.REPLACEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
 		setAsChild(this.replacement, false);
 		this.replacement = replacement;
 		setAsChild(this.replacement, true);

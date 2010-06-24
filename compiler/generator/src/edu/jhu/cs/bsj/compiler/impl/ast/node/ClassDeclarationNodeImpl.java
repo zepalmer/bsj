@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -21,8 +23,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarationNode
@@ -48,21 +50,32 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the modifiers property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ClassDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the modifiers property. */
         MODIFIERS,
-        /** Attribute for the extendsClause property. */
+        /** Attribute identifier for the extendsClause property. */
         EXTENDS_CLAUSE,
-        /** Attribute for the implementsClause property. */
+        /** Attribute identifier for the implementsClause property. */
         IMPLEMENTS_CLAUSE,
-        /** Attribute for the body property. */
+        /** Attribute identifier for the body property. */
         BODY,
-        /** Attribute for the typeParameters property. */
+        /** Attribute identifier for the typeParameters property. */
         TYPE_PARAMETERS,
-        /** Attribute for the identifier property. */
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
-        /** Attribute for the javadoc property. */
+        /** Attribute identifier for the javadoc property. */
         JAVADOC,
     }
     
@@ -96,7 +109,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public ClassModifiersNode getModifiers()
     {
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -114,7 +127,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -127,7 +140,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public DeclaredTypeNode getExtendsClause()
     {
-        recordAccess(LocalAttribute.EXTENDS_CLAUSE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.EXTENDS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.extendsClause;
     }
     
@@ -145,7 +158,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXTENDS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.EXTENDS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(extendsClause, false);
         this.extendsClause = extendsClause;
@@ -158,7 +171,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public DeclaredTypeListNode getImplementsClause()
     {
-        recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.implementsClause;
     }
     
@@ -176,7 +189,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(implementsClause, false);
         this.implementsClause = implementsClause;
@@ -189,7 +202,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public ClassBodyNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -207,7 +220,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -220,7 +233,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public TypeParameterListNode getTypeParameters()
     {
-        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.typeParameters;
     }
     
@@ -238,7 +251,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(typeParameters, false);
         this.typeParameters = typeParameters;
@@ -251,7 +264,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -269,7 +282,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -282,7 +295,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public JavadocNode getJavadoc()
     {
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.javadoc;
     }
     
@@ -300,7 +313,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

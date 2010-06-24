@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,8 +17,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.CatchListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TryNodeImpl extends NodeImpl implements TryNode
@@ -33,15 +35,26 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     /** The meta-annotations associated with this node. */
     private MetaAnnotationListNode metaAnnotations;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the body property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(TryNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the body property. */
         BODY,
-        /** Attribute for the catches property. */
+        /** Attribute identifier for the catches property. */
         CATCHES,
-        /** Attribute for the finallyBlock property. */
+        /** Attribute identifier for the finallyBlock property. */
         FINALLY_BLOCK,
-        /** Attribute for the metaAnnotations property. */
+        /** Attribute identifier for the metaAnnotations property. */
         META_ANNOTATIONS,
     }
     
@@ -69,7 +82,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public BlockStatementListNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -87,7 +100,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -100,7 +113,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public CatchListNode getCatches()
     {
-        recordAccess(LocalAttribute.CATCHES, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.CATCHES).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.catches;
     }
     
@@ -118,7 +131,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CATCHES, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.CATCHES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(catches, false);
         this.catches = catches;
@@ -131,7 +144,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public BlockStatementListNode getFinallyBlock()
     {
-        recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.FINALLY_BLOCK).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.finallyBlock;
     }
     
@@ -149,7 +162,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.FINALLY_BLOCK).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(finallyBlock, false);
         this.finallyBlock = finallyBlock;
@@ -162,7 +175,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaAnnotations;
     }
     
@@ -180,7 +193,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

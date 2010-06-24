@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParameterizedTypeNodeImpl extends NodeImpl implements ParameterizedTypeNode
@@ -26,11 +28,22 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     /** The type arguments for this node. */
     private TypeArgumentListNode typeArguments;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the baseType property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ParameterizedTypeNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the baseType property. */
         BASE_TYPE,
-        /** Attribute for the typeArguments property. */
+        /** Attribute identifier for the typeArguments property. */
         TYPE_ARGUMENTS,
     }
     
@@ -54,7 +67,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      */
     public UnparameterizedTypeNode getBaseType()
     {
-        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.baseType;
     }
     
@@ -72,7 +85,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(baseType, false);
         this.baseType = baseType;
@@ -85,7 +98,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      */
     public TypeArgumentListNode getTypeArguments()
     {
-        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.typeArguments;
     }
     
@@ -103,7 +116,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;

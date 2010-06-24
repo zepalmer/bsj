@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,9 +25,20 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     /** The array values. */
     private MetaAnnotationValueListNode values;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the values property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaAnnotationArrayValueNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the values property. */
         VALUES,
     }
     
@@ -47,7 +60,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
      */
     public MetaAnnotationValueListNode getValues()
     {
-        recordAccess(LocalAttribute.VALUES, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.VALUES).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.values;
     }
     
@@ -65,7 +78,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VALUES, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.VALUES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(values, false);
         this.values = values;

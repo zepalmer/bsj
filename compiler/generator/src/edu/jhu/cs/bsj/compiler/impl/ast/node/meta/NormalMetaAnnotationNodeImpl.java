@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,8 +17,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl implements NormalMetaAnnotationNode
@@ -24,9 +26,20 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     /** The arguments. */
     private MetaAnnotationElementListNode arguments;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the arguments property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(NormalMetaAnnotationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the arguments property. */
         ARGUMENTS,
     }
     
@@ -50,7 +63,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
      */
     public MetaAnnotationElementListNode getArguments()
     {
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.arguments;
     }
     
@@ -68,7 +81,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(arguments, false);
         this.arguments = arguments;

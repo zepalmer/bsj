@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,8 +17,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedNameNode
@@ -24,9 +26,20 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     /** The name being qualified. */
     private NameNode base;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the base property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(QualifiedNameNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the base property. */
         BASE,
     }
     
@@ -50,7 +63,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
      */
     public NameNode getBase()
     {
-        recordAccess(LocalAttribute.BASE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.base;
     }
     
@@ -68,7 +81,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BASE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(base, false);
         this.base = base;

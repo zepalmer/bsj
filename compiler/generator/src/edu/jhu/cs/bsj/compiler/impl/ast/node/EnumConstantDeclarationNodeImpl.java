@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -18,8 +20,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumConstantDeclarationNode
@@ -42,19 +44,30 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the metaAnnotations property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(EnumConstantDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the metaAnnotations property. */
         META_ANNOTATIONS,
-        /** Attribute for the annotations property. */
+        /** Attribute identifier for the annotations property. */
         ANNOTATIONS,
-        /** Attribute for the identifier property. */
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
-        /** Attribute for the arguments property. */
+        /** Attribute identifier for the arguments property. */
         ARGUMENTS,
-        /** Attribute for the body property. */
+        /** Attribute identifier for the body property. */
         BODY,
-        /** Attribute for the javadoc property. */
+        /** Attribute identifier for the javadoc property. */
         JAVADOC,
     }
     
@@ -86,7 +99,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaAnnotations;
     }
     
@@ -104,7 +117,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
@@ -117,7 +130,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public AnnotationListNode getAnnotations()
     {
-        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.annotations;
     }
     
@@ -135,7 +148,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(annotations, false);
         this.annotations = annotations;
@@ -148,7 +161,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -166,7 +179,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -179,7 +192,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public ExpressionListNode getArguments()
     {
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.arguments;
     }
     
@@ -197,7 +210,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(arguments, false);
         this.arguments = arguments;
@@ -210,7 +223,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public AnonymousClassBodyNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -228,7 +241,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -241,7 +254,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public JavadocNode getJavadoc()
     {
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.javadoc;
     }
     
@@ -259,7 +272,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

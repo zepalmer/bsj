@@ -4,23 +4,15 @@ import java.util.concurrent.atomic.AtomicLong;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.*;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 /* GEN:headerstop */
 
 public abstract class NodeImpl
 {
 	/* GEN:start */
 	/**
-	 * The attribute type which controls the parent variable in a node.
-	 */
-	private static class ParentAttribute implements Attribute
-	{
-	}
-
-	/**
 	 * The parent attribute for this node.
 	 */
-	private Attribute parentAttribute = new ParentAttribute();
+	private ReadWriteAttribute parentAttribute = new ReadWriteAttribute(this);
 
 	/**
 	 * The next globally unique UID to assign.
@@ -36,6 +28,10 @@ public abstract class NodeImpl
 	 * The parent for this node.
 	 */
 	private Node parent = null;
+	/**
+	 * A variable indicating whether or not the <code>parent</code> variable has ever been set.
+	 */
+	private boolean parentSet = false;
 
 	/**
 	 * Assigns this node a UID.
@@ -43,36 +39,6 @@ public abstract class NodeImpl
 	{
 		this.uid = sUid.getAndIncrement();
 	}
-
-	/**
-	 * A data structure containing information about attribute access.
-	 */
-	static class AccessRecord extends Pair<Attribute.AccessType, Integer>
-	{
-		public AccessRecord(Attribute.AccessType accessType, Integer id)
-		{
-			super(accessType, id);
-		}
-
-		/**
-		 * Gets the type of access from this access record.
-		 */
-		public Attribute.AccessType getAccessType()
-		{
-			return this.getFirst();
-		}
-
-		/**
-		 * Gets the metaprogram ID from this access record.
-		 */
-		public Integer getMetaprogramID()
-		{
-			return this.getSecond();
-		}
-	}
-
-	/** The current set of access record for this node's attributes. */
-	private MultiMap<Attribute, AccessRecord> accessRecordMap = new HashMultiMap<Attribute, AccessRecord>();
 
 	/**
 	 * Causes this node to receive a visitor. Visitors are received by nodes in a depth-first fashion. The order of the
@@ -117,7 +83,7 @@ public abstract class NodeImpl
 	 */
 	public Node getParent()
 	{
-		recordAccess(this.parentAttribute, Attribute.AccessType.READ);
+		this.parentAttribute.recordAccess(ReadWriteAttribute.AccessType.READ);
 		return this.parent;
 	}
 
@@ -135,10 +101,11 @@ public abstract class NodeImpl
 		// The first write to the parent property of a node is not recorded for the same reason that writes when a node
 		// is created are not recorded. This allows list predicate filters to move up a pristine subtree without
 		// causing a conflict.
-		if (this.parent != null || accessRecordMap.getAll(this.parentAttribute).size() > 0)
+		if (this.parentSet)
 		{
-			recordAccess(this.parentAttribute, Attribute.AccessType.STRONG_WRITE);
+			this.parentAttribute.recordAccess(ReadWriteAttribute.AccessType.WRITE);
 		}
+		this.parentSet = true;
 		this.parent = node;
 	}
 
@@ -244,39 +211,9 @@ public abstract class NodeImpl
 	 * 
 	 * @return The manager for this node.
 	 */
-	protected BsjNodeManager getManager()
+	public BsjNodeManager getManager()
 	{
 		return this.manager;
-	}
-
-	/**
-	 * Records an attribute access for this node. If this access is in conflict with other accesses which have already
-	 * occurred on this node, an approprite exception is thrown.
-	 * 
-	 * @param attribute The attribute that was accessed.
-	 * @param accessType The type of access that was involved.
-	 * @throws MetaprogramAttributeConflictException If a conflict exists between this access and one which has already
-	 *             occurred.
-	 */
-	protected void recordAccess(Attribute attribute, Attribute.AccessType accessType)
-			throws MetaprogramAttributeConflictException
-	{
-		if (this.manager.getCurrentMetaprogramId() == null)
-		{
-			return;
-		}
-
-		Set<AccessRecord> previousAccesses = this.accessRecordMap.getAll(attribute);
-		for (AccessRecord record : previousAccesses)
-		{
-			Attribute.AccessType recordAccessType = record.getAccessType();
-			if (accessType.canConflict(recordAccessType))
-			{
-				this.manager.assertCooperation(record.getMetaprogramID(), this);
-			}
-		}
-
-		this.accessRecordMap.put(attribute, new AccessRecord(accessType, this.manager.getCurrentMetaprogramId()));
 	}
 
 	/**

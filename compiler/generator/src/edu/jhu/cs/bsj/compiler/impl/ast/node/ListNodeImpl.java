@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Generated;
@@ -15,10 +17,10 @@ import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.NodeList;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.NodeListAdapter;
 import edu.jhu.cs.bsj.compiler.impl.ast.NodeListImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T>
@@ -26,9 +28,20 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     /** The list of children. */
     private List<T> children;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the children property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ListNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the children property. */
         CHILDREN,
     }
     
@@ -56,7 +69,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
      */
     public List<T> getChildren()
     {
-        recordAccess(LocalAttribute.CHILDREN, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.CHILDREN).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.children;
     }
     

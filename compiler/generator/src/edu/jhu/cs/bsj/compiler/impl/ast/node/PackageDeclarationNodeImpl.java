@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,8 +17,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDeclarationNode
@@ -30,13 +32,24 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     /** The annotations on the package declaration. */
     private AnnotationListNode annotations;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the name property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(PackageDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the name property. */
         NAME,
-        /** Attribute for the metaAnnotations property. */
+        /** Attribute identifier for the metaAnnotations property. */
         META_ANNOTATIONS,
-        /** Attribute for the annotations property. */
+        /** Attribute identifier for the annotations property. */
         ANNOTATIONS,
     }
     
@@ -62,7 +75,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public NameNode getName()
     {
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.name;
     }
     
@@ -80,7 +93,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(name, false);
         this.name = name;
@@ -93,7 +106,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaAnnotations;
     }
     
@@ -111,7 +124,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
@@ -124,7 +137,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public AnnotationListNode getAnnotations()
     {
-        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.annotations;
     }
     
@@ -142,7 +155,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(annotations, false);
         this.annotations = annotations;

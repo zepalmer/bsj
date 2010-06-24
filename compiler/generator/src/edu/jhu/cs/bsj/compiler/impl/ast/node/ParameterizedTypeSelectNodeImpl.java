@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements ParameterizedTypeSelectNode
@@ -26,11 +28,22 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     /** The type which is selected from the base. */
     private DeclaredTypeNode select;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the base property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ParameterizedTypeSelectNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the base property. */
         BASE,
-        /** Attribute for the select property. */
+        /** Attribute identifier for the select property. */
         SELECT,
     }
     
@@ -54,7 +67,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public ParameterizedTypeNode getBase()
     {
-        recordAccess(LocalAttribute.BASE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.base;
     }
     
@@ -72,7 +85,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BASE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(base, false);
         this.base = base;
@@ -85,7 +98,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public DeclaredTypeNode getSelect()
     {
-        recordAccess(LocalAttribute.SELECT, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.select;
     }
     
@@ -103,7 +116,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.SELECT, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(select, false);
         this.select = select;

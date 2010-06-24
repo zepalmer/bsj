@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStaticImportNode
@@ -26,11 +28,22 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     /** The identifier to import from that type. */
     private IdentifierNode identifier;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the name property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(SingleStaticImportNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the name property. */
         NAME,
-        /** Attribute for the identifier property. */
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
     }
     
@@ -54,7 +67,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
      */
     public NameNode getName()
     {
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.name;
     }
     
@@ -72,7 +85,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(name, false);
         this.name = name;
@@ -85,7 +98,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
      */
     public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -103,7 +116,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;

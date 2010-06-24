@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InitializerDeclarationNodeImpl extends NodeImpl implements InitializerDeclarationNode
@@ -29,13 +31,24 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     /** The meta-annotations associated with this node. */
     private MetaAnnotationListNode metaAnnotations;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the staticInitializer property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(InitializerDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the staticInitializer property. */
         STATIC_INITIALIZER,
-        /** Attribute for the body property. */
+        /** Attribute identifier for the body property. */
         BODY,
-        /** Attribute for the metaAnnotations property. */
+        /** Attribute identifier for the metaAnnotations property. */
         META_ANNOTATIONS,
     }
     
@@ -61,7 +74,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public boolean getStaticInitializer()
     {
-        recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.STATIC_INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.staticInitializer;
     }
     
@@ -79,7 +92,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.STATIC_INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.staticInitializer = staticInitializer;
     }
@@ -90,7 +103,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public BlockStatementListNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -108,7 +121,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -121,7 +134,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaAnnotations;
     }
     
@@ -139,7 +152,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

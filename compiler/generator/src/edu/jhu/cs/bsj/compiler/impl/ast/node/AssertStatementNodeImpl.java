@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AssertStatementNodeImpl extends NodeImpl implements AssertStatementNode
@@ -29,13 +31,24 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     /** The meta-annotations associated with this node. */
     private MetaAnnotationListNode metaAnnotations;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the testExpression property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(AssertStatementNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the testExpression property. */
         TEST_EXPRESSION,
-        /** Attribute for the messageExpression property. */
+        /** Attribute identifier for the messageExpression property. */
         MESSAGE_EXPRESSION,
-        /** Attribute for the metaAnnotations property. */
+        /** Attribute identifier for the metaAnnotations property. */
         META_ANNOTATIONS,
     }
     
@@ -61,7 +74,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public ExpressionNode getTestExpression()
     {
-        recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TEST_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.testExpression;
     }
     
@@ -79,7 +92,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TEST_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(testExpression, false);
         this.testExpression = testExpression;
@@ -92,7 +105,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public ExpressionNode getMessageExpression()
     {
-        recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.MESSAGE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.messageExpression;
     }
     
@@ -110,7 +123,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.MESSAGE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(messageExpression, false);
         this.messageExpression = messageExpression;
@@ -123,7 +136,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaAnnotations;
     }
     
@@ -141,7 +154,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

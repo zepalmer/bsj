@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -11,8 +13,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationNode
@@ -20,9 +22,20 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     /** The annotation type. */
     private UnparameterizedTypeNode annotationType;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the annotationType property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(AnnotationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the annotationType property. */
         ANNOTATION_TYPE,
     }
     
@@ -44,7 +57,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
      */
     public UnparameterizedTypeNode getAnnotationType()
     {
-        recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.annotationType;
     }
     
@@ -62,7 +75,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(annotationType, false);
         this.annotationType = annotationType;

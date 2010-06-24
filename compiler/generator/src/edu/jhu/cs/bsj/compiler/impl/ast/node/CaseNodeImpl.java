@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CaseNodeImpl extends NodeImpl implements CaseNode
@@ -26,11 +28,22 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     /** The statements to execute in this case node. */
     private BlockStatementListNode statements;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the expression property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(CaseNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the expression property. */
         EXPRESSION,
-        /** Attribute for the statements property. */
+        /** Attribute identifier for the statements property. */
         STATEMENTS,
     }
     
@@ -54,7 +67,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public ExpressionNode getExpression()
     {
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.expression;
     }
     
@@ -72,7 +85,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;
@@ -85,7 +98,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public BlockStatementListNode getStatements()
     {
-        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.statements;
     }
     
@@ -103,7 +116,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(statements, false);
         this.statements = statements;

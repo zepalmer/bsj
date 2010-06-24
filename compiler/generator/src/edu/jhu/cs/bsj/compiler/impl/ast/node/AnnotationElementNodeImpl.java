@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationElementNode
@@ -26,11 +28,22 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     /** The element's value. */
     private AnnotationValueNode value;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the identifier property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(AnnotationElementNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
-        /** Attribute for the value property. */
+        /** Attribute identifier for the value property. */
         VALUE,
     }
     
@@ -54,7 +67,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -72,7 +85,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -85,7 +98,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public AnnotationValueNode getValue()
     {
-        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.value;
     }
     
@@ -103,7 +116,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(value, false);
         this.value = value;

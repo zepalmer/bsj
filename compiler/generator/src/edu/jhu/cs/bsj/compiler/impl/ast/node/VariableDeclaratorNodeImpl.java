@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -16,8 +18,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDeclaratorNode
 {
@@ -30,13 +32,24 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     /** The initializer to use. */
     private VariableInitializerNode initializer;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the name property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(VariableDeclaratorNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the name property. */
         NAME,
-        /** Attribute for the arrayLevels property. */
+        /** Attribute identifier for the arrayLevels property. */
         ARRAY_LEVELS,
-        /** Attribute for the initializer property. */
+        /** Attribute identifier for the initializer property. */
         INITIALIZER,
     }
     
@@ -62,7 +75,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public IdentifierNode getName()
     {
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.name;
     }
     
@@ -80,7 +93,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(name, false);
         this.name = name;
@@ -93,7 +106,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public int getArrayLevels()
     {
-        recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.arrayLevels;
     }
     
@@ -111,7 +124,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.arrayLevels = arrayLevels;
     }
@@ -122,7 +135,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public VariableInitializerNode getInitializer()
     {
-        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.initializer;
     }
     
@@ -140,7 +153,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(initializer, false);
         this.initializer = initializer;

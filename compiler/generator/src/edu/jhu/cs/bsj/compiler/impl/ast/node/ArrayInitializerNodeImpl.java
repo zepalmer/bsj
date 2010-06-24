@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializerNode
@@ -22,9 +24,20 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     /** The initializers for the array. */
     private VariableInitializerListNode initializers;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the initializers property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ArrayInitializerNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the initializers property. */
         INITIALIZERS,
     }
     
@@ -46,7 +59,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      */
     public VariableInitializerListNode getInitializers()
     {
-        recordAccess(LocalAttribute.INITIALIZERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.INITIALIZERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.initializers;
     }
     
@@ -64,7 +77,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.INITIALIZERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.INITIALIZERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(initializers, false);
         this.initializers = initializers;

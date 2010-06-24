@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.RestrictedPrimaryExpressionNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
@@ -26,11 +28,22 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     /** The index into the array. */
     private ExpressionNode indexExpression;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the arrayExpression property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ArrayAccessNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the arrayExpression property. */
         ARRAY_EXPRESSION,
-        /** Attribute for the indexExpression property. */
+        /** Attribute identifier for the indexExpression property. */
         INDEX_EXPRESSION,
     }
     
@@ -54,7 +67,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public RestrictedPrimaryExpressionNode getArrayExpression()
     {
-        recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.arrayExpression;
     }
     
@@ -72,7 +85,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(arrayExpression, false);
         this.arrayExpression = arrayExpression;
@@ -85,7 +98,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public ExpressionNode getIndexExpression()
     {
-        recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.indexExpression;
     }
     
@@ -103,7 +116,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(indexExpression, false);
         this.indexExpression = indexExpression;

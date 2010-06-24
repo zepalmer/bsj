@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -11,8 +13,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCreationNode
@@ -23,11 +25,22 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     /** The number of uninitialized levels for this array. */
     private int arrayLevels;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the baseType property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ArrayCreationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the baseType property. */
         BASE_TYPE,
-        /** Attribute for the arrayLevels property. */
+        /** Attribute identifier for the arrayLevels property. */
         ARRAY_LEVELS,
     }
     
@@ -51,7 +64,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public BaseTypeNode getBaseType()
     {
-        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.baseType;
     }
     
@@ -69,7 +82,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(baseType, false);
         this.baseType = baseType;
@@ -82,7 +95,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public int getArrayLevels()
     {
-        recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.arrayLevels;
     }
     
@@ -100,7 +113,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.arrayLevels = arrayLevels;
     }

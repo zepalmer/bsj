@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
@@ -22,9 +24,20 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     /** The members of this interface body. */
     private InterfaceMemberListNode members;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the members property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(InterfaceBodyNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the members property. */
         MEMBERS,
     }
     
@@ -46,7 +59,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      */
     public InterfaceMemberListNode getMembers()
     {
-        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.members;
     }
     
@@ -64,7 +77,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(members, false);
         this.members = members;

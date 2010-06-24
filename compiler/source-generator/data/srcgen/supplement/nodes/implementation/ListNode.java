@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.utils.SubList;
-import static edu.jhu.cs.bsj.compiler.impl.ast.Attribute.AccessType;
 
 /* GEN:headerstop */
 

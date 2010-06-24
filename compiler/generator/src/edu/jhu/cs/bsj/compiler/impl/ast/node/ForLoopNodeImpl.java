@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -17,8 +19,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
@@ -38,17 +40,28 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     /** The meta-annotations associated with this node. */
     private MetaAnnotationListNode metaAnnotations;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the initializer property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ForLoopNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the initializer property. */
         INITIALIZER,
-        /** Attribute for the condition property. */
+        /** Attribute identifier for the condition property. */
         CONDITION,
-        /** Attribute for the update property. */
+        /** Attribute identifier for the update property. */
         UPDATE,
-        /** Attribute for the statement property. */
+        /** Attribute identifier for the statement property. */
         STATEMENT,
-        /** Attribute for the metaAnnotations property. */
+        /** Attribute identifier for the metaAnnotations property. */
         META_ANNOTATIONS,
     }
     
@@ -78,7 +91,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public ForInitializerNode getInitializer()
     {
-        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.initializer;
     }
     
@@ -96,7 +109,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(initializer, false);
         this.initializer = initializer;
@@ -109,7 +122,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public ExpressionNode getCondition()
     {
-        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.condition;
     }
     
@@ -127,7 +140,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(condition, false);
         this.condition = condition;
@@ -140,7 +153,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public StatementExpressionListNode getUpdate()
     {
-        recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.UPDATE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.update;
     }
     
@@ -158,7 +171,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.UPDATE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(update, false);
         this.update = update;
@@ -171,7 +184,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public StatementNode getStatement()
     {
-        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.statement;
     }
     
@@ -189,7 +202,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(statement, false);
         this.statement = statement;
@@ -202,7 +215,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaAnnotations;
     }
     
@@ -220,7 +233,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

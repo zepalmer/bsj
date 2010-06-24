@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,9 +25,20 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
     /** The names of the metaprogram targets on which to depend. */
     private MetaprogramDependencyListNode targets;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the targets property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaprogramDependencyDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the targets property. */
         TARGETS,
     }
     
@@ -47,7 +60,7 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
      */
     public MetaprogramDependencyListNode getTargets()
     {
-        recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.targets;
     }
     
@@ -65,7 +78,7 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(targets, false);
         this.targets = targets;

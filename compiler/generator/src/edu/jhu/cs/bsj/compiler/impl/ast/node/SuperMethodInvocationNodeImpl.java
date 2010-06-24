@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -16,8 +18,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMethodInvocationNode
@@ -34,15 +36,26 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     /** The type arguments for the method. */
     private ReferenceTypeListNode typeArguments;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the type property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(SuperMethodInvocationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the type property. */
         TYPE,
-        /** Attribute for the identifier property. */
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
-        /** Attribute for the arguments property. */
+        /** Attribute identifier for the arguments property. */
         ARGUMENTS,
-        /** Attribute for the typeArguments property. */
+        /** Attribute identifier for the typeArguments property. */
         TYPE_ARGUMENTS,
     }
     
@@ -70,7 +83,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public UnparameterizedTypeNode getType()
     {
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.type;
     }
     
@@ -88,7 +101,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(type, false);
         this.type = type;
@@ -101,7 +114,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -119,7 +132,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -132,7 +145,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public ExpressionListNode getArguments()
     {
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.arguments;
     }
     
@@ -150,7 +163,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(arguments, false);
         this.arguments = arguments;
@@ -163,7 +176,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public ReferenceTypeListNode getTypeArguments()
     {
-        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.typeArguments;
     }
     
@@ -181,7 +194,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(typeArguments, false);
         this.typeArguments = typeArguments;

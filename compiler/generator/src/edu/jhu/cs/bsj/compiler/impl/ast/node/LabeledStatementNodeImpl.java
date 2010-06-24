@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,8 +17,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStatementNode
@@ -30,13 +32,24 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     /** The meta-annotations associated with this node. */
     private MetaAnnotationListNode metaAnnotations;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the label property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(LabeledStatementNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the label property. */
         LABEL,
-        /** Attribute for the statement property. */
+        /** Attribute identifier for the statement property. */
         STATEMENT,
-        /** Attribute for the metaAnnotations property. */
+        /** Attribute identifier for the metaAnnotations property. */
         META_ANNOTATIONS,
     }
     
@@ -62,7 +75,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public IdentifierNode getLabel()
     {
-        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.label;
     }
     
@@ -80,7 +93,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.LABEL, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(label, false);
         this.label = label;
@@ -93,7 +106,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public StatementNode getStatement()
     {
-        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.statement;
     }
     
@@ -111,7 +124,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(statement, false);
         this.statement = statement;
@@ -124,7 +137,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaAnnotations;
     }
     
@@ -142,7 +155,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

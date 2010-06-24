@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -26,11 +28,22 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
     /** Whether or not this dependency is weak. */
     private boolean weak;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the targetName property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaprogramDependencyNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the targetName property. */
         TARGET_NAME,
-        /** Attribute for the weak property. */
+        /** Attribute identifier for the weak property. */
         WEAK,
     }
     
@@ -54,7 +67,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
      */
     public NameNode getTargetName()
     {
-        recordAccess(LocalAttribute.TARGET_NAME, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TARGET_NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.targetName;
     }
     
@@ -72,7 +85,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TARGET_NAME, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TARGET_NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(targetName, false);
         this.targetName = targetName;
@@ -85,7 +98,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
      */
     public boolean getWeak()
     {
-        recordAccess(LocalAttribute.WEAK, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.WEAK).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.weak;
     }
     
@@ -103,7 +116,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.WEAK, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.WEAK).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.weak = weak;
     }

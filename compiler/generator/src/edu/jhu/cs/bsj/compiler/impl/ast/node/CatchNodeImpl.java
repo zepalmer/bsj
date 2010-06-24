@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CatchNodeImpl extends NodeImpl implements CatchNode
@@ -26,11 +28,22 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     /** This catch block's exception variable. */
     private VariableNode parameter;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the body property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(CatchNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the body property. */
         BODY,
-        /** Attribute for the parameter property. */
+        /** Attribute identifier for the parameter property. */
         PARAMETER,
     }
     
@@ -54,7 +67,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public BlockStatementListNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -72,7 +85,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -85,7 +98,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public VariableNode getParameter()
     {
-        recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.parameter;
     }
     
@@ -103,7 +116,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(parameter, false);
         this.parameter = parameter;

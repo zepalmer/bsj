@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ClassInstantiationNodeImpl extends NodeImpl implements ClassInstantiationNode
@@ -28,13 +30,24 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     /** The body of the anonymous class. */
     private AnonymousClassBodyNode body;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the constructorTypeArguments property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ClassInstantiationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the constructorTypeArguments property. */
         CONSTRUCTOR_TYPE_ARGUMENTS,
-        /** Attribute for the arguments property. */
+        /** Attribute identifier for the arguments property. */
         ARGUMENTS,
-        /** Attribute for the body property. */
+        /** Attribute identifier for the body property. */
         BODY,
     }
     
@@ -60,7 +73,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public TypeArgumentListNode getConstructorTypeArguments()
     {
-        recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.constructorTypeArguments;
     }
     
@@ -78,7 +91,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(constructorTypeArguments, false);
         this.constructorTypeArguments = constructorTypeArguments;
@@ -91,7 +104,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public ExpressionListNode getArguments()
     {
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.arguments;
     }
     
@@ -109,7 +122,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(arguments, false);
         this.arguments = arguments;
@@ -122,7 +135,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public AnonymousClassBodyNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -140,7 +153,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;

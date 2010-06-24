@@ -25,9 +25,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.NonConflictingReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.PackageCompilationUnitAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.DuplicatePackageMemberExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
 
@@ -40,11 +42,22 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     /** The callback module for this package node. */
     private PackageNodeCallback packageNodeCallback;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the name property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(PackageNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the name property. */
         NAME,
-        /** Attribute for the packageNodeCallback property. */
+        /** Attribute identifier for the packageNodeCallback property. */
         PACKAGE_NODE_CALLBACK,
     }
     
@@ -68,7 +81,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public IdentifierNode getName()
     {
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.name;
     }
     
@@ -220,68 +233,28 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 * call to {@link #addPackageNode(PackageNode)} which is caused by {@link #load(String)} from causing a loop.
 	 */
 	private Set<String> unloadableCompilationUnitNames = new HashSet<String>();
+	/**
+	 * The attributes which are tracking access to compilation units.
+	 */
+	private Map<String, PackageCompilationUnitAttribute> compilationUnitAttributes =
+			new HashMap<String, PackageCompilationUnitAttribute>();
+	/**
+	 * An attribute to track the iterator for this node.
+	 */
+	private NonConflictingReadWriteAttribute iteratorAttribute = new NonConflictingReadWriteAttribute(this);
 	
 	/**
-	 * Represents an attribute for accessing a specific compilation unit within this package node.
+	 * Lazily creates compilation unit attributes.
 	 */
-	private static class CompilationUnitAttribute implements Attribute
+	private PackageCompilationUnitAttribute getPackageCompilationUnitAttribute(String compilationUnitName)
 	{
-		/** The name of the compilation unit. */
-		private String name;
-		/**
-		 * Creates a new compilation unit attribute.
-		 * @param name The compilation unit's  name. 
-		 */
-		public CompilationUnitAttribute(String name)
+		PackageCompilationUnitAttribute ret = this.compilationUnitAttributes.get(compilationUnitName);
+		if (ret==null)
 		{
-			this.name = name;
+			ret = new PackageCompilationUnitAttribute(this);
+			this.compilationUnitAttributes.put(compilationUnitName, ret);
 		}
-		/**
-		 * Compares this attribute to another.
-		 */
-		public boolean equals(Object o)
-		{
-			if (o == null)
-				return false;
-			if (o.getClass() != this.getClass())
-				return false;
-			CompilationUnitAttribute other = (CompilationUnitAttribute)o;
-			return this.name.equals(other.name);
-		}
-		/**
-		 * Creates a hashcode for this attribute.
-		 */
-		public int hashCode()
-		{
-			return this.name.hashCode();
-		}
-	}
-	
-	/**
-	 * Represents an attribute for accessing iteration of compilation units within this package node.  This attribute
-	 * is used to control the state of iterators.  Creation of an iterator reads this attribute; writing any
-	 * compilation unit writes this attribute.
-	 */
-	private static class IteratorAttribute implements Attribute
-	{
-		/**
-		 * Compares this attribute to another.
-		 */
-		public boolean equals(Object o)
-		{
-			if (o == null)
-				return false;
-			if (o.getClass() != this.getClass())
-				return false;
-			return true;
-		}
-		/**
-		 * Creates a hashcode for this attribute.
-		 */
-		public int hashCode()
-		{
-			return 0;
-		}
+		return ret;
 	}
 	
 	/**
@@ -320,8 +293,9 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	public void addCompilationUnit(CompilationUnitNode compilationUnit)
 	{
 		getManager().assertInsertable(this);
-		recordAccess(new CompilationUnitAttribute(compilationUnit.getName()), Attribute.AccessType.STRONG_WRITE);
-		recordAccess(new IteratorAttribute(), Attribute.AccessType.WEAK_WRITE);
+		getPackageCompilationUnitAttribute(compilationUnit.getName()).recordAccess(
+				PackageCompilationUnitAttribute.AccessType.WRITE);
+		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.WRITE);
 		if (this.load(compilationUnit.getName()) != null)
 		{
 			throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
@@ -335,7 +309,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public CompilationUnitNode getCompilationUnit(String name)
 	{
-		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.READ);
+		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.READ);
 		return this.compilationUnitNodes.get(name);
 	}
 
@@ -344,7 +318,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public Iterator<CompilationUnitNode> getCompilationUnitIterator()
 	{
-		recordAccess(new IteratorAttribute(), Attribute.AccessType.READ);
+		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.READ);
 		return Collections.unmodifiableMap(compilationUnitNodes).values().iterator();
 	}
 
@@ -498,8 +472,8 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public boolean contains(String name)
 	{
-		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.READ);
-		recordAccess(new IteratorAttribute(), Attribute.AccessType.READ);
+		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.READ);
+		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.READ);
 		if (compilationUnitNodes.get(name) != null)
 		{
 			return true;
@@ -512,8 +486,8 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public CompilationUnitNode load(String name)
 	{
-		recordAccess(new CompilationUnitAttribute(name), Attribute.AccessType.WEAK_WRITE);
-		recordAccess(new IteratorAttribute(), Attribute.AccessType.WEAK_WRITE);
+		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.LOAD);
+		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.WRITE);
 		
 		CompilationUnitNode compilationUnitNode;
 

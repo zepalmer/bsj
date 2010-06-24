@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForInitializerDeclarationNode
@@ -22,9 +24,20 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     /** The variables declared in this initializer. */
     private VariableDeclarationNode declaration;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the declaration property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ForInitializerDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the declaration property. */
         DECLARATION,
     }
     
@@ -46,7 +59,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      */
     public VariableDeclarationNode getDeclaration()
     {
-        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.declaration;
     }
     
@@ -64,7 +77,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(declaration, false);
         this.declaration = declaration;

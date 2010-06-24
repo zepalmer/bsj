@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements VariableModifiersNode
@@ -23,9 +25,20 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     /** Whether or not the associated variable is final. */
     private boolean finalFlag;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the finalFlag property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(VariableModifiersNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the finalFlag property. */
         FINAL_FLAG,
     }
     
@@ -49,7 +62,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
      */
     public boolean getFinalFlag()
     {
-        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.finalFlag;
     }
     
@@ -67,7 +80,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.finalFlag = finalFlag;
     }

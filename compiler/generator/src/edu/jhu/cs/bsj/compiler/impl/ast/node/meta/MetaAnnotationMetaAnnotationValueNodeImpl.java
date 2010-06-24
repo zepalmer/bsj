@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,9 +25,20 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     /** The annotation. */
     private MetaAnnotationNode annotation;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the annotation property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaAnnotationMetaAnnotationValueNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the annotation property. */
         ANNOTATION,
     }
     
@@ -47,7 +60,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
      */
     public MetaAnnotationNode getAnnotation()
     {
-        recordAccess(LocalAttribute.ANNOTATION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.annotation;
     }
     
@@ -65,7 +78,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ANNOTATION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(annotation, false);
         this.annotation = annotation;

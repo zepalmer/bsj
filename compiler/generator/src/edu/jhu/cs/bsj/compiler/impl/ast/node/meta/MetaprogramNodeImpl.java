@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -27,11 +29,22 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     /** The list of statements in the metaprogram's body. */
     private BlockStatementListNode body;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the preamble property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaprogramNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the preamble property. */
         PREAMBLE,
-        /** Attribute for the body property. */
+        /** Attribute identifier for the body property. */
         BODY,
     }
     
@@ -55,7 +68,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public MetaprogramPreambleNode getPreamble()
     {
-        recordAccess(LocalAttribute.PREAMBLE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.PREAMBLE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.preamble;
     }
     
@@ -73,7 +86,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PREAMBLE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.PREAMBLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(preamble, false);
         this.preamble = preamble;
@@ -86,7 +99,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public BlockStatementListNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -104,7 +117,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;

@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,8 +17,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDeclarationNode
@@ -30,13 +32,24 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     /** The variable declarators for this node. */
     private VariableDeclaratorListNode declarators;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the modifiers property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(VariableDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the modifiers property. */
         MODIFIERS,
-        /** Attribute for the type property. */
+        /** Attribute identifier for the type property. */
         TYPE,
-        /** Attribute for the declarators property. */
+        /** Attribute identifier for the declarators property. */
         DECLARATORS,
     }
     
@@ -62,7 +75,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public VariableModifiersNode getModifiers()
     {
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -80,7 +93,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -93,7 +106,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public TypeNode getType()
     {
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.type;
     }
     
@@ -111,7 +124,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(type, false);
         this.type = type;
@@ -124,7 +137,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public VariableDeclaratorListNode getDeclarators()
     {
-        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.declarators;
     }
     
@@ -142,7 +155,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(declarators, false);
         this.declarators = declarators;

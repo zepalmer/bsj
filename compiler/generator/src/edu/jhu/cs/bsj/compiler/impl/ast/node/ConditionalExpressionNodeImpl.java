@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConditionalExpressionNodeImpl extends NodeImpl implements ConditionalExpressionNode
@@ -28,13 +30,24 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     /** The value of this expression when the condition is false. */
     private ExpressionNode falseExpression;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the condition property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ConditionalExpressionNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the condition property. */
         CONDITION,
-        /** Attribute for the trueExpression property. */
+        /** Attribute identifier for the trueExpression property. */
         TRUE_EXPRESSION,
-        /** Attribute for the falseExpression property. */
+        /** Attribute identifier for the falseExpression property. */
         FALSE_EXPRESSION,
     }
     
@@ -60,7 +73,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public ExpressionNode getCondition()
     {
-        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.condition;
     }
     
@@ -78,7 +91,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(condition, false);
         this.condition = condition;
@@ -91,7 +104,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public ExpressionNode getTrueExpression()
     {
-        recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TRUE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.trueExpression;
     }
     
@@ -109,7 +122,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TRUE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(trueExpression, false);
         this.trueExpression = trueExpression;
@@ -122,7 +135,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public ExpressionNode getFalseExpression()
     {
-        recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.FALSE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.falseExpression;
     }
     
@@ -140,7 +153,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.FALSE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(falseExpression, false);
         this.falseExpression = falseExpression;

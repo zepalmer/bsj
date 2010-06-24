@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -17,8 +19,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationLis
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -39,17 +41,28 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     /** The dependencies for this metaprogram. */
     private MetaprogramDependencyDeclarationListNode dependencies;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the imports property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaprogramPreambleNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the imports property. */
         IMPORTS,
-        /** Attribute for the localMode property. */
+        /** Attribute identifier for the localMode property. */
         LOCAL_MODE,
-        /** Attribute for the packageMode property. */
+        /** Attribute identifier for the packageMode property. */
         PACKAGE_MODE,
-        /** Attribute for the targets property. */
+        /** Attribute identifier for the targets property. */
         TARGETS,
-        /** Attribute for the dependencies property. */
+        /** Attribute identifier for the dependencies property. */
         DEPENDENCIES,
     }
     
@@ -79,7 +92,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public MetaprogramImportListNode getImports()
     {
-        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.imports;
     }
     
@@ -97,7 +110,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(imports, false);
         this.imports = imports;
@@ -110,7 +123,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public MetaprogramLocalMode getLocalMode()
     {
-        recordAccess(LocalAttribute.LOCAL_MODE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.LOCAL_MODE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.localMode;
     }
     
@@ -128,7 +141,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.LOCAL_MODE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.LOCAL_MODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.localMode = localMode;
     }
@@ -139,7 +152,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public MetaprogramPackageMode getPackageMode()
     {
-        recordAccess(LocalAttribute.PACKAGE_MODE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.PACKAGE_MODE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.packageMode;
     }
     
@@ -157,7 +170,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PACKAGE_MODE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.PACKAGE_MODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.packageMode = packageMode;
     }
@@ -168,7 +181,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public MetaprogramTargetListNode getTargets()
     {
-        recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.targets;
     }
     
@@ -186,7 +199,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(targets, false);
         this.targets = targets;
@@ -199,7 +212,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public MetaprogramDependencyDeclarationListNode getDependencies()
     {
-        recordAccess(LocalAttribute.DEPENDENCIES, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.DEPENDENCIES).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.dependencies;
     }
     
@@ -217,7 +230,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.DEPENDENCIES, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.DEPENDENCIES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(dependencies, false);
         this.dependencies = dependencies;

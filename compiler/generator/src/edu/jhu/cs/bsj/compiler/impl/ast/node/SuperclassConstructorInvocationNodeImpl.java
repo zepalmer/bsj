@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,8 +17,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements SuperclassConstructorInvocationNode
@@ -24,9 +26,20 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     /** The qualifying expression for the enclosing object. */
     private PrimaryExpressionNode qualifyingExpression;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the qualifyingExpression property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(SuperclassConstructorInvocationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the qualifyingExpression property. */
         QUALIFYING_EXPRESSION,
     }
     
@@ -50,7 +63,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      */
     public PrimaryExpressionNode getQualifyingExpression()
     {
-        recordAccess(LocalAttribute.QUALIFYING_EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.qualifyingExpression;
     }
     
@@ -68,7 +81,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.QUALIFYING_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(qualifyingExpression, false);
         this.qualifyingExpression = qualifyingExpression;

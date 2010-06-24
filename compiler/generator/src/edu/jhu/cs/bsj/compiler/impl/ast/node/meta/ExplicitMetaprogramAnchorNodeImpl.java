@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -11,8 +13,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends MetaprogramAnchorNodeImpl<T> implements ExplicitMetaprogramAnchorNode<T>
@@ -20,9 +22,20 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
     /** The metaprogram on this node. */
     private MetaprogramNode metaprogram;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the metaprogram property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ExplicitMetaprogramAnchorNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the metaprogram property. */
         METAPROGRAM,
     }
     
@@ -45,7 +58,7 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
      */
     public MetaprogramNode getMetaprogram()
     {
-        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.METAPROGRAM).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaprogram;
     }
     
@@ -63,7 +76,7 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.METAPROGRAM).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaprogram, false);
         this.metaprogram = metaprogram;

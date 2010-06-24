@@ -1,5 +1,4 @@
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassDeclarationNodeImpl.LocalAttribute;
 
 public class MetaprogramAnchorNodeImpl
 {
@@ -10,7 +9,7 @@ public class MetaprogramAnchorNodeImpl
 	 */
 	public T getReplacement()
 	{
-		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.READ);
+		getAttribute(LocalAttribute.REPLACEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
 		return this.replacement;
 	}
 	
@@ -21,7 +20,7 @@ public class MetaprogramAnchorNodeImpl
 	public void setReplacement(T replacement)
 	{
 		// TODO: some kind of control on this; setReplacement should probably only be called one time?
-		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.STRONG_WRITE);
+		getAttribute(LocalAttribute.REPLACEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
 		setAsChild(this.replacement, false);
 		this.replacement = replacement;
 		setAsChild(this.replacement, true);

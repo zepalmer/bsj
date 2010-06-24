@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -19,8 +21,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclarationNode
@@ -40,17 +42,28 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the modifiers property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(EnumDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the modifiers property. */
         MODIFIERS,
-        /** Attribute for the implementsClause property. */
+        /** Attribute identifier for the implementsClause property. */
         IMPLEMENTS_CLAUSE,
-        /** Attribute for the body property. */
+        /** Attribute identifier for the body property. */
         BODY,
-        /** Attribute for the identifier property. */
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
-        /** Attribute for the javadoc property. */
+        /** Attribute identifier for the javadoc property. */
         JAVADOC,
     }
     
@@ -80,7 +93,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public EnumModifiersNode getModifiers()
     {
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -98,7 +111,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -111,7 +124,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public DeclaredTypeListNode getImplementsClause()
     {
-        recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.implementsClause;
     }
     
@@ -129,7 +142,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(implementsClause, false);
         this.implementsClause = implementsClause;
@@ -142,7 +155,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public EnumBodyNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -160,7 +173,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -173,7 +186,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -191,7 +204,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -204,7 +217,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public JavadocNode getJavadoc()
     {
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.javadoc;
     }
     
@@ -222,7 +235,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

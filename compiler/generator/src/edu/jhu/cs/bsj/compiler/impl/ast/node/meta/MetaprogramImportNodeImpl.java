@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,9 +25,20 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     /** The import for the metaprogram. */
     private ImportNode importNode;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the importNode property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaprogramImportNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the importNode property. */
         IMPORT_NODE,
     }
     
@@ -47,7 +60,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      */
     public ImportNode getImportNode()
     {
-        recordAccess(LocalAttribute.IMPORT_NODE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.importNode;
     }
     
@@ -65,7 +78,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPORT_NODE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(importNode, false);
         this.importNode = importNode;

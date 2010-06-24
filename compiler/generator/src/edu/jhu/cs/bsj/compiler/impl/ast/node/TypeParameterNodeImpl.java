@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
@@ -26,11 +28,22 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     /** The bounds over the base type. */
     private DeclaredTypeListNode bounds;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the identifier property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(TypeParameterNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
-        /** Attribute for the bounds property. */
+        /** Attribute identifier for the bounds property. */
         BOUNDS,
     }
     
@@ -54,7 +67,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -72,7 +85,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -85,7 +98,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public DeclaredTypeListNode getBounds()
     {
-        recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BOUNDS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.bounds;
     }
     
@@ -103,7 +116,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BOUNDS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(bounds, false);
         this.bounds = bounds;

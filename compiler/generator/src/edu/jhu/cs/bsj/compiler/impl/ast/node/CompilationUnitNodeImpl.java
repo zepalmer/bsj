@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -16,8 +18,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnitNode
@@ -37,17 +39,28 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     /** The type declarations of this unit. */
     private TypeDeclarationListNode typeDecls;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the name property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(CompilationUnitNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the name property. */
         NAME,
-        /** Attribute for the packageDeclaration property. */
+        /** Attribute identifier for the packageDeclaration property. */
         PACKAGE_DECLARATION,
-        /** Attribute for the metaimports property. */
+        /** Attribute identifier for the metaimports property. */
         METAIMPORTS,
-        /** Attribute for the imports property. */
+        /** Attribute identifier for the imports property. */
         IMPORTS,
-        /** Attribute for the typeDecls property. */
+        /** Attribute identifier for the typeDecls property. */
         TYPE_DECLS,
     }
     
@@ -77,7 +90,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public String getName()
     {
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.name;
     }
     
@@ -87,7 +100,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public PackageDeclarationNode getPackageDeclaration()
     {
-        recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.PACKAGE_DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.packageDeclaration;
     }
     
@@ -105,7 +118,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.PACKAGE_DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(packageDeclaration, false);
         this.packageDeclaration = packageDeclaration;
@@ -118,7 +131,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public MetaprogramImportListNode getMetaimports()
     {
-        recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.METAIMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaimports;
     }
     
@@ -136,7 +149,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.METAIMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaimports, false);
         this.metaimports = metaimports;
@@ -149,7 +162,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public ImportListNode getImports()
     {
-        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.imports;
     }
     
@@ -167,7 +180,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(imports, false);
         this.imports = imports;
@@ -180,7 +193,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public TypeDeclarationListNode getTypeDecls()
     {
-        recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TYPE_DECLS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.typeDecls;
     }
     
@@ -198,7 +211,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TYPE_DECLS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(typeDecls, false);
         this.typeDecls = typeDecls;

@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,8 +17,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class IfNodeImpl extends NodeImpl implements IfNode
@@ -33,15 +35,26 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     /** The meta-annotations associated with this node. */
     private MetaAnnotationListNode metaAnnotations;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the condition property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(IfNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the condition property. */
         CONDITION,
-        /** Attribute for the thenStatement property. */
+        /** Attribute identifier for the thenStatement property. */
         THEN_STATEMENT,
-        /** Attribute for the elseStatement property. */
+        /** Attribute identifier for the elseStatement property. */
         ELSE_STATEMENT,
-        /** Attribute for the metaAnnotations property. */
+        /** Attribute identifier for the metaAnnotations property. */
         META_ANNOTATIONS,
     }
     
@@ -69,7 +82,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public ExpressionNode getCondition()
     {
-        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.condition;
     }
     
@@ -87,7 +100,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(condition, false);
         this.condition = condition;
@@ -100,7 +113,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public StatementNode getThenStatement()
     {
-        recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.THEN_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.thenStatement;
     }
     
@@ -118,7 +131,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.THEN_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(thenStatement, false);
         this.thenStatement = thenStatement;
@@ -131,7 +144,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public StatementNode getElseStatement()
     {
-        recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ELSE_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.elseStatement;
     }
     
@@ -149,7 +162,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ELSE_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(elseStatement, false);
         this.elseStatement = elseStatement;
@@ -162,7 +175,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaAnnotations;
     }
     
@@ -180,7 +193,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;

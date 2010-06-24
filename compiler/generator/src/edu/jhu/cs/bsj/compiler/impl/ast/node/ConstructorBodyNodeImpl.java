@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBodyNode
@@ -26,11 +28,22 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     /** The statements contained in this constructor. */
     private BlockStatementListNode statements;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the constructorInvocation property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ConstructorBodyNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the constructorInvocation property. */
         CONSTRUCTOR_INVOCATION,
-        /** Attribute for the statements property. */
+        /** Attribute identifier for the statements property. */
         STATEMENTS,
     }
     
@@ -54,7 +67,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public ConstructorInvocationNode getConstructorInvocation()
     {
-        recordAccess(LocalAttribute.CONSTRUCTOR_INVOCATION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.constructorInvocation;
     }
     
@@ -72,7 +85,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.CONSTRUCTOR_INVOCATION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(constructorInvocation, false);
         this.constructorInvocation = constructorInvocation;
@@ -85,7 +98,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public BlockStatementListNode getStatements()
     {
-        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.statements;
     }
     
@@ -103,7 +116,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(statements, false);
         this.statements = statements;

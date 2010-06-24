@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 import javax.tools.DiagnosticListener;
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaAnnotationMetaprogram;
@@ -28,11 +30,22 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     /** The anchor of a metaprogram attached to this node. */
     private MetaAnnotationMetaprogramAnchorNode metaprogramAnchor;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the annotationType property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(MetaAnnotationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the annotationType property. */
         ANNOTATION_TYPE,
-        /** Attribute for the metaprogramAnchor property. */
+        /** Attribute identifier for the metaprogramAnchor property. */
         METAPROGRAM_ANCHOR,
     }
     
@@ -56,7 +69,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      */
     public UnparameterizedTypeNode getAnnotationType()
     {
-        recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.annotationType;
     }
     
@@ -74,7 +87,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(annotationType, false);
         this.annotationType = annotationType;
@@ -87,7 +100,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      */
     public MetaAnnotationMetaprogramAnchorNode getMetaprogramAnchor()
     {
-        recordAccess(LocalAttribute.METAPROGRAM_ANCHOR, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.METAPROGRAM_ANCHOR).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.metaprogramAnchor;
     }
     

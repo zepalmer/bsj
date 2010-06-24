@@ -840,12 +840,23 @@ public class SourceGenerator
 			// gen attributes enum
 			if (def.getResponsibleProperties(false).size() > 0)
 			{
-				ps.println("private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute");
+				ps.println("private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();");
+				ps.println("private ReadWriteAttribute getAttribute(LocalAttribute attributeName)");
+				ps.println("{");
+				ps.println("    ReadWriteAttribute attribute = localAttributes.get(attributeName);");
+				ps.println("    if (attribute == null)");
+				ps.println("    {");
+				ps.println("        attribute = new ReadWriteAttribute(" + rawclassname + ".this);");
+				ps.println("        localAttributes.put(attributeName, attribute);");
+				ps.println("    }");
+				ps.println("    return attribute;");
+				ps.println("}");
+				ps.println("private static enum LocalAttribute");
 				ps.println("{");
 				ps.incPrependCount();
 				for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
 				{
-					ps.println("/** Attribute for the " + p.getName() + " property. */");
+					ps.println("/** Attribute identifier for the " + p.getName() + " property. */");
 					ps.println(StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ",");
 				}
 				ps.decPrependCount();
@@ -923,9 +934,9 @@ public class SourceGenerator
 					ps.println(" */");
 					ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
 					ps.println("{");
-					ps.println("    recordAccess(LocalAttribute."
-							+ StringUtilities.convertCamelCaseToUpperCase(p.getName())
-							+ ", Attribute.AccessType.READ);");
+					ps.println("    getAttribute(LocalAttribute."
+							+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
+							+ ".recordAccess(ReadWriteAttribute.AccessType.READ);");
 					ps.println("    return this." + p.getName() + ";");
 					ps.println("}");
 					ps.println();
@@ -953,9 +964,9 @@ public class SourceGenerator
 						ps.println("if (checkPermissions)");
 						ps.println("{");
 						ps.println("    getManager().assertMutatable(this);");
-						ps.println("    recordAccess(LocalAttribute."
-								+ StringUtilities.convertCamelCaseToUpperCase(p.getName())
-								+ ", Attribute.AccessType.STRONG_WRITE);");
+						ps.println("    getAttribute(LocalAttribute."
+								+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
+								+ ".recordAccess(ReadWriteAttribute.AccessType.WRITE);");
 						ps.println("}");
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{
@@ -1886,8 +1897,8 @@ public class SourceGenerator
 					ps.print(p.getName());
 				} else
 				{
-					throw new IllegalStateException("Property " + p.getName()
-							+ " is invisible in factory method of " + def.getBaseName() + " with no default.");
+					throw new IllegalStateException("Property " + p.getName() + " is invisible in factory method of "
+							+ def.getBaseName() + " with no default.");
 				}
 			}
 			ps.print(")");
@@ -2436,7 +2447,8 @@ public class SourceGenerator
 			{
 				classPs.println("args.getFirst().add(" + messagePropertyExpression.getExpression() + ");");
 				// NOTE: this is correct because arguments in the format string are 1-based
-				classPs.println("args.getSecond().put(\"" + messagePropertyExpression.getName() + "\", args.getFirst().size());");
+				classPs.println("args.getSecond().put(\"" + messagePropertyExpression.getName()
+						+ "\", args.getFirst().size());");
 			}
 			classPs.println("return args;");
 			classPs.decPrependCount();
@@ -2612,7 +2624,8 @@ public class SourceGenerator
 			String exceptionPackage = "edu.jhu.cs.bsj.compiler.ast.exception";
 			String exceptionImplPackage = "edu.jhu.cs.bsj.compiler.impl.ast.exception";
 
-			String docString = (def.getException().getDocString() == null) ? def.getDocString() : def.getException().getDocString();
+			String docString = (def.getException().getDocString() == null) ? def.getDocString()
+					: def.getException().getDocString();
 			docString = "/**\n * " + docString.replaceAll("\n", "\n * ") + "\n */";
 
 			Project ifaceProject = def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT);

@@ -1,9 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Generated;
@@ -11,17 +12,13 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramAttributeConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MultipleParentNodeExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.EmptyIterator;
-import edu.jhu.cs.bsj.compiler.impl.utils.HashMultiMap;
-import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
-import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NodeImpl implements Node
 {
@@ -37,15 +34,26 @@ public abstract class NodeImpl implements Node
     /** Whether or not this node originated in a binary file. */
     private boolean binary;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the startLocation property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(NodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the startLocation property. */
         START_LOCATION,
-        /** Attribute for the stopLocation property. */
+        /** Attribute identifier for the stopLocation property. */
         STOP_LOCATION,
-        /** Attribute for the manager property. */
+        /** Attribute identifier for the manager property. */
         MANAGER,
-        /** Attribute for the binary property. */
+        /** Attribute identifier for the binary property. */
         BINARY,
     }
     
@@ -69,7 +77,7 @@ public abstract class NodeImpl implements Node
      */
     public BsjSourceLocation getStartLocation()
     {
-        recordAccess(LocalAttribute.START_LOCATION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.START_LOCATION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.startLocation;
     }
     
@@ -79,7 +87,7 @@ public abstract class NodeImpl implements Node
      */
     public BsjSourceLocation getStopLocation()
     {
-        recordAccess(LocalAttribute.STOP_LOCATION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.STOP_LOCATION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.stopLocation;
     }
     
@@ -164,16 +172,9 @@ public abstract class NodeImpl implements Node
     
     
 	/**
-	 * The attribute type which controls the parent variable in a node.
-	 */
-	private static class ParentAttribute implements Attribute
-	{
-	}
-
-	/**
 	 * The parent attribute for this node.
 	 */
-	private Attribute parentAttribute = new ParentAttribute();
+	private ReadWriteAttribute parentAttribute = new ReadWriteAttribute(this);
 
 	/**
 	 * The next globally unique UID to assign.
@@ -189,6 +190,10 @@ public abstract class NodeImpl implements Node
 	 * The parent for this node.
 	 */
 	private Node parent = null;
+	/**
+	 * A variable indicating whether or not the <code>parent</code> variable has ever been set.
+	 */
+	private boolean parentSet = false;
 
 	/**
 	 * Assigns this node a UID.
@@ -196,36 +201,6 @@ public abstract class NodeImpl implements Node
 	{
 		this.uid = sUid.getAndIncrement();
 	}
-
-	/**
-	 * A data structure containing information about attribute access.
-	 */
-	static class AccessRecord extends Pair<Attribute.AccessType, Integer>
-	{
-		public AccessRecord(Attribute.AccessType accessType, Integer id)
-		{
-			super(accessType, id);
-		}
-
-		/**
-		 * Gets the type of access from this access record.
-		 */
-		public Attribute.AccessType getAccessType()
-		{
-			return this.getFirst();
-		}
-
-		/**
-		 * Gets the metaprogram ID from this access record.
-		 */
-		public Integer getMetaprogramID()
-		{
-			return this.getSecond();
-		}
-	}
-
-	/** The current set of access record for this node's attributes. */
-	private MultiMap<Attribute, AccessRecord> accessRecordMap = new HashMultiMap<Attribute, AccessRecord>();
 
 	/**
 	 * Causes this node to receive a visitor. Visitors are received by nodes in a depth-first fashion. The order of the
@@ -270,7 +245,7 @@ public abstract class NodeImpl implements Node
 	 */
 	public Node getParent()
 	{
-		recordAccess(this.parentAttribute, Attribute.AccessType.READ);
+		this.parentAttribute.recordAccess(ReadWriteAttribute.AccessType.READ);
 		return this.parent;
 	}
 
@@ -288,10 +263,11 @@ public abstract class NodeImpl implements Node
 		// The first write to the parent property of a node is not recorded for the same reason that writes when a node
 		// is created are not recorded. This allows list predicate filters to move up a pristine subtree without
 		// causing a conflict.
-		if (this.parent != null || accessRecordMap.getAll(this.parentAttribute).size() > 0)
+		if (this.parentSet)
 		{
-			recordAccess(this.parentAttribute, Attribute.AccessType.STRONG_WRITE);
+			this.parentAttribute.recordAccess(ReadWriteAttribute.AccessType.WRITE);
 		}
+		this.parentSet = true;
 		this.parent = node;
 	}
 
@@ -397,39 +373,9 @@ public abstract class NodeImpl implements Node
 	 * 
 	 * @return The manager for this node.
 	 */
-	protected BsjNodeManager getManager()
+	public BsjNodeManager getManager()
 	{
 		return this.manager;
-	}
-
-	/**
-	 * Records an attribute access for this node. If this access is in conflict with other accesses which have already
-	 * occurred on this node, an approprite exception is thrown.
-	 * 
-	 * @param attribute The attribute that was accessed.
-	 * @param accessType The type of access that was involved.
-	 * @throws MetaprogramAttributeConflictException If a conflict exists between this access and one which has already
-	 *             occurred.
-	 */
-	protected void recordAccess(Attribute attribute, Attribute.AccessType accessType)
-			throws MetaprogramAttributeConflictException
-	{
-		if (this.manager.getCurrentMetaprogramId() == null)
-		{
-			return;
-		}
-
-		Set<AccessRecord> previousAccesses = this.accessRecordMap.getAll(attribute);
-		for (AccessRecord record : previousAccesses)
-		{
-			Attribute.AccessType recordAccessType = record.getAccessType();
-			if (accessType.canConflict(recordAccessType))
-			{
-				this.manager.assertCooperation(record.getMetaprogramID(), this);
-			}
-		}
-
-		this.accessRecordMap.put(attribute, new AccessRecord(accessType, this.manager.getCurrentMetaprogramId()));
 	}
 
 	/**

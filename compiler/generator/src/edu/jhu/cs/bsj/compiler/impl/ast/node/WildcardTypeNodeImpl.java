@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
@@ -25,11 +27,22 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     /** Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound. */
     private boolean upperBound;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the bound property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(WildcardTypeNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the bound property. */
         BOUND,
-        /** Attribute for the upperBound property. */
+        /** Attribute identifier for the upperBound property. */
         UPPER_BOUND,
     }
     
@@ -53,7 +66,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public ReferenceTypeNode getBound()
     {
-        recordAccess(LocalAttribute.BOUND, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.bound;
     }
     
@@ -71,7 +84,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BOUND, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(bound, false);
         this.bound = bound;
@@ -84,7 +97,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public boolean getUpperBound()
     {
-        recordAccess(LocalAttribute.UPPER_BOUND, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.UPPER_BOUND).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.upperBound;
     }
     
@@ -102,7 +115,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.UPPER_BOUND, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.UPPER_BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.upperBound = upperBound;
     }

@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -20,8 +22,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorDeclarationNodeImpl extends NodeImpl implements ConstructorDeclarationNode
@@ -50,23 +52,34 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the identifier property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ConstructorDeclarationNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the identifier property. */
         IDENTIFIER,
-        /** Attribute for the body property. */
+        /** Attribute identifier for the body property. */
         BODY,
-        /** Attribute for the modifiers property. */
+        /** Attribute identifier for the modifiers property. */
         MODIFIERS,
-        /** Attribute for the parameters property. */
+        /** Attribute identifier for the parameters property. */
         PARAMETERS,
-        /** Attribute for the varargParameter property. */
+        /** Attribute identifier for the varargParameter property. */
         VARARG_PARAMETER,
-        /** Attribute for the throwTypes property. */
+        /** Attribute identifier for the throwTypes property. */
         THROW_TYPES,
-        /** Attribute for the typeParameters property. */
+        /** Attribute identifier for the typeParameters property. */
         TYPE_PARAMETERS,
-        /** Attribute for the javadoc property. */
+        /** Attribute identifier for the javadoc property. */
         JAVADOC,
     }
     
@@ -102,7 +115,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -120,7 +133,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(identifier, false);
         this.identifier = identifier;
@@ -133,7 +146,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public ConstructorBodyNode getBody()
     {
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
@@ -151,7 +164,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(body, false);
         this.body = body;
@@ -164,7 +177,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public ConstructorModifiersNode getModifiers()
     {
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -182,7 +195,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
@@ -195,7 +208,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public VariableListNode getParameters()
     {
-        recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.parameters;
     }
     
@@ -213,7 +226,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(parameters, false);
         this.parameters = parameters;
@@ -226,7 +239,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public VariableNode getVarargParameter()
     {
-        recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.varargParameter;
     }
     
@@ -244,7 +257,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(varargParameter, false);
         this.varargParameter = varargParameter;
@@ -257,7 +270,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public UnparameterizedTypeListNode getThrowTypes()
     {
-        recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.throwTypes;
     }
     
@@ -275,7 +288,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(throwTypes, false);
         this.throwTypes = throwTypes;
@@ -288,7 +301,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public TypeParameterListNode getTypeParameters()
     {
-        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.typeParameters;
     }
     
@@ -306,7 +319,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(typeParameters, false);
         this.typeParameters = typeParameters;
@@ -319,7 +332,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public JavadocNode getJavadoc()
     {
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.javadoc;
     }
     
@@ -337,7 +350,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(javadoc, false);
         this.javadoc = javadoc;

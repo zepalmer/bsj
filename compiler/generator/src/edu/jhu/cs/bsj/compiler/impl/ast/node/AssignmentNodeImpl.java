@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -14,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
@@ -29,13 +31,24 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     /** The expression to use. */
     private ExpressionNode expression;
     
-    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
-        /** Attribute for the variable property. */
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(AssignmentNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the variable property. */
         VARIABLE,
-        /** Attribute for the operator property. */
+        /** Attribute identifier for the operator property. */
         OPERATOR,
-        /** Attribute for the expression property. */
+        /** Attribute identifier for the expression property. */
         EXPRESSION,
     }
     
@@ -61,7 +74,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public ExpressionNode getVariable()
     {
-        recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.variable;
     }
     
@@ -79,7 +92,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(variable, false);
         this.variable = variable;
@@ -92,7 +105,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public AssignmentOperator getOperator()
     {
-        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.OPERATOR).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.operator;
     }
     
@@ -110,7 +123,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.OPERATOR).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         this.operator = operator;
     }
@@ -121,7 +134,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public ExpressionNode getExpression()
     {
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
+        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.expression;
     }
     
@@ -139,7 +152,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         setAsChild(expression, false);
         this.expression = expression;
