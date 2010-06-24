@@ -259,7 +259,7 @@ public class MetacompilationManager implements MetacompilationContext
 			String packageName;
 			packageName = binaryName.substring(0, binaryName.lastIndexOf('.'));
 			compilationUnitName = binaryName.substring(binaryName.lastIndexOf('.') + 1);
-			packageNode = packageNode.getSubpackage(packageName);
+			packageNode = packageNode.getSubpackageByQualifiedName(packageName);
 		} else
 		{
 			compilationUnitName = binaryName;
