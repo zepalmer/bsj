@@ -65,7 +65,6 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	private MetaAnnotationMetaprogramAnchorNode anchor;
 	private BsjNodeFactory factory;
 	private boolean onFieldDeclaration = true;
-	private List<String> depends;
 
 	/**
 	 * 
@@ -84,12 +83,27 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	@BsjMetaAnnotationElementSetter
-	public void setDepends(List<String> depends) {
-		changeInstanceDependencies(depends);
+	public void setDepends(String[] depends) {
+		if (depends != null) {
+			changeInstanceDependencies(Arrays.asList(depends));
+		}
 	}
+	
 	@BsjMetaAnnotationElementGetter
-	public List<String> getDepends() {
-		return retrieveInstanceDependencies();
+	public String[] getDepends() {
+		return (String[]) retrieveInstanceDependencies().toArray();
+	}
+	
+	@BsjMetaAnnotationElementSetter
+	public void setTargets(String[] targets) {
+		if (targets != null) {
+			changeInstanceTargets(Arrays.asList(targets));
+		}
+	}
+	
+	@BsjMetaAnnotationElementGetter
+	public String[] getTargets() {
+		return (String[]) retrieveInstanceTargets().toArray();
 	}
 	
 	@BsjMetaAnnotationElementGetter
@@ -124,6 +138,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		ClassDeclarationNode classDeclaration = anchor
 				.getNearestAncestorOfType(ClassDeclarationNode.class);
 
+
 		// TODO Currently this assumes we are on a field,
 
 		// find out if we are anchored onto a field or a private method
@@ -145,18 +160,17 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			
 			// Throw an error if none can be found
 			if (methodNode == null) {
-				context
-				.getDiagnosticListener()
-				.report(
-						new InvalidAnnotatedDeclarationDiagnosticImpl(
-								getClass(),
-								null,
-								Collections
-								.<Class<? extends Node>> singletonList(FieldDeclarationNode.class)));
+				context.getDiagnosticListener().report(
+					new InvalidAnnotatedDeclarationDiagnosticImpl(
+							getClass(),
+							null,
+							Collections
+							.<Class<? extends Node>> singletonList(FieldDeclarationNode.class)));
 				throw new MetaprogramExecutionFailureException();				
 			}
 			fieldType = methodNode.getReturnType();
-			fieldName = trimName(methodNode.getIdentifier().getIdentifier());
+//			fieldName = trimName(methodNode.getIdentifier().getIdentifier());
+			fieldName = methodNode.getIdentifier().getIdentifier();
 			getAllMethods(fieldName, fieldType, classDeclarationList);
 		} else {
 			for (VariableDeclaratorNode variableDeclaration : fieldNode.getDeclarators().getChildren()) {
@@ -188,7 +202,6 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 
 
 	private String trimName(String identifier) {
-		// TODO Auto-generated method stub
 		if (identifier.startsWith("get")) {
 			return downCase(identifier.substring(3));
 		} else {
@@ -213,11 +226,24 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 					fieldType, fieldName, methodName, forwardedMethodName));
 			i++;
 		}
+	}	
+	
+	private void getAllMethods(
+			String fieldNameString, String forwardedMethodName, TypeNode fieldType,
+			List<ClassMemberNode> classDeclarationList) {
+		int i = 0;
+		IdentifierNode fieldName = factory.makeIdentifierNode(fieldNameString);
+		for (String methodName : getMethodNames()) {
+//			String forwardedMethodName = getForwardedMethodName(fieldName.getIdentifier(), i);
+			classDeclarationList.addAll(createForwardedMethod(
+					fieldType, fieldName, methodName, forwardedMethodName));
+			i++;
+		}
 	}
 
 	public String getForwardedMethodName(String fieldName, int i) {
 		String methodName = getMethodNames()[i];
-		if (forwardedMethodNames != null && forwardedMethodNames[i] != null) {
+		if (forwardedMethodNames != null && forwardedMethodNames.length < i && forwardedMethodNames[i] != null) {
 			return forwardedMethodNames[i];
 		} else {
 			if (fieldNameOverride != null) {
