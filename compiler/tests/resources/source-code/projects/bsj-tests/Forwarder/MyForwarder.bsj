@@ -1,0 +1,42 @@
+package mypackage;
+#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
+
+public class MyForwarder {
+	/*
+	@@Forwarder(
+		methodNames={"sayHello"},
+		forwardedMethodNames="hiThere")
+	*/
+	@@Forwarder(
+		methodNames="sayGoodbye")
+	private Test member;
+
+	/*
+	@@Forwarder(methodNames="length")
+	*/
+	@@Forwarder(methodNames="isEmpty")
+	private java.lang.String s;
+
+	public MyForwarder(Test o) {
+		member = o;
+	}
+
+	private Test getMember() {
+		return member;
+	}
+
+	public static void main(String[] args) {
+		MyForwarder foo = new MyForwarder(new Test());
+		//System.out.println(foo.hiThere(3));
+	}
+	/*
+	public static class Test {
+		public String sayHello(int i) {
+			return "hello";
+		}
+		public String sayGoodbye() {
+			return "goodbye";
+		}
+	}
+	*/
+}
