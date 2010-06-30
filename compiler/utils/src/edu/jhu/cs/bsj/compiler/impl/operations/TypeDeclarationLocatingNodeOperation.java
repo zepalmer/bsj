@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
@@ -299,20 +301,33 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 			return handleTypeBodyNode(node);
 		}
 
-		protected NamedTypeDeclarationNode<?> handleTypeBodyNode(TypeBodyNode<?> typeBodyNode)
+		protected <T extends Node> NamedTypeDeclarationNode<?> handleTypeBodyNode(TypeBodyNode<T> typeBodyNode)
 		{
-			for (Node node : typeBodyNode.getMembers())
+
+			Set<? extends T> memberSet = typeBodyNode.getMembers().filter(new NodeFilter<T>()
 			{
-				if (node instanceof NamedTypeDeclarationNode<?>)
+				@Override
+				public boolean filter(T node)
 				{
-					NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) node; // TODO make this use filter
-					if (namedTypeDeclarationNode.getIdentifier().getIdentifier().equals(this.name))
+					if (node instanceof NamedTypeDeclarationNode<?>)
 					{
-						return namedTypeDeclarationNode;
+						NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) node;
+						if (namedTypeDeclarationNode.getIdentifier().getIdentifier().equals(
+								TopLevelTypeDeclarationLocatingAncestorOperation.this.name))
+						{
+							return true;
+						}
 					}
+					return false;
 				}
+			});
+			if (memberSet.size()>0)
+			{
+				return (NamedTypeDeclarationNode<?>)(memberSet.iterator().next());
+			} else
+			{
+				return null;
 			}
-			return null;
 		}
 
 		@Override
@@ -346,7 +361,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 					{
 						if (typeDecl instanceof NamedTypeDeclarationNode<?>)
 						{
-							NamedTypeDeclarationNode<?> namedTypeDecl = (NamedTypeDeclarationNode<?>)typeDecl;
+							NamedTypeDeclarationNode<?> namedTypeDecl = (NamedTypeDeclarationNode<?>) typeDecl;
 							if (namedTypeDecl.getIdentifier().getIdentifier().equals(name))
 							{
 								return namedTypeDecl;
