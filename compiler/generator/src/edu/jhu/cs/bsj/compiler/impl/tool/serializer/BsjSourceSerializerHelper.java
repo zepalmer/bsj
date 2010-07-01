@@ -874,7 +874,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeForInitializerExpressionNode(ForInitializerExpressionNode node, PrependablePrintStream p)
 	{
-		handleListNode(node.getExpressions(), "", ", ", "", p, true);
+		handleListNode(node.getExpressions(), "", ", ", ";", p, false);
 		return null;
 	}
 
@@ -886,8 +886,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		if (node.getInitializer() != null)
 		{
 			node.getInitializer().executeOperation(this, p);
+			// (the initializer prints its own ';')
+		} else
+		{
+			p.print(';');
 		}
-		p.print("; ");
+		p.print(" ");
 		if (node.getCondition() != null)
 		{
 			node.getCondition().executeOperation(this, p);
@@ -1655,7 +1659,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			}
 			declarator.executeOperation(this, p);
 		}
-		p.println(";");
+		p.print(";");
 		return null;
 	}
 
