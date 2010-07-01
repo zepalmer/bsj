@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 
 /**
  * A common supertype for all nodes which use variable declarators to declare a set of variables.

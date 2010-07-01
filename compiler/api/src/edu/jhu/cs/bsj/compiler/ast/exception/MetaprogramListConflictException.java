@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.exception;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramListConflictDiagnostic;

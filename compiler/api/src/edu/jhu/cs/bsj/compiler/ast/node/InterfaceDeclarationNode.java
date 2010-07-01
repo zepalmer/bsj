@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 
 /**
  * Represents the declaration of an interface, as in:

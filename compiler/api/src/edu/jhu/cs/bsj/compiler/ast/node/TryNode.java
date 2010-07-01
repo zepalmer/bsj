@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListNode;
 
 /**
  * A node to represent a try-catch block, as in:

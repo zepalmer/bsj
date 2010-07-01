@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 
 /**
  * A node representing a method invocation from <tt>super</tt>, such as in the expression

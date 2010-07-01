@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 
 /**
  * This interface is implemented by any node which represents the body of a type definition.

@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListNode;
 
 /**
  * Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that

@@ -3,6 +3,10 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 
 /**
  * A node representing a method declaration, as in:

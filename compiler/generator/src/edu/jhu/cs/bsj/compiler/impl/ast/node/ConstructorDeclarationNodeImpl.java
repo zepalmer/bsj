@@ -18,10 +18,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 

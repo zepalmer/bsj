@@ -11,9 +11,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 

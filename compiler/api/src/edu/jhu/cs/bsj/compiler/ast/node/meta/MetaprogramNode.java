@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 
 /**
  * A node for metaprograms, as in

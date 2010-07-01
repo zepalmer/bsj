@@ -19,7 +19,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -32,6 +31,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
@@ -75,7 +75,8 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 	private static String[] IMPORT_PACKAGES = { "edu.jhu.cs.bsj.compiler.impl.metaprogram",
 			"edu.jhu.cs.bsj.compiler.ast", "edu.jhu.cs.bsj.compiler.ast.exception",
 			"edu.jhu.cs.bsj.compiler.diagnostic.user", "edu.jhu.cs.bsj.compiler.ast.node",
-			"edu.jhu.cs.bsj.compiler.ast.node.meta", "edu.jhu.cs.bsj.compiler.metaprogram" };
+			"edu.jhu.cs.bsj.compiler.ast.node.list", "edu.jhu.cs.bsj.compiler.ast.node.meta",
+			"edu.jhu.cs.bsj.compiler.metaprogram" };
 
 	public CompileExplicitMetaprogramTask(ExplicitMetaprogramAnchorNode<R> anchor, InjectionInfo injectionInfo)
 	{

@@ -14,9 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureExceptio
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -25,6 +23,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;

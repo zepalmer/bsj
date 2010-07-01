@@ -26,7 +26,12 @@ public class RegeneratorTest extends AbstractPerFileTest
 	{
 		if (file.getName().endsWith(".bsj") || file.getName().endsWith(".java"))
 		{
-			return regenerateJavaFile(file);
+			boolean result = regenerateJavaFile(file);
+			if (!result)
+			{
+				System.err.println("Regeneration failed on " + file);
+			}
+			return result;
 		} else
 		{
 			return true;

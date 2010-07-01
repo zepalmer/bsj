@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListNode;
 
 /**
  * Represents the body of an enum declaration.

@@ -192,6 +192,7 @@ scope Rule {
 
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
+    import edu.jhu.cs.bsj.compiler.ast.node.list.*;
     import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
     import edu.jhu.cs.bsj.compiler.ast.util.*;
     import edu.jhu.cs.bsj.compiler.diagnostic.*;

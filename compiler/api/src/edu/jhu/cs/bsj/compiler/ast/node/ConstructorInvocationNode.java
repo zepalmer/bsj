@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 
 /**
  * This class is a common superclass to both types of explicit constructor invocations: alternate constructor
