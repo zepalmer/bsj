@@ -46,10 +46,10 @@ public class BsjNodeManager
 	private MetaAnnotationObjectInstantiator instantiator = new MetaAnnotationObjectInstantiator();
 
 	/**
-	 * The stack of running metaprogram IDs. This is specifically in place to permit code to temporarily suspend the
-	 * running metaprograms (by pushing <code>null</code> onto the stack).
+	 * The stack of running metaprograms. This is specifically in place to permit code to temporarily suspend the
+	 * running metaprograms' effects (by pushing <code>null</code> onto the stack).
 	 */
-	private Stack<Integer> metaprogramIdStack;
+	private Stack<MetaprogramProfile<?>> metaprogramStack;
 	/**
 	 * The stack of permission policy managers for nodes. If this manager is <code>null</code>, any mutation is
 	 * permitted.
@@ -61,7 +61,7 @@ public class BsjNodeManager
 	 */
 	public BsjNodeManager()
 	{
-		this.metaprogramIdStack = new Stack<Integer>();
+		this.metaprogramStack = new Stack<MetaprogramProfile<?>>();
 		this.permissionPolicyStack = new Stack<PermissionPolicyManager>();
 	}
 
@@ -96,25 +96,31 @@ public class BsjNodeManager
 		this.dependencyManager = dependencyManager;
 	}
 
-	public Integer getCurrentMetaprogramId()
+	public MetaprogramProfile<?> getCurrentMetaprogram()
 	{
-		if (metaprogramIdStack.isEmpty())
+		if (metaprogramStack.isEmpty())
 		{
 			return null;
 		} else
 		{
-			return metaprogramIdStack.peek();
+			return metaprogramStack.peek();
 		}
 	}
 
-	public void pushCurrentMetaprogramId(Integer id)
+	public void pushCurrentMetaprogram(MetaprogramProfile<?> metaprogram)
 	{
-		this.metaprogramIdStack.push(id);
+		this.metaprogramStack.push(metaprogram);
 	}
 
-	public void popCurrentMetaprogramId()
+	public void popCurrentMetaprogram()
 	{
-		this.metaprogramIdStack.pop();
+		this.metaprogramStack.pop();
+	}
+	
+	public Integer getCurrentMetaprogramId()
+	{
+		MetaprogramProfile<?> metaprogram = getCurrentMetaprogram();
+		return metaprogram == null ? null : metaprogram.getMetaprogram().getID();
 	}
 
 	/**

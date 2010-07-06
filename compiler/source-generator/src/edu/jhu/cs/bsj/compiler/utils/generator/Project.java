@@ -14,6 +14,8 @@ public enum Project
 {
 	API("interface", Arrays.asList("edu.jhu.cs.bsj.compiler.ast.*", "edu.jhu.cs.bsj.compiler.ast.node.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.list.*",
+			"edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.*",
+			"edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.source.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "edu.jhu.cs.bsj.compiler.ast.exception.*", "java.util.*",
 			"java.io.*", "javax.annotation.Generated"), Arrays.<Project> asList()),
 	PARSER("parser", Arrays.<String> asList(), Arrays.asList(API)),

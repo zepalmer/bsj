@@ -460,111 +460,15 @@
             </diagnostic>
 
             <diagnostic name="MetaprogramListConflictDiagnostic" super="MetaprogramConflictDiagnostic"
-                typeParam="T extends MetaprogramErrorException" superTypeArg="T">
+                superTypeArg="MetaprogramListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list">
                 <exception />
+                <prop name="conflicts" type="Set&lt;? extends ListKnowledge&lt;?&gt;&gt;"
+                    desc="the conflicts which were detected"/>
                 <doc><![CDATA[
                     Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
-                    {@link ListNode}.
-                ]]></doc>
-            </diagnostic>
-
-            <diagnostic name="MetaprogramPredicateListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
-                superTypeArg="MetaprogramPredicateListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.predicate">
-                <exception />
-                <prop name="predicate" type="NodeFilter&lt;?&gt;" desc="the node filter which was in conflict" />
-                <prop name="element" type="Node" desc="the node which matched the filter" />
-                <doc><![CDATA[
-                    Indicates that the first metaprogram used the provided predicate to search the list for values while
-                    the second metaprogram either inserted or removed the given element (which matches the predicate)
-                    from the list.  (&#x2559;P&#x255C;<sup>m</sup> &#x2227; &#x2553;e&#x2208;*&#x2556;<sup>n</sup>)
-                ]]></doc>
-            </diagnostic>
-
-            <diagnostic name="MetaprogramInsertionOrderListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
-                superTypeArg="MetaprogramInsertionOrderListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.insertionOrder">
-                <exception />
-                <prop name="after" type="boolean" desc="whether or not the insertion was after the reference node" />
-                <prop name="element" type="Node" desc="the reference node" />
-                <prop name="firstInsert" type="Node" desc="the first node inserted" />
-                <prop name="secondInsert" type="Node" desc="the second node inserted" />
-                <doc><![CDATA[
-                    Indicates that two metaprograms both tried to insert values before or after the same element in the
-                    list.  (#x2553;e&#x2192;e1&#x2556;<sup>m</sup> &#x2227; #x2553;e&#x2192;e2&#x2556;<sup>n</sup> or
-                    #x2553;e&#x2190;e1&#x2556;<sup>m</sup> &#x2227; #x2553;e&#x2190;e2&#x2556;<sup>n</sup>)  The
-                    <code>after</code> field is <code>true</code> if the insertion came after the element and
-                    <code>false</code> if the insertion came before the element.  If <code>element</code> is
-                    <code>null</code>, it indicates the front or back of the list.
-                    <p/>
-                    This diagnostic is only generated for order-dependent elements.
-                ]]></doc>
-            </diagnostic>
-
-            <diagnostic name="MetaprogramReadWriteListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
-                superTypeArg="MetaprogramReadWriteListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.insertionOrder">
-                <exception />
-                <prop name="after" type="boolean" desc="whether or not the insertion was after the reference node" />
-                <prop name="element" type="Node" desc="the reference node" />
-                <doc><![CDATA[
-                    Indicates that one metaprogram read a node before or after a given reference node while another
-                    metaprogram changed that value.
-                    (&#x2559;e&#x2192;e1&#x255C;<sup>m</sup> &#x2227; &#x2553;e&#x2192;e2&#x2556;<sup>n</sup> or
-                    &#x2559;e&#x2190;e1&#x255C;<sup>m</sup> &#x2227; &#x2553;e&#x2190;e2&#x2556;<sup>n</sup>)  The
-                    <code>after</code> field is <code>true</code> if the insertion and read both came after the element
-                    and <code>false</code> if before.  If <code>element</code> is <code>null</code>, it indicates the
-                    front or back of the list.
-                ]]></doc>
-            </diagnostic>
-
-            <diagnostic name="MetaprogramChangedReferenceNodeListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
-                superTypeArg="MetaprogramChangedReferenceNodeListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.changed.reference">
-                <exception />
-                <prop name="element" type="Node" desc="the reference node" />
-                <doc><![CDATA[
-                    Indicates that the first metaprogram used the specified reference node for some operation and the
-                    second metaprogram either added or removed that reference node.
-                    <p/>
-                    This diagnostic addresses the following logical cases:
-                    <ul>
-                        <li>&#x2553;e&#x2192;e'&#x2556;<sup>m</sup> &#x2227; &#x2553;e&#x2208;*&#x2556;<sup>n</sup></li>
-                        <li>&#x2553;e'&#x2190;e&#x2556;<sup>m</sup> &#x2227; &#x2553;e&#x2208;*&#x2556;<sup>n</sup></li>
-                        <li>&#x2559;e&#x2192;e'&#x255C;<sup>m</sup> &#x2227; &#x2553;e&#x2208;*&#x2556;<sup>n</sup></li>
-                        <li>&#x2559;e'&#x2190;e&#x255C;<sup>m</sup> &#x2227; &#x2553;e&#x2208;*&#x2556;<sup>n</sup></li>
-                    </ul>
-                ]]></doc>
-            </diagnostic>
-
-            <diagnostic name="MetaprogramChangedValueNodeListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
-                superTypeArg="MetaprogramChangedValueNodeListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.changed.value">
-                <exception />
-                <prop name="element" type="Node" desc="the reference node" />
-                <prop name="value" type="Node" desc="the affected value" />
-                <doc><![CDATA[
-                    Indicates that the first metaprogram either read or wrote a value for some operation and the
-                    second metaprogram either added or removed that value node.
-                    <p/>
-                    This diagnostic addresses the following logical cases:
-                    <ul>
-                        <li>&#x2553;e&#x2192;e'&#x2556;<sup>m</sup> &#x2227; &#x2553;e'&#x2208;*&#x2556;<sup>n</sup></li>
-                        <li>&#x2553;e'&#x2190;e&#x2556;<sup>m</sup> &#x2227; &#x2553;e'&#x2208;*&#x2556;<sup>n</sup></li>
-                        <li>&#x2559;e&#x2192;e'&#x255C;<sup>m</sup> &#x2227; &#x2553;e'&#x2208;*&#x2556;<sup>n</sup></li>
-                        <li>&#x2559;e'&#x2190;e&#x255C;<sup>m</sup> &#x2227; &#x2553;e'&#x2208;*&#x2556;<sup>n</sup></li>
-                    </ul>
-                ]]></doc>
-            </diagnostic>
-
-            <diagnostic name="MetaprogramPresenceChangedListConflictDiagnostic" super="MetaprogramListConflictDiagnostic"
-                superTypeArg="MetaprogramPresenceChangedListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list.changed.presence">
-                <exception />
-                <prop name="element" type="Node" desc="the element in question" />
-                <doc><![CDATA[
-                    Indicates that the first metaprogram changed whether or not an element was in the list while the
-                    second metaprogram either made a similar change or observed that the element was in the list.
-                    <p/>
-                    This diagnostic addresses the following logical cases:
-                    <ul>
-                        <li>&#x2553;e&#x2208;*&#x2556;<sup>m</sup> &#x2227; &#x2553;e&#x2208;*&#x2556;<sup>n</sup></li>
-                        <li>&#x2553;e&#x2208;*&#x2556;<sup>m</sup> &#x2227; &#x2559;e&#x2208;*&#x255C;<sup>n</sup></li>
-                    </ul>
+                    {@link ListNode}.  Note that this diagnostic has the ability to represent multiple failures
+                    detected in a closure.  As a result, the anchors provided are merely advisory and represent one
+                    of the possible conflicts contained within.
                 ]]></doc>
             </diagnostic>
 
