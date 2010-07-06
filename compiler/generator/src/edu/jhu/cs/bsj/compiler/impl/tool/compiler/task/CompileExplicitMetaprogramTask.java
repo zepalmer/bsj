@@ -46,6 +46,7 @@ import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingList
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
 import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilerUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.Dependency;
@@ -213,8 +214,6 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		}
 
 		// *** Start by building the metaprogram compilation unit
-		String metaprogramPackageName = "edu.jhu.cs.bsj.generated.metaprogram";
-
 		// Process default imports
 		List<ImportNode> imports = new ArrayList<ImportNode>();
 		for (String packageString : IMPORT_PACKAGES)
@@ -253,10 +252,11 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 		// Get metaprogram class name
 		String metaprogramClassName = "Metaprogram" + metaprogramNode.getUid();
-		String fullyQualifiedMetaprogramClassName = metaprogramPackageName + "." + metaprogramClassName;
+		String fullyQualifiedMetaprogramClassName = CompilerUtilities.METAPROGRAM_PACKAGE_NAME + "."
+				+ metaprogramClassName;
 
 		// Create nodes for this metaprogram
-		PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(factory.parseNameNode(metaprogramPackageName));
+		PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(factory.parseNameNode(CompilerUtilities.METAPROGRAM_PACKAGE_NAME));
 
 		// Steal the method body from the metaprogram node
 		BlockStatementListNode metaprogramBody = metaprogramNode.getBody();
@@ -323,7 +323,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 		BsjFileManager fileManager = new LocationMappedFileManager(locationMap);
 		BsjFileObject metaprogramSourceFile = fileManager.getFileForOutput(BsjCompilerLocation.SOURCE_PATH,
-				metaprogramPackageName, metaprogramClassName + ".bsj", null);
+				CompilerUtilities.METAPROGRAM_PACKAGE_NAME, metaprogramClassName + ".bsj", null);
 		NodeMappingSerializationOperation serializer = NodeMappingSerializationOperation.make();
 		Pair<String, SerializedNodeMap> serialized = serializer.executeCompilationUnitNode(
 				metaprogramCompilationUnitNode, null);

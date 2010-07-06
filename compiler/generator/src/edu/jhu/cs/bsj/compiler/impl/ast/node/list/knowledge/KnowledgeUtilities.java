@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ClosureRule;
@@ -32,6 +32,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.closure.ReadWriteAft
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.closure.ReadWriteBeforeConflictClosureRuleImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.closure.ReadWriteConflictClosureRuleImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.closure.UnaryKnowledgeClosureRule;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilerUtilities;
 
 /**
  * This class acts as a container for common static utilities related to list knowledge.
@@ -150,16 +151,26 @@ public class KnowledgeUtilities
 	 */
 	public static List<StackTraceElement> getStackTrace()
 	{
-		List<StackTraceElement> list = new LinkedList<StackTraceElement>(
-				Arrays.asList(Thread.currentThread().getStackTrace()));
-		// Throw away the Thread.getStackTrace() frame as well as this one
-		for (int i=0;i<2;i++)
+		List<StackTraceElement> list = Arrays.asList(Thread.currentThread().getStackTrace());
+		// Trim out resulting trace. Throw away first two elements (Thread.getStackTrace() and this one) and anything
+		// which appears after an element in the BSJ generated package.
+		ArrayList<StackTraceElement> ret = new ArrayList<StackTraceElement>();
+		if (list.size() > 2)
 		{
-			if (list.size() > 0)
+			Iterator<StackTraceElement> it = list.iterator();
+			it.next();
+			it.next();
+			while (it.hasNext())
 			{
-				list.remove(0);
+				StackTraceElement element = it.next();
+				ret.add(element);
+				if (element.getClassName().startsWith(CompilerUtilities.METAPROGRAM_PACKAGE_NAME))
+				{
+					break;
+				}
 			}
 		}
-		return Collections.unmodifiableList(list);
+		ret.trimToSize();
+		return Collections.unmodifiableList(ret);
 	}
 }

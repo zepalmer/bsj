@@ -79,7 +79,6 @@ public class DiagnosticMessageUtilities
 		StringBuilder sb = new StringBuilder();
 		for (StackTraceElement e : stackTrace)
 		{
-			// TODO: should probably cut off printing at a compiler-generated metaprogram, yes?
 			if (sb.length()>0)
 			{
 				sb.append('\n');
