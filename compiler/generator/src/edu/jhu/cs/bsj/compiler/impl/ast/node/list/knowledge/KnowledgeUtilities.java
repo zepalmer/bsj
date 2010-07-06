@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ClosureRule;
@@ -149,11 +150,15 @@ public class KnowledgeUtilities
 	 */
 	public static List<StackTraceElement> getStackTrace()
 	{
-		List<StackTraceElement> list = new ArrayList<StackTraceElement>(
+		List<StackTraceElement> list = new LinkedList<StackTraceElement>(
 				Arrays.asList(Thread.currentThread().getStackTrace()));
-		if (list.size() > 0)
+		// Throw away the Thread.getStackTrace() frame as well as this one
+		for (int i=0;i<2;i++)
 		{
-			list.remove(list.size() - 1);
+			if (list.size() > 0)
+			{
+				list.remove(0);
+			}
 		}
 		return Collections.unmodifiableList(list);
 	}

@@ -7,14 +7,16 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ListKnowledge;
+import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ConflictKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramListConflictDiagnostic;
 
 /**
  * Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
- * {@link ListNode}.
+ * {@link ListNode}.  Note that this diagnostic has the ability to represent multiple failures
+ * detected in a closure.  As a result, the anchors provided are merely advisory and represent one
+ * of the possible conflicts contained within.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class MetaprogramListConflictException extends MetaprogramConflictException
@@ -22,13 +24,13 @@ public abstract class MetaprogramListConflictException extends MetaprogramConfli
     private static final long serialVersionUID = 1L;
     
     /** The conflicts which were detected. */
-    private Set<? extends ListKnowledge<?>> conflicts;
+    private Set<? extends ConflictKnowledge<?>> conflicts;
     
     public MetaprogramListConflictException(
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
             Node conflictNode,
-            Set<? extends ListKnowledge<?>> conflicts)
+            Set<? extends ConflictKnowledge<?>> conflicts)
     {
         super(firstAnchor, secondAnchor, conflictNode);
         this.conflicts = conflicts;
@@ -38,7 +40,7 @@ public abstract class MetaprogramListConflictException extends MetaprogramConfli
      * Retrieves the conflicts which were detected.
      * @return The conflicts which were detected.
      */
-    public Set<? extends ListKnowledge<?>> getConflicts()
+    public Set<? extends ConflictKnowledge<?>> getConflicts()
     {
         return this.conflicts;
     }

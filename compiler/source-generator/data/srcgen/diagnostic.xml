@@ -206,7 +206,7 @@
             <diagnostic name="InvalidMetaAnnotationMethodDiagnostic" super="InvalidMetaAnnotationDefinitionDiagnostic">
                 <prop name="methodType" type="MetaAnnotationMethodType" desc="the type of method with which there is a problem" />
                 <prop name="methodName" type="String" desc="the name of the method with which there is a problem" />
-                <messageProp name="methodTypeCode" expression="methodType.getCode()"/>
+                <messageProp name="methodTypeCode" expression="methodType.getCode()" />
                 <doc><![CDATA[
                     A diagnostic which represents some problem in the definition of a meta-annotation type's getter or
                     setter methods.
@@ -255,7 +255,7 @@
             <diagnostic name="MetaAnnotationPropertyMissingMethodDiagnostic" super="InvalidMetaAnnotationPropertyDiagnostic"
                 code="bsj.compiler.metaAnnotation.property.missingMethod">
                 <prop name="methodType" type="MetaAnnotationMethodType" desc="the type of method missing" />
-                <messageProp name="methodTypeCode" expression="methodType.getCode()"/>
+                <messageProp name="methodTypeCode" expression="methodType.getCode()" />
                 <doc><![CDATA[
                     A diagnostic indicating that a property's getter or setter is missing.
                 ]]></doc>
@@ -374,7 +374,7 @@
                 code="bsj.compiler.metaprogram.failure.exception">
                 <prop name="exception" type="Exception" desc="the exception which was raised by the metaprogram" />
                 <messageProp name="stackTrace"
-                    expression="DiagnosticMessageUtilities.getIndentedStackTraceString(exception)" />
+                    expression="DiagnosticMessageUtilities.getExceptionString(exception,locale)" />
                 <doc><![CDATA[
                     This diagnostic indicates that the body of a metaprogram terminated by raising an exception.
                 ]]></doc>
@@ -384,7 +384,7 @@
                 code="bsj.compiler.metaprogram.failure.general">
                 <prop name="exception" type="MetaprogramExecutionFailureException" desc="the exception which was raised to indicate failure" />
                 <messageProp name="stackTrace"
-                    expression="DiagnosticMessageUtilities.getIndentedStackTraceString(exception)" />
+                    expression="DiagnosticMessageUtilities.getExceptionString(exception,locale)" />
                 <doc><![CDATA[
                     A diagnostic indicating that the execution of a metaprogram failed due to the metaprogram itself
                     raising a {@link MetaprogramExecutionFailureException}.  The exception is provided to allow the
@@ -462,8 +462,9 @@
             <diagnostic name="MetaprogramListConflictDiagnostic" super="MetaprogramConflictDiagnostic"
                 superTypeArg="MetaprogramListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list">
                 <exception />
-                <prop name="conflicts" type="Set&lt;? extends ListKnowledge&lt;?&gt;&gt;"
-                    desc="the conflicts which were detected"/>
+                <prop name="conflicts" type="Set&lt;? extends ConflictKnowledge&lt;?&gt;&gt;" desc="the conflicts which were detected" />
+                <messageProp name="conflictKnowledge"
+                    expression="&quot;    &quot; + DiagnosticMessageUtilities.getConflictsDescription(conflicts,locale).replaceAll(&quot;\n&quot;, &quot;\n    &quot;).replaceAll(&quot;\n +$&quot;, &quot;\n&quot;)" />
                 <doc><![CDATA[
                     Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
                     {@link ListNode}.  Note that this diagnostic has the ability to represent multiple failures

@@ -42,7 +42,7 @@ public class MetaprogramExceptionDiagnosticImpl extends MetaprogramErrorDiagnost
         Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
         args.getFirst().add(this.exception);
         args.getSecond().put("exception", args.getFirst().size());
-        args.getFirst().add(DiagnosticMessageUtilities.getIndentedStackTraceString(exception));
+        args.getFirst().add(DiagnosticMessageUtilities.getExceptionString(exception,locale));
         args.getSecond().put("stackTrace", args.getFirst().size());
         return args;
     }

@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ListKnowledge;
+import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ConflictKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramListConflictDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -19,13 +19,15 @@ import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 /**
  * Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
- * {@link ListNode}.
+ * {@link ListNode}.  Note that this diagnostic has the ability to represent multiple failures
+ * detected in a closure.  As a result, the anchors provided are merely advisory and represent one
+ * of the possible conflicts contained within.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MetaprogramListConflictDiagnosticImpl extends MetaprogramConflictDiagnosticImpl<MetaprogramListConflictException> implements MetaprogramListConflictDiagnostic
 {
     /** The conflicts which were detected. */
-    private Set<? extends ListKnowledge<?>> conflicts;
+    private Set<? extends ConflictKnowledge<?>> conflicts;
     
     public MetaprogramListConflictDiagnosticImpl(
             BsjSourceLocation source,
@@ -33,7 +35,7 @@ public class MetaprogramListConflictDiagnosticImpl extends MetaprogramConflictDi
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
             Node conflictNode,
-            Set<? extends ListKnowledge<?>> conflicts)
+            Set<? extends ConflictKnowledge<?>> conflicts)
     {
         super(source, MetaprogramListConflictDiagnostic.CODE, Kind.ERROR, exception, firstAnchor, secondAnchor, conflictNode);
         this.conflicts = conflicts;
@@ -42,7 +44,7 @@ public class MetaprogramListConflictDiagnosticImpl extends MetaprogramConflictDi
     /**
      * {@inheritDoc}
      */
-    public Set<? extends ListKnowledge<?>> getConflicts()
+    public Set<? extends ConflictKnowledge<?>> getConflicts()
     {
         return this.conflicts;
     }
@@ -53,6 +55,8 @@ public class MetaprogramListConflictDiagnosticImpl extends MetaprogramConflictDi
         Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
         args.getFirst().add(this.conflicts);
         args.getSecond().put("conflicts", args.getFirst().size());
+        args.getFirst().add("    " + DiagnosticMessageUtilities.getConflictsDescription(conflicts,locale).replaceAll("\n", "\n    ").replaceAll("\n +$", "\n"));
+        args.getSecond().put("conflictKnowledge", args.getFirst().size());
         return args;
     }
     

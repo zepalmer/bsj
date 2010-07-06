@@ -7,7 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ListKnowledge;
+import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ConflictKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramListConflictDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramListConflictDiagnosticImpl;
@@ -25,7 +25,7 @@ public class MetaprogramListConflictExceptionImpl extends MetaprogramListConflic
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
             Node conflictNode,
-            Set<? extends ListKnowledge<?>> conflicts)
+            Set<? extends ConflictKnowledge<?>> conflicts)
     {
         super(firstAnchor, secondAnchor, conflictNode, conflicts);
     }
