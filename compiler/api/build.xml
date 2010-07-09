@@ -19,6 +19,7 @@
             author="true"
             version="true"
             windowtitle="BSJ Compiler API">
+            <link href="http://java.sun.com/javase/6/docs/api/"/>
             <fileset dir="${src}">
                 <include name="**/*.java"/>
             </fileset>
