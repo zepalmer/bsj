@@ -2,12 +2,28 @@
 	<property name="src" location="src"/>
 	<property name="bin" location="bin"/>
 	<property name="lib" location="lib"/>
+	<property name="javadoc" location="javadoc"/>
 	
 	<path id="build.classpath">
 		<fileset dir="lib">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
+	
+	<target name="javadoc">
+        <delete dir="${javadoc}"/>
+        <mkdir dir="${javadoc}"/>
+        <javadoc
+            access="protected"
+            destdir="${javadoc}"
+            author="true"
+            version="true"
+            windowtitle="BSJ Compiler API">
+            <fileset dir="${src}">
+                <include name="**/*.java"/>
+            </fileset>
+        </javadoc>
+	</target>
 
 	<target name="build">
         <mkdir dir="${bin}"/>
@@ -23,5 +39,6 @@
 	
 	<target name="clean">
 		<delete dir="${bin}"/>
+        <delete dir="${javadoc}"/>
 	</target>
 </project>

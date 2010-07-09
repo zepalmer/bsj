@@ -65,6 +65,11 @@
 	<property name="ant.build.javac.source" value="1.6"/>
 	<property name="ant.build.javac.target" value="1.6"/>
 	
+	<!-- Builds the project's javadocs -->
+	<target name="javadoc">
+        <ant antfile="build.xml" dir="api" target="javadoc" inheritrefs="true"/>
+	</target>
+	
     <!-- Builds the project's binaries -->
 	<target name="build">
 		<ant antfile="build.xml" dir="api" target="build" inheritrefs="true"/>
