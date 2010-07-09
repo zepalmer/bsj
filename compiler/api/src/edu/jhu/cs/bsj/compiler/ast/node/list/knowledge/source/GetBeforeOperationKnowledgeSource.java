@@ -19,7 +19,7 @@ public interface GetBeforeOperationKnowledgeSource<T extends Node> extends Opera
 	
 	/**
 	 * Retrieves the resulting element.
-	 * @returnm The element which was retrieved before the anchor argument.
+	 * @return The element which was retrieved before the anchor argument.
 	 */
 	public SymbolicElement<T> getResult();
 }

@@ -19,7 +19,7 @@ public interface GetAfterOperationKnowledgeSource<T extends Node> extends Operat
 	
 	/**
 	 * Retrieves the resulting element.
-	 * @returnm The element which was retrieved from the list.
+	 * @return The element which was retrieved from the list.
 	 */
 	public SymbolicElement<T> getResult();
 }

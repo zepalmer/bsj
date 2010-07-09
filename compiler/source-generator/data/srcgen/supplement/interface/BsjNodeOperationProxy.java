@@ -38,7 +38,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
 
     /**
      * Called after every call to the backing operation.
-     * @param p The incoming return data (compatible with the backing interface).
+     * @param r The incoming return data (compatible with the backing interface).
      * @return The resulting return data (compatible with the return interface).
      */
     protected abstract RNew after(ROrig r);

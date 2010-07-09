@@ -32,7 +32,8 @@ public interface BsjFileManager extends JavaFileManager
 	 * This implementation of {@link JavaFileManager} places a stronger requirement on the return value of the file
 	 * accessor methods.
 	 * 
-	 * @see JavaFileManager#getJavaFileForInput(javax.tools.JavaFileManager.Location, String, Kind)
+	 * @see JavaFileManager#getJavaFileForInput(javax.tools.JavaFileManager.Location, String,
+	 *      javax.tools.JavaFileObject.Kind)
 	 */
 	@Override
 	public BsjFileObject getJavaFileForInput(Location location, String className, Kind kind) throws IOException;
@@ -41,15 +42,18 @@ public interface BsjFileManager extends JavaFileManager
 	 * This implementation of {@link JavaFileManager} places a stronger requirement on the return value of the file
 	 * accessor methods.
 	 * 
-	 * @see JavaFileManager#getJavaFileForOutput(javax.tools.JavaFileManager.Location, String, Kind, FileObject)
+	 * @see JavaFileManager#getJavaFileForOutput(javax.tools.JavaFileManager.Location, String,
+	 *      javax.tools.JavaFileObject.Kind, FileObject)
 	 */
 	@Override
 	public BsjFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling)
 			throws IOException;
 
 	/**
-	 * This method corresponds to the {@link JavaFileManager#list(javax.tools.JavaFileManager.Location, String, java.util.Set, boolean)}
-	 * method but provides a stronger assurance about the returned values.
+	 * This method corresponds to the
+	 * {@link JavaFileManager#list(javax.tools.JavaFileManager.Location, String, java.util.Set, boolean)} method but
+	 * provides a stronger assurance about the returned values.
+	 * 
 	 * @param location The location at which the listing should occur.
 	 * @param packageName The package to list.
 	 * @param kinds The kinds of files to be accepted.

@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
  * This implementation of {@link BsjMetaAnnotationMetaprogram} provides basic functionality which is commonly necessary
  * for meta-annotation metaprograms. It provides an inner class for the implementation of the returned metaprogram that
  * depends upon the abstract methods of this class for its functionality. Specifically, execution of the metaprogram can
- * be defined in the {@link #execute(Context<MetaAnnotationMetaprogramAnchorNode>) execute} method.
+ * be defined in the {@link #execute(Context) execute} method.
  * 
  * @author Zachary Palmer
  */
@@ -44,8 +44,6 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
 	 * 
 	 * @param permanentTargets The targets that instances of this meta-annotation class always use.
 	 * @param permanentDependencies The dependencies that instances of this meta-annotation class always use.
-	 * @param localMode The default local mode of this meta-annotation metaprogram.
-	 * @param packageMode The default package mode of this meta-annotation metaprogram.
 	 */
 	public AbstractBsjMetaAnnotationMetaprogram(List<String> permanentTargets, List<String> permanentDependencies)
 	{
@@ -60,8 +58,6 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
 	 * @param permanentTargets The targets that instances of this meta-annotation class always use.
 	 * @param permanentDependencies The dependencies that instances of this meta-annotation class always use.
 	 * @param permanentWeakDependencies The weak dependencies that instances of this meta-annotation class always use.
-	 * @param localMode The default local mode of this meta-annotation metaprogram.
-	 * @param packageMode The default package mode of this meta-annotation metaprogram.
 	 */
 	public AbstractBsjMetaAnnotationMetaprogram(List<String> permanentTargets, List<String> permanentDependencies,
 			List<String> permanentWeakDependencies)

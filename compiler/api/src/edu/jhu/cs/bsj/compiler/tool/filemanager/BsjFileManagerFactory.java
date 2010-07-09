@@ -76,7 +76,7 @@ public interface BsjFileManagerFactory
 	 * path string.
 	 * 
 	 * @param location The location to set.
-	 * @param manager The manager to use.
+	 * @param path The path to use.
 	 * @throws IOException If pathname canonicalization fails.
 	 */
 	public void setLocationManager(BsjCompilerLocation location, String path) throws IOException;

@@ -47,7 +47,7 @@ public interface LocationManager extends Closeable, Flushable
 	 * @param relativeName The relative name of the file object. This must be a path-rootless relative name.
 	 * @param writable A hint indicating whether or not the caller expects to be able to write to the resulting file
 	 *            object. This can usually be ignored but may be significant in some cases (such as in
-	 *            {@link UnionLocationManager}).
+	 *            the case of a unioning location manager).
 	 * @return The resulting file object. Note that, unlike {@link JavaFileManager}, this method will always return a
 	 *         non-<code>null</code> object regardless of whether or not the specified file exists.
 	 * @throws IOException If an I/O error occurs.
@@ -61,7 +61,7 @@ public interface LocationManager extends Closeable, Flushable
 	 * @param kind The kind of the file.
 	 * @param writable A hint indicating whether or not the caller expects to be able to write to the resulting file
 	 *            object. This can usually be ignored but may be significant in some cases (such as in
-	 *            {@link UnionLocationManager}).
+	 *            the case of a unioning location manager).
 	 * @return The resulting file object. Note that, unlike {@link JavaFileManager}, this method will always return a
 	 *         non-<code>null</code> object regardless of whether or not the specified file exists.
 	 * @throws IOException If an I/O error occurs.

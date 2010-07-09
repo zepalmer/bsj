@@ -19,7 +19,7 @@ public interface AddAfterOperationKnowledgeSource<T extends Node> extends Operat
 	
 	/**
 	 * Retrieves the addition argument.
-	 * @returnm The element which was added after the anchor argument.
+	 * @return The element which was added after the anchor argument.
 	 */
 	public SymbolicElement<T> getAddition();
 }

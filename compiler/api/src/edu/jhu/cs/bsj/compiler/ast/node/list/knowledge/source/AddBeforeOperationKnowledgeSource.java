@@ -19,7 +19,7 @@ public interface AddBeforeOperationKnowledgeSource<T extends Node> extends Opera
 	
 	/**
 	 * Retrieves the addition argument.
-	 * @returnm The element which was added before the anchor argument.
+	 * @return The element which was added before the anchor argument.
 	 */
 	public SymbolicElement<T> getAddition();
 }
