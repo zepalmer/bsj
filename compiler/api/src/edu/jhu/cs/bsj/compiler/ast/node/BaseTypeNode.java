@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * This tagging interface is used to denote AST nodes which can be used as array base types.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface BaseTypeNode extends Node
+public interface BaseTypeNode extends TypeNode
 {
     /**
      * Generates a deep copy of this node.

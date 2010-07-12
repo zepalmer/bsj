@@ -31,7 +31,7 @@
             ]]></doc>
         </type>
 
-        <type name="BaseTypeNode" super="Node" mode="tag">
+        <type name="BaseTypeNode" super="TypeNode" mode="tag">
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which can be used as array base types.
             ]]></doc>
