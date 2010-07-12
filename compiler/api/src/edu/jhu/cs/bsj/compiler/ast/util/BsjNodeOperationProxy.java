@@ -887,32 +887,6 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeFieldAccessByExpressionNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
-    public RNew executeFieldAccessByNameNode(FieldAccessByNameNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeFieldAccessByNameNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
     public RNew executeFieldDeclarationNode(FieldDeclarationNode node, PNew p)
     {
         POrig porig = before(p);
@@ -1203,6 +1177,19 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
     {
         POrig porig = before(p);
         ROrig rorig = this.backingOp.executeLabeledStatementNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeLocalVariableDeclarationNode(node, porig);
         return after(rorig);
     }
 
@@ -2057,10 +2044,23 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeVariableDeclarationNode(VariableDeclarationNode node, PNew p)
+    public RNew executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, PNew p)
     {
         POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeVariableDeclarationNode(node, porig);
+        ROrig rorig = this.backingOp.executeVariableAccessByExpressionNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeVariableAccessByNameNode(VariableAccessByNameNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeVariableAccessByNameNode(node, porig);
         return after(rorig);
     }
 

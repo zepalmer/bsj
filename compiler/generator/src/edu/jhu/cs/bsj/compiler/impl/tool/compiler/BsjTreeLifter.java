@@ -191,7 +191,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("PrimitiveType"),
                             NameCategory.EXPRESSION
@@ -208,7 +208,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("UnaryStatementOperator"),
                             NameCategory.EXPRESSION
@@ -225,7 +225,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("AssignmentOperator"),
                             NameCategory.EXPRESSION
@@ -242,7 +242,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("BinaryOperator"),
                             NameCategory.EXPRESSION
@@ -259,7 +259,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("NameCategory"),
                             NameCategory.EXPRESSION
@@ -276,7 +276,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("UnaryOperator"),
                             NameCategory.EXPRESSION
@@ -293,7 +293,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("MetaprogramPackageMode"),
                             NameCategory.EXPRESSION
@@ -310,7 +310,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("MetaprogramLocalMode"),
                             NameCategory.EXPRESSION
@@ -327,7 +327,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeNullLiteralNode();
         } else
         {
-            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+            return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("AccessModifier"),
                             NameCategory.EXPRESSION
@@ -2449,61 +2449,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
-    public ExpressionNode executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, ExpressionNode factoryNode)
-    {
-        ExpressionNode liftExpression = 
-                node.getExpression() != null ?
-                        node.getExpression().executeOperation(this,factoryNode) :
-                        factory.makeNullLiteralNode();
-        ExpressionNode liftIdentifier = 
-                node.getIdentifier() != null ?
-                        node.getIdentifier().executeOperation(this,factoryNode) :
-                        factory.makeNullLiteralNode();
-        BsjSourceLocation liftStartLocationValue = 
-                node.getStartLocation();
-        BsjSourceLocation liftStopLocationValue = 
-                node.getStopLocation();
-        
-        ExpressionNode ret =
-                factory.makeMethodInvocationByExpressionNode(
-                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeFieldAccessByExpressionNode"),
-                        factory.makeExpressionListNode(
-                                liftExpression,
-                                liftIdentifier,
-                                expressionizeBsjSourceLocation(liftStartLocationValue),
-                                expressionizeBsjSourceLocation(liftStopLocationValue)),
-                        factory.makeReferenceTypeListNode());
-        
-        return ret;
-    }
-    
-    @Override
-    public ExpressionNode executeFieldAccessByNameNode(FieldAccessByNameNode node, ExpressionNode factoryNode)
-    {
-        ExpressionNode liftName = 
-                node.getName() != null ?
-                        node.getName().executeOperation(this,factoryNode) :
-                        factory.makeNullLiteralNode();
-        BsjSourceLocation liftStartLocationValue = 
-                node.getStartLocation();
-        BsjSourceLocation liftStopLocationValue = 
-                node.getStopLocation();
-        
-        ExpressionNode ret =
-                factory.makeMethodInvocationByExpressionNode(
-                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeFieldAccessByNameNode"),
-                        factory.makeExpressionListNode(
-                                liftName,
-                                expressionizeBsjSourceLocation(liftStartLocationValue),
-                                expressionizeBsjSourceLocation(liftStopLocationValue)),
-                        factory.makeReferenceTypeListNode());
-        
-        return ret;
-    }
-    
-    @Override
     public ExpressionNode executeFieldDeclarationNode(FieldDeclarationNode node, ExpressionNode factoryNode)
     {
         ExpressionNode liftModifiers = 
@@ -3261,6 +3206,41 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftLabel,
                                 liftStatement,
                                 liftMetaAnnotations,
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftModifiers = 
+                node.getModifiers() != null ?
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftType = 
+                node.getType() != null ?
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftDeclarators = 
+                node.getDeclarators() != null ?
+                        node.getDeclarators().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeLocalVariableDeclarationNode"),
+                        factory.makeExpressionListNode(
+                                liftModifiers,
+                                liftType,
+                                liftDeclarators,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5491,19 +5471,15 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
-    public ExpressionNode executeVariableDeclarationNode(VariableDeclarationNode node, ExpressionNode factoryNode)
+    public ExpressionNode executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode liftModifiers = 
-                node.getModifiers() != null ?
-                        node.getModifiers().executeOperation(this,factoryNode) :
+        ExpressionNode liftExpression = 
+                node.getExpression() != null ?
+                        node.getExpression().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        ExpressionNode liftType = 
-                node.getType() != null ?
-                        node.getType().executeOperation(this,factoryNode) :
-                        factory.makeNullLiteralNode();
-        ExpressionNode liftDeclarators = 
-                node.getDeclarators() != null ?
-                        node.getDeclarators().executeOperation(this,factoryNode) :
+        ExpressionNode liftIdentifier = 
+                node.getIdentifier() != null ?
+                        node.getIdentifier().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
         BsjSourceLocation liftStartLocationValue = 
                 node.getStartLocation();
@@ -5513,11 +5489,35 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeVariableDeclarationNode"),
+                        factory.makeIdentifierNode("makeVariableAccessByExpressionNode"),
                         factory.makeExpressionListNode(
-                                liftModifiers,
-                                liftType,
-                                liftDeclarators,
+                                liftExpression,
+                                liftIdentifier,
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeVariableAccessByNameNode(VariableAccessByNameNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftName = 
+                node.getName() != null ?
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeVariableAccessByNameNode"),
+                        factory.makeExpressionListNode(
+                                liftName,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());

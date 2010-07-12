@@ -795,22 +795,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, PrependablePrintStream p)
-	{
-		node.getExpression().executeOperation(this, p);
-		p.print(".");
-		node.getIdentifier().executeOperation(this, p);
-		return null;
-	}
-
-	@Override
-	public Void executeFieldAccessByNameNode(FieldAccessByNameNode node, PrependablePrintStream p)
-	{
-		node.getName().executeOperation(this, p);
-		return null;
-	}
-
-	@Override
 	public Void executeFieldDeclarationNode(FieldDeclarationNode node, PrependablePrintStream p)
 	{
 		if (node.getJavadoc() != null)
@@ -1087,6 +1071,35 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		node.getLabel().executeOperation(this, p);
 		p.print(": ");
 		node.getStatement().executeOperation(this, p);
+		return null;
+	}
+
+	@Override
+	public Void executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, PrependablePrintStream p)
+	{
+		node.getModifiers().executeOperation(this, p);
+		if (node.getModifiers().getFinalFlag() || node.getModifiers().getAnnotations().size() > 0 ||
+				node.getModifiers().getMetaAnnotations().size() > 0)
+		{
+			p.print(' ');
+		}
+		node.getType().executeOperation(this, p);
+		p.print(' ');
+
+		boolean first = true;
+
+		for (VariableDeclaratorNode declarator : node.getDeclarators())
+		{
+			if (first)
+			{
+				first = false;
+			} else
+			{
+				p.print(", ");
+			}
+			declarator.executeOperation(this, p);
+		}
+		p.print(";");
 		return null;
 	}
 
@@ -1635,31 +1648,18 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeVariableDeclarationNode(VariableDeclarationNode node, PrependablePrintStream p)
+	public Void executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, PrependablePrintStream p)
 	{
-		node.getModifiers().executeOperation(this, p);
-		if (node.getModifiers().getFinalFlag() || node.getModifiers().getAnnotations().size() > 0 ||
-				node.getModifiers().getMetaAnnotations().size() > 0)
-		{
-			p.print(' ');
-		}
-		node.getType().executeOperation(this, p);
-		p.print(' ');
+		node.getExpression().executeOperation(this, p);
+		p.print(".");
+		node.getIdentifier().executeOperation(this, p);
+		return null;
+	}
 
-		boolean first = true;
-
-		for (VariableDeclaratorNode declarator : node.getDeclarators())
-		{
-			if (first)
-			{
-				first = false;
-			} else
-			{
-				p.print(", ");
-			}
-			declarator.executeOperation(this, p);
-		}
-		p.print(";");
+	@Override
+	public Void executeVariableAccessByNameNode(VariableAccessByNameNode node, PrependablePrintStream p)
+	{
+		node.getName().executeOperation(this, p);
 		return null;
 	}
 

@@ -17,13 +17,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
@@ -208,10 +208,10 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 			while (index > 0)
 			{
 				index--;
-				if (node.get(index) instanceof VariableDeclarationNode)
+				if (node.get(index) instanceof LocalVariableDeclarationNode)
 				{
 					// Does this local variable declaration cover the name?
-					VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) node.get(index);
+					LocalVariableDeclarationNode variableDeclarationNode = (LocalVariableDeclarationNode) node.get(index);
 					for (VariableDeclaratorNode variableDeclaratorNode : variableDeclarationNode.getDeclarators())
 					{
 						if (variableDeclaratorNode.getName().getIdentifier().equals(name))

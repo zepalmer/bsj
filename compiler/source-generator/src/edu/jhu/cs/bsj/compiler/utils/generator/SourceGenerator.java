@@ -2085,7 +2085,7 @@ public class SourceGenerator
 				ps.println("} else");
 				ps.println("{");
 				ps.incPrependCount();
-				ps.println("return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(");
+				ps.println("return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(");
 				ps.println("        factory.makeSimpleNameNode(");
 				ps.println("                factory.makeIdentifierNode(\"" + etype + "\"),");
 				ps.println("                NameCategory.EXPRESSION");

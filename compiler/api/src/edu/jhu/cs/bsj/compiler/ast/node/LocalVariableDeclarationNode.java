@@ -20,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
  *     </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface VariableDeclarationNode extends Node, BlockStatementNode, VariableDeclaratorOwnerNode
+public interface LocalVariableDeclarationNode extends Node, BlockStatementNode, VariableDeclaratorOwnerNode
 {
     /**
      * Gets the modifiers for this variable.
@@ -64,5 +64,5 @@ public interface VariableDeclarationNode extends Node, BlockStatementNode, Varia
      * @return The resulting deep copy node.
      */
     @Override
-    public VariableDeclarationNode deepCopy(BsjNodeFactory factory);
+    public LocalVariableDeclarationNode deepCopy(BsjNodeFactory factory);
 }

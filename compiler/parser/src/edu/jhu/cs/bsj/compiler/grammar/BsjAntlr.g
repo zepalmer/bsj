@@ -3655,7 +3655,7 @@ blockStatement returns [BlockStatementNode ret]
 // Parses local variable declaration statement.
 // For example, this rule would match
 //     int x = 5, y;
-localVariableDeclarationStatement returns [VariableDeclarationNode ret]
+localVariableDeclarationStatement returns [LocalVariableDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("localVariableDeclarationStatement");
@@ -3674,7 +3674,7 @@ localVariableDeclarationStatement returns [VariableDeclarationNode ret]
 // For example, this rule would match
 //     int x = 5, y
 // Note the absence of a semicolon.
-localVariableDeclaration returns [VariableDeclarationNode ret]
+localVariableDeclaration returns [LocalVariableDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("localVariableDeclaration");
@@ -3696,7 +3696,7 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
             }
         )*
         {
-            $ret = factory.makeVariableDeclarationNode(
+            $ret = factory.makeLocalVariableDeclarationNode(
                     $variableModifiers.ret,
                     $type.ret,
                     factory.makeVariableDeclaratorListNode(list));
@@ -4939,7 +4939,7 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             // field access by expression name (such as "x" or "x.y")
             name
             {
-                $ret = factory.makeFieldAccessByNameNode($name.ret);
+                $ret = factory.makeVariableAccessByNameNode($name.ret);
             }
         )
         (
@@ -4972,7 +4972,7 @@ primarySuffix returns [RestrictedPrimaryExpressionNode ret]
 	        // field access on an expression
 	        '.' identifier
 	        {
-	            $ret = factory.makeFieldAccessByExpressionNode(in, $identifier.ret);
+	            $ret = factory.makeVariableAccessByExpressionNode(in, $identifier.ret);
 	        }
 	    |
 	        // method invocation with type arguments

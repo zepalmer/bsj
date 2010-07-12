@@ -732,28 +732,6 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeFieldAccessByNameNode(FieldAccessByNameNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
     public R executeFieldDeclarationNode(FieldDeclarationNode node, P p)
     {
         return null;
@@ -997,6 +975,17 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @return <code>null</code>, always.
      */
     public R executeLabeledStatementNode(LabeledStatementNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
+    public R executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, P p)
     {
         return null;
     }
@@ -1722,7 +1711,18 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeVariableDeclarationNode(VariableDeclarationNode node, P p)
+    public R executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
+    public R executeVariableAccessByNameNode(VariableAccessByNameNode node, P p)
     {
         return null;
     }

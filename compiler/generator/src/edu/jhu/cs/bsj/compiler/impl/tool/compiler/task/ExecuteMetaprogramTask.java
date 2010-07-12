@@ -21,6 +21,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -28,7 +29,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
@@ -265,7 +265,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 					// or instance initializer, then the metaprogram is given Insert permission to the type declaration
 					// which encloses that node.
 					targetNode = node.getNearestAncestorOfType(TypeDeclarationNode.class);
-				} else if (node instanceof VariableDeclarationNode || node instanceof StatementNode)
+				} else if (node instanceof LocalVariableDeclarationNode || node instanceof StatementNode)
 				{
 					// + If the meta-annotation annotates a local variable declaration or statement, then
 					BlockNode enclosingBlock = node.getNearestAncestorOfType(BlockNode.class);

@@ -18,20 +18,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Foo.bar
  * </pre>
  * This node is not used to represent field access from the evaluation result of a subexpression (such as in the
- * code <tt>foo().bar</tt>).  For that form of access, see {@link FieldAccessByExpressionNode}.
+ * code <tt>foo().bar</tt>).  For that form of access, see {@link VariableAccessByExpressionNode}.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface FieldAccessByNameNode extends Node, FieldAccessNode
+public interface VariableAccessByNameNode extends Node, VariableAccessNode
 {
     /**
-     * Gets the name of the field to access.
-     * @return The name of the field to access.
+     * Gets the name of the variable to access.
+     * @return The name of the variable to access.
      */
     public NameNode getName();
     
     /**
-     * Changes the name of the field to access.
-     * @param name The name of the field to access.
+     * Changes the name of the variable to access.
+     * @param name The name of the variable to access.
      */
     public void setName(NameNode name);
     
@@ -41,5 +41,5 @@ public interface FieldAccessByNameNode extends Node, FieldAccessNode
      * @return The resulting deep copy node.
      */
     @Override
-    public FieldAccessByNameNode deepCopy(BsjNodeFactory factory);
+    public VariableAccessByNameNode deepCopy(BsjNodeFactory factory);
 }

@@ -83,7 +83,7 @@ public class GenerateNullChecks extends AbstractBsjMetaAnnotationMetaprogram
             // if (<:varName:> == null) {throw new IllegalArgumentException("...");}
             IfNode ifNode = factory.makeIfNode(
                     factory.makeBinaryExpressionNode(
-                            factory.makeFieldAccessByNameNode(factory.parseNameNode(varName)), 
+                            factory.makeVariableAccessByNameNode(factory.parseNameNode(varName)), 
                             factory.makeNullLiteralNode(), 
                             BinaryOperator.EQUAL), 
                     factory.makeThrowNode(factory.makeUnqualifiedClassInstantiationNode(

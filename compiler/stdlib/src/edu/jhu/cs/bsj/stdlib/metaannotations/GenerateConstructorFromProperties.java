@@ -76,10 +76,10 @@ public class GenerateConstructorFromProperties extends
             
             // initialize the parameters
             constructorStatements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                    factory.makeFieldAccessByExpressionNode(
+                    factory.makeVariableAccessByExpressionNode(
                             factory.makeThisNode(), factory.makeIdentifierNode(fieldName)), 
                     AssignmentOperator.ASSIGNMENT, 
-                    factory.makeFieldAccessByNameNode(factory.parseNameNode(fieldName)))));
+                    factory.makeVariableAccessByNameNode(factory.parseNameNode(fieldName)))));
 
             // add the parameters to the javadoc
             javadoc.append("@param " + fieldName + " the value for " + fieldName + ".\n");

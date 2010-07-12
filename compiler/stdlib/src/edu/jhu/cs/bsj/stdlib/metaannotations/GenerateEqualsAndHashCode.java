@@ -121,19 +121,19 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 
 		// if (this == o) return true;
 		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(factory.makeThisNode(),
-				factory.makeFieldAccessByNameNode(factory.parseNameNode("o")), BinaryOperator.EQUAL),
+				factory.makeVariableAccessByNameNode(factory.parseNameNode("o")), BinaryOperator.EQUAL),
 				factory.makeReturnNode(factory.makeBooleanLiteralNode(true))));
 
 		// if (obj == null) return false;
 		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
-				factory.makeFieldAccessByNameNode(factory.parseNameNode("o")), factory.makeNullLiteralNode(),
+				factory.makeVariableAccessByNameNode(factory.parseNameNode("o")), factory.makeNullLiteralNode(),
 				BinaryOperator.EQUAL), factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
 
 		// if (getClass() != obj.getClass()) return false;
 		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
 				factory.makeMethodInvocationByNameNode(factory.parseNameNode("getClass")),
 				factory.makeMethodInvocationByExpressionNode(
-						factory.makeFieldAccessByNameNode(factory.parseNameNode("o")),
+						factory.makeVariableAccessByNameNode(factory.parseNameNode("o")),
 						factory.makeIdentifierNode("getClass")), BinaryOperator.NOT_EQUAL),
 				factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
 
@@ -142,7 +142,7 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		{
 			statements.add(factory.makeIfNode(factory.makeUnaryExpressionNode(factory.makeSuperMethodInvocationNode(
 					factory.makeIdentifierNode("equals"),
-					factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode("o")))),
+					factory.makeExpressionListNode(factory.makeVariableAccessByNameNode(factory.parseNameNode("o")))),
 					UnaryOperator.LOGICAL_COMPLEMENT), factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
 		}
 
@@ -150,12 +150,12 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		NamedTypeDeclarationNode<?> enclosingDeclaration = context.getAnchor().getNearestAncestorOfType(
 				NamedTypeDeclarationNode.class);
 		// TODO: what if we have a type parameter?
-		statements.add(factory.makeVariableDeclarationNode(
+		statements.add(factory.makeLocalVariableDeclarationNode(
 				factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())),
 				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
 						factory.makeIdentifierNode("other"),
 						factory.makeTypeCastNode(
-								factory.makeFieldAccessByNameNode(factory.parseNameNode("o")),
+								factory.makeVariableAccessByNameNode(factory.parseNameNode("o")),
 								factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())))))));
 
 		// For each property, do some kind of comparison on it
@@ -166,7 +166,7 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 			ExpressionNode comparisonExpressionNode;
 			PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
 			PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationByExpressionNode(
-					factory.makeFieldAccessByNameNode(factory.parseNameNode("other")),
+					factory.makeVariableAccessByNameNode(factory.parseNameNode("other")),
 					factory.makeIdentifierNode(getterName));
 			if (type instanceof PrimitiveTypeNode)
 			{
@@ -220,14 +220,14 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
 
 		// final int prime = 31;
-		statements.add(factory.makeVariableDeclarationNode(factory.makeVariableModifiersNode(true,
+		statements.add(factory.makeLocalVariableDeclarationNode(factory.makeVariableModifiersNode(true,
 				factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()),
 				factory.makePrimitiveTypeNode(PrimitiveType.INT),
 				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
 						factory.makeIdentifierNode("prime"), factory.makeIntLiteralNode(31)))));
 
 		// int result = 1;
-		statements.add(factory.makeVariableDeclarationNode(factory.makePrimitiveTypeNode(PrimitiveType.INT),
+		statements.add(factory.makeLocalVariableDeclarationNode(factory.makePrimitiveTypeNode(PrimitiveType.INT),
 				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
 						factory.makeIdentifierNode("result"), factory.makeIntLiteralNode(1)))));
 
@@ -276,16 +276,16 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 			}
 			// Now that we have our hash adjustment mechanism, add the statement
 			statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-					factory.makeFieldAccessByNameNode(factory.parseNameNode("result")), AssignmentOperator.ASSIGNMENT,
+					factory.makeVariableAccessByNameNode(factory.parseNameNode("result")), AssignmentOperator.ASSIGNMENT,
 					factory.makeBinaryExpressionNode(
 							factory.makeBinaryExpressionNode(
-									factory.makeFieldAccessByNameNode(factory.parseNameNode("result")),
-									factory.makeFieldAccessByNameNode(factory.parseNameNode("prime")),
+									factory.makeVariableAccessByNameNode(factory.parseNameNode("result")),
+									factory.makeVariableAccessByNameNode(factory.parseNameNode("prime")),
 									BinaryOperator.MULTIPLY), hashValueNode, BinaryOperator.PLUS))));
 		}
 
 		// Add final return
-		statements.add(factory.makeReturnNode(factory.makeFieldAccessByNameNode(factory.parseNameNode("result"))));
+		statements.add(factory.makeReturnNode(factory.makeVariableAccessByNameNode(factory.parseNameNode("result"))));
 
 		// Create hashCode method
 		return factory.makeMethodDeclarationNode(factory.makeBlockStatementListNode(statements),

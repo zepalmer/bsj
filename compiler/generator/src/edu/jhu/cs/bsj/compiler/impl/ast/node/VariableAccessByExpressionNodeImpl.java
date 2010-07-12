@@ -12,20 +12,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByExpressionNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAccessByExpressionNode
+public class VariableAccessByExpressionNodeImpl extends NodeImpl implements VariableAccessByExpressionNode
 {
-    /** The expression from which the field is being selected. */
+    /** The expression from which the variable is being selected. */
     private PrimaryExpressionNode expression;
     
-    /** The name of the field. */
+    /** The name of the variable. */
     private IdentifierNode identifier;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
@@ -34,7 +34,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(FieldAccessByExpressionNodeImpl.this);
+            attribute = new ReadWriteAttribute(VariableAccessByExpressionNodeImpl.this);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
@@ -48,7 +48,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     }
     
     /** General constructor. */
-    public FieldAccessByExpressionNodeImpl(
+    public VariableAccessByExpressionNodeImpl(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
@@ -62,8 +62,8 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     }
     
     /**
-     * Gets the expression from which the field is being selected.
-     * @return The expression from which the field is being selected.
+     * Gets the expression from which the variable is being selected.
+     * @return The expression from which the variable is being selected.
      */
     public PrimaryExpressionNode getExpression()
     {
@@ -72,8 +72,8 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     }
     
     /**
-     * Changes the expression from which the field is being selected.
-     * @param expression The expression from which the field is being selected.
+     * Changes the expression from which the variable is being selected.
+     * @param expression The expression from which the variable is being selected.
      */
     public void setExpression(PrimaryExpressionNode expression)
     {
@@ -93,8 +93,8 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     }
     
     /**
-     * Gets the name of the field.
-     * @return The name of the field.
+     * Gets the name of the variable.
+     * @return The name of the variable.
      */
     public IdentifierNode getIdentifier()
     {
@@ -103,8 +103,8 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     }
     
     /**
-     * Changes the name of the field.
-     * @param identifier The name of the field.
+     * Changes the name of the variable.
+     * @param identifier The name of the variable.
      */
     public void setIdentifier(IdentifierNode identifier)
     {
@@ -185,15 +185,15 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitFieldAccessByExpressionNodeStart(this, true);
+        visitor.visitVariableAccessByExpressionNodeStart(this, true);
         visitor.visitNodeStart(this);
-        visitor.visitFieldAccessNodeStart(this);
+        visitor.visitVariableAccessNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitFieldAccessNodeStop(this);
+        visitor.visitVariableAccessNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitFieldAccessByExpressionNodeStop(this, true);
+        visitor.visitVariableAccessByExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -244,7 +244,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeFieldAccessByExpressionNode(this, p);
+        return operation.executeVariableAccessByExpressionNode(this, p);
     }
     
     /**
@@ -253,9 +253,9 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
      * @return The resulting deep copy node.
      */
     @Override
-    public FieldAccessByExpressionNode deepCopy(BsjNodeFactory factory)
+    public VariableAccessByExpressionNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeFieldAccessByExpressionNode(
+        return factory.makeVariableAccessByExpressionNode(
                 getExpression()==null?null:getExpression().deepCopy(factory),
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getStartLocation(),

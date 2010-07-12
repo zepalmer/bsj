@@ -556,22 +556,6 @@ public interface BsjNodeOperation<P,R>
     public R executeExpressionStatementNode(ExpressionStatementNode node, P p);
 
     /**
-     * Executes this operation against a FieldAccessByExpressionNode.
-     * @param node The FieldAccessByExpressionNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, P p);
-
-    /**
-     * Executes this operation against a FieldAccessByNameNode.
-     * @param node The FieldAccessByNameNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeFieldAccessByNameNode(FieldAccessByNameNode node, P p);
-
-    /**
      * Executes this operation against a FieldDeclarationNode.
      * @param node The FieldDeclarationNode in question.
      * @param p The parameter to use.
@@ -754,6 +738,14 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeLabeledStatementNode(LabeledStatementNode node, P p);
+
+    /**
+     * Executes this operation against a LocalVariableDeclarationNode.
+     * @param node The LocalVariableDeclarationNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, P p);
 
     /**
      * Executes this operation against a LongLiteralNode.
@@ -1276,12 +1268,20 @@ public interface BsjNodeOperation<P,R>
     public R executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, P p);
 
     /**
-     * Executes this operation against a VariableDeclarationNode.
-     * @param node The VariableDeclarationNode in question.
+     * Executes this operation against a VariableAccessByExpressionNode.
+     * @param node The VariableAccessByExpressionNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
-    public R executeVariableDeclarationNode(VariableDeclarationNode node, P p);
+    public R executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, P p);
+
+    /**
+     * Executes this operation against a VariableAccessByNameNode.
+     * @param node The VariableAccessByNameNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeVariableAccessByNameNode(VariableAccessByNameNode node, P p);
 
     /**
      * Executes this operation against a VariableDeclaratorListNode.

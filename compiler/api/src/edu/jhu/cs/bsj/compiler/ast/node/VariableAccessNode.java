@@ -5,10 +5,10 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * This tagging interface is used to denote BSJ AST nodes which represent field access.
+ * This tagging interface is used to denote BSJ AST nodes which represent variable access.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface FieldAccessNode extends Node, RestrictedPrimaryExpressionNode
+public interface VariableAccessNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**
      * Generates a deep copy of this node.
@@ -16,5 +16,5 @@ public interface FieldAccessNode extends Node, RestrictedPrimaryExpressionNode
      * @return The resulting deep copy node.
      */
     @Override
-    public FieldAccessNode deepCopy(BsjNodeFactory factory);
+    public VariableAccessNode deepCopy(BsjNodeFactory factory);
 }

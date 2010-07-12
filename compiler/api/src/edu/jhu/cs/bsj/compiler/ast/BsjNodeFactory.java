@@ -1772,40 +1772,6 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a FieldAccessByExpressionNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
-            PrimaryExpressionNode expression,
-            IdentifierNode identifier);
-    
-    /**
-     * Creates a FieldAccessByExpressionNode.
-     * The specified start and stop locations are used.
-     */
-    public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
-            PrimaryExpressionNode expression,
-            IdentifierNode identifier,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a FieldAccessByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public FieldAccessByNameNode makeFieldAccessByNameNode(
-            NameNode name);
-    
-    /**
-     * Creates a FieldAccessByNameNode.
-     * The specified start and stop locations are used.
-     */
-    public FieldAccessByNameNode makeFieldAccessByNameNode(
-            NameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
      * Creates a FieldDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1892,14 +1858,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
-            VariableDeclarationNode declaration);
+            LocalVariableDeclarationNode declaration);
     
     /**
      * Creates a ForInitializerDeclarationNode.
      * The specified start and stop locations are used.
      */
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
-            VariableDeclarationNode declaration,
+            LocalVariableDeclarationNode declaration,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -2406,6 +2372,44 @@ public interface BsjNodeFactory
     public LabeledStatementNode makeLabeledStatementNode(
             IdentifierNode label,
             StatementNode statement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            VariableModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators);
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            VariableModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            TypeNode type,
+            VariableDeclaratorListNode declarators);
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -4249,40 +4253,36 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            VariableModifiersNode modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators);
+    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier);
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByExpressionNode.
      * The specified start and stop locations are used.
      */
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            VariableModifiersNode modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
+    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            TypeNode type,
-            VariableDeclaratorListNode declarators);
+    public VariableAccessByNameNode makeVariableAccessByNameNode(
+            NameNode name);
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByNameNode.
      * The specified start and stop locations are used.
      */
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
+    public VariableAccessByNameNode makeVariableAccessByNameNode(
+            NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     

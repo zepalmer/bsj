@@ -145,7 +145,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
         // if (o == null) {throw new NullPointerException();}        
         statements.add(factory.makeIfNode(
                 factory.makeBinaryExpressionNode(
-                        factory.makeFieldAccessByNameNode(factory.parseNameNode("o")), 
+                        factory.makeVariableAccessByNameNode(factory.parseNameNode("o")), 
                         factory.makeNullLiteralNode(), 
                         BinaryOperator.EQUAL),
                 factory.makeThrowNode(factory.makeUnqualifiedClassInstantiationNode(
@@ -157,7 +157,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
                         factory.makeThisNode(), 
                         factory.makeIdentifierNode("equals"), 
                         factory.makeExpressionListNode(
-                                factory.makeFieldAccessByNameNode(factory.parseNameNode("o")))), 
+                                factory.makeVariableAccessByNameNode(factory.parseNameNode("o")))), 
                 factory.makeReturnNode(factory.makeIntLiteralNode(0))));
         
         // for each property, in order compare it to the other
@@ -170,7 +170,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
             
             PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
             PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationByExpressionNode(
-                    factory.makeFieldAccessByNameNode(factory.parseNameNode("o")),
+                    factory.makeVariableAccessByNameNode(factory.parseNameNode("o")),
                     factory.makeIdentifierNode(getterName));
             
             if (type instanceof PrimitiveTypeNode)

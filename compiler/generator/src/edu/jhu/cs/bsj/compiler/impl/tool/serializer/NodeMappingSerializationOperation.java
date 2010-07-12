@@ -1159,34 +1159,6 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, PrependablePrintStream p)
-		{
-
-			before(node);
-			try
-			{
-				return super.executeFieldAccessByExpressionNode(node, p);
-			} finally
-			{
-				after(node);
-			}
-		}
-
-		@Override
-		public Void executeFieldAccessByNameNode(FieldAccessByNameNode node, PrependablePrintStream p)
-		{
-
-			before(node);
-			try
-			{
-				return super.executeFieldAccessByNameNode(node, p);
-			} finally
-			{
-				after(node);
-			}
-		}
-
-		@Override
 		public Void executeFieldDeclarationNode(FieldDeclarationNode node, PrependablePrintStream p)
 		{
 
@@ -1517,6 +1489,20 @@ public class NodeMappingSerializationOperation extends
 			try
 			{
 				return super.executeListNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
+		public Void executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, PrependablePrintStream p)
+		{
+
+			before(node);
+			try
+			{
+				return super.executeLocalVariableDeclarationNode(node, p);
 			} finally
 			{
 				after(node);
@@ -2437,13 +2423,27 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeVariableDeclarationNode(VariableDeclarationNode node, PrependablePrintStream p)
+		public Void executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, PrependablePrintStream p)
 		{
 
 			before(node);
 			try
 			{
-				return super.executeVariableDeclarationNode(node, p);
+				return super.executeVariableAccessByExpressionNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
+		public Void executeVariableAccessByNameNode(VariableAccessByNameNode node, PrependablePrintStream p)
+		{
+
+			before(node);
+			try
+			{
+				return super.executeVariableAccessByNameNode(node, p);
 			} finally
 			{
 				after(node);

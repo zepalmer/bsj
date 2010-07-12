@@ -6,7 +6,6 @@ import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
@@ -16,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 
@@ -125,7 +125,7 @@ public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
         // *** As the left-hand operand of an assignment operator (§15.26)
         // (All of the above seem to indicate the locations in which a field can be accessed by name (directly or
         //  indirectly.)
-        if (hasAncestry(node, FieldAccessByNameNode.class))
+        if (hasAncestry(node, VariableAccessByNameNode.class))
         {
             return NameCategory.EXPRESSION;
         }

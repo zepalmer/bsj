@@ -3084,68 +3084,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
-     * Creates a FieldAccessByExpressionNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
-            PrimaryExpressionNode expression,
-            IdentifierNode identifier)
-    {
-        this.before();
-        FieldAccessByExpressionNode node = factory.makeFieldAccessByExpressionNode(expression, identifier);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a FieldAccessByExpressionNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
-            PrimaryExpressionNode expression,
-            IdentifierNode identifier,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        FieldAccessByExpressionNode node = factory.makeFieldAccessByExpressionNode(expression, identifier, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a FieldAccessByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public FieldAccessByNameNode makeFieldAccessByNameNode(
-            NameNode name)
-    {
-        this.before();
-        FieldAccessByNameNode node = factory.makeFieldAccessByNameNode(name);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a FieldAccessByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public FieldAccessByNameNode makeFieldAccessByNameNode(
-            NameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        FieldAccessByNameNode node = factory.makeFieldAccessByNameNode(name, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
      * Creates a FieldDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3289,7 +3227,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
-            VariableDeclarationNode declaration)
+            LocalVariableDeclarationNode declaration)
     {
         this.before();
         ForInitializerDeclarationNode node = factory.makeForInitializerDeclarationNode(declaration);
@@ -3303,7 +3241,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
-            VariableDeclarationNode declaration,
+            LocalVariableDeclarationNode declaration,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4207,6 +4145,72 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         LabeledStatementNode node = factory.makeLabeledStatementNode(label, statement, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            VariableModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators)
+    {
+        this.before();
+        LocalVariableDeclarationNode node = factory.makeLocalVariableDeclarationNode(modifiers, type, declarators);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            VariableModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        LocalVariableDeclarationNode node = factory.makeLocalVariableDeclarationNode(modifiers, type, declarators, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            TypeNode type,
+            VariableDeclaratorListNode declarators)
+    {
+        this.before();
+        LocalVariableDeclarationNode node = factory.makeLocalVariableDeclarationNode(type, declarators);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        LocalVariableDeclarationNode node = factory.makeLocalVariableDeclarationNode(type, declarators, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7507,67 +7511,63 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            VariableModifiersNode modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators)
+    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier)
     {
         this.before();
-        VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, type, declarators);
+        VariableAccessByExpressionNode node = factory.makeVariableAccessByExpressionNode(expression, identifier);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByExpressionNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            VariableModifiersNode modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
+    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, type, declarators, startLocation, stopLocation);
+        VariableAccessByExpressionNode node = factory.makeVariableAccessByExpressionNode(expression, identifier, startLocation, stopLocation);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            TypeNode type,
-            VariableDeclaratorListNode declarators)
+    public VariableAccessByNameNode makeVariableAccessByNameNode(
+            NameNode name)
     {
         this.before();
-        VariableDeclarationNode node = factory.makeVariableDeclarationNode(type, declarators);
+        VariableAccessByNameNode node = factory.makeVariableAccessByNameNode(name);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByNameNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
+    public VariableAccessByNameNode makeVariableAccessByNameNode(
+            NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableDeclarationNode node = factory.makeVariableDeclarationNode(type, declarators, startLocation, stopLocation);
+        VariableAccessByNameNode node = factory.makeVariableAccessByNameNode(name, startLocation, stopLocation);
         this.after(node);
         return node;
     }

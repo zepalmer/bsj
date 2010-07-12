@@ -13,8 +13,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
@@ -22,7 +22,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForInitializerDeclarationNode
 {
     /** The variables declared in this initializer. */
-    private VariableDeclarationNode declaration;
+    private LocalVariableDeclarationNode declaration;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -43,7 +43,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     
     /** General constructor. */
     public ForInitializerDeclarationNodeImpl(
-            VariableDeclarationNode declaration,
+            LocalVariableDeclarationNode declaration,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -57,7 +57,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      * Gets the variables declared in this initializer.
      * @return The variables declared in this initializer.
      */
-    public VariableDeclarationNode getDeclaration()
+    public LocalVariableDeclarationNode getDeclaration()
     {
         getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.declaration;
@@ -67,12 +67,12 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      * Changes the variables declared in this initializer.
      * @param declaration The variables declared in this initializer.
      */
-    public void setDeclaration(VariableDeclarationNode declaration)
+    public void setDeclaration(LocalVariableDeclarationNode declaration)
     {
             setDeclaration(declaration, true);
     }
     
-    private void setDeclaration(VariableDeclarationNode declaration, boolean checkPermissions)
+    private void setDeclaration(LocalVariableDeclarationNode declaration, boolean checkPermissions)
     {
         if (checkPermissions)
         {
@@ -221,9 +221,9 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getDeclaration()) && (after instanceof VariableDeclarationNode))
+        if (before.equals(this.getDeclaration()) && (after instanceof LocalVariableDeclarationNode))
         {
-            setDeclaration((VariableDeclarationNode)after);
+            setDeclaration((LocalVariableDeclarationNode)after);
             return true;
         }
         return false;

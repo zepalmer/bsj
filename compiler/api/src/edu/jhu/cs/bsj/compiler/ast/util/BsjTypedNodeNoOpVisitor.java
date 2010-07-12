@@ -870,36 +870,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type FieldAccessByExpressionNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitFieldAccessByExpressionNodeStart(FieldAccessByExpressionNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type FieldAccessByNameNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitFieldAccessByNameNodeStart(FieldAccessByNameNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type FieldAccessNode.
-     * @param node The node being visited.
-     */
-    public void visitFieldAccessNodeStart(FieldAccessNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type FieldDeclarationNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1205,6 +1175,17 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitLiteralizableTypeNodeStart(LiteralizableTypeNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type LocalVariableDeclarationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitLocalVariableDeclarationNodeStart(LocalVariableDeclarationNode node, boolean mostSpecific)
     {
     }
 
@@ -2076,13 +2057,32 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type VariableDeclarationNode.
+     * Starts a visit for nodes of type VariableAccessByExpressionNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitVariableDeclarationNodeStart(VariableDeclarationNode node, boolean mostSpecific)
+    public void visitVariableAccessByExpressionNodeStart(VariableAccessByExpressionNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VariableAccessByNameNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableAccessByNameNodeStart(VariableAccessByNameNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VariableAccessNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableAccessNodeStart(VariableAccessNode node)
     {
     }
 
@@ -2966,36 +2966,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type FieldAccessByExpressionNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitFieldAccessByExpressionNodeStop(FieldAccessByExpressionNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type FieldAccessByNameNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitFieldAccessByNameNodeStop(FieldAccessByNameNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type FieldAccessNode.
-     * @param node The node being visited.
-     */
-    public void visitFieldAccessNodeStop(FieldAccessNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type FieldDeclarationNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -3301,6 +3271,17 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitLiteralizableTypeNodeStop(LiteralizableTypeNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type LocalVariableDeclarationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitLocalVariableDeclarationNodeStop(LocalVariableDeclarationNode node, boolean mostSpecific)
     {
     }
 
@@ -4172,13 +4153,32 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type VariableDeclarationNode.
+     * Stops a visit for nodes of type VariableAccessByExpressionNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitVariableDeclarationNodeStop(VariableDeclarationNode node, boolean mostSpecific)
+    public void visitVariableAccessByExpressionNodeStop(VariableAccessByExpressionNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VariableAccessByNameNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableAccessByNameNodeStop(VariableAccessByNameNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VariableAccessNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableAccessNodeStop(VariableAccessNode node)
     {
     }
 

@@ -12,16 +12,16 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessByNameNode
+public class VariableAccessByNameNodeImpl extends NodeImpl implements VariableAccessByNameNode
 {
-    /** The name of the field to access. */
+    /** The name of the variable to access. */
     private NameNode name;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
@@ -30,7 +30,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(FieldAccessByNameNodeImpl.this);
+            attribute = new ReadWriteAttribute(VariableAccessByNameNodeImpl.this);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
@@ -42,7 +42,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     }
     
     /** General constructor. */
-    public FieldAccessByNameNodeImpl(
+    public VariableAccessByNameNodeImpl(
             NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -54,8 +54,8 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     }
     
     /**
-     * Gets the name of the field to access.
-     * @return The name of the field to access.
+     * Gets the name of the variable to access.
+     * @return The name of the variable to access.
      */
     public NameNode getName()
     {
@@ -64,8 +64,8 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     }
     
     /**
-     * Changes the name of the field to access.
-     * @param name The name of the field to access.
+     * Changes the name of the variable to access.
+     * @param name The name of the variable to access.
      */
     public void setName(NameNode name)
     {
@@ -138,15 +138,15 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitFieldAccessByNameNodeStart(this, true);
+        visitor.visitVariableAccessByNameNodeStart(this, true);
         visitor.visitNodeStart(this);
-        visitor.visitFieldAccessNodeStart(this);
+        visitor.visitVariableAccessNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitFieldAccessNodeStop(this);
+        visitor.visitVariableAccessNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitFieldAccessByNameNodeStop(this, true);
+        visitor.visitVariableAccessByNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -193,7 +193,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeFieldAccessByNameNode(this, p);
+        return operation.executeVariableAccessByNameNode(this, p);
     }
     
     /**
@@ -202,9 +202,9 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
      * @return The resulting deep copy node.
      */
     @Override
-    public FieldAccessByNameNode deepCopy(BsjNodeFactory factory)
+    public VariableAccessByNameNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeFieldAccessByNameNode(
+        return factory.makeVariableAccessByNameNode(
                 getName()==null?null:getName().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());

@@ -123,7 +123,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
         
         // String ret = "ClassName [";
-        statements.add(factory.makeVariableDeclarationNode(
+        statements.add(factory.makeLocalVariableDeclarationNode(
         		factory.makeUnparameterizedTypeNode(
                         factory.makeSimpleNameNode(
                         factory.makeIdentifierNode("String"), 
@@ -160,7 +160,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
 
             // now add our property's string representation to the whole
             statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                    factory.makeFieldAccessByNameNode(factory.parseNameNode("ret")), 
+                    factory.makeVariableAccessByNameNode(factory.parseNameNode("ret")), 
                     AssignmentOperator.PLUS_ASSIGNMENT, 
                     factory.makeBinaryExpressionNode(
                             factory.makeStringLiteralNode((first ? "" : ", ") + fieldName + "="), 
@@ -173,13 +173,13 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         
         // ret += "]";
         statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                factory.makeFieldAccessByNameNode(factory.parseNameNode("ret")), 
+                factory.makeVariableAccessByNameNode(factory.parseNameNode("ret")), 
                 AssignmentOperator.PLUS_ASSIGNMENT, 
                 factory.makeStringLiteralNode("]"))));
         
         // return ret;
         statements.add(factory.makeReturnNode(
-                factory.makeFieldAccessByNameNode(
+                factory.makeVariableAccessByNameNode(
                         factory.makeSimpleNameNode(
                                 factory.makeIdentifierNode("ret"), NameCategory.EXPRESSION))));
         

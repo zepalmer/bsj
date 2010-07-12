@@ -2802,60 +2802,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a FieldAccessByExpressionNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
-            PrimaryExpressionNode expression,
-            IdentifierNode identifier)
-    {
-        FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a FieldAccessByExpressionNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
-            PrimaryExpressionNode expression,
-            IdentifierNode identifier,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a FieldAccessByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public FieldAccessByNameNode makeFieldAccessByNameNode(
-            NameNode name)
-    {
-        FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a FieldAccessByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public FieldAccessByNameNode makeFieldAccessByNameNode(
-            NameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
      * Creates a FieldDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2983,7 +2929,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
-            VariableDeclarationNode declaration)
+            LocalVariableDeclarationNode declaration)
     {
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2995,7 +2941,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
-            VariableDeclarationNode declaration,
+            LocalVariableDeclarationNode declaration,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3786,6 +3732,64 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            VariableModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators)
+    {
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            VariableModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            TypeNode type,
+            VariableDeclaratorListNode declarators)
+    {
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(makeVariableModifiersNode(), type, declarators, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(makeVariableModifiersNode(), type, declarators, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6669,60 +6673,56 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            VariableModifiersNode modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators)
+    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
+        VariableAccessByExpressionNode ret = new VariableAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByExpressionNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            VariableModifiersNode modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
+    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
+        VariableAccessByExpressionNode ret = new VariableAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            TypeNode type,
-            VariableDeclaratorListNode declarators)
+    public VariableAccessByNameNode makeVariableAccessByNameNode(
+            NameNode name)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(makeVariableModifiersNode(), type, declarators, startLocation, stopLocation, manager, binary);
+        VariableAccessByNameNode ret = new VariableAccessByNameNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a VariableAccessByNameNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
+    public VariableAccessByNameNode makeVariableAccessByNameNode(
+            NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(makeVariableModifiersNode(), type, declarators, startLocation, stopLocation, manager, binary);
+        VariableAccessByNameNode ret = new VariableAccessByNameNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

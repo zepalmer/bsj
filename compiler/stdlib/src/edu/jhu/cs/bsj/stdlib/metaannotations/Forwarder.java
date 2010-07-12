@@ -289,7 +289,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			for (VariableNode parameter : parameters.getChildren()) {
 				NameNode name = factory.makeSimpleNameNode(parameter
 						.getIdentifier(), NameCategory.AMBIGUOUS);
-				listOfArguments.add(factory.makeFieldAccessByNameNode(name));
+				listOfArguments.add(factory.makeVariableAccessByNameNode(name));
 			}
 			ExpressionListNode someArgs = factory.makeExpressionListNode(listOfArguments);
 			ReturnNode returnNode = factory.makeReturnNode(factory.makeMethodInvocationByExpressionNode(fieldExpression, factory.makeIdentifierNode(methodName), someArgs));
@@ -350,7 +350,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 	
 	private PrimaryExpressionNode makeFieldAccess(IdentifierNode fieldIdentifier) {
-		return factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(fieldIdentifier, NameCategory.AMBIGUOUS));
+		return factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(fieldIdentifier, NameCategory.AMBIGUOUS));
 	}	
 	private PrimaryExpressionNode makeMethodAccess(IdentifierNode fieldIdentifier) {
 		return factory.makeMethodInvocationByNameNode(factory.makeSimpleNameNode(fieldIdentifier, NameCategory.METHOD));

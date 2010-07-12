@@ -12,16 +12,16 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDeclarationNode
+public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalVariableDeclarationNode
 {
     /** The modifiers for this variable. */
     private VariableModifiersNode modifiers;
@@ -38,7 +38,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(VariableDeclarationNodeImpl.this);
+            attribute = new ReadWriteAttribute(LocalVariableDeclarationNodeImpl.this);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
@@ -54,7 +54,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     }
     
     /** General constructor. */
-    public VariableDeclarationNodeImpl(
+    public LocalVariableDeclarationNodeImpl(
             VariableModifiersNode modifiers,
             TypeNode type,
             VariableDeclaratorListNode declarators,
@@ -232,7 +232,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitVariableDeclarationNodeStart(this, true);
+        visitor.visitLocalVariableDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitBlockStatementNodeStart(this);
         visitor.visitVariableDeclaratorOwnerNodeStart(this);
@@ -242,7 +242,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         visitor.visitBlockStatementNodeStop(this);
         visitor.visitVariableDeclaratorOwnerNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitVariableDeclarationNodeStop(this, true);
+        visitor.visitLocalVariableDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -297,7 +297,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeVariableDeclarationNode(this, p);
+        return operation.executeLocalVariableDeclarationNode(this, p);
     }
     
     /**
@@ -306,9 +306,9 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      * @return The resulting deep copy node.
      */
     @Override
-    public VariableDeclarationNode deepCopy(BsjNodeFactory factory)
+    public LocalVariableDeclarationNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeVariableDeclarationNode(
+        return factory.makeLocalVariableDeclarationNode(
                 getModifiers()==null?null:getModifiers().deepCopy(factory),
                 getType()==null?null:getType().deepCopy(factory),
                 getDeclarators()==null?null:getDeclarators().deepCopy(factory),

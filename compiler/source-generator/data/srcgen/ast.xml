@@ -65,13 +65,6 @@
             ]]></doc>
         </type>
 
-        <type name="FieldAccessNode" super="Node" mode="tag">
-            <tag name="RestrictedPrimaryExpressionNode" />
-            <doc><![CDATA[
-                This tagging interface is used to denote BSJ AST nodes which represent field access.
-            ]]></doc>
-        </type>
-
         <type name="ForInitializerNode" super="Node" mode="tag">
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which are used as standard for-loop initializers.  It exists
@@ -183,6 +176,13 @@
         <type name="TypeNode" super="Node" mode="tag">
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which refer to types.
+            ]]></doc>
+        </type>
+
+        <type name="VariableAccessNode" super="Node" mode="tag">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <doc><![CDATA[
+                This tagging interface is used to denote BSJ AST nodes which represent variable access.
             ]]></doc>
         </type>
 
@@ -529,45 +529,6 @@
             ]]></doc>
         </type>
 
-        <type name="FieldAccessByExpressionNode" super="Node">
-            <tag name="FieldAccessNode" />
-            <prop name="expression" type="PrimaryExpressionNode" desc="the expression from which the field is being selected" />
-            <prop name="identifier" type="IdentifierNode" desc="the name of the field" />
-            <doc><![CDATA[
-                Represents a field access, as in
-                <pre>
-                <i>expr</i>.<i>ident</i>
-                </pre>
-                For example, this node would allow the access of a fieldon the result of a method call using the code
-                <pre>
-                foo().bar
-                </pre>
-                This node is not used for simple expressions such as <tt>x</tt> or <tt>y.z</tt>.  For those forms of field
-                access, see {@link FieldAccessByNameNode}.
-            ]]></doc>
-        </type>
-
-        <type name="FieldAccessByNameNode" super="Node">
-            <tag name="FieldAccessNode" />
-            <prop name="name" type="NameNode" desc="the name of the field to access" />
-            <doc><![CDATA[
-                Represents a field access, as in
-                <pre>
-                <i>name</i>
-                </pre>
-                For example, this node would allow the access of a local variable <tt>x</tt> using the code
-                <pre>
-                x
-                </pre>
-                and allow the access of a <tt>bar</tt> field on a class <tt>Foo</tt> using the code
-                <pre>
-                Foo.bar
-                </pre>
-                This node is not used to represent field access from the evaluation result of a subexpression (such as in the
-                code <tt>foo().bar</tt>).  For that form of access, see {@link FieldAccessByExpressionNode}.
-            ]]></doc>
-        </type>
-
         <type name="InstanceOfNode" super="Node">
             <tag name="NonAssignmentExpressionNode" />
             <prop name="expression" type="ExpressionNode" desc="the expression being evaluated" />
@@ -879,6 +840,45 @@
             </factory-method>
         </type>
 
+        <type name="VariableAccessByExpressionNode" super="Node">
+            <tag name="VariableAccessNode" />
+            <prop name="expression" type="PrimaryExpressionNode" desc="the expression from which the variable is being selected" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of the variable" />
+            <doc><![CDATA[
+                Represents a field access, as in
+                <pre>
+                <i>expr</i>.<i>ident</i>
+                </pre>
+                For example, this node would allow the access of a field on the result of a method call using the code
+                <pre>
+                foo().bar
+                </pre>
+                This node is not used for simple expressions such as <tt>x</tt> or <tt>y.z</tt>.  For those forms of field
+                access, see {@link VariableAccessByNameNode}.
+            ]]></doc>
+        </type>
+
+        <type name="VariableAccessByNameNode" super="Node">
+            <tag name="VariableAccessNode" />
+            <prop name="name" type="NameNode" desc="the name of the variable to access" />
+            <doc><![CDATA[
+                Represents a field access, as in
+                <pre>
+                <i>name</i>
+                </pre>
+                For example, this node would allow the access of a local variable <tt>x</tt> using the code
+                <pre>
+                x
+                </pre>
+                and allow the access of a <tt>bar</tt> field on a class <tt>Foo</tt> using the code
+                <pre>
+                Foo.bar
+                </pre>
+                This node is not used to represent field access from the evaluation result of a subexpression (such as in the
+                code <tt>foo().bar</tt>).  For that form of access, see {@link VariableAccessByExpressionNode}.
+            ]]></doc>
+        </type>
+
         <!-- ===================== STATEMENT NODES ====================== -->
 
         <type name="AssertStatementNode" super="Node">
@@ -1071,6 +1071,32 @@
             </factory-method>
         </type>
 
+        <type name="LocalVariableDeclarationNode" super="Node">
+            <tag name="BlockStatementNode" />
+            <tag name="VariableDeclaratorOwnerNode" />
+            <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable"
+                default="makeVariableModifiersNode()" />
+            <prop name="type" type="TypeNode" desc="the type of the declared variables" />
+            <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
+            <doc><![CDATA[
+                A node for the declaration of a variable, as in:
+                    <pre>
+                    <i>type identifier</i>;
+                    </pre>
+                or
+                    <pre>
+                    <i>type identifier</i> = <i>expression</i>;
+                    </pre>
+                or
+                    <pre>
+                    <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
+                    </pre>
+            ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
+        </type>
+
         <type name="ReturnNode" super="Node">
             <tag name="StatementNode" />
             <prop name="expression" type="ExpressionNode" desc="the expression to return" />
@@ -1171,37 +1197,12 @@
             </factory-method>
         </type>
 
-        <type name="VariableDeclarationNode" super="Node">
-            <tag name="BlockStatementNode" />
-            <tag name="VariableDeclaratorOwnerNode" />
-            <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable"
-                default="makeVariableModifiersNode()" />
-            <prop name="type" type="TypeNode" desc="the type of the declared variables" />
-            <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
-            <doc><![CDATA[
-                A node for the declaration of a variable, as in:
-                    <pre>
-                    <i>type identifier</i>;
-                    </pre>
-                or
-                    <pre>
-                    <i>type identifier</i> = <i>expression</i>;
-                    </pre>
-                or
-                    <pre>
-                    <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
-                    </pre>
-            ]]></doc>
-            <factory-method>
-                <use-defaults />
-            </factory-method>
-        </type>
-
         <type name="VariableDeclaratorNode" super="Node">
             <prop name="name" type="IdentifierNode" desc="the name of this variable" />
-            <prop name="arrayLevels" type="int" desc="the number of additional array levels added to the type of this variable" default="0"/>
+            <prop name="arrayLevels" type="int"
+                desc="the number of additional array levels added to the type of this variable" default="0" />
             <prop name="initializer" type="VariableInitializerNode" desc="the initializer to use" />
-            <include file="VariableDeclaratorNode.java"/>
+            <include file="VariableDeclaratorNode.java" />
             <doc><![CDATA[
                 Represents a declarator for a variable declaration.  For example, in
                 <pre>int x = 5, y;</pre>
@@ -1215,7 +1216,7 @@
                 <tt>initializer</tt> field is <tt>null</tt>.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -1833,13 +1834,14 @@
 
         <type name="ForInitializerDeclarationNode" super="Node">
             <tag name="ForInitializerNode" />
-            <prop name="declaration" type="VariableDeclarationNode" desc="the variables declared in this initializer" />
+            <prop name="declaration" type="LocalVariableDeclarationNode" desc="the variables declared in this initializer" />
             <doc><![CDATA[
                 Represents a for loop initializer which declares variables.  For example, in
                 <pre>for (int i=0;i&lt;n;i++)</pre>
                 this node represents
                 <pre>int i=0</pre>
-                Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
+                Note that, due to the nature of {@link LocalVariableDeclarationNode}, this can be a variable
+                muilti-declaration.
             ]]></doc>
         </type>
 
@@ -1896,7 +1898,7 @@
                 or as a statement.  Either way, it has no effect.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -2005,7 +2007,7 @@
                 <use-defaults />
             </factory-method>
         </type>
-        
+
         <type name="WildcardTypeNode" super="Node">
             <tag name="TypeArgumentNode" />
             <prop name="bound" type="ReferenceTypeNode" desc="the wildcard's bound" />
@@ -2028,7 +2030,7 @@
             ]]></doc>
         </type>
     </srcgen>
-    
+
     <!--  List Nodes -->
     <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node.list" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node.list">
         <type name="ListNode" typeParam="T extends Node" super="Node" mode="abstract">
@@ -2059,7 +2061,7 @@
             <constructor-override prop="children" expr="getChildrenList(children)" />
             <nogen id="children" />
         </type>
-        
+
         <!-- ======================== LIST NODES ======================== -->
 
         <type name="AnnotationElementListNode" super="ListNode" superTypeArg="AnnotationElementNode">
@@ -2576,7 +2578,7 @@
         </type>
 
         <!-- ======================== OTHER NODES ======================= -->
-        
+
         <type name="RawCodeLiteralNode" super="LiteralNode" superTypeArg="String">
             <doc><![CDATA[
                 A node representing an unprocessed code literal.  This literal is not guaranteed to contain parseable

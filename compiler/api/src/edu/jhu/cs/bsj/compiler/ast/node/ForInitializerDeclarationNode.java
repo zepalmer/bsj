@@ -9,7 +9,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * <pre>for (int i=0;i&lt;n;i++)</pre>
  * this node represents
  * <pre>int i=0</pre>
- * Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
+ * Note that, due to the nature of {@link LocalVariableDeclarationNode}, this can be a variable
+ * muilti-declaration.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ForInitializerDeclarationNode extends Node, ForInitializerNode
@@ -18,13 +19,13 @@ public interface ForInitializerDeclarationNode extends Node, ForInitializerNode
      * Gets the variables declared in this initializer.
      * @return The variables declared in this initializer.
      */
-    public VariableDeclarationNode getDeclaration();
+    public LocalVariableDeclarationNode getDeclaration();
     
     /**
      * Changes the variables declared in this initializer.
      * @param declaration The variables declared in this initializer.
      */
-    public void setDeclaration(VariableDeclarationNode declaration);
+    public void setDeclaration(LocalVariableDeclarationNode declaration);
     
     /**
      * Generates a deep copy of this node.

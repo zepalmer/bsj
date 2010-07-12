@@ -680,26 +680,6 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
-    public R executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, P p)
-    {
-        return executeDefault(node, p);
-    }
-
-    /**
-     * Executes the default operation for this node.
-     * @param node The node in question.
-     * @param p The parameter to this node operation.
-     */
-    public R executeFieldAccessByNameNode(FieldAccessByNameNode node, P p)
-    {
-        return executeDefault(node, p);
-    }
-
-    /**
-     * Executes the default operation for this node.
-     * @param node The node in question.
-     * @param p The parameter to this node operation.
-     */
     public R executeFieldDeclarationNode(FieldDeclarationNode node, P p)
     {
         return executeDefault(node, p);
@@ -921,6 +901,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeLabeledStatementNode(LabeledStatementNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -1580,7 +1570,17 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
-    public R executeVariableDeclarationNode(VariableDeclarationNode node, P p)
+    public R executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeVariableAccessByNameNode(VariableAccessByNameNode node, P p)
     {
         return executeDefault(node, p);
     }

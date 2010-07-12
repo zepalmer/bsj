@@ -8,7 +8,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
@@ -17,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 
@@ -144,7 +144,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 					returnType = factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
 							factory.makeIdentifierNode(retName), NameCategory.TYPE));
 				}
-			} else if (argExpr instanceof LiteralNode<?> || argExpr instanceof FieldAccessNode)
+			} else if (argExpr instanceof LiteralNode<?> || argExpr instanceof VariableAccessNode)
 			{
 				// skip over the nodes we won't know how to handle
 				newArgList.add(argExpr.deepCopy(factory));
