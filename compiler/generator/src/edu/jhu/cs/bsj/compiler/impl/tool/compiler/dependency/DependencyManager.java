@@ -132,9 +132,9 @@ public class DependencyManager
 		}
 
 		// For debugging purposes, print out a description of the dependency graph
-		if (LOGGER.isTraceEnabled())
+		if (LOGGER.isDebugEnabled())
 		{
-			traceLogDependencyGraph();
+			debugLogDependencyGraph();
 		}
 
 		// Determine whether or not we just caused a cycle
@@ -175,30 +175,30 @@ public class DependencyManager
 	/**
 	 * Writes trace logs which describe the dependency graph.
 	 */
-	private void traceLogDependencyGraph()
+	private void debugLogDependencyGraph()
 	{
-		LOGGER.trace("Dependency graph current appears as follows:");
+		LOGGER.debug("Dependency graph currently appears as follows:");
 		Set<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>> targetsToVisit = new HashSet<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>>();
 		for (Map.Entry<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> entry : this.profileToNodeMap.entrySet())
 		{
 			MetaprogramProfile<?> profile = entry.getKey();
 			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> node = entry.getValue();
 			Set<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>> targets = node.getChildren();
-			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " at " + profile.getLocation() + " has "
+			LOGGER.debug("Metaprogram " + profile.getMetaprogram().getID() + " at " + profile.getLocation() + " has "
 					+ targets.size() + " target dependencies");
 			for (BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> target : targets)
 			{
-				LOGGER.trace("    " + target.getData().getTarget());
+				LOGGER.debug("    " + target.getData().getTarget());
 			}
 			targetsToVisit.addAll(targets);
 		}
 		for (BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData> target : targetsToVisit)
 		{
 			Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> programs = target.getChildren();
-			LOGGER.trace("Target " + target.getData().getTarget() + " contains " + programs.size() + " metaprograms");
+			LOGGER.debug("Target " + target.getData().getTarget() + " contains " + programs.size() + " metaprograms");
 			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> program : programs)
 			{
-				LOGGER.trace("    " + program.getData().getProfile().getMetaprogram().getID() + " at "
+				LOGGER.debug("    " + program.getData().getProfile().getMetaprogram().getID() + " at "
 						+ program.getData().getProfile().getLocation());
 			}
 		}
