@@ -1083,6 +1083,34 @@ metaAnnotationList returns [MetaAnnotationListNode ret]
         )*
     ;
 
+// Parses a sequence of any annotations: BSJ meta-annotations or Java annotations.  These are returned as two lists.
+// This rule is used for those grammar rules which cannot have other forms of modifier.
+anyAnnotations returns [MetaAnnotationListNode metaAnnotations, AnnotationListNode annotations]
+        scope Rule;
+        @init {
+            ruleStart("anyAnnotations");
+            List<MetaAnnotationNode> metaAnnotationList = new ArrayList<MetaAnnotationNode>();
+            List<AnnotationNode> annotationList = new ArrayList<AnnotationNode>();
+        }
+        @after {
+            $metaAnnotations = factory.makeMetaAnnotationListNode(metaAnnotationList);
+            $annotations = factory.makeAnnotationListNode(annotationList);
+            ruleStop();
+        }
+    :
+        (
+            metaAnnotation
+            {
+                metaAnnotationList.add($metaAnnotation.ret);
+            }
+        |
+            annotation
+            {
+                annotationList.add($annotation.ret);
+            }
+        )+
+    ;
+
 // Parses a meta-annotation.
 // For example, in
 //     @@Test("foo")
@@ -1098,31 +1126,34 @@ metaAnnotation returns [MetaAnnotationNode ret]
             ruleStop();
         }
     :   
-        '@' '@' name
-        {
-            $ret = factory.makeNormalMetaAnnotationNode(
-                    factory.makeMetaAnnotationElementListNode(new ArrayList<MetaAnnotationElementNode>()),
-                    factory.makeUnparameterizedTypeNode($name.ret));
-        }
+        {configuration.getMetaAnnotationsSupported()}?=>
         (
-            '('   
-            (
-                metaAnnotationElementValuePairs
-                {
-                    $ret = factory.makeNormalMetaAnnotationNode(
-                            $metaAnnotationElementValuePairs.ret,
-                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
-                }
-            |
-                metaAnnotationElementValue
-                {
-                    $ret = factory.makeSingleElementMetaAnnotationNode(
-                            $metaAnnotationElementValue.ret,
-                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
-                }
-            )? 
-            ')' 
-        )?
+	        '@' '@' name
+	        {
+	            $ret = factory.makeNormalMetaAnnotationNode(
+	                    factory.makeMetaAnnotationElementListNode(new ArrayList<MetaAnnotationElementNode>()),
+	                    factory.makeUnparameterizedTypeNode($name.ret));
+	        }
+	        (
+	            '('   
+	            (
+	                metaAnnotationElementValuePairs
+	                {
+	                    $ret = factory.makeNormalMetaAnnotationNode(
+	                            $metaAnnotationElementValuePairs.ret,
+	                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
+	                }
+	            |
+	                metaAnnotationElementValue
+	                {
+	                    $ret = factory.makeSingleElementMetaAnnotationNode(
+	                            $metaAnnotationElementValue.ret,
+	                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
+	                }
+	            )? 
+	            ')' 
+            )?
+        )
     ;
 
 // Parses a meta-annotation's element-value pairs.
@@ -1456,10 +1487,10 @@ packageDeclaration returns [PackageDeclarationNode ret]
         }
     :
         (
-            annotations
+            anyAnnotations
             {
-                annotationsNode = $annotations.annotations;
-                metaAnnotationsNode = $annotations.metaAnnotations;
+                annotationsNode = $anyAnnotations.annotations;
+                metaAnnotationsNode = $anyAnnotations.metaAnnotations;
             }
         )?
         'package' name ';'
@@ -1674,7 +1705,7 @@ modifiers[boolean accessAllowed, Modifier... mods]
              MetaAnnotationListNode metaAnnotations]
         scope Rule;
         @init {
-            ruleStart("classOrInterfaceDeclaration");
+            ruleStart("modifiers");
             List<AnnotationNode> annotationList = new ArrayList<AnnotationNode>();
             List<MetaAnnotationNode> metaAnnotationList = new ArrayList<MetaAnnotationNode>();
             $access = AccessModifier.PACKAGE;
@@ -2205,10 +2236,10 @@ enumConstant returns [EnumConstantDeclarationNode ret]
     :   
         javadoc
         (
-            annotations
+            anyAnnotations
             {
-                annotationsNode = $annotations.annotations;
-                metaAnnotationsNode = $annotations.metaAnnotations;
+                annotationsNode = $anyAnnotations.annotations;
+                metaAnnotationsNode = $anyAnnotations.metaAnnotations;
             }
         )?
         id=identifier
@@ -3266,16 +3297,14 @@ explicitConstructorInvocation returns [ConstructorInvocationNode ret]
         }
     ;
 
-annotations returns [AnnotationListNode annotations, MetaAnnotationListNode metaAnnotations]
+annotations returns [AnnotationListNode ret]
         scope Rule;
         @init {
             ruleStart("annotations");
             List<AnnotationNode> annotationsList = new ArrayList<AnnotationNode>();
-            List<MetaAnnotationNode> metaAnnotationsList = new ArrayList<MetaAnnotationNode>();
         }
         @after {
-            $annotations = factory.makeAnnotationListNode(annotationsList);
-            $metaAnnotations = factory.makeMetaAnnotationListNode(metaAnnotationsList);
+            $ret = factory.makeAnnotationListNode(annotationsList);
             ruleStop();
         }
     :   
@@ -3283,11 +3312,6 @@ annotations returns [AnnotationListNode annotations, MetaAnnotationListNode meta
             annotation
             {
                 annotationsList.add($annotation.ret);
-            }
-        |
-            metaAnnotation
-            {
-                metaAnnotationsList.add($metaAnnotation.ret);
             }
         )+
     ;

@@ -23,22 +23,30 @@ public enum BsjParserConfiguration
 	{
 		/** Indicates that BSJ should not be used in any form.  This causes a BSJ parser to behave like a normal Java
 		 *  parser. */
-		NONE(false),
+		NONE(false,false),
 		/** Indicates that the BSJ Language Specification v1 should be observed. */
-		BLS1(true)
+		BLS1(true,true)
 		;
 		
 		/** Indicates whether or not this BSJ version supports metaprograms of the [: :] variety. */
 		private boolean metaprogramsSupported;
+		/** Indicates whether or not this BSJ version supports meta-annotations. */
+		private boolean metaAnnotationsSupported;
 
-		private BsjVersion(boolean metaprogramsSupported)
+		private BsjVersion(boolean metaprogramsSupported, boolean metaAnnotationsSupported)
 		{
 			this.metaprogramsSupported = metaprogramsSupported;
+			this.metaAnnotationsSupported = metaAnnotationsSupported;
 		}
 
 		public boolean getMetaprogramsSupported()
 		{
 			return metaprogramsSupported;
+		}
+
+		public boolean getMetaAnnotationsSupported()
+		{
+			return metaAnnotationsSupported;
 		}
 	}
 	
@@ -67,5 +75,11 @@ public enum BsjParserConfiguration
 	public boolean getMetaprogramsSupported()
 	{
 		return this.bsjVersion.getMetaprogramsSupported();
+	}
+
+	/** Determines whether or not this configuration supports BSJ meta-annotations. */
+	public boolean getMetaAnnotationsSupported()
+	{
+		return this.bsjVersion.getMetaAnnotationsSupported();
 	}
 }
