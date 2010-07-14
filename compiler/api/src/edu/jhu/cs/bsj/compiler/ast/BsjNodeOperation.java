@@ -740,6 +740,22 @@ public interface BsjNodeOperation<P,R>
     public R executeLabeledStatementNode(LabeledStatementNode node, P p);
 
     /**
+     * Executes this operation against a LocalClassDeclarationNode.
+     * @param node The LocalClassDeclarationNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeLocalClassDeclarationNode(LocalClassDeclarationNode node, P p);
+
+    /**
+     * Executes this operation against a LocalClassModifiersNode.
+     * @param node The LocalClassModifiersNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeLocalClassModifiersNode(LocalClassModifiersNode node, P p);
+
+    /**
      * Executes this operation against a LocalVariableDeclarationNode.
      * @param node The LocalVariableDeclarationNode in question.
      * @param p The parameter to use.

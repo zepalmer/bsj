@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends PropertyBasedHierarchyDefinition<T, U> & IParameterizedPropertyBasedHierarchyDefinition<T,U>, U extends AbstractPropertyDefinition<U>>
+public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends PropertyBasedHierarchyDefinition<T, U> & IParameterizedPropertyBasedHierarchyDefinition<T, U>, U extends AbstractPropertyDefinition<U>>
 		extends PropertyBasedHierarchyDefinition<T, U> implements IParameterizedPropertyBasedHierarchyDefinition<T, U>
 {
 	private String baseName;
@@ -12,7 +12,7 @@ public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends Pr
 	private String superName;
 	private String superTypeArg;
 	private List<TagReferenceDefinition> tags;
-	
+
 	public ParameterizedPropertyBasedHierarchyDefinition(String baseName, String typeParameter, String superName,
 			String superTypeArg, List<TagReferenceDefinition> tags)
 	{
@@ -61,6 +61,24 @@ public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends Pr
 				return typeParameter;
 			}
 		}
+	}
+
+	public String getTypeParameterUpperBound()
+	{
+		if (typeParameter == null)
+		{
+			return null;
+		}
+		String[] s = typeParameter.trim().split("\\s+");
+		if (s.length < 3)
+		{
+			return null;
+		}
+		if (!s[1].equals("extends"))
+		{
+			return null;
+		}
+		return s[2];
 	}
 
 	public String getUnboundedSuperTypeArg()

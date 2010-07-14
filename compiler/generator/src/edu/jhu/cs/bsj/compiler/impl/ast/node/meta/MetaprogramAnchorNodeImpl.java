@@ -62,6 +62,10 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.replacement != null)
+        {
+            this.replacement.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -83,6 +87,10 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.replacement != null)
+        {
+            this.replacement.receiveTyped(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {

@@ -11,22 +11,22 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarationNodeImpl<ClassModifiersNode> implements ClassDeclarationNode
+public class LocalClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarationNodeImpl<LocalClassModifiersNode> implements LocalClassDeclarationNode
 {
     /** General constructor. */
-    public ClassDeclarationNodeImpl(
-            ClassModifiersNode modifiers,
+    public LocalClassDeclarationNodeImpl(
+            LocalClassModifiersNode modifiers,
             DeclaredTypeNode extendsClause,
             DeclaredTypeListNode implementsClause,
             ClassBodyNode body,
@@ -87,15 +87,17 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitClassDeclarationNodeStart(this, true);
+        visitor.visitLocalClassDeclarationNodeStart(this, true);
         visitor.visitAbstractlyUnmodifiedClassDeclarationNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitInlineTypeDeclarableNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitInlineTypeDeclarableNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAbstractlyUnmodifiedClassDeclarationNodeStop(this);
-        visitor.visitClassDeclarationNodeStop(this, true);
+        visitor.visitLocalClassDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -159,7 +161,7 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeClassDeclarationNode(this, p);
+        return operation.executeLocalClassDeclarationNode(this, p);
     }
     
     /**
@@ -168,9 +170,9 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
      * @return The resulting deep copy node.
      */
     @Override
-    public ClassDeclarationNode deepCopy(BsjNodeFactory factory)
+    public LocalClassDeclarationNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeClassDeclarationNode(
+        return factory.makeLocalClassDeclarationNode(
                 getModifiers()==null?null:getModifiers().deepCopy(factory),
                 getExtendsClause()==null?null:getExtendsClause().deepCopy(factory),
                 getImplementsClause()==null?null:getImplementsClause().deepCopy(factory),
@@ -193,9 +195,9 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof ClassModifiersNode))
+        if (before.equals(this.getModifiers()) && (after instanceof LocalClassModifiersNode))
         {
-            setModifiers((ClassModifiersNode)after);
+            setModifiers((LocalClassModifiersNode)after);
             return true;
         }
         if (before.equals(this.getExtendsClause()) && (after instanceof DeclaredTypeNode))

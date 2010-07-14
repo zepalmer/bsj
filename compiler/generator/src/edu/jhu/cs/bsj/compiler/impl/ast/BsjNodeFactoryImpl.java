@@ -3736,6 +3736,103 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
+     * Creates a LocalClassDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalClassDeclarationNode makeLocalClassDeclarationNode(
+            LocalClassModifiersNode modifiers,
+            DeclaredTypeNode extendsClause,
+            DeclaredTypeListNode implementsClause,
+            ClassBodyNode body,
+            TypeParameterListNode typeParameters,
+            IdentifierNode identifier,
+            JavadocNode javadoc)
+    {
+        LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalClassDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalClassDeclarationNode makeLocalClassDeclarationNode(
+            LocalClassModifiersNode modifiers,
+            DeclaredTypeNode extendsClause,
+            DeclaredTypeListNode implementsClause,
+            ClassBodyNode body,
+            TypeParameterListNode typeParameters,
+            IdentifierNode identifier,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            boolean abstractFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations)
+    {
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            boolean abstractFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+    )
+    {
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
      * Creates a LocalVariableDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

@@ -735,10 +735,21 @@ public class SourceGenerator
 			return false;
 		}
 
-		protected boolean propInstanceOf(String propType, String classname)
+		protected <T extends PropertyBasedHierarchyDefinition<T, U> & IParameterizedPropertyBasedHierarchyDefinition<T, U>, U extends AbstractPropertyDefinition<U>> boolean propInstanceOf(
+				String propType, String classname, T def)
 		{
 			if (propType.contains("<"))
 				propType = propType.substring(0, propType.indexOf('<')).trim();
+			if (def != null && propType.equals(def.getUnboundedTypeParameter()))
+			{
+				if (def.getTypeParameterUpperBound()==null)
+				{
+					propType = "Object";
+				} else
+				{
+					propType = def.getTypeParameterUpperBound();
+				}
+			}
 			return defInstanceOf(map.get(propType), classname);
 		}
 
@@ -750,7 +761,7 @@ public class SourceGenerator
 			if (DIRECT_COPY_NAMES.contains(p.getBaseType()))
 			{
 				abstractor.directCopy(ps, p);
-			} else if (propInstanceOf(p.getBaseType(), "Node"))
+			} else if (propInstanceOf(p.getBaseType(), "Node", def))
 			{
 				abstractor.node(ps, p);
 			} else if (CLONEABLE_NAMES.contains(p.getBaseType()))
@@ -889,7 +900,7 @@ public class SourceGenerator
 				{
 					expr = p.getName();
 				}
-				if (propInstanceOf(p.getBaseType(), "Node") && !p.isReadOnly())
+				if (propInstanceOf(p.getBaseType(), "Node", def) && !p.isReadOnly())
 				{
 					ps.println("set" + capFirst(p.getName()) + "(" + expr + ", false);");
 				} else
@@ -968,12 +979,12 @@ public class SourceGenerator
 								+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
 								+ ".recordAccess(ReadWriteAttribute.AccessType.WRITE);");
 						ps.println("}");
-						if (propInstanceOf(p.getBaseType(), "Node"))
+						if (propInstanceOf(p.getBaseType(), "Node", def))
 						{
 							ps.println("setAsChild(" + p.getName() + ", false);");
 						}
 						ps.println("this." + p.getName() + " = " + p.getName() + ";");
-						if (propInstanceOf(p.getBaseType(), "Node"))
+						if (propInstanceOf(p.getBaseType(), "Node", def))
 						{
 							ps.println("setAsChild(" + p.getName() + ", true);");
 						}
@@ -1005,7 +1016,7 @@ public class SourceGenerator
 			}
 			for (ModalPropertyDefinition<?> p : def.getProperties())
 			{
-				if (propInstanceOf(p.getBaseType(), "Node"))
+				if (propInstanceOf(p.getBaseType(), "Node", def))
 				{
 					ps.println("if (this." + p.getName() + " != null)");
 					ps.println("{");
@@ -1059,7 +1070,7 @@ public class SourceGenerator
 			}
 			for (ModalPropertyDefinition<?> p : def.getProperties())
 			{
-				if (propInstanceOf(p.getBaseType(), "Node"))
+				if (propInstanceOf(p.getBaseType(), "Node", def))
 				{
 					ps.println("if (this." + p.getName() + " != null)");
 					ps.println("{");
@@ -1076,6 +1087,32 @@ public class SourceGenerator
 					ps.println("        node.receiveTyped(visitor);");
 					ps.println("    }");
 					ps.println("}");
+				} else if (p.getBaseType().equals(def.getUnboundedTypeParameter()))
+				{
+					// Try to extract a type bound from the type parameter
+					// TODO: abstract some of this logic somehow?
+					String bound = def.getTypeParameterUpperBound();
+					if (bound != null)
+					{
+						TypeDefinition tdef = def.getNamespaceMap().get(bound);
+						boolean isNode = false;
+						while (tdef != null)
+						{
+							if (tdef.getBaseName().equals("Node"))
+							{
+								isNode = true;
+								break;
+							}
+							tdef = tdef.getParent();
+						}
+						if (isNode)
+						{
+							ps.println("if (this." + p.getName() + " != null)");
+							ps.println("{");
+							ps.println("    this." + p.getName() + ".receiveTyped(visitor);");
+							ps.println("}");
+						}
+					}
 				}
 			}
 			ps.println("Iterator<? extends Node> extras = getHiddenVisitorChildren();");
@@ -1202,7 +1239,7 @@ public class SourceGenerator
 					}
 					String capName = Character.toUpperCase(p.getName().charAt(0)) + p.getName().substring(1);
 					ps.println("    sb.append(\"" + p.getName() + "=\");");
-					if (propInstanceOf(p.getBaseType(), "Node"))
+					if (propInstanceOf(p.getBaseType(), "Node", def))
 					{
 						ps.println("    sb.append(this.get" + capName + "() == null? \"null\" : this.get" + capName
 								+ "().getClass().getSimpleName());");
@@ -1381,7 +1418,7 @@ public class SourceGenerator
 				ps.println();
 				for (ModalPropertyDefinition<?> p : def.getRecursiveProperties())
 				{
-					if (propInstanceOf(p.getBaseType(), "Node"))
+					if (propInstanceOf(p.getBaseType(), "Node", def))
 					{
 						if (p.isReadOnly())
 							continue;
@@ -1409,7 +1446,7 @@ public class SourceGenerator
 							rawTypeArg = typeArg.substring(typeArg.indexOf('<'));
 							typeParamParam = true;
 						}
-						boolean nodeType = (propInstanceOf(rawTypeArg, "Node"));
+						boolean nodeType = (propInstanceOf(rawTypeArg, "Node", def));
 
 						if (typeParamParam && nodeType)
 						{
@@ -1792,7 +1829,7 @@ public class SourceGenerator
 			dps.println();
 
 			// Special ListNode constructor
-			if (propInstanceOf(def.getFullName(), "ListNode"))
+			if (this.<TypeDefinition,PropertyDefinition>propInstanceOf(def.getFullName(), "ListNode", null))
 			{
 				// Write documentation
 				for (PrintStream ps : new PrintStream[] { ips, cps, dps })

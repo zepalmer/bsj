@@ -3214,6 +3214,100 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
+    public ExpressionNode executeLocalClassDeclarationNode(LocalClassDeclarationNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftModifiers = 
+                node.getModifiers() != null ?
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftExtendsClause = 
+                node.getExtendsClause() != null ?
+                        node.getExtendsClause().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftImplementsClause = 
+                node.getImplementsClause() != null ?
+                        node.getImplementsClause().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftBody = 
+                node.getBody() != null ?
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftTypeParameters = 
+                node.getTypeParameters() != null ?
+                        node.getTypeParameters().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftIdentifier = 
+                node.getIdentifier() != null ?
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftJavadoc = 
+                node.getJavadoc() != null ?
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeLocalClassDeclarationNode"),
+                        factory.makeExpressionListNode(
+                                liftModifiers,
+                                liftExtendsClause,
+                                liftImplementsClause,
+                                liftBody,
+                                liftTypeParameters,
+                                liftIdentifier,
+                                liftJavadoc,
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeLocalClassModifiersNode(LocalClassModifiersNode node, ExpressionNode factoryNode)
+    {
+        boolean liftAbstractFlagValue = 
+                node.getAbstractFlag();
+        boolean liftFinalFlagValue = 
+                node.getFinalFlag();
+        boolean liftStrictfpFlagValue = 
+                node.getStrictfpFlag();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftAnnotations = 
+                node.getAnnotations() != null ?
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeLocalClassModifiersNode"),
+                        factory.makeExpressionListNode(
+                                expressionizeBoolean(liftAbstractFlagValue),
+                                expressionizeBoolean(liftFinalFlagValue),
+                                expressionizeBoolean(liftStrictfpFlagValue),
+                                liftMetaAnnotations,
+                                liftAnnotations,
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
     public ExpressionNode executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, ExpressionNode factoryNode)
     {
         ExpressionNode liftModifiers = 

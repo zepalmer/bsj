@@ -1186,6 +1186,32 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
+    public RNew executeLocalClassDeclarationNode(LocalClassDeclarationNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeLocalClassDeclarationNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeLocalClassModifiersNode(LocalClassModifiersNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeLocalClassModifiersNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
     public RNew executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, PNew p)
     {
         POrig porig = before(p);

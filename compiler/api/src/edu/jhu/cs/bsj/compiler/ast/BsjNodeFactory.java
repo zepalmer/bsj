@@ -2376,6 +2376,73 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
+     * Creates a LocalClassDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public LocalClassDeclarationNode makeLocalClassDeclarationNode(
+            LocalClassModifiersNode modifiers,
+            DeclaredTypeNode extendsClause,
+            DeclaredTypeListNode implementsClause,
+            ClassBodyNode body,
+            TypeParameterListNode typeParameters,
+            IdentifierNode identifier,
+            JavadocNode javadoc);
+    
+    /**
+     * Creates a LocalClassDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public LocalClassDeclarationNode makeLocalClassDeclarationNode(
+            LocalClassModifiersNode modifiers,
+            DeclaredTypeNode extendsClause,
+            DeclaredTypeListNode implementsClause,
+            ClassBodyNode body,
+            TypeParameterListNode typeParameters,
+            IdentifierNode identifier,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            boolean abstractFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations);
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            boolean abstractFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+    );
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
      * Creates a LocalVariableDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

@@ -9,6 +9,10 @@ public interface IParameterizedPropertyBasedHierarchyDefinition<T extends Proper
 	public String getBaseName();
 
 	public String getTypeParameter();
+	
+	public String getUnboundedTypeParameter();
+
+	public String getTypeParameterUpperBound();
 
 	public String getBaseSuperName();
 

@@ -1934,6 +1934,26 @@ fieldModifiers returns [FieldModifiersNode ret]
         }
     ;
     
+inlineClassModifiers returns [InlineClassModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("inlineClassModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        modifiers[false, Modifier.ABSTRACT, Modifier.FINAL, Modifier.STRICTFP]
+        {
+            $ret = factory.makeInlineClassModifiersNode(
+                    $modifiers.modifiers.has(Modifier.ABSTRACT),
+                    $modifiers.modifiers.has(Modifier.FINAL),
+                    $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.metaAnnotations,
+                    $modifiers.annotations);
+        }
+    ;
+    
 interfaceModifiers returns [InterfaceModifiersNode ret]
         scope Rule;
         @init {
@@ -1997,7 +2017,7 @@ variableModifiers returns [VariableModifiersNode ret]
         }
     ;
 
-classDeclaration returns [InlineTypeDeclarableNode ret] 
+classDeclaration returns [TypeDeclarationNode ret] 
         scope Rule;
         @init {
             ruleStart("classDeclaration");
@@ -2056,6 +2076,44 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         }
     ;
 
+inlineClassDeclaration returns [InlineClassDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("inlineClassDeclaration");
+            DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
+            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode();
+        }         
+        @after {
+            ruleStop();
+        }
+    :   
+        javadoc inlineClassModifiers
+        'class' id=identifier
+        (
+            typeParameters
+            {
+                typeParamsNode = $typeParameters.ret;
+            }
+        )?
+        ('extends' classOrInterfaceType)?
+        (
+            'implements' declaredTypeList
+            {
+                declaredTypeListNode = $declaredTypeList.ret;
+            }
+        )?            
+        classBody
+        {            
+            $ret = factory.makeInlineClassDeclarationNode(
+                    $inlineClassModifiers.ret,
+                    $classOrInterfaceType.ret,
+                    declaredTypeListNode,
+                    $classBody.ret,
+                    typeParamsNode,                    
+                    $id.ret,
+                    $javadoc.ret);
+        }
+    ;
 
 typeParameters returns [TypeParameterListNode ret]
         scope Rule;
@@ -3660,9 +3718,9 @@ blockStatement returns [BlockStatementNode ret]
             $ret = $localVariableDeclarationStatement.ret;
         }
     |   
-        (typeHeader)=>classDeclaration
+        (typeHeader)=>inlineClassDeclaration
         {
-            $ret = factory.makeInlineTypeDeclarationNode($classDeclaration.ret);
+            $ret = factory.makeInlineTypeDeclarationNode($inlineClassDeclaration.ret);
         }
     |   
         statement

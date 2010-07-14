@@ -106,6 +106,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type AbstractlyUnmodifiedClassDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAbstractlyUnmodifiedClassDeclarationNodeStart(AbstractlyUnmodifiedClassDeclarationNode<?> node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type AlternateConstructorInvocationNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1179,6 +1187,28 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type LocalClassDeclarationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitLocalClassDeclarationNodeStart(LocalClassDeclarationNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type LocalClassModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitLocalClassModifiersNodeStart(LocalClassModifiersNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type LocalVariableDeclarationNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2198,6 +2228,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitWildcardTypeNodeStart(WildcardTypeNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type AbstractlyUnmodifiedClassDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAbstractlyUnmodifiedClassDeclarationNodeStop(AbstractlyUnmodifiedClassDeclarationNode<?> node)
     {
     }
 
@@ -3271,6 +3309,28 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitLiteralizableTypeNodeStop(LiteralizableTypeNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type LocalClassDeclarationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitLocalClassDeclarationNodeStop(LocalClassDeclarationNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type LocalClassModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitLocalClassModifiersNodeStop(LocalClassModifiersNode node, boolean mostSpecific)
     {
     }
 

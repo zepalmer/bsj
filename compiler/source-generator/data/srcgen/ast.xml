@@ -372,6 +372,21 @@
             </factory-method>
         </type>
 
+        <type name="LocalClassModifiersNode" super="ModifiersNode">
+            <prop name="abstractFlag" type="boolean" desc="whether or not the associated class is abstract"
+                default="false" />
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final"
+                default="false" />
+            <prop name="strictfpFlag" type="boolean"
+                desc="whether or not the associated class uses strict floating-point" default="false" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with a local class.
+            ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
+        </type>
+
         <type name="InterfaceModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated interface" />
             <prop name="staticFlag" type="boolean" desc="whether or not the associated interface is static"
@@ -1569,10 +1584,10 @@
             ]]></doc>
         </type>
 
-        <type name="ClassDeclarationNode" super="Node">
+        <type name="AbstractlyUnmodifiedClassDeclarationNode" super="Node" typeParam="T extends ModifiersNode"
+            mode="abstract">
             <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode" />
-            <tag name="InlineTypeDeclarableNode" />
-            <prop name="modifiers" type="ClassModifiersNode" desc="the modifiers for this type" />
+            <prop name="modifiers" type="T" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeNode" desc="the extends clause" />
             <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
             <prop name="body" type="ClassBodyNode" desc="the body of this class" />
@@ -1586,12 +1601,20 @@
                     <i>...</i>
                 }
                 </pre>
+                This abstract class is defined in order to permit subclasses to dictate which modifiers are legal on a
+                class declaration (as different types of class declarations may permit different modifier sets).
+            ]]></doc>
+        </type>
+
+        <type name="ClassDeclarationNode" super="AbstractlyUnmodifiedClassDeclarationNode" superTypeArg="ClassModifiersNode">
+            <doc><![CDATA[
+                Represents the declaration of a normal class, such as in the context of another type's member or as in
+                a top-level type.
             ]]></doc>
         </type>
 
         <type name="EnumDeclarationNode" super="Node">
             <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode" />
-            <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="EnumModifiersNode" desc="the modifiers for this type" />
             <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
             <prop name="body" type="EnumBodyNode" desc="this enum's body" />
@@ -1604,6 +1627,14 @@
                     <i>...</i>
                 }
                 </pre>
+            ]]></doc>
+        </type>
+
+        <type name="LocalClassDeclarationNode" super="AbstractlyUnmodifiedClassDeclarationNode"
+            superTypeArg="LocalClassModifiersNode">
+            <tag name="InlineTypeDeclarableNode" />
+            <doc><![CDATA[
+                Represents the declaration of an inline class as a block statement.
             ]]></doc>
         </type>
 

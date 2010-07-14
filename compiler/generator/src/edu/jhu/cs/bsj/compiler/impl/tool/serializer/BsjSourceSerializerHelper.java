@@ -462,23 +462,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeClassDeclarationNode(ClassDeclarationNode node, PrependablePrintStream p)
 	{
-		if (node.getJavadoc() != null)
-		{
-			node.getJavadoc().executeOperation(this, p);
-			p.print("\n");
-		}
-		node.getModifiers().executeOperation(this, p);
-		p.print("class ");
-		node.getIdentifier().executeOperation(this, p);
-		handleListNode(node.getTypeParameters(), "<", ", ", ">", p, true);
-		if (node.getExtendsClause() != null)
-		{
-			p.print(" extends ");
-			node.getExtendsClause().executeOperation(this, p);
-		}
-		handleListNode(node.getImplementsClause(), " implements ", ", ", "", p, true);
-		p.print("\n");
-		node.getBody().executeOperation(this, p);
+		handleAbstractlyUnmodifiedClassDeclarationNode(node, p);
 		return null;
 	}
 
@@ -843,7 +827,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeFloatLiteralNode(FloatLiteralNode node, PrependablePrintStream p)
 	{
-		p.print(node.getValue().toString()+"f");
+		p.print(node.getValue().toString() + "f");
 		return null;
 	}
 
@@ -910,8 +894,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print(")\n");
 		// Special grouping case - if the immediate child statement is also an if node, the child does not have an
 		// else clause, and we do then we must introduce a block to make sure that the dangling else works correctly
-		boolean dangingElse = (node.getElseStatement() != null && node.getThenStatement() instanceof IfNode &&
-				((IfNode)(node.getThenStatement())).getElseStatement() == null);
+		boolean dangingElse = (node.getElseStatement() != null && node.getThenStatement() instanceof IfNode && ((IfNode) (node.getThenStatement())).getElseStatement() == null);
 		if (dangingElse)
 		{
 			p.println("{");
@@ -1075,11 +1058,42 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeLocalClassDeclarationNode(LocalClassDeclarationNode node, PrependablePrintStream p)
+	{
+		handleAbstractlyUnmodifiedClassDeclarationNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeLocalClassModifiersNode(LocalClassModifiersNode node, PrependablePrintStream p)
+	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
+		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
+
+		if (node.getAbstractFlag())
+		{
+			p.print("abstract ");
+		}
+
+		if (node.getFinalFlag())
+		{
+			p.print("final ");
+		}
+
+		if (node.getStrictfpFlag())
+		{
+			p.print("strictfp ");
+		}
+
+		return null;
+	}
+
+	@Override
 	public Void executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, PrependablePrintStream p)
 	{
 		node.getModifiers().executeOperation(this, p);
-		if (node.getModifiers().getFinalFlag() || node.getModifiers().getAnnotations().size() > 0 ||
-				node.getModifiers().getMetaAnnotations().size() > 0)
+		if (node.getModifiers().getFinalFlag() || node.getModifiers().getAnnotations().size() > 0
+				|| node.getModifiers().getMetaAnnotations().size() > 0)
 		{
 			p.print(' ');
 		}
@@ -1106,7 +1120,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeLongLiteralNode(LongLiteralNode node, PrependablePrintStream p)
 	{
-		p.print(node.getValue().toString()+"L");
+		p.print(node.getValue().toString() + "L");
 		return null;
 	}
 
@@ -1674,7 +1688,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, PrependablePrintStream p)
 	{
 		node.getName().executeOperation(this, p);
-		for (int i=0;i<node.getArrayLevels();i++)
+		for (int i = 0; i < node.getArrayLevels(); i++)
 		{
 			p.print("[]");
 		}
@@ -1760,7 +1774,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	// =========================== Metaprogram Nodes ==========================
 	// ========================================================================
 
-	
 	@Override
 	public Void executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
 			PrependablePrintStream p)
@@ -1871,14 +1884,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, PrependablePrintStream p)
+	public Void executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node,
+			PrependablePrintStream p)
 	{
 		this.handleListNode(node, "", "\n", "\n", p, true);
 		return null;
 	}
 
 	@Override
-	public Void executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, PrependablePrintStream p)
+	public Void executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node,
+			PrependablePrintStream p)
 	{
 		p.print("#depends ");
 		node.getTargets().executeOperation(this, p);
@@ -2042,6 +2057,28 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		}
 
 		p.print(end);
+	}
+
+	private void handleAbstractlyUnmodifiedClassDeclarationNode(AbstractlyUnmodifiedClassDeclarationNode<?> node,
+			PrependablePrintStream p)
+	{
+		if (node.getJavadoc() != null)
+		{
+			node.getJavadoc().executeOperation(this, p);
+			p.print("\n");
+		}
+		node.getModifiers().executeOperation(this, p);
+		p.print("class ");
+		node.getIdentifier().executeOperation(this, p);
+		handleListNode(node.getTypeParameters(), "<", ", ", ">", p, true);
+		if (node.getExtendsClause() != null)
+		{
+			p.print(" extends ");
+			node.getExtendsClause().executeOperation(this, p);
+		}
+		handleListNode(node.getImplementsClause(), " implements ", ", ", "", p, true);
+		p.print("\n");
+		node.getBody().executeOperation(this, p);
 	}
 
 	protected String accessModifierToString(AccessModifier modifier)
@@ -2255,7 +2292,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		ret.append(" */");
 		return ret.toString();
 	}
-	
+
 	/**
 	 * Escapes the provided string.
 	 * 

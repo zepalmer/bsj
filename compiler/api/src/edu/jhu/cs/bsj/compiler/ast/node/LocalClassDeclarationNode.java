@@ -5,11 +5,10 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * Represents the declaration of a normal class, such as in the context of another type's member or as in
- * a top-level type.
+ * Represents the declaration of an inline class as a block statement.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ClassDeclarationNode extends AbstractlyUnmodifiedClassDeclarationNode<ClassModifiersNode>
+public interface LocalClassDeclarationNode extends AbstractlyUnmodifiedClassDeclarationNode<LocalClassModifiersNode>, InlineTypeDeclarableNode
 {
     /**
      * Generates a deep copy of this node.
@@ -17,5 +16,5 @@ public interface ClassDeclarationNode extends AbstractlyUnmodifiedClassDeclarati
      * @return The resulting deep copy node.
      */
     @Override
-    public ClassDeclarationNode deepCopy(BsjNodeFactory factory);
+    public LocalClassDeclarationNode deepCopy(BsjNodeFactory factory);
 }

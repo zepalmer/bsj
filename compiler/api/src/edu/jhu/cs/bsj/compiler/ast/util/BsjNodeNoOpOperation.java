@@ -985,6 +985,28 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
+    public R executeLocalClassDeclarationNode(LocalClassDeclarationNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
+    public R executeLocalClassModifiersNode(LocalClassModifiersNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
     public R executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, P p)
     {
         return null;

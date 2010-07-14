@@ -7,34 +7,40 @@ import java.util.Map;
 
 import javax.annotation.Generated;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AbstractlyUnmodifiedClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclarationNode
+public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends ModifiersNode> extends NodeImpl implements AbstractlyUnmodifiedClassDeclarationNode<T>
 {
     /** The modifiers for this type. */
-    private EnumModifiersNode modifiers;
+    private T modifiers;
+    
+    /** The extends clause. */
+    private DeclaredTypeNode extendsClause;
     
     /** The implements clause. */
     private DeclaredTypeListNode implementsClause;
     
-    /** This enum's body. */
-    private EnumBodyNode body;
+    /** The body of this class. */
+    private ClassBodyNode body;
+    
+    /** This class's type parameters. */
+    private TypeParameterListNode typeParameters;
     
     /** The name of this declared type. */
     private IdentifierNode identifier;
@@ -48,7 +54,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(EnumDeclarationNodeImpl.this);
+            attribute = new ReadWriteAttribute(AbstractlyUnmodifiedClassDeclarationNodeImpl.this);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
@@ -57,10 +63,14 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     {
         /** Attribute identifier for the modifiers property. */
         MODIFIERS,
+        /** Attribute identifier for the extendsClause property. */
+        EXTENDS_CLAUSE,
         /** Attribute identifier for the implementsClause property. */
         IMPLEMENTS_CLAUSE,
         /** Attribute identifier for the body property. */
         BODY,
+        /** Attribute identifier for the typeParameters property. */
+        TYPE_PARAMETERS,
         /** Attribute identifier for the identifier property. */
         IDENTIFIER,
         /** Attribute identifier for the javadoc property. */
@@ -68,10 +78,12 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     }
     
     /** General constructor. */
-    public EnumDeclarationNodeImpl(
-            EnumModifiersNode modifiers,
+    protected AbstractlyUnmodifiedClassDeclarationNodeImpl(
+            T modifiers,
+            DeclaredTypeNode extendsClause,
             DeclaredTypeListNode implementsClause,
-            EnumBodyNode body,
+            ClassBodyNode body,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -81,8 +93,10 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     {
         super(startLocation, stopLocation, manager, binary);
         setModifiers(modifiers, false);
+        setExtendsClause(extendsClause, false);
         setImplementsClause(implementsClause, false);
         setBody(body, false);
+        setTypeParameters(typeParameters, false);
         setIdentifier(identifier, false);
         setJavadoc(javadoc, false);
     }
@@ -91,7 +105,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      * Gets the modifiers for this type.
      * @return The modifiers for this type.
      */
-    public EnumModifiersNode getModifiers()
+    public T getModifiers()
     {
         getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.modifiers;
@@ -101,12 +115,12 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      * Changes the modifiers for this type.
      * @param modifiers The modifiers for this type.
      */
-    public void setModifiers(EnumModifiersNode modifiers)
+    public void setModifiers(T modifiers)
     {
             setModifiers(modifiers, true);
     }
     
-    private void setModifiers(EnumModifiersNode modifiers, boolean checkPermissions)
+    private void setModifiers(T modifiers, boolean checkPermissions)
     {
         if (checkPermissions)
         {
@@ -116,6 +130,37 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         setAsChild(modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
+    }
+    
+    /**
+     * Gets the extends clause.
+     * @return The extends clause.
+     */
+    public DeclaredTypeNode getExtendsClause()
+    {
+        getAttribute(LocalAttribute.EXTENDS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        return this.extendsClause;
+    }
+    
+    /**
+     * Changes the extends clause.
+     * @param extendsClause The extends clause.
+     */
+    public void setExtendsClause(DeclaredTypeNode extendsClause)
+    {
+            setExtendsClause(extendsClause, true);
+    }
+    
+    private void setExtendsClause(DeclaredTypeNode extendsClause, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.EXTENDS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        setAsChild(extendsClause, false);
+        this.extendsClause = extendsClause;
+        setAsChild(extendsClause, true);
     }
     
     /**
@@ -150,25 +195,25 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     }
     
     /**
-     * Gets this enum's body.
-     * @return This enum's body.
+     * Gets the body of this class.
+     * @return The body of this class.
      */
-    public EnumBodyNode getBody()
+    public ClassBodyNode getBody()
     {
         getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.body;
     }
     
     /**
-     * Changes this enum's body.
-     * @param body This enum's body.
+     * Changes the body of this class.
+     * @param body The body of this class.
      */
-    public void setBody(EnumBodyNode body)
+    public void setBody(ClassBodyNode body)
     {
             setBody(body, true);
     }
     
-    private void setBody(EnumBodyNode body, boolean checkPermissions)
+    private void setBody(ClassBodyNode body, boolean checkPermissions)
     {
         if (checkPermissions)
         {
@@ -178,6 +223,37 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         setAsChild(body, false);
         this.body = body;
         setAsChild(body, true);
+    }
+    
+    /**
+     * Gets this class's type parameters.
+     * @return This class's type parameters.
+     */
+    public TypeParameterListNode getTypeParameters()
+    {
+        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        return this.typeParameters;
+    }
+    
+    /**
+     * Changes this class's type parameters.
+     * @param typeParameters This class's type parameters.
+     */
+    public void setTypeParameters(TypeParameterListNode typeParameters)
+    {
+            setTypeParameters(typeParameters, true);
+    }
+    
+    private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        setAsChild(typeParameters, false);
+        this.typeParameters = typeParameters;
+        setAsChild(typeParameters, true);
     }
     
     /**
@@ -257,6 +333,10 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         {
             this.modifiers.receive(visitor);
         }
+        if (this.extendsClause != null)
+        {
+            this.extendsClause.receive(visitor);
+        }
         if (this.implementsClause != null)
         {
             this.implementsClause.receive(visitor);
@@ -264,6 +344,10 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (this.body != null)
         {
             this.body.receive(visitor);
+        }
+        if (this.typeParameters != null)
+        {
+            this.typeParameters.receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -290,6 +374,10 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         {
             this.modifiers.receiveTyped(visitor);
         }
+        if (this.extendsClause != null)
+        {
+            this.extendsClause.receiveTyped(visitor);
+        }
         if (this.implementsClause != null)
         {
             this.implementsClause.receiveTyped(visitor);
@@ -297,6 +385,10 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (this.body != null)
         {
             this.body.receiveTyped(visitor);
+        }
+        if (this.typeParameters != null)
+        {
+            this.typeParameters.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -312,7 +404,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitEnumDeclarationNodeStart(this, true);
+        visitor.visitAbstractlyUnmodifiedClassDeclarationNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
@@ -320,7 +412,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         visitor.visitStopBegin(this);
         visitor.visitNamedTypeDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitEnumDeclarationNodeStop(this, true);
+        visitor.visitAbstractlyUnmodifiedClassDeclarationNodeStop(this);
         visitor.visitStopEnd(this);
     }
     
@@ -334,8 +426,10 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     {
         List<Object> list = super.getChildObjects();
         list.add(getModifiers());
+        list.add(getExtendsClause());
         list.add(getImplementsClause());
         list.add(getBody());
+        list.add(getTypeParameters());
         return list;
     }
     
@@ -351,11 +445,17 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         sb.append("modifiers=");
         sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
         sb.append(',');
+        sb.append("extendsClause=");
+        sb.append(this.getExtendsClause() == null? "null" : this.getExtendsClause().getClass().getSimpleName());
+        sb.append(',');
         sb.append("implementsClause=");
         sb.append(this.getImplementsClause() == null? "null" : this.getImplementsClause().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
         sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeParameters=");
+        sb.append(this.getTypeParameters() == null? "null" : this.getTypeParameters().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
         sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
@@ -372,74 +472,6 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         return sb.toString();
     }
     
-    /**
-     * Executes an operation on this node.
-     * @param operation The operation to perform.
-     * @param p The parameter to pass to the operation.
-     * @return The result of the operation.
-     */
-    @Override
-    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
-    {
-        return operation.executeEnumDeclarationNode(this, p);
-    }
-    
-    /**
-     * Generates a deep copy of this node.
-     * @param factory The node factory to use to create the deep copy.
-     * @return The resulting deep copy node.
-     */
-    @Override
-    public EnumDeclarationNode deepCopy(BsjNodeFactory factory)
-    {
-        return factory.makeEnumDeclarationNode(
-                getModifiers()==null?null:getModifiers().deepCopy(factory),
-                getImplementsClause()==null?null:getImplementsClause().deepCopy(factory),
-                getBody()==null?null:getBody().deepCopy(factory),
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
-                getStartLocation(),
-                getStopLocation());
-    }
-    /**
-     * Performs replacement for this node.
-     * @param before The node to replace.
-     * @param after The node to replace the <tt>before</tt> node.
-     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
-     *         specified <tt>before</tt> node is not a child of this node.
-     */
-    public boolean replace(Node before, Node after)
-    {
-        if (before==null)
-            throw new IllegalArgumentException("Cannot replace node with before value of null.");
-        
-        if (before.equals(this.getModifiers()) && (after instanceof EnumModifiersNode))
-        {
-            setModifiers((EnumModifiersNode)after);
-            return true;
-        }
-        if (before.equals(this.getImplementsClause()) && (after instanceof DeclaredTypeListNode))
-        {
-            setImplementsClause((DeclaredTypeListNode)after);
-            return true;
-        }
-        if (before.equals(this.getBody()) && (after instanceof EnumBodyNode))
-        {
-            setBody((EnumBodyNode)after);
-            return true;
-        }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
-        {
-            setIdentifier((IdentifierNode)after);
-            return true;
-        }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
-        {
-            setJavadoc((JavadocNode)after);
-            return true;
-        }
-        return false;
-    }
     
 	/**
 	 * {@inheritDoc}

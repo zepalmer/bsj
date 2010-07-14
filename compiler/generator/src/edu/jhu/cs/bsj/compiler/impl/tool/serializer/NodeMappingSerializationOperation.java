@@ -1341,6 +1341,34 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
+		public Void executeLocalClassDeclarationNode(LocalClassDeclarationNode node, PrependablePrintStream p)
+		{
+
+			before(node);
+			try
+			{
+				return super.executeLocalClassDeclarationNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
+		public Void executeLocalClassModifiersNode(LocalClassModifiersNode node, PrependablePrintStream p)
+		{
+
+			before(node);
+			try
+			{
+				return super.executeLocalClassModifiersNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
 		public Void executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, PrependablePrintStream p)
 		{
 
