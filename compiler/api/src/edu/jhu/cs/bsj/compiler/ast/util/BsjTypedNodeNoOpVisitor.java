@@ -20,7 +20,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -1517,17 +1516,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitModifiersNodeStart(ModifiersNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type NameListNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitNameListNodeStart(NameListNode node, boolean mostSpecific)
     {
     }
 
@@ -3643,17 +3631,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitModifiersNodeStop(ModifiersNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type NameListNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitNameListNodeStop(NameListNode node, boolean mostSpecific)
     {
     }
 

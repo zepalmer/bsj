@@ -19,7 +19,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -1261,17 +1260,6 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @return <code>null</code>, always.
      */
     public R executeMethodModifiersNode(MethodModifiersNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeNameListNode(NameListNode node, P p)
     {
         return null;
     }

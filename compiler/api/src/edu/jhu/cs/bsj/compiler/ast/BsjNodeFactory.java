@@ -20,7 +20,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -3164,38 +3163,6 @@ public interface BsjNodeFactory
             AccessModifier access,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a NameListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public NameListNode makeNameListNode(
-            List<NameNode> children);
-    
-    /**
-     * Creates a NameListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public NameListNode makeNameListNode(
-            NameNode... childrenElements);
-    
-    /**
-     * Creates a NameListNode.
-     * The specified start and stop locations are used.
-     */
-    public NameListNode makeNameListNode(
-            List<NameNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a NameListNode.
-     * The specified start and stop locations are used.
-     */
-    public NameListNode makeNameListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            NameNode... childrenElements);
     
     /**
      * Creates a NoOperationNode.

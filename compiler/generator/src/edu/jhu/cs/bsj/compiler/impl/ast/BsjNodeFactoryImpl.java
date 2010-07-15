@@ -32,7 +32,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -88,7 +87,6 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.list.ExpressionListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.IdentifierListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.ImportListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.InterfaceMemberListNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.list.NameListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.ReferenceTypeListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.StatementExpressionListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.TypeArgumentListNodeImpl;
@@ -4953,58 +4951,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
-    }
-    
-    /**
-     * Creates a NameListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public NameListNode makeNameListNode(
-            List<NameNode> children)
-    {
-        NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a NameListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public NameListNode makeNameListNode(
-            NameNode... childrenElements)
-    {
-        List<NameNode> children = Arrays.asList(childrenElements);
-        return makeNameListNode(children, startLocation, stopLocation);
-    }
-    
-    /**
-     * Creates a NameListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NameListNode makeNameListNode(
-            List<NameNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a NameListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NameListNode makeNameListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            NameNode... childrenElements)
-    {
-        List<NameNode> children = Arrays.asList(childrenElements);
-        return makeNameListNode(children, startLocation, stopLocation);
     }
     
     /**

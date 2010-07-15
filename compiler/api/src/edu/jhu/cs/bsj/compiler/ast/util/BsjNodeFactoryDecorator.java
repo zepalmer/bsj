@@ -31,7 +31,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -5537,66 +5536,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MethodModifiersNode node = factory.makeMethodModifiersNode(access, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a NameListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public NameListNode makeNameListNode(
-            List<NameNode> children)
-    {
-        this.before();
-        NameListNode node = factory.makeNameListNode(children);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a NameListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public NameListNode makeNameListNode(
-            NameNode... childrenElements)
-    {
-        this.before();
-        NameListNode node = factory.makeNameListNode(childrenElements);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a NameListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NameListNode makeNameListNode(
-            List<NameNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        NameListNode node = factory.makeNameListNode(children, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a NameListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NameListNode makeNameListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            NameNode... childrenElements)
-    {
-        this.before();
-        NameListNode node = factory.makeNameListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }

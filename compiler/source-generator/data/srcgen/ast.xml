@@ -2215,14 +2215,6 @@
             ]]></doc>
         </type>
 
-        <type name="NameListNode" super="ListNode" superTypeArg="NameNode">
-            <constant name="alwaysOrdered" type="boolean" default="false"
-                desc="whether or not this list's contents are always order-dependent" />
-            <doc><![CDATA[
-                Represents a list of {@link NameNode}s.
-            ]]></doc>
-        </type>
-
         <type name="ReferenceTypeListNode" super="ListNode" superTypeArg="ReferenceTypeNode">
             <constant name="alwaysOrdered" type="boolean" default="true"
                 desc="whether or not this list's contents are always order-dependent" />

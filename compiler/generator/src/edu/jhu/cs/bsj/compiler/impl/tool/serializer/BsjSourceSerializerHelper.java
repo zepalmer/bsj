@@ -23,7 +23,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -1233,13 +1232,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print("synchronized ");
 		}
 
-		return null;
-	}
-
-	@Override
-	public Void executeNameListNode(NameListNode node, PrependablePrintStream p)
-	{
-		handleListNode(node, "", ",", "", p, true);
 		return null;
 	}
 

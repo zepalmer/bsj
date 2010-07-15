@@ -19,7 +19,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -1161,16 +1160,6 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeMethodModifiersNode(MethodModifiersNode node, P p)
-    {
-        return executeDefault(node, p);
-    }
-
-    /**
-     * Executes the default operation for this node.
-     * @param node The node in question.
-     * @param p The parameter to this node operation.
-     */
-    public R executeNameListNode(NameListNode node, P p)
     {
         return executeDefault(node, p);
     }

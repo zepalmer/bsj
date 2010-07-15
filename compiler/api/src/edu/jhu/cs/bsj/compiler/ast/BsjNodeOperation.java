@@ -18,7 +18,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -946,14 +945,6 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMethodModifiersNode(MethodModifiersNode node, P p);
-
-    /**
-     * Executes this operation against a NameListNode.
-     * @param node The NameListNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeNameListNode(NameListNode node, P p);
 
     /**
      * Executes this operation against a NoOperationNode.
