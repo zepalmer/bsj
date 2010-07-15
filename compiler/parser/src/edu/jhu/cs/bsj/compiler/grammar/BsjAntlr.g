@@ -1934,7 +1934,7 @@ fieldModifiers returns [FieldModifiersNode ret]
         }
     ;
     
-inlineClassModifiers returns [InlineClassModifiersNode ret]
+inlineClassModifiers returns [LocalClassModifiersNode ret]
         scope Rule;
         @init {
             ruleStart("inlineClassModifiers");
@@ -1945,7 +1945,7 @@ inlineClassModifiers returns [InlineClassModifiersNode ret]
     :
         modifiers[false, Modifier.ABSTRACT, Modifier.FINAL, Modifier.STRICTFP]
         {
-            $ret = factory.makeInlineClassModifiersNode(
+            $ret = factory.makeLocalClassModifiersNode(
                     $modifiers.modifiers.has(Modifier.ABSTRACT),
                     $modifiers.modifiers.has(Modifier.FINAL),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
@@ -2076,7 +2076,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         }
     ;
 
-inlineClassDeclaration returns [InlineClassDeclarationNode ret]
+inlineClassDeclaration returns [LocalClassDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("inlineClassDeclaration");
@@ -2104,7 +2104,7 @@ inlineClassDeclaration returns [InlineClassDeclarationNode ret]
         )?            
         classBody
         {            
-            $ret = factory.makeInlineClassDeclarationNode(
+            $ret = factory.makeLocalClassDeclarationNode(
                     $inlineClassModifiers.ret,
                     $classOrInterfaceType.ret,
                     declaredTypeListNode,
