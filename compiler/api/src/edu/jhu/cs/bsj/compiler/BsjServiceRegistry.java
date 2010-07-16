@@ -6,6 +6,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
+import edu.jhu.cs.bsj.compiler.tool.data.BsjThreadLocalData;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManagerFactory;
 
 /**
@@ -20,6 +21,8 @@ public class BsjServiceRegistry
 			"factory.filemanager", BsjFileManagerFactory.class);
 	private static Service<BsjToolkitFactory> TOOLKIT_FACTORY = new Service<BsjToolkitFactory>("factory.toolkit",
 			BsjToolkitFactory.class);
+	private static SingletonService<BsjThreadLocalData> THREAD_LOCAL_DATA = new SingletonService<BsjThreadLocalData>(
+			"data.threadlocal", BsjThreadLocalData.class);
 
 	/** Specifies the location on the classpath of the BSJ service property file. */
 	private static final String PROPERTIES_PATH = "/resources/services/bsjservices.properties";
@@ -73,7 +76,7 @@ public class BsjServiceRegistry
 	{
 		return TOOLKIT_FACTORY.newInstance();
 	}
-	
+
 	/**
 	 * Creates an instance of the toolkit factory.
 	 * 
@@ -84,11 +87,17 @@ public class BsjServiceRegistry
 	{
 		return FILE_MANAGER_FACTORY.newInstance();
 	}
-	
+
 	/**
-	 * Creates an instance of the BSJ file manager factory.
-	 * @return A new file manager factory.
+	 * Retrieves the thread local data registry.
+	 * 
+	 * @return The thread local data registry.
+	 * @throws MissingResourceException If no resources exist on the classpath which can satisfy the request.
 	 */
+	public static BsjThreadLocalData getThreadLocalData() throws MissingResourceException
+	{
+		return THREAD_LOCAL_DATA.getSingleton();
+	}
 
 	/**
 	 * Describes the different types of services that this registry provides.
@@ -99,7 +108,7 @@ public class BsjServiceRegistry
 		private Class<T> serviceClass;
 		private Class<? extends T> providerClass;
 
-		private Service(String key, Class<T> serviceClass)
+		protected Service(String key, Class<T> serviceClass)
 		{
 			this.key = key;
 			this.serviceClass = serviceClass;
@@ -110,7 +119,7 @@ public class BsjServiceRegistry
 			return key;
 		}
 
-		public Class<? extends T> getServiceClass()
+		public Class<T> getServiceClass()
 		{
 			return serviceClass;
 		}
@@ -123,7 +132,7 @@ public class BsjServiceRegistry
 			}
 			return providerClass;
 		}
-		
+
 		/**
 		 * Retrieves a class from the toolkit factory.
 		 * 
@@ -159,9 +168,10 @@ public class BsjServiceRegistry
 						this.getKey());
 			}
 		}
-		
+
 		/**
 		 * Instantiates this service's class.
+		 * 
 		 * @return An instance of this service.
 		 */
 		public T newInstance()
@@ -179,6 +189,24 @@ public class BsjServiceRegistry
 				throw new MissingResourceException("Could not instantiate " + c.getName() + " specified by "
 						+ this.getKey() + " to create service.", c.getName(), this.getKey());
 			}
+		}
+	}
+
+	/**
+	 * Describes the singleton services the registry provides.
+	 */
+	private static class SingletonService<T> extends Service<T>
+	{
+		private final T SINGLETON = this.newInstance();
+
+		protected SingletonService(String key, Class<T> serviceClass)
+		{
+			super(key, serviceClass);
+		}
+
+		public T getSingleton()
+		{
+			return this.SINGLETON;
 		}
 	}
 }
