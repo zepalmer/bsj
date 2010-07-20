@@ -240,9 +240,8 @@ public class InitialNameCategorizer
 		for (Class<?> c : classes)
 		{
 			node = node.getParent();
-			// TODO: is the following appropriate?
-//			if (node == null)
-//				return false;
+			if (node == null)
+				return false;
 			if (!c.isAssignableFrom(node.getClass()))
 				return false;
 		}
