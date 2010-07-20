@@ -7,7 +7,6 @@ import java.util.List;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
@@ -117,7 +116,7 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 						factory.makeVariableAccessByExpressionNode(factory.makeThisNode(),
 								factory.makeIdentifierNode(varname)), AssignmentOperator.ASSIGNMENT,
 						factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(
-								factory.makeIdentifierNode(varname), NameCategory.EXPRESSION))))),
+								factory.makeIdentifierNode(varname)))))),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), setterName,
 				factory.makeVariableListNode(factory.makeVariableNode(factory.makeVariableModifiersNode(),
 						var.getEffectiveType(factory), factory.makeIdentifierNode(varname))),

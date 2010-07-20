@@ -29,46 +29,50 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
-import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.operations.AncestryExecutingNodeOperation;
 
 /**
- * This visitor disambiguates AST nodes which represent ambiguous names (as defined by &#xA7;6.5 of the JLS). After the
- * initial name categorization, this visitor is used to assign more specific categories to ambiguous names, implementing
- * the rules specified in JLS &#xA7;6.5.2. Disambiguation of other types of names is not handled by this class.
+ * This categorizer disambiguates AST nodes which represent ambiguous names (as defined by &#xA7;6.5 of the JLS). After
+ * the initial name categorization, this class is used to assign more specific categories to ambiguous names,
+ * implementing the rules specified in JLS &#xA7;6.5.2. Disambiguation of other types of names is not handled by this
+ * class.
  * <p/>
- * In order for this class to function correctly, the tree it visits must have no names which are of category
+ * In order for this class to function correctly, the tree it views must have no names which are of category
  * {@link NameCategory#PACKAGE_OR_TYPE PACKAGE_OR_TYPE}.
  * 
  * @author Zachary Palmer
  */
-public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
+public class AmbiguousNameCategorizer
 {
+	/** A singleton for this object. */
+	public static final AmbiguousNameCategorizer SINGLETON = new AmbiguousNameCategorizer();
+
 	/** The logger for this object. */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 
-	@Override
-	public void visitNameNodeStop(NameNode node)
+	/**
+	 * This method categorizes names which fall into {@link NameCategory#AMBIGUOUS} according to the rules of
+	 * &#xA7;6.5.2.
+	 * 
+	 * @return An indication of whether the name is a package name or a type name.
+	 */
+	public NameCategory categorize(NameNode name)
 	{
-		// This method only deals with ambiguous names.
-		if (node.getCategory() != NameCategory.AMBIGUOUS)
-			return;
-
 		if (LOGGER.isTraceEnabled())
 		{
-			LOGGER.trace("Disambiguating " + node.getNameString() + " at " + node.getStartLocation());
+			LOGGER.trace("Disambiguating " + name.getNameString() + " at " + name.getStartLocation());
 		}
 
 		// We handle an ambiguous name based partially on whether or not it is qualified
-		if (node instanceof SimpleNameNode)
+		if (name instanceof SimpleNameNode)
 		{
-			disambiguateSimpleName((SimpleNameNode) node);
-		} else if (node instanceof QualifiedNameNode)
+			return disambiguateSimpleName((SimpleNameNode) name);
+		} else if (name instanceof QualifiedNameNode)
 		{
-			disambiguateQualifiedName((QualifiedNameNode) node);
+			return disambiguateQualifiedName((QualifiedNameNode) name);
 		} else
 		{
-			throw new IllegalStateException("Unknown type of NameNode: " + node.getClass().getName());
+			throw new IllegalStateException("Unknown type of NameNode: " + name.getClass().getName());
 		}
 	}
 
@@ -77,7 +81,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 	 * 
 	 * @param node The ambiguous simple name to handle.
 	 */
-	private void disambiguateSimpleName(SimpleNameNode node)
+	private NameCategory disambiguateSimpleName(SimpleNameNode node)
 	{
 		// ***** If the Identifier appears within the scope (§6.3) of a local variable declaration (§14.4) or parameter
 		// declaration (§8.4.1, §8.8.1, §14.20) or field declaration (§8.3) with that name, then the AmbiguousName
@@ -89,11 +93,11 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 				LOGGER.trace(node.getNameString()
 						+ " is in the scope of a local variable, parameter, or field; therefore an ExpressionName");
 			}
-			node.assertCategory(NameCategory.EXPRESSION);
-			return;
+			return NameCategory.EXPRESSION;
 		}
 
 		// TODO Other rules
+		return null;
 	}
 
 	/**
@@ -101,9 +105,10 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 	 * 
 	 * @param node The ambiguous qualified name to handle.
 	 */
-	private void disambiguateQualifiedName(QualifiedNameNode node)
+	private NameCategory disambiguateQualifiedName(QualifiedNameNode node)
 	{
 		// TODO Qualified name rules
+		return null;
 	}
 
 	/**

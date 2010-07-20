@@ -10,7 +10,6 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
@@ -126,8 +125,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         statements.add(factory.makeLocalVariableDeclarationNode(
         		factory.makeUnparameterizedTypeNode(
                         factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("String"), 
-                        NameCategory.TYPE)),
+                        		factory.makeIdentifierNode("String"))),
                 factory.makeVariableDeclaratorListNode(
                         factory.makeVariableDeclaratorNode( 
                                 factory.makeIdentifierNode("ret"),
@@ -181,7 +179,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         statements.add(factory.makeReturnNode(
                 factory.makeVariableAccessByNameNode(
                         factory.makeSimpleNameNode(
-                                factory.makeIdentifierNode("ret"), NameCategory.EXPRESSION))));
+                                factory.makeIdentifierNode("ret")))));
         
         // create a method declaration for toString()
         return factory.makeMethodDeclarationNode(
@@ -191,7 +189,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
                 factory.makeVariableListNode(), 
                 factory.makeUnparameterizedTypeNode(
                         factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("String"), NameCategory.TYPE)), 
+                        factory.makeIdentifierNode("String"))), 
                 factory.makeJavadocNode(
                         "Implementation of toString.\n" +
                 		"@return a string representation of this object."));

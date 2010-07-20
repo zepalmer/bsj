@@ -11,7 +11,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
@@ -5991,11 +5990,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
-            IdentifierNode identifier,
-            NameCategory category)
+            IdentifierNode identifier)
     {
         this.before();
-        QualifiedNameNode node = factory.makeQualifiedNameNode(base, identifier, category);
+        QualifiedNameNode node = factory.makeQualifiedNameNode(base, identifier);
         this.after(node);
         return node;
     }
@@ -6008,12 +6006,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
             IdentifierNode identifier,
-            NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        QualifiedNameNode node = factory.makeQualifiedNameNode(base, identifier, category, startLocation, stopLocation);
+        QualifiedNameNode node = factory.makeQualifiedNameNode(base, identifier, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -6176,11 +6173,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public SimpleNameNode makeSimpleNameNode(
-            IdentifierNode identifier,
-            NameCategory category)
+            IdentifierNode identifier)
     {
         this.before();
-        SimpleNameNode node = factory.makeSimpleNameNode(identifier, category);
+        SimpleNameNode node = factory.makeSimpleNameNode(identifier);
         this.after(node);
         return node;
     }
@@ -6192,12 +6188,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public SimpleNameNode makeSimpleNameNode(
             IdentifierNode identifier,
-            NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        SimpleNameNode node = factory.makeSimpleNameNode(identifier, category, startLocation, stopLocation);
+        SimpleNameNode node = factory.makeSimpleNameNode(identifier, startLocation, stopLocation);
         this.after(node);
         return node;
     }

@@ -7,7 +7,6 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
@@ -288,7 +287,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			List<ExpressionNode> listOfArguments = new ArrayList<ExpressionNode>();
 			for (VariableNode parameter : parameters.getChildren()) {
 				NameNode name = factory.makeSimpleNameNode(parameter
-						.getIdentifier(), NameCategory.AMBIGUOUS);
+						.getIdentifier());
 				listOfArguments.add(factory.makeVariableAccessByNameNode(name));
 			}
 			ExpressionListNode someArgs = factory.makeExpressionListNode(listOfArguments);
@@ -350,10 +349,10 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 	
 	private PrimaryExpressionNode makeFieldAccess(IdentifierNode fieldIdentifier) {
-		return factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(fieldIdentifier, NameCategory.AMBIGUOUS));
+		return factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(fieldIdentifier));
 	}	
 	private PrimaryExpressionNode makeMethodAccess(IdentifierNode fieldIdentifier) {
-		return factory.makeMethodInvocationByNameNode(factory.makeSimpleNameNode(fieldIdentifier, NameCategory.METHOD));
+		return factory.makeMethodInvocationByNameNode(factory.makeSimpleNameNode(fieldIdentifier));
 	}
 
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -129,7 +128,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 				{
 					retName = retName.substring(4);
 					returnType = factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-							factory.makeIdentifierNode(retName), NameCategory.TYPE));
+							factory.makeIdentifierNode(retName)));
 				}
 			} else if (argExpr instanceof MethodInvocationByNameNode)
 			{
@@ -142,7 +141,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 				{
 					retName = retName.substring(4);
 					returnType = factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-							factory.makeIdentifierNode(retName), NameCategory.TYPE));
+							factory.makeIdentifierNode(retName)));
 				}
 			} else if (argExpr instanceof LiteralNode<?> || argExpr instanceof VariableAccessNode)
 			{
@@ -168,7 +167,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 
 			// add a call to the new method to the new argument list
 			newArgList.add(factory.makeMethodInvocationByNameNode(factory.makeSimpleNameNode(
-					factory.makeIdentifierNode(methodName), NameCategory.METHOD), factory.makeExpressionListNode(),
+					factory.makeIdentifierNode(methodName)), factory.makeExpressionListNode(),
 					factory.makeReferenceTypeListNode()));
 		}
 

@@ -5233,8 +5233,7 @@ typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationByNameNode re
         {
             NameNode name = factory.makeQualifiedNameNode(
                     $name.ret,
-                    $identifier.ret,
-                    NameCategory.METHOD);
+                    $identifier.ret);
             $ret = factory.makeMethodInvocationByNameNode(
                     name,
                     $arguments.ret,
@@ -5584,13 +5583,12 @@ name returns [NameNode ret]
             {
                 if (i==0)
                 {
-                    $ret = factory.makeSimpleNameNode(identifierNodes.get(0), null);
+                    $ret = factory.makeSimpleNameNode(identifierNodes.get(0));
                 } else
                 {
 	                $ret = factory.makeQualifiedNameNode(
 	                        $ret,
-	                        identifierNodes.get(i),
-	                        null);
+	                        identifierNodes.get(i));
                     ruleStop();
                 }
             }

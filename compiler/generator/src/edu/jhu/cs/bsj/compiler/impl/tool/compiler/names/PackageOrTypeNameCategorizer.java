@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
@@ -24,7 +23,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
-import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.operations.AncestryExecutingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
 
@@ -35,26 +33,21 @@ import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperat
  * 
  * @author Zachary Palmer
  */
-public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
+public class PackageOrTypeNameCategorizer
 {
+	/** A singleton for this object. */
+	public static final PackageOrTypeNameCategorizer SINGLETON = new PackageOrTypeNameCategorizer();
+
 	/** The logger for this object. */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 	
-	/** A factory for node duplication. */
-	private BsjNodeFactory factory;
-	
-	public PackageOrTypeNameCategorizationVisitor(BsjNodeFactory factory)
+	/**
+	 * This method categorizes names which fall into {@link NameCategory#PACKAGE_OR_TYPE} according to the rules of
+	 * &#xA7;6.5.1.
+	 * @return An indication of whether the name is a package name or a type name.
+	 */
+	public NameCategory categorize(NameNode name)
 	{
-		super();
-		this.factory = factory;
-	}
-
-	@Override
-	public void visitNameNodeStop(NameNode name)
-	{
-		if (name.getCategory() != NameCategory.PACKAGE_OR_TYPE)
-			return;
-
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Deciding package or type for " + name.getNameString() + " at " + name.getStartLocation());
@@ -66,7 +59,7 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 			// If a type is in scope which has the same name as this node, the node refers to a type. Otherwise, this
 			// node refers to a package.
 			TypeDeclarationNode typeDeclarationNode = name.executeOperation(new TypeDeclarationLocatingNodeOperation(
-					factory.makeSimpleNameNode(name.getIdentifier().deepCopy(factory), NameCategory.TYPE)), null);
+					(SimpleNameNode)name, NameCategory.TYPE), null);
 			if (typeDeclarationNode == null)
 			{
 				category = NameCategory.PACKAGE;
@@ -128,7 +121,7 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 			LOGGER.trace("Categorized name " + name.getNameString() + " at " + name.getStartLocation() + " as "
 					+ category);
 		}
-		name.assertCategory(category);
+		return category;
 	}
 
 	/**

@@ -21,7 +21,6 @@ import org.junit.Test;
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -95,7 +94,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 
 		// create a metaFactory for use in the lifted code
 		ExpressionNode metaFactory = factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(
-				factory.makeIdentifierNode(factoryName), NameCategory.TYPE));
+				factory.makeIdentifierNode(factoryName)));
 
 		// get the lifted code
 		ExpressionNode metaAst = ast.executeOperation(new BsjTreeLifter(factory), metaFactory);

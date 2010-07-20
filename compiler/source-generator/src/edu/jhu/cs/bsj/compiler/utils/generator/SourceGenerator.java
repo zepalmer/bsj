@@ -2124,11 +2124,9 @@ public class SourceGenerator
 				ps.incPrependCount();
 				ps.println("return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(");
 				ps.println("        factory.makeSimpleNameNode(");
-				ps.println("                factory.makeIdentifierNode(\"" + etype + "\"),");
-				ps.println("                NameCategory.EXPRESSION");
+				ps.println("                factory.makeIdentifierNode(\"" + etype + "\")");
 				ps.println("                ),");
-				ps.println("        factory.makeIdentifierNode(x.name()),");
-				ps.println("        NameCategory.EXPRESSION));");
+				ps.println("        factory.makeIdentifierNode(x.name())));");
 				ps.decPrependCount();
 				ps.println("}");
 				ps.decPrependCount();
@@ -2289,17 +2287,13 @@ public class SourceGenerator
 						ps.incPrependCount(2);
 						ps.println("factory.makeSimpleNameNode(");
 						ps.incPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"java\"),");
-						ps.println("NameCategory.PACKAGE),");
+						ps.println("factory.makeIdentifierNode(\"java\")),");
 						ps.decPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"util\"),");
-						ps.println("NameCategory.PACKAGE),");
+						ps.println("factory.makeIdentifierNode(\"util\")),");
 						ps.decPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"Arrays\"),");
-						ps.println("NameCategory.TYPE),");
+						ps.println("factory.makeIdentifierNode(\"Arrays\")),");
 						ps.decPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"asList\"),");
-						ps.println("NameCategory.METHOD),");
+						ps.println("factory.makeIdentifierNode(\"asList\")),");
 						ps.decPrependCount(2);
 						ps.println("factory.makeExpressionListNode(lift" + capFirst(p.getName()) + "List),");
 						ps.println("factory.makeReferenceTypeListNode(");
@@ -2308,8 +2302,7 @@ public class SourceGenerator
 						ps.incPrependCount(2);
 						ps.println("factory.makeSimpleNameNode(");
 						ps.incPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\"),");
-						ps.print("NameCategory.TYPE))))");
+						ps.println("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\")))))");
 						ps.decPrependCount(8);
 					}
 

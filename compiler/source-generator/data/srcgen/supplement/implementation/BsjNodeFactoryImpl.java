@@ -133,10 +133,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		{
 			if (node == null)
 			{
-				node = makeSimpleNameNode(makeIdentifierNode(component), null);
+				node = makeSimpleNameNode(makeIdentifierNode(component));
 			} else
 			{
-				node = makeQualifiedNameNode(node, makeIdentifierNode(component), null);
+				node = makeQualifiedNameNode(node, makeIdentifierNode(component));
 			}
 		}
 		return node;

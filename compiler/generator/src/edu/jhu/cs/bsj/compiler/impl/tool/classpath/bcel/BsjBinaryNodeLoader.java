@@ -689,15 +689,14 @@ public class BsjBinaryNodeLoader
         // if the name is not qualified, just return a simple name node
         if (!name.contains("."))
         {
-            return factory.makeSimpleNameNode(factory.makeIdentifierNode(name), null);            
+            return factory.makeSimpleNameNode(factory.makeIdentifierNode(name));            
         }
         
         // recursively build qualified names
         String[] tokens = name.split("\\.");
         NameNode retNode = factory.makeQualifiedNameNode(
                 buildNameNode(name.substring(0, name.lastIndexOf('.'))), 
-                factory.makeIdentifierNode(tokens[tokens.length-1]), 
-                null);
+                factory.makeIdentifierNode(tokens[tokens.length-1]));
 
         return retNode;
     }

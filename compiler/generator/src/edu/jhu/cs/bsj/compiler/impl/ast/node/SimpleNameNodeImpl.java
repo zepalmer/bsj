@@ -10,7 +10,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
@@ -22,13 +21,12 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     /** General constructor. */
     public SimpleNameNodeImpl(
             IdentifierNode identifier,
-            NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(identifier, category, startLocation, stopLocation, manager, binary);
+        super(identifier, startLocation, stopLocation, manager, binary);
     }
     
     /**
@@ -143,7 +141,6 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     {
         return factory.makeSimpleNameNode(
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getCategory(),
                 getStartLocation(),
                 getStopLocation());
     }

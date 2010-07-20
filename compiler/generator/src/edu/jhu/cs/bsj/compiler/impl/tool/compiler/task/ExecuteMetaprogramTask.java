@@ -184,7 +184,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		{
 			target = profile.getAnchor().getFurthestAncestor();
 		}
-		context.registerTask(new CategorizeNamesTask(target, new InjectionInfo(profile, true)));
+		context.registerTask(new InstantiateMetaAnnotationObjectTask(target, new InjectionInfo(profile, true)));
 
 		// Re-enqueue this task so we can execute the next metaprogram when the time comes (which is probably right now)
 		context.registerTask(this);

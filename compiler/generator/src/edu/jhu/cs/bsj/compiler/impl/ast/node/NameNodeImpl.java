@@ -1,12 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import static edu.jhu.cs.bsj.compiler.ast.NameCategory.AMBIGUOUS;
-import static edu.jhu.cs.bsj.compiler.ast.NameCategory.EXPRESSION;
-import static edu.jhu.cs.bsj.compiler.ast.NameCategory.PACKAGE;
-import static edu.jhu.cs.bsj.compiler.ast.NameCategory.PACKAGE_OR_TYPE;
-import static edu.jhu.cs.bsj.compiler.ast.NameCategory.TYPE;
-
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,15 +16,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
-import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.NameCategorizer;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NameNodeImpl extends NodeImpl implements NameNode
 {
     /** The identifier used in this name. */
     private IdentifierNode identifier;
-    
-    /** The category for this name. */
-    private NameCategory category;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -48,14 +38,11 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     {
         /** Attribute identifier for the identifier property. */
         IDENTIFIER,
-        /** Attribute identifier for the category property. */
-        CATEGORY,
     }
     
     /** General constructor. */
     protected NameNodeImpl(
             IdentifierNode identifier,
-            NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -63,7 +50,6 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     {
         super(startLocation, stopLocation, manager, binary);
         setIdentifier(identifier, false);
-        this.category = category;
     }
     
     /**
@@ -95,16 +81,6 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         setAsChild(identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
-    }
-    
-    /**
-     * Gets the category for this name.
-     * @return The category for this name.
-     */
-    public NameCategory getCategory()
-    {
-        getAttribute(LocalAttribute.CATEGORY).recordAccess(ReadWriteAttribute.AccessType.READ);
-        return this.category;
     }
     
     /**
@@ -181,7 +157,6 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
-        list.add(getCategory());
         return list;
     }
     
@@ -197,9 +172,6 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         sb.append("identifier=");
         sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
-        sb.append("category=");
-        sb.append(String.valueOf(this.getCategory()) + ":" + (this.getCategory() != null ? this.getCategory().getClass().getSimpleName() : "null"));
-        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -210,60 +182,8 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     }
     
     
-	/**
-	 * This data structure maps pairs of name categories to the appropriate transition when category assertions are
-	 * made.  When a mapping is not present, the transition in question is illegal.
-	 */
-	private static Map<Pair<NameCategory,NameCategory>,NameCategory> categoryTransitionMap;
-	// Initialize the category transition map
-	private static void addMapping(Map<Pair<NameCategory,NameCategory>,NameCategory> map, NameCategory prev,
-			NameCategory assertion, NameCategory result)
+	public NameCategory getCategory()
 	{
-		map.put(new Pair<NameCategory,NameCategory>(prev,assertion), result);
+		return NameCategorizer.SINGLETON.categorize(this);
 	}
-	static {
-		Map<Pair<NameCategory,NameCategory>,NameCategory> map =
-			new HashMap<Pair<NameCategory,NameCategory>,NameCategory>();
-		
-		addMapping(map, AMBIGUOUS, PACKAGE, PACKAGE);
-		addMapping(map, AMBIGUOUS, TYPE, TYPE);
-		addMapping(map, AMBIGUOUS, EXPRESSION, EXPRESSION);
-		addMapping(map, AMBIGUOUS, PACKAGE_OR_TYPE, PACKAGE_OR_TYPE);
-		addMapping(map, PACKAGE_OR_TYPE, PACKAGE, PACKAGE);
-		addMapping(map, PACKAGE_OR_TYPE, TYPE, TYPE);
-		
-		categoryTransitionMap = Collections.unmodifiableMap(map);
-	}
-	
-	/**
-	 * Asserts that this node should fall into the specified category.
-	 * @param category The category into which this node should fall.
-	 * @throws IllegalStateException If this node cannot fall into that category because it has already been marked with
-	 *                               another category.
-	 */
-	public void assertCategory(NameCategory category)
-	{
-		if (this.category == category)
-			return;
-		
-		if (this.category == null)
-		{
-			this.category = category;
-			return;
-		}
-		
-		NameCategory result = categoryTransitionMap.get(new Pair<NameCategory,NameCategory>(this.category, category));
-		if (result == null)
-		{
-			result = categoryTransitionMap.get(new Pair<NameCategory,NameCategory>(category, this.category));
-		}
-		if (result == null)
-		{
-			throw new IllegalStateException("Illegal name category transition: " + this.category + " => " + category);
-		} else
-		{
-			this.category = result;
-		}
-	}
-
 }

@@ -14,7 +14,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.InitialNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
@@ -59,21 +58,19 @@ public class NameCategorizationTest extends AbstractPerFileTest
 				});
 
 		// Perform initial categorization
-		InitialNameCategorizationVisitor initialNameCategorizationVisitor = new InitialNameCategorizationVisitor();
-		node.receiveTyped(initialNameCategorizationVisitor);
-		// Confirm that every name got a category
-		node.receiveTyped(new BsjTypedNodeNoOpVisitor()
-		{
-			@Override
-			public void visitNameNodeStart(NameNode node)
-			{
-				if (node.getCategory() == null)
+		node.receiveTyped(
+				new BsjTypedNodeNoOpVisitor()
 				{
-					throw new IllegalStateException("Did not assign a category to name" + node.toString() + " at "
-							+ node.getStartLocation());
-				}
-			}
-		});
+					@Override
+					public void visitNameNodeStart(NameNode node)
+					{
+						if (node.getCategory()==null)
+						{
+							throw new IllegalStateException("Did not assign a category to name" + node.toString() + " at "
+									+ node.getStartLocation());
+						}
+					}
+				});
 
 		// TODO: ****** Can we actually do this unit test?
 		// The problem is that much of the following categorization depends on a compilation environment to function

@@ -218,7 +218,6 @@
 
         <type name="NameNode" super="Node" mode="abstract">
             <prop name="identifier" type="IdentifierNode" desc="the identifier used in this name" />
-            <prop name="category" type="NameCategory" mode="readOnly" desc="the category for this name" />
             <include file="NameNode.java" />
             <doc><![CDATA[
                 A common supertype for all nodes representing a name.  In Java, a name is either a simple name (a single

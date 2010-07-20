@@ -3,9 +3,10 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 import java.io.IOException;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.operations.EnclosingNameNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
@@ -49,8 +50,8 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 		}
 
 		// Register the metaprogram profile with the metacompilation manager
-		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile, this.injectionInfo.getParentProfile(),
-				metacompilationContext.getDiagnosticListener());
+		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile,
+				this.injectionInfo.getParentProfile(), metacompilationContext.getDiagnosticListener());
 	}
 
 	/**
@@ -65,12 +66,21 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 		{
 			// TODO: handle anonymous inner classes correctly
 			nameNode = factory.makeSimpleNameNode(factory.makeIdentifierNode(anchor.getNearestAncestorOfType(
-					CompilationUnitNode.class).getName()), NameCategory.TYPE);
-		} else if (nameNode.getCategory() == NameCategory.PACKAGE)
+					CompilationUnitNode.class).getName()));
+		} else
 		{
-			nameNode = factory.makeQualifiedNameNode(nameNode,
-					factory.makeIdentifierNode(anchor.getNearestAncestorOfType(CompilationUnitNode.class).getName()),
-					NameCategory.TYPE);
+			Node node = anchor;
+			while (node != null && !(node instanceof CompilationUnitNode) && !(node instanceof TypeDeclarationNode))
+			{
+				node = node.getParent();
+			}
+			boolean isTopLevelMetaprogram = (node instanceof CompilationUnitNode);
+			if (isTopLevelMetaprogram)
+			{
+				nameNode = factory.makeQualifiedNameNode(
+						nameNode,
+						factory.makeIdentifierNode(anchor.getNearestAncestorOfType(CompilationUnitNode.class).getName()));
+			}
 		}
 		return nameNode.getNameString();
 	}

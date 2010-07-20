@@ -18,7 +18,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -271,7 +270,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 						factory.makeVariableModifiersNode(),
 						factory.makeParameterizedTypeNode(
 								factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-										factory.makeIdentifierNode("Context"), NameCategory.TYPE)),
+										factory.makeIdentifierNode("Context"))),
 								factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)))),
 						factory.makeIdentifierNode("context"))), factory.makeVoidTypeNode(), null);
 

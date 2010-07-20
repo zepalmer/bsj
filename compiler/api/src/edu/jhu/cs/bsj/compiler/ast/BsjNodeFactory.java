@@ -3418,8 +3418,7 @@ public interface BsjNodeFactory
      */
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
-            IdentifierNode identifier,
-            NameCategory category);
+            IdentifierNode identifier);
     
     /**
      * Creates a QualifiedNameNode.
@@ -3428,7 +3427,6 @@ public interface BsjNodeFactory
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
             IdentifierNode identifier,
-            NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3519,8 +3517,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SimpleNameNode makeSimpleNameNode(
-            IdentifierNode identifier,
-            NameCategory category);
+            IdentifierNode identifier);
     
     /**
      * Creates a SimpleNameNode.
@@ -3528,7 +3525,6 @@ public interface BsjNodeFactory
      */
     public SimpleNameNode makeSimpleNameNode(
             IdentifierNode identifier,
-            NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     

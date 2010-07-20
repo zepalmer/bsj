@@ -50,6 +50,23 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 	private List<String> components;
 	/** The categories of the name to find. */
 	private List<NameCategory> categories;
+	
+	/**
+	 * Creates a new type declaration locating operation.  Uses the category of the provided name as guidance.
+	 * @param simpleName The name of the type to locate.
+	 * @param category The category to use; this overrides the actual category of the name.
+	 */
+	public TypeDeclarationLocatingNodeOperation(SimpleNameNode name, NameCategory category)
+	{
+		if (name == null)
+			throw new IllegalArgumentException("Cannot handle null name");
+
+		this.components = new LinkedList<String>();
+		this.categories = new LinkedList<NameCategory>();
+		
+		this.components.add(name.getIdentifier().getIdentifier());
+		this.categories.add(category);
+	}
 
 	/**
 	 * Creates a new type declaration locating operation.
@@ -58,13 +75,8 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 	 */
 	public TypeDeclarationLocatingNodeOperation(NameNode name)
 	{
-		super();
 		if (name == null)
 			throw new IllegalArgumentException("Cannot handle null name");
-		/*
-		 * if (name.getCategory() != NameCategory.TYPE && name.getCategory() != NameCategory.PACKAGE) throw new
-		 * IllegalArgumentException("Must be a type name (category = " + name.getCategory() + ")");
-		 */
 
 		this.components = new LinkedList<String>();
 		this.categories = new LinkedList<NameCategory>();

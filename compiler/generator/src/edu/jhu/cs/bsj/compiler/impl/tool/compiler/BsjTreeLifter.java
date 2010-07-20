@@ -137,7 +137,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
 		{
 			return factory.makeUnqualifiedClassInstantiationNode(
 					factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-							factory.makeIdentifierNode("BsjSourceLocation"), NameCategory.TYPE)),
+							factory.makeIdentifierNode("BsjSourceLocation"))),
 					factory.makeTypeArgumentListNode(),
 					factory.makeExpressionListNode(
 							factory.makeStringLiteralNode(location.getResourceName()),
@@ -192,11 +192,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("PrimitiveType"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("PrimitiveType")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -209,11 +207,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("UnaryStatementOperator"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("UnaryStatementOperator")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -226,11 +222,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("AssignmentOperator"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("AssignmentOperator")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -243,11 +237,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("BinaryOperator"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("BinaryOperator")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -260,11 +252,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("NameCategory"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("NameCategory")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -277,11 +267,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("UnaryOperator"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("UnaryOperator")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -294,11 +282,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("MetaprogramPackageMode"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("MetaprogramPackageMode")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -311,11 +297,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("MetaprogramLocalMode"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("MetaprogramLocalMode")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -328,11 +312,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         {
             return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
-                            factory.makeIdentifierNode("AccessModifier"),
-                            NameCategory.EXPRESSION
+                            factory.makeIdentifierNode("AccessModifier")
                             ),
-                    factory.makeIdentifierNode(x.name()),
-                    NameCategory.EXPRESSION));
+                    factory.makeIdentifierNode(x.name())));
         }
     }
     
@@ -507,20 +489,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("AnnotationElementNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("AnnotationElementNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -609,20 +587,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("AnnotationNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("AnnotationNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -656,20 +630,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("AnnotationMemberNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("AnnotationMemberNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -842,20 +812,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("AnnotationValueNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("AnnotationValueNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -914,20 +880,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("AnonymousClassMemberNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("AnonymousClassMemberNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -1263,20 +1225,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("BlockStatementNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("BlockStatementNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -1388,20 +1346,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("CaseNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("CaseNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -1465,20 +1419,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("CatchNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("CatchNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -1670,20 +1620,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("ClassMemberNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("ClassMemberNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -2043,20 +1989,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("DeclaredTypeNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("DeclaredTypeNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -2218,20 +2160,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("EnumConstantDeclarationNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("EnumConstantDeclarationNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -2396,20 +2334,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("ExpressionNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("ExpressionNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -2676,20 +2610,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("IdentifierNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("IdentifierNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -2786,20 +2716,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("ImportNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("ImportNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -3069,20 +2995,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("InterfaceMemberNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("InterfaceMemberNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -3415,20 +3337,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaAnnotationElementNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("MetaAnnotationElementNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -3517,20 +3435,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaAnnotationNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("MetaAnnotationNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -3609,20 +3523,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaAnnotationValueNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("MetaAnnotationValueNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -3656,20 +3566,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaprogramDependencyDeclarationNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("MetaprogramDependencyDeclarationNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -3728,20 +3634,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaprogramDependencyNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("MetaprogramDependencyNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -3803,20 +3705,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaprogramImportNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("MetaprogramImportNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -3946,20 +3844,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaprogramTargetNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("MetaprogramTargetNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -4517,8 +4411,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getIdentifier() != null ?
                         node.getIdentifier().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        NameCategory liftCategoryValue = 
-                node.getCategory();
         BsjSourceLocation liftStartLocationValue = 
                 node.getStartLocation();
         BsjSourceLocation liftStopLocationValue = 
@@ -4531,7 +4423,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftBase,
                                 liftIdentifier,
-                                expressionizeNameCategory(liftCategoryValue),
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -4588,20 +4479,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("ReferenceTypeNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("ReferenceTypeNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -4646,8 +4533,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getIdentifier() != null ?
                         node.getIdentifier().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
-        NameCategory liftCategoryValue = 
-                node.getCategory();
         BsjSourceLocation liftStartLocationValue = 
                 node.getStartLocation();
         BsjSourceLocation liftStopLocationValue = 
@@ -4659,7 +4544,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeSimpleNameNode"),
                         factory.makeExpressionListNode(
                                 liftIdentifier,
-                                expressionizeNameCategory(liftCategoryValue),
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -4783,20 +4667,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("StatementExpressionNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("StatementExpressionNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5148,20 +5028,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("TypeArgumentNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("TypeArgumentNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5225,20 +5101,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("TypeDeclarationNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("TypeDeclarationNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5297,20 +5169,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("TypeParameterNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("TypeParameterNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5430,20 +5298,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("UnparameterizedTypeNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("UnparameterizedTypeNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5597,20 +5461,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("VariableDeclaratorNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("VariableDeclaratorNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5677,20 +5537,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("VariableInitializerNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("VariableInitializerNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5724,20 +5580,16 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeQualifiedNameNode(
                                                         factory.makeQualifiedNameNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
+                                                                        factory.makeIdentifierNode("java")),
+                                                                factory.makeIdentifierNode("util")),
+                                                        factory.makeIdentifierNode("Arrays")),
+                                                factory.makeIdentifierNode("asList")),
                                         factory.makeExpressionListNode(liftChildrenList),
                                         factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("VariableNode"),
-                                                                NameCategory.TYPE)))),
+                                                                factory.makeIdentifierNode("VariableNode")))))
+                                ,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());

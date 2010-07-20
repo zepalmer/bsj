@@ -12,7 +12,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
@@ -258,10 +257,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		{
 			if (node == null)
 			{
-				node = makeSimpleNameNode(makeIdentifierNode(component), null);
+				node = makeSimpleNameNode(makeIdentifierNode(component));
 			} else
 			{
-				node = makeQualifiedNameNode(node, makeIdentifierNode(component), null);
+				node = makeQualifiedNameNode(node, makeIdentifierNode(component));
 			}
 		}
 		return node;
@@ -5348,10 +5347,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
-            IdentifierNode identifier,
-            NameCategory category)
+            IdentifierNode identifier)
     {
-        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager, binary);
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5363,11 +5361,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
             IdentifierNode identifier,
-            NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager, binary);
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5509,10 +5506,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public SimpleNameNode makeSimpleNameNode(
-            IdentifierNode identifier,
-            NameCategory category)
+            IdentifierNode identifier)
     {
-        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category, startLocation, stopLocation, manager, binary);
+        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5523,11 +5519,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SimpleNameNode makeSimpleNameNode(
             IdentifierNode identifier,
-            NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category, startLocation, stopLocation, manager, binary);
+        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

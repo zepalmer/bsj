@@ -184,6 +184,12 @@ public class PackageNodeCallback
 			}
 		}
 
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("No such compilation unit " + name + " exists in package node \""
+					+ packageNode.getFullyQualifiedName() + "\"");
+		}
+		
 		return null;
 	}
 
