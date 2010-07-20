@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast;
 
 import java.util.Set;
 
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListMissingElementException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -24,7 +25,7 @@ public interface NodeList<T extends Node>
 	 * Inserts the provided node at the end of the list.
 	 * 
 	 * @param node The node to add.
-	 * @throws Exception If <code>node</code> is <code>null</code>.
+	 * @throws NullPointerException If <code>node</code> is <code>null</code>.
 	 */
 	public void addLast(T node);
 
@@ -33,20 +34,20 @@ public interface NodeList<T extends Node>
 	 * 
 	 * @param member The node which is already a member of this list.
 	 * @param node The node to add.
-	 * @throws IllegalArgumentException If the provided <code>member</code> is not a member of this list.
+	 * @throws MetaprogramListMissingElementException If the provided <code>member</code> is not a member of this list.
 	 * @throws NullPointerException If either <code>member</code> or <code>node</code> is <code>null</code>.
 	 */
-	public void addBefore(T member, T node) throws IllegalArgumentException;
+	public void addBefore(T member, T node) throws MetaprogramListMissingElementException;
 
 	/**
 	 * Inserts the provided node into the list immediately after the specified node.
 	 * 
 	 * @param member The node which is already a member of this list.
 	 * @param node The node to add.
-	 * @throws IllegalArgumentException If the provided <code>member</code> is not a member of this list.
+	 * @throws MetaprogramListMissingElementException If the provided <code>member</code> is not a member of this list.
 	 * @throws NullPointerException If either <code>member</code> or <code>node</code> is <code>null</code>.
 	 */
-	public void addAfter(T member, T node) throws IllegalArgumentException;
+	public void addAfter(T member, T node) throws MetaprogramListMissingElementException;
 
 	/**
 	 * Removes the provided node from this list. If the node was not already a member of this list, the list is
@@ -77,20 +78,20 @@ public interface NodeList<T extends Node>
 	 * 
 	 * @param member The member for which we desire the preceeding node.
 	 * @return The node which appears before that member or <code>null</code> if that member is first in the list.
-	 * @throws IllegalArgumentException If the specified <code>member</code> is not a member in this list.
+	 * @throws MetaprogramListMissingElementException If the specified <code>member</code> is not a member in this list.
 	 * @throws NullPointerException If <code>member</code> is <code>null</code>.
 	 */
-	public T getBefore(T member) throws IllegalArgumentException;
+	public T getBefore(T member) throws MetaprogramListMissingElementException;
 
 	/**
 	 * Retrieves the node which appears after the specified node in the list.
 	 * 
 	 * @param member The member for which we desire the succeeding node.
 	 * @return The node which appears before that member or <code>null</code> if that member is last in the list.
-	 * @throws IllegalArgumentException If the specified <code>member</code> is not a member in this list.
+	 * @throws MetaprogramListMissingElementException If the specified <code>member</code> is not a member in this list.
 	 * @throws NullPointerException If <code>member</code> is <code>null</code>.
 	 */
-	public T getAfter(T member) throws IllegalArgumentException;
+	public T getAfter(T member) throws MetaprogramListMissingElementException;
 
 	/**
 	 * Retrieves all members of this list which meet the criteria of the specified node filter.

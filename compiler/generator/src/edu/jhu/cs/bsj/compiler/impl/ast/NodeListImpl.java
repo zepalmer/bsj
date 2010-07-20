@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.NodeList;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListMissingElementException;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ClosureRule;
@@ -24,6 +25,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ValueElement;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.source.KnowledgeSource;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramListConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramListMissingElementExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.AfterEffectKnowledgeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.AfterInvariantKnowledgeImpl;
@@ -149,7 +151,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public void addAfter(T member, T node) throws IllegalArgumentException
+	public void addAfter(T member, T node) throws MetaprogramListMissingElementException
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
@@ -163,8 +165,8 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		int index = this.backing.indexOf(member);
 		if (index == -1)
 		{
-			// TODO: more complete exception here - this breaks the list algebra
-			throw new IllegalArgumentException(member + " is not a member of this list");
+			throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
+					this.manager.getCurrentMetaprogram().getLocation(), member);
 		}
 		this.backing.add(index + 1, node);
 		if (isRecordingKnowledge())
@@ -180,7 +182,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public void addBefore(T member, T node) throws IllegalArgumentException
+	public void addBefore(T member, T node) throws MetaprogramListMissingElementException
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
@@ -194,8 +196,8 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		int index = this.backing.indexOf(member);
 		if (index == -1)
 		{
-			// TODO: more complete exception here - this breaks the list algebra
-			throw new IllegalArgumentException(member + " is not a member of this list");
+			throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
+					this.manager.getCurrentMetaprogram().getLocation(), member);
 		}
 		this.backing.add(index, node);
 		if (isRecordingKnowledge())
@@ -291,7 +293,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public T getAfter(T member) throws IllegalArgumentException
+	public T getAfter(T member) throws MetaprogramListMissingElementException
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
@@ -305,8 +307,8 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		int index = this.backing.indexOf(member);
 		if (index == -1)
 		{
-			// TODO: more complete exception here - this breaks the list algebra
-			throw new IllegalArgumentException(member + " is not a member of this list");
+			throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
+					this.manager.getCurrentMetaprogram().getLocation(), member);
 		}
 		if (index == this.backing.size() - 1)
 		{
@@ -330,7 +332,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public T getBefore(T member) throws IllegalArgumentException
+	public T getBefore(T member) throws MetaprogramListMissingElementException
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
@@ -344,8 +346,8 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		int index = this.backing.indexOf(member);
 		if (index == -1)
 		{
-			// TODO: more complete exception here - this breaks the list algebra
-			throw new IllegalArgumentException(member + " is not a member of this list");
+			throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
+					this.manager.getCurrentMetaprogram().getLocation(), member);
 		}
 		if (index == 0)
 		{

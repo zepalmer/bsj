@@ -439,6 +439,18 @@
                 ]]></doc>
             </diagnostic>
 
+            <diagnostic name="MetaprogramListMissingElementDiagnostic" super="MetaprogramDetectedErrorDiagnostic"
+                superTypeArg="MetaprogramListMissingElementException" code="bsj.compiler.metaprogram.failure.list.element.missing">
+                <exception/>
+                <prop name="anchor" type="MetaprogramAnchorNode&lt;?&gt;" desc="the metaprogram which performed the illegal operation"/>
+                <prop name="metaprogram" type="BsjSourceLocation" desc="the location of the metaprogram which performed the illegal operation"/>
+                <prop name="element" type="Node" desc="the element which was used as a base in the list which did not contain it"/>
+                <doc><![CDATA[
+                    Indicates that a list operation occurred on an AST node using a base element which was not contained
+                    in the list.
+                ]]></doc>
+            </diagnostic>
+
             <diagnostic name="MetaprogramConflictDiagnostic" typeParam="T extends MetaprogramErrorException"
                 super="MetaprogramDetectedErrorDiagnostic" superTypeArg="T">
                 <exception />
@@ -472,7 +484,7 @@
                     of the possible conflicts contained within.
                 ]]></doc>
             </diagnostic>
-
+            
             <diagnostic name="MultipleParentNodeDiagnostic" super="MetaprogramDetectedErrorDiagnostic"
                 superTypeArg="MultipleParentNodeException" code="bsj.compiler.metaprogram.node.parent.multiple">
                 <exception>
