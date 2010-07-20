@@ -2021,6 +2021,91 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
+     * Creates a ConstantDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            ConstantModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            JavadocNode javadoc)
+    {
+        ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            ConstantModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations)
+    {
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+    )
+    {
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
      * Creates a ConstructorBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

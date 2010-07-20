@@ -2196,6 +2196,103 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a ConstantDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            ConstantModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            JavadocNode javadoc)
+    {
+        this.before();
+        ConstantDeclarationNode node = factory.makeConstantDeclarationNode(modifiers, type, declarators, javadoc);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            ConstantModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ConstantDeclarationNode node = factory.makeConstantDeclarationNode(modifiers, type, declarators, javadoc, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations)
+    {
+        this.before();
+        ConstantModifiersNode node = factory.makeConstantModifiersNode(metaAnnotations, annotations);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ConstantModifiersNode node = factory.makeConstantModifiersNode(metaAnnotations, annotations, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+    )
+    {
+        this.before();
+        ConstantModifiersNode node = factory.makeConstantModifiersNode();
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ConstantModifiersNode node = factory.makeConstantModifiersNode(startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a ConstructorBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

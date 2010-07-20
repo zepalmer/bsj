@@ -947,6 +947,34 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
+		public Void executeConstantDeclarationNode(ConstantDeclarationNode node, PrependablePrintStream p)
+		{
+
+			before(node);
+			try
+			{
+				return super.executeConstantDeclarationNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
+		public Void executeConstantModifiersNode(ConstantModifiersNode node, PrependablePrintStream p)
+		{
+
+			before(node);
+			try
+			{
+				return super.executeConstantModifiersNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
 		public Void executeConstructorBodyNode(ConstructorBodyNode node, PrependablePrintStream p)
 		{
 

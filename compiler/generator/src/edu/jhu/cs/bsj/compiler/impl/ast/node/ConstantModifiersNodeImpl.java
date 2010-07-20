@@ -10,29 +10,25 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
-import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstantModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationNodeImpl<FieldModifiersNode> implements FieldDeclarationNode
+public class ConstantModifiersNodeImpl extends ModifiersNodeImpl implements ConstantModifiersNode
 {
     /** General constructor. */
-    public FieldDeclarationNodeImpl(
-            FieldModifiersNode modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
-            JavadocNode javadoc,
+    public ConstantModifiersNodeImpl(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
     }
     
     /**
@@ -81,19 +77,15 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitFieldDeclarationNodeStart(this, true);
-        visitor.visitAbstractMemberVariableDeclarationNodeStart(this);
+        visitor.visitConstantModifiersNodeStart(this, true);
+        visitor.visitModifiersNodeStart(this);
         visitor.visitNodeStart(this);
-        visitor.visitClassMemberNodeStart(this);
-        visitor.visitAnonymousClassMemberNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitClassMemberNodeStop(this);
-        visitor.visitAnonymousClassMemberNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitAbstractMemberVariableDeclarationNodeStop(this);
-        visitor.visitFieldDeclarationNodeStop(this, true);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitConstantModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -118,17 +110,11 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("modifiers=");
-        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
         sb.append(',');
-        sb.append("type=");
-        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("declarators=");
-        sb.append(this.getDeclarators() == null? "null" : this.getDeclarators().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("javadoc=");
-        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append("annotations=");
+        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -148,7 +134,7 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeFieldDeclarationNode(this, p);
+        return operation.executeConstantModifiersNode(this, p);
     }
     
     /**
@@ -157,13 +143,11 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
      * @return The resulting deep copy node.
      */
     @Override
-    public FieldDeclarationNode deepCopy(BsjNodeFactory factory)
+    public ConstantModifiersNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeFieldDeclarationNode(
-                getModifiers()==null?null:getModifiers().deepCopy(factory),
-                getType()==null?null:getType().deepCopy(factory),
-                getDeclarators()==null?null:getDeclarators().deepCopy(factory),
-                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
+        return factory.makeConstantModifiersNode(
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -179,24 +163,14 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof FieldModifiersNode))
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
         {
-            setModifiers((FieldModifiersNode)after);
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
-        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
         {
-            setType((TypeNode)after);
-            return true;
-        }
-        if (before.equals(this.getDeclarators()) && (after instanceof VariableDeclaratorListNode))
-        {
-            setDeclarators((VariableDeclaratorListNode)after);
-            return true;
-        }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
-        {
-            setJavadoc((JavadocNode)after);
+            setAnnotations((AnnotationListNode)after);
             return true;
         }
         return false;

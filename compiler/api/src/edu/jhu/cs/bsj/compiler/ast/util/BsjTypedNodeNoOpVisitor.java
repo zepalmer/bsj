@@ -105,6 +105,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type AbstractMemberVariableDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAbstractMemberVariableDeclarationNodeStart(AbstractMemberVariableDeclarationNode<?> node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type AbstractlyUnmodifiedClassDeclarationNode.
      * @param node The node being visited.
      */
@@ -676,6 +684,28 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitConditionalExpressionNodeStart(ConditionalExpressionNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ConstantDeclarationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitConstantDeclarationNodeStart(ConstantDeclarationNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ConstantModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitConstantModifiersNodeStart(ConstantModifiersNode node, boolean mostSpecific)
     {
     }
 
@@ -2220,6 +2250,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type AbstractMemberVariableDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAbstractMemberVariableDeclarationNodeStop(AbstractMemberVariableDeclarationNode<?> node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type AbstractlyUnmodifiedClassDeclarationNode.
      * @param node The node being visited.
      */
@@ -2791,6 +2829,28 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitConditionalExpressionNodeStop(ConditionalExpressionNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ConstantDeclarationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitConstantDeclarationNodeStop(ConstantDeclarationNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ConstantModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitConstantModifiersNodeStop(ConstantModifiersNode node, boolean mostSpecific)
     {
     }
 

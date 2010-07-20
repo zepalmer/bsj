@@ -30,6 +30,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstantModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
@@ -315,7 +317,7 @@ public class BsjBinaryNodeLoader
         
         for (Field field : clazz.getFields())
         {
-            list.add(buildFieldDeclarationNode(field));
+            list.add(buildConstantDeclarationNode(field));
         }
         
         return factory.makeInterfaceBodyNode(factory.makeInterfaceMemberListNode(list));
@@ -464,6 +466,18 @@ public class BsjBinaryNodeLoader
         return factory.makeConstructorModifiersNode(buildAccessModifier(method));
     }
 
+    private ConstantDeclarationNode buildConstantDeclarationNode(Field field)
+    {
+        ConstantDeclarationNode retNode =
+            factory.makeConstantDeclarationNode(
+                    buildConstantModifiersNode(field),
+                    buildTypeNode(field.getType()),
+                    buildVariableDeclarators(field), 
+                    null);
+
+        return retNode;
+    }
+
     private FieldDeclarationNode buildFieldDeclarationNode(Field field)
     {
         FieldDeclarationNode retNode =
@@ -486,6 +500,13 @@ public class BsjBinaryNodeLoader
                 null);
         
         return factory.makeVariableDeclaratorListNode(retNode);
+    }
+
+    private ConstantModifiersNode buildConstantModifiersNode(Field field)
+    {
+        return factory.makeConstantModifiersNode(
+                factory.makeMetaAnnotationListNode(),
+                factory.makeAnnotationListNode());
     }
 
     private FieldModifiersNode buildFieldModifiersNode(Field field)

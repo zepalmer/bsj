@@ -577,6 +577,22 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeConstantDeclarationNode(ConstantDeclarationNode node, PrependablePrintStream p)
+	{
+		handleAbstractMemberVariableDeclarationNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeConstantModifiersNode(ConstantModifiersNode node, PrependablePrintStream p)
+	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
+		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
+		p.print("public static final ");
+		return null;
+	}
+
+	@Override
 	public Void executeConstructorBodyNode(ConstructorBodyNode node, PrependablePrintStream p)
 	{
 		p.print("{\n");
@@ -780,16 +796,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeFieldDeclarationNode(FieldDeclarationNode node, PrependablePrintStream p)
 	{
-		if (node.getJavadoc() != null)
-		{
-			node.getJavadoc().executeOperation(this, p);
-			p.println();
-		}
-		node.getModifiers().executeOperation(this, p);
-		node.getType().executeOperation(this, p);
-		p.print(' ');
-		node.getDeclarators().executeOperation(this, p);
-		p.println(";");
+		handleAbstractMemberVariableDeclarationNode(node, p);
 		return null;
 	}
 
@@ -2071,6 +2078,21 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		handleListNode(node.getImplementsClause(), " implements ", ", ", "", p, true);
 		p.print("\n");
 		node.getBody().executeOperation(this, p);
+	}
+
+	private void handleAbstractMemberVariableDeclarationNode(AbstractMemberVariableDeclarationNode<?> node,
+			PrependablePrintStream p)
+	{
+		if (node.getJavadoc() != null)
+		{
+			node.getJavadoc().executeOperation(this, p);
+			p.println();
+		}
+		node.getModifiers().executeOperation(this, p);
+		node.getType().executeOperation(this, p);
+		p.print(' ');
+		node.getDeclarators().executeOperation(this, p);
+		p.println(";");
 	}
 
 	protected String accessModifierToString(AccessModifier modifier)

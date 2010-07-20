@@ -10,8 +10,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstantModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
@@ -19,11 +19,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationNodeImpl<FieldModifiersNode> implements FieldDeclarationNode
+public class ConstantDeclarationNodeImpl extends AbstractMemberVariableDeclarationNodeImpl<ConstantModifiersNode> implements ConstantDeclarationNode
 {
     /** General constructor. */
-    public FieldDeclarationNodeImpl(
-            FieldModifiersNode modifiers,
+    public ConstantDeclarationNodeImpl(
+            ConstantModifiersNode modifiers,
             TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
@@ -81,19 +81,19 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitFieldDeclarationNodeStart(this, true);
+        visitor.visitConstantDeclarationNodeStart(this, true);
         visitor.visitAbstractMemberVariableDeclarationNodeStart(this);
         visitor.visitNodeStart(this);
-        visitor.visitClassMemberNodeStart(this);
-        visitor.visitAnonymousClassMemberNodeStart(this);
+        visitor.visitInterfaceMemberNodeStart(this);
+        visitor.visitAnnotationMemberNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitClassMemberNodeStop(this);
-        visitor.visitAnonymousClassMemberNodeStop(this);
+        visitor.visitInterfaceMemberNodeStop(this);
+        visitor.visitAnnotationMemberNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAbstractMemberVariableDeclarationNodeStop(this);
-        visitor.visitFieldDeclarationNodeStop(this, true);
+        visitor.visitConstantDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -148,7 +148,7 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeFieldDeclarationNode(this, p);
+        return operation.executeConstantDeclarationNode(this, p);
     }
     
     /**
@@ -157,9 +157,9 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
      * @return The resulting deep copy node.
      */
     @Override
-    public FieldDeclarationNode deepCopy(BsjNodeFactory factory)
+    public ConstantDeclarationNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeFieldDeclarationNode(
+        return factory.makeConstantDeclarationNode(
                 getModifiers()==null?null:getModifiers().deepCopy(factory),
                 getType()==null?null:getType().deepCopy(factory),
                 getDeclarators()==null?null:getDeclarators().deepCopy(factory),
@@ -179,9 +179,9 @@ public class FieldDeclarationNodeImpl extends AbstractMemberVariableDeclarationN
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof FieldModifiersNode))
+        if (before.equals(this.getModifiers()) && (after instanceof ConstantModifiersNode))
         {
-            setModifiers((FieldModifiersNode)after);
+            setModifiers((ConstantModifiersNode)after);
             return true;
         }
         if (before.equals(this.getType()) && (after instanceof TypeNode))

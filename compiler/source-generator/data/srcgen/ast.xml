@@ -330,6 +330,17 @@
             </factory-method>
         </type>
 
+        <type name="ConstantModifiersNode" super="ModifiersNode">
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with a constant.  The modifiers
+                <tt>public</tt>, <tt>static</tt>, and <tt>final</tt> are implicit for all constants and so are not
+                listed here.
+            ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
+        </type>
+
         <type name="ConstructorModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated constructor" />
             <doc><![CDATA[
@@ -1376,6 +1387,18 @@
 
         <!-- ======================= MEMBER NODES ======================= -->
 
+        <type name="AbstractMemberVariableDeclarationNode" super="Node" typeParam="T extends ModifiersNode"
+            mode="abstract">
+            <tag name="VariableDeclaratorOwnerNode" />
+            <prop name="modifiers" type="T" desc="the modifiers for this declaration" />
+            <prop name="type" type="TypeNode" desc="the type of the declared variables" />
+            <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
+            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <doc><![CDATA[
+                A node representing a member variable declaration.
+            ]]></doc>
+        </type>
+
         <type name="AnnotationMethodDeclarationNode" super="Node">
             <tag name="AnnotationMemberNode" />
             <prop name="modifiers" type="AnnotationMethodModifiersNode" desc="the modifiers for this annotation method" />
@@ -1388,6 +1411,14 @@
                 <pre>
                     <i>modifiers type identifier</i> () default <i>defaultValue</i>;
                 </pre>
+            ]]></doc>
+        </type>
+
+        <type name="ConstantDeclarationNode" super="AbstractMemberVariableDeclarationNode" superTypeArg="ConstantModifiersNode">
+            <tag name="InterfaceMemberNode" />
+            <tag name="AnnotationMemberNode" />
+            <doc><![CDATA[
+                A node representing a constant declaration.  Fields are not represented by this node.
             ]]></doc>
         </type>
 
@@ -1438,18 +1469,11 @@
             </factory-method>
         </type>
 
-        <type name="FieldDeclarationNode" super="Node">
+        <type name="FieldDeclarationNode" super="AbstractMemberVariableDeclarationNode" superTypeArg="FieldModifiersNode">
             <tag name="ClassMemberNode" />
-            <tag name="InterfaceMemberNode" />
-            <tag name="AnnotationMemberNode" />
             <tag name="AnonymousClassMemberNode" />
-            <tag name="VariableDeclaratorOwnerNode" />
-            <prop name="modifiers" type="FieldModifiersNode" desc="the modifiers for this field" />
-            <prop name="type" type="TypeNode" desc="the type of the declared variables" />
-            <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
-            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
-                A node representing a field declaration.  Constants are represented by this node as well.
+                A node representing a field declaration.  Interface constants are not represented by this node.
             ]]></doc>
         </type>
 

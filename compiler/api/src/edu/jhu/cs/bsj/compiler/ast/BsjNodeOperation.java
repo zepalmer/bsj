@@ -435,6 +435,22 @@ public interface BsjNodeOperation<P,R>
     public R executeConditionalExpressionNode(ConditionalExpressionNode node, P p);
 
     /**
+     * Executes this operation against a ConstantDeclarationNode.
+     * @param node The ConstantDeclarationNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeConstantDeclarationNode(ConstantDeclarationNode node, P p);
+
+    /**
+     * Executes this operation against a ConstantModifiersNode.
+     * @param node The ConstantModifiersNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeConstantModifiersNode(ConstantModifiersNode node, P p);
+
+    /**
      * Executes this operation against a ConstructorBodyNode.
      * @param node The ConstructorBodyNode in question.
      * @param p The parameter to use.

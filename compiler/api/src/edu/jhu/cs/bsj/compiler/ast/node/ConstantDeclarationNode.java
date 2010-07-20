@@ -5,10 +5,10 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * A node representing a field declaration.  Interface constants are not represented by this node.
+ * A node representing a constant declaration.  Fields are not represented by this node.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface FieldDeclarationNode extends AbstractMemberVariableDeclarationNode<FieldModifiersNode>, ClassMemberNode, AnonymousClassMemberNode
+public interface ConstantDeclarationNode extends AbstractMemberVariableDeclarationNode<ConstantModifiersNode>, InterfaceMemberNode, AnnotationMemberNode
 {
     /**
      * Generates a deep copy of this node.
@@ -16,5 +16,5 @@ public interface FieldDeclarationNode extends AbstractMemberVariableDeclarationN
      * @return The resulting deep copy node.
      */
     @Override
-    public FieldDeclarationNode deepCopy(BsjNodeFactory factory);
+    public ConstantDeclarationNode deepCopy(BsjNodeFactory factory);
 }

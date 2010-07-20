@@ -1263,6 +1263,61 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
+     * Creates a ConstantDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            ConstantModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            JavadocNode javadoc);
+    
+    /**
+     * Creates a ConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            ConstantModifiersNode modifiers,
+            TypeNode type,
+            VariableDeclaratorListNode declarators,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConstantModifiersNode makeConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations);
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstantModifiersNode makeConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConstantModifiersNode makeConstantModifiersNode(
+    );
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstantModifiersNode makeConstantModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
      * Creates a ConstructorBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

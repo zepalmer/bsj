@@ -1811,6 +1811,76 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
+    public ExpressionNode executeConstantDeclarationNode(ConstantDeclarationNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftModifiers = 
+                node.getModifiers() != null ?
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftType = 
+                node.getType() != null ?
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftDeclarators = 
+                node.getDeclarators() != null ?
+                        node.getDeclarators().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftJavadoc = 
+                node.getJavadoc() != null ?
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeConstantDeclarationNode"),
+                        factory.makeExpressionListNode(
+                                liftModifiers,
+                                liftType,
+                                liftDeclarators,
+                                liftJavadoc,
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeConstantModifiersNode(ConstantModifiersNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftAnnotations = 
+                node.getAnnotations() != null ?
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeConstantModifiersNode"),
+                        factory.makeExpressionListNode(
+                                liftMetaAnnotations,
+                                liftAnnotations,
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
     public ExpressionNode executeConstructorBodyNode(ConstructorBodyNode node, ExpressionNode factoryNode)
     {
         ExpressionNode liftConstructorInvocation = 

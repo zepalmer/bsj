@@ -1877,6 +1877,23 @@ classModifiers returns [ClassModifiersNode ret]
         }
     ;
     
+constantModifiers returns [ConstantModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("constantModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        modifiers[false, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL]
+        {
+            $ret = factory.makeConstantModifiersNode(
+                    $modifiers.metaAnnotations,
+                    $modifiers.annotations);
+        }
+    ;
+
 constructorModifiers returns [ConstructorModifiersNode ret]
         scope Rule;
         @init {
@@ -2820,9 +2837,9 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
             ruleStop();
         }
     :
-        interfaceFieldDeclaration
+        constantDeclaration
         {
-            $ret = $interfaceFieldDeclaration.ret;
+            $ret = $constantDeclaration.ret;
         }        
     |   
         interfaceMethodDeclaration
@@ -2897,18 +2914,35 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         }         
     ;
 
-interfaceFieldDeclaration returns [FieldDeclarationNode ret]
+constantDeclaration returns [ConstantDeclarationNode ret]
         scope Rule;
         @init {
-            ruleStart("interfaceFieldDeclaration");
+            ruleStart("constantDeclaration");
+            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
         }
         @after {
             ruleStop();
         }
     :   
-        fieldDeclaration
+        javadoc constantModifiers
+        type
+        a=variableDeclarator // process type in case identifier has [] after it
         {
-            $ret = $fieldDeclaration.ret;
+            list.add($a.ret);
+        }
+        (
+            ',' b=variableDeclarator
+            {
+                list.add($b.ret);
+            }
+        )*
+        ';'
+        {
+            $ret = factory.makeConstantDeclarationNode(
+                    $constantModifiers.ret,
+                    $type.ret,
+                    factory.makeVariableDeclaratorListNode(list),
+                    $javadoc.ret);
         }
     ;
 
@@ -3599,9 +3633,9 @@ annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
             $ret = $annotationMethodDeclaration.ret;
         }
     |   
-        interfaceFieldDeclaration
+        constantDeclaration
         {
-            $ret = $interfaceFieldDeclaration.ret;
+            $ret = $constantDeclaration.ret;
         }
     |   
         normalClassDeclaration
