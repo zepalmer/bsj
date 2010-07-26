@@ -1,19 +1,12 @@
 package mypackage;
 #import edu.jhu.cs.bsj.stdlib.metaannotations.*;
 
+import java.util.Set;
+
 public class MyForwarder {
-	/*
-	@@Forwarder(
-		methodName={"sayHello"},
-		forwardedMethodName="hiThere")
-	*/
-	@@Forwarder(
-		methodName="sayGoodbye")
 	private Test member;
 
-	/*
 	@@Forwarder(methodName="length")
-	*/
 	@@Forwarder(methodName="isEmpty")
 	private java.lang.String s;
 
@@ -21,6 +14,14 @@ public class MyForwarder {
 		member = o;
 	}
 
+	@@Forwarder(methodName="add")
+	private Set<String> foo;
+
+	@@Forwarder(
+		methodName="sayHello",
+		forwardedMethodName="hiThere")
+	@@Forwarder(
+		methodName="sayGoodbye")
 	private Test getMember() {
 		return member;
 	}
