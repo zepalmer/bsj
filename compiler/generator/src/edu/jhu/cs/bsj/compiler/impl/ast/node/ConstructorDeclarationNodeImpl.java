@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +52,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
@@ -469,11 +469,11 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         visitor.visitStartBegin(this);
         visitor.visitConstructorDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
-        visitor.visitClassMemberNodeStart(this);
+        visitor.visitAbstractInvokableDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitClassMemberNodeStop(this);
+        visitor.visitAbstractInvokableDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitConstructorDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

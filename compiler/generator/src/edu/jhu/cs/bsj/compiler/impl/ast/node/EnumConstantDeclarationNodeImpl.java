@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,23 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumConstantDeclarationNode
 {
-    /** The meta-annotations on this constant. */
-    private MetaAnnotationListNode metaAnnotations;
-    
-    /** The annotations on this constant. */
-    private AnnotationListNode annotations;
+    /** The modifiers for this enum constant. */
+    private EnumConstantModifiersNode modifiers;
     
     /** The name of this constant. */
     private IdentifierNode identifier;
@@ -44,7 +40,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
@@ -57,10 +53,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     }
     private static enum LocalAttribute
     {
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-        /** Attribute identifier for the annotations property. */
-        ANNOTATIONS,
+        /** Attribute identifier for the modifiers property. */
+        MODIFIERS,
         /** Attribute identifier for the identifier property. */
         IDENTIFIER,
         /** Attribute identifier for the arguments property. */
@@ -73,8 +67,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
@@ -85,8 +78,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setMetaAnnotations(metaAnnotations, false);
-        setAnnotations(annotations, false);
+        setModifiers(modifiers, false);
         setIdentifier(identifier, false);
         setArguments(arguments, false);
         setBody(body, false);
@@ -94,65 +86,34 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     }
     
     /**
-     * Gets the meta-annotations on this constant.
-     * @return The meta-annotations on this constant.
+     * Gets the modifiers for this enum constant.
+     * @return The modifiers for this enum constant.
      */
-    public MetaAnnotationListNode getMetaAnnotations()
+    public EnumConstantModifiersNode getModifiers()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
-        return this.metaAnnotations;
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        return this.modifiers;
     }
     
     /**
-     * Changes the meta-annotations on this constant.
-     * @param metaAnnotations The meta-annotations on this constant.
+     * Changes the modifiers for this enum constant.
+     * @param modifiers The modifiers for this enum constant.
      */
-    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    public void setModifiers(EnumConstantModifiersNode modifiers)
     {
-            setMetaAnnotations(metaAnnotations, true);
+            setModifiers(modifiers, true);
     }
     
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    private void setModifiers(EnumConstantModifiersNode modifiers, boolean checkPermissions)
     {
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
-        setAsChild(metaAnnotations, true);
-    }
-    
-    /**
-     * Gets the annotations on this constant.
-     * @return The annotations on this constant.
-     */
-    public AnnotationListNode getAnnotations()
-    {
-        getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
-        return this.annotations;
-    }
-    
-    /**
-     * Changes the annotations on this constant.
-     * @param annotations The annotations on this constant.
-     */
-    public void setAnnotations(AnnotationListNode annotations)
-    {
-            setAnnotations(annotations, true);
-    }
-    
-    private void setAnnotations(AnnotationListNode annotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        setAsChild(annotations, false);
-        this.annotations = annotations;
-        setAsChild(annotations, true);
+        setAsChild(modifiers, false);
+        this.modifiers = modifiers;
+        setAsChild(modifiers, true);
     }
     
     /**
@@ -290,13 +251,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.metaAnnotations != null)
+        if (this.modifiers != null)
         {
-            this.metaAnnotations.receive(visitor);
-        }
-        if (this.annotations != null)
-        {
-            this.annotations.receive(visitor);
+            this.modifiers.receive(visitor);
         }
         if (this.identifier != null)
         {
@@ -335,13 +292,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.metaAnnotations != null)
+        if (this.modifiers != null)
         {
-            this.metaAnnotations.receiveTyped(visitor);
-        }
-        if (this.annotations != null)
-        {
-            this.annotations.receiveTyped(visitor);
+            this.modifiers.receiveTyped(visitor);
         }
         if (this.identifier != null)
         {
@@ -375,11 +328,11 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         visitor.visitStartBegin(this);
         visitor.visitEnumConstantDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
-        visitor.visitMetaAnnotatableNodeStart(this);
+        visitor.visitDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitMetaAnnotatableNodeStop(this);
+        visitor.visitDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitEnumConstantDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
@@ -394,8 +347,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getMetaAnnotations());
-        list.add(getAnnotations());
+        list.add(getModifiers());
         list.add(getIdentifier());
         list.add(getArguments());
         list.add(getBody());
@@ -412,11 +364,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("annotations=");
-        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append("modifiers=");
+        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
         sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
@@ -460,8 +409,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public EnumConstantDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeEnumConstantDeclarationNode(
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
-                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
+                getModifiers()==null?null:getModifiers().deepCopy(factory),
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getArguments()==null?null:getArguments().deepCopy(factory),
                 getBody()==null?null:getBody().deepCopy(factory),
@@ -481,14 +429,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getModifiers()) && (after instanceof EnumConstantModifiersNode))
         {
-            setMetaAnnotations((MetaAnnotationListNode)after);
-            return true;
-        }
-        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
-        {
-            setAnnotations((AnnotationListNode)after);
+            setModifiers((EnumConstantModifiersNode)after);
             return true;
         }
         if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))

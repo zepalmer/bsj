@@ -90,11 +90,11 @@ public class LocalClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDecl
         visitor.visitLocalClassDeclarationNodeStart(this, true);
         visitor.visitAbstractlyUnmodifiedClassDeclarationNodeStart(this);
         visitor.visitNodeStart(this);
-        visitor.visitInlineTypeDeclarableNodeStart(this);
+        visitor.visitBlockStatementNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitInlineTypeDeclarableNodeStop(this);
+        visitor.visitBlockStatementNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAbstractlyUnmodifiedClassDeclarationNodeStop(this);
         visitor.visitLocalClassDeclarationNodeStop(this, true);

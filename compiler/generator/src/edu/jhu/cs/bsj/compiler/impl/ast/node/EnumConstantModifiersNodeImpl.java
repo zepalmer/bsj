@@ -1,9 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -12,76 +10,25 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarableNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTypeDeclarationNode
+public class EnumConstantModifiersNodeImpl extends ModifiersNodeImpl implements EnumConstantModifiersNode
 {
-    /** The type declaration. */
-    private InlineTypeDeclarableNode declaration;
-    
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(InlineTypeDeclarationNodeImpl.this);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute
-    {
-        /** Attribute identifier for the declaration property. */
-        DECLARATION,
-    }
-    
     /** General constructor. */
-    public InlineTypeDeclarationNodeImpl(
-            InlineTypeDeclarableNode declaration,
+    public EnumConstantModifiersNodeImpl(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(startLocation, stopLocation, manager, binary);
-        setDeclaration(declaration, false);
-    }
-    
-    /**
-     * Gets the type declaration.
-     * @return The type declaration.
-     */
-    public InlineTypeDeclarableNode getDeclaration()
-    {
-        getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
-        return this.declaration;
-    }
-    
-    /**
-     * Changes the type declaration.
-     * @param declaration The type declaration.
-     */
-    public void setDeclaration(InlineTypeDeclarableNode declaration)
-    {
-            setDeclaration(declaration, true);
-    }
-    
-    private void setDeclaration(InlineTypeDeclarableNode declaration, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        setAsChild(declaration, false);
-        this.declaration = declaration;
-        setAsChild(declaration, true);
+        super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
     }
     
     /**
@@ -95,10 +42,6 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.declaration != null)
-        {
-            this.declaration.receive(visitor);
-        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -120,10 +63,6 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.declaration != null)
-        {
-            this.declaration.receiveTyped(visitor);
-        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -138,15 +77,15 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitInlineTypeDeclarationNodeStart(this, true);
+        visitor.visitEnumConstantModifiersNodeStart(this, true);
+        visitor.visitModifiersNodeStart(this);
         visitor.visitNodeStart(this);
-        visitor.visitBlockStatementNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitBlockStatementNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitInlineTypeDeclarationNodeStop(this, true);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitEnumConstantModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -159,7 +98,6 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getDeclaration());
         return list;
     }
     
@@ -172,8 +110,11 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("declaration=");
-        sb.append(this.getDeclaration() == null? "null" : this.getDeclaration().getClass().getSimpleName());
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("annotations=");
+        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -193,7 +134,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeInlineTypeDeclarationNode(this, p);
+        return operation.executeEnumConstantModifiersNode(this, p);
     }
     
     /**
@@ -202,10 +143,11 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
      * @return The resulting deep copy node.
      */
     @Override
-    public InlineTypeDeclarationNode deepCopy(BsjNodeFactory factory)
+    public EnumConstantModifiersNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeInlineTypeDeclarationNode(
-                getDeclaration()==null?null:getDeclaration().deepCopy(factory),
+        return factory.makeEnumConstantModifiersNode(
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
                 getStartLocation(),
                 getStopLocation());
     }
@@ -221,9 +163,14 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getDeclaration()) && (after instanceof InlineTypeDeclarableNode))
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
         {
-            setDeclaration((InlineTypeDeclarableNode)after);
+            setMetaAnnotations((MetaAnnotationListNode)after);
+            return true;
+        }
+        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
+        {
+            setAnnotations((AnnotationListNode)after);
             return true;
         }
         return false;

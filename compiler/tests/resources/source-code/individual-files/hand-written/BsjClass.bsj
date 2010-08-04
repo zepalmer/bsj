@@ -25,14 +25,14 @@
 					factory.makeEnumConstantDeclarationListNode(
 							java.util.Arrays.<EnumConstantDeclarationNode>asList(
 									factory.makeEnumConstantDeclarationNode(
-											factory.makeMetaAnnotationListNode(
-													java.util.Arrays.<MetaAnnotationNode>asList(),
-													new BsjSourceLocation("<unknown>", 1, 10),
-													new BsjSourceLocation("<unknown>", 1, 10)),
-											factory.makeAnnotationListNode(
-													java.util.Arrays.<AnnotationNode>asList(),
-													new BsjSourceLocation("<unknown>", 1, 10),
-													new BsjSourceLocation("<unknown>", 1, 10)),
+											factory.makeEnumConstantModifiersNode(
+													factory.makeMetaAnnotationListNode(java.util.Arrays.<MetaAnnotationNode>asList(),
+															new BsjSourceLocation("<unknown>", 1, 10),
+															new BsjSourceLocation("<unknown>", 1, 10)),
+													factory.makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(),
+															new BsjSourceLocation("<unknown>", 1, 10),
+															new BsjSourceLocation("<unknown>", 1, 10)),
+													new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 10)),
 											factory.makeIdentifierNode(
 													"A",
 													new BsjSourceLocation("<unknown>", 1, 10),
@@ -46,14 +46,14 @@
 											new BsjSourceLocation("<unknown>", 1, 10),
 											new BsjSourceLocation("<unknown>", 1, 11)),
 									factory.makeEnumConstantDeclarationNode(
-											factory.makeMetaAnnotationListNode(
-													java.util.Arrays.<MetaAnnotationNode>asList(),
-													new BsjSourceLocation("<unknown>", 1, 10),
-													new BsjSourceLocation("<unknown>", 1, 10)),
-											factory.makeAnnotationListNode(
-													java.util.Arrays.<AnnotationNode>asList(),
-													new BsjSourceLocation("<unknown>", 1, 13),
-													new BsjSourceLocation("<unknown>", 1, 13)),
+											factory.makeEnumConstantModifiersNode(
+													factory.makeMetaAnnotationListNode(java.util.Arrays.<MetaAnnotationNode>asList(),
+															new BsjSourceLocation("<unknown>", 1, 13),
+															new BsjSourceLocation("<unknown>", 1, 13)),
+													factory.makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(),
+															new BsjSourceLocation("<unknown>", 1, 13),
+															new BsjSourceLocation("<unknown>", 1, 13)),
+													new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 13)),
 											factory.makeIdentifierNode(
 													"B",
 													new BsjSourceLocation("<unknown>", 1, 13),

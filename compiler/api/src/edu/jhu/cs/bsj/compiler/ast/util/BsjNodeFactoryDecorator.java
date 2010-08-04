@@ -2884,15 +2884,14 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc)
     {
         this.before();
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(metaAnnotations, annotations, identifier, arguments, body, javadoc);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(modifiers, identifier, arguments, body, javadoc);
         this.after(node);
         return node;
     }
@@ -2903,8 +2902,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
@@ -2913,7 +2911,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         this.before();
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(metaAnnotations, annotations, identifier, arguments, body, javadoc, startLocation, stopLocation);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(modifiers, identifier, arguments, body, javadoc, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2924,12 +2922,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc)
     {
         this.before();
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(identifier, arguments, javadoc);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(modifiers, identifier, arguments, javadoc);
         this.after(node);
         return node;
     }
@@ -2940,6 +2939,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc,
@@ -2947,7 +2947,68 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         this.before();
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(identifier, arguments, javadoc, startLocation, stopLocation);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(modifiers, identifier, arguments, javadoc, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations)
+    {
+        this.before();
+        EnumConstantModifiersNode node = factory.makeEnumConstantModifiersNode(metaAnnotations, annotations);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        EnumConstantModifiersNode node = factory.makeEnumConstantModifiersNode(metaAnnotations, annotations, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+    )
+    {
+        this.before();
+        EnumConstantModifiersNode node = factory.makeEnumConstantModifiersNode();
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        EnumConstantModifiersNode node = factory.makeEnumConstantModifiersNode(startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3824,36 +3885,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         InitializerDeclarationNode node = factory.makeInitializerDeclarationNode(staticInitializer, body, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a InlineTypeDeclarationNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
-            InlineTypeDeclarableNode declaration)
-    {
-        this.before();
-        InlineTypeDeclarationNode node = factory.makeInlineTypeDeclarationNode(declaration);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a InlineTypeDeclarationNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
-            InlineTypeDeclarableNode declaration,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        InlineTypeDeclarationNode node = factory.makeInlineTypeDeclarationNode(declaration, startLocation, stopLocation);
         this.after(node);
         return node;
     }

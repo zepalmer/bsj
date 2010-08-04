@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,7 +43,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     /** The callback module for this package node. */
     private PackageNodeCallback packageNodeCallback;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
         ReadWriteAttribute attribute = localAttributes.get(attributeName);

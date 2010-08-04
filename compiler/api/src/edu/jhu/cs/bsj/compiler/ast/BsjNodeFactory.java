@@ -1656,8 +1656,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
@@ -1668,8 +1667,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
@@ -1682,6 +1680,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc);
@@ -1691,9 +1690,43 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations);
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+    );
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -2192,22 +2225,6 @@ public interface BsjNodeFactory
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
             BlockStatementListNode body,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a InlineTypeDeclarationNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
-            InlineTypeDeclarableNode declaration);
-    
-    /**
-     * Creates a InlineTypeDeclarationNode.
-     * The specified start and stop locations are used.
-     */
-    public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
-            InlineTypeDeclarableNode declaration,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     

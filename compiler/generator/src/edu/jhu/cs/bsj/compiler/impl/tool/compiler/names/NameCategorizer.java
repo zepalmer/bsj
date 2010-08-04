@@ -31,19 +31,22 @@ public class NameCategorizer
 		NameCategory category;
 
 		category = InitialNameCategorizer.SINGLETON.categorize(name);
-		switch (category)
+		if (category != null)
 		{
-			case PACKAGE_OR_TYPE:
-				category = PackageOrTypeNameCategorizer.SINGLETON.categorize(name);
-				break;
-			case AMBIGUOUS:
-				category = AmbiguousNameCategorizer.SINGLETON.categorize(name);
-				break;
+			switch (category)
+			{
+				case PACKAGE_OR_TYPE:
+					category = PackageOrTypeNameCategorizer.SINGLETON.categorize(name);
+					break;
+				case AMBIGUOUS:
+					category = AmbiguousNameCategorizer.SINGLETON.categorize(name);
+					break;
+			}
 		}
 
 		if (LOGGER.isTraceEnabled())
 		{
-			LOGGER.trace("NameNode " + name + " categorized as " + category);
+			LOGGER.trace("NameNode " + name.getNameString() + " categorized as " + category);
 		}
 
 		return category;

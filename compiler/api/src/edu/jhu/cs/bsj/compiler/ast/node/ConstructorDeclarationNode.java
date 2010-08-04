@@ -16,7 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
  * See {@link MethodDeclarationNode} for more information.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ConstructorDeclarationNode extends Node, ClassMemberNode
+public interface ConstructorDeclarationNode extends Node, AbstractInvokableDeclarationNode
 {
     /**
      * Gets the identifier for the name of this constructor.

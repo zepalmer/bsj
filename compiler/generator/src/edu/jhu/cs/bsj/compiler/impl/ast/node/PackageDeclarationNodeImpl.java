@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     /** The annotations on the package declaration. */
     private AnnotationListNode annotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
@@ -235,10 +235,12 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         visitor.visitPackageDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitMetaAnnotatableNodeStart(this);
+        visitor.visitDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitMetaAnnotatableNodeStop(this);
+        visitor.visitDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitPackageDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

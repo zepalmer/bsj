@@ -659,6 +659,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeEnumConstantModifiersNode(EnumConstantModifiersNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeEnumDeclarationNode(EnumDeclarationNode node, P p)
     {
         return executeDefault(node, p);
@@ -820,16 +830,6 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeInitializerDeclarationNode(InitializerDeclarationNode node, P p)
-    {
-        return executeDefault(node, p);
-    }
-
-    /**
-     * Executes the default operation for this node.
-     * @param node The node in question.
-     * @param p The parameter to this node operation.
-     */
-    public R executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, P p)
     {
         return executeDefault(node, p);
     }

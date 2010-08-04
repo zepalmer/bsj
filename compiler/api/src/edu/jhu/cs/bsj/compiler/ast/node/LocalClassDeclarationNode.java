@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Represents the declaration of an inline class as a block statement.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface LocalClassDeclarationNode extends AbstractlyUnmodifiedClassDeclarationNode<LocalClassModifiersNode>, InlineTypeDeclarableNode
+public interface LocalClassDeclarationNode extends AbstractlyUnmodifiedClassDeclarationNode<LocalClassModifiersNode>, BlockStatementNode
 {
     /**
      * Generates a deep copy of this node.

@@ -35,6 +35,12 @@ public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDecl
     public void setJavadoc(JavadocNode javadoc);
     
     /**
+     * Gets the modifiers associated with this node.
+     * @return The modifiers associated with this node.
+     */
+    public ModifiersNode getModifiers();
+    
+    /**
      * Gets this type's body.
      * @return This type's body.
      */

@@ -1130,6 +1130,20 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
+		public Void executeEnumConstantModifiersNode(EnumConstantModifiersNode node, PrependablePrintStream p)
+		{
+
+			before(node);
+			try
+			{
+				return super.executeEnumConstantModifiersNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
 		public Void executeEnumDeclarationNode(EnumDeclarationNode node, PrependablePrintStream p)
 		{
 
@@ -1389,20 +1403,6 @@ public class NodeMappingSerializationOperation extends
 			try
 			{
 				return super.executeLocalClassModifiersNode(node, p);
-			} finally
-			{
-				after(node);
-			}
-		}
-
-		@Override
-		public Void executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, PrependablePrintStream p)
-		{
-
-			before(node);
-			try
-			{
-				return super.executeInlineTypeDeclarationNode(node, p);
 			} finally
 			{
 				after(node);

@@ -3,9 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 
 /**
  * A node representing an enum constant.  While enum constants typically consist of a single name, many optional
@@ -13,31 +11,19 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
  * <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface EnumConstantDeclarationNode extends Node, MetaAnnotatableNode
+public interface EnumConstantDeclarationNode extends Node, DeclarationNode
 {
     /**
-     * Gets the meta-annotations on this constant.
-     * @return The meta-annotations on this constant.
+     * Gets the modifiers for this enum constant.
+     * @return The modifiers for this enum constant.
      */
-    public MetaAnnotationListNode getMetaAnnotations();
+    public EnumConstantModifiersNode getModifiers();
     
     /**
-     * Changes the meta-annotations on this constant.
-     * @param metaAnnotations The meta-annotations on this constant.
+     * Changes the modifiers for this enum constant.
+     * @param modifiers The modifiers for this enum constant.
      */
-    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations);
-    
-    /**
-     * Gets the annotations on this constant.
-     * @return The annotations on this constant.
-     */
-    public AnnotationListNode getAnnotations();
-    
-    /**
-     * Changes the annotations on this constant.
-     * @param annotations The annotations on this constant.
-     */
-    public void setAnnotations(AnnotationListNode annotations);
+    public void setModifiers(EnumConstantModifiersNode modifiers);
     
     /**
      * Gets the name of this constant.

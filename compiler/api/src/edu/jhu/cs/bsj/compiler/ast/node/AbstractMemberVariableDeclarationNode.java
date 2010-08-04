@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
  * A node representing a member variable declaration.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AbstractMemberVariableDeclarationNode<T extends ModifiersNode> extends Node, VariableDeclaratorOwnerNode
+public interface AbstractMemberVariableDeclarationNode<T extends ModifiersNode> extends Node, VariableDeclaratorOwnerNode, DeclarationNode
 {
     /**
      * Gets the modifiers for this declaration.

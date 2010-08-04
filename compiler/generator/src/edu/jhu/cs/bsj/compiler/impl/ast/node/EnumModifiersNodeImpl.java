@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     /** Whether or not the associated enum uses strict floating-point. */
     private boolean strictfpFlag;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
@@ -171,9 +171,11 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         visitor.visitEnumModifiersNodeStart(this, true);
         visitor.visitModifiersNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitAccessibleTypeModifiersNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitAccessibleTypeModifiersNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitModifiersNodeStop(this);
         visitor.visitEnumModifiersNodeStop(this, true);

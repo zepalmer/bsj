@@ -25,6 +25,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -47,7 +48,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	// private variables used in testing
 	private static final String[] META_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl",
-			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
+			"edu.jhu.cs.bsj.compiler.ast.node.list.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
 	private BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
 	private String factoryName = "factory";
 
@@ -57,13 +58,14 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	@Test
 	public void testLifterOnExamples()
 	{
-		log4jConfigure("debug");
+		System.out.println("STARTING TESTS WITH " + ((double)(Runtime.getRuntime().maxMemory()))/1024/1024+"Mb");
 		findAndTestJavaFiles(EXAMPLES);
 	}
 
 	@Override
 	protected boolean doFileTest(File file)
 	{
+		System.out.println("TESTING " + file);
 		return liftJavaFile(file);
 	}
 
@@ -93,8 +95,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		String originalProgram = ast.executeOperation(toolkit.getSerializer(), null);
 
 		// create a metaFactory for use in the lifted code
-		ExpressionNode metaFactory = factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(
-				factory.makeIdentifierNode(factoryName)));
+		ExpressionNode metaFactory = factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(factoryName)));
 
 		// get the lifted code
 		ExpressionNode metaAst = ast.executeOperation(new BsjTreeLifter(factory), metaFactory);
@@ -189,23 +190,17 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
 
 		// compile
-		final boolean[] success = new boolean[] { true };
-		toolkit.getCompiler().compile(fileObjects, new DiagnosticListener<BsjSourceLocation>()
-		{
-			@Override
-			public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
-			{
-				if (diagnostic.getKind() == Diagnostic.Kind.ERROR)
+		CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
+				new DiagnosticListener<BsjSourceLocation>()
 				{
-					success[0] = false;
-					System.err.println(diagnostic.getMessage(null));
-				} else
-				{
-					System.out.println(diagnostic.getMessage(null));
-				}
-			}
-		});
-		Assert.assertTrue(success[0]);
+					@Override
+					public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
+					{
+						System.err.println(diagnostic.getMessage(null));
+					}
+				});
+		toolkit.getCompiler().compile(fileObjects, listener);
+		Assert.assertTrue(listener.getCount(Diagnostic.Kind.ERROR) == 0);
 
 		// run the compiled wrapper and return the node created by the lifted code
 		Class<?> wrapper = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass("WrapperClass");

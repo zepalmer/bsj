@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * are syntactically legal modifiers, they are not included here because they are implicit to all interfaces.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InterfaceModifiersNode extends ModifiersNode
+public interface InterfaceModifiersNode extends ModifiersNode, AccessibleTypeModifiersNode
 {
     /**
      * Gets the access for the associated interface.

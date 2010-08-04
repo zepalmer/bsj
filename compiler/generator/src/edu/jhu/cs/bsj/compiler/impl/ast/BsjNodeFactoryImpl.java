@@ -2625,14 +2625,13 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(metaAnnotations, annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2642,8 +2641,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
@@ -2651,7 +2649,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(metaAnnotations, annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2661,11 +2659,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2675,13 +2674,67 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            EnumConstantModifiersNode modifiers,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations)
+    {
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
+            AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+    )
+    {
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3450,32 +3503,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a InlineTypeDeclarationNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
-            InlineTypeDeclarableNode declaration)
-    {
-        InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a InlineTypeDeclarationNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
-            InlineTypeDeclarableNode declaration,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

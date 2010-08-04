@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     /** The meta-annotations associated with this node. */
     private MetaAnnotationListNode metaAnnotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
@@ -218,12 +218,14 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         visitor.visitClassMemberNodeStart(this);
         visitor.visitAnonymousClassMemberNodeStart(this);
         visitor.visitMetaAnnotatableNodeStart(this);
+        visitor.visitDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitClassMemberNodeStop(this);
         visitor.visitAnonymousClassMemberNodeStop(this);
         visitor.visitMetaAnnotatableNodeStop(this);
+        visitor.visitDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitInitializerDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

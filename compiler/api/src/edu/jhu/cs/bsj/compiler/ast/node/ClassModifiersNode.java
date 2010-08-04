@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Represents the modifiers which can be associated with a class.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ClassModifiersNode extends ModifiersNode
+public interface ClassModifiersNode extends ModifiersNode, AccessibleTypeModifiersNode
 {
     /**
      * Gets the access for the associated class.

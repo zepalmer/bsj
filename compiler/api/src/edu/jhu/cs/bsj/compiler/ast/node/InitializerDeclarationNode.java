@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InitializerDeclarationNode extends Node, ClassMemberNode, AnonymousClassMemberNode, MetaAnnotatableNode
+public interface InitializerDeclarationNode extends Node, ClassMemberNode, AnonymousClassMemberNode, MetaAnnotatableNode, DeclarationNode
 {
     /**
      * Gets whether or not the initializer is static.

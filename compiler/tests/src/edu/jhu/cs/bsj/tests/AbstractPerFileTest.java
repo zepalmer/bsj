@@ -21,6 +21,10 @@ public abstract class AbstractPerFileTest extends AbstractTest
 	public void findAndTestJavaFiles(File dir)
 	{
 		Assume.assumeTrue(Boolean.getBoolean("bsj.tests.run.slow"));
+		if (!dir.exists())
+		{
+			Assert.fail("Resource directory " + dir.getAbsolutePath() + " does not exist.");
+		}
 		for (File file : dir.listFiles())
 		{
 			if (file.isDirectory())

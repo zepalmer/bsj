@@ -5,11 +5,11 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * This tagging interface is used to denote AST nodes which represent type declarations and can be declared inline
- * as a statement.
+ * Represents the modifiers which can be associated with an enum constant.  Only annotations and
+ * meta-annotations can be used.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InlineTypeDeclarableNode extends Node, TypeDeclarationNode
+public interface EnumConstantModifiersNode extends ModifiersNode
 {
     /**
      * Generates a deep copy of this node.
@@ -17,5 +17,5 @@ public interface InlineTypeDeclarableNode extends Node, TypeDeclarationNode
      * @return The resulting deep copy node.
      */
     @Override
-    public InlineTypeDeclarableNode deepCopy(BsjNodeFactory factory);
+    public EnumConstantModifiersNode deepCopy(BsjNodeFactory factory);
 }

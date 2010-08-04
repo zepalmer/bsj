@@ -105,6 +105,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type AbstractInvokableDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAbstractInvokableDeclarationNodeStart(AbstractInvokableDeclarationNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type AbstractMemberVariableDeclarationNode.
      * @param node The node being visited.
      */
@@ -117,6 +125,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitAbstractlyUnmodifiedClassDeclarationNodeStart(AbstractlyUnmodifiedClassDeclarationNode<?> node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type AccessibleTypeModifiersNode.
+     * @param node The node being visited.
+     */
+    public void visitAccessibleTypeModifiersNodeStart(AccessibleTypeModifiersNode node)
     {
     }
 
@@ -762,6 +778,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type DeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitDeclarationNodeStart(DeclarationNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type DeclaredTypeListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -843,6 +867,17 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitEnumConstantDeclarationNodeStart(EnumConstantDeclarationNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type EnumConstantModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitEnumConstantModifiersNodeStart(EnumConstantModifiersNode node, boolean mostSpecific)
     {
     }
 
@@ -1062,25 +1097,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitInitializerDeclarationNodeStart(InitializerDeclarationNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type InlineTypeDeclarableNode.
-     * @param node The node being visited.
-     */
-    public void visitInlineTypeDeclarableNodeStart(InlineTypeDeclarableNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type InlineTypeDeclarationNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitInlineTypeDeclarationNodeStart(InlineTypeDeclarationNode node, boolean mostSpecific)
     {
     }
 
@@ -1538,6 +1554,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMethodModifiersNodeStart(MethodModifiersNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ModifiedNode.
+     * @param node The node being visited.
+     */
+    public void visitModifiedNodeStart(ModifiedNode<?> node)
     {
     }
 
@@ -2250,6 +2274,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type AbstractInvokableDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAbstractInvokableDeclarationNodeStop(AbstractInvokableDeclarationNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type AbstractMemberVariableDeclarationNode.
      * @param node The node being visited.
      */
@@ -2262,6 +2294,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitAbstractlyUnmodifiedClassDeclarationNodeStop(AbstractlyUnmodifiedClassDeclarationNode<?> node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type AccessibleTypeModifiersNode.
+     * @param node The node being visited.
+     */
+    public void visitAccessibleTypeModifiersNodeStop(AccessibleTypeModifiersNode node)
     {
     }
 
@@ -2907,6 +2947,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type DeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitDeclarationNodeStop(DeclarationNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type DeclaredTypeListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2988,6 +3036,17 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitEnumConstantDeclarationNodeStop(EnumConstantDeclarationNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type EnumConstantModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitEnumConstantModifiersNodeStop(EnumConstantModifiersNode node, boolean mostSpecific)
     {
     }
 
@@ -3207,25 +3266,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitInitializerDeclarationNodeStop(InitializerDeclarationNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type InlineTypeDeclarableNode.
-     * @param node The node being visited.
-     */
-    public void visitInlineTypeDeclarableNodeStop(InlineTypeDeclarableNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type InlineTypeDeclarationNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitInlineTypeDeclarationNodeStop(InlineTypeDeclarationNode node, boolean mostSpecific)
     {
     }
 
@@ -3683,6 +3723,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMethodModifiersNodeStop(MethodModifiersNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ModifiedNode.
+     * @param node The node being visited.
+     */
+    public void visitModifiedNodeStop(ModifiedNode<?> node)
     {
     }
 

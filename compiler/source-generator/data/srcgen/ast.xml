@@ -48,6 +48,12 @@
                 This tagging interface is used to denote AST nodes which can be used as members of a class declaration's body.
             ]]></doc>
         </type>
+        
+        <type name="DeclarationNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which declare some Java language element.
+            ]]></doc>
+        </type>
 
         <type name="DeclaredTypeNode" super="Node" mode="tag">
             <tag name="ReferenceTypeNode" />
@@ -79,14 +85,6 @@
             ]]></doc>
         </type>
 
-        <type name="InlineTypeDeclarableNode" super="Node" mode="tag">
-            <tag name="TypeDeclarationNode" />
-            <doc><![CDATA[
-                This tagging interface is used to denote AST nodes which represent type declarations and can be declared inline
-                as a statement.
-            ]]></doc>
-        </type>
-
         <type name="InterfaceMemberNode" super="Node" mode="tag">
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's
@@ -108,6 +106,13 @@
                 default="makeMetaAnnotationListNode()" />
             <doc><![CDATA[
                 This tagging interface describes nodes which may be meta-annotated.
+            ]]></doc>
+        </type>
+        
+        <type name="ModifiedNode" super="Node" typeParam="T extends ModifiersNode" mode="tag">
+            <prop name="modifiers" type="T" desc="the modifiers for this node"/>
+            <doc><![CDATA[
+                This interface represents a node which has a child node that modifies it.
             ]]></doc>
         </type>
 
@@ -168,6 +173,7 @@
             <tag name="InterfaceMemberNode" />
             <tag name="AnnotationMemberNode" />
             <tag name="AnonymousClassMemberNode" />
+            <tag name="DeclarationNode" />
             <doc><![CDATA[
                 This tagging interface is used to denoate AST nodes which declare types.
             ]]></doc>
@@ -288,6 +294,13 @@
 
         <!-- ====================== MODIFIER NODES ====================== -->
 
+        <type name="AccessibleTypeModifiersNode" super="ModifiersNode" mode="tag">
+            <prop name="access" type="AccessModifier" desc="the access for the associated type" />
+            <doc><![CDATA[
+                A node representing the modifiers applied to a type declaration which has an access modifier.
+            ]]></doc>
+        </type>
+
         <type name="AnnotationMethodModifiersNode" super="ModifiersNode">
             <doc><![CDATA[
                 Represents the modifiers which can be associated with an annotation method.  As all annotation methods
@@ -297,6 +310,7 @@
         </type>
 
         <type name="AnnotationModifiersNode" super="ModifiersNode">
+            <tag name="AccessibleTypeModifiersNode" />
             <prop name="access" type="AccessModifier" desc="the access for the associated annotation" />
             <prop name="staticFlag" type="boolean" desc="whether or not the associated annotation is static"
                 default="false" />
@@ -313,6 +327,7 @@
         </type>
 
         <type name="ClassModifiersNode" super="ModifiersNode">
+            <tag name="AccessibleTypeModifiersNode" />
             <prop name="access" type="AccessModifier" desc="the access for the associated class" />
             <prop name="abstractFlag" type="boolean" desc="whether or not the associated class is abstract"
                 default="false" />
@@ -351,7 +366,18 @@
             </factory-method>
         </type>
 
+        <type name="EnumConstantModifiersNode" super="ModifiersNode">
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with an enum constant.  Only annotations and
+                meta-annotations can be used.
+            ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
+        </type>
+
         <type name="EnumModifiersNode" super="ModifiersNode">
+            <tag name="AccessibleTypeModifiersNode" />
             <prop name="access" type="AccessModifier" desc="the access for the associated enum" />
             <prop name="strictfpFlag" type="boolean"
                 desc="whether or not the associated enum uses strict floating-point" default="false" />
@@ -398,6 +424,7 @@
         </type>
 
         <type name="InterfaceModifiersNode" super="ModifiersNode">
+            <tag name="AccessibleTypeModifiersNode" />
             <prop name="access" type="AccessModifier" desc="the access for the associated interface" />
             <prop name="staticFlag" type="boolean" desc="whether or not the associated interface is static"
                 default="false" />
@@ -1072,15 +1099,6 @@
             </factory-method>
         </type>
 
-        <type name="InlineTypeDeclarationNode" super="Node">
-            <tag name="BlockStatementNode" />
-            <prop name="declaration" type="InlineTypeDeclarableNode" desc="the type declaration" />
-            <doc><![CDATA[
-                A node representing an inline type declaration.  This is used to allow classes and enums to be declared
-                within a method body or similar environment.
-            ]]></doc>
-        </type>
-
         <type name="LabeledStatementNode" super="Node">
             <tag name="StatementNode" />
             <prop name="label" type="IdentifierNode" desc="the statement's label" />
@@ -1099,6 +1117,7 @@
         <type name="LocalVariableDeclarationNode" super="Node">
             <tag name="BlockStatementNode" />
             <tag name="VariableDeclaratorOwnerNode" />
+            <tag name="DeclarationNode" />
             <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable"
                 default="makeVariableModifiersNode()" />
             <prop name="type" type="TypeNode" desc="the type of the declared variables" />
@@ -1387,9 +1406,28 @@
 
         <!-- ======================= MEMBER NODES ======================= -->
 
+        <type name="AbstractInvokableDeclarationNode" super="Node" mode="tag">
+            <tag name="ClassMemberNode" />
+            <tag name="DeclarationNode" />
+            <prop name="identifier" type="IdentifierNode" desc="the identifier for the name of this executable" />
+            <prop name="modifiers" type="ModifiersNode" mode="readOnly" desc="the modifiers for this executable" />
+            <prop name="parameters" type="VariableListNode" desc="the parameters declared by this executable" />
+            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this executable"
+                default="null" />
+            <prop name="throwTypes" type="UnparameterizedTypeListNode" desc="the types of exceptions thrown by this executable"
+                default="makeUnparameterizedTypeListNode()" />
+            <prop name="typeParameters" type="TypeParameterListNode" desc="this executable's applicable type parameters"
+                default="makeTypeParameterListNode()" />
+            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <doc><![CDATA[
+                A node representing an executable declaration, such as a method or a constructor.
+            ]]></doc>
+        </type>
+
         <type name="AbstractMemberVariableDeclarationNode" super="Node" typeParam="T extends ModifiersNode"
             mode="abstract">
             <tag name="VariableDeclaratorOwnerNode" />
+            <tag name="DeclarationNode" />
             <prop name="modifiers" type="T" desc="the modifiers for this declaration" />
             <prop name="type" type="TypeNode" desc="the type of the declared variables" />
             <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
@@ -1401,6 +1439,7 @@
 
         <type name="AnnotationMethodDeclarationNode" super="Node">
             <tag name="AnnotationMemberNode" />
+            <tag name="DeclarationNode" />
             <prop name="modifiers" type="AnnotationMethodModifiersNode" desc="the modifiers for this annotation method" />
             <prop name="type" type="TypeNode" desc="the return type of this annotation method" />
             <prop name="identifier" type="IdentifierNode" desc="this annotation method's name" />
@@ -1423,7 +1462,7 @@
         </type>
 
         <type name="ConstructorDeclarationNode" super="Node">
-            <tag name="ClassMemberNode" />
+            <tag name="AbstractInvokableDeclarationNode" />
             <prop name="identifier" type="IdentifierNode" desc="the identifier for the name of this constructor" />
             <prop name="body" type="ConstructorBodyNode" desc="the body of this constructor" />
             <prop name="modifiers" type="ConstructorModifiersNode" desc="the modifiers for this constructor" />
@@ -1449,11 +1488,8 @@
         </type>
 
         <type name="EnumConstantDeclarationNode" super="Node">
-            <tag name="MetaAnnotatableNode" />
-            <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on this constant"
-                default="makeMetaAnnotationListNode()" />
-            <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant"
-                default="makeAnnotationListNode()" />
+            <tag name="DeclarationNode" />
+            <prop name="modifiers" type="EnumConstantModifiersNode" desc="the modifiers for this enum constant"/>
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to the enum constructor" />
             <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant"
@@ -1481,6 +1517,7 @@
             <tag name="ClassMemberNode" />
             <tag name="AnonymousClassMemberNode" />
             <tag name="MetaAnnotatableNode" />
+            <tag name="DeclarationNode" />
             <prop name="staticInitializer" type="boolean" desc="whether or not the initializer is static" />
             <prop name="body" type="BlockStatementListNode" desc="the body of the initializer" />
             <doc><![CDATA[
@@ -1497,9 +1534,9 @@
         </type>
 
         <type name="MethodDeclarationNode" super="Node">
-            <tag name="ClassMemberNode" />
             <tag name="InterfaceMemberNode" />
             <tag name="AnonymousClassMemberNode" />
+            <tag name="AbstractInvokableDeclarationNode" />
             <prop name="body" type="BlockStatementListNode" desc="the body of this method" />
             <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
             <prop name="identifier" type="IdentifierNode" desc="this method's name" />
@@ -1655,7 +1692,7 @@
 
         <type name="LocalClassDeclarationNode" super="AbstractlyUnmodifiedClassDeclarationNode"
             superTypeArg="LocalClassModifiersNode">
-            <tag name="InlineTypeDeclarableNode" />
+            <tag name="BlockStatementNode" />
             <doc><![CDATA[
                 Represents the declaration of an inline class as a block statement.
             ]]></doc>
@@ -1697,6 +1734,8 @@
             <tag name="TypeDeclarationNode" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this declared type" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <prop name="modifiers" type="ModifiersNode" desc="the modifiers associated with this node"
+                mode="readOnly" />
             <prop name="body" type="TypeBodyNode" typeArg="? extends T" mode="readOnly" desc="this type's body" />
             <include file="NamedTypeDeclarationNode.java" />
             <doc><![CDATA[
@@ -1958,6 +1997,7 @@
 
         <type name="PackageDeclarationNode" super="Node">
             <tag name="MetaAnnotatableNode" />
+            <tag name="DeclarationNode" />
             <prop name="name" type="NameNode" desc="the name of the package" />
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on the package declaration"
                 default="makeMetaAnnotationListNode()" />

@@ -29,7 +29,6 @@ public class InitialNameCategorizer
 	public static final InitialNameCategorizer SINGLETON = new InitialNameCategorizer();
 
 	/** The logger for this object. */
-	@SuppressWarnings("unused")
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 
 	/**
@@ -37,6 +36,7 @@ public class InitialNameCategorizer
 	 * 
 	 * @param node The node to categorize.
 	 * @param category The category to assign to that node.
+	 * @return The appropriate name category, or <code>null</code> if a name category cannot be established.
 	 */
 	public NameCategory categorize(NameNode node)
 	{
@@ -183,8 +183,12 @@ public class InitialNameCategorizer
 			return NameCategory.TYPE;
 		}
 
-		throw new IllegalStateException("Could not find a name categorization for " + node.getNameString()
-				+ (node.getStartLocation() == null ? "" : " at " + node.getStartLocation()));
+		// No name category found.  This is only okay if the name is detached.
+		if (node.getRootPackage() != null)
+		{
+			LOGGER.error("Could not determine category for name " + node.getNameString());
+		}
+		return null;
 	}
 
 	/**

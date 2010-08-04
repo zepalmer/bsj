@@ -539,6 +539,14 @@ public interface BsjNodeOperation<P,R>
     public R executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, P p);
 
     /**
+     * Executes this operation against a EnumConstantModifiersNode.
+     * @param node The EnumConstantModifiersNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeEnumConstantModifiersNode(EnumConstantModifiersNode node, P p);
+
+    /**
      * Executes this operation against a EnumDeclarationNode.
      * @param node The EnumDeclarationNode in question.
      * @param p The parameter to use.
@@ -673,14 +681,6 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInitializerDeclarationNode(InitializerDeclarationNode node, P p);
-
-    /**
-     * Executes this operation against a InlineTypeDeclarationNode.
-     * @param node The InlineTypeDeclarationNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, P p);
 
     /**
      * Executes this operation against a InstanceOfNode.

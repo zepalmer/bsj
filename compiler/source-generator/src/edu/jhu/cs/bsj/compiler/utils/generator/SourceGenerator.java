@@ -851,7 +851,7 @@ public class SourceGenerator
 			// gen attributes enum
 			if (def.getResponsibleProperties(false).size() > 0)
 			{
-				ps.println("private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();");
+				ps.println("private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);");
 				ps.println("private ReadWriteAttribute getAttribute(LocalAttribute attributeName)");
 				ps.println("{");
 				ps.println("    ReadWriteAttribute attribute = localAttributes.get(attributeName);");

@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +40,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
@@ -329,10 +329,12 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         visitor.visitAnnotationMethodDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitAnnotationMemberNodeStart(this);
+        visitor.visitDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitAnnotationMemberNodeStop(this);
+        visitor.visitDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAnnotationMethodDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

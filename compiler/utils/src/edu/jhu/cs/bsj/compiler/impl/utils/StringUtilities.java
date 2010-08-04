@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.utils;
 
+import java.util.List;
+
 /**
  * Contains utilities related to string manipulation.
  * @author Zachary Palmer
@@ -66,6 +68,28 @@ public class StringUtilities
 				sb.append("_");
 			}
 			sb.append(Character.toUpperCase(ident.charAt(i)));
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Joins the contents of the provided list of strings with the specified delimiter.
+	 * @param list The strings to join.
+	 * @param delimiter The delimiter in question.
+	 * @return The resulting string.
+	 */
+	public static String join(List<String> list, String delimiter)
+	{
+		StringBuilder sb = new StringBuilder();
+		boolean first = true;
+		for (String string : list)
+		{
+			if (first)
+			{
+				sb.append(delimiter);
+			}
+			sb.append(string);
+			first = false;
 		}
 		return sb.toString();
 	}

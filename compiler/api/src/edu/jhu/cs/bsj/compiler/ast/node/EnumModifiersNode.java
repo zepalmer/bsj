@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * legal but also implicit, so it does not appear here.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface EnumModifiersNode extends ModifiersNode
+public interface EnumModifiersNode extends ModifiersNode, AccessibleTypeModifiersNode
 {
     /**
      * Gets the access for the associated enum.

@@ -281,8 +281,7 @@ public class BsjBinaryNodeLoader
             if (field.isEnum() && !field.isSynthetic())
             {
                 list.add(factory.makeEnumConstantDeclarationNode(
-                		factory.makeMetaAnnotationListNode(),
-                        factory.makeAnnotationListNode(), 
+                		factory.makeEnumConstantModifiersNode(),
                         factory.makeIdentifierNode(field.getName()), 
                         factory.makeExpressionListNode(),
                         null,

@@ -19,17 +19,31 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 
+/**
+ * This visitor operates on a very large expression, rewriting it as a series of methods and method calls.  This is
+ * necessary for expressions which are large enough to exceed the limit on the bytecode size of a method.
+ * @author Zachary Palmer
+ */
 public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 {
+	private static final int DEFAULT_NODE_COUNT_THRESHOLD = 4000;
+	
 	private List<MethodDeclarationNode> methods;
 	private int methodId;
 	private BsjNodeFactory factory;
-
+	private int liftThreshold;
+	
 	public BsjLiftedCodeVisitor(List<MethodDeclarationNode> methods, BsjNodeFactory factory)
+	{
+		this(methods, factory, DEFAULT_NODE_COUNT_THRESHOLD);
+	}
+
+	public BsjLiftedCodeVisitor(List<MethodDeclarationNode> methods, BsjNodeFactory factory, int liftThreshold)
 	{
 		this.methods = methods;
 		this.methodId = 0;
 		this.factory = factory;
+		this.liftThreshold = liftThreshold;
 	}
 
 	/**
@@ -104,7 +118,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 		CountingVisitor countingVisitor = new CountingVisitor(0);
 		node.receive(countingVisitor);
 
-		if (countingVisitor.getCount() < 4000)
+		if (countingVisitor.getCount() < this.liftThreshold)
 		{
 			return;
 		}

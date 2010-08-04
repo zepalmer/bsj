@@ -91,6 +91,29 @@ public interface Node
 	public <N> N getNearestAncestorOfType(Class<N> nodeClass, List<? super Node> list);
 	
 	/**
+	 * A convenience method which retrieves the nearest ancestor of this node of any of the specified types.  Note that
+	 * a node is not its own ancestor; thus, providing this node's type as the node class will not retrieve this node.
+	 * The first node with a type matching any of those in the provided collection will be returned.
+	 * @param nodeClasses The possible classes of ancestor to retrieve.
+	 * @return The ancestor in question or <code>null</code> if no such ancestor exists.
+	 */
+	public <N> N getNearestAncestorOfTypes(Collection<Class<? extends N>> nodeClasses);
+	
+	/**
+	 * A convenience method which retrieves the nearest ancestor of this node of any of the specified types.  If such an
+	 * ancestor exists and the provided list is not <code>null</code>, all of the ancestors between this node and the
+	 * returned ancestor are added to the list.
+	 * 
+	 * Note that a node is not its own ancestor; thus, providing this node's type as the node class will not retrieve
+	 * this node.
+	 * @param nodeClasses The possible classes of ancestor to retrieve.
+	 * @param list The list of ancestors or <code>null</code> for no ancestor recording.
+	 * @return The ancestor in question or <code>null</code> if no such ancestor exists.  If no such ancestor exists,
+	 *         the provided list is unmodified.
+	 */
+	public <N> N getNearestAncestorOfTypes(Collection<Class<? extends N>> nodeClasses, List<? super Node> list);
+	
+	/**
 	 * Retrieves the top of the tree in which this node exists.
 	 * @return The furthest ancestor of this node (or this node if it has no parent).
 	 */
@@ -110,5 +133,13 @@ public interface Node
 	 * @return <code>true</code> if this node is a binary node; <code>false</code> if it is not.
 	 */
 	public boolean isBinary();
+	
+	/**
+	 * Generates source code representing this AST node.  Note that the output may be somewhat ambiguous and may lose
+	 * information; for instance, it is possible for both a {@link NameNode} and an {@link IdentifierNode} to be
+	 * serialized into source code as "<tt>var</tt>".  This method is intended primarily for display and reporting
+	 * purposes.
+	 */
+	public String toSourceCode();
 	/* GEN:stop */
 }

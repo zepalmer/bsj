@@ -1910,6 +1910,23 @@ constructorModifiers returns [ConstructorModifiersNode ret]
         }
     ;
     
+enumConstantModifiers returns [EnumConstantModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("enumConstantModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        modifiers[false]
+        {
+            $ret = factory.makeEnumConstantModifiersNode(
+                    $modifiers.metaAnnotations,
+                    $modifiers.annotations);
+        }
+    ;
+
 enumModifiers returns [EnumModifiersNode ret]
         scope Rule;
         @init {
@@ -2309,14 +2326,7 @@ enumConstant returns [EnumConstantDeclarationNode ret]
             ruleStop();
         }
     :   
-        javadoc
-        (
-            anyAnnotations
-            {
-                annotationsNode = $anyAnnotations.annotations;
-                metaAnnotationsNode = $anyAnnotations.metaAnnotations;
-            }
-        )?
+        javadoc enumConstantModifiers
         id=identifier
         (
             arguments
@@ -2332,8 +2342,7 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         )?
         {
             $ret = factory.makeEnumConstantDeclarationNode(
-                metaAnnotationsNode,
-                annotationsNode,
+                $enumConstantModifiers.ret,
                 $id.ret,
                 argumentsNode,
                 anonymousClassBodyNode,
@@ -3754,7 +3763,7 @@ blockStatement returns [BlockStatementNode ret]
     |   
         (typeHeader)=>inlineClassDeclaration
         {
-            $ret = factory.makeInlineTypeDeclarationNode($inlineClassDeclaration.ret);
+            $ret = $inlineClassDeclaration.ret;
         }
     |   
         statement

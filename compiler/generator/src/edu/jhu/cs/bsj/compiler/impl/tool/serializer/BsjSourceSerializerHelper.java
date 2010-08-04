@@ -732,8 +732,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			node.getJavadoc().executeOperation(this, p);
 			p.print("\n");
 		}
-		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
-		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
+		node.getModifiers().executeOperation(this, p);
 		node.getIdentifier().executeOperation(this, p);
 		handleListNode(node.getArguments(), "(", ", ", ")", p, true);
 		if (node.getBody() != null)
@@ -741,6 +740,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print("\n");
 			node.getBody().executeOperation(this, p);
 		}
+		return null;
+	}
+
+	@Override
+	public Void executeEnumConstantModifiersNode(EnumConstantModifiersNode node, PrependablePrintStream p)
+	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
+		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		return null;
 	}
 
@@ -965,13 +972,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		node.getBody().executeOperation(this, p);
 		p.decPrependCount();
 		p.println("}");
-		return null;
-	}
-
-	@Override
-	public Void executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, PrependablePrintStream p)
-	{
-		node.getDeclaration().executeOperation(this, p);
 		return null;
 	}
 

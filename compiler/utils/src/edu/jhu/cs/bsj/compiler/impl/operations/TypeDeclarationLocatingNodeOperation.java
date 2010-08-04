@@ -345,6 +345,8 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 		@Override
 		public NamedTypeDeclarationNode<?> executeCompilationUnitNode(CompilationUnitNode node, List<Node> p)
 		{
+			// TODO: fix priorities - single type imports first, then compilation unit package peers, then
+			// import-on-demand nodes
 			if (seenTypeDeclaration)
 			{
 				for (ImportNode importNode : node.getImports())

@@ -1,7 +1,10 @@
 /* GEN:headerstart */
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.*;
+
+import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
 /* GEN:headerstop */
@@ -40,13 +43,6 @@ public abstract class NodeImpl
 		this.uid = sUid.getAndIncrement();
 	}
 
-	/**
-	 * Causes this node to receive a visitor. Visitors are received by nodes in a depth-first fashion. The order of the
-	 * children receiving the visitor is dependent upon the type of node; however, a superclass's child nodes are always
-	 * visited before the subclass's child nodes.
-	 * 
-	 * @param visitor The visitor which should visit this node.
-	 */
 	public void receive(BsjNodeVisitor visitor)
 	{
 		visitor.visitStart(this);
@@ -66,21 +62,11 @@ public abstract class NodeImpl
 		return new EmptyIterator<Node>();
 	}
 
-	/**
-	 * Retrieves the unique ID number of this node.
-	 */
 	public long getUid()
 	{
 		return this.uid;
 	}
 
-	/**
-	 * Retrieves the parent of this node. If this node does not have a parent, <code>null</code> is returned. A node may
-	 * be without a parent if it is a {@link CompilationUnitNode} or if it is a code fragment (such as an isolated
-	 * expression).
-	 * 
-	 * @return This node's parent, or <code>null</code> if this node has no parent.
-	 */
 	public Node getParent()
 	{
 		this.parentAttribute.recordAccess(ReadWriteAttribute.AccessType.READ);
@@ -88,7 +74,7 @@ public abstract class NodeImpl
 	}
 
 	/**
-	 * Retrieves the parent node reference object for this node.
+	 * Changes the parent node reference object for this node.
 	 * 
 	 * @param node The parent node for this node.
 	 */
@@ -109,12 +95,6 @@ public abstract class NodeImpl
 		this.parent = node;
 	}
 
-	/**
-	 * Convenience function for marking a node as this node's child or not.
-	 * 
-	 * @param node The node to use. If <code>null</code>, nothing happens.
-	 * @param child <code>true</code> if the node is this node's child; <code>false</code> if it is not.
-	 */
 	protected void setAsChild(Node node, boolean child)
 	{
 		if (node instanceof NodeImpl)
@@ -126,38 +106,37 @@ public abstract class NodeImpl
 		}
 	}
 
-	/**
-	 * A convenience method which retrieves the nearest ancestor of this node of the specified type. Note that a node is
-	 * not its own ancestor; thus, providing this node's type as the node class will not retrieve this node.
-	 * 
-	 * @param nodeClass The class of ancestor to retrieve.
-	 * @return The ancestor in question or <code>null</code> if no such ancestor exists.
-	 */
 	public <N> N getNearestAncestorOfType(Class<N> nodeClass)
 	{
 		return getNearestAncestorOfType(nodeClass, null);
 	}
 
-	/**
-	 * A convenience method which retrieves the nearest ancestor of this node of the specified type. If such an ancestor
-	 * exists and the provided list is not <code>null</code>, all of the ancestors between this node and the returned
-	 * ancestor are added to the list.
-	 * 
-	 * Note that a node is not its own ancestor; thus, providing this node's type as the node class will not retrieve
-	 * this node.
-	 * 
-	 * @param nodeClass The class of ancestor to retrieve.
-	 * @param list The list of ancestors or <code>null</code> for no ancestor recording.
-	 * @return The ancestor in question or <code>null</code> if no such ancestor exists. If no such ancestor exists, the
-	 *         provided list is unmodified.
-	 */
 	public <N> N getNearestAncestorOfType(Class<N> nodeClass, List<? super Node> list)
+	{
+		return this.getNearestAncestorOfTypes(Collections.<Class<? extends N>>singletonList(nodeClass), list);
+	}
+	
+	public <N> N getNearestAncestorOfTypes(Collection<Class<? extends N>> nodeClasses)
+	{
+		return getNearestAncestorOfTypes(nodeClasses, null);
+	}
+	
+	public <N> N getNearestAncestorOfTypes(Collection<Class<? extends N>> nodeClasses, List<? super Node> list)
 	{
 		List<Node> nodeList = new ArrayList<Node>();
 		Node node = this.getParent();
 		while (node != null)
 		{
-			if (nodeClass.isInstance(node))
+			Class<? extends N> nodeClass = null;
+			for (Class<? extends N> candidateClass : nodeClasses)
+			{
+				if (candidateClass.isInstance(node))
+				{
+					nodeClass = candidateClass;
+					break;
+				}
+			}
+			if (nodeClass != null)
 			{
 				if (list != null)
 				{
@@ -171,11 +150,6 @@ public abstract class NodeImpl
 		return null;
 	}
 
-	/**
-	 * Retrieves the top of the tree in which this node exists.
-	 * 
-	 * @return The furthest ancestor of this node (or this node if it has no parent).
-	 */
 	public Node getFurthestAncestor()
 	{
 		Node node = this;
@@ -186,12 +160,6 @@ public abstract class NodeImpl
 		return node;
 	}
 
-	/**
-	 * Retrieves the root package associated with this node.
-	 * 
-	 * @return This node's root package (or <code>null</code> if this node is not part of a tree connected to the root
-	 *         package).
-	 */
 	public PackageNode getRootPackage()
 	{
 		Node node = getFurthestAncestor();
@@ -206,22 +174,19 @@ public abstract class NodeImpl
 		return null;
 	}
 
-	/**
-	 * Retrieves the manager for this node.
-	 * 
-	 * @return The manager for this node.
-	 */
 	public BsjNodeManager getManager()
 	{
 		return this.manager;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean isBinary()
 	{
 		return this.binary;
+	}
+	
+	public String toSourceCode()
+	{
+		return this.executeOperation(new BsjSourceSerializerImpl(), null);
 	}
 	/* GEN:stop */
 }

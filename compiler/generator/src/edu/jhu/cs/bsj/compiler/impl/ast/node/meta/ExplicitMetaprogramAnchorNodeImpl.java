@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,7 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
     /** The metaprogram on this node. */
     private MetaprogramNode metaprogram;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new HashMap<LocalAttribute,ReadWriteAttribute>();
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
     {
         ReadWriteAttribute attribute = localAttributes.get(attributeName);

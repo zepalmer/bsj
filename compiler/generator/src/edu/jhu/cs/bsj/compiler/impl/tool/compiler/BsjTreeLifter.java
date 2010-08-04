@@ -2250,13 +2250,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     @Override
     public ExpressionNode executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode liftMetaAnnotations = 
-                node.getMetaAnnotations() != null ?
-                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
-                        factory.makeNullLiteralNode();
-        ExpressionNode liftAnnotations = 
-                node.getAnnotations() != null ?
-                        node.getAnnotations().executeOperation(this,factoryNode) :
+        ExpressionNode liftModifiers = 
+                node.getModifiers() != null ?
+                        node.getModifiers().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
         ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
@@ -2284,12 +2280,41 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeEnumConstantDeclarationNode"),
                         factory.makeExpressionListNode(
-                                liftMetaAnnotations,
-                                liftAnnotations,
+                                liftModifiers,
                                 liftIdentifier,
                                 liftArguments,
                                 liftBody,
                                 liftJavadoc,
+                                expressionizeBsjSourceLocation(liftStartLocationValue),
+                                expressionizeBsjSourceLocation(liftStopLocationValue)),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeEnumConstantModifiersNode(EnumConstantModifiersNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        ExpressionNode liftAnnotations = 
+                node.getAnnotations() != null ?
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
+        BsjSourceLocation liftStartLocationValue = 
+                node.getStartLocation();
+        BsjSourceLocation liftStopLocationValue = 
+                node.getStopLocation();
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeEnumConstantModifiersNode"),
+                        factory.makeExpressionListNode(
+                                liftMetaAnnotations,
+                                liftAnnotations,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -2879,31 +2904,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStaticInitializerValue),
                                 liftBody,
                                 liftMetaAnnotations,
-                                expressionizeBsjSourceLocation(liftStartLocationValue),
-                                expressionizeBsjSourceLocation(liftStopLocationValue)),
-                        factory.makeReferenceTypeListNode());
-        
-        return ret;
-    }
-    
-    @Override
-    public ExpressionNode executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, ExpressionNode factoryNode)
-    {
-        ExpressionNode liftDeclaration = 
-                node.getDeclaration() != null ?
-                        node.getDeclaration().executeOperation(this,factoryNode) :
-                        factory.makeNullLiteralNode();
-        BsjSourceLocation liftStartLocationValue = 
-                node.getStartLocation();
-        BsjSourceLocation liftStopLocationValue = 
-                node.getStopLocation();
-        
-        ExpressionNode ret =
-                factory.makeMethodInvocationByExpressionNode(
-                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeInlineTypeDeclarationNode"),
-                        factory.makeExpressionListNode(
-                                liftDeclaration,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
