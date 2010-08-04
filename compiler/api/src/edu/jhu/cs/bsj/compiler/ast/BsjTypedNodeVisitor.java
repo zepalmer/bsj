@@ -1325,12 +1325,6 @@ public interface BsjTypedNodeVisitor
     public void visitMethodModifiersNodeStart(MethodModifiersNode node, boolean mostSpecific);
 
     /**
-     * Starts a visit for nodes of type ModifiedNode.
-     * @param node The node being visited.
-     */
-    public void visitModifiedNodeStart(ModifiedNode<?> node);
-
-    /**
      * Starts a visit for nodes of type ModifiersNode.
      * @param node The node being visited.
      */
@@ -3072,12 +3066,6 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMethodModifiersNodeStop(MethodModifiersNode node, boolean mostSpecific);
-
-    /**
-     * Stops a visit for nodes of type ModifiedNode.
-     * @param node The node being visited.
-     */
-    public void visitModifiedNodeStop(ModifiedNode<?> node);
 
     /**
      * Stops a visit for nodes of type ModifiersNode.

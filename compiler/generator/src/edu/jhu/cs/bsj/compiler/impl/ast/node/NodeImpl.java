@@ -24,25 +24,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.EmptyIterator;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NodeImpl implements Node
 {
-	private static int instanceCount = 0;
-	{
-		instanceCount++;
-		if (sUid.get() % 20000 == 0)
-		{
-			System.out.println("CURRENT NODE COUNT = " + instanceCount);
-		}
-	}
-    @Override
-	protected void finalize() throws Throwable
-	{
-		instanceCount--;
-		if (sUid.get() % 20000 == 0)
-		{
-			System.out.println("CURRENT NODE COUNT = " + instanceCount);
-		}
-	}
-
-	/** The location at which this node's text starts (inclusive). */
+    /** The location at which this node's text starts (inclusive). */
     private BsjSourceLocation startLocation;
     
     /** The location at which this node's text stops (exclusive). */

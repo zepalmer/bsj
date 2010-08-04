@@ -109,13 +109,6 @@
             ]]></doc>
         </type>
         
-        <type name="ModifiedNode" super="Node" typeParam="T extends ModifiersNode" mode="tag">
-            <prop name="modifiers" type="T" desc="the modifiers for this node"/>
-            <doc><![CDATA[
-                This interface represents a node which has a child node that modifies it.
-            ]]></doc>
-        </type>
-
         <type name="NonAssignmentExpressionNode" super="Node" mode="tag">
             <tag name="ExpressionNode" />
             <doc><![CDATA[
