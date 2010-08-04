@@ -1,11 +1,16 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
@@ -49,6 +54,16 @@ public abstract class AbstractElementImpl<T extends Node> extends TypecheckerMod
 		}
 		return EnumSet.of(modifier);
 	}
+	
+	protected List<? extends AnnotationMirror> makeAnnotationMirrors(List<? extends AnnotationNode> annotations)
+	{
+		List<AnnotationMirror> ret = new ArrayList<AnnotationMirror>();
+		for (AnnotationNode annotationNode : annotations)
+		{
+			ret.add(AnnotationMirrorImpl.makeForNode(getManager(), annotationNode));
+		}
+		return ret;
+	}
 
 	@Override
 	public Element getEnclosingElement()
@@ -73,4 +88,12 @@ public abstract class AbstractElementImpl<T extends Node> extends TypecheckerMod
 	{
 		return ~(int) this.getBackingNode().getUid();
 	}
+
+	@Override
+	public <A extends Annotation> A getAnnotation(Class<A> annotationType)
+	{
+		// NOTE: this implementation does not support getAnnotation functionality in any form
+		return null;
+	}
+	
 }

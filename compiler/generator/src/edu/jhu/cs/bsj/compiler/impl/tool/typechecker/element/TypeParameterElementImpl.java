@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
-import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +14,7 @@ import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
 
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
@@ -28,8 +29,12 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	@Override
 	public List<? extends TypeMirror> getBounds()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<TypeMirror> list = new ArrayList<TypeMirror>();
+		for (DeclaredTypeNode typeNode : getBackingNode().getBounds())
+		{
+			list.add(makeType(typeNode));
+		}
+		return list;
 	}
 
 	@Override
@@ -53,30 +58,15 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	}
 
 	@Override
-	public <A extends Annotation> A getAnnotation(Class<A> annotationType)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public List<? extends Element> getEnclosedElements()
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Element getEnclosingElement()
-	{
-		// According to contract, type parameters never have an enclosing element.
 		return null;
 	}
 

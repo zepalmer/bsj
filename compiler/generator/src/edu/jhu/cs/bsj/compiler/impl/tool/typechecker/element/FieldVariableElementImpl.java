@@ -1,14 +1,11 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
-import java.lang.annotation.Annotation;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
@@ -24,20 +21,6 @@ public class FieldVariableElementImpl extends AbstractMemberVariableElementImpl<
 
 	@Override
 	public TypeMirror asType()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <A extends Annotation> A getAnnotation(Class<A> annotationType)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<? extends AnnotationMirror> getAnnotationMirrors()
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -72,12 +55,4 @@ public class FieldVariableElementImpl extends AbstractMemberVariableElementImpl<
 		}
 		return set;
 	}
-
-	@Override
-	public Name getSimpleName()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

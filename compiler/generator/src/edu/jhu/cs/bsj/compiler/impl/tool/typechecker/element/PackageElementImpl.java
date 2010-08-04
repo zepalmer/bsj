@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -61,17 +60,9 @@ public class PackageElementImpl extends AbstractElementImpl<PackageNode> impleme
 	}
 
 	@Override
-	public <A extends Annotation> A getAnnotation(Class<A> annotationType)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override

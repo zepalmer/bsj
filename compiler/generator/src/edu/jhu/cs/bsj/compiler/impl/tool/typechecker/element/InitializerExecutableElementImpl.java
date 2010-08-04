@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
-import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +16,7 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 
 public class InitializerExecutableElementImpl extends AbstractExecutableElementImpl<InitializerDeclarationNode>
 {
@@ -33,28 +34,13 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	}
 
 	@Override
-	public <A extends Annotation> A getAnnotation(Class<A> annotationType)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public List<? extends Element> getEnclosedElements()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Element getEnclosingElement()
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -75,8 +61,7 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	@Override
 	public Set<Modifier> getModifiers()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptySet();
 	}
 
 	@Override
@@ -94,35 +79,30 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	@Override
 	public List<? extends VariableElement> getParameters()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public TypeMirror getReturnType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return NoTypeImpl.makeVoid(getManager());
 	}
 
 	@Override
 	public List<? extends TypeMirror> getThrownTypes()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public List<? extends TypeParameterElement> getTypeParameters()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public boolean isVarArgs()
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 

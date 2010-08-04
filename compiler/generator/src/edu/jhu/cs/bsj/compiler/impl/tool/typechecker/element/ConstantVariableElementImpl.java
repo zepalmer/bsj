@@ -1,15 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
-import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
@@ -31,20 +28,6 @@ public class ConstantVariableElementImpl extends AbstractMemberVariableElementIm
 	}
 
 	@Override
-	public <A extends Annotation> A getAnnotation(Class<A> annotationType)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<? extends AnnotationMirror> getAnnotationMirrors()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<? extends Element> getEnclosedElements()
 	{
 		return Collections.emptyList();
@@ -55,12 +38,4 @@ public class ConstantVariableElementImpl extends AbstractMemberVariableElementIm
 	{
 		return EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
 	}
-
-	@Override
-	public Name getSimpleName()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

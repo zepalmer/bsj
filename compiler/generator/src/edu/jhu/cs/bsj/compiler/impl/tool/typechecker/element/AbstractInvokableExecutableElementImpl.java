@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeParameterElement;
@@ -73,4 +74,11 @@ public abstract class AbstractInvokableExecutableElementImpl<T extends AbstractI
 		}
 		return list;
 	}
+
+	@Override
+	public List<? extends AnnotationMirror> getAnnotationMirrors()
+	{
+		return makeAnnotationMirrors(getBackingNode().getModifiers().getAnnotations());
+	}
+	
 }
