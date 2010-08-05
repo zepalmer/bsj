@@ -40,13 +40,6 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	}
 
 	@Override
-	public List<? extends Element> getEnclosedElements()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public ElementKind getKind()
 	{
 		if (getBackingNode().getStaticInitializer())

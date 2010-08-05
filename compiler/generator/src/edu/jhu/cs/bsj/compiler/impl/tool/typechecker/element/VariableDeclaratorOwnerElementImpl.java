@@ -5,6 +5,7 @@ import javax.lang.model.element.Name;
 
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
+import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
 public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDeclaratorOwnerNode> extends
@@ -54,8 +55,7 @@ public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDecla
 	@Override
 	public Object getConstantValue()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override

@@ -66,8 +66,7 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	@Override
 	public List<? extends Element> getEnclosedElements()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<A
 	@Override
 	public List<? extends TypeMirror> getInterfaces()
 	{
-		return Collections.singletonList(getTypeByName("java", "lang", "annotation", "Annotation"));
+		return Collections.singletonList(getElementByName("java", "lang", "annotation", "Annotation").asType());
 	}
 
 	@Override

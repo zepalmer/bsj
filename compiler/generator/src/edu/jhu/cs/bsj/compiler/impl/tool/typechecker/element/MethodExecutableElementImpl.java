@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.lang.model.element.Element;
@@ -30,13 +29,6 @@ public class MethodExecutableElementImpl extends AbstractInvokableExecutableElem
 
 	@Override
 	public TypeMirror asType()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<? extends Element> getEnclosedElements()
 	{
 		// TODO Auto-generated method stub
 		return null;

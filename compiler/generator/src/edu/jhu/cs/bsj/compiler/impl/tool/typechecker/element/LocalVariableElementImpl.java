@@ -25,8 +25,7 @@ public class LocalVariableElementImpl extends VariableDeclaratorOwnerElementImpl
 	@Override
 	public TypeMirror asType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return makeType(getBackingNode().getType());
 	}
 
 	@Override

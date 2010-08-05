@@ -45,7 +45,7 @@ public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends Abstrac
 				return null;
 			} else
 			{
-				return makeType(objectDeclaration);
+				return makeElement(objectDeclaration).asType();
 			}
 		}
 	}

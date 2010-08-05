@@ -5,8 +5,10 @@ import java.util.List;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractMemberVariableDeclarationNode;
+import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
 public abstract class AbstractMemberVariableElementImpl<T extends AbstractMemberVariableDeclarationNode<?>> extends
@@ -20,8 +22,7 @@ public abstract class AbstractMemberVariableElementImpl<T extends AbstractMember
 	@Override
 	public Object getConstantValue()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -34,5 +35,11 @@ public abstract class AbstractMemberVariableElementImpl<T extends AbstractMember
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
 	{
 		return makeAnnotationMirrors(getBackingNode().getModifiers().getAnnotations());
+	}
+
+	@Override
+	public TypeMirror asType()
+	{
+		return makeType(getBackingNode().getType());
 	}
 }

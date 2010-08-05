@@ -23,8 +23,7 @@ public class ConstantVariableElementImpl extends AbstractMemberVariableElementIm
 	@Override
 	public TypeMirror asType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return makeType(getBackingNode().getType());
 	}
 
 	@Override

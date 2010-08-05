@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
 
@@ -46,7 +47,7 @@ public class TypecheckerModelComponentImpl
 	 * @param node The node for which to create a type.
 	 * @return  The resulting type.
 	 */
-	protected TypeMirror makeType(Node node)
+	protected TypeMirror makeType(TypeNode node)
 	{
 		return node.executeOperation(new TypeBuildingNodeOperation(getManager()), null);
 	}
@@ -60,17 +61,6 @@ public class TypecheckerModelComponentImpl
 	public Element getElementByName(String... name)
 	{
 		return makeElement(findTopLevelTypeByName(name));
-	}
-	
-	/**
-	 * Retrieves a type for the top-level type named by the provided name components.  All but the last are assumed
-	 * to represent package names.
-	 * @param name The name of the top-level type to obtain.
-	 * @return A type mirror for that top-level type.
-	 */
-	public TypeMirror getTypeByName(String... name)
-	{
-		return makeType(findTopLevelTypeByName(name));
 	}
 	
 	protected NamedTypeDeclarationNode<?> findTopLevelTypeByName(String... name)

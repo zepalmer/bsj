@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -20,6 +21,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
+import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
 public class AnonymousClassTypeElementImpl extends AbstractElementImpl<AnonymousClassBodyNode> implements TypeElement
@@ -37,7 +39,7 @@ public class AnonymousClassTypeElementImpl extends AbstractElementImpl<Anonymous
 		if (parent instanceof QualifiedClassInstantiationNode)
 		{
 			// TODO
-			return null;
+			throw new NotImplementedYetException();
 		} else if (parent instanceof UnqualifiedClassInstantiationNode)
 		{
 			UnqualifiedClassInstantiationNode node = (UnqualifiedClassInstantiationNode)parent;
@@ -102,8 +104,16 @@ public class AnonymousClassTypeElementImpl extends AbstractElementImpl<Anonymous
 	@Override
 	public List<? extends Element> getEnclosedElements()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<Element> ret = new ArrayList<Element>();
+		for (Node node : getBackingNode().getMembers())
+		{
+			Element element = makeElement(node);
+			if (element != null)
+			{
+				ret.add(element);
+			}
+		}
+		return ret;
 	}
 
 	@Override

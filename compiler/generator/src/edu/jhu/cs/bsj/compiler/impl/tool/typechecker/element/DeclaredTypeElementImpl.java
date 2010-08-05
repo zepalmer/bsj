@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AccessibleTypeModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
@@ -106,8 +108,16 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 	@Override
 	public List<? extends Element> getEnclosedElements()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<Element> ret = new ArrayList<Element>();
+		for (Node node : getBackingNode().getBody().getMembers())
+		{
+			Element element = makeElement(node);
+			if (element != null)
+			{
+				ret.add(element);
+			}
+		}
+		return ret;
 	}
 
 	@Override

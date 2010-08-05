@@ -12,6 +12,7 @@ import javax.lang.model.element.Name;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
 public class EnumConstantVariableElementImpl extends AbstractVariableElementImpl<EnumConstantDeclarationNode>
@@ -37,21 +38,13 @@ public class EnumConstantVariableElementImpl extends AbstractVariableElementImpl
 	@Override
 	public TypeMirror asType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return makeElement(getBackingNode().getNearestAncestorOfType(EnumDeclarationNode.class)).asType();
 	}
 
 	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
 	{
 		return makeAnnotationMirrors(getBackingNode().getModifiers().getAnnotations());
-	}
-
-	@Override
-	public List<? extends Element> getEnclosedElements()
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

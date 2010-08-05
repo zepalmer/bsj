@@ -55,16 +55,6 @@ public abstract class AbstractElementImpl<T extends Node> extends TypecheckerMod
 		return EnumSet.of(modifier);
 	}
 	
-	protected List<? extends AnnotationMirror> makeAnnotationMirrors(List<? extends AnnotationNode> annotations)
-	{
-		List<AnnotationMirror> ret = new ArrayList<AnnotationMirror>();
-		for (AnnotationNode annotationNode : annotations)
-		{
-			ret.add(AnnotationMirrorImpl.makeForNode(getManager(), annotationNode));
-		}
-		return ret;
-	}
-
 	@Override
 	public Element getEnclosingElement()
 	{
@@ -95,5 +85,16 @@ public abstract class AbstractElementImpl<T extends Node> extends TypecheckerMod
 		// NOTE: this implementation does not support getAnnotation functionality in any form
 		return null;
 	}
+
+	// *** Convenient utilities ***
 	
+	protected List<? extends AnnotationMirror> makeAnnotationMirrors(List<? extends AnnotationNode> annotations)
+	{
+		List<AnnotationMirror> ret = new ArrayList<AnnotationMirror>();
+		for (AnnotationNode annotationNode : annotations)
+		{
+			ret.add(AnnotationMirrorImpl.makeForNode(getManager(), annotationNode));
+		}
+		return ret;
+	}
 }
