@@ -39,7 +39,7 @@ public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends Abstrac
 					null);
 		} else
 		{
-			NamedTypeDeclarationNode<?> objectDeclaration = findTopLevelTypeByName("java", "lang", "Object");
+			NamedTypeDeclarationNode<?> objectDeclaration = getManager().getToolkit().findTopLevelTypeByName("java", "lang", "Object");
 			if (objectDeclaration.getUid() == getBackingNode().getUid())
 			{
 				return null;

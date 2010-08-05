@@ -35,6 +35,11 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 	{
 		super(manager, backingNode, enclosingElement);
 	}
+	
+	public T getBackingNode()
+	{
+		return super.getBackingNode();
+	}
 
 	@Override
 	public NestingKind getNestingKind()
