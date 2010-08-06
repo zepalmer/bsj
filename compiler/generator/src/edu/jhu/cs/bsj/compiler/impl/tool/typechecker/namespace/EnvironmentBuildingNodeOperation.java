@@ -28,7 +28,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -205,7 +204,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeArrayAccessNode(ArrayAccessNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getArrayExpression(), node.getIndexExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -239,7 +238,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeAssertStatementNode(AssertStatementNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getMessageExpression(), node.getTestExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -252,7 +251,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeBinaryExpressionNode(BinaryExpressionNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getLeftOperand(), node.getRightOperand());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -278,7 +277,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeBreakNode(BreakNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getLabel());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -419,7 +418,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeConditionalExpressionNode(ConditionalExpressionNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getCondition(), node.getTrueExpression(), node.getFalseExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -458,7 +457,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeContinueNode(ContinueNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getLabel());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -531,7 +530,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeExpressionListNode(ExpressionListNode node, Environment p)
 	{
-		return handleNondefiningListNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -584,7 +583,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeIdentifierListNode(IdentifierListNode node, Environment p)
 	{
-		return handleNondefiningListNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -603,19 +602,19 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeImportListNode(ImportListNode node, Environment p)
 	{
-		return handleNondefiningListNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeImportOnDemandNode(ImportOnDemandNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getName());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeImportSingleTypeNode(ImportSingleTypeNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getName());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -628,7 +627,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeInstanceOfNode(InstanceOfNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getExpression(), node.getType());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -713,14 +712,13 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getArguments(), node.getExpression(), node.getIdentifier(),
-				node.getTypeArguments());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeMethodInvocationByNameNode(MethodInvocationByNameNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getArguments(), node.getName(), node.getTypeArguments());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -751,7 +749,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executePackageDeclarationNode(PackageDeclarationNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getName());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -763,19 +761,19 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeParameterizedTypeNode(ParameterizedTypeNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getBaseType(), node.getTypeArguments());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getBase(), node.getSelect());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -787,14 +785,13 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getArguments(), node.getBody(), node.getConstructorTypeArguments(),
-				node.getIdentifier(), node.getEnclosingExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeQualifiedNameNode(QualifiedNameNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getIdentifier(), node.getBase());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -814,13 +811,13 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeReturnNode(ReturnNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeSimpleNameNode(SimpleNameNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getIdentifier());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -833,7 +830,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeSingleStaticImportNode(SingleStaticImportNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getName());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -846,7 +843,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeStaticImportOnDemandNode(StaticImportOnDemandNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getName());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -921,7 +918,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeTypeCastNode(TypeCastNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -948,32 +945,31 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeUnaryExpressionNode(UnaryExpressionNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getExpression());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, Environment p)
 	{
-		return handleNondefiningListNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeUnparameterizedTypeNode(UnparameterizedTypeNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getName());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, Environment p)
 	{
-		return handleNondefiningNode(node, p, node.getArguments(), node.getBody(), node.getConstructorTypeArguments(),
-				node.getType());
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -1376,13 +1372,12 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	 * 
 	 * @param node The node in question.
 	 * @param environment The environment to record for the node and to pass to its children.
-	 * @param children The children of that node.
 	 * @return The same environment.
 	 */
-	private Environment handleNondefiningNode(Node node, Environment environment, Node... children)
+	private Environment handleNondefiningNode(Node node, Environment environment)
 	{
 		recordEnvironment(node, environment);
-		for (Node child : children)
+		for (Node child : node.getChildIterable())
 		{
 			if (child != null)
 			{
@@ -1392,89 +1387,9 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 		return environment;
 	}
 
-	// performance variations
-	/**
-	 * A performance-oriented overload.
-	 * 
-	 * @see EnvironmentBuildingNodeOperation#handleNondefiningNode(Node, Environment, Node...)
-	 */
-	private Environment handleNondefiningNode(Node node, Environment environment)
-	{
-		return recordEnvironment(node, environment);
-	}
-
-	/**
-	 * A performance-oriented overload.
-	 * 
-	 * @see EnvironmentBuildingNodeOperation#handleNondefiningNode(Node, Environment, Node...)
-	 */
-	private Environment handleNondefiningNode(Node node, Environment environment, Node child1)
-	{
-		recordEnvironment(node, environment);
-		if (child1 != null)
-			child1.executeOperation(this, environment);
-		return environment;
-	}
-
-	/**
-	 * A performance-oriented overload.
-	 * 
-	 * @see EnvironmentBuildingNodeOperation#handleNondefiningNode(Node, Environment, Node...)
-	 */
-	private Environment handleNondefiningNode(Node node, Environment environment, Node child1, Node child2)
-	{
-		recordEnvironment(node, environment);
-		if (child1 != null)
-			child1.executeOperation(this, environment);
-		if (child2 != null)
-			child2.executeOperation(this, environment);
-		return environment;
-	}
-
-	/**
-	 * A performance-oriented overload.
-	 * 
-	 * @see EnvironmentBuildingNodeOperation#handleNondefiningNode(Node, Environment, Node...)
-	 */
-	private Environment handleNondefiningNode(Node node, Environment environment, Node child1, Node child2, Node child3)
-	{
-		recordEnvironment(node, environment);
-		if (child1 != null)
-			child1.executeOperation(this, environment);
-		if (child2 != null)
-			child2.executeOperation(this, environment);
-		if (child3 != null)
-			child3.executeOperation(this, environment);
-		return environment;
-	}
-
-	/**
-	 * Processes a list node which does not perform any namespace assignments and for which the members of the list are
-	 * typespace-independent. A list of exception types on a method declaration, for instance, could be processed by
-	 * this method. The exception types have an impact in the scope of the method declaration (which is handled by the
-	 * processing of the method declaration) but have no impact on a scope specific to the list.
-	 * <p/>
-	 * A list of block statements, on the other hand, cannot be processed correctly by this method. This is because the
-	 * environment produced by the first block statement may have an effect on the environment produced by the second
-	 * block statement; the children are not independent.
-	 * 
-	 * @param node The list node in question.
-	 * @param environment The environment to record for the list and to pass to its children.
-	 * @return The same environment.
-	 */
-	private Environment handleNondefiningListNode(ListNode<? extends Node> node, Environment environment)
-	{
-		recordEnvironment(node, environment);
-		for (Node child : node)
-		{
-			child.executeOperation(this, environment);
-		}
-		return environment;
-	}
-
 	private Environment handleModifiersNode(ModifiersNode node, Environment environment)
 	{
-		return handleNondefiningNode(node, environment, node.getAnnotations(), node.getMetaAnnotations());
+		return handleNondefiningNode(node, environment);
 	}
 
 	/**
