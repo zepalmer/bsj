@@ -3,14 +3,12 @@ package edu.jhu.cs.bsj.stdlib.metaannotations.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
-import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 
 
 
