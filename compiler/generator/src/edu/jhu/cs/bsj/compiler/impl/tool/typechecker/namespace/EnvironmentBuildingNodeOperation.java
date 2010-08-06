@@ -56,6 +56,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElement
  * 
  * @author Zachary Palmer
  */
+// TODO: the logic for determining which nodes are the children of a given node should be abstracted
 public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environment, Environment>
 {
 	/**
@@ -713,15 +714,14 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getArguments(), node.getExpression(), node.getIdentifier(),
+				node.getTypeArguments());
 	}
 
 	@Override
 	public Environment executeMethodInvocationByNameNode(MethodInvocationByNameNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getArguments(), node.getName(), node.getTypeArguments());
 	}
 
 	@Override
@@ -733,8 +733,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeNoOperationNode(NoOperationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -753,57 +752,50 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executePackageDeclarationNode(PackageDeclarationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getName());
 	}
 
 	@Override
 	public Environment executePackageNode(PackageNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return p;
 	}
 
 	@Override
 	public Environment executeParameterizedTypeNode(ParameterizedTypeNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getBaseType(), node.getTypeArguments());
 	}
 
 	@Override
 	public Environment executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getBase(), node.getSelect());
 	}
 
 	@Override
 	public Environment executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getExpression());
 	}
 
 	@Override
 	public Environment executePrimitiveTypeNode(PrimitiveTypeNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getArguments(), node.getBody(), node.getConstructorTypeArguments(),
+				node.getIdentifier(), node.getEnclosingExpression());
 	}
 
 	@Override
 	public Environment executeQualifiedNameNode(QualifiedNameNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getIdentifier(), node.getBase());
 	}
 
 	@Override
@@ -981,8 +973,8 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getArguments(), node.getBody(), node.getConstructorTypeArguments(),
+				node.getType());
 	}
 
 	@Override
@@ -1388,7 +1380,6 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	 * @param children The children of that node.
 	 * @return The same environment.
 	 */
-	@SuppressWarnings("unused")
 	private Environment handleNondefiningNode(Node node, Environment environment, Node... children)
 	{
 		recordEnvironment(node, environment);
