@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 
 /**
  * Represents the usage of a meta-annotation, as in:
@@ -13,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * That is handled by the {@link SingleElementMetaAnnotationNode} class.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface NormalMetaAnnotationNode extends MetaAnnotationNode
+public interface NormalMetaAnnotationNode extends MetaAnnotationNode, BsjSpecificNode
 {
     /**
      * Gets the arguments.

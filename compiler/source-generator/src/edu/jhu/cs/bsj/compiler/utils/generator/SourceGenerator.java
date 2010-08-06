@@ -502,6 +502,12 @@ public class SourceGenerator
 					extendsClause.append(", ");
 				extendsClause.append(iface);
 			}
+			if (def.isBsjSpecific())
+			{
+				if (extendsClause.length() > 0)
+					extendsClause.append(", ");
+				extendsClause.append("BsjSpecificNode");
+			}
 			if (extendsClause.length() > 0)
 				extendsClause.insert(0, " extends ");
 
@@ -742,7 +748,7 @@ public class SourceGenerator
 				propType = propType.substring(0, propType.indexOf('<')).trim();
 			if (def != null && propType.equals(def.getUnboundedTypeParameter()))
 			{
-				if (def.getTypeParameterUpperBound()==null)
+				if (def.getTypeParameterUpperBound() == null)
 				{
 					propType = "Object";
 				} else
@@ -1829,7 +1835,7 @@ public class SourceGenerator
 			dps.println();
 
 			// Special ListNode constructor
-			if (this.<TypeDefinition,PropertyDefinition>propInstanceOf(def.getFullName(), "ListNode", null))
+			if (this.<TypeDefinition, PropertyDefinition> propInstanceOf(def.getFullName(), "ListNode", null))
 			{
 				// Write documentation
 				for (PrintStream ps : new PrintStream[] { ips, cps, dps })
@@ -1948,13 +1954,20 @@ public class SourceGenerator
 	static class NodeOperationWriter extends ClassHierarchyBuildingHandler
 	{
 		/** Print stream for the interface. */
-		PrintStream ips;
+		private PrependablePrintStream ips;
 		/** Print stream for the implementation. */
-		PrintStream nps;
+		private PrependablePrintStream nps;
 		/** Print stream for all-methods proxy. */
-		PrintStream pps;
+		private PrependablePrintStream pps;
 		/** Print stream for default operation implementation. */
-		PrintStream dps;
+		private PrependablePrintStream dps;
+		/** Print stream for the Java node operation implementation. */
+		private PrependablePrintStream jps;
+
+		protected Iterable<PrependablePrintStream> allStreams()
+		{
+			return Arrays.asList(ips, nps, pps, dps, jps);
+		}
 
 		@Override
 		public void init() throws IOException
@@ -1971,11 +1984,18 @@ public class SourceGenerator
 			dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, Project.API,
 					SupplementCategory.GENERAL, "BsjDefaultNodeOperation<P,R>", true, null, null,
 					"BsjNodeOperation<P,R>");
+			jps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, Project.API,
+					SupplementCategory.GENERAL, "JavaNodeOperation<P,R>", true, null, null, "BsjNodeOperation<P,R>");
 		}
 
 		@Override
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
+			for (PrependablePrintStream ps : allStreams())
+			{
+				ps.incPrependCount();
+			}
+
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
 				String typeName;
@@ -2005,55 +2025,72 @@ public class SourceGenerator
 				typeName = def.getBaseName() + typeArg;
 				String typeParamS = def.getTypeParameter() == null ? "" : ("<" + def.getTypeParameter() + "> ");
 
-				ips.println("    /**");
-				ips.println("     * Executes this operation against a " + def.getBaseName() + ".");
-				ips.println("     * @param node The " + def.getBaseName() + " in question.");
-				ips.println("     * @param p The parameter to use.");
-				ips.println("     * @return The result of the operation.");
-				ips.println("     */");
-				ips.println("    public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
-						+ " node, P p);");
+				ips.println("/**");
+				ips.println(" * Executes this operation against a " + def.getBaseName() + ".");
+				ips.println(" * @param node The " + def.getBaseName() + " in question.");
+				ips.println(" * @param p The parameter to use.");
+				ips.println(" * @return The result of the operation.");
+				ips.println(" */");
+				ips.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, P p);");
 				ips.println();
 
-				nps.println("    /**");
-				nps.println("     * Performs no operation.");
-				nps.println("     * @param node Ignored.");
-				nps.println("     * @param p Ignored.");
-				nps.println("     * @return <code>null</code>, always.");
-				nps.println("     */");
-				nps.println("    public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
-						+ " node, P p)");
-				nps.println("    {");
-				nps.println("        return null;");
-				nps.println("    }");
+				nps.println("/**");
+				nps.println(" * Performs no operation.");
+				nps.println(" * @param node Ignored.");
+				nps.println(" * @param p Ignored.");
+				nps.println(" * @return <code>null</code>, always.");
+				nps.println(" */");
+				nps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, P p)");
+				nps.println("{");
+				nps.println("    return null;");
+				nps.println("}");
 				nps.println();
 
-				pps.println("    /**");
-				pps.println("     * Decorates this operation, turning it over to the backing operation.");
-				pps.println("     * @param node The node to affect.");
-				pps.println("     * @param p The value to pass through the proxy filter and into the backing operation.");
-				pps.println("     * @return The result of this operation (after being passed through the proxy filter).");
-				pps.println("     */");
-				pps.println("    public " + typeParamS + "RNew execute" + def.getBaseName() + "(" + typeName
+				pps.println("/**");
+				pps.println(" * Decorates this operation, turning it over to the backing operation.");
+				pps.println(" * @param node The node to affect.");
+				pps.println(" * @param p The value to pass through the proxy filter and into the backing operation.");
+				pps.println(" * @return The result of this operation (after being passed through the proxy filter).");
+				pps.println(" */");
+				pps.println("public " + typeParamS + "RNew execute" + def.getBaseName() + "(" + typeName
 						+ " node, PNew p)");
-				pps.println("    {");
-				pps.println("        POrig porig = before(p);");
-				pps.println("        ROrig rorig = this.backingOp.execute" + def.getBaseName() + "(node, porig);");
-				pps.println("        return after(rorig);");
-				pps.println("    }");
+				pps.println("{");
+				pps.println("    POrig porig = before(p);");
+				pps.println("    ROrig rorig = this.backingOp.execute" + def.getBaseName() + "(node, porig);");
+				pps.println("    return after(rorig);");
+				pps.println("}");
 				pps.println();
 
-				dps.println("    /**");
-				dps.println("     * Executes the default operation for this node.");
-				dps.println("     * @param node The node in question.");
-				dps.println("     * @param p The parameter to this node operation.");
-				dps.println("     */");
-				dps.println("    public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
-						+ " node, P p)");
-				dps.println("    {");
-				dps.println("        return executeDefault(node, p);");
-				dps.println("    }");
+				dps.println("/**");
+				dps.println(" * Executes the default operation for this node.");
+				dps.println(" * @param node The node in question.");
+				dps.println(" * @param p The parameter to this node operation.");
+				dps.println(" */");
+				dps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, P p)");
+				dps.println("{");
+				dps.println("    return executeDefault(node, p);");
+				dps.println("}");
 				dps.println();
+
+				if (def.isBsjSpecific())
+				{
+					jps.println("    /**");
+					jps.println("     * Executes the BSJ-specific operation for this node.");
+					jps.println("     * @param node The node in question.");
+					jps.println("     * @param p The parameter to this node operation.");
+					jps.println("     */");
+					jps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
+							+ " node, P p)");
+					jps.println("{");
+					jps.println("    return handleBsjSpecificNode(node, p);");
+					jps.println("}");
+					jps.println();
+				}
+			}
+
+			for (PrependablePrintStream ps : allStreams())
+			{
+				ps.decPrependCount();
 			}
 		}
 
@@ -2061,18 +2098,12 @@ public class SourceGenerator
 		public void finish() throws IOException
 		{
 			super.finish();
-
-			ips.println("}");
-			ips.close();
-
-			nps.println("}");
-			nps.close();
-
-			pps.println("}");
-			pps.close();
-
-			dps.println("}");
-			dps.close();
+			
+			for (PrependablePrintStream ps : allStreams())
+			{
+				ps.println("}");
+				ps.close();
+			}
 		}
 	}
 

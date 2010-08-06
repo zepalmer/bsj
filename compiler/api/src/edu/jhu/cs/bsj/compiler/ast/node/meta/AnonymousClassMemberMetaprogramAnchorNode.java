@@ -4,12 +4,13 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 
 /**
  * A node representing a metaprogram found in an anonymous class body.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AnonymousClassMemberMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<AnonymousClassMemberNode>, AnonymousClassMemberNode
+public interface AnonymousClassMemberMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<AnonymousClassMemberNode>, AnonymousClassMemberNode, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

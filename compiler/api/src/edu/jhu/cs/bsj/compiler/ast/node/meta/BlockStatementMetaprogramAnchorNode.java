@@ -4,12 +4,13 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 
 /**
  * A node representing a metaprogram as a block statement.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface BlockStatementMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<BlockStatementNode>, BlockStatementNode
+public interface BlockStatementMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<BlockStatementNode>, BlockStatementNode, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

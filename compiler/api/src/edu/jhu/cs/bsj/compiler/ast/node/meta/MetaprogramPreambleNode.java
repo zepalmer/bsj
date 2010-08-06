@@ -5,13 +5,14 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
  * This node represents a metaprogram's preamble.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramPreambleNode extends Node
+public interface MetaprogramPreambleNode extends Node, BsjSpecificNode
 {
     /**
      * Gets the imports for this metaprogram.

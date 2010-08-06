@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 
 /**
@@ -10,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
  * Java code and has not yet been assigned a type.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface RawCodeLiteralNode extends LiteralNode<String>
+public interface RawCodeLiteralNode extends LiteralNode<String>, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

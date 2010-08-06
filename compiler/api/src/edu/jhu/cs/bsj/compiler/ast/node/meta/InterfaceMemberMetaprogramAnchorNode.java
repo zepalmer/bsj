@@ -3,13 +3,14 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberNode;
 
 /**
  * A node representing a metaprogram found in an intereface body.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InterfaceMemberMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<InterfaceMemberNode>, InterfaceMemberNode
+public interface InterfaceMemberMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<InterfaceMemberNode>, InterfaceMemberNode, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

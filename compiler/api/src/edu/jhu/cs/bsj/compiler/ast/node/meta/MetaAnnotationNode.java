@@ -6,6 +6,7 @@ import javax.tools.DiagnosticListener;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
@@ -15,7 +16,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
  * node represents a metaprogram; otherwise, it is <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaAnnotationNode extends Node
+public interface MetaAnnotationNode extends Node, BsjSpecificNode
 {
     /**
      * Gets the annotation type.

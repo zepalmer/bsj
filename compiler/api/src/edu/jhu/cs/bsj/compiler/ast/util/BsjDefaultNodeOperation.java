@@ -83,7 +83,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -93,7 +93,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -103,7 +103,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -113,7 +113,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -123,7 +123,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -133,7 +133,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -143,7 +143,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -153,7 +153,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -163,7 +163,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -173,7 +173,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -183,7 +183,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -193,7 +193,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -203,7 +203,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -213,7 +213,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -223,7 +223,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -233,7 +233,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -243,7 +243,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -253,7 +253,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -263,7 +263,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -273,7 +273,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -283,7 +283,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -293,7 +293,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -303,7 +303,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -313,7 +313,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -323,7 +323,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -333,7 +333,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -343,7 +343,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -353,7 +353,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -363,7 +363,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -373,7 +373,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -383,7 +383,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -393,7 +393,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -403,7 +403,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -413,7 +413,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -423,7 +423,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -433,7 +433,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -443,7 +443,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -453,7 +453,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -463,7 +463,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -473,7 +473,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -483,7 +483,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -493,7 +493,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -503,7 +503,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -513,7 +513,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -523,7 +523,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -533,7 +533,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -543,7 +543,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -553,7 +553,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -563,7 +563,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -573,7 +573,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -583,7 +583,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -593,7 +593,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -603,7 +603,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -613,7 +613,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -623,7 +623,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -633,7 +633,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -643,7 +643,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -653,7 +653,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -663,7 +663,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -673,7 +673,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -683,7 +683,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -693,7 +693,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -703,7 +703,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -713,7 +713,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -723,7 +723,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -733,7 +733,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -743,7 +743,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -753,7 +753,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -763,7 +763,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -773,7 +773,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -783,7 +783,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -793,7 +793,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -803,7 +803,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -813,7 +813,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -823,7 +823,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -833,7 +833,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -843,7 +843,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -853,7 +853,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -863,7 +863,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -873,7 +873,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -883,7 +883,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -893,7 +893,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -903,7 +903,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -913,7 +913,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -923,7 +923,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -933,7 +933,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -943,7 +943,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -953,7 +953,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -963,7 +963,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -973,7 +973,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -983,7 +983,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -993,7 +993,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1003,7 +1003,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1013,7 +1013,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1023,7 +1023,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1033,7 +1033,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1043,7 +1043,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1053,7 +1053,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1063,7 +1063,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1073,7 +1073,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1083,7 +1083,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1093,7 +1093,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1103,7 +1103,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1113,7 +1113,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1123,7 +1123,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1133,7 +1133,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1143,7 +1143,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1153,7 +1153,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1163,7 +1163,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1173,7 +1173,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1183,7 +1183,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1193,7 +1193,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1203,7 +1203,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1213,7 +1213,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1223,7 +1223,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1233,7 +1233,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1243,7 +1243,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1253,7 +1253,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1263,7 +1263,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1273,7 +1273,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1283,7 +1283,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1293,7 +1293,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1303,7 +1303,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1313,7 +1313,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1323,7 +1323,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1333,7 +1333,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1343,7 +1343,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1353,7 +1353,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1363,7 +1363,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1373,7 +1373,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1383,7 +1383,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1393,7 +1393,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1403,7 +1403,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1413,7 +1413,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1423,7 +1423,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1433,7 +1433,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1443,7 +1443,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1453,7 +1453,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1463,7 +1463,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1473,7 +1473,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1483,7 +1483,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1493,7 +1493,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1503,7 +1503,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1513,7 +1513,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1523,7 +1523,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1533,7 +1533,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1543,7 +1543,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1553,7 +1553,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1563,7 +1563,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1573,7 +1573,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1583,7 +1583,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1593,7 +1593,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1603,7 +1603,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1613,7 +1613,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1623,7 +1623,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1633,7 +1633,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1643,7 +1643,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1653,7 +1653,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1663,7 +1663,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1673,7 +1673,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1683,7 +1683,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1693,7 +1693,7 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.
@@ -1703,5 +1703,5 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
     {
         return executeDefault(node, p);
     }
-
+    
 }

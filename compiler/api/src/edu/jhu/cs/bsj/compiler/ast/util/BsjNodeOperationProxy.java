@@ -112,7 +112,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAlternateConstructorInvocationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -125,7 +125,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationAnnotationValueNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -138,7 +138,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationArrayValueNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -151,7 +151,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationBodyNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -164,7 +164,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -177,7 +177,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationElementListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -190,7 +190,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationElementNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -203,7 +203,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationExpressionValueNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -216,7 +216,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -229,7 +229,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationMemberListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -242,7 +242,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationMemberMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -255,7 +255,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationMethodDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -268,7 +268,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationMethodModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -281,7 +281,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -294,7 +294,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnnotationValueListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -307,7 +307,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnonymousClassBodyNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -320,7 +320,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnonymousClassMemberListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -333,7 +333,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAnonymousClassMemberMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -346,7 +346,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeArrayAccessNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -359,7 +359,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeArrayInitializerCreationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -372,7 +372,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeArrayInitializerNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -385,7 +385,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeArrayInstantiatorCreationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -398,7 +398,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeArrayTypeNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -411,7 +411,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAssertStatementNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -424,7 +424,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeAssignmentNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -437,7 +437,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeBinaryExpressionNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -450,7 +450,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeBlockNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -463,7 +463,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeBlockStatementListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -476,7 +476,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeBlockStatementMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -489,7 +489,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeBooleanLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -502,7 +502,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeBreakNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -515,7 +515,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeCaseListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -528,7 +528,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeCaseNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -541,7 +541,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeCatchListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -554,7 +554,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeCatchNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -567,7 +567,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeCharLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -580,7 +580,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeClassBodyNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -593,7 +593,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeClassDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -606,7 +606,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeClassLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -619,7 +619,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeClassMemberListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -632,7 +632,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeClassMemberMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -645,7 +645,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeClassModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -658,7 +658,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeCodeLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -671,7 +671,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeCompilationUnitNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -684,7 +684,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeConditionalExpressionNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -697,7 +697,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeConstantDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -710,7 +710,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeConstantModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -723,7 +723,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeConstructorBodyNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -736,7 +736,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeConstructorDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -749,7 +749,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeConstructorModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -762,7 +762,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeContinueNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -775,7 +775,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeDeclaredTypeListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -788,7 +788,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeDoWhileLoopNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -801,7 +801,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeDoubleLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -814,7 +814,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeEnhancedForLoopNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -827,7 +827,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeEnumBodyNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -840,7 +840,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeEnumConstantDeclarationListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -853,7 +853,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeEnumConstantDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -866,7 +866,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeEnumConstantModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -879,7 +879,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeEnumDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -892,7 +892,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeEnumModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -905,7 +905,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeExpressionListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -918,7 +918,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeExpressionStatementNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -931,7 +931,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeFieldDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -944,7 +944,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeFieldModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -957,7 +957,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeFloatLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -970,7 +970,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeForInitializerDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -983,7 +983,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeForInitializerExpressionNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -996,7 +996,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeForLoopNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1009,7 +1009,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeIdentifierListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1022,7 +1022,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeIdentifierNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1035,7 +1035,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeIfNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1048,7 +1048,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeImportListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1061,7 +1061,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeImportOnDemandNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1074,7 +1074,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeImportSingleTypeNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1087,7 +1087,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeInitializerDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1100,7 +1100,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeInstanceOfNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1113,7 +1113,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeIntLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1126,7 +1126,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeInterfaceBodyNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1139,7 +1139,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeInterfaceDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1152,7 +1152,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeInterfaceMemberListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1165,7 +1165,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeInterfaceMemberMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1178,7 +1178,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeInterfaceModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1191,7 +1191,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeJavadocNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1204,7 +1204,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeLabeledStatementNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1217,7 +1217,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeLocalClassDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1230,7 +1230,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeLocalClassModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1243,7 +1243,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeLocalVariableDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1256,7 +1256,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeLongLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1269,7 +1269,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaAnnotationArrayValueNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1282,7 +1282,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaAnnotationElementListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1295,7 +1295,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaAnnotationElementNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1308,7 +1308,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaAnnotationExpressionValueNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1321,7 +1321,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaAnnotationListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1334,7 +1334,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaAnnotationMetaAnnotationValueNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1347,7 +1347,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaAnnotationMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1360,7 +1360,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaAnnotationValueListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1373,7 +1373,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramDependencyDeclarationListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1386,7 +1386,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramDependencyDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1399,7 +1399,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramDependencyListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1412,7 +1412,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramDependencyNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1425,7 +1425,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramImportListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1438,7 +1438,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramImportNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1451,7 +1451,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1464,7 +1464,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramPreambleNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1477,7 +1477,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramTargetListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1490,7 +1490,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMetaprogramTargetNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1503,7 +1503,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMethodDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1516,7 +1516,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMethodInvocationByExpressionNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1529,7 +1529,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMethodInvocationByNameNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1542,7 +1542,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeMethodModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1555,7 +1555,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeNoOperationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1568,7 +1568,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeNormalAnnotationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1581,7 +1581,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeNormalMetaAnnotationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1594,7 +1594,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeNullLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1607,7 +1607,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executePackageDeclarationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1620,7 +1620,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executePackageNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1633,7 +1633,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeParameterizedTypeNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1646,7 +1646,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeParameterizedTypeSelectNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1659,7 +1659,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeParenthesizedExpressionNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1672,7 +1672,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executePrimitiveTypeNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1685,7 +1685,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeQualifiedClassInstantiationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1698,7 +1698,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeQualifiedNameNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1711,7 +1711,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeRawCodeLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1724,7 +1724,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeReferenceTypeListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1737,7 +1737,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeReturnNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1750,7 +1750,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSimpleNameNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1763,7 +1763,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSingleElementAnnotationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1776,7 +1776,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSingleElementMetaAnnotationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1789,7 +1789,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSingleStaticImportNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1802,7 +1802,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeStatementExpressionListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1815,7 +1815,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeStaticImportOnDemandNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1828,7 +1828,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeStringLiteralNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1841,7 +1841,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSuperFieldAccessNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1854,7 +1854,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSuperMethodInvocationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1867,7 +1867,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSuperclassConstructorInvocationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1880,7 +1880,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSwitchNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1893,7 +1893,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeSynchronizedNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1906,7 +1906,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeThisNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1919,7 +1919,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeThrowNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1932,7 +1932,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeTryNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1945,7 +1945,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeTypeArgumentListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1958,7 +1958,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeTypeCastNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1971,7 +1971,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeTypeDeclarationListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1984,7 +1984,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeTypeDeclarationMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -1997,7 +1997,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeTypeParameterListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2010,7 +2010,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeTypeParameterNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2023,7 +2023,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeUnaryExpressionNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2036,7 +2036,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeUnaryStatementExpressionNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2049,7 +2049,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeUnparameterizedTypeListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2062,7 +2062,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeUnparameterizedTypeNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2075,7 +2075,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeUnqualifiedClassInstantiationNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2088,7 +2088,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVariableAccessByExpressionNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2101,7 +2101,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVariableAccessByNameNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2114,7 +2114,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVariableDeclaratorListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2127,7 +2127,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVariableDeclaratorNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2140,7 +2140,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVariableInitializerListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2153,7 +2153,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVariableListNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2166,7 +2166,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVariableModifiersNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2179,7 +2179,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVariableNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2192,7 +2192,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeVoidTypeNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2205,7 +2205,7 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeWhileLoopNode(node, porig);
         return after(rorig);
     }
-
+    
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.
@@ -2218,5 +2218,5 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
         ROrig rorig = this.backingOp.executeWildcardTypeNode(node, porig);
         return after(rorig);
     }
-
+    
 }

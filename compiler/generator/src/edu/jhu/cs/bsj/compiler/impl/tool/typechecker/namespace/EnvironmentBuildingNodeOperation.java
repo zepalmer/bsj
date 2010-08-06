@@ -10,7 +10,6 @@ import javax.lang.model.element.VariableElement;
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
@@ -29,6 +28,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -38,34 +38,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.util.JavaNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElementImpl;
@@ -75,10 +50,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElement
  * operation method is the environment that the node should consider to be its base. The environment which is returned
  * by each operation method is the environment which that node will be using. All returned environments are recorded in
  * a map for future reference.
+ * <p/>
+ * If this operation is asked to build an environment for a BSJ-specific node other than a code literal or raw code
+ * literal, an {@link IllegalStateException} will result.
  * 
  * @author Zachary Palmer
  */
-public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Environment, Environment>
+public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environment, Environment>
 {
 	/**
 	 * The node-to-environment mapping that this operation is populating. Each constructed environment is stored here.
@@ -105,6 +83,13 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 		this.rootPackage = rootPackage;
 		this.toolkit = toolkit;
 		this.listener = diagnosticListener;
+	}
+
+	@Override
+	public Environment handleBsjSpecificNode(BsjSpecificNode node, Environment p)
+	{
+		throw new IllegalStateException("Environments should not be built when BSJ-specific node of type "
+				+ node.getClass() + " is still present.  Node string: " + node.toString());
 	}
 
 	@Override
@@ -178,14 +163,6 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	}
 
 	@Override
-	public Environment executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
-			Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Environment executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, Environment p)
 	{
 		// TODO Auto-generated method stub
@@ -195,15 +172,13 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
 	public Environment executeAnnotationModifiersNode(AnnotationModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -228,18 +203,9 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	}
 
 	@Override
-	public Environment executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node,
-			Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Environment executeArrayAccessNode(ArrayAccessNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getArrayExpression(), node.getIndexExpression());
 	}
 
 	@Override
@@ -273,8 +239,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeAssertStatementNode(AssertStatementNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getMessageExpression(), node.getTestExpression());
 	}
 
 	@Override
@@ -287,8 +252,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeBinaryExpressionNode(BinaryExpressionNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getLeftOperand(), node.getRightOperand());
 	}
 
 	@Override
@@ -306,14 +270,6 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	}
 
 	@Override
-	public Environment executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
-			Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Environment executeBooleanLiteralNode(BooleanLiteralNode node, Environment p)
 	{
 		return recordEnvironment(node, p);
@@ -322,7 +278,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeBreakNode(BreakNode node, Environment p)
 	{
-		return recordEnvironment(node, p);
+		return handleNondefiningNode(node, p, node.getLabel());
 	}
 
 	@Override
@@ -396,17 +352,9 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	}
 
 	@Override
-	public Environment executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Environment executeClassModifiersNode(ClassModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -420,26 +368,21 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	public Environment executeCompilationUnitNode(CompilationUnitNode node, Environment p)
 	{
 		// Create variables for the symbol table
-		NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap;
-		NamespaceMap<ExecutableElement> methodNamespaceMap;
-		NamespaceMap<VariableElement> variableNamespaceMap;
+		NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap = makeTypeNamespace(null, false);
+		NamespaceMap<ExecutableElement> methodNamespaceMap = makeMethodNamespace(null, false);
+		NamespaceMap<VariableElement> variableNamespaceMap = makeVariableNamespace(null, false);
+		Environment emptyEnvironment = new Environment(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap);
 
 		// *** Process on-demand imports. This namespace has a lazy error policy, as ambiguities in on-demand
 		// imports (such as "import java.util.*; import java.awt.*;" only matter if the ambiguous name is used
 		// (such as in "List").
-		typeNamespaceMap = makeTypeNamespace(null, false);
 		populateOnDemandImports(typeNamespaceMap, node.getImports());
 
 		// *** Process on-demand static imports.
-		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
-		methodNamespaceMap = makeMethodNamespace(null, false);
-		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
-		variableNamespaceMap = makeVariableNamespace(null, false);
 		populateOnDemandStaticImports(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getImports());
 
 		// *** Process top-level package peers. This namespace has an eager error policy as any duplication means
 		// a name conflict in the local package.
-		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
 		populateNamespaceMapWithPackage(typeNamespaceMap, (PackageNode) node.getParent(), node.getPackageDeclaration());
 
@@ -450,9 +393,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 		populateSingleTypeImports(typeNamespaceMap, node.getImports());
 
 		// *** Process single-type static imports.
-		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
 		methodNamespaceMap = makeMethodNamespace(methodNamespaceMap, true);
-		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
 		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, true);
 		populateSingleTypeStaticImports(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getImports());
 
@@ -467,8 +408,8 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 		recordEnvironment(node, environment);
 
 		// *** Build the environments for each of the children
-		node.getPackageDeclaration().executeOperation(this, environment);
-		node.getImports().executeOperation(this, environment);
+		node.getPackageDeclaration().executeOperation(this, emptyEnvironment);
+		node.getImports().executeOperation(this, emptyEnvironment);
 		node.getTypeDecls().executeOperation(this, environment);
 
 		// Finished!
@@ -478,8 +419,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeConditionalExpressionNode(ConditionalExpressionNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getCondition(), node.getTrueExpression(), node.getFalseExpression());
 	}
 
 	@Override
@@ -492,8 +432,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeConstantModifiersNode(ConstantModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -513,14 +452,13 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeConstructorModifiersNode(ConstructorModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
 	public Environment executeContinueNode(ContinueNode node, Environment p)
 	{
-		return recordEnvironment(node, p);
+		return handleNondefiningNode(node, p, node.getLabel());
 	}
 
 	@Override
@@ -574,8 +512,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeEnumConstantModifiersNode(EnumConstantModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -588,15 +525,13 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeEnumModifiersNode(EnumModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
 	public Environment executeExpressionListNode(ExpressionListNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningListNode(node, p);
 	}
 
 	@Override
@@ -616,8 +551,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeFieldModifiersNode(FieldModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -650,15 +584,13 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeIdentifierListNode(IdentifierListNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningListNode(node, p);
 	}
 
 	@Override
 	public Environment executeIdentifierNode(IdentifierNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -671,22 +603,19 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeImportListNode(ImportListNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningListNode(node, p);
 	}
 
 	@Override
 	public Environment executeImportOnDemandNode(ImportOnDemandNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getName());
 	}
 
 	@Override
 	public Environment executeImportSingleTypeNode(ImportSingleTypeNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getName());
 	}
 
 	@Override
@@ -699,8 +628,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeInstanceOfNode(InstanceOfNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getExpression(), node.getType());
 	}
 
 	@Override
@@ -725,18 +653,9 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	}
 
 	@Override
-	public Environment executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node,
-			Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Environment executeInterfaceModifiersNode(InterfaceModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -748,8 +667,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeJavadocNode(JavadocNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return p;
 	}
 
 	@Override
@@ -769,8 +687,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeLocalClassModifiersNode(LocalClassModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -784,136 +701,6 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	public Environment executeLongLiteralNode(LongLiteralNode node, Environment p)
 	{
 		return recordEnvironment(node, p);
-	}
-
-	@Override
-	public Environment executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaAnnotationElementNode(MetaAnnotationElementNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaAnnotationListNode(MetaAnnotationListNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node,
-			Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node,
-			Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node,
-			Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node,
-			Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramDependencyNode(MetaprogramDependencyNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramImportListNode(MetaprogramImportListNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramImportNode(MetaprogramImportNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramNode(MetaprogramNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramPreambleNode(MetaprogramPreambleNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramTargetListNode(MetaprogramTargetListNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeMetaprogramTargetNode(MetaprogramTargetNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -940,8 +727,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeMethodModifiersNode(MethodModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -953,13 +739,6 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 
 	@Override
 	public Environment executeNormalAnnotationNode(NormalAnnotationNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, Environment p)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -1044,15 +823,13 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeReturnNode(ReturnNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getExpression());
 	}
 
 	@Override
 	public Environment executeSimpleNameNode(SimpleNameNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getIdentifier());
 	}
 
 	@Override
@@ -1063,17 +840,9 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	}
 
 	@Override
-	public Environment executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Environment executeSingleStaticImportNode(SingleStaticImportNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getName());
 	}
 
 	@Override
@@ -1086,8 +855,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeStaticImportOnDemandNode(StaticImportOnDemandNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getName());
 	}
 
 	@Override
@@ -1135,8 +903,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeThisNode(ThisNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -1163,20 +930,11 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeTypeCastNode(TypeCastNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getExpression());
 	}
 
 	@Override
 	public Environment executeTypeDeclarationListNode(TypeDeclarationListNode node, Environment p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Environment executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node,
-			Environment p)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -1199,29 +957,25 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeUnaryExpressionNode(UnaryExpressionNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getExpression());
 	}
 
 	@Override
 	public Environment executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getExpression());
 	}
 
 	@Override
 	public Environment executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningListNode(node, p);
 	}
 
 	@Override
 	public Environment executeUnparameterizedTypeNode(UnparameterizedTypeNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p, node.getName());
 	}
 
 	@Override
@@ -1276,8 +1030,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeVariableModifiersNode(VariableModifiersNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleModifiersNode(node, p);
 	}
 
 	@Override
@@ -1290,8 +1043,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 	@Override
 	public Environment executeVoidTypeNode(VoidTypeNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return recordEnvironment(node, p);
 	}
 
 	@Override
@@ -1445,18 +1197,24 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 
 				// For each member of the type, import it if possible
 				NamedTypeDeclarationNode<?> type = getAccessibleTypeFromCanonicalName(importNode.getName());
-				// TODO: what if type does not exist or is not accessible?
-				for (Node node : type.getBody().getMembers())
+				if (type == null)
 				{
-					if (node instanceof NamedTypeDeclarationNode<?>)
+					// TODO: emit an appropriate diagnostic
+					throw new NotImplementedYetException();
+				} else
+				{
+					for (Node node : type.getBody().getMembers())
 					{
-						tryPopulateMemberType(typeNamespaceMap, importNode, (NamedTypeDeclarationNode<?>) node);
-					} else if (node instanceof FieldDeclarationNode)
-					{
-						tryPopulateMemberField(variableNamespaceMap, importNode, (FieldDeclarationNode) node);
-					} else if (node instanceof MethodDeclarationNode)
-					{
-						tryPopulateMemberMethod(methodNamespaceMap, importNode, (MethodDeclarationNode) node);
+						if (node instanceof NamedTypeDeclarationNode<?>)
+						{
+							tryPopulateMemberType(typeNamespaceMap, importNode, (NamedTypeDeclarationNode<?>) node);
+						} else if (node instanceof FieldDeclarationNode)
+						{
+							tryPopulateMemberField(variableNamespaceMap, importNode, (FieldDeclarationNode) node);
+						} else if (node instanceof MethodDeclarationNode)
+						{
+							tryPopulateMemberMethod(methodNamespaceMap, importNode, (MethodDeclarationNode) node);
+						}
 					}
 				}
 			}
@@ -1615,6 +1373,118 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 						(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(type), type);
 			}
 		}
+	}
+
+	/**
+	 * Processes a node which does not perform any namespace assignments and for which the children of the node are
+	 * typespace-independent. A binary expression, for instance, could be processed by this method. While the contents
+	 * of the binary expression may have implications on their own scope, no legal Java AST would allow an expression to
+	 * declare a new language element. Furthermore, the two children of the binary expression are independent; the
+	 * scoping implications in one subexpression (such as by declaration of an anonymous class) do not affect the scope
+	 * of the other subexpression.
+	 * 
+	 * @param node The node in question.
+	 * @param environment The environment to record for the node and to pass to its children.
+	 * @param children The children of that node.
+	 * @return The same environment.
+	 */
+	@SuppressWarnings("unused")
+	private Environment handleNondefiningNode(Node node, Environment environment, Node... children)
+	{
+		recordEnvironment(node, environment);
+		for (Node child : children)
+		{
+			if (child != null)
+			{
+				child.executeOperation(this, environment);
+			}
+		}
+		return environment;
+	}
+
+	// performance variations
+	/**
+	 * A performance-oriented overload.
+	 * 
+	 * @see EnvironmentBuildingNodeOperation#handleNondefiningNode(Node, Environment, Node...)
+	 */
+	private Environment handleNondefiningNode(Node node, Environment environment)
+	{
+		return recordEnvironment(node, environment);
+	}
+
+	/**
+	 * A performance-oriented overload.
+	 * 
+	 * @see EnvironmentBuildingNodeOperation#handleNondefiningNode(Node, Environment, Node...)
+	 */
+	private Environment handleNondefiningNode(Node node, Environment environment, Node child1)
+	{
+		recordEnvironment(node, environment);
+		if (child1 != null)
+			child1.executeOperation(this, environment);
+		return environment;
+	}
+
+	/**
+	 * A performance-oriented overload.
+	 * 
+	 * @see EnvironmentBuildingNodeOperation#handleNondefiningNode(Node, Environment, Node...)
+	 */
+	private Environment handleNondefiningNode(Node node, Environment environment, Node child1, Node child2)
+	{
+		recordEnvironment(node, environment);
+		if (child1 != null)
+			child1.executeOperation(this, environment);
+		if (child2 != null)
+			child2.executeOperation(this, environment);
+		return environment;
+	}
+
+	/**
+	 * A performance-oriented overload.
+	 * 
+	 * @see EnvironmentBuildingNodeOperation#handleNondefiningNode(Node, Environment, Node...)
+	 */
+	private Environment handleNondefiningNode(Node node, Environment environment, Node child1, Node child2, Node child3)
+	{
+		recordEnvironment(node, environment);
+		if (child1 != null)
+			child1.executeOperation(this, environment);
+		if (child2 != null)
+			child2.executeOperation(this, environment);
+		if (child3 != null)
+			child3.executeOperation(this, environment);
+		return environment;
+	}
+
+	/**
+	 * Processes a list node which does not perform any namespace assignments and for which the members of the list are
+	 * typespace-independent. A list of exception types on a method declaration, for instance, could be processed by
+	 * this method. The exception types have an impact in the scope of the method declaration (which is handled by the
+	 * processing of the method declaration) but have no impact on a scope specific to the list.
+	 * <p/>
+	 * A list of block statements, on the other hand, cannot be processed correctly by this method. This is because the
+	 * environment produced by the first block statement may have an effect on the environment produced by the second
+	 * block statement; the children are not independent.
+	 * 
+	 * @param node The list node in question.
+	 * @param environment The environment to record for the list and to pass to its children.
+	 * @return The same environment.
+	 */
+	private Environment handleNondefiningListNode(ListNode<? extends Node> node, Environment environment)
+	{
+		recordEnvironment(node, environment);
+		for (Node child : node)
+		{
+			child.executeOperation(this, environment);
+		}
+		return environment;
+	}
+
+	private Environment handleModifiersNode(ModifiersNode node, Environment environment)
+	{
+		return handleNondefiningNode(node, environment, node.getAnnotations(), node.getMetaAnnotations());
 	}
 
 	/**

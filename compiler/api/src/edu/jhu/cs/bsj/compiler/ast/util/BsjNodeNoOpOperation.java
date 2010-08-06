@@ -75,7 +75,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -86,7 +86,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -97,7 +97,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -108,7 +108,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -119,7 +119,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -130,7 +130,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -141,7 +141,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -152,7 +152,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -163,7 +163,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -174,7 +174,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -185,7 +185,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -196,7 +196,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -207,7 +207,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -218,7 +218,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -229,7 +229,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -240,7 +240,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -251,7 +251,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -262,7 +262,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -273,7 +273,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -284,7 +284,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -295,7 +295,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -306,7 +306,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -317,7 +317,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -328,7 +328,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -339,7 +339,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -350,7 +350,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -361,7 +361,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -372,7 +372,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -383,7 +383,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -394,7 +394,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -405,7 +405,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -416,7 +416,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -427,7 +427,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -438,7 +438,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -449,7 +449,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -460,7 +460,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -471,7 +471,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -482,7 +482,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -493,7 +493,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -504,7 +504,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -515,7 +515,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -526,7 +526,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -537,7 +537,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -548,7 +548,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -559,7 +559,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -570,7 +570,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -581,7 +581,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -592,7 +592,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -603,7 +603,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -614,7 +614,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -625,7 +625,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -636,7 +636,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -647,7 +647,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -658,7 +658,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -669,7 +669,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -680,7 +680,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -691,7 +691,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -702,7 +702,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -713,7 +713,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -724,7 +724,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -735,7 +735,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -746,7 +746,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -757,7 +757,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -768,7 +768,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -779,7 +779,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -790,7 +790,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -801,7 +801,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -812,7 +812,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -823,7 +823,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -834,7 +834,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -845,7 +845,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -856,7 +856,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -867,7 +867,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -878,7 +878,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -889,7 +889,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -900,7 +900,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -911,7 +911,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -922,7 +922,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -933,7 +933,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -944,7 +944,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -955,7 +955,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -966,7 +966,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -977,7 +977,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -988,7 +988,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -999,7 +999,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1010,7 +1010,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1021,7 +1021,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1032,7 +1032,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1043,7 +1043,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1054,7 +1054,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1065,7 +1065,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1076,7 +1076,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1087,7 +1087,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1098,7 +1098,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1109,7 +1109,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1120,7 +1120,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1131,7 +1131,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1142,7 +1142,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1153,7 +1153,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1164,7 +1164,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1175,7 +1175,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1186,7 +1186,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1197,7 +1197,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1208,7 +1208,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1219,7 +1219,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1230,7 +1230,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1241,7 +1241,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1252,7 +1252,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1263,7 +1263,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1274,7 +1274,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1285,7 +1285,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1296,7 +1296,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1307,7 +1307,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1318,7 +1318,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1329,7 +1329,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1340,7 +1340,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1351,7 +1351,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1362,7 +1362,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1373,7 +1373,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1384,7 +1384,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1395,7 +1395,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1406,7 +1406,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1417,7 +1417,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1428,7 +1428,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1439,7 +1439,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1450,7 +1450,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1461,7 +1461,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1472,7 +1472,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1483,7 +1483,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1494,7 +1494,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1505,7 +1505,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1516,7 +1516,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1527,7 +1527,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1538,7 +1538,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1549,7 +1549,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1560,7 +1560,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1571,7 +1571,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1582,7 +1582,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1593,7 +1593,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1604,7 +1604,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1615,7 +1615,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1626,7 +1626,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1637,7 +1637,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1648,7 +1648,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1659,7 +1659,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1670,7 +1670,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1681,7 +1681,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1692,7 +1692,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1703,7 +1703,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1714,7 +1714,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1725,7 +1725,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1736,7 +1736,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1747,7 +1747,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1758,7 +1758,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1769,7 +1769,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1780,7 +1780,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1791,7 +1791,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1802,7 +1802,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1813,7 +1813,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1824,7 +1824,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1835,7 +1835,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1846,7 +1846,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
     /**
      * Performs no operation.
      * @param node Ignored.
@@ -1857,5 +1857,5 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
     {
         return null;
     }
-
+    
 }

@@ -3,13 +3,14 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 
 /**
  * Represents a single element meta-annotation, as in:
  * <pre>@@<i>type</i>(<i>value</i>)</pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface SingleElementMetaAnnotationNode extends MetaAnnotationNode
+public interface SingleElementMetaAnnotationNode extends MetaAnnotationNode, BsjSpecificNode
 {
     /**
      * Gets the value of the "value" element.

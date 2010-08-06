@@ -81,7 +81,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationAnnotationValueNode.
      * @param node The AnnotationAnnotationValueNode in question.
@@ -89,7 +89,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationArrayValueNode.
      * @param node The AnnotationArrayValueNode in question.
@@ -97,7 +97,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationArrayValueNode(AnnotationArrayValueNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationBodyNode.
      * @param node The AnnotationBodyNode in question.
@@ -105,7 +105,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationBodyNode(AnnotationBodyNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationDeclarationNode.
      * @param node The AnnotationDeclarationNode in question.
@@ -113,7 +113,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationDeclarationNode(AnnotationDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationElementListNode.
      * @param node The AnnotationElementListNode in question.
@@ -121,7 +121,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationElementListNode(AnnotationElementListNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationElementNode.
      * @param node The AnnotationElementNode in question.
@@ -129,7 +129,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationElementNode(AnnotationElementNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationExpressionValueNode.
      * @param node The AnnotationExpressionValueNode in question.
@@ -137,7 +137,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationListNode.
      * @param node The AnnotationListNode in question.
@@ -145,7 +145,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationListNode(AnnotationListNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationMemberListNode.
      * @param node The AnnotationMemberListNode in question.
@@ -153,7 +153,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationMemberListNode(AnnotationMemberListNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationMemberMetaprogramAnchorNode.
      * @param node The AnnotationMemberMetaprogramAnchorNode in question.
@@ -161,7 +161,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationMethodDeclarationNode.
      * @param node The AnnotationMethodDeclarationNode in question.
@@ -169,7 +169,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationMethodModifiersNode.
      * @param node The AnnotationMethodModifiersNode in question.
@@ -177,7 +177,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationModifiersNode.
      * @param node The AnnotationModifiersNode in question.
@@ -185,7 +185,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationModifiersNode(AnnotationModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a AnnotationValueListNode.
      * @param node The AnnotationValueListNode in question.
@@ -193,7 +193,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnnotationValueListNode(AnnotationValueListNode node, P p);
-
+    
     /**
      * Executes this operation against a AnonymousClassBodyNode.
      * @param node The AnonymousClassBodyNode in question.
@@ -201,7 +201,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnonymousClassBodyNode(AnonymousClassBodyNode node, P p);
-
+    
     /**
      * Executes this operation against a AnonymousClassMemberListNode.
      * @param node The AnonymousClassMemberListNode in question.
@@ -209,7 +209,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, P p);
-
+    
     /**
      * Executes this operation against a AnonymousClassMemberMetaprogramAnchorNode.
      * @param node The AnonymousClassMemberMetaprogramAnchorNode in question.
@@ -217,7 +217,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node, P p);
-
+    
     /**
      * Executes this operation against a ArrayAccessNode.
      * @param node The ArrayAccessNode in question.
@@ -225,7 +225,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeArrayAccessNode(ArrayAccessNode node, P p);
-
+    
     /**
      * Executes this operation against a ArrayInitializerCreationNode.
      * @param node The ArrayInitializerCreationNode in question.
@@ -233,7 +233,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, P p);
-
+    
     /**
      * Executes this operation against a ArrayInitializerNode.
      * @param node The ArrayInitializerNode in question.
@@ -241,7 +241,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeArrayInitializerNode(ArrayInitializerNode node, P p);
-
+    
     /**
      * Executes this operation against a ArrayInstantiatorCreationNode.
      * @param node The ArrayInstantiatorCreationNode in question.
@@ -249,7 +249,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, P p);
-
+    
     /**
      * Executes this operation against a ArrayTypeNode.
      * @param node The ArrayTypeNode in question.
@@ -257,7 +257,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeArrayTypeNode(ArrayTypeNode node, P p);
-
+    
     /**
      * Executes this operation against a AssertStatementNode.
      * @param node The AssertStatementNode in question.
@@ -265,7 +265,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAssertStatementNode(AssertStatementNode node, P p);
-
+    
     /**
      * Executes this operation against a AssignmentNode.
      * @param node The AssignmentNode in question.
@@ -273,7 +273,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAssignmentNode(AssignmentNode node, P p);
-
+    
     /**
      * Executes this operation against a BinaryExpressionNode.
      * @param node The BinaryExpressionNode in question.
@@ -281,7 +281,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeBinaryExpressionNode(BinaryExpressionNode node, P p);
-
+    
     /**
      * Executes this operation against a BlockNode.
      * @param node The BlockNode in question.
@@ -289,7 +289,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeBlockNode(BlockNode node, P p);
-
+    
     /**
      * Executes this operation against a BlockStatementListNode.
      * @param node The BlockStatementListNode in question.
@@ -297,7 +297,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeBlockStatementListNode(BlockStatementListNode node, P p);
-
+    
     /**
      * Executes this operation against a BlockStatementMetaprogramAnchorNode.
      * @param node The BlockStatementMetaprogramAnchorNode in question.
@@ -305,7 +305,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node, P p);
-
+    
     /**
      * Executes this operation against a BooleanLiteralNode.
      * @param node The BooleanLiteralNode in question.
@@ -313,7 +313,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeBooleanLiteralNode(BooleanLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a BreakNode.
      * @param node The BreakNode in question.
@@ -321,7 +321,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeBreakNode(BreakNode node, P p);
-
+    
     /**
      * Executes this operation against a CaseListNode.
      * @param node The CaseListNode in question.
@@ -329,7 +329,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeCaseListNode(CaseListNode node, P p);
-
+    
     /**
      * Executes this operation against a CaseNode.
      * @param node The CaseNode in question.
@@ -337,7 +337,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeCaseNode(CaseNode node, P p);
-
+    
     /**
      * Executes this operation against a CatchListNode.
      * @param node The CatchListNode in question.
@@ -345,7 +345,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeCatchListNode(CatchListNode node, P p);
-
+    
     /**
      * Executes this operation against a CatchNode.
      * @param node The CatchNode in question.
@@ -353,7 +353,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeCatchNode(CatchNode node, P p);
-
+    
     /**
      * Executes this operation against a CharLiteralNode.
      * @param node The CharLiteralNode in question.
@@ -361,7 +361,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeCharLiteralNode(CharLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a ClassBodyNode.
      * @param node The ClassBodyNode in question.
@@ -369,7 +369,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeClassBodyNode(ClassBodyNode node, P p);
-
+    
     /**
      * Executes this operation against a ClassDeclarationNode.
      * @param node The ClassDeclarationNode in question.
@@ -377,7 +377,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeClassDeclarationNode(ClassDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a ClassLiteralNode.
      * @param node The ClassLiteralNode in question.
@@ -385,7 +385,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeClassLiteralNode(ClassLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a ClassMemberListNode.
      * @param node The ClassMemberListNode in question.
@@ -393,7 +393,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeClassMemberListNode(ClassMemberListNode node, P p);
-
+    
     /**
      * Executes this operation against a ClassMemberMetaprogramAnchorNode.
      * @param node The ClassMemberMetaprogramAnchorNode in question.
@@ -401,7 +401,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, P p);
-
+    
     /**
      * Executes this operation against a ClassModifiersNode.
      * @param node The ClassModifiersNode in question.
@@ -409,7 +409,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeClassModifiersNode(ClassModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a CodeLiteralNode.
      * @param node The CodeLiteralNode in question.
@@ -417,7 +417,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeCodeLiteralNode(CodeLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a CompilationUnitNode.
      * @param node The CompilationUnitNode in question.
@@ -425,7 +425,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeCompilationUnitNode(CompilationUnitNode node, P p);
-
+    
     /**
      * Executes this operation against a ConditionalExpressionNode.
      * @param node The ConditionalExpressionNode in question.
@@ -433,7 +433,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeConditionalExpressionNode(ConditionalExpressionNode node, P p);
-
+    
     /**
      * Executes this operation against a ConstantDeclarationNode.
      * @param node The ConstantDeclarationNode in question.
@@ -441,7 +441,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeConstantDeclarationNode(ConstantDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a ConstantModifiersNode.
      * @param node The ConstantModifiersNode in question.
@@ -449,7 +449,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeConstantModifiersNode(ConstantModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a ConstructorBodyNode.
      * @param node The ConstructorBodyNode in question.
@@ -457,7 +457,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeConstructorBodyNode(ConstructorBodyNode node, P p);
-
+    
     /**
      * Executes this operation against a ConstructorDeclarationNode.
      * @param node The ConstructorDeclarationNode in question.
@@ -465,7 +465,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeConstructorDeclarationNode(ConstructorDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a ConstructorModifiersNode.
      * @param node The ConstructorModifiersNode in question.
@@ -473,7 +473,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeConstructorModifiersNode(ConstructorModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a ContinueNode.
      * @param node The ContinueNode in question.
@@ -481,7 +481,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeContinueNode(ContinueNode node, P p);
-
+    
     /**
      * Executes this operation against a DeclaredTypeListNode.
      * @param node The DeclaredTypeListNode in question.
@@ -489,7 +489,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeDeclaredTypeListNode(DeclaredTypeListNode node, P p);
-
+    
     /**
      * Executes this operation against a DoWhileLoopNode.
      * @param node The DoWhileLoopNode in question.
@@ -497,7 +497,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeDoWhileLoopNode(DoWhileLoopNode node, P p);
-
+    
     /**
      * Executes this operation against a DoubleLiteralNode.
      * @param node The DoubleLiteralNode in question.
@@ -505,7 +505,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeDoubleLiteralNode(DoubleLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a EnhancedForLoopNode.
      * @param node The EnhancedForLoopNode in question.
@@ -513,7 +513,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeEnhancedForLoopNode(EnhancedForLoopNode node, P p);
-
+    
     /**
      * Executes this operation against a EnumBodyNode.
      * @param node The EnumBodyNode in question.
@@ -521,7 +521,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeEnumBodyNode(EnumBodyNode node, P p);
-
+    
     /**
      * Executes this operation against a EnumConstantDeclarationListNode.
      * @param node The EnumConstantDeclarationListNode in question.
@@ -529,7 +529,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node, P p);
-
+    
     /**
      * Executes this operation against a EnumConstantDeclarationNode.
      * @param node The EnumConstantDeclarationNode in question.
@@ -537,7 +537,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a EnumConstantModifiersNode.
      * @param node The EnumConstantModifiersNode in question.
@@ -545,7 +545,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeEnumConstantModifiersNode(EnumConstantModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a EnumDeclarationNode.
      * @param node The EnumDeclarationNode in question.
@@ -553,7 +553,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeEnumDeclarationNode(EnumDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a EnumModifiersNode.
      * @param node The EnumModifiersNode in question.
@@ -561,7 +561,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeEnumModifiersNode(EnumModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a ExpressionListNode.
      * @param node The ExpressionListNode in question.
@@ -569,7 +569,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeExpressionListNode(ExpressionListNode node, P p);
-
+    
     /**
      * Executes this operation against a ExpressionStatementNode.
      * @param node The ExpressionStatementNode in question.
@@ -577,7 +577,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeExpressionStatementNode(ExpressionStatementNode node, P p);
-
+    
     /**
      * Executes this operation against a FieldDeclarationNode.
      * @param node The FieldDeclarationNode in question.
@@ -585,7 +585,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeFieldDeclarationNode(FieldDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a FieldModifiersNode.
      * @param node The FieldModifiersNode in question.
@@ -593,7 +593,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeFieldModifiersNode(FieldModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a FloatLiteralNode.
      * @param node The FloatLiteralNode in question.
@@ -601,7 +601,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeFloatLiteralNode(FloatLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a ForInitializerDeclarationNode.
      * @param node The ForInitializerDeclarationNode in question.
@@ -609,7 +609,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a ForInitializerExpressionNode.
      * @param node The ForInitializerExpressionNode in question.
@@ -617,7 +617,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeForInitializerExpressionNode(ForInitializerExpressionNode node, P p);
-
+    
     /**
      * Executes this operation against a ForLoopNode.
      * @param node The ForLoopNode in question.
@@ -625,7 +625,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeForLoopNode(ForLoopNode node, P p);
-
+    
     /**
      * Executes this operation against a IdentifierListNode.
      * @param node The IdentifierListNode in question.
@@ -633,7 +633,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeIdentifierListNode(IdentifierListNode node, P p);
-
+    
     /**
      * Executes this operation against a IdentifierNode.
      * @param node The IdentifierNode in question.
@@ -641,7 +641,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeIdentifierNode(IdentifierNode node, P p);
-
+    
     /**
      * Executes this operation against a IfNode.
      * @param node The IfNode in question.
@@ -649,7 +649,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeIfNode(IfNode node, P p);
-
+    
     /**
      * Executes this operation against a ImportListNode.
      * @param node The ImportListNode in question.
@@ -657,7 +657,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeImportListNode(ImportListNode node, P p);
-
+    
     /**
      * Executes this operation against a ImportOnDemandNode.
      * @param node The ImportOnDemandNode in question.
@@ -665,7 +665,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeImportOnDemandNode(ImportOnDemandNode node, P p);
-
+    
     /**
      * Executes this operation against a ImportSingleTypeNode.
      * @param node The ImportSingleTypeNode in question.
@@ -673,7 +673,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeImportSingleTypeNode(ImportSingleTypeNode node, P p);
-
+    
     /**
      * Executes this operation against a InitializerDeclarationNode.
      * @param node The InitializerDeclarationNode in question.
@@ -681,7 +681,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInitializerDeclarationNode(InitializerDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a InstanceOfNode.
      * @param node The InstanceOfNode in question.
@@ -689,7 +689,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInstanceOfNode(InstanceOfNode node, P p);
-
+    
     /**
      * Executes this operation against a IntLiteralNode.
      * @param node The IntLiteralNode in question.
@@ -697,7 +697,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeIntLiteralNode(IntLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a InterfaceBodyNode.
      * @param node The InterfaceBodyNode in question.
@@ -705,7 +705,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInterfaceBodyNode(InterfaceBodyNode node, P p);
-
+    
     /**
      * Executes this operation against a InterfaceDeclarationNode.
      * @param node The InterfaceDeclarationNode in question.
@@ -713,7 +713,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInterfaceDeclarationNode(InterfaceDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a InterfaceMemberListNode.
      * @param node The InterfaceMemberListNode in question.
@@ -721,7 +721,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInterfaceMemberListNode(InterfaceMemberListNode node, P p);
-
+    
     /**
      * Executes this operation against a InterfaceMemberMetaprogramAnchorNode.
      * @param node The InterfaceMemberMetaprogramAnchorNode in question.
@@ -729,7 +729,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, P p);
-
+    
     /**
      * Executes this operation against a InterfaceModifiersNode.
      * @param node The InterfaceModifiersNode in question.
@@ -737,7 +737,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInterfaceModifiersNode(InterfaceModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a JavadocNode.
      * @param node The JavadocNode in question.
@@ -745,7 +745,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeJavadocNode(JavadocNode node, P p);
-
+    
     /**
      * Executes this operation against a LabeledStatementNode.
      * @param node The LabeledStatementNode in question.
@@ -753,7 +753,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeLabeledStatementNode(LabeledStatementNode node, P p);
-
+    
     /**
      * Executes this operation against a LocalClassDeclarationNode.
      * @param node The LocalClassDeclarationNode in question.
@@ -761,7 +761,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeLocalClassDeclarationNode(LocalClassDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a LocalClassModifiersNode.
      * @param node The LocalClassModifiersNode in question.
@@ -769,7 +769,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeLocalClassModifiersNode(LocalClassModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a LocalVariableDeclarationNode.
      * @param node The LocalVariableDeclarationNode in question.
@@ -777,7 +777,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a LongLiteralNode.
      * @param node The LongLiteralNode in question.
@@ -785,7 +785,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeLongLiteralNode(LongLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaAnnotationArrayValueNode.
      * @param node The MetaAnnotationArrayValueNode in question.
@@ -793,7 +793,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaAnnotationElementListNode.
      * @param node The MetaAnnotationElementListNode in question.
@@ -801,7 +801,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaAnnotationElementNode.
      * @param node The MetaAnnotationElementNode in question.
@@ -809,7 +809,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaAnnotationElementNode(MetaAnnotationElementNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaAnnotationExpressionValueNode.
      * @param node The MetaAnnotationExpressionValueNode in question.
@@ -817,7 +817,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaAnnotationListNode.
      * @param node The MetaAnnotationListNode in question.
@@ -825,7 +825,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaAnnotationListNode(MetaAnnotationListNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaAnnotationMetaAnnotationValueNode.
      * @param node The MetaAnnotationMetaAnnotationValueNode in question.
@@ -833,7 +833,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaAnnotationMetaprogramAnchorNode.
      * @param node The MetaAnnotationMetaprogramAnchorNode in question.
@@ -841,7 +841,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaAnnotationValueListNode.
      * @param node The MetaAnnotationValueListNode in question.
@@ -849,7 +849,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramDependencyDeclarationListNode.
      * @param node The MetaprogramDependencyDeclarationListNode in question.
@@ -857,7 +857,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramDependencyDeclarationNode.
      * @param node The MetaprogramDependencyDeclarationNode in question.
@@ -865,7 +865,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramDependencyListNode.
      * @param node The MetaprogramDependencyListNode in question.
@@ -873,7 +873,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramDependencyNode.
      * @param node The MetaprogramDependencyNode in question.
@@ -881,7 +881,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramDependencyNode(MetaprogramDependencyNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramImportListNode.
      * @param node The MetaprogramImportListNode in question.
@@ -889,7 +889,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramImportListNode(MetaprogramImportListNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramImportNode.
      * @param node The MetaprogramImportNode in question.
@@ -897,7 +897,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramImportNode(MetaprogramImportNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramNode.
      * @param node The MetaprogramNode in question.
@@ -905,7 +905,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramNode(MetaprogramNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramPreambleNode.
      * @param node The MetaprogramPreambleNode in question.
@@ -913,7 +913,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramPreambleNode(MetaprogramPreambleNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramTargetListNode.
      * @param node The MetaprogramTargetListNode in question.
@@ -921,7 +921,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramTargetListNode(MetaprogramTargetListNode node, P p);
-
+    
     /**
      * Executes this operation against a MetaprogramTargetNode.
      * @param node The MetaprogramTargetNode in question.
@@ -929,7 +929,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMetaprogramTargetNode(MetaprogramTargetNode node, P p);
-
+    
     /**
      * Executes this operation against a MethodDeclarationNode.
      * @param node The MethodDeclarationNode in question.
@@ -937,7 +937,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMethodDeclarationNode(MethodDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a MethodInvocationByExpressionNode.
      * @param node The MethodInvocationByExpressionNode in question.
@@ -945,7 +945,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, P p);
-
+    
     /**
      * Executes this operation against a MethodInvocationByNameNode.
      * @param node The MethodInvocationByNameNode in question.
@@ -953,7 +953,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMethodInvocationByNameNode(MethodInvocationByNameNode node, P p);
-
+    
     /**
      * Executes this operation against a MethodModifiersNode.
      * @param node The MethodModifiersNode in question.
@@ -961,7 +961,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMethodModifiersNode(MethodModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a NoOperationNode.
      * @param node The NoOperationNode in question.
@@ -969,7 +969,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeNoOperationNode(NoOperationNode node, P p);
-
+    
     /**
      * Executes this operation against a NormalAnnotationNode.
      * @param node The NormalAnnotationNode in question.
@@ -977,7 +977,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeNormalAnnotationNode(NormalAnnotationNode node, P p);
-
+    
     /**
      * Executes this operation against a NormalMetaAnnotationNode.
      * @param node The NormalMetaAnnotationNode in question.
@@ -985,7 +985,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, P p);
-
+    
     /**
      * Executes this operation against a NullLiteralNode.
      * @param node The NullLiteralNode in question.
@@ -993,7 +993,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeNullLiteralNode(NullLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a PackageDeclarationNode.
      * @param node The PackageDeclarationNode in question.
@@ -1001,7 +1001,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executePackageDeclarationNode(PackageDeclarationNode node, P p);
-
+    
     /**
      * Executes this operation against a PackageNode.
      * @param node The PackageNode in question.
@@ -1009,7 +1009,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executePackageNode(PackageNode node, P p);
-
+    
     /**
      * Executes this operation against a ParameterizedTypeNode.
      * @param node The ParameterizedTypeNode in question.
@@ -1017,7 +1017,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeParameterizedTypeNode(ParameterizedTypeNode node, P p);
-
+    
     /**
      * Executes this operation against a ParameterizedTypeSelectNode.
      * @param node The ParameterizedTypeSelectNode in question.
@@ -1025,7 +1025,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, P p);
-
+    
     /**
      * Executes this operation against a ParenthesizedExpressionNode.
      * @param node The ParenthesizedExpressionNode in question.
@@ -1033,7 +1033,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, P p);
-
+    
     /**
      * Executes this operation against a PrimitiveTypeNode.
      * @param node The PrimitiveTypeNode in question.
@@ -1041,7 +1041,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executePrimitiveTypeNode(PrimitiveTypeNode node, P p);
-
+    
     /**
      * Executes this operation against a QualifiedClassInstantiationNode.
      * @param node The QualifiedClassInstantiationNode in question.
@@ -1049,7 +1049,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, P p);
-
+    
     /**
      * Executes this operation against a QualifiedNameNode.
      * @param node The QualifiedNameNode in question.
@@ -1057,7 +1057,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeQualifiedNameNode(QualifiedNameNode node, P p);
-
+    
     /**
      * Executes this operation against a RawCodeLiteralNode.
      * @param node The RawCodeLiteralNode in question.
@@ -1065,7 +1065,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeRawCodeLiteralNode(RawCodeLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a ReferenceTypeListNode.
      * @param node The ReferenceTypeListNode in question.
@@ -1073,7 +1073,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeReferenceTypeListNode(ReferenceTypeListNode node, P p);
-
+    
     /**
      * Executes this operation against a ReturnNode.
      * @param node The ReturnNode in question.
@@ -1081,7 +1081,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeReturnNode(ReturnNode node, P p);
-
+    
     /**
      * Executes this operation against a SimpleNameNode.
      * @param node The SimpleNameNode in question.
@@ -1089,7 +1089,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSimpleNameNode(SimpleNameNode node, P p);
-
+    
     /**
      * Executes this operation against a SingleElementAnnotationNode.
      * @param node The SingleElementAnnotationNode in question.
@@ -1097,7 +1097,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSingleElementAnnotationNode(SingleElementAnnotationNode node, P p);
-
+    
     /**
      * Executes this operation against a SingleElementMetaAnnotationNode.
      * @param node The SingleElementMetaAnnotationNode in question.
@@ -1105,7 +1105,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, P p);
-
+    
     /**
      * Executes this operation against a SingleStaticImportNode.
      * @param node The SingleStaticImportNode in question.
@@ -1113,7 +1113,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSingleStaticImportNode(SingleStaticImportNode node, P p);
-
+    
     /**
      * Executes this operation against a StatementExpressionListNode.
      * @param node The StatementExpressionListNode in question.
@@ -1121,7 +1121,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeStatementExpressionListNode(StatementExpressionListNode node, P p);
-
+    
     /**
      * Executes this operation against a StaticImportOnDemandNode.
      * @param node The StaticImportOnDemandNode in question.
@@ -1129,7 +1129,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeStaticImportOnDemandNode(StaticImportOnDemandNode node, P p);
-
+    
     /**
      * Executes this operation against a StringLiteralNode.
      * @param node The StringLiteralNode in question.
@@ -1137,7 +1137,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeStringLiteralNode(StringLiteralNode node, P p);
-
+    
     /**
      * Executes this operation against a SuperFieldAccessNode.
      * @param node The SuperFieldAccessNode in question.
@@ -1145,7 +1145,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSuperFieldAccessNode(SuperFieldAccessNode node, P p);
-
+    
     /**
      * Executes this operation against a SuperMethodInvocationNode.
      * @param node The SuperMethodInvocationNode in question.
@@ -1153,7 +1153,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSuperMethodInvocationNode(SuperMethodInvocationNode node, P p);
-
+    
     /**
      * Executes this operation against a SuperclassConstructorInvocationNode.
      * @param node The SuperclassConstructorInvocationNode in question.
@@ -1161,7 +1161,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node, P p);
-
+    
     /**
      * Executes this operation against a SwitchNode.
      * @param node The SwitchNode in question.
@@ -1169,7 +1169,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSwitchNode(SwitchNode node, P p);
-
+    
     /**
      * Executes this operation against a SynchronizedNode.
      * @param node The SynchronizedNode in question.
@@ -1177,7 +1177,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSynchronizedNode(SynchronizedNode node, P p);
-
+    
     /**
      * Executes this operation against a ThisNode.
      * @param node The ThisNode in question.
@@ -1185,7 +1185,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeThisNode(ThisNode node, P p);
-
+    
     /**
      * Executes this operation against a ThrowNode.
      * @param node The ThrowNode in question.
@@ -1193,7 +1193,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeThrowNode(ThrowNode node, P p);
-
+    
     /**
      * Executes this operation against a TryNode.
      * @param node The TryNode in question.
@@ -1201,7 +1201,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeTryNode(TryNode node, P p);
-
+    
     /**
      * Executes this operation against a TypeArgumentListNode.
      * @param node The TypeArgumentListNode in question.
@@ -1209,7 +1209,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeTypeArgumentListNode(TypeArgumentListNode node, P p);
-
+    
     /**
      * Executes this operation against a TypeCastNode.
      * @param node The TypeCastNode in question.
@@ -1217,7 +1217,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeTypeCastNode(TypeCastNode node, P p);
-
+    
     /**
      * Executes this operation against a TypeDeclarationListNode.
      * @param node The TypeDeclarationListNode in question.
@@ -1225,7 +1225,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeTypeDeclarationListNode(TypeDeclarationListNode node, P p);
-
+    
     /**
      * Executes this operation against a TypeDeclarationMetaprogramAnchorNode.
      * @param node The TypeDeclarationMetaprogramAnchorNode in question.
@@ -1233,7 +1233,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, P p);
-
+    
     /**
      * Executes this operation against a TypeParameterListNode.
      * @param node The TypeParameterListNode in question.
@@ -1241,7 +1241,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeTypeParameterListNode(TypeParameterListNode node, P p);
-
+    
     /**
      * Executes this operation against a TypeParameterNode.
      * @param node The TypeParameterNode in question.
@@ -1249,7 +1249,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeTypeParameterNode(TypeParameterNode node, P p);
-
+    
     /**
      * Executes this operation against a UnaryExpressionNode.
      * @param node The UnaryExpressionNode in question.
@@ -1257,7 +1257,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeUnaryExpressionNode(UnaryExpressionNode node, P p);
-
+    
     /**
      * Executes this operation against a UnaryStatementExpressionNode.
      * @param node The UnaryStatementExpressionNode in question.
@@ -1265,7 +1265,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, P p);
-
+    
     /**
      * Executes this operation against a UnparameterizedTypeListNode.
      * @param node The UnparameterizedTypeListNode in question.
@@ -1273,7 +1273,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, P p);
-
+    
     /**
      * Executes this operation against a UnparameterizedTypeNode.
      * @param node The UnparameterizedTypeNode in question.
@@ -1281,7 +1281,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeUnparameterizedTypeNode(UnparameterizedTypeNode node, P p);
-
+    
     /**
      * Executes this operation against a UnqualifiedClassInstantiationNode.
      * @param node The UnqualifiedClassInstantiationNode in question.
@@ -1289,7 +1289,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, P p);
-
+    
     /**
      * Executes this operation against a VariableAccessByExpressionNode.
      * @param node The VariableAccessByExpressionNode in question.
@@ -1297,7 +1297,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, P p);
-
+    
     /**
      * Executes this operation against a VariableAccessByNameNode.
      * @param node The VariableAccessByNameNode in question.
@@ -1305,7 +1305,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableAccessByNameNode(VariableAccessByNameNode node, P p);
-
+    
     /**
      * Executes this operation against a VariableDeclaratorListNode.
      * @param node The VariableDeclaratorListNode in question.
@@ -1313,7 +1313,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableDeclaratorListNode(VariableDeclaratorListNode node, P p);
-
+    
     /**
      * Executes this operation against a VariableDeclaratorNode.
      * @param node The VariableDeclaratorNode in question.
@@ -1321,7 +1321,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableDeclaratorNode(VariableDeclaratorNode node, P p);
-
+    
     /**
      * Executes this operation against a VariableInitializerListNode.
      * @param node The VariableInitializerListNode in question.
@@ -1329,7 +1329,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableInitializerListNode(VariableInitializerListNode node, P p);
-
+    
     /**
      * Executes this operation against a VariableListNode.
      * @param node The VariableListNode in question.
@@ -1337,7 +1337,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableListNode(VariableListNode node, P p);
-
+    
     /**
      * Executes this operation against a VariableModifiersNode.
      * @param node The VariableModifiersNode in question.
@@ -1345,7 +1345,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableModifiersNode(VariableModifiersNode node, P p);
-
+    
     /**
      * Executes this operation against a VariableNode.
      * @param node The VariableNode in question.
@@ -1353,7 +1353,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableNode(VariableNode node, P p);
-
+    
     /**
      * Executes this operation against a VoidTypeNode.
      * @param node The VoidTypeNode in question.
@@ -1361,7 +1361,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVoidTypeNode(VoidTypeNode node, P p);
-
+    
     /**
      * Executes this operation against a WhileLoopNode.
      * @param node The WhileLoopNode in question.
@@ -1369,7 +1369,7 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeWhileLoopNode(WhileLoopNode node, P p);
-
+    
     /**
      * Executes this operation against a WildcardTypeNode.
      * @param node The WildcardTypeNode in question.
@@ -1377,5 +1377,5 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeWildcardTypeNode(WildcardTypeNode node, P p);
-
+    
 }

@@ -3,13 +3,14 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 
 /**
  * Represents a list of {@link MetaAnnotationNode}s.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaAnnotationListNode extends ListNode<MetaAnnotationNode>
+public interface MetaAnnotationListNode extends ListNode<MetaAnnotationNode>, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

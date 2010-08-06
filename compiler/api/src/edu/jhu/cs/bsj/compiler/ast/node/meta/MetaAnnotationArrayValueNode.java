@@ -4,6 +4,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -12,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * {@link MetaAnnotationMetaAnnotationValueNode}) as well as expressions.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaAnnotationArrayValueNode extends Node, MetaAnnotationValueNode
+public interface MetaAnnotationArrayValueNode extends Node, MetaAnnotationValueNode, BsjSpecificNode
 {
     /**
      * Gets the array values.

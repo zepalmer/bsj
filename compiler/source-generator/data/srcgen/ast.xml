@@ -48,7 +48,7 @@
                 This tagging interface is used to denote AST nodes which can be used as members of a class declaration's body.
             ]]></doc>
         </type>
-        
+
         <type name="DeclarationNode" super="Node" mode="tag">
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which declare some Java language element.
@@ -108,7 +108,7 @@
                 This tagging interface describes nodes which may be meta-annotated.
             ]]></doc>
         </type>
-        
+
         <type name="NonAssignmentExpressionNode" super="Node" mode="tag">
             <tag name="ExpressionNode" />
             <doc><![CDATA[
@@ -1482,7 +1482,7 @@
 
         <type name="EnumConstantDeclarationNode" super="Node">
             <tag name="DeclarationNode" />
-            <prop name="modifiers" type="EnumConstantModifiersNode" desc="the modifiers for this enum constant"/>
+            <prop name="modifiers" type="EnumConstantModifiersNode" desc="the modifiers for this enum constant" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to the enum constructor" />
             <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant"
@@ -2345,7 +2345,8 @@
     </srcgen>
 
     <!-- BSJ AST Nodes -->
-    <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node.meta" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node.meta">
+    <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node.meta" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node.meta"
+        bsjSpecific="true">
 
         <!-- ==================== TAGGING INTERFACES ==================== -->
 

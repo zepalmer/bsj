@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
@@ -10,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * A node representing a processed code literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface CodeLiteralNode extends LiteralNode<Node>
+public interface CodeLiteralNode extends LiteralNode<Node>, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

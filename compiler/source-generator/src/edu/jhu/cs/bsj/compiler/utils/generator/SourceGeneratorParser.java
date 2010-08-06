@@ -282,6 +282,22 @@ public class SourceGeneratorParser
 				profile = profile.derive(GenerationProfile.IMPLEMENTATION_PROJECT,
 						parseProjectFromString(e.getAttribute("ctgt")));
 			}
+			if (e.hasAttribute("bsjSpecific"))
+			{
+				String bsjSpecificStr = e.getAttribute("bsjSpecific");
+				boolean bsjSpecific;
+				if (bsjSpecificStr.equalsIgnoreCase("true"))
+				{
+					bsjSpecific = true;
+				} else if (bsjSpecificStr.equalsIgnoreCase("false"))
+				{
+					bsjSpecific = false;
+				} else
+				{
+					throw new IllegalStateException("Incorrect boolean value: " + bsjSpecificStr);
+				}
+				profile = profile.derive(GenerationProfile.BSJ_SPECIFIC, bsjSpecific);
+			}
 
 			NodeList children = e.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++)
@@ -399,6 +415,7 @@ public class SourceGeneratorParser
 			boolean genChildren = true;
 			boolean genReplace = true;
 			List<FactoryMethodDefinition> factoryMethodDefinitions = new ArrayList<FactoryMethodDefinition>();
+			boolean isBsjSpecific = this.profile.getProperty(GenerationProfile.BSJ_SPECIFIC);
 
 			NodeList children = e.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++)
@@ -468,7 +485,8 @@ public class SourceGeneratorParser
 
 			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg, profile,
 					interfaces, tags, constants, props, includes, docString, toStringLines, factoryOverrideMap,
-					constructorOverrideMap, genConstructor, genChildren, genReplace, factoryMethodDefinitions, mode);
+					constructorOverrideMap, genConstructor, genChildren, genReplace, factoryMethodDefinitions, mode,
+					isBsjSpecific);
 			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
 			{
 				factoryMethodDefinition.setParent(typeDefinition);

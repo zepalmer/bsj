@@ -13,6 +13,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElement
  */
 public class Environment
 {
+	// TODO: environment doesn't currently handle throwable exception types
+	// TODO: environment doesn't handle statement labels
+	// but this isn't necessary for code literal analysis, so it's a nice-to-have
 	/** The type namespace in this environment. */
 	private NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap;
 	/** The method namespace in this environment.  */

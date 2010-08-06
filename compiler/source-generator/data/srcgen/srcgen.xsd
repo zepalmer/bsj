@@ -146,7 +146,7 @@
 
     <xs:complexType name="diagnosticException_T">
         <xs:sequence>
-            <xs:element name="doc" type="doc_T" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="doc" type="doc_T" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
         <xs:attribute name="prop" type="xs:string" use="optional" default="exception" />
     </xs:complexType>
@@ -224,6 +224,7 @@
         <xs:attribute name="cpkg" type="xs:string" use="optional" />
         <xs:attribute name="itgt" type="project_T" use="optional" default="api" />
         <xs:attribute name="ctgt" type="project_T" use="optional" default="generator" />
+        <xs:attribute name="bsjSpecific" type="xs:boolean" use="optional" default="false" />
     </xs:complexType>
 
     <xs:element name="srcgen" type="srcgen_T" />

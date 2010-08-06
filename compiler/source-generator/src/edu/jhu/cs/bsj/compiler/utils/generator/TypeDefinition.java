@@ -32,16 +32,17 @@ public class TypeDefinition extends ParameterizedPropertyBasedHierarchyDefinitio
 	private boolean genReplace;
 	private List<FactoryMethodDefinition> factoryMethods;
 	private Mode mode;
+	private boolean bsjSpecific;
 
 	private TypeDefinition parent;
 	private Map<String, TypeDefinition> namespaceMap;
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
-			GenerationProfile profile, List<String> interfaces, List<TagReferenceDefinition> tags,
+			GenerationProfile profile, List<String> interfaces, List<TagReferenceDefinition> tags, 
 			List<ConstantDefinition> constants, List<PropertyDefinition> properties, List<String> includes,
 			String docString, List<String> toStringLines, Map<String, String> factoryOverrideMap,
 			Map<String, String> constructorOverrideMap, boolean genConstructor, boolean genChildren,
-			boolean genReplace, List<FactoryMethodDefinition> factoryMethods, Mode mode)
+			boolean genReplace, List<FactoryMethodDefinition> factoryMethods, Mode mode, boolean bsjSpecific)
 	{
 		super(baseName, typeParameter, superName, superTypeArg, tags);
 		this.profile = profile;
@@ -58,6 +59,7 @@ public class TypeDefinition extends ParameterizedPropertyBasedHierarchyDefinitio
 		this.genReplace = genReplace;
 		this.factoryMethods = factoryMethods;
 		this.mode = mode;
+		this.bsjSpecific = bsjSpecific;
 	}
 
 	public GenerationProfile getProfile()
@@ -128,6 +130,11 @@ public class TypeDefinition extends ParameterizedPropertyBasedHierarchyDefinitio
 	public List<ConstantDefinition> getConstants()
 	{
 		return constants;
+	}
+
+	public boolean isBsjSpecific()
+	{
+		return bsjSpecific;
 	}
 
 	@Override

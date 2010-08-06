@@ -27,6 +27,8 @@ public class GenerationProfile
 			PropertyDefinition.Mode.NORMAL);
 	public static final Element<Project> INTERFACE_PROJECT = new Element<Project>(Project.API);
 	public static final Element<Project> IMPLEMENTATION_PROJECT = new Element<Project>(Project.GENERATOR);
+	
+	public static final Element<Boolean> BSJ_SPECIFIC = new Element<Boolean>(false);
 
 	public static final class Element<T>
 	{

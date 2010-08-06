@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -11,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * and prepared for execution by the compiler.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ExplicitMetaprogramAnchorNode<T extends Node> extends MetaprogramAnchorNode<T>
+public interface ExplicitMetaprogramAnchorNode<T extends Node> extends MetaprogramAnchorNode<T>, BsjSpecificNode
 {
     /**
      * Gets the metaprogram on this node.

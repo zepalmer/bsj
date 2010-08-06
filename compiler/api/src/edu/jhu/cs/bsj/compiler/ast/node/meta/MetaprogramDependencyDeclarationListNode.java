@@ -3,13 +3,14 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 
 /**
  * Represents a list of {@link MetaprogramDependencyDeclarationNode}s.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramDependencyDeclarationListNode extends ListNode<MetaprogramDependencyDeclarationNode>
+public interface MetaprogramDependencyDeclarationListNode extends ListNode<MetaprogramDependencyDeclarationNode>, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
 
@@ -10,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
  * A value in a meta-annotation which is an expression.  This value may not be an assignment expression.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaAnnotationExpressionValueNode extends Node, MetaAnnotationValueNode
+public interface MetaAnnotationExpressionValueNode extends Node, MetaAnnotationValueNode, BsjSpecificNode
 {
     /**
      * Gets the expression.
