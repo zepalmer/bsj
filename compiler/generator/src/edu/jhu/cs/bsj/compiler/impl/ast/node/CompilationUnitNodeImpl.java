@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -321,6 +322,16 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         list.add(getImports());
         list.add(getTypeDecls());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getPackageDeclaration(), getMetaimports(), getImports(), getTypeDecls()});
     }
     
     /**

@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -353,6 +354,16 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         list.add(getBody());
         list.add(getJavadoc());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getModifiers(), getIdentifier(), getArguments(), getBody(), getJavadoc()});
     }
     
     /**

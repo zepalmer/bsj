@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -305,6 +306,16 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         list.add(getFinalFlag());
         list.add(getStrictfpFlag());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getMetaAnnotations(), getAnnotations()});
     }
     
     /**

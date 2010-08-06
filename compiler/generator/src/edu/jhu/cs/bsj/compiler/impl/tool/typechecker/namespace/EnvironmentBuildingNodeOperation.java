@@ -56,7 +56,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElement
  * 
  * @author Zachary Palmer
  */
-// TODO: the logic for determining which nodes are the children of a given node should be abstracted
 public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environment, Environment>
 {
 	/**

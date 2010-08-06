@@ -141,5 +141,13 @@ public interface Node
 	 * purposes.
 	 */
 	public String toSourceCode();
+	
+	/**
+	 * Retrieves an iterable view of the children of this node.  Its iterator does not iterate in any particular order.
+	 * Different views may not have consistent ordering.  Calling this method causes a read operation to be performed
+	 * over all of the children of this node which either are nodes or represent node children.
+	 * @return The iterator of this node's children.
+	 */
+	public Iterable<? extends Node> getChildIterable();
 	/* GEN:stop */
 }

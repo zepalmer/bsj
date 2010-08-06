@@ -110,6 +110,18 @@ public class AnnotationValueListNodeImpl extends ListNodeImpl<AnnotationValueNod
     }
     
     /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        List<Node> ret = new ArrayList<Node>();
+        ret.addAll(getChildren());
+        return ret;
+    }
+    
+    /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
      */

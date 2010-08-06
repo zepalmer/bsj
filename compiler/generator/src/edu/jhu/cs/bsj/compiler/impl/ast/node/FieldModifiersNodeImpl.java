@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -303,6 +304,16 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
         list.add(getTransientFlag());
         list.add(getVolatileFlag());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getMetaAnnotations(), getAnnotations()});
     }
     
     /**

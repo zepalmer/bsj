@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -165,6 +166,16 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
         List<Object> list = super.getChildObjects();
         list.add(getArguments());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getArguments(), getAnnotationType(), getMetaprogramAnchor()});
     }
     
     /**

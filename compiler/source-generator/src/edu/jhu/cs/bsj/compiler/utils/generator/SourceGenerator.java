@@ -798,6 +798,35 @@ public class SourceGenerator
 
 			void voidType(PrependablePrintStream ps, ModalPropertyDefinition<?> p);
 		}
+
+		static class DefaultPropertyTypeAbstractor implements PropertyTypeAbstractor
+		{
+
+			@Override
+			public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+			{
+			}
+
+			@Override
+			public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+			{
+			}
+
+			@Override
+			public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+			{
+			}
+
+			@Override
+			public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+			{
+			}
+
+			@Override
+			public void voidType(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+			{
+			}
+		}
 	}
 
 	/**
@@ -845,6 +874,33 @@ public class SourceGenerator
 					+ def.getNameWithTypeParameters());
 			ps.println("{");
 			ps.incPrependCount();
+
+			// precalculation
+			final Boolean hasListAsProperty;
+			{
+				if (def.getMode() == Mode.CONCRETE)
+				{
+					final boolean[] found = new boolean[] { false };
+					PropertyTypeAbstractor hasListAsPropertyAbstractor = new DefaultPropertyTypeAbstractor()
+					{
+						@Override
+						public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+							found[0] = true;
+						}
+					};
+					for (ModalPropertyDefinition<?> p : def.getRecursiveProperties())
+					{
+						if (p.isHide())
+							continue;
+						propAbstract(hasListAsPropertyAbstractor, p, null, def);
+					}
+					hasListAsProperty = found[0];
+				} else
+				{
+					hasListAsProperty = null;
+				}
+			}
 
 			// gen properties
 			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
@@ -1218,6 +1274,70 @@ public class SourceGenerator
 			if (!def.isGenChildren())
 				ps.print("*/"); // nogen logic
 			ps.println();
+
+			// add logic for child iterator
+			if (def.getMode() == Mode.CONCRETE)
+			{
+				ps.println("/**");
+				ps.println(" * Returns an iterator over the children of this node.");
+				ps.println(" * @see Node#getChildIterator()");
+				ps.println(" */");
+				ps.println("@Override");
+				ps.println("public Iterable<? extends Node> getChildIterable()");
+				ps.println("{");
+				ps.incPrependCount();
+				if (hasListAsProperty)
+				{
+					ps.println("List<Node> ret = new ArrayList<Node>();");
+					PropertyTypeAbstractor abstractor = new DefaultPropertyTypeAbstractor()
+					{
+						@Override
+						public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+							ps.println("ret.addAll(get" + capFirst(p.getName()) + "());");
+						}
+
+						@Override
+						public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+							ps.println("ret.add(get" + capFirst(p.getName()) + "());");
+						}
+					};
+					for (PropertyDefinition p : def.getRecursiveProperties())
+					{
+						if (p.isHide())
+							continue;
+						propAbstract(abstractor, p, ps, def);
+					}
+					ps.println("return ret;");
+				} else
+				{
+					ps.print("return Arrays.asList(new Node[]{");
+					PropertyTypeAbstractor abstractor = new DefaultPropertyTypeAbstractor()
+					{
+						private boolean first = true;
+
+						@Override
+						public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+							if (!first)
+								ps.print(", ");
+							ps.print("get" + capFirst(p.getName()) + "()");
+							first = false;
+						}
+					};
+					for (PropertyDefinition p : def.getRecursiveProperties())
+					{
+						if (p.isHide())
+							continue;
+						propAbstract(abstractor, p, ps, def);
+					}
+					ps.println("});");
+				}
+				ps.decPrependCount();
+				ps.println("}");
+				ps.println();
+			}
 
 			// add logic for toString
 			ps.println("/**");
@@ -2098,7 +2218,7 @@ public class SourceGenerator
 		public void finish() throws IOException
 		{
 			super.finish();
-			
+
 			for (PrependablePrintStream ps : allStreams())
 			{
 				ps.println("}");

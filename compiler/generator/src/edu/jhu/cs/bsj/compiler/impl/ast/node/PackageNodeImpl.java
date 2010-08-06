@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -161,6 +162,16 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         List<Object> list = super.getChildObjects();
         list.add(getName());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getName()});
     }
     
     /**

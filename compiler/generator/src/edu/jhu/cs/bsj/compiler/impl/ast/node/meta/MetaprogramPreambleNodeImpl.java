@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -332,6 +333,16 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         list.add(getTargets());
         list.add(getDependencies());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getImports(), getTargets(), getDependencies()});
     }
     
     /**

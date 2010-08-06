@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -111,6 +112,16 @@ public class LocalClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDecl
     {
         List<Object> list = super.getChildObjects();
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getModifiers(), getExtendsClause(), getImplementsClause(), getBody(), getTypeParameters(), getIdentifier(), getJavadoc()});
     }
     
     /**

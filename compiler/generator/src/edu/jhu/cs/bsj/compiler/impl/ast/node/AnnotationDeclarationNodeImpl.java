@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -289,6 +290,16 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         list.add(getModifiers());
         list.add(getBody());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getModifiers(), getBody(), getIdentifier(), getJavadoc()});
     }
     
     /**

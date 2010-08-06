@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -200,6 +201,16 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         return list;
+    }
+    
+    /**
+     * Returns an iterator over the children of this node.
+     * @see Node#getChildIterator()
+     */
+    @Override
+    public Iterable<? extends Node> getChildIterable()
+    {
+        return Arrays.asList(new Node[]{getExpression(), getMetaAnnotations()});
     }
     
     /**
