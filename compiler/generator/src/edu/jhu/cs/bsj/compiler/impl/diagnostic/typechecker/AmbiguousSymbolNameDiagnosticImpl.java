@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic.typechecker;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -7,35 +8,36 @@ import java.util.Map;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.AmbiguousTypeNameDiagnostic;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.AmbiguousSymbolNameDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.SymbolType;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
- * Indicates that a type name could not be resolved because at least two different types applied.
+ * Indicates that a symbol name could not be resolved because at least two different symbols of the
+ * same symbol type applied.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public abstract class AmbiguousTypeNameDiagnosticImpl extends NamespaceLookupFailureDiagnosticImpl implements AmbiguousTypeNameDiagnostic
+public class AmbiguousSymbolNameDiagnosticImpl extends NamespaceLookupFailureDiagnosticImpl implements AmbiguousSymbolNameDiagnostic
 {
-    /** The type declarations which caused the ambiguity. */
-    private List<NamedTypeDeclarationNode<?>> examples;
+    /** The declarations which caused the ambiguity. */
+    private Collection<? extends Node> examples;
     
-    public AmbiguousTypeNameDiagnosticImpl(
+    public AmbiguousSymbolNameDiagnosticImpl(
             BsjSourceLocation source,
-            String code,
-            javax.tools.Diagnostic.Kind kind,
             String name,
-            List<NamedTypeDeclarationNode<?>> examples)
+            SymbolType symbolType,
+            Collection<? extends Node> examples)
     {
-        super(source, code, kind, name);
+        super(source, AmbiguousSymbolNameDiagnostic.CODE, Kind.ERROR, name, symbolType);
         this.examples = examples;
     }
     
     /**
      * {@inheritDoc}
      */
-    public List<NamedTypeDeclarationNode<?>> getExamples()
+    public Collection<? extends Node> getExamples()
     {
         return this.examples;
     }

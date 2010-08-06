@@ -373,8 +373,7 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 
 		// Step 1: Populate member types
 		// TODO: insert appropriate diagnostic factory
-		typeNamespaceMap = new NamespaceMap<DeclaredTypeElementImpl<?>>(typeNamespaceMap, this.listener,
-				new NotImplementedYetAmbiguousDiagnosticFactory(), true);
+		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
 		populateTypes(typeNamespaceMap, node.getBody().getMembers());
 
 		// TODO: finish
@@ -428,40 +427,33 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 		// *** Process on-demand imports. This namespace has a lazy error policy, as ambiguities in on-demand
 		// imports (such as "import java.util.*; import java.awt.*;" only matter if the ambiguous name is used
 		// (such as in "List").
-		typeNamespaceMap = new NamespaceMap<DeclaredTypeElementImpl<?>>(this.listener,
-				new OnDemandImportAmbiguousTypeNameDiagnosticFactory(), false);
+		typeNamespaceMap = makeTypeNamespace(null, false);
 		populateOnDemandImports(typeNamespaceMap, node.getImports());
 
 		// *** Process on-demand static imports.
 		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
-		methodNamespaceMap = new NamespaceMap<ExecutableElement>(this.listener,
-				new NotImplementedYetAmbiguousDiagnosticFactory(), false);
+		methodNamespaceMap = makeMethodNamespace(null, false);
 		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
-		variableNamespaceMap = new NamespaceMap<VariableElement>(this.listener,
-				new NotImplementedYetAmbiguousDiagnosticFactory(), false);
+		variableNamespaceMap = makeVariableNamespace(null, false);
 		populateOnDemandStaticImports(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getImports());
 
 		// *** Process top-level package peers. This namespace has an eager error policy as any duplication means
 		// a name conflict in the local package.
 		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
-		typeNamespaceMap = new NamespaceMap<DeclaredTypeElementImpl<?>>(typeNamespaceMap, this.listener,
-				new NotImplementedYetAmbiguousDiagnosticFactory(), true);
+		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
 		populateNamespaceMapWithPackage(typeNamespaceMap, (PackageNode) node.getParent(), node.getPackageDeclaration());
 
 		// *** Process single-type imports. This namespace has a eager error policy, as ambiguities in single-type
 		// imports cause the import statements to be useless in any context (such as
 		// "import java.util.List; import java.awt.List;").
-		typeNamespaceMap = new NamespaceMap<DeclaredTypeElementImpl<?>>(typeNamespaceMap, this.listener,
-				new SingleImportAmbiguousTypeNameDiagnosticFactory(), true);
+		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
 		populateSingleTypeImports(typeNamespaceMap, node.getImports());
 
 		// *** Process single-type static imports.
 		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
-		methodNamespaceMap = new NamespaceMap<ExecutableElement>(methodNamespaceMap, this.listener,
-				new NotImplementedYetAmbiguousDiagnosticFactory(), false);
+		methodNamespaceMap = makeMethodNamespace(methodNamespaceMap, true);
 		// TODO: create a diagnostic policy - currently ignoring, which is safe because Java compiler will catch it
-		variableNamespaceMap = new NamespaceMap<VariableElement>(variableNamespaceMap, this.listener,
-				new NotImplementedYetAmbiguousDiagnosticFactory(), false);
+		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, true);
 		populateSingleTypeStaticImports(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getImports());
 
 		// *** Process top-level type declarations. The addition of the public top-level type declaration will, of
@@ -1550,5 +1542,30 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 						(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(type), type);
 			}
 		}
+	}
+
+	/**
+	 * Convenience method for creating a type namespace.
+	 */
+	private NamespaceMap<DeclaredTypeElementImpl<?>> makeTypeNamespace(NamespaceMap<DeclaredTypeElementImpl<?>> map,
+			boolean eager)
+	{
+		return NamespaceMap.makeType(map, this.listener, eager);
+	}
+
+	/**
+	 * Convenience method for creating a method namespace.
+	 */
+	private NamespaceMap<ExecutableElement> makeMethodNamespace(NamespaceMap<ExecutableElement> map, boolean eager)
+	{
+		return NamespaceMap.makeMethod(map, this.listener, eager);
+	}
+
+	/**
+	 * Convenience method for creating a variable namespace.
+	 */
+	private NamespaceMap<VariableElement> makeVariableNamespace(NamespaceMap<VariableElement> map, boolean eager)
+	{
+		return NamespaceMap.makeVariable(map, this.listener, eager);
 	}
 }

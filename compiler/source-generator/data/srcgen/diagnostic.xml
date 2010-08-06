@@ -515,47 +515,27 @@
             </diagnostic>
             
             <diagnostic name="NamespaceLookupFailureDiagnostic" super="BsjTypeCheckerDiagnostic">
-                <prop name="name" type="String" desc="the name of the type which could not be resolved or was ambiguous"/>
+                <prop name="name" type="String" desc="the name of the symbol which could not be resolved or was ambiguous"/>
+                <prop name="symbolType" type="SymbolType" desc="the type of symbol that could not be resolved"/>
                 <doc><![CDATA[
-                    Indicates that a namespace lookup failed during BSJ type checking.  This means that some type name
-                    could not be resolved to a unique type.
+                    Indicates that a namespace lookup failed during BSJ type checking.  This means that some name
+                    could not be resolved to a unique symbol (type, method, or variable).
                 ]]></doc>
             </diagnostic>
             
-            <diagnostic name="UnknownTypeNameDiagnostic" super="NamespaceLookupFailureDiagnostic" code="bsj.typechecker.name.unknown">
+            <diagnostic name="UnknownSymbolNameDiagnostic" super="NamespaceLookupFailureDiagnostic" code="bsj.typechecker.name.unknown">
                 <doc><![CDATA[
-                    Indicates that a type name could not be resolved because no such type declaration could be found
+                    Indicates that a name could not be resolved because no corresponding declaration could be found
                     in scope.
                 ]]></doc>
             </diagnostic>
             
-            <diagnostic name="AmbiguousTypeNameDiagnostic" super="NamespaceLookupFailureDiagnostic">
-                <prop name="examples" type="List&lt;NamedTypeDeclarationNode&lt;?&gt;&gt;" desc="the type declarations which caused the ambiguity"/>
+            <diagnostic name="AmbiguousSymbolNameDiagnostic" super="NamespaceLookupFailureDiagnostic"
+                code="bsj.typechecker.name.ambiguous">
+                <prop name="examples" type="Collection&lt;? extends Node&gt;" desc="the declarations which caused the ambiguity"/>
                 <doc><![CDATA[
-                    Indicates that a type name could not be resolved because at least two different types applied.
-                ]]></doc>
-            </diagnostic>
-            
-            <diagnostic name="SingleImportAmbiguousTypeNameDiagnostic" super="AmbiguousTypeNameDiagnostic"
-                code="bsj.typechecker.name.ambiguous.import.single">
-                <doc><![CDATA[
-                    Indicates that multiple single-type imports cause ambiguity over the simple name.  These may be
-                    static or non-static imports.
-                ]]></doc>
-            </diagnostic>
-
-            <diagnostic name="OnDemandImportAmbiguousTypeNameDiagnostic" super="AmbiguousTypeNameDiagnostic"
-                code="bsj.typechecker.name.ambiguous.import.onDemand">
-                <doc><![CDATA[
-                    Indicates that multiple on-demand imports cause ambiguity over the simple name.  These may be
-                    static or non-static imports.
-                ]]></doc>
-            </diagnostic>
-            
-            <diagnostic name="AmbiguousMemberTypeNameDiagnostic" super="AmbiguousTypeNameDiagnostic"
-                code="bsj.typechecker.name.ambiguous.member">
-                <doc><![CDATA[
-                    Indicates that a given member type name was declared more than once.
+                    Indicates that a symbol name could not be resolved because at least two different symbols of the
+                    same symbol type applied.
                 ]]></doc>
             </diagnostic>
             

@@ -7,22 +7,24 @@ import java.util.Map;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.UnknownTypeNameDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.SymbolType;
+import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.UnknownSymbolNameDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 
 /**
- * Indicates that a type name could not be resolved because no such type declaration could be found
+ * Indicates that a name could not be resolved because no corresponding declaration could be found
  * in scope.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class UnknownTypeNameDiagnosticImpl extends NamespaceLookupFailureDiagnosticImpl implements UnknownTypeNameDiagnostic
+public class UnknownSymbolNameDiagnosticImpl extends NamespaceLookupFailureDiagnosticImpl implements UnknownSymbolNameDiagnostic
 {
-    public UnknownTypeNameDiagnosticImpl(
+    public UnknownSymbolNameDiagnosticImpl(
             BsjSourceLocation source,
-            String name)
+            String name,
+            SymbolType symbolType)
     {
-        super(source, UnknownTypeNameDiagnostic.CODE, Kind.ERROR, name);
+        super(source, UnknownSymbolNameDiagnostic.CODE, Kind.ERROR, name, symbolType);
     }
     
     @Override

@@ -99,6 +99,7 @@ public interface PackageNode extends Node
 	 * @param name The simple name of the top level type.
 	 * @return The type's declaration or <code>null</code> if no such declaration exists.
 	 */
+	// TODO: what if the name is ambiguous? (a non-public top-level type with this name also exists, for example)
 	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name);
 
 	/**
