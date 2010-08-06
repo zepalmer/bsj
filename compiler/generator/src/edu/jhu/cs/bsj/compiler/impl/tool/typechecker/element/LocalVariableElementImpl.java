@@ -17,9 +17,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 public class LocalVariableElementImpl extends VariableDeclaratorOwnerElementImpl<LocalVariableDeclarationNode>
 {
 	public LocalVariableElementImpl(TypecheckerModelManager manager, LocalVariableDeclarationNode backingNode,
-			Element enclosingElement)
+			Element enclosingElement, int index)
 	{
-		super(manager, backingNode, enclosingElement);
+		super(manager, backingNode, enclosingElement, index);
 	}
 
 	@Override

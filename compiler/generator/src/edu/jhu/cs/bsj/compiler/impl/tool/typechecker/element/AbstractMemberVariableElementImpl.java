@@ -14,9 +14,10 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 public abstract class AbstractMemberVariableElementImpl<T extends AbstractMemberVariableDeclarationNode<?>> extends
 		VariableDeclaratorOwnerElementImpl<T>
 {
-	public AbstractMemberVariableElementImpl(TypecheckerModelManager manager, T backingNode, Element enclosingElement)
+	public AbstractMemberVariableElementImpl(TypecheckerModelManager manager, T backingNode, Element enclosingElement,
+			int index)
 	{
-		super(manager, backingNode, enclosingElement);
+		super(manager, backingNode, enclosingElement, index);
 	}
 
 	@Override

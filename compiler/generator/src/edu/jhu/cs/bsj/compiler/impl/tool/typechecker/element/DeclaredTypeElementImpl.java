@@ -19,6 +19,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.LocalClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
 /**
@@ -116,10 +118,24 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 		List<Element> ret = new ArrayList<Element>();
 		for (Node node : getBackingNode().getBody().getMembers())
 		{
-			Element element = makeElement(node);
-			if (element != null)
+			Element element;
+			if (node instanceof VariableDeclaratorOwnerNode)
 			{
-				ret.add(element);
+				for (VariableDeclaratorNode declaratorNode : ((VariableDeclaratorOwnerNode)node).getDeclarators())
+				{
+					element = makeElement(declaratorNode);
+					if (element != null)
+					{
+						ret.add(element);
+					}
+				}
+			} else
+			{
+				element = makeElement(node);
+				if (element != null)
+				{
+					ret.add(element);
+				}
 			}
 		}
 		return ret;

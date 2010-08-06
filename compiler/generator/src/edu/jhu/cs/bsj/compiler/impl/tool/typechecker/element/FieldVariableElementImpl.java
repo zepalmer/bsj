@@ -12,9 +12,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 public class FieldVariableElementImpl extends AbstractMemberVariableElementImpl<FieldDeclarationNode>
 {
 	public FieldVariableElementImpl(TypecheckerModelManager manager, FieldDeclarationNode backingNode,
-			Element enclosingElement)
+			Element enclosingElement, int index)
 	{
-		super(manager, backingNode, enclosingElement);
+		super(manager, backingNode, enclosingElement, index);
 	}
 
 	@Override

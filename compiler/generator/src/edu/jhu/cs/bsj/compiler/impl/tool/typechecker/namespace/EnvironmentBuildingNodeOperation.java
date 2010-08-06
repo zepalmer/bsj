@@ -1366,23 +1366,23 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 						populateNamespaceMapWithPackage(typeNamespaceMap, packageNode, importNode);
 						break;
 					case TYPE:
-						NamedTypeDeclarationNode<?> type = getTypeFromCanonicalName(importNode.getName());
-						for (Node node : type.getBody().getMembers())
+						NamedTypeDeclarationNode<?> type = getAccessibleTypeFromCanonicalName(importNode.getName());
+						if (type == null)
 						{
-							if (node instanceof NamedTypeDeclarationNode<?>)
+							// TODO: emit an appropriate diagnostic
+							throw new NotImplementedYetException();
+						} else
+						{
+							for (Node node : type.getBody().getMembers())
 							{
-								NamedTypeDeclarationNode<?> memberType = (NamedTypeDeclarationNode<?>) node;
-								if (memberType.getModifiers() instanceof AccessibleTypeModifiersNode
-										&& ((AccessibleTypeModifiersNode) memberType.getModifiers()).getAccess() == AccessModifier.PUBLIC)
+								if (node instanceof NamedTypeDeclarationNode<?>)
 								{
-									typeNamespaceMap.add(memberType.getIdentifier().getIdentifier(),
-											(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(memberType),
-											importNode);
+									tryPopulateMemberType(typeNamespaceMap, importNode,
+											(NamedTypeDeclarationNode<?>) node);
 								}
 							}
 						}
-						// TODO: import all declared types which exist on another type
-						throw new NotImplementedYetException();
+						break;
 					default:
 						// In this case, the name categorizer messed up
 						throw new IllegalStateException(
@@ -1394,12 +1394,73 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 		}
 	}
 
+	private void tryPopulateMemberType(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap, Node indicator,
+			NamedTypeDeclarationNode<?> memberType)
+	{
+		if (memberType.getModifiers() instanceof AccessibleTypeModifiersNode
+				&& ((AccessibleTypeModifiersNode) memberType.getModifiers()).getAccess() == AccessModifier.PUBLIC)
+		{
+			typeNamespaceMap.add(memberType.getIdentifier().getIdentifier(),
+					(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(memberType), indicator);
+		}
+	}
+
+	private void tryPopulateMemberMethod(NamespaceMap<ExecutableElement> methodNamespaceMap, Node indicator,
+			MethodDeclarationNode memberMethod)
+	{
+		if (memberMethod.getModifiers().getAccess() == AccessModifier.PUBLIC)
+		{
+			methodNamespaceMap.add(memberMethod.getIdentifier().getIdentifier(),
+					(ExecutableElement) this.toolkit.makeElement(memberMethod), indicator);
+		}
+	}
+
+	private void tryPopulateMemberField(NamespaceMap<VariableElement> variableNamespaceMap, Node indicator,
+			FieldDeclarationNode memberField)
+	{
+		if (memberField.getModifiers().getAccess() == AccessModifier.PUBLIC)
+		{
+			for (VariableDeclaratorNode declaratorNode : memberField.getDeclarators())
+			{
+				variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+						(VariableElement) this.toolkit.makeElement(memberField), declaratorNode);
+			}
+		}
+	}
+
 	private void populateOnDemandStaticImports(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap,
 			NamespaceMap<ExecutableElement> methodNamespaceMap, NamespaceMap<VariableElement> variableNamespaceMap,
 			Iterable<ImportNode> imports)
 	{
-		// TODO Auto-generated method stub
+		for (ImportNode importNode : imports)
+		{
+			if (importNode instanceof StaticImportOnDemandNode)
+			{
+				if (importNode.getName().getCategory() != NameCategory.TYPE)
+				{
+					// On-demand static imports can only name types.
+					// TODO: report an appropriate diagnostic
+					throw new NotImplementedYetException();
+				}
 
+				// For each member of the type, import it if possible
+				NamedTypeDeclarationNode<?> type = getAccessibleTypeFromCanonicalName(importNode.getName());
+				// TODO: what if type does not exist or is not accessible?
+				for (Node node : type.getBody().getMembers())
+				{
+					if (node instanceof NamedTypeDeclarationNode<?>)
+					{
+						tryPopulateMemberType(typeNamespaceMap, importNode, (NamedTypeDeclarationNode<?>) node);
+					} else if (node instanceof FieldDeclarationNode)
+					{
+						tryPopulateMemberField(variableNamespaceMap, importNode, (FieldDeclarationNode) node);
+					} else if (node instanceof MethodDeclarationNode)
+					{
+						tryPopulateMemberMethod(methodNamespaceMap, importNode, (MethodDeclarationNode) node);
+					}
+				}
+			}
+		}
 	}
 
 	private void populateSingleTypeImports(NamespaceMap<DeclaredTypeElementImpl<?>> map, Iterable<ImportNode> imports)
@@ -1408,14 +1469,16 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 		{
 			if (importNode instanceof ImportSingleTypeNode)
 			{
-				NamedTypeDeclarationNode<?> type = getTypeFromCanonicalName(importNode.getName());
+				NamedTypeDeclarationNode<?> type = getAccessibleTypeFromCanonicalName(importNode.getName());
 				if (type == null)
 				{
-					continue;
+					// TODO: raise some kind of appropriate diagnostic
+					throw new NotImplementedYetException();
+				} else
+				{
+					map.add(type.getIdentifier().getIdentifier(),
+							(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(type), importNode);
 				}
-
-				map.add(type.getIdentifier().getIdentifier(),
-						(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(type), importNode);
 			}
 		}
 	}
@@ -1428,7 +1491,15 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 
 	}
 
-	private NamedTypeDeclarationNode<?> getTypeFromCanonicalName(NameNode name)
+	/**
+	 * Obtains a named type declaration from the specified canonical name. The type declaration must be accessible from
+	 * the name in question. For instance, if the type declaration has private access, the name must be in a subtree of
+	 * the enclosing type inside of which the named type is declared.
+	 * 
+	 * @param name The name of the type declaration to locate.
+	 * @return The resulting type declaration, or <code>null</code> if no such accessible type declaration exists.
+	 */
+	private NamedTypeDeclarationNode<?> getAccessibleTypeFromCanonicalName(NameNode name)
 	{
 		// Get the name of the package.
 		List<String> typeNames = new ArrayList<String>();
@@ -1484,6 +1555,8 @@ public class EnvironmentBuildingNodeOperation implements BsjNodeOperation<Enviro
 				throw new NotImplementedYetException();
 			}
 		}
+
+		// TODO: verify that the requested type is accessible from the provided NameNode
 
 		return type;
 	}

@@ -13,9 +13,11 @@ public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDecla
 {
 	private int index;
 
-	public VariableDeclaratorOwnerElementImpl(TypecheckerModelManager manager, T backingNode, Element enclosingElement)
+	public VariableDeclaratorOwnerElementImpl(TypecheckerModelManager manager, T backingNode, Element enclosingElement,
+			int index)
 	{
 		super(manager, backingNode, enclosingElement);
+		this.index = index;
 	}
 
 	public int getIndex()

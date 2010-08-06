@@ -77,7 +77,7 @@ public class PackageElementImpl extends AbstractElementImpl<PackageNode> impleme
 			{
 				if (typeDeclarationNode instanceof NamedTypeDeclarationNode<?>)
 				{
-					list.add(typeDeclarationNode.executeOperation(new ElementBuildingNodeOperation(getManager()), null));
+					list.add(makeElement(typeDeclarationNode));
 				}
 			}
 		}
