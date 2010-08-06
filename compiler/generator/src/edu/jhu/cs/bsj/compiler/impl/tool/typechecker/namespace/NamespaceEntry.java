@@ -5,8 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.lang.model.element.Element;
+
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElementImpl;
 
 /**
  * This class represents a single entry in the type namespace. On the happy path, this entry contains a single type
@@ -16,56 +17,48 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElement
  * 
  * @author Zachary Palmer
  */
-public class TypeNamespaceEntry
+public class NamespaceEntry<T extends Element>
 {
 	/** The first type which was provided to this entry. */
-	private DeclaredTypeElementImpl<?> firstType;
+	private T firstValue;
 	/** The first indicator node. */
 	private Node firstIndicator;
 	/** The types which are mapped to the specified name. */
-	private Set<DeclaredTypeElementImpl<?>> types;
+	private Set<T> values;
 	/** A mapping from nodes which brought types into scope to the type declarations that they indicated. */
-	private Map<Node, DeclaredTypeElementImpl<?>> indicatorNodeMap;
+	private Map<Node, T> indicatorNodeMap;
 
-	public TypeNamespaceEntry(TypeNamespaceEntry other)
+	public NamespaceEntry(T type, Node indicator)
 	{
-		this.types = new HashSet<DeclaredTypeElementImpl<?>>(other.types);
-		this.indicatorNodeMap = new HashMap<Node, DeclaredTypeElementImpl<?>>(other.indicatorNodeMap);
-		this.firstType = other.firstType;
-		this.firstIndicator = other.firstIndicator;
-	}
-	
-	public TypeNamespaceEntry(DeclaredTypeElementImpl<?> type, Node indicator)
-	{
-		this.types = new HashSet<DeclaredTypeElementImpl<?>>();
-		this.indicatorNodeMap = new HashMap<Node, DeclaredTypeElementImpl<?>>();
+		this.values = new HashSet<T>();
+		this.indicatorNodeMap = new HashMap<Node, T>();
 		add(type, indicator);
 	}
 
-	public void add(DeclaredTypeElementImpl<?> type, Node indicator)
+	public void add(T type, Node indicator)
 	{
-		if (this.types.size() == 0)
+		if (this.values.size() == 0)
 		{
-			firstType = type;
+			firstValue = type;
 			firstIndicator = indicator;
 		}
-		this.types.add(type);
+		this.values.add(type);
 		this.indicatorNodeMap.put(indicator, type);
 	}
 
-	public Set<DeclaredTypeElementImpl<?>> getTypes()
+	public Set<T> getValues()
 	{
-		return types;
+		return values;
 	}
 
-	public Map<Node, DeclaredTypeElementImpl<?>> getIndicatorNodeMap()
+	public Map<Node, T> getIndicatorNodeMap()
 	{
 		return indicatorNodeMap;
 	}
 
-	public DeclaredTypeElementImpl<?> getFirstType()
+	public T getFirstValue()
 	{
-		return firstType;
+		return firstValue;
 	}
 
 	public Node getFirstIndicator()

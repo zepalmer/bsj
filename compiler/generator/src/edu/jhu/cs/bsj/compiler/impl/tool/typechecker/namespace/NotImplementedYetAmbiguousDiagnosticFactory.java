@@ -1,9 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
-import java.util.List;
+import javax.lang.model.element.Element;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.AmbiguousTypeNameDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 
@@ -12,11 +11,11 @@ import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
  * class should eventually be eliminated.
  * @author Zachary Palmer
  */
-public class NotImplementedYetAmbiguousDiagnosticFactory extends AbstractAmbiguousDiagnosticFactory
+public class NotImplementedYetAmbiguousDiagnosticFactory implements AmbiguousDiagnosticFactory<Element>
 {
 	@Override
-	protected AmbiguousTypeNameDiagnostic createDiagnostic(String name, BsjSourceLocation sourceLocation,
-			List<NamedTypeDeclarationNode<?>> nodes)
+	public AmbiguousTypeNameDiagnostic makeDiagnostic(String name, NamespaceEntry<? extends Element> entry,
+			BsjSourceLocation sourceLocation)
 	{
 		throw new NotImplementedYetException();
 	}
