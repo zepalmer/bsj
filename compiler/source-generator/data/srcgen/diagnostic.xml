@@ -539,14 +539,16 @@
             <diagnostic name="SingleImportAmbiguousTypeNameDiagnostic" super="AmbiguousTypeNameDiagnostic"
                 code="bsj.typechecker.name.ambiguous.import.single">
                 <doc><![CDATA[
-                    Indicates that multiple single imports cause ambiguity over the simple name.
+                    Indicates that multiple single-type imports cause ambiguity over the simple name.  These may be
+                    static or non-static imports.
                 ]]></doc>
             </diagnostic>
 
             <diagnostic name="OnDemandImportAmbiguousTypeNameDiagnostic" super="AmbiguousTypeNameDiagnostic"
                 code="bsj.typechecker.name.ambiguous.import.onDemand">
                 <doc><![CDATA[
-                    Indicates that multiple on-demand imports cause ambiguity over the simple name.
+                    Indicates that multiple on-demand imports cause ambiguity over the simple name.  These may be
+                    static or non-static imports.
                 ]]></doc>
             </diagnostic>
             
