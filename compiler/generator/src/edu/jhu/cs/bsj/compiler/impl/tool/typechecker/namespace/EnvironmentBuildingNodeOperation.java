@@ -211,29 +211,25 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeArrayInitializerNode(ArrayInitializerNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeArrayTypeNode(ArrayTypeNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
