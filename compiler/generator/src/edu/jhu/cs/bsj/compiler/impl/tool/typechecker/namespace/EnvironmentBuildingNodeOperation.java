@@ -775,8 +775,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeNormalAnnotationNode(NormalAnnotationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -862,8 +861,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeSingleElementAnnotationNode(SingleElementAnnotationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -909,8 +907,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeSuperMethodInvocationNode(SuperMethodInvocationNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -1014,15 +1011,13 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeVariableAccessByNameNode(VariableAccessByNameNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
