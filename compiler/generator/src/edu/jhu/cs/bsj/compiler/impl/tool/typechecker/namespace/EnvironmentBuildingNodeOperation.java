@@ -109,15 +109,13 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeAnnotationArrayValueNode(AnnotationArrayValueNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -137,29 +135,25 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeAnnotationElementListNode(AnnotationElementListNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeAnnotationElementNode(AnnotationElementNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeAnnotationListNode(AnnotationListNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -191,8 +185,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeAnnotationValueListNode(AnnotationValueListNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
