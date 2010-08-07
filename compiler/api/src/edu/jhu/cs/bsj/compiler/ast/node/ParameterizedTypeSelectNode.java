@@ -12,6 +12,21 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
  * containing the name "B"; the <tt>base</tt> child is a {@link ParameterizedTypeNode}.  The <tt>base</tt> has
  * children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link TypeArgumentListNode} containing the
  * type argument with the name "X".
+ * <p/>
+ * As a point of note, <tt>ParameterizedTypeSelectNode</tt>s lead to the right (unlike <tt>NameNode<tt/>s,
+ * which lead to the left).  That is, if there are multiple levels of <tt>ParameterizedTypeSelectNode</tt>,
+ * the root node's <tt>base</tt> value is the leftmost part of the type (whereas the <tt>identifier</tt>
+ * in the root <tt>NameNode</tt> is the rightmost part of the name).
+ * <p/>
+ * For example, consider the somewhat complex type <tt>A&lt;X,Y&gt;.B.C&lt;Z&gt;.D</tt>.  The root node is
+ * a <tt>ParameterizedTypeSelectNode</tt>.  The <tt>base</tt> child for the root is a
+ * {@link ParameterizedTypeNode} with an {@link UnparameterizedTypeNode} containing the name "A" and a
+ * {@link TypeArgumentListNode} containing type arguments for "X" and "Y".
+ * <p/>
+ * The <tt>select</tt> child of the root is another <tt>ParameterizedTypeSelectNode</tt>.  It has a
+ * <tt>base</tt> child which, in turn, has an {@link UnparameterizedTypeNode} containing the name "B.C" and
+ * a {@link TypeArgumentListNode} containing a type argument for "Z".  Finally, the last <tt>select</tt>
+ * child is an {@link UnparameterizedTypeNode} containing the name "D".
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode

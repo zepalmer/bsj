@@ -16,6 +16,7 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 
 public class InitializerExecutableElementImpl extends AbstractExecutableElementImpl<InitializerDeclarationNode>
@@ -60,7 +61,7 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	@Override
 	public Name getSimpleName()
 	{
-		return new NameImpl(getBackingNode().getStaticInitializer() ? "<clinit>" : "");
+		return new NameImpl(getBackingNode().getStaticInitializer() ? NamespaceUtilities.STATIC_INITIALIZER_NAME : "");
 	}
 
 	@Override

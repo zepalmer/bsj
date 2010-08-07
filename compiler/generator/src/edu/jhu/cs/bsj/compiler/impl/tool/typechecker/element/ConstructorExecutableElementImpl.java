@@ -11,6 +11,7 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 
 public class ConstructorExecutableElementImpl extends AbstractInvokableExecutableElementImpl<ConstructorDeclarationNode>
@@ -50,7 +51,7 @@ public class ConstructorExecutableElementImpl extends AbstractInvokableExecutabl
 	@Override
 	public Name getSimpleName()
 	{
-		return new NameImpl("<init>");
+		return new NameImpl(NamespaceUtilities.CONSTRUCTOR_NAME);
 	}
 
 }

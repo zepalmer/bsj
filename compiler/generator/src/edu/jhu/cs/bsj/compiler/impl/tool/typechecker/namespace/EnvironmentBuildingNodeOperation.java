@@ -1,12 +1,11 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
@@ -44,6 +43,8 @@ import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElementImpl;
 
+// TODO: method environment stuff is broken; it doesn't allow for overloading
+
 /**
  * This node operation builds {@link Environment}s for BSJ nodes. The environment which is provided as input to each
  * operation method is the environment that the node should consider to be its base. The environment which is returned
@@ -52,6 +53,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElement
  * <p/>
  * If this operation is asked to build an environment for a BSJ-specific node other than a code literal or raw code
  * literal, an {@link IllegalStateException} will result.
+ * <p/>
+ * The mapping which stores the environments maps each node to the environment that its descendents should use if they
+ * have no further additions to the symbol table. A {@link CompilationUnitNode}, for instance, will be mapped to the
+ * environment that it prescribes for its declared types. In this way, for instance, a type declaration node is mapped
+ * to the symbol table available to its callers. That is, if a type <tt>Foo</tt> has a field named <tt>bar</tt>, then
+ * the environment mapped by the name <tt>Foo</tt> will contain a variable symbol table entry for <tt>bar</tt>; this
+ * simplifies processing of qualified names such as <tt>Foo.bar</tt>.
  * 
  * @author Zachary Palmer
  */
@@ -171,13 +179,13 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeAnnotationModifiersNode(AnnotationModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -244,8 +252,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeAssignmentNode(AssignmentNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -317,24 +324,67 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeClassBodyNode(ClassBodyNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap = p.getTypeNamespaceMap();
+		NamespaceMap<ExecutableElement> methodNamespaceMap = p.getMethodNamespaceMap();
+		NamespaceMap<VariableElement> variableNamespaceMap = p.getVariableNamespaceMap();
+
+		// *** Populate member elements
+		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
+		methodNamespaceMap = makeMethodNamespace(methodNamespaceMap, true);
+		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, true);
+		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getMembers(),
+				AccessModifier.PRIVATE);
+
+		// *** Inherit member elements
+		ClassDeclarationNode classDeclarationNode = (ClassDeclarationNode) node.getParent();
+		populateInheritedElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap,
+				classDeclarationNode.getExtendsClause());
+		for (DeclaredTypeNode implementsType : classDeclarationNode.getImplementsClause())
+		{
+			populateInheritedElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, implementsType);
+		}
+
+		// *** Store the resulting environment
+		Environment environment = new Environment(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap);
+		recordEnvironment(node, p, environment);
+
+		// *** Deal with children
+		for (Node child : node.getChildIterable())
+		{
+			child.executeOperation(this, environment);
+		}
+
+		// *** Finished!
+		return environment;
 	}
 
 	@Override
 	public Environment executeClassDeclarationNode(ClassDeclarationNode node, Environment p)
 	{
 		NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap = p.getTypeNamespaceMap();
+		NamespaceMap<ExecutableElement> methodNamespaceMap = p.getMethodNamespaceMap();
+		NamespaceMap<VariableElement> variableNamespaceMap = p.getVariableNamespaceMap();
 
-		// Step 1: Populate member types
-		// TODO: insert appropriate diagnostic factory
+		// *** Populate type parameters (which are in scope of the entire declaration)
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
-		populateTypes(typeNamespaceMap, node.getBody().getMembers());
+		for (TypeParameterNode typeParameterNode : node.getTypeParameters())
+		{
+			typeNamespaceMap.add(typeParameterNode.getIdentifier().getIdentifier(),
+					(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(typeParameterNode), typeParameterNode);
+		}
 
-		// TODO: finish
+		// *** Store the resulting environment
+		Environment environment = new Environment(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap);
+		recordEnvironment(node, p, environment);
 
-		// TODO Auto-generated method stub
-		return null;
+		// *** Deal with children
+		for (Node child : node.getChildIterable())
+		{
+			child.executeOperation(this, environment);
+		}
+
+		// *** Finished!
+		return environment;
 	}
 
 	@Override
@@ -353,14 +403,13 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeClassModifiersNode(ClassModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
 	public Environment executeCodeLiteralNode(CodeLiteralNode node, Environment p)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -400,7 +449,8 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 		// course, be redundant (because it was obtained in from package peers above). The same typespace map is used,
 		// since a top-level
 		// type named N in the same compilation unit and a single-static import of a type named N will conflict.
-		populateTypes(typeNamespaceMap, node.getTypeDecls());
+		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getTypeDecls(),
+				AccessModifier.PUBLIC);
 
 		// *** Store this environment
 		Environment environment = new Environment(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap);
@@ -431,7 +481,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeConstantModifiersNode(ConstantModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -451,7 +501,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeConstructorModifiersNode(ConstructorModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -511,7 +561,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeEnumConstantModifiersNode(EnumConstantModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -524,7 +574,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeEnumModifiersNode(EnumModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -550,7 +600,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeFieldModifiersNode(FieldModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -654,7 +704,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeInterfaceModifiersNode(InterfaceModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -686,7 +736,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeLocalClassModifiersNode(LocalClassModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -724,7 +774,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeMethodModifiersNode(MethodModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -1017,7 +1067,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	@Override
 	public Environment executeVariableModifiersNode(VariableModifiersNode node, Environment p)
 	{
-		return handleModifiersNode(node, p);
+		return handleNondefiningNode(node, p);
 	}
 
 	@Override
@@ -1105,7 +1155,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 						populateNamespaceMapWithPackage(typeNamespaceMap, packageNode, importNode);
 						break;
 					case TYPE:
-						NamedTypeDeclarationNode<?> type = getAccessibleTypeFromCanonicalName(importNode.getName());
+						NamedTypeDeclarationNode<?> type = this.toolkit.getAccessibleTypeFromFullyQualifiedName(importNode.getName());
 						if (type == null)
 						{
 							// TODO: emit an appropriate diagnostic
@@ -1117,7 +1167,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 								if (node instanceof NamedTypeDeclarationNode<?>)
 								{
 									tryPopulateMemberType(typeNamespaceMap, importNode,
-											(NamedTypeDeclarationNode<?>) node);
+											(NamedTypeDeclarationNode<?>) node, AccessModifier.PUBLIC);
 								}
 							}
 						}
@@ -1129,40 +1179,6 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 										+ importNode.getName().getNameString() + " has category "
 										+ importNode.getName().getCategory());
 				}
-			}
-		}
-	}
-
-	private void tryPopulateMemberType(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap, Node indicator,
-			NamedTypeDeclarationNode<?> memberType)
-	{
-		if (memberType.getModifiers() instanceof AccessibleTypeModifiersNode
-				&& ((AccessibleTypeModifiersNode) memberType.getModifiers()).getAccess() == AccessModifier.PUBLIC)
-		{
-			typeNamespaceMap.add(memberType.getIdentifier().getIdentifier(),
-					(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(memberType), indicator);
-		}
-	}
-
-	private void tryPopulateMemberMethod(NamespaceMap<ExecutableElement> methodNamespaceMap, Node indicator,
-			MethodDeclarationNode memberMethod)
-	{
-		if (memberMethod.getModifiers().getAccess() == AccessModifier.PUBLIC)
-		{
-			methodNamespaceMap.add(memberMethod.getIdentifier().getIdentifier(),
-					(ExecutableElement) this.toolkit.makeElement(memberMethod), indicator);
-		}
-	}
-
-	private void tryPopulateMemberField(NamespaceMap<VariableElement> variableNamespaceMap, Node indicator,
-			FieldDeclarationNode memberField)
-	{
-		if (memberField.getModifiers().getAccess() == AccessModifier.PUBLIC)
-		{
-			for (VariableDeclaratorNode declaratorNode : memberField.getDeclarators())
-			{
-				variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
-						(VariableElement) this.toolkit.makeElement(memberField), declaratorNode);
 			}
 		}
 	}
@@ -1183,26 +1199,15 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 				}
 
 				// For each member of the type, import it if possible
-				NamedTypeDeclarationNode<?> type = getAccessibleTypeFromCanonicalName(importNode.getName());
+				NamedTypeDeclarationNode<?> type = this.toolkit.getAccessibleTypeFromFullyQualifiedName(importNode.getName());
 				if (type == null)
 				{
 					// TODO: emit an appropriate diagnostic
 					throw new NotImplementedYetException();
 				} else
 				{
-					for (Node node : type.getBody().getMembers())
-					{
-						if (node instanceof NamedTypeDeclarationNode<?>)
-						{
-							tryPopulateMemberType(typeNamespaceMap, importNode, (NamedTypeDeclarationNode<?>) node);
-						} else if (node instanceof FieldDeclarationNode)
-						{
-							tryPopulateMemberField(variableNamespaceMap, importNode, (FieldDeclarationNode) node);
-						} else if (node instanceof MethodDeclarationNode)
-						{
-							tryPopulateMemberMethod(methodNamespaceMap, importNode, (MethodDeclarationNode) node);
-						}
-					}
+					populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap,
+							type.getBody().getMembers(), AccessModifier.PUBLIC);
 				}
 			}
 		}
@@ -1214,7 +1219,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 		{
 			if (importNode instanceof ImportSingleTypeNode)
 			{
-				NamedTypeDeclarationNode<?> type = getAccessibleTypeFromCanonicalName(importNode.getName());
+				NamedTypeDeclarationNode<?> type = this.toolkit.getAccessibleTypeFromFullyQualifiedName(importNode.getName());
 				if (type == null)
 				{
 					// TODO: raise some kind of appropriate diagnostic
@@ -1237,73 +1242,182 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	}
 
 	/**
-	 * Obtains a named type declaration from the specified canonical name. The type declaration must be accessible from
-	 * the name in question. For instance, if the type declaration has private access, the name must be in a subtree of
-	 * the enclosing type inside of which the named type is declared.
+	 * Populates the elements represented by a list of nodes into a set of namespace maps as immediately-accessible
+	 * members.
 	 * 
-	 * @param name The name of the type declaration to locate.
-	 * @return The resulting type declaration, or <code>null</code> if no such accessible type declaration exists.
+	 * @param typeNamespaceMap The type namespace into which to populate.
+	 * @param methodNamespaceMap The method namespace into which to populate.
+	 * @param variableNamespaceMap The variable namespace into which to populate.
+	 * @param nodes The list of nodes from which to extract the elements to populate.
+	 * @param access The level of access to use during population.
 	 */
-	private NamedTypeDeclarationNode<?> getAccessibleTypeFromCanonicalName(NameNode name)
+	private void populateElements(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap,
+			NamespaceMap<ExecutableElement> methodNamespaceMap, NamespaceMap<VariableElement> variableNamespaceMap,
+			Iterable<? extends Node> nodes, AccessModifier access)
 	{
-		// Get the name of the package.
-		List<String> typeNames = new ArrayList<String>();
-		while (name != null && name.getCategory() != NameCategory.PACKAGE)
-		{
-			if (name.getCategory() != NameCategory.TYPE)
-			{
-				throw new IllegalStateException("Name categorizer gave non-package, non-type category to import name: "
-						+ name.getNameString() + " has category " + name.getCategory());
-			}
-			typeNames.add(name.getIdentifier().getIdentifier());
-			if (name instanceof SimpleNameNode)
-			{
-				name = null;
-			} else
-			{
-				name = ((QualifiedNameNode) name).getBase();
-			}
-		}
+		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, nodes, access, false);
+	}
 
-		if (typeNames.size() == 0)
+	/**
+	 * Populates the elements represented by a list of nodes into a set of namespace maps as immediately-accessible
+	 * members.
+	 * 
+	 * @param typeNamespaceMap The type namespace into which to populate.
+	 * @param methodNamespaceMap The method namespace into which to populate.
+	 * @param variableNamespaceMap The variable namespace into which to populate.
+	 * @param nodes The list of nodes from which to extract the elements to populate.
+	 * @param access The level of access to use during population.
+	 * @param skipNonMembers <code>true</code> if non-members such as constructors should be skipped; <code>false</code>
+	 *            otherwise.
+	 */
+	private void populateElements(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap,
+			NamespaceMap<ExecutableElement> methodNamespaceMap, NamespaceMap<VariableElement> variableNamespaceMap,
+			Iterable<? extends Node> nodes, AccessModifier access, boolean skipNonMembers)
+	{
+		for (Node node : nodes)
 		{
-			// We were provided with a package name, not a type name
-			// TODO: raise an appropriate diagnostic
-			throw new NotImplementedYetException();
-		}
-
-		// Ascertain the package in which the imported type lives
-		PackageNode packageNode;
-		if (name == null)
-		{
-			packageNode = this.rootPackage;
-		} else
-		{
-			packageNode = this.rootPackage.getSubpackageByQualifiedName(name);
-		}
-
-		// Obtain the type from the package
-		NamedTypeDeclarationNode<?> type = packageNode.getTopLevelTypeDeclaration(typeNames.get(0));
-		if (type == null)
-		{
-			// The type does not exist
-			// TODO: raise an appropriate diagnostic
-			throw new NotImplementedYetException();
-		}
-		for (int index = 1; index < typeNames.size(); index++)
-		{
-			type = type.getTypeDeclaration(typeNames.get(index));
-			if (type == null)
+			if (node instanceof NamedTypeDeclarationNode<?>)
 			{
-				// The type does not exist
-				// TODO: raise an appropriate diagnostic
-				throw new NotImplementedYetException();
+				tryPopulateMemberType(typeNamespaceMap, node, (NamedTypeDeclarationNode<?>) node, access);
+			} else if (node instanceof AbstractMemberVariableDeclarationNode<?>)
+			{
+				tryPopulateMemberField(variableNamespaceMap, node, (FieldDeclarationNode) node, access);
+			} else if (node instanceof MethodDeclarationNode)
+			{
+				tryPopulateMemberMethod(methodNamespaceMap, node, (MethodDeclarationNode) node, access);
+			} else if (node instanceof ConstantDeclarationNode)
+			{
+				tryPopulateMemberConstant(variableNamespaceMap, node, (ConstantDeclarationNode) node);
+			} else if (node instanceof ConstructorDeclarationNode && !skipNonMembers)
+			{
+				tryPopulateMemberConstructor(methodNamespaceMap, node, (ConstructorDeclarationNode) node, access);
 			}
 		}
+	}
 
-		// TODO: verify that the requested type is accessible from the provided NameNode
+	/**
+	 * Populates the elements inherited from a given type. This method will populate into the provided namespaces those
+	 * elements which are inheritable; constructors, for instance, will not be included.
+	 * 
+	 * @param typeNamespaceMap The type namespace into which to populate.
+	 * @param methodNamespaceMap The method namespace into which to populate.
+	 * @param variableNamespaceMap The variable namespace into which to populate.
+	 * @param typeNode The type from which elements are being inherited.
+	 */
+	private void populateInheritedElements(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap,
+			NamespaceMap<ExecutableElement> methodNamespaceMap, NamespaceMap<VariableElement> variableNamespaceMap,
+			DeclaredTypeNode typeNode)
+	{
+		// TODO: detect cycles to prevent stack overflow
+		
+		// TODO: figure out whether we have PACKAGE or PROTECTED access
+		AccessModifier access = AccessModifier.PROTECTED;
 
-		return type;
+		// Locate the actual element representing the indicated type.
+		DeclaredType type = (DeclaredType) this.toolkit.makeType(typeNode);
+		DeclaredTypeElementImpl<?> element = (DeclaredTypeElementImpl<?>) type.asElement();
+
+		// Populate its non-constructor elements
+		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap,
+				element.getBackingNode().getBody().getMembers(), access, true);
+	}
+
+	/**
+	 * Attempts to populate a member type into the provided type namespace map. This will succeed if and only if the
+	 * type in question has an access modifier and that access modifier is less restrictive or equally restrictive to
+	 * the level of access provided.
+	 * 
+	 * @param typeNamespaceMap The namespace into which to populate the type.
+	 * @param indicator The node responsible for indicating this mapping.
+	 * @param memberType The declaration which is being populated.
+	 * @param access The maximum level of restriction this mapping can tolerate.
+	 */
+	private void tryPopulateMemberType(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap, Node indicator,
+			NamedTypeDeclarationNode<?> memberType, AccessModifier access)
+	{
+		if (memberType.getModifiers() instanceof AccessibleTypeModifiersNode
+				&& ((AccessibleTypeModifiersNode) memberType.getModifiers()).getAccess().compareTo(access) < 0)
+		{
+			typeNamespaceMap.add(memberType.getIdentifier().getIdentifier(),
+					(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(memberType), indicator);
+		}
+	}
+
+	/**
+	 * Attempts to populate a member method into the provided method namespace map. This will succeed if and only if the
+	 * method's access modifier is less restrictive or equally restrictive to the level of access provided.
+	 * 
+	 * @param methodNamespaceMap The namespace into which to populate the method.
+	 * @param indicator The node responsible for indicating this mapping.
+	 * @param memberMethod The declaration which is being populated.
+	 * @param access The maximum level of restriction this mapping can tolerate.
+	 */
+	private void tryPopulateMemberMethod(NamespaceMap<ExecutableElement> methodNamespaceMap, Node indicator,
+			MethodDeclarationNode memberMethod, AccessModifier access)
+	{
+		if (((AccessibleTypeModifiersNode) memberMethod.getModifiers()).getAccess().compareTo(access) < 0)
+		{
+			methodNamespaceMap.add(memberMethod.getIdentifier().getIdentifier(),
+					(ExecutableElement) this.toolkit.makeElement(memberMethod), indicator);
+		}
+	}
+
+	/**
+	 * Attempts to populate a member variable into the provided method namespace map. This will succeed if and only if
+	 * the variable's access modifier is less restrictive or equally restrictive to the level of access provided.
+	 * 
+	 * @param variableNamespaceMap The namespace into which to populate the variable.
+	 * @param indicator The node responsible for indicating this mapping.
+	 * @param memberField The declaration which is being populated.
+	 * @param access The maximum level of restriction this mapping can tolerate.
+	 */
+	private void tryPopulateMemberField(NamespaceMap<VariableElement> variableNamespaceMap, Node indicator,
+			FieldDeclarationNode memberField, AccessModifier access)
+	{
+		if (((AccessibleTypeModifiersNode) memberField.getModifiers()).getAccess().compareTo(access) < 0)
+		{
+			for (VariableDeclaratorNode declaratorNode : memberField.getDeclarators())
+			{
+				variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+						(VariableElement) this.toolkit.makeElement(memberField), declaratorNode);
+			}
+		}
+	}
+
+	/**
+	 * Populates a member constant into the provided method namespace map.
+	 * 
+	 * @param variableNamespaceMap The namespace into which to populate the variable.
+	 * @param indicator The node responsible for indicating this mapping.
+	 * @param memberConstant The declaration which is being populated.
+	 */
+	private void tryPopulateMemberConstant(NamespaceMap<VariableElement> variableNamespaceMap, Node indicator,
+			ConstantDeclarationNode memberConstant)
+	{
+		for (VariableDeclaratorNode declaratorNode : memberConstant.getDeclarators())
+		{
+			variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+					(VariableElement) this.toolkit.makeElement(memberConstant), declaratorNode);
+		}
+	}
+
+	/**
+	 * Attempts to populate a constructor into the provided method namespace map. This will succeed if and only if the
+	 * constructor's access modifier is less restrictive or equally restrictive to the level of access provided.
+	 * 
+	 * @param methodNamespaceMap The namespace into which to populate the constructor.
+	 * @param indicator The node responsible for indicating this mapping.
+	 * @param constructor The declaration which is being populated.
+	 * @param access The maximum level of restriction this mapping can tolerate.
+	 */
+	private void tryPopulateMemberConstructor(NamespaceMap<ExecutableElement> methodNamespaceMap, Node indicator,
+			ConstructorDeclarationNode constructor, AccessModifier access)
+	{
+		if (((AccessibleTypeModifiersNode) constructor.getModifiers()).getAccess().compareTo(access) < 0)
+		{
+			methodNamespaceMap.add(NamespaceUtilities.CONSTRUCTOR_NAME,
+					(ExecutableElement) this.toolkit.makeElement(constructor), indicator);
+		}
 	}
 
 	/**
@@ -1344,25 +1458,6 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	}
 
 	/**
-	 * Populates the types contained in a list of nodes into a type namespace map as immediately-accessible members.
-	 * 
-	 * @param typeNamespaceMap
-	 * @param nodes
-	 */
-	private void populateTypes(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap, Iterable<? extends Node> nodes)
-	{
-		for (Node node : nodes)
-		{
-			if (node instanceof NamedTypeDeclarationNode<?>)
-			{
-				NamedTypeDeclarationNode<?> type = (NamedTypeDeclarationNode<?>) node;
-				typeNamespaceMap.add(type.getIdentifier().getIdentifier(),
-						(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(type), type);
-			}
-		}
-	}
-
-	/**
 	 * Processes a node which does not perform any namespace assignments and for which the children of the node are
 	 * typespace-independent. A binary expression, for instance, could be processed by this method. While the contents
 	 * of the binary expression may have implications on their own scope, no legal Java AST would allow an expression to
@@ -1385,11 +1480,6 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 			}
 		}
 		return environment;
-	}
-
-	private Environment handleModifiersNode(ModifiersNode node, Environment environment)
-	{
-		return handleNondefiningNode(node, environment);
 	}
 
 	/**
