@@ -269,10 +269,12 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         visitor.visitAnnotationDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitNamedTypeDeclarationNodeStart(this);
+        visitor.visitModifiedNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNamedTypeDeclarationNodeStop(this);
+        visitor.visitModifiedNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAnnotationDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

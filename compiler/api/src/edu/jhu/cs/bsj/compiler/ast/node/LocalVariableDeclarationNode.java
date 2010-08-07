@@ -20,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
  *     </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface LocalVariableDeclarationNode extends Node, BlockStatementNode, VariableDeclaratorOwnerNode, DeclarationNode
+public interface LocalVariableDeclarationNode extends Node, BlockStatementNode, VariableDeclaratorOwnerNode, DeclarationNode, ModifiedNode<VariableModifiersNode>
 {
     /**
      * Gets the modifiers for this variable.

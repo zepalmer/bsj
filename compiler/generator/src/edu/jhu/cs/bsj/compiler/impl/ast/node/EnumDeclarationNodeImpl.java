@@ -316,10 +316,12 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         visitor.visitEnumDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitNamedTypeDeclarationNodeStart(this);
+        visitor.visitModifiedNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNamedTypeDeclarationNodeStop(this);
+        visitor.visitModifiedNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitEnumDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

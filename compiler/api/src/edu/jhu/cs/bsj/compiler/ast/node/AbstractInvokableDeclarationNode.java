@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
  * A node representing an executable declaration, such as a method or a constructor.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AbstractInvokableDeclarationNode extends Node, ClassMemberNode, DeclarationNode
+public interface AbstractInvokableDeclarationNode<T extends ModifiersNode> extends Node, ClassMemberNode, DeclarationNode, ModifiedNode<T>
 {
     /**
      * Gets the identifier for the name of this executable.
@@ -29,7 +29,13 @@ public interface AbstractInvokableDeclarationNode extends Node, ClassMemberNode,
      * Gets the modifiers for this executable.
      * @return The modifiers for this executable.
      */
-    public ModifiersNode getModifiers();
+    public T getModifiers();
+    
+    /**
+     * Changes the modifiers for this executable.
+     * @param modifiers The modifiers for this executable.
+     */
+    public void setModifiers(T modifiers);
     
     /**
      * Gets the parameters declared by this executable.
@@ -97,5 +103,5 @@ public interface AbstractInvokableDeclarationNode extends Node, ClassMemberNode,
      * @return The resulting deep copy node.
      */
     @Override
-    public AbstractInvokableDeclarationNode deepCopy(BsjNodeFactory factory);
+    public AbstractInvokableDeclarationNode<T> deepCopy(BsjNodeFactory factory);
 }

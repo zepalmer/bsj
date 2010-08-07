@@ -16,7 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface EnumDeclarationNode extends Node, NamedTypeDeclarationNode<ClassMemberNode>
+public interface EnumDeclarationNode extends Node, NamedTypeDeclarationNode<ClassMemberNode>, ModifiedNode<EnumModifiersNode>
 {
     /**
      * Gets the modifiers for this type.

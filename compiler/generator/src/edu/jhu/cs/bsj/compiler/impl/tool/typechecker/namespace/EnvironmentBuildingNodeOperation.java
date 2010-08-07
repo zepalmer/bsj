@@ -432,7 +432,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 		// *** Process single-type static imports.
 		methodNamespaceMap = makeMethodNamespace(methodNamespaceMap, true);
 		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, true);
-		populateSingleTypeStaticImports(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getImports());
+		populateSingleStaticImports(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getImports());
 
 		// *** Process top-level type declarations. The addition of the public top-level type declaration will, of
 		// course, be redundant (because it was obtained in from package peers above). The same typespace map is used,
@@ -1151,7 +1151,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 								if (node instanceof NamedTypeDeclarationNode<?>)
 								{
 									tryPopulateMemberType(typeNamespaceMap, importNode,
-											(NamedTypeDeclarationNode<?>) node, AccessModifier.PUBLIC);
+											(NamedTypeDeclarationNode<?>) node, AccessModifier.PUBLIC, null);
 								}
 							}
 						}
@@ -1217,12 +1217,36 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 		}
 	}
 
-	private void populateSingleTypeStaticImports(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap,
+	private void populateSingleStaticImports(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap,
 			NamespaceMap<ExecutableElement> methodNamespaceMap, NamespaceMap<VariableElement> variableNamespaceMap,
 			Iterable<ImportNode> imports)
 	{
-		// TODO Auto-generated method stub
+		for (ImportNode importNode : imports)
+		{
+			if (importNode instanceof SingleStaticImportNode)
+			{
+				if (importNode.getName().getCategory() != NameCategory.TYPE)
+				{
+					// On-demand static imports can only name types.
+					// TODO: report an appropriate diagnostic
+					throw new NotImplementedYetException();
+				}
 
+				// Find all members of the type which have the specified name.
+				NamedTypeDeclarationNode<?> type = this.toolkit.getAccessibleTypeFromFullyQualifiedName(importNode.getName());
+				SingleStaticImportNode singleStaticImportNode = (SingleStaticImportNode) importNode;
+				if (type == null)
+				{
+					// TODO: emit an appropriate diagnostic
+					throw new NotImplementedYetException();
+				} else
+				{
+					populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap,
+							type.getBody().getMembers(), AccessModifier.PUBLIC, false,
+							singleStaticImportNode.getIdentifier().getIdentifier());
+				}
+			}
+		}
 	}
 
 	/**
@@ -1239,7 +1263,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 			NamespaceMap<ExecutableElement> methodNamespaceMap, NamespaceMap<VariableElement> variableNamespaceMap,
 			Iterable<? extends Node> nodes, AccessModifier access)
 	{
-		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, nodes, access, false);
+		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, nodes, access, false, null);
 	}
 
 	/**
@@ -1253,28 +1277,32 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	 * @param access The level of access to use during population.
 	 * @param skipNonMembers <code>true</code> if non-members such as constructors should be skipped; <code>false</code>
 	 *            otherwise.
+	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
 	private void populateElements(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap,
 			NamespaceMap<ExecutableElement> methodNamespaceMap, NamespaceMap<VariableElement> variableNamespaceMap,
-			Iterable<? extends Node> nodes, AccessModifier access, boolean skipNonMembers)
+			Iterable<? extends Node> nodes, AccessModifier access, boolean skipNonMembers, String name)
 	{
 		for (Node node : nodes)
 		{
 			if (node instanceof NamedTypeDeclarationNode<?>)
 			{
-				tryPopulateMemberType(typeNamespaceMap, node, (NamedTypeDeclarationNode<?>) node, access);
+				tryPopulateMemberType(typeNamespaceMap, node, (NamedTypeDeclarationNode<?>) node, access, name);
 			} else if (node instanceof AbstractMemberVariableDeclarationNode<?>)
 			{
-				tryPopulateMemberField(variableNamespaceMap, node, (FieldDeclarationNode) node, access);
+				tryPopulateMemberField(variableNamespaceMap, node, (FieldDeclarationNode) node, access, name);
 			} else if (node instanceof MethodDeclarationNode)
 			{
-				tryPopulateMemberMethod(methodNamespaceMap, node, (MethodDeclarationNode) node, access);
+				tryPopulateMemberMethod(methodNamespaceMap, node, (MethodDeclarationNode) node, access, name);
 			} else if (node instanceof ConstantDeclarationNode)
 			{
-				tryPopulateMemberConstant(variableNamespaceMap, node, (ConstantDeclarationNode) node);
-			} else if (node instanceof ConstructorDeclarationNode && !skipNonMembers)
+				tryPopulateMemberConstant(variableNamespaceMap, node, (ConstantDeclarationNode) node, name);
+			} else if (!skipNonMembers)
 			{
-				tryPopulateMemberConstructor(methodNamespaceMap, node, (ConstructorDeclarationNode) node, access);
+				if (node instanceof ConstructorDeclarationNode && name == null)
+				{
+					tryPopulateMemberConstructor(methodNamespaceMap, node, (ConstructorDeclarationNode) node, access);
+				}
 			}
 		}
 	}
@@ -1293,7 +1321,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 			DeclaredTypeNode typeNode)
 	{
 		// TODO: detect cycles to prevent stack overflow
-		
+
 		// TODO: figure out whether we have PACKAGE or PROTECTED access
 		AccessModifier access = AccessModifier.PROTECTED;
 
@@ -1303,7 +1331,7 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 
 		// Populate its non-constructor elements
 		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap,
-				element.getBackingNode().getBody().getMembers(), access, true);
+				element.getBackingNode().getBody().getMembers(), access, true, null);
 	}
 
 	/**
@@ -1315,12 +1343,14 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	 * @param indicator The node responsible for indicating this mapping.
 	 * @param memberType The declaration which is being populated.
 	 * @param access The maximum level of restriction this mapping can tolerate.
+	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
 	private void tryPopulateMemberType(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap, Node indicator,
-			NamedTypeDeclarationNode<?> memberType, AccessModifier access)
+			NamedTypeDeclarationNode<?> memberType, AccessModifier access, String name)
 	{
 		if (memberType.getModifiers() instanceof AccessibleTypeModifiersNode
-				&& ((AccessibleTypeModifiersNode) memberType.getModifiers()).getAccess().compareTo(access) < 0)
+				&& ((AccessibleTypeModifiersNode) memberType.getModifiers()).getAccess().compareTo(access) < 0
+				&& (name == null || memberType.getIdentifier().getIdentifier().equals(name)))
 		{
 			typeNamespaceMap.add(memberType.getIdentifier().getIdentifier(),
 					(DeclaredTypeElementImpl<?>) this.toolkit.makeElement(memberType), indicator);
@@ -1335,11 +1365,13 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	 * @param indicator The node responsible for indicating this mapping.
 	 * @param memberMethod The declaration which is being populated.
 	 * @param access The maximum level of restriction this mapping can tolerate.
+	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
 	private void tryPopulateMemberMethod(NamespaceMap<ExecutableElement> methodNamespaceMap, Node indicator,
-			MethodDeclarationNode memberMethod, AccessModifier access)
+			MethodDeclarationNode memberMethod, AccessModifier access, String name)
 	{
-		if (((AccessibleTypeModifiersNode) memberMethod.getModifiers()).getAccess().compareTo(access) < 0)
+		if (((AccessibleTypeModifiersNode) memberMethod.getModifiers()).getAccess().compareTo(access) < 0
+				&& (name == null || memberMethod.getIdentifier().getIdentifier().equals(name)))
 		{
 			methodNamespaceMap.add(memberMethod.getIdentifier().getIdentifier(),
 					(ExecutableElement) this.toolkit.makeElement(memberMethod), indicator);
@@ -1354,16 +1386,20 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	 * @param indicator The node responsible for indicating this mapping.
 	 * @param memberField The declaration which is being populated.
 	 * @param access The maximum level of restriction this mapping can tolerate.
+	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
 	private void tryPopulateMemberField(NamespaceMap<VariableElement> variableNamespaceMap, Node indicator,
-			FieldDeclarationNode memberField, AccessModifier access)
+			FieldDeclarationNode memberField, AccessModifier access, String name)
 	{
 		if (((AccessibleTypeModifiersNode) memberField.getModifiers()).getAccess().compareTo(access) < 0)
 		{
 			for (VariableDeclaratorNode declaratorNode : memberField.getDeclarators())
 			{
-				variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
-						(VariableElement) this.toolkit.makeElement(memberField), declaratorNode);
+				if (name == null || declaratorNode.getName().getIdentifier().equals(name))
+				{
+					variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+							(VariableElement) this.toolkit.makeElement(memberField), declaratorNode);
+				}
 			}
 		}
 	}
@@ -1374,14 +1410,18 @@ public class EnvironmentBuildingNodeOperation extends JavaNodeOperation<Environm
 	 * @param variableNamespaceMap The namespace into which to populate the variable.
 	 * @param indicator The node responsible for indicating this mapping.
 	 * @param memberConstant The declaration which is being populated.
+	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
 	private void tryPopulateMemberConstant(NamespaceMap<VariableElement> variableNamespaceMap, Node indicator,
-			ConstantDeclarationNode memberConstant)
+			ConstantDeclarationNode memberConstant, String name)
 	{
 		for (VariableDeclaratorNode declaratorNode : memberConstant.getDeclarators())
 		{
-			variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
-					(VariableElement) this.toolkit.makeElement(memberConstant), declaratorNode);
+			if ((name == null || declaratorNode.getName().getIdentifier().equals(name)))
+			{
+				variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+						(VariableElement) this.toolkit.makeElement(memberConstant), declaratorNode);
+			}
 		}
 	}
 

@@ -235,9 +235,11 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         visitor.visitStartBegin(this);
         visitor.visitVariableNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitModifiedNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitModifiedNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitVariableNodeStop(this, true);
         visitor.visitStopEnd(this);

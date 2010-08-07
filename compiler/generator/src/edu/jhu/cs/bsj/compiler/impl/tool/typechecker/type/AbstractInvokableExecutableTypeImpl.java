@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
-public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvokableDeclarationNode> extends AbstractExecutableTypeImpl<T>
+public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvokableDeclarationNode<?>> extends AbstractExecutableTypeImpl<T>
 {
 	public AbstractInvokableExecutableTypeImpl(TypecheckerModelManager manager, T backingNode)
 	{

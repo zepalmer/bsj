@@ -238,12 +238,14 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
         visitor.visitBlockStatementNodeStart(this);
         visitor.visitVariableDeclaratorOwnerNodeStart(this);
         visitor.visitDeclarationNodeStart(this);
+        visitor.visitModifiedNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitBlockStatementNodeStop(this);
         visitor.visitVariableDeclaratorOwnerNodeStop(this);
         visitor.visitDeclarationNodeStop(this);
+        visitor.visitModifiedNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitLocalVariableDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

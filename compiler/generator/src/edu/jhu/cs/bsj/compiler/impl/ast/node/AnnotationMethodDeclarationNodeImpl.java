@@ -331,11 +331,13 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         visitor.visitNodeStart(this);
         visitor.visitAnnotationMemberNodeStart(this);
         visitor.visitDeclarationNodeStart(this);
+        visitor.visitModifiedNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitAnnotationMemberNodeStop(this);
         visitor.visitDeclarationNodeStop(this);
+        visitor.visitModifiedNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAnnotationMethodDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

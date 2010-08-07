@@ -108,6 +108,13 @@
                 This tagging interface describes nodes which may be meta-annotated.
             ]]></doc>
         </type>
+        
+        <type name="ModifiedNode" super="Node" mode="tag" typeParam="T extends ModifiersNode">
+            <prop name="modifiers" type="T" desc="the modifiers which apply to this node"/>
+            <doc><![CDATA[
+                This interface is implemented by nodes which have modifiers.
+            ]]></doc>
+        </type>
 
         <type name="NonAssignmentExpressionNode" super="Node" mode="tag">
             <tag name="ExpressionNode" />
@@ -1111,6 +1118,7 @@
             <tag name="BlockStatementNode" />
             <tag name="VariableDeclaratorOwnerNode" />
             <tag name="DeclarationNode" />
+            <tag name="ModifiedNode" typeArg="VariableModifiersNode" />
             <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable"
                 default="makeVariableModifiersNode()" />
             <prop name="type" type="TypeNode" desc="the type of the declared variables" />
@@ -1414,11 +1422,12 @@
 
         <!-- ======================= MEMBER NODES ======================= -->
 
-        <type name="AbstractInvokableDeclarationNode" super="Node" mode="tag">
+        <type name="AbstractInvokableDeclarationNode" super="Node" mode="tag" typeParam="T extends ModifiersNode">
             <tag name="ClassMemberNode" />
             <tag name="DeclarationNode" />
+            <tag name="ModifiedNode" typeArg="T" /> <!-- TODO: guarantee access modifier -->
             <prop name="identifier" type="IdentifierNode" desc="the identifier for the name of this executable" />
-            <prop name="modifiers" type="ModifiersNode" mode="readOnly" desc="the modifiers for this executable" />
+            <prop name="modifiers" type="T" desc="the modifiers for this executable" />
             <prop name="parameters" type="VariableListNode" desc="the parameters declared by this executable" />
             <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this executable"
                 default="null" />
@@ -1448,6 +1457,7 @@
         <type name="AnnotationMethodDeclarationNode" super="Node">
             <tag name="AnnotationMemberNode" />
             <tag name="DeclarationNode" />
+            <tag name="ModifiedNode" typeArg="AnnotationMethodModifiersNode"/>
             <prop name="modifiers" type="AnnotationMethodModifiersNode" desc="the modifiers for this annotation method" />
             <prop name="type" type="TypeNode" desc="the return type of this annotation method" />
             <prop name="identifier" type="IdentifierNode" desc="this annotation method's name" />
@@ -1470,7 +1480,7 @@
         </type>
 
         <type name="ConstructorDeclarationNode" super="Node">
-            <tag name="AbstractInvokableDeclarationNode" />
+            <tag name="AbstractInvokableDeclarationNode" typeArg="ConstructorModifiersNode" />
             <prop name="identifier" type="IdentifierNode" desc="the identifier for the name of this constructor" />
             <prop name="body" type="ConstructorBodyNode" desc="the body of this constructor" />
             <prop name="modifiers" type="ConstructorModifiersNode" desc="the modifiers for this constructor" />
@@ -1497,6 +1507,7 @@
 
         <type name="EnumConstantDeclarationNode" super="Node">
             <tag name="DeclarationNode" />
+            <tag name="ModifiedNode" typeArg="EnumConstantModifiersNode"/>
             <prop name="modifiers" type="EnumConstantModifiersNode" desc="the modifiers for this enum constant" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to the enum constructor" />
@@ -1544,7 +1555,7 @@
         <type name="MethodDeclarationNode" super="Node">
             <tag name="InterfaceMemberNode" />
             <tag name="AnonymousClassMemberNode" />
-            <tag name="AbstractInvokableDeclarationNode" />
+            <tag name="AbstractInvokableDeclarationNode" typeArg="MethodModifiersNode" />
             <prop name="body" type="BlockStatementListNode" desc="the body of this method" />
             <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
             <prop name="identifier" type="IdentifierNode" desc="this method's name" />
@@ -1638,6 +1649,7 @@
 
         <type name="AnnotationDeclarationNode" super="Node">
             <tag name="NamedTypeDeclarationNode" typeArg="AnnotationMemberNode" />
+            <tag name="ModifiedNode" typeArg="AnnotationModifiersNode"/>
             <prop name="modifiers" type="AnnotationModifiersNode" desc="the modifiers for this type" />
             <prop name="body" type="AnnotationBodyNode" desc="this annotation's body" />
             <doc><![CDATA[
@@ -1655,6 +1667,7 @@
         <type name="AbstractlyUnmodifiedClassDeclarationNode" super="Node" typeParam="T extends ModifiersNode"
             mode="abstract">
             <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode" />
+            <tag name="ModifiedNode" typeArg="T"/>
             <prop name="modifiers" type="T" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeNode" desc="the extends clause" />
             <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
@@ -1683,6 +1696,7 @@
 
         <type name="EnumDeclarationNode" super="Node">
             <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode" />
+            <tag name="ModifiedNode" typeArg="EnumModifiersNode"/>
             <prop name="modifiers" type="EnumModifiersNode" desc="the modifiers for this type" />
             <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
             <prop name="body" type="EnumBodyNode" desc="this enum's body" />
@@ -1708,6 +1722,7 @@
 
         <type name="InterfaceDeclarationNode" super="Node">
             <tag name="NamedTypeDeclarationNode" typeArg="InterfaceMemberNode" />
+            <tag name="ModifiedNode" typeArg="InterfaceModifiersNode"/>
             <prop name="modifiers" type="InterfaceModifiersNode" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeListNode" desc="the extends clause" />
             <prop name="body" type="InterfaceBodyNode" desc="this interface's body" />
@@ -2095,6 +2110,7 @@
         </type>
 
         <type name="VariableNode" super="Node">
+            <tag name="ModifiedNode" typeArg="VariableModifiersNode"/>
             <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers of this parameter"
                 default="makeVariableModifiersNode()" />
             <prop name="type" type="TypeNode" desc="the type of the variable" />

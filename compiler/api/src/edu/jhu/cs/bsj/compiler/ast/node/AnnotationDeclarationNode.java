@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AnnotationDeclarationNode extends Node, NamedTypeDeclarationNode<AnnotationMemberNode>
+public interface AnnotationDeclarationNode extends Node, NamedTypeDeclarationNode<AnnotationMemberNode>, ModifiedNode<AnnotationModifiersNode>
 {
     /**
      * Gets the modifiers for this type.

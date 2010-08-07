@@ -155,7 +155,7 @@ public interface BsjTypedNodeVisitor
      * Starts a visit for nodes of type AbstractInvokableDeclarationNode.
      * @param node The node being visited.
      */
-    public void visitAbstractInvokableDeclarationNodeStart(AbstractInvokableDeclarationNode node);
+    public void visitAbstractInvokableDeclarationNodeStart(AbstractInvokableDeclarationNode<?> node);
 
     /**
      * Starts a visit for nodes of type AbstractMemberVariableDeclarationNode.
@@ -1325,6 +1325,12 @@ public interface BsjTypedNodeVisitor
     public void visitMethodModifiersNodeStart(MethodModifiersNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type ModifiedNode.
+     * @param node The node being visited.
+     */
+    public void visitModifiedNodeStart(ModifiedNode<?> node);
+
+    /**
      * Starts a visit for nodes of type ModifiersNode.
      * @param node The node being visited.
      */
@@ -1898,7 +1904,7 @@ public interface BsjTypedNodeVisitor
      * Stops a visit for nodes of type AbstractInvokableDeclarationNode.
      * @param node The node being visited.
      */
-    public void visitAbstractInvokableDeclarationNodeStop(AbstractInvokableDeclarationNode node);
+    public void visitAbstractInvokableDeclarationNodeStop(AbstractInvokableDeclarationNode<?> node);
 
     /**
      * Stops a visit for nodes of type AbstractMemberVariableDeclarationNode.
@@ -3066,6 +3072,12 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMethodModifiersNodeStop(MethodModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type ModifiedNode.
+     * @param node The node being visited.
+     */
+    public void visitModifiedNodeStop(ModifiedNode<?> node);
 
     /**
      * Stops a visit for nodes of type ModifiersNode.
