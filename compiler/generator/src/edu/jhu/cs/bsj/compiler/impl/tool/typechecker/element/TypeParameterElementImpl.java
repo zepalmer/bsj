@@ -11,17 +11,18 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ElementVisitor;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
-import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 
-public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterNode> implements TypeParameterElement
+public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterNode> implements BsjTypeParameterElement
 {
 	public TypeParameterElementImpl(TypecheckerModelManager manager, TypeParameterNode backingNode,
-			Element enclosingElement)
+			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}

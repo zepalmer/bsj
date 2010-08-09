@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
@@ -13,13 +12,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
 
 public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends AbstractlyUnmodifiedClassDeclarationNode<?>>
 		extends DeclaredTypeElementImpl<T>
 {
 	public AbstractlyUnmodifiedClassTypeElementImpl(TypecheckerModelManager manager, T backingNode,
-			Element enclosingElement)
+			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}

@@ -15,8 +15,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
 
@@ -136,7 +136,7 @@ public class TypecheckerToolkit
 	 * @return The resulting type declaration.
 	 */
 	public NamedTypeDeclarationNode<?> getAccessibleTypeFromName(NameNode name,
-			NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap)
+			NamespaceMap<BsjTypeElement> typeNamespaceMap)
 	{
 		List<String> typeNames = new ArrayList<String>();
 		NameNode packageName = extractTypePortionOfName(name, typeNames);
@@ -145,7 +145,7 @@ public class TypecheckerToolkit
 		{
 			// ...then the name was referring to either (1) a top level type or (2) a type which is in the symbol table.
 			// Let's see if the last name component (which represents the first identifier) is in the symbol table.
-			DeclaredTypeElementImpl<?> typeElement = typeNamespaceMap.lookup(typeNames.get(typeNames.size()-1), name.getStartLocation());
+			BsjTypeElement typeElement = typeNamespaceMap.lookup(typeNames.get(typeNames.size()-1), name.getStartLocation());
 			if (typeElement != null)
 			{
 				// It looks like our type is in the symbol table!  Now we just need to resolve the remaining components.

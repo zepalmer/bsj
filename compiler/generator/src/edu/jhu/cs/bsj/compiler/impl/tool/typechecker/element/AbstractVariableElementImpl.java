@@ -5,16 +5,17 @@ import java.util.List;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementVisitor;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 
 public abstract class AbstractVariableElementImpl<T extends Node> extends AbstractElementImpl<T> implements
-		VariableElement
+		BsjVariableElement
 {
-	public AbstractVariableElementImpl(TypecheckerModelManager manager, T backingNode, Element enclosingElement)
+	public AbstractVariableElementImpl(TypecheckerModelManager manager, T backingNode, BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}

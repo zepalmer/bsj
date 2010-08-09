@@ -21,7 +21,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 
 public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, TypeMirror>
 {
@@ -125,7 +125,7 @@ public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, Typ
 	private TypeMirror makeDeclarationTypeFromDeclaration(NamedTypeDeclarationNode<?> typeDeclaration,
 			Collection<? extends TypeArgumentNode> typeArgumentNodes, TypeMirror providedEnclosingType)
 	{
-		DeclaredTypeElementImpl<?> typeElement = (DeclaredTypeElementImpl<?>) this.manager.getToolkit().makeElement(
+		BsjTypeElement typeElement = (BsjTypeElement) this.manager.getToolkit().makeElement(
 				typeDeclaration);
 		TypeMirror enclosingType;
 		if (providedEnclosingType != null)

@@ -23,11 +23,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 
 public class AnonymousClassTypeElementImpl extends AbstractElementImpl<AnonymousClassBodyNode> implements TypeElement
 {
 	public AnonymousClassTypeElementImpl(TypecheckerModelManager manager, AnonymousClassBodyNode backingNode,
-			Element enclosingElement)
+			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}

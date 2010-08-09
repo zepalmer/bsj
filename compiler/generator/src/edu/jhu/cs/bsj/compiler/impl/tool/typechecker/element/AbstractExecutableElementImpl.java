@@ -5,15 +5,16 @@ import java.util.List;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementVisitor;
-import javax.lang.model.element.ExecutableElement;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
 
 public abstract class AbstractExecutableElementImpl<T extends Node> extends AbstractElementImpl<T> implements
-		ExecutableElement
+		BsjExecutableElement
 {
-	public AbstractExecutableElementImpl(TypecheckerModelManager manager, T backingNode, Element enclosingElement)
+	public AbstractExecutableElementImpl(TypecheckerModelManager manager, T backingNode, BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}

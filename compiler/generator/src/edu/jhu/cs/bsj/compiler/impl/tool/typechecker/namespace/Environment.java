@@ -1,9 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.VariableElement;
-
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 
 /**
  * This class represents a compilation environment in BSJ. An environment corresponds to an AST subtree; each subtree
@@ -18,14 +17,14 @@ public class Environment
 	// TODO: environment doesn't handle definite assignment
 	// but none of this is necessary for code literal analysis, so they're in the nice-to-have category
 	/** The type namespace in this environment. */
-	private NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap;
+	private NamespaceMap<BsjTypeElement> typeNamespaceMap;
 	/** The method namespace in this environment. */
-	private NamespaceMap<ExecutableElement> methodNamespaceMap;
+	private NamespaceMap<BsjExecutableElement> methodNamespaceMap;
 	/** The variable namespace in this environment. */
-	private NamespaceMap<VariableElement> variableNamespaceMap;
+	private NamespaceMap<BsjVariableElement> variableNamespaceMap;
 
-	public Environment(NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap,
-			NamespaceMap<ExecutableElement> methodNamespaceMap, NamespaceMap<VariableElement> variableNamespaceMap)
+	public Environment(NamespaceMap<BsjTypeElement> typeNamespaceMap,
+			NamespaceMap<BsjExecutableElement> methodNamespaceMap, NamespaceMap<BsjVariableElement> variableNamespaceMap)
 	{
 		super();
 		this.typeNamespaceMap = typeNamespaceMap;
@@ -33,17 +32,17 @@ public class Environment
 		this.variableNamespaceMap = variableNamespaceMap;
 	}
 
-	public NamespaceMap<DeclaredTypeElementImpl<?>> getTypeNamespaceMap()
+	public NamespaceMap<BsjTypeElement> getTypeNamespaceMap()
 	{
 		return typeNamespaceMap;
 	}
 
-	public NamespaceMap<ExecutableElement> getMethodNamespaceMap()
+	public NamespaceMap<BsjExecutableElement> getMethodNamespaceMap()
 	{
 		return methodNamespaceMap;
 	}
 
-	public NamespaceMap<VariableElement> getVariableNamespaceMap()
+	public NamespaceMap<BsjVariableElement> getVariableNamespaceMap()
 	{
 		return variableNamespaceMap;
 	}
@@ -86,5 +85,23 @@ public class Environment
 		this.typeNamespaceMap.lock();
 		this.methodNamespaceMap.lock();
 		this.variableNamespaceMap.lock();
+	}
+	
+	/**
+	 * Creates a string representing this environment.
+	 */
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("Types:     ");
+		sb.append(this.typeNamespaceMap);
+		sb.append("\n");
+		sb.append("Methods:   ");
+		sb.append(this.methodNamespaceMap);
+		sb.append("\n");
+		sb.append("Variables: ");
+		sb.append(this.variableNamespaceMap);
+		sb.append("\n");
+		return sb.toString();
 	}
 }

@@ -3,17 +3,17 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 import java.util.EnumSet;
 import java.util.Set;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 
 public class DeclaredClassTypeElementImpl extends AbstractlyUnmodifiedClassTypeElementImpl<ClassDeclarationNode>
 {
 	public DeclaredClassTypeElementImpl(TypecheckerModelManager manager, ClassDeclarationNode backingNode,
-			Element enclosingElement)
+			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}

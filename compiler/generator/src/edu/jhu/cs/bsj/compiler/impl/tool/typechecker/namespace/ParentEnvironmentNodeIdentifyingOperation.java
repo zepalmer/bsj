@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
@@ -45,7 +44,7 @@ public class ParentEnvironmentNodeIdentifyingOperation extends BsjDefaultNodeOpe
 			{
 				throw new NotImplementedYetException("Haven't made a decision how to handle this.");
 			}
-		} else if (node instanceof PackageNode || node instanceof CompilationUnitNode)
+		} else if (node instanceof PackageNode)
 		{
 			return null;
 		} else

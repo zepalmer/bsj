@@ -5,7 +5,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeParameterElement;
@@ -14,12 +13,13 @@ import javax.lang.model.type.TypeMirror;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationModifiersNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 
 public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<AnnotationDeclarationNode>
 {
 	public DeclaredAnnotationTypeElementImpl(TypecheckerModelManager manager, AnnotationDeclarationNode backingNode,
-			Element enclosingElement)
+			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}

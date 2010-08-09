@@ -13,11 +13,12 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 
 public class LocalVariableElementImpl extends VariableDeclaratorOwnerElementImpl<LocalVariableDeclarationNode>
 {
 	public LocalVariableElementImpl(TypecheckerModelManager manager, LocalVariableDeclarationNode backingNode,
-			Element enclosingElement, int index)
+			BsjElement enclosingElement, int index)
 	{
 		super(manager, backingNode, enclosingElement, index);
 	}

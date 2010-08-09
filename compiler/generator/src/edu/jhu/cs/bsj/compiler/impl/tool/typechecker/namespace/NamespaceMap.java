@@ -3,16 +3,16 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.VariableElement;
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.SymbolType;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.typechecker.AmbiguousSymbolNameDiagnosticImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 
 /**
  * A mapping which is used to represent a namespace. This is a mapping from simple names to the declarations to which
@@ -34,7 +34,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.DeclaredTypeElement
  * 
  * @author Zachary Palmer
  */
-public class NamespaceMap<T extends Element>
+public class NamespaceMap<T extends BsjElement>
 {
 	/** The symbol type for this map. */
 	private SymbolType symbolType;
@@ -67,7 +67,7 @@ public class NamespaceMap<T extends Element>
 	public void lock()
 	{
 		this.locked = true;
-		if (!this.deferenceMap.locked)
+		if (this.deferenceMap != null && !this.deferenceMap.locked)
 			this.deferenceMap.lock();
 	}
 
@@ -156,19 +156,51 @@ public class NamespaceMap<T extends Element>
 
 		return false;
 	}
-
+	
 	/**
-	 * Construction method which creates a type namespace map.
-	 * 
-	 * @param deferenceMap The deference map to use or <code>null</code> for none.
-	 * @param diagnosticListener The listener to which to report errors.
-	 * @param eager <code>true</code> to eagerly report errors; <code>false</code> to lazily report errors.
+	 * Creates a string representation of this namespace.
 	 */
-	public static NamespaceMap<DeclaredTypeElementImpl<?>> makeType(
-			NamespaceMap<? extends DeclaredTypeElementImpl<?>> deferenceMap,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager)
+	public String toString()
 	{
-		return new NamespaceMap<DeclaredTypeElementImpl<?>>(SymbolType.TYPE, deferenceMap, diagnosticListener, eager);
+		StringBuilder sb = new StringBuilder();
+		NamespaceMap<? extends T> map = this;
+		while (map != null)
+		{
+			renderString(map, sb);
+			map = map.deferenceMap;
+		}
+		sb.insert(0, '{');
+		sb.append('}');
+		return sb.toString();
+	}
+
+	private static <E extends BsjElement> void renderString(NamespaceMap<E> map, StringBuilder sb)
+	{
+		for (Map.Entry<String, NamespaceEntry<E>> entry : map.backingMap.entrySet())
+		{
+			if (sb.length()>0)
+			{
+				sb.append(", ");
+			}
+			sb.append(entry.getKey());
+			sb.append(" -> ");
+			if (entry.getValue().getValues().size()>1)
+			{
+				sb.append("{");
+				boolean first = true;
+				for (BsjElement element : entry.getValue().getValues())
+				{
+					if (!first)
+						sb.append(", ");
+					sb.append(element.getDeclarationNode().getStartLocation());
+					first = false;
+				}
+				sb.append("}");
+			} else
+			{
+				sb.append(entry.getValue().getValues().iterator().next().getDeclarationNode().getStartLocation());
+			}
+		}
 	}
 
 	/**
@@ -178,10 +210,11 @@ public class NamespaceMap<T extends Element>
 	 * @param diagnosticListener The listener to which to report errors.
 	 * @param eager <code>true</code> to eagerly report errors; <code>false</code> to lazily report errors.
 	 */
-	public static NamespaceMap<ExecutableElement> makeMethod(NamespaceMap<? extends ExecutableElement> deferenceMap,
+	public static NamespaceMap<BsjTypeElement> makeType(
+			NamespaceMap<? extends BsjTypeElement> deferenceMap,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager)
 	{
-		return new NamespaceMap<ExecutableElement>(SymbolType.METHOD, deferenceMap, diagnosticListener, eager);
+		return new NamespaceMap<BsjTypeElement>(SymbolType.TYPE, deferenceMap, diagnosticListener, eager);
 	}
 
 	/**
@@ -191,9 +224,22 @@ public class NamespaceMap<T extends Element>
 	 * @param diagnosticListener The listener to which to report errors.
 	 * @param eager <code>true</code> to eagerly report errors; <code>false</code> to lazily report errors.
 	 */
-	public static NamespaceMap<VariableElement> makeVariable(NamespaceMap<VariableElement> deferenceMap,
+	public static NamespaceMap<BsjExecutableElement> makeMethod(NamespaceMap<? extends BsjExecutableElement> deferenceMap,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager)
 	{
-		return new NamespaceMap<VariableElement>(SymbolType.VARIABLE, deferenceMap, diagnosticListener, eager);
+		return new NamespaceMap<BsjExecutableElement>(SymbolType.METHOD, deferenceMap, diagnosticListener, eager);
+	}
+
+	/**
+	 * Construction method which creates a type namespace map.
+	 * 
+	 * @param deferenceMap The deference map to use or <code>null</code> for none.
+	 * @param diagnosticListener The listener to which to report errors.
+	 * @param eager <code>true</code> to eagerly report errors; <code>false</code> to lazily report errors.
+	 */
+	public static NamespaceMap<BsjVariableElement> makeVariable(NamespaceMap<? extends BsjVariableElement> deferenceMap,
+			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager)
+	{
+		return new NamespaceMap<BsjVariableElement>(SymbolType.VARIABLE, deferenceMap, diagnosticListener, eager);
 	}
 }

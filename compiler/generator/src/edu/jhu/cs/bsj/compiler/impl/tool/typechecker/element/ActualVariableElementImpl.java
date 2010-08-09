@@ -14,12 +14,13 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 
 public class ActualVariableElementImpl extends AbstractVariableElementImpl<VariableNode>
 {
 	private boolean varArgs;
 	
-	public ActualVariableElementImpl(TypecheckerModelManager manager, VariableNode backingNode, Element enclosingElement,
+	public ActualVariableElementImpl(TypecheckerModelManager manager, VariableNode backingNode, BsjElement enclosingElement,
 			boolean varArgs)
 	{
 		super(manager, backingNode, enclosingElement);

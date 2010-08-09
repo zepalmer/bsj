@@ -54,27 +54,28 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 			// Find the node which dictates which environment this node will have
 			Node parentEnvironmentNode = node.executeOperation(this.locator, null);
 
-			// Get its environment
-			Environment parentEnvironment;
 			if (parentEnvironmentNode == null)
 			{
-				parentEnvironment = new Environment(NamespaceMap.makeType(null, this.listener, false),
+				// There is no parent environment; start a fresh one
+				environment = new Environment(NamespaceMap.makeType(null, this.listener, false),
 						NamespaceMap.makeMethod(null, this.listener, false), NamespaceMap.makeVariable(null,
 								this.listener, false));
+				environment.lock();
 			} else
 			{
-				parentEnvironment = parentEnvironmentNode.executeOperation(this, null);
+				// Find the parent environment
+				Environment parentEnvironment = parentEnvironmentNode.executeOperation(this, null);
+				
+				// Apply changes to its environment as necessary
+				environment = parentEnvironmentNode.executeOperation(this.modifier, parentEnvironment, node);
+				
+				// Lock the environment to ensure that it does not change
+				environment.lock();
+				
+				// Reduce the environment if possible
+				environment = environment.reduce(parentEnvironment);
 			}
-
-			// Apply changes to its environment as necessary
-			environment = parentEnvironmentNode.executeOperation(this.modifier, parentEnvironment, node);
 			
-			// Lock the environment to ensure that it does not change
-			environment.lock();
-			
-			// Reduce the environment if possible
-			environment = environment.reduce(parentEnvironment);
-
 			// Store the result
 			this.environmentCache.put(node, environment);
 		}

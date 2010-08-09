@@ -14,18 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 
-public abstract class AbstractElementImpl<T extends Node> extends TypecheckerModelComponentImpl implements Element
+public abstract class AbstractElementImpl<T extends Node> extends TypecheckerModelComponentImpl implements BsjElement
 {
 	private T backingNode;
-	private Element enclosingElement;
+	private BsjElement enclosingElement;
 
 	protected T getBackingNode()
 	{
 		return this.backingNode;
 	}
 
-	public AbstractElementImpl(TypecheckerModelManager manager, T backingNode, Element enclosingElement)
+	public AbstractElementImpl(TypecheckerModelManager manager, T backingNode, BsjElement enclosingElement)
 	{
 		super(manager);
 		this.backingNode = backingNode;
@@ -97,4 +98,11 @@ public abstract class AbstractElementImpl<T extends Node> extends TypecheckerMod
 		}
 		return ret;
 	}
+
+	@Override
+	public Node getDeclarationNode()
+	{
+		return getBackingNode();
+	}
+	
 }

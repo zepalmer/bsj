@@ -11,11 +11,12 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 
 public class ConstantVariableElementImpl extends AbstractMemberVariableElementImpl<ConstantDeclarationNode>
 {
 	public ConstantVariableElementImpl(TypecheckerModelManager manager, ConstantDeclarationNode backingNode,
-			Element enclosingElement, int index)
+			BsjElement enclosingElement, int index)
 	{
 		super(manager, backingNode, enclosingElement, index);
 	}

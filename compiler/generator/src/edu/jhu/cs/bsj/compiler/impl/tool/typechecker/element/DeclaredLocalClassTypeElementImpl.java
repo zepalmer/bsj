@@ -3,18 +3,18 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 import java.util.EnumSet;
 import java.util.Set;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
 import edu.jhu.cs.bsj.compiler.ast.node.LocalClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 
 public class DeclaredLocalClassTypeElementImpl extends
 		AbstractlyUnmodifiedClassTypeElementImpl<LocalClassDeclarationNode>
 {
 	public DeclaredLocalClassTypeElementImpl(TypecheckerModelManager manager, LocalClassDeclarationNode backingNode,
-			Element enclosingElement)
+			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}
