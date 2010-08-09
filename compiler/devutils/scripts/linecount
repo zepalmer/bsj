@@ -1,0 +1,77 @@
+#!/bin/bash
+
+tdir()
+{
+    if [ ! -d "$1" ]; then
+        echo "Missing expected directory in current path: $1 does not exist."
+    fi
+}
+
+infile()
+{
+    grep "$2" "$1" >&/dev/null
+}
+
+padleft()
+{
+    s="$1"
+    while [ "${#s}" -lt "$2" ]; do
+        s="$3$s"
+    done
+    echo "$s"
+}
+
+padright()
+{
+    s="$1"
+    while [ "${#s}" -lt "$2" ]; do
+        s="$s$3"
+    done
+    echo "$s"
+}
+
+statsforlist()
+{
+    files="$1"
+    if [ -z "$files" ]; then
+        count=0
+    else
+        count="$(cat $files | egrep -v '^$' | wc -l)"
+    fi
+    echo "        with comments:    $(padleft "$count" 8 ' ')" 
+    if [ -z "$files" ]; then
+        count=0
+    else
+        count="$(sloccount $files | grep 'Total Physical Source Lines of Code (SLOC)' | egrep -o '[0-9,]+$' | tr -d ',')"
+    fi
+    echo "        without comments: $(padleft "$count" 8 ' ')" 
+}
+
+getstats()
+{
+    files="$(find $* -type f | egrep '\.(g|java)$' | grep -v '.gen' | grep -v 'resources')"
+    genfiles="$(echo "$files" | while read line; do infile "$line" "@Generated" && echo "$line"; done)"
+    ngenfiles="$(echo "$files" | while read line; do infile "$line" "@Generated" || echo "$line"; done)"
+    echo "    Overall:"
+    statsforlist "$files"
+    echo "    Generated:"
+    statsforlist "$genfiles"
+    echo "    Non-generated:"
+    statsforlist "$ngenfiles"
+}
+
+tdir api
+tdir generator
+tdir parser
+tdir stdlib
+tdir utils
+tdir tests
+
+echo "Compiler project:"
+getstats api parser generator utils
+echo "Standard libraries:"
+getstats stdlib
+echo "Unit tests:"
+getstats tests
+echo "Overall:"
+getstats api parser generator utils stdlib tests
