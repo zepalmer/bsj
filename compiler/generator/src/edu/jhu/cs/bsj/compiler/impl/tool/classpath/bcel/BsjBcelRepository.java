@@ -86,9 +86,8 @@ public class BsjBcelRepository implements Repository
 		return this.classPath;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JavaClass loadClass(Class c) throws ClassNotFoundException
+	public JavaClass loadClass(@SuppressWarnings("rawtypes") Class c) throws ClassNotFoundException
 	{
 		return loadClass(c.getName());
 	}

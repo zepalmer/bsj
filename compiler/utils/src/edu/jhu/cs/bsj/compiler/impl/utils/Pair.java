@@ -41,7 +41,6 @@ public class Pair<T,U>
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -51,6 +50,7 @@ public class Pair<T,U>
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		@SuppressWarnings("rawtypes")
 		Pair other = (Pair) obj;
 		if (first == null)
 		{
