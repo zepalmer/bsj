@@ -2,6 +2,9 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 
 /**
@@ -24,7 +27,26 @@ public class SanityCheckTask extends AbstractBsjCompilerTask
 	@Override
 	public void execute(MetacompilationContext context) throws IOException
 	{
+		// Ensure that the dependency graph is sane
 		context.getDependencyManager().assertNoCycles();
 		context.getDependencyManager().assertNoInjectionConflict();
+		
+		// Ensure that the AST has been purged of BSJ-specific stuff
+		context.getRootPackage().receive(new BsjNodeVisitor()
+		{
+			@Override
+			public void visitStop(Node node)
+			{
+			}
+			
+			@Override
+			public void visitStart(Node node)
+			{
+				if (node instanceof BsjSpecificNode)
+				{
+					throw new IllegalStateException("BSJ-specific node still exists in AST: " + node);
+				}
+			}
+		});
 	}
 }
