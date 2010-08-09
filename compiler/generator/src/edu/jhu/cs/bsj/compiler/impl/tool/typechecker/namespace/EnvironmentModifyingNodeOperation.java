@@ -379,6 +379,11 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		NamespaceMap<ExecutableElement> methodNamespaceMap = env.getMethodNamespaceMap();
 		NamespaceMap<VariableElement> variableNamespaceMap = env.getVariableNamespaceMap();
 
+		// *** Create a new scope for type parameters
+		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
+		methodNamespaceMap = makeMethodNamespace(methodNamespaceMap, true);
+		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, true);		
+
 		// *** Populate type parameters (which are in scope of the entire declaration)
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
 		for (TypeParameterNode typeParameterNode : node.getTypeParameters())
