@@ -11,16 +11,18 @@ public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends Pr
 	private String typeParameter;
 	private String superName;
 	private String superTypeArg;
+	private String constructorFooter;
 	private List<TagReferenceDefinition> tags;
 
 	public ParameterizedPropertyBasedHierarchyDefinition(String baseName, String typeParameter, String superName,
-			String superTypeArg, List<TagReferenceDefinition> tags)
+			String superTypeArg, String constructorFooter, List<TagReferenceDefinition> tags)
 	{
 		super();
 		this.baseName = baseName;
 		this.typeParameter = typeParameter;
 		this.superName = superName;
 		this.superTypeArg = superTypeArg;
+		this.constructorFooter = constructorFooter;
 		this.tags = tags;
 	}
 
@@ -148,6 +150,11 @@ public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends Pr
 	public String getSuperName()
 	{
 		return superName;
+	}
+
+	public String getConstructorFooter()
+	{
+		return constructorFooter;
 	}
 
 	@Override

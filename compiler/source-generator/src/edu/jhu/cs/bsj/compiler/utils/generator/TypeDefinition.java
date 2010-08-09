@@ -38,13 +38,14 @@ public class TypeDefinition extends ParameterizedPropertyBasedHierarchyDefinitio
 	private Map<String, TypeDefinition> namespaceMap;
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
+			String constructorFooter,
 			GenerationProfile profile, List<String> interfaces, List<TagReferenceDefinition> tags, 
 			List<ConstantDefinition> constants, List<PropertyDefinition> properties, List<String> includes,
 			String docString, List<String> toStringLines, Map<String, String> factoryOverrideMap,
 			Map<String, String> constructorOverrideMap, boolean genConstructor, boolean genChildren,
 			boolean genReplace, List<FactoryMethodDefinition> factoryMethods, Mode mode, boolean bsjSpecific)
 	{
-		super(baseName, typeParameter, superName, superTypeArg, tags);
+		super(baseName, typeParameter, superName, superTypeArg, constructorFooter, tags);
 		this.profile = profile;
 		this.interfaces = interfaces;
 		this.constants = constants;

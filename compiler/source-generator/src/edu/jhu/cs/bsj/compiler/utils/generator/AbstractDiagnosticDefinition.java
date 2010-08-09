@@ -22,10 +22,11 @@ public class AbstractDiagnosticDefinition<T extends AbstractDiagnosticDefinition
 	private Map<String, T> namespaceMap;
 
 	public AbstractDiagnosticDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
-			GenerationProfile profile, List<DiagnosticPropertyDefinition> properties,
+			String constructorFooter, GenerationProfile profile, List<DiagnosticPropertyDefinition> properties,
 			List<MessagePropertyExpressionDefinition> messagePropertyExpressions, String docString, String code)
 	{
-		super(baseName, typeParameter, superName, superTypeArg, Collections.<TagReferenceDefinition> emptyList());
+		super(baseName, typeParameter, superName, superTypeArg, constructorFooter,
+				Collections.<TagReferenceDefinition> emptyList());
 		this.profile = profile;
 		this.properties = properties;
 		this.messagePropertyExpressions = messagePropertyExpressions;

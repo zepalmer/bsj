@@ -12,11 +12,12 @@ public class DiagnosticDefinition extends AbstractDiagnosticDefinition<Diagnosti
 	private DiagnosticExceptionDefinition exception;
 
 	public DiagnosticDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
+			String constructorFooter,
 			GenerationProfile profile, DiagnosticExceptionDefinition exception,
 			List<DiagnosticPropertyDefinition> properties,
 			List<MessagePropertyExpressionDefinition> messagePropertyExpressions, String docString, String code)
 	{
-		super(baseName, typeParameter, superName, superTypeArg, profile, properties, messagePropertyExpressions,
+		super(baseName, typeParameter, superName, superTypeArg, constructorFooter, profile, properties, messagePropertyExpressions,
 				docString, code);
 		this.exception = exception;
 	}

@@ -999,6 +999,13 @@ public class SourceGenerator
 					ps.println("this." + p.getName() + " = " + expr + ";");
 				}
 			}
+			if (def.getConstructorFooter()!=null)
+			{
+				for (String line : def.getConstructorFooter().trim().split("\n"))
+				{
+					ps.println(line.trim());
+				}
+			}
 			ps.decPrependCount();
 			ps.println("}");
 			if (!def.isGenConstructor())
@@ -2892,6 +2899,14 @@ public class SourceGenerator
 				classPs.println("this." + prop.getName() + " = " + prop.getName() + ";");
 			}
 
+			if (def.getConstructorFooter()!=null)
+			{
+				for (String line : def.getConstructorFooter().trim().split("\n"))
+				{
+					classPs.println(line.trim());
+				}
+			}
+			
 			classPs.decPrependCount();
 			classPs.println("}");
 			classPs.println();

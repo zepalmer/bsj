@@ -408,6 +408,7 @@ public class SourceGeneratorParser
 			List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
 			List<String> includes = new ArrayList<String>();
 			String docString = null;
+			String constructorFooter = null;
 			List<String> toStringLines = new ArrayList<String>();
 			Map<String, String> factoryOverrideMap = new HashMap<String, String>();
 			Map<String, String> constructorOverrideMap = new HashMap<String, String>();
@@ -447,6 +448,9 @@ public class SourceGeneratorParser
 					} else if (childTag.equals("doc"))
 					{
 						docString = unindent(childElement.getTextContent());
+					} else if (childTag.equals("constructorFooter"))
+					{
+						constructorFooter = unindent(childElement.getTextContent());
 					} else if (childTag.equals("toString"))
 					{
 						toStringLines = splitAndTrim(childElement.getTextContent());
@@ -483,7 +487,7 @@ public class SourceGeneratorParser
 				}
 			}
 
-			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg, profile,
+			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg, constructorFooter, profile,
 					interfaces, tags, constants, props, includes, docString, toStringLines, factoryOverrideMap,
 					constructorOverrideMap, genConstructor, genChildren, genReplace, factoryMethodDefinitions, mode,
 					isBsjSpecific);
@@ -632,6 +636,7 @@ public class SourceGeneratorParser
 			List<DiagnosticPropertyDefinition> props = new ArrayList<DiagnosticPropertyDefinition>();
 			List<MessagePropertyExpressionDefinition> messagePropertyExpressions = new ArrayList<MessagePropertyExpressionDefinition>();
 			String docString = null;
+			String constructorFooter = null;
 			String code = getAttributeValue(e, "code");
 
 			NodeList children = e.getChildNodes();
@@ -658,6 +663,9 @@ public class SourceGeneratorParser
 					} else if (childTag.equals("doc"))
 					{
 						docString = unindent(childElement.getTextContent());
+					} else if (childTag.equals("constructorFooter"))
+					{
+						constructorFooter = unindent(childElement.getTextContent());
 					} else
 					{
 						throw new IllegalStateException("Unknown subtag for type: " + childTag);
@@ -666,7 +674,7 @@ public class SourceGeneratorParser
 			}
 
 			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, typeParam, superName, superArg,
-					this.profile, exception, props, messagePropertyExpressions, docString, code);
+					constructorFooter, this.profile, exception, props, messagePropertyExpressions, docString, code);
 			return diagnosticDefinition;
 		}
 	}
@@ -729,6 +737,7 @@ public class SourceGeneratorParser
 			List<DiagnosticPropertyDefinition> props = new ArrayList<DiagnosticPropertyDefinition>();
 			List<MessagePropertyExpressionDefinition> messagePropertyExpressions = new ArrayList<MessagePropertyExpressionDefinition>();
 			String docString = null;
+			String constructorFooter = null;
 			String code = getAttributeValue(e, "code");
 
 			NodeList children = e.getChildNodes();
@@ -751,6 +760,9 @@ public class SourceGeneratorParser
 					} else if (childTag.equals("doc"))
 					{
 						docString = unindent(childElement.getTextContent());
+					} else if (childTag.equals("constructorFooter"))
+					{
+						constructorFooter = unindent(childElement.getTextContent());
 					} else
 					{
 						throw new IllegalStateException("Unknown subtag for type: " + childTag);
@@ -759,7 +771,7 @@ public class SourceGeneratorParser
 			}
 
 			UserDiagnosticDefinition def = new UserDiagnosticDefinition(name, typeParam, superName, superArg,
-					this.profile, props, messagePropertyExpressions, docString, code);
+					constructorFooter, this.profile, props, messagePropertyExpressions, docString, code);
 			return def;
 		}
 	}

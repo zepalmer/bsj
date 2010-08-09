@@ -10,10 +10,10 @@ import java.util.List;
 public class UserDiagnosticDefinition extends AbstractDiagnosticDefinition<UserDiagnosticDefinition>
 {
 	public UserDiagnosticDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
-			GenerationProfile profile, List<DiagnosticPropertyDefinition> properties,
+			String constructorFooter, GenerationProfile profile, List<DiagnosticPropertyDefinition> properties,
 			List<MessagePropertyExpressionDefinition> messagePropertyExpressions, String docString, String code)
 	{
-		super(baseName, typeParameter, superName, superTypeArg, profile, properties, messagePropertyExpressions,
-				docString, code);
+		super(baseName, typeParameter, superName, superTypeArg, constructorFooter, profile, properties,
+				messagePropertyExpressions, docString, code);
 	}
 }
