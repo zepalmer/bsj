@@ -46,5 +46,4 @@ public class EnvironmentManager
 	{
 		return node.executeOperation(this.environmentCalculatingOperation, null);
 	}
-	
 }

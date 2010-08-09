@@ -76,6 +76,15 @@ public class Environment
 		{
 			return this;
 		}
-		
+	}
+	
+	/**
+	 * Locks this environment, preventing any further changes to its namespace map at penalty of a runtime failure.
+	 */
+	public void lock()
+	{
+		this.typeNamespaceMap.lock();
+		this.methodNamespaceMap.lock();
+		this.variableNamespaceMap.lock();
 	}
 }

@@ -46,6 +46,8 @@ public class NamespaceMap<T extends Element>
 	private DiagnosticListener<BsjSourceLocation> diagnosticListener;
 	/** Whether or not this map reports errors eagerly. */
 	private boolean eager;
+	/** Whether or not this environment is locked. */
+	private boolean locked;
 
 	private NamespaceMap(SymbolType symbolType, NamespaceMap<? extends T> deferenceMap,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager)
@@ -56,6 +58,17 @@ public class NamespaceMap<T extends Element>
 		this.deferenceMap = deferenceMap;
 		this.diagnosticListener = diagnosticListener;
 		this.eager = eager;
+		this.locked = false;
+	}
+	
+	/**
+	 * Locks this namespace.  A locked namespace cannot be modified; any attempts to do so produce a runtime error.
+	 */
+	public void lock()
+	{
+		this.locked = true;
+		if (!this.deferenceMap.locked)
+			this.deferenceMap.lock();
 	}
 
 	/**
@@ -64,9 +77,13 @@ public class NamespaceMap<T extends Element>
 	 * @param name The name to add.
 	 * @param element The type element to which the name corresponds.
 	 * @param indicator The node which was responsible for indicating this mapping.
+	 * @throws IllegalStateException If this environment has been locked.
 	 */
 	public void add(String name, T element, Node indicator)
 	{
+		if (this.locked)
+			throw new IllegalStateException("Attempted to modify locked namespace map");
+		
 		NamespaceEntry<T> entry = this.backingMap.get(name);
 		if (entry == null)
 		{
@@ -134,7 +151,7 @@ public class NamespaceMap<T extends Element>
 	 */
 	public boolean definitelyReplacableBy(NamespaceMap<T> other)
 	{
-		if (this.deferenceMap == other && this.isTransparent())
+		if (this.deferenceMap == other && this.isTransparent() && this.deferenceMap.locked && this.locked)
 			return true;
 
 		return false;

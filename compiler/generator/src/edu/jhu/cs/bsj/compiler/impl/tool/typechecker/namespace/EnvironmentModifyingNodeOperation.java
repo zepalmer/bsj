@@ -343,13 +343,11 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		NamespaceMap<DeclaredTypeElementImpl<?>> typeNamespaceMap = env.getTypeNamespaceMap();
 		NamespaceMap<ExecutableElement> methodNamespaceMap = env.getMethodNamespaceMap();
 		NamespaceMap<VariableElement> variableNamespaceMap = env.getVariableNamespaceMap();
-
-		// *** Populate member elements
+		
+		// *** Create a new scope for inherited member elements
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
 		methodNamespaceMap = makeMethodNamespace(methodNamespaceMap, true);
-		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, true);
-		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getMembers(),
-				AccessModifier.PRIVATE);
+		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, true);		
 
 		// *** Inherit member elements
 		ClassDeclarationNode classDeclarationNode = (ClassDeclarationNode) node.getParent();
@@ -359,6 +357,15 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		{
 			populateInheritedElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, implementsType);
 		}
+
+		// *** Create a new scope for declared member elements
+		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
+		methodNamespaceMap = makeMethodNamespace(methodNamespaceMap, true);
+		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, true);		
+
+		// *** Populate member elements
+		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, node.getMembers(),
+				AccessModifier.PRIVATE);
 
 		// *** Store the resulting environment
 		return new Environment(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap);

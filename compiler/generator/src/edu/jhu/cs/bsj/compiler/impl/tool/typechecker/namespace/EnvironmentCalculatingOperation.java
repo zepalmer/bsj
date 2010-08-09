@@ -68,8 +68,11 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 
 			// Apply changes to its environment as necessary
 			environment = parentEnvironmentNode.executeOperation(this.modifier, parentEnvironment, node);
-
-			// Use the original environment if no changes were made (to conserve space and reduce indirection)
+			
+			// Lock the environment to ensure that it does not change
+			environment.lock();
+			
+			// Reduce the environment if possible
 			environment = environment.reduce(parentEnvironment);
 
 			// Store the result
