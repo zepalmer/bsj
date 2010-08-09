@@ -17,4 +17,5 @@ public interface StringLiteralNode extends LiteralNode<String>
      */
     @Override
     public StringLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

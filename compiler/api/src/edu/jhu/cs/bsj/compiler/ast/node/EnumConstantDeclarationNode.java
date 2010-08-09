@@ -80,4 +80,5 @@ public interface EnumConstantDeclarationNode extends Node, DeclarationNode, Modi
      */
     @Override
     public EnumConstantDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

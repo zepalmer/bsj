@@ -47,4 +47,5 @@ public interface InitializerDeclarationNode extends Node, ClassMemberNode, Anony
      */
     @Override
     public InitializerDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

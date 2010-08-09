@@ -80,4 +80,5 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      */
     @Override
     public AnnotationMethodDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -18,4 +18,5 @@ public interface DeclaredTypeNode extends Node, ReferenceTypeNode, BaseTypeNode
      */
     @Override
     public DeclaredTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -475,6 +475,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     }
     
     
+    
 	/**
 	 * {@inheritDoc}
 	 */

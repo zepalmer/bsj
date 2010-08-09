@@ -104,4 +104,5 @@ public interface AbstractInvokableDeclarationNode<T extends ModifiersNode> exten
      */
     @Override
     public AbstractInvokableDeclarationNode<T> deepCopy(BsjNodeFactory factory);
+    
 }

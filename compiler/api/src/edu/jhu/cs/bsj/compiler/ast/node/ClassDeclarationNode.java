@@ -18,4 +18,5 @@ public interface ClassDeclarationNode extends AbstractlyUnmodifiedClassDeclarati
      */
     @Override
     public ClassDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

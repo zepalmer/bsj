@@ -180,6 +180,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     }
     
     
+    
 
 	/**
 	 * Creates a list of this node's child objects. Modifying the list has no effect on this node.

@@ -61,4 +61,5 @@ public interface EnumDeclarationNode extends Node, NamedTypeDeclarationNode<Clas
      */
     @Override
     public EnumDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

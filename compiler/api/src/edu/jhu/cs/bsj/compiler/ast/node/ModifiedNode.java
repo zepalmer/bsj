@@ -29,4 +29,5 @@ public interface ModifiedNode<T extends ModifiersNode> extends Node
      */
     @Override
     public ModifiedNode<T> deepCopy(BsjNodeFactory factory);
+    
 }

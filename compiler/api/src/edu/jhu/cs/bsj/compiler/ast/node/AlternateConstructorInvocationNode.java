@@ -22,4 +22,5 @@ public interface AlternateConstructorInvocationNode extends ConstructorInvocatio
      */
     @Override
     public AlternateConstructorInvocationNode deepCopy(BsjNodeFactory factory);
+    
 }

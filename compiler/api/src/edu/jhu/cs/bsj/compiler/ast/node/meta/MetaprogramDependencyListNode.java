@@ -19,4 +19,5 @@ public interface MetaprogramDependencyListNode extends ListNode<MetaprogramDepen
      */
     @Override
     public MetaprogramDependencyListNode deepCopy(BsjNodeFactory factory);
+    
 }

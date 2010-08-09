@@ -44,4 +44,5 @@ public interface LabeledStatementNode extends Node, StatementNode
      */
     @Override
     public LabeledStatementNode deepCopy(BsjNodeFactory factory);
+    
 }

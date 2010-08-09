@@ -42,4 +42,5 @@ public interface VariableAccessByNameNode extends Node, VariableAccessNode
      */
     @Override
     public VariableAccessByNameNode deepCopy(BsjNodeFactory factory);
+    
 }

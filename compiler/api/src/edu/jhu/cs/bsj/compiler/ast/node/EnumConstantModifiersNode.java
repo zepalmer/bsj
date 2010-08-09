@@ -18,4 +18,5 @@ public interface EnumConstantModifiersNode extends ModifiersNode
      */
     @Override
     public EnumConstantModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

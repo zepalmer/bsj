@@ -53,4 +53,5 @@ public interface TypeParameterNode extends Node
      */
     @Override
     public TypeParameterNode deepCopy(BsjNodeFactory factory);
+    
 }

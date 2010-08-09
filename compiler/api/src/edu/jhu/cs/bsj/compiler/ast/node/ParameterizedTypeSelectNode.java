@@ -62,4 +62,5 @@ public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
      */
     @Override
     public ParameterizedTypeSelectNode deepCopy(BsjNodeFactory factory);
+    
 }

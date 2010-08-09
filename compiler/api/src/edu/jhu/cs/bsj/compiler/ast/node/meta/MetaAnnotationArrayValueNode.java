@@ -34,4 +34,5 @@ public interface MetaAnnotationArrayValueNode extends Node, MetaAnnotationValueN
      */
     @Override
     public MetaAnnotationArrayValueNode deepCopy(BsjNodeFactory factory);
+    
 }

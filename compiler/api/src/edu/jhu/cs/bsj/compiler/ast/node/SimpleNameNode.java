@@ -20,4 +20,5 @@ public interface SimpleNameNode extends NameNode
      */
     @Override
     public SimpleNameNode deepCopy(BsjNodeFactory factory);
+    
 }

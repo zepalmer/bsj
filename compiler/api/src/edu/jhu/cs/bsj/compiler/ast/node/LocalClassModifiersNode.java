@@ -53,4 +53,5 @@ public interface LocalClassModifiersNode extends ModifiersNode
      */
     @Override
     public LocalClassModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

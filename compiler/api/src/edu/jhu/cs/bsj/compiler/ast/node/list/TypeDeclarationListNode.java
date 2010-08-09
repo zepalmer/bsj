@@ -18,4 +18,5 @@ public interface TypeDeclarationListNode extends ListNode<TypeDeclarationNode>
      */
     @Override
     public TypeDeclarationListNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -18,4 +18,5 @@ public interface ExpressionListNode extends ListNode<ExpressionNode>
      */
     @Override
     public ExpressionListNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -93,4 +93,5 @@ public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpres
      */
     @Override
     public SuperMethodInvocationNode deepCopy(BsjNodeFactory factory);
+    
 }

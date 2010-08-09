@@ -55,4 +55,5 @@ public interface InterfaceModifiersNode extends ModifiersNode, AccessibleTypeMod
      */
     @Override
     public InterfaceModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

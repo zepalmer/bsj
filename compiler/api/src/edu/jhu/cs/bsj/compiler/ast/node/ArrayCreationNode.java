@@ -41,4 +41,5 @@ public interface ArrayCreationNode extends Node, PrimaryExpressionNode
      */
     @Override
     public ArrayCreationNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -17,4 +17,5 @@ public interface ConstantDeclarationNode extends AbstractMemberVariableDeclarati
      */
     @Override
     public ConstantDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

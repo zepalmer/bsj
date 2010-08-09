@@ -18,4 +18,5 @@ public interface ClassMemberListNode extends ListNode<ClassMemberNode>
      */
     @Override
     public ClassMemberListNode deepCopy(BsjNodeFactory factory);
+    
 }

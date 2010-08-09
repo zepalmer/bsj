@@ -44,4 +44,5 @@ public interface ArrayAccessNode extends Node, RestrictedPrimaryExpressionNode
      */
     @Override
     public ArrayAccessNode deepCopy(BsjNodeFactory factory);
+    
 }

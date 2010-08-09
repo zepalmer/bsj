@@ -47,4 +47,5 @@ public interface ConstructorInvocationNode extends Node
      */
     @Override
     public ConstructorInvocationNode deepCopy(BsjNodeFactory factory);
+    
 }

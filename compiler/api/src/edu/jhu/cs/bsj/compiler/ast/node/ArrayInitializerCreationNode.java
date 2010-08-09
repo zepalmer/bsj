@@ -34,4 +34,5 @@ public interface ArrayInitializerCreationNode extends ArrayCreationNode
      */
     @Override
     public ArrayInitializerCreationNode deepCopy(BsjNodeFactory factory);
+    
 }

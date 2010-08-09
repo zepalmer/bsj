@@ -33,4 +33,5 @@ public interface ReturnNode extends Node, StatementNode
      */
     @Override
     public ReturnNode deepCopy(BsjNodeFactory factory);
+    
 }

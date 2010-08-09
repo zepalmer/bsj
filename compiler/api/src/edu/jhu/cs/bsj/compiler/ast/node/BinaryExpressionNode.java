@@ -54,4 +54,5 @@ public interface BinaryExpressionNode extends Node, NonAssignmentExpressionNode
      */
     @Override
     public BinaryExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

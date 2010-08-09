@@ -32,4 +32,5 @@ public interface ContinueNode extends Node, StatementNode
      */
     @Override
     public ContinueNode deepCopy(BsjNodeFactory factory);
+    
 }

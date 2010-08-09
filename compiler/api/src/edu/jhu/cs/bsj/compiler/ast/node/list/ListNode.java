@@ -42,4 +42,5 @@ public interface ListNode<T extends Node> extends Node, List<T>, NodeList<T>
      */
     @Override
     public ListNode<T> deepCopy(BsjNodeFactory factory);
+    
 }

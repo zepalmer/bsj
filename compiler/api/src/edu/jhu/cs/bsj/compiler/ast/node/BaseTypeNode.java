@@ -17,4 +17,5 @@ public interface BaseTypeNode extends TypeNode
      */
     @Override
     public BaseTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

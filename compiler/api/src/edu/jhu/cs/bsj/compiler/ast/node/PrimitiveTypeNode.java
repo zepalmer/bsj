@@ -30,4 +30,5 @@ public interface PrimitiveTypeNode extends Node, TypeNode, BaseTypeNode, Literal
      */
     @Override
     public PrimitiveTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

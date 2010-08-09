@@ -173,6 +173,7 @@ public abstract class NodeImpl implements Node
     }
     
     
+    
 	/**
 	 * The parent attribute for this node.
 	 */

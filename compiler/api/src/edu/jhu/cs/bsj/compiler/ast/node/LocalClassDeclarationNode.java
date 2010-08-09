@@ -17,4 +17,5 @@ public interface LocalClassDeclarationNode extends AbstractlyUnmodifiedClassDecl
      */
     @Override
     public LocalClassDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

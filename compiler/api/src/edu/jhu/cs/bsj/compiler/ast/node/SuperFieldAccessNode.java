@@ -63,4 +63,5 @@ public interface SuperFieldAccessNode extends Node, RestrictedPrimaryExpressionN
      */
     @Override
     public SuperFieldAccessNode deepCopy(BsjNodeFactory factory);
+    
 }

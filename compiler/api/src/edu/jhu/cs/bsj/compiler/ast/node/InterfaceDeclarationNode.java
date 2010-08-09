@@ -74,4 +74,5 @@ public interface InterfaceDeclarationNode extends Node, NamedTypeDeclarationNode
      */
     @Override
     public InterfaceDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

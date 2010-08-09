@@ -75,4 +75,5 @@ public interface CompilationUnitNode extends Node
      */
     @Override
     public CompilationUnitNode deepCopy(BsjNodeFactory factory);
+    
 }

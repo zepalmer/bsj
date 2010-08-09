@@ -121,4 +121,5 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      */
     @Override
     public ConstructorDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

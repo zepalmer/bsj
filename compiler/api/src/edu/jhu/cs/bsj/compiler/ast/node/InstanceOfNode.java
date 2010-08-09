@@ -44,4 +44,5 @@ public interface InstanceOfNode extends Node, NonAssignmentExpressionNode
      */
     @Override
     public InstanceOfNode deepCopy(BsjNodeFactory factory);
+    
 }

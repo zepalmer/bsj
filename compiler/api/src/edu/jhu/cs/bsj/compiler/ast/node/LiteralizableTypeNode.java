@@ -19,4 +19,5 @@ public interface LiteralizableTypeNode extends Node, TypeNode
      */
     @Override
     public LiteralizableTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

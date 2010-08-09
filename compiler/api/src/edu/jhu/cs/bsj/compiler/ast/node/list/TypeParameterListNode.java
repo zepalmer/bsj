@@ -18,4 +18,5 @@ public interface TypeParameterListNode extends ListNode<TypeParameterNode>
      */
     @Override
     public TypeParameterListNode deepCopy(BsjNodeFactory factory);
+    
 }

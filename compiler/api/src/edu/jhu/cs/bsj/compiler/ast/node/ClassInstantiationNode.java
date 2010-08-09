@@ -55,4 +55,5 @@ public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressio
      */
     @Override
     public ClassInstantiationNode deepCopy(BsjNodeFactory factory);
+    
 }

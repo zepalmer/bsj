@@ -19,4 +19,5 @@ public interface AnonymousClassMemberNode extends Node, ClassMemberNode
      */
     @Override
     public AnonymousClassMemberNode deepCopy(BsjNodeFactory factory);
+    
 }

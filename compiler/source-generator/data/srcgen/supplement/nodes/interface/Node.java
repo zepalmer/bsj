@@ -47,14 +47,6 @@ public interface Node
 	public List<Object> getChildObjects();
 
 	/**
-	 * Executes an operation on this node.
-	 * @param operation The operation to perform.
-	 * @param p The parameter to pass to the operation.
-	 * @return The result of the operation.
-	 */
-	public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p);
-	
-	/**
 	 * Replaces one child node value with another.  This convenience method is provided to allow children to remove
 	 * themselves from their parents when necessary, replacing themselves with another node.  It is more efficient to
 	 * call the appropriate setter directly (such as <tt>getParent().setPackageDeclaration(...)</tt>), but this method

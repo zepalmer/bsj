@@ -58,4 +58,5 @@ public interface AssignmentNode extends Node, StatementExpressionNode
      */
     @Override
     public AssignmentNode deepCopy(BsjNodeFactory factory);
+    
 }

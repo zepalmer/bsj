@@ -17,4 +17,5 @@ public interface VariableAccessNode extends Node, RestrictedPrimaryExpressionNod
      */
     @Override
     public VariableAccessNode deepCopy(BsjNodeFactory factory);
+    
 }

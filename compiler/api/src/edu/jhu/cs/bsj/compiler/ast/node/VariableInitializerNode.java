@@ -18,4 +18,5 @@ public interface VariableInitializerNode extends Node
      */
     @Override
     public VariableInitializerNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -56,4 +56,5 @@ public interface AnnotationModifiersNode extends ModifiersNode, AccessibleTypeMo
      */
     @Override
     public AnnotationModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

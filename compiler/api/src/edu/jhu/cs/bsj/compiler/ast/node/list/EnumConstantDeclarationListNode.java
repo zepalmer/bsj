@@ -18,4 +18,5 @@ public interface EnumConstantDeclarationListNode extends ListNode<EnumConstantDe
      */
     @Override
     public EnumConstantDeclarationListNode deepCopy(BsjNodeFactory factory);
+    
 }

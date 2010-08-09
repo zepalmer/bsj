@@ -18,4 +18,5 @@ public interface UnparameterizedTypeListNode extends ListNode<UnparameterizedTyp
      */
     @Override
     public UnparameterizedTypeListNode deepCopy(BsjNodeFactory factory);
+    
 }

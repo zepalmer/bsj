@@ -338,4 +338,5 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     }
     
     
+    
 }

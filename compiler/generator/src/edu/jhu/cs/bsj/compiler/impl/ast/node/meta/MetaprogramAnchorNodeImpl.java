@@ -146,6 +146,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     }
     
     
+    
 	/**
 	 * Retrieves the node with which this anchor will be replaced once its metaprogram executes.
 	 * @return The replacement node to use.

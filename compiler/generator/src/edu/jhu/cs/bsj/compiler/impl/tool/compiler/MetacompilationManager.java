@@ -11,8 +11,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import javax.tools.DiagnosticListener;
 import javax.tools.Diagnostic.Kind;
+import javax.tools.DiagnosticListener;
 
 import org.apache.log4j.Logger;
 

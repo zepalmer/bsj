@@ -43,4 +43,5 @@ public interface EnumModifiersNode extends ModifiersNode, AccessibleTypeModifier
      */
     @Override
     public EnumModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

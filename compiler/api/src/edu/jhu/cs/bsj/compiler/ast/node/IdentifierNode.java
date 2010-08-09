@@ -32,4 +32,5 @@ public interface IdentifierNode extends Node
      */
     @Override
     public IdentifierNode deepCopy(BsjNodeFactory factory);
+    
 }

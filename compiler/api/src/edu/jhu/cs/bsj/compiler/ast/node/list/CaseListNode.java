@@ -18,4 +18,5 @@ public interface CaseListNode extends ListNode<CaseNode>
      */
     @Override
     public CaseListNode deepCopy(BsjNodeFactory factory);
+    
 }

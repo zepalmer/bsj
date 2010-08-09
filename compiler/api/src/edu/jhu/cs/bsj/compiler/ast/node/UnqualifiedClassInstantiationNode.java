@@ -33,4 +33,5 @@ public interface UnqualifiedClassInstantiationNode extends ClassInstantiationNod
      */
     @Override
     public UnqualifiedClassInstantiationNode deepCopy(BsjNodeFactory factory);
+    
 }

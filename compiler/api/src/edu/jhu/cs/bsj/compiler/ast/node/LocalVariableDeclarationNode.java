@@ -65,4 +65,5 @@ public interface LocalVariableDeclarationNode extends Node, BlockStatementNode, 
      */
     @Override
     public LocalVariableDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -20,4 +20,5 @@ public interface RawCodeLiteralNode extends LiteralNode<String>, BsjSpecificNode
      */
     @Override
     public RawCodeLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

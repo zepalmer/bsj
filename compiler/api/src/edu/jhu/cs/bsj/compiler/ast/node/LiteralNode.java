@@ -29,4 +29,5 @@ public interface LiteralNode<T> extends Node, RestrictedPrimaryExpressionNode
      */
     @Override
     public LiteralNode<T> deepCopy(BsjNodeFactory factory);
+    
 }

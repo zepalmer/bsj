@@ -32,4 +32,5 @@ public interface ThrowNode extends Node, StatementNode
      */
     @Override
     public ThrowNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -29,4 +29,5 @@ public interface ArrayTypeNode extends Node, ReferenceTypeNode, LiteralizableTyp
      */
     @Override
     public ArrayTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

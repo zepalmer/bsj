@@ -17,4 +17,5 @@ public interface VoidTypeNode extends Node, TypeNode, LiteralizableTypeNode
      */
     @Override
     public VoidTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

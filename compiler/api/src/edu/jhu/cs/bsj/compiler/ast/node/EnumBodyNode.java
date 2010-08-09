@@ -43,4 +43,5 @@ public interface EnumBodyNode extends Node, TypeBodyNode<ClassMemberNode>
      */
     @Override
     public EnumBodyNode deepCopy(BsjNodeFactory factory);
+    
 }

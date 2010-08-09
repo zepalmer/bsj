@@ -17,4 +17,5 @@ public interface BooleanLiteralNode extends LiteralNode<Boolean>
      */
     @Override
     public BooleanLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -32,4 +32,5 @@ public interface BreakNode extends Node, StatementNode
      */
     @Override
     public BreakNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -17,4 +17,5 @@ public interface ReferenceTypeNode extends Node, TypeNode, TypeArgumentNode
      */
     @Override
     public ReferenceTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

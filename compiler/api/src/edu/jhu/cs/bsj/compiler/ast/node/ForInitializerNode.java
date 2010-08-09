@@ -18,4 +18,5 @@ public interface ForInitializerNode extends Node
      */
     @Override
     public ForInitializerNode deepCopy(BsjNodeFactory factory);
+    
 }

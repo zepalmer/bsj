@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.tools.JavaCompiler;
+import javax.tools.JavaFileManager.Location;
 import javax.tools.JavaFileObject;
+import javax.tools.JavaFileObject.Kind;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
-import javax.tools.JavaFileManager.Location;
-import javax.tools.JavaFileObject.Kind;
 
 import junit.framework.Assert;
 

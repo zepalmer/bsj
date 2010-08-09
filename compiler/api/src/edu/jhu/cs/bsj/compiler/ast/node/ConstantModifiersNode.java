@@ -19,4 +19,5 @@ public interface ConstantModifiersNode extends ModifiersNode
      */
     @Override
     public ConstantModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -215,6 +215,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     }
     
     
+    
 	/**
 	 * The meta-annotation object represented by this AST node.
 	 */

@@ -71,6 +71,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNod
  *
  * @author Zachary Palmer
  */
+
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface BsjNodeOperation<P,R>
 {

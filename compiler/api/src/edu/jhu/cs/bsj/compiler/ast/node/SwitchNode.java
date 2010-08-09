@@ -48,4 +48,5 @@ public interface SwitchNode extends Node, StatementNode
      */
     @Override
     public SwitchNode deepCopy(BsjNodeFactory factory);
+    
 }

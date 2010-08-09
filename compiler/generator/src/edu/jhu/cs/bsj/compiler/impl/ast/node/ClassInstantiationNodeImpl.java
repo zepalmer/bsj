@@ -287,4 +287,5 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     }
     
     
+    
 }

@@ -64,19 +64,20 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNod
  * to a different set of data types.  Note that only the first call is proxied; if the
  * backing operation calls itself, those calls are not intercepted.
  *
- * @param <POrig> The data parameter type for the original backing operation.
+ * @param <pOrig> A data parameter type for the original backing operation.
  * @param <ROrig> The return type for the original backing operation.
- * @param <PNew> The data parameter type for the new decorated operation.
+ * @param <pNew> A data parameter type for the new decorated operation.
  * @param <RNew> The return type for the decorated operation.
  *
  * @author Zachary Palmer
  */
+
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements BsjNodeOperation<PNew,RNew>
 {
     /** The backing operation to proxy. */
     private BsjNodeOperation<POrig,ROrig> backingOp;
-
+    
     /**
      * Creates a new node operation proxy.
      * @param backingOp The backing operation to proxy.
@@ -85,21 +86,20 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
     {
         this.backingOp = backingOp;
     }
-
+    
     /**
      * Called before every call to the backing operation.
      * @param p The incoming parameter data (compatible with the proxy interface).
      * @return The resulting parameter data (compatible with the backing interface).
      */
     protected abstract POrig before(PNew p);
-
+    
     /**
      * Called after every call to the backing operation.
      * @param r The incoming return data (compatible with the backing interface).
      * @return The resulting return data (compatible with the return interface).
      */
     protected abstract RNew after(ROrig r);
-
     /**
      * Decorates this operation, turning it over to the backing operation.
      * @param node The node to affect.

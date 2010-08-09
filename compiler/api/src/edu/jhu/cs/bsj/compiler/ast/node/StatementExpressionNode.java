@@ -17,4 +17,5 @@ public interface StatementExpressionNode extends Node, ExpressionNode
      */
     @Override
     public StatementExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

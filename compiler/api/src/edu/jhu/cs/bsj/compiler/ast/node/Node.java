@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
@@ -35,6 +36,24 @@ public interface Node
      * @return The resulting deep copy node.
      */
     public Node deepCopy(BsjNodeFactory factory);
+    
+    /**
+     * Executes an operation on this node.
+     * @param operation The operation to perform.
+     * @param p A parameter to pass to the operation.
+     * @return The result of the operation.
+     */
+    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p);
+    
+    /**
+     * Executes an operation on this node.
+     * @param operation The operation to perform.
+     * @param p1 A parameter to pass to the operation.
+     * @param p2 A parameter to pass to the operation.
+     * @return The result of the operation.
+     */
+    public <P1,P2,R> R executeOperation(BsjNodeOperation2Arguments<P1,P2,R> operation, P1 p1, P2 p2);
+    
 	/**
 	 * Causes this node to receive a visitor.  Visitors are received by nodes in a depth-first fashion.  The order of
 	 * the children receiving the visitor is dependent upon the type of node; however, a superclass's child nodes are
@@ -80,14 +99,6 @@ public interface Node
 	 */
 	public List<Object> getChildObjects();
 
-	/**
-	 * Executes an operation on this node.
-	 * @param operation The operation to perform.
-	 * @param p The parameter to pass to the operation.
-	 * @return The result of the operation.
-	 */
-	public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p);
-	
 	/**
 	 * Replaces one child node value with another.  This convenience method is provided to allow children to remove
 	 * themselves from their parents when necessary, replacing themselves with another node.  It is more efficient to

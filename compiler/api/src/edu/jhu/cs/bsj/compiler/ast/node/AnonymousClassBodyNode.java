@@ -32,4 +32,5 @@ public interface AnonymousClassBodyNode extends Node, TypeBodyNode<AnonymousClas
      */
     @Override
     public AnonymousClassBodyNode deepCopy(BsjNodeFactory factory);
+    
 }

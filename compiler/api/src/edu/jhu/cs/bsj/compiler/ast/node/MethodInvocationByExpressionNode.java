@@ -55,4 +55,5 @@ public interface MethodInvocationByExpressionNode extends MethodInvocationNode
      */
     @Override
     public MethodInvocationByExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

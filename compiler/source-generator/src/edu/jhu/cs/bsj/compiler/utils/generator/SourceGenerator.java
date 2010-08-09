@@ -33,6 +33,11 @@ import edu.jhu.cs.bsj.compiler.utils.generator.TypeDefinition.Mode;
  */
 public class SourceGenerator
 {
+	/**
+	 * Defines the number of node operation variations that exist. Each variation takes a different number of arguments.
+	 */
+	private static final int NUMBER_OF_OPERATION_VARIATIONS = 2;
+
 	private static final File CONTENTS_FILE = new File("data/srcgen/srcgen.xml");
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
 	private static final File TARGET_DIR = new File("out/");
@@ -549,6 +554,30 @@ public class SourceGenerator
 			if (def.getBaseSuperName() != null)
 				ps.println("@Override");
 			ps.println("public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory);");
+			ps.println();
+
+			// write operation interface
+			if (def.getBaseName().equals("Node"))
+			{
+				for (int i = 1; i <= NUMBER_OF_OPERATION_VARIATIONS; i++)
+				{
+					NodeOperationWriter.Strings strings = new NodeOperationWriter.Strings(i);
+					ps.println("/**");
+					ps.println(" * Executes an operation on this node.");
+					ps.println(" * @param operation The operation to perform.");
+					for (int j = 1; j <= i; j++)
+					{
+						ps.println(" * @param " + strings.getParameterName(j)
+								+ " A parameter to pass to the operation.");
+					}
+					ps.println(" * @return The result of the operation.");
+					ps.println(" */");
+					ps.println("public <" + strings.inputTypeParams + ",R> R executeOperation(BsjNodeOperation"
+							+ strings.suffix + "<" + strings.inputTypeParams + ",R> operation, " + strings.methodParams
+							+ ");");
+					ps.println();
+				}
+			}
 
 			// write bodies
 			ps.decPrependCount();
@@ -1397,21 +1426,32 @@ public class SourceGenerator
 			ps.println();
 
 			// add node operation implementation
-			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
+			for (int i = 1; i <= NUMBER_OF_OPERATION_VARIATIONS; i++)
 			{
-				ps.println("/**");
-				ps.println(" * Executes an operation on this node.");
-				ps.println(" * @param operation The operation to perform.");
-				ps.println(" * @param p The parameter to pass to the operation.");
-				ps.println(" * @return The result of the operation.");
-				ps.println(" */");
-				ps.println("@Override");
-				ps.println("public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)");
-				ps.println("{");
-				ps.println("    return operation.execute" + def.getBaseName() + "(this, p);");
-				ps.println("}");
+				NodeOperationWriter.Strings strings = new NodeOperationWriter.Strings(i);
+				if (def.getMode() == TypeDefinition.Mode.CONCRETE)
+				{
+					ps.println("/**");
+					ps.println(" * Executes an operation on this node.");
+					ps.println(" * @param operation The operation to perform.");
+					for (int j = 1; j <= i; j++)
+					{
+						ps.println(" * @param " + strings.getParameterName(j)
+								+ " The parameter to pass to the operation.");
+					}
+					ps.println(" * @return The result of the operation.");
+					ps.println(" */");
+					ps.println("@Override");
+					ps.println("public <" + strings.inputTypeParams + ",R> R executeOperation(BsjNodeOperation"
+							+ strings.suffix + "<" + strings.inputTypeParams + ",R> operation, " + strings.methodParams
+							+ ")");
+					ps.println("{");
+					ps.println("    return operation.execute" + def.getBaseName() + "(this, " + strings.methodArgs
+							+ ");");
+					ps.println("}");
+				}
+				ps.println();
 			}
-			ps.println();
 
 			// add deep copy implementation
 			// TODO: this doesn't properly deep copy hidden properties, for which the factory takes no arguments
@@ -2069,24 +2109,99 @@ public class SourceGenerator
 	}
 
 	/**
-	 * Writes the BSJ node operation interface and no-op class.
+	 * Writes the BSJ node operation interface and related classes.
 	 */
 	static class NodeOperationWriter extends ClassHierarchyBuildingHandler
 	{
+		static class Strings
+		{
+			final int argCount;
+			final String suffix;
+			final String inputTypeParams;
+			final String methodParams;
+			final String methodArgs;
+
+			protected String getParameterName(int index)
+			{
+				if (index <= 0 || index > argCount)
+				{
+					throw new IndexOutOfBoundsException();
+				}
+				if (argCount == 1)
+				{
+					return "p";
+				} else
+				{
+					return "p" + index;
+				}
+			}
+
+			protected String getTypeParameterName(int index)
+			{
+				if (index <= 0 || index > argCount)
+				{
+					throw new IndexOutOfBoundsException();
+				}
+				if (argCount == 1)
+				{
+					return "P";
+				} else
+				{
+					return "P" + index;
+				}
+			}
+
+			protected Strings(int argCount)
+			{
+				this.argCount = argCount;
+				if (argCount == 1)
+				{
+					suffix = "";
+				} else
+				{
+					suffix = argCount + "Arguments";
+				}
+				StringBuilder inputTypeParamsBuilder = new StringBuilder();
+				StringBuilder methodParamsBuilder = new StringBuilder();
+				StringBuilder methodArgsBuilder = new StringBuilder();
+				for (int i = 1; i <= argCount; i++)
+				{
+					if (i > 1)
+					{
+						inputTypeParamsBuilder.append(",");
+						methodParamsBuilder.append(", ");
+						methodArgsBuilder.append(", ");
+					}
+					inputTypeParamsBuilder.append(getTypeParameterName(i));
+					methodParamsBuilder.append(getTypeParameterName(i) + " " + getParameterName(i));
+					methodArgsBuilder.append(getParameterName(i));
+				}
+				inputTypeParams = inputTypeParamsBuilder.toString();
+				methodParams = methodParamsBuilder.toString();
+				methodArgs = methodArgsBuilder.toString();
+			}
+		}
+
 		/** Print stream for the interface. */
-		private PrependablePrintStream ips;
+		private List<PrependablePrintStream> ipsList;
 		/** Print stream for the implementation. */
-		private PrependablePrintStream nps;
+		private List<PrependablePrintStream> npsList;
 		/** Print stream for all-methods proxy. */
-		private PrependablePrintStream pps;
+		private List<PrependablePrintStream> ppsList;
 		/** Print stream for default operation implementation. */
-		private PrependablePrintStream dps;
+		private List<PrependablePrintStream> dpsList;
 		/** Print stream for the Java node operation implementation. */
-		private PrependablePrintStream jps;
+		private List<PrependablePrintStream> jpsList;
 
 		protected Iterable<PrependablePrintStream> allStreams()
 		{
-			return Arrays.asList(ips, nps, pps, dps, jps);
+			List<PrependablePrintStream> streams = new ArrayList<PrependablePrintStream>();
+			streams.addAll(ipsList);
+			streams.addAll(npsList);
+			streams.addAll(ppsList);
+			streams.addAll(dpsList);
+			streams.addAll(jpsList);
+			return streams;
 		}
 
 		@Override
@@ -2094,123 +2209,331 @@ public class SourceGenerator
 		{
 			super.init();
 
-			ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, Project.API,
-					SupplementCategory.GENERAL, "BsjNodeOperation<P,R>", true, null, null);
-			nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, Project.API,
-					SupplementCategory.GENERAL, "BsjNodeNoOpOperation<P,R>", true, null, null, "BsjNodeOperation<P,R>");
-			pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, Project.API,
-					SupplementCategory.GENERAL, "BsjNodeOperationProxy<POrig,ROrig,PNew,RNew>", true, null, null,
-					"BsjNodeOperation<PNew,RNew>");
-			dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, Project.API,
-					SupplementCategory.GENERAL, "BsjDefaultNodeOperation<P,R>", true, null, null,
-					"BsjNodeOperation<P,R>");
-			jps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, Project.API,
-					SupplementCategory.GENERAL, "JavaNodeOperation<P,R>", true, null, null, "BsjNodeOperation<P,R>");
+			ipsList = new ArrayList<PrependablePrintStream>();
+			npsList = new ArrayList<PrependablePrintStream>();
+			ppsList = new ArrayList<PrependablePrintStream>();
+			dpsList = new ArrayList<PrependablePrintStream>();
+			jpsList = new ArrayList<PrependablePrintStream>();
+
+			for (int index = 1; index <= NUMBER_OF_OPERATION_VARIATIONS; index++)
+			{
+				final int argCount = index;
+				final Strings strings = new Strings(argCount);
+
+				String inputTypeParams = strings.inputTypeParams;
+				String typeParams = inputTypeParams + ",R";
+				String typeParamDecl = "<" + typeParams + ">";
+
+				String newTypeParams = typeParams.replace(",", "New,") + "New";
+				String newTypeParamsDecl = "<" + newTypeParams + ">";
+				String origTypeParams = typeParams.replaceAll(",", "Orig,") + "Orig";
+				String proxyTypeParams = origTypeParams + "," + newTypeParams;
+				String proxyTypeParamsDecl = "<" + proxyTypeParams + ">";
+
+				String suffix = strings.suffix;
+
+				// @formatter:off
+				String bsjNodeOperationHeader =
+					"/**\n" +
+					" * This interface specifies an operation to be carried out on a node.  The purpose of this\n" +
+					" * mechanism is effectively to allow the addition of operations to the node hierarchy\n"+
+					" * requiring that the hierarchy itself be modified.  Note that while this interface is\n"+
+					" * similar to that of the visitor pattern (see {@link BsjNodeVisitor}), it does not function\n"+
+					" * the same way.  This mechanism does not abstract node traversal; the implementation is\n"+
+					" * required to do that itself if it wishes to walk the tree.\n"+
+					" *\n";
+				for (int i=1;i<=argCount;i++)
+				{
+					bsjNodeOperationHeader += 
+					" * @param <"+strings.getTypeParameterName(i)+"> A parameter type for all methods to accept.  If no return type is desired, use\n"+
+					" * {@link java.lang.Void}.\n";
+				}
+				bsjNodeOperationHeader +=
+					" * @param <R> A return type for all methods to return.  If no return type is desired, use\n"+
+					" * {@link java.lang.Void}.\n"+
+					" *\n"+
+					" * @author Zachary Palmer\n"+
+					" */\n";
+				
+				String bsjNoOpNodeOperationHeader =
+					"/**\n" +
+					" * This implementation of the BSJ node operation implements every method with a no-op.\n" +
+					" *\n" +
+					" * @author Zachary Palmer\n" +
+					" */\n";
+				
+				String bsjNodeOperationProxyHeader =
+					"/**\n" +
+					" * This implementation of the BSJ node operation decorates every method of a backing\n" +
+					" * operation with a uniform before and after call.  This permits allows proxying, adjusting\n" +
+					" * or logging the parameters and results of calls, or adaptation of the backing operation\n" +
+					" * to a different set of data types.  Note that only the first call is proxied; if the\n" +
+					" * backing operation calls itself, those calls are not intercepted.\n" +
+					" *\n";
+				for (int i=1;i<=argCount;i++)
+				{
+					bsjNodeOperationProxyHeader +=
+						" * @param <" + strings.getParameterName(i) + "Orig> A data parameter type for the original backing operation.\n";
+				}
+				bsjNodeOperationProxyHeader +=
+					" * @param <ROrig> The return type for the original backing operation.\n";
+				for (int i=1;i<=argCount;i++)
+				{
+					bsjNodeOperationProxyHeader +=
+						" * @param <" + strings.getParameterName(i) + "New> A data parameter type for the new decorated operation.\n";
+				}
+				bsjNodeOperationProxyHeader +=
+					" * @param <RNew> The return type for the decorated operation.\n" +
+					" *\n" +
+					" * @author Zachary Palmer\n" +
+					" */\n";
+				
+				String bsjDefaultNodeOperationHeader =
+					"/**\n" +
+					" * This implementation of the BSJ node operation implements every method with a call to a default operation method.  The\n" +
+					" * default operation method is left abstract for the overlying implementation.  This serves as a convenient mechanism\n" +
+					" * for handling most nodes with a default case but labeling some with special handling.  For instance, a node operation\n" +
+					" * which only recognizes a small subset of node types might use the default operation to raise a runtime exception.\n" +
+					" *\n" +
+					" * @author Zachary Palmer\n" +
+					" */\n";
+				
+				String javaNodeOperationHeader =
+					"/**\n" +
+					" * This implementation of the BSJ node operation implements methods which correspond to BSJ-specific node types with a\n" +
+					" * call to a default operation method. The default operation method is left abstract for the overlying implementation.\n" +
+					" * This serves as a convenient mechanism for operating over trees which should be pure Java ASTs; the default method may\n" +
+					" * raise an exception or perform other error reporting operations.\n" +
+					" *\n" + 
+					" * @author Zachary Palmer\n" +
+					" */\n";
+				// @formatter:on
+
+				PrependablePrintStream ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast",
+						TypeDefinition.Mode.INTERFACE, Project.API, SupplementCategory.GENERAL, "BsjNodeOperation"
+								+ suffix + typeParamDecl, false, bsjNodeOperationHeader, null);
+				PrependablePrintStream nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
+						TypeDefinition.Mode.CONCRETE, Project.API, SupplementCategory.GENERAL, "BsjNodeNoOpOperation"
+								+ suffix + typeParamDecl, false, bsjNoOpNodeOperationHeader, null, "BsjNodeOperation"
+								+ suffix + typeParamDecl);
+				PrependablePrintStream pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
+						TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL, "BsjNodeOperationProxy"
+								+ suffix + proxyTypeParamsDecl, false, bsjNodeOperationProxyHeader, null,
+						"BsjNodeOperation" + suffix + newTypeParamsDecl);
+				PrependablePrintStream dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
+						TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL,
+						"BsjDefaultNodeOperation" + suffix + typeParamDecl, false, bsjDefaultNodeOperationHeader, null,
+						"BsjNodeOperation" + suffix + typeParamDecl);
+				PrependablePrintStream jps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
+						TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL, "JavaNodeOperation"
+								+ suffix + typeParamDecl, false, javaNodeOperationHeader, null, "BsjNodeOperation"
+								+ suffix + typeParamDecl);
+
+				ipsList.add(ips);
+				npsList.add(nps);
+				ppsList.add(pps);
+				dpsList.add(dps);
+				jpsList.add(jps);
+
+				pps.incPrependCount();
+				pps.println("/** The backing operation to proxy. */");
+				pps.println("private BsjNodeOperation" + strings.suffix + "<" + origTypeParams + "> backingOp;");
+				pps.println();
+				pps.println("/**");
+				pps.println(" * Creates a new node operation proxy.");
+				pps.println(" * @param backingOp The backing operation to proxy.");
+				pps.println(" */");
+				pps.println("public BsjNodeOperationProxy" + strings.suffix + "(BsjNodeOperation" + strings.suffix
+						+ "<" + origTypeParams + "> backingOp)");
+				pps.println("{");
+				pps.println("    this.backingOp = backingOp;");
+				pps.println("}");
+				pps.println();
+				for (int i = 1; i <= argCount; i++)
+				{
+					pps.println("/**");
+					pps.println(" * Called before every call to the backing operation.");
+					pps.println(" * @param p The incoming parameter data (compatible with the proxy interface).");
+					pps.println(" * @return The resulting parameter data (compatible with the backing interface).");
+					pps.println(" */");
+					pps.println("protected abstract " + strings.getTypeParameterName(i) + "Orig before"
+							+ (argCount == 1 ? "" : String.valueOf(i)) + "(" + strings.getTypeParameterName(i) + "New "
+							+ strings.getParameterName(i) + ");");
+					pps.println();
+				}
+				pps.println("/**");
+				pps.println(" * Called after every call to the backing operation.");
+				pps.println(" * @param r The incoming return data (compatible with the backing interface).");
+				pps.println(" * @return The resulting return data (compatible with the return interface).");
+				pps.println(" */");
+				pps.println("protected abstract RNew after(ROrig r);");
+				pps.decPrependCount();
+
+				dps.incPrependCount();
+				dps.println("/**");
+				dps.println(" * The default operation which all default node operation implementations will call.");
+				dps.println(" * @param node The node in question.");
+				for (int i = 1; i <= argCount; i++)
+				{
+					dps.println(" * @param " + strings.getParameterName(i) + " The parameter to the execution method.");
+				}
+				dps.println(" */");
+				dps.println("public abstract R executeDefault(Node node, " + strings.methodParams + ");");
+				dps.println();
+				dps.decPrependCount();
+
+				jps.incPrependCount();
+				jps.println("/**");
+				jps.println(" * The default operation which all BSJ-specific node operation implementations will call.");
+				jps.println(" * ");
+				jps.println(" * @param node The node in question.");
+				for (int i = 1; i <= argCount; i++)
+				{
+					jps.println(" * @param " + strings.getParameterName(i) + " The parameter to the execution method.");
+				}
+				jps.println(" */");
+				jps.println("public abstract R handleBsjSpecificNode(BsjSpecificNode node, " + strings.methodParams
+						+ ");");
+				jps.println();
+				jps.decPrependCount();
+			}
 		}
 
 		@Override
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			for (PrependablePrintStream ps : allStreams())
+			for (int index = 1; index <= NUMBER_OF_OPERATION_VARIATIONS; index++)
 			{
-				ps.incPrependCount();
-			}
+				final int argCount = index;
+				final Strings strings = new Strings(argCount);
+				final PrependablePrintStream ips = ipsList.get(argCount - 1);
+				final PrependablePrintStream nps = npsList.get(argCount - 1);
+				final PrependablePrintStream pps = ppsList.get(argCount - 1);
+				final PrependablePrintStream dps = dpsList.get(argCount - 1);
+				final PrependablePrintStream jps = jpsList.get(argCount - 1);
 
-			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
-			{
-				String typeName;
-				String typeArg;
-				if (def.getTypeParameter() != null)
+				for (PrependablePrintStream ps : allStreams())
 				{
-					String[] args = def.getTypeParameter().split(",");
-					for (int i = 0; i < args.length; i++)
-					{
-						if (args[i].contains(" "))
-							args[i] = args[i].substring(0, args[i].indexOf(' ')).trim();
-					}
-					StringBuilder sb = new StringBuilder();
-					for (String s : args)
-					{
-						if (sb.length() > 0)
-							sb.append(",");
-						sb.append(s);
-					}
-					sb.insert(0, "<");
-					sb.append(">");
-					typeArg = sb.toString();
-				} else
-				{
-					typeArg = "";
+					ps.incPrependCount();
 				}
-				typeName = def.getBaseName() + typeArg;
-				String typeParamS = def.getTypeParameter() == null ? "" : ("<" + def.getTypeParameter() + "> ");
 
-				ips.println("/**");
-				ips.println(" * Executes this operation against a " + def.getBaseName() + ".");
-				ips.println(" * @param node The " + def.getBaseName() + " in question.");
-				ips.println(" * @param p The parameter to use.");
-				ips.println(" * @return The result of the operation.");
-				ips.println(" */");
-				ips.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, P p);");
-				ips.println();
-
-				nps.println("/**");
-				nps.println(" * Performs no operation.");
-				nps.println(" * @param node Ignored.");
-				nps.println(" * @param p Ignored.");
-				nps.println(" * @return <code>null</code>, always.");
-				nps.println(" */");
-				nps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, P p)");
-				nps.println("{");
-				nps.println("    return null;");
-				nps.println("}");
-				nps.println();
-
-				pps.println("/**");
-				pps.println(" * Decorates this operation, turning it over to the backing operation.");
-				pps.println(" * @param node The node to affect.");
-				pps.println(" * @param p The value to pass through the proxy filter and into the backing operation.");
-				pps.println(" * @return The result of this operation (after being passed through the proxy filter).");
-				pps.println(" */");
-				pps.println("public " + typeParamS + "RNew execute" + def.getBaseName() + "(" + typeName
-						+ " node, PNew p)");
-				pps.println("{");
-				pps.println("    POrig porig = before(p);");
-				pps.println("    ROrig rorig = this.backingOp.execute" + def.getBaseName() + "(node, porig);");
-				pps.println("    return after(rorig);");
-				pps.println("}");
-				pps.println();
-
-				dps.println("/**");
-				dps.println(" * Executes the default operation for this node.");
-				dps.println(" * @param node The node in question.");
-				dps.println(" * @param p The parameter to this node operation.");
-				dps.println(" */");
-				dps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, P p)");
-				dps.println("{");
-				dps.println("    return executeDefault(node, p);");
-				dps.println("}");
-				dps.println();
-
-				if (def.isBsjSpecific())
+				if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 				{
-					jps.println("    /**");
-					jps.println("     * Executes the BSJ-specific operation for this node.");
-					jps.println("     * @param node The node in question.");
-					jps.println("     * @param p The parameter to this node operation.");
-					jps.println("     */");
-					jps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
-							+ " node, P p)");
-					jps.println("{");
-					jps.println("    return handleBsjSpecificNode(node, p);");
-					jps.println("}");
-					jps.println();
-				}
-			}
+					String typeName;
+					String typeArg;
+					if (def.getTypeParameter() != null)
+					{
+						String[] args = def.getTypeParameter().split(",");
+						for (int i = 0; i < args.length; i++)
+						{
+							if (args[i].contains(" "))
+								args[i] = args[i].substring(0, args[i].indexOf(' ')).trim();
+						}
+						StringBuilder sb = new StringBuilder();
+						for (String s : args)
+						{
+							if (sb.length() > 0)
+								sb.append(",");
+							sb.append(s);
+						}
+						sb.insert(0, "<");
+						sb.append(">");
+						typeArg = sb.toString();
+					} else
+					{
+						typeArg = "";
+					}
+					typeName = def.getBaseName() + typeArg;
+					String typeParamS = def.getTypeParameter() == null ? "" : ("<" + def.getTypeParameter() + "> ");
 
-			for (PrependablePrintStream ps : allStreams())
-			{
-				ps.decPrependCount();
+					String paramDecls = strings.methodParams;
+					String methodArgs = strings.methodArgs;
+
+					ips.println("/**");
+					ips.println(" * Executes this operation against a " + def.getBaseName() + ".");
+					ips.println(" * @param node The " + def.getBaseName() + " in question.");
+					ips.println(" * @param p The parameter to use.");
+					ips.println(" * @return The result of the operation.");
+					ips.println(" */");
+					ips.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, "
+							+ paramDecls + ");");
+					ips.println();
+
+					nps.println("/**");
+					nps.println(" * Performs no operation.");
+					nps.println(" * @param node Ignored.");
+					nps.println(" * @param p Ignored.");
+					nps.println(" * @return <code>null</code>, always.");
+					nps.println(" */");
+					nps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, "
+							+ paramDecls + ")");
+					nps.println("{");
+					nps.println("    return null;");
+					nps.println("}");
+					nps.println();
+
+					pps.println("/**");
+					pps.println(" * Decorates this operation, turning it over to the backing operation.");
+					pps.println(" * @param node The node to affect.");
+					pps.println(" * @param p The value to pass through the proxy filter and into the backing operation.");
+					pps.println(" * @return The result of this operation (after being passed through the proxy filter).");
+					pps.println(" */");
+					pps.println("public " + typeParamS + "RNew execute" + def.getBaseName() + "(" + typeName
+							+ " node, " + paramDecls.replaceAll(" p", "New p") + ")");
+					pps.println("{");
+					if (argCount == 1)
+					{
+						pps.println("    POrig porig = before(p);");
+						pps.println("    ROrig rorig = this.backingOp.execute" + def.getBaseName() + "(node, porig);");
+					} else
+					{
+						for (int i = 1; i <= argCount; i++)
+						{
+							pps.println("    P" + i + "Orig p" + i + "orig = before" + i + "(p" + i + ");");
+						}
+						pps.print("    ROrig rorig = this.backingOp.execute" + def.getBaseName() + "(node");
+						for (int i = 1; i <= argCount; i++)
+						{
+							pps.print(", p" + i + "orig");
+						}
+						pps.println(");");
+					}
+					pps.println("    return after(rorig);");
+					pps.println("}");
+					pps.println();
+
+					dps.println("/**");
+					dps.println(" * Executes the default operation for this node.");
+					dps.println(" * @param node The node in question.");
+					dps.println(" * @param p The parameter to this node operation.");
+					dps.println(" */");
+					dps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, "
+							+ paramDecls + ")");
+					dps.println("{");
+					dps.println("    return executeDefault(node, " + methodArgs + ");");
+					dps.println("}");
+					dps.println();
+
+					if (def.isBsjSpecific())
+					{
+						jps.println("/**");
+						jps.println(" * Executes the BSJ-specific operation for this node.");
+						jps.println(" * @param node The node in question.");
+						jps.println(" * @param p The parameter to this node operation.");
+						jps.println(" */");
+						jps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
+								+ " node, " + paramDecls + ")");
+						jps.println("{");
+						jps.println("    return handleBsjSpecificNode(node, " + methodArgs + ");");
+						jps.println("}");
+						jps.println();
+					}
+				}
+
+				for (PrependablePrintStream ps : allStreams())
+				{
+					ps.decPrependCount();
+				}
 			}
 		}
 
@@ -2510,15 +2833,17 @@ public class SourceGenerator
 			Project ifaceProject = def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT);
 			Project classProject = def.getProfile().getProperty(GenerationProfile.IMPLEMENTATION_PROJECT);
 			ifacePs = createOutputFile(interfacePackage, Mode.INTERFACE, ifaceProject, SupplementCategory.GENERAL,
-					def.getFullName(), false, INTERFACE_IMPORTS + "\n/**\n * "
-							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */", def.getFullSuper());
+					def.getFullName(), false,
+					INTERFACE_IMPORTS + "\n/**\n * " + def.getDocString().replaceAll("\n", "\n * ") + "\n */",
+					def.getFullSuper());
 			ifacePs.incPrependCount();
 
 			String classPackage = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
 			classPs = createOutputFile(classPackage, def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE,
-					classProject, SupplementCategory.GENERAL, def.getName() + "Impl"
-							+ def.getTypeParameterWithDelimiters(), false, CLASS_IMPORTS + "import " + interfacePackage
-							+ ".*;\n" + "\n\n/**\n * " + def.getDocString().replaceAll("\n", "\n * ") + "\n */",
+					classProject, SupplementCategory.GENERAL,
+					def.getName() + "Impl" + def.getTypeParameterWithDelimiters(), false, CLASS_IMPORTS + "import "
+							+ interfacePackage + ".*;\n" + "\n\n/**\n * "
+							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */",
 					def.getFullSuper().replaceAll(def.getSuperName(), def.getSuperName() + "Impl"),
 					def.getNameWithTypeParameters());
 			classPs.incPrependCount();

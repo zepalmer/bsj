@@ -50,4 +50,5 @@ public interface VariableAccessByExpressionNode extends Node, VariableAccessNode
      */
     @Override
     public VariableAccessByExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

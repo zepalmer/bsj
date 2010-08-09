@@ -17,4 +17,5 @@ public interface TypeArgumentNode extends Node
      */
     @Override
     public TypeArgumentNode deepCopy(BsjNodeFactory factory);
+    
 }

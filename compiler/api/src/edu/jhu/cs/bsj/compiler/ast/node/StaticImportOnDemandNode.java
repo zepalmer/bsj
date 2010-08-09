@@ -29,4 +29,5 @@ public interface StaticImportOnDemandNode extends Node, ImportNode
      */
     @Override
     public StaticImportOnDemandNode deepCopy(BsjNodeFactory factory);
+    
 }

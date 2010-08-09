@@ -32,4 +32,5 @@ public interface QualifiedNameNode extends NameNode
      */
     @Override
     public QualifiedNameNode deepCopy(BsjNodeFactory factory);
+    
 }

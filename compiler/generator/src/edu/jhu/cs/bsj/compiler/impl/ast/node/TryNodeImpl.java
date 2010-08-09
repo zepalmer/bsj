@@ -10,6 +10,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
@@ -348,6 +349,19 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeTryNode(this, p);
+    }
+    
+    /**
+     * Executes an operation on this node.
+     * @param operation The operation to perform.
+     * @param p1 The parameter to pass to the operation.
+     * @param p2 The parameter to pass to the operation.
+     * @return The result of the operation.
+     */
+    @Override
+    public <P1,P2,R> R executeOperation(BsjNodeOperation2Arguments<P1,P2,R> operation, P1 p1, P2 p2)
+    {
+        return operation.executeTryNode(this, p1, p2);
     }
     
     /**

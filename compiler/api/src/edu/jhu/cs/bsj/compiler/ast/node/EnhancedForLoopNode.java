@@ -57,4 +57,5 @@ public interface EnhancedForLoopNode extends Node, StatementNode
      */
     @Override
     public EnhancedForLoopNode deepCopy(BsjNodeFactory factory);
+    
 }

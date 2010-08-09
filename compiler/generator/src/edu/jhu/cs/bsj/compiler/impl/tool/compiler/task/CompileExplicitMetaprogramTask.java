@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.tools.DiagnosticListener;
 import javax.tools.Diagnostic.Kind;
+import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;

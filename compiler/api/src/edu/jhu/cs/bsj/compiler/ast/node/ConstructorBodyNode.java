@@ -52,4 +52,5 @@ public interface ConstructorBodyNode extends Node
      */
     @Override
     public ConstructorBodyNode deepCopy(BsjNodeFactory factory);
+    
 }

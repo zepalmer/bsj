@@ -53,6 +53,7 @@ public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDecl
      */
     @Override
     public NamedTypeDeclarationNode<T> deepCopy(BsjNodeFactory factory);
+    
 	/**
 	 * Retrieves the specified member type declaration from this node.
 	 * 

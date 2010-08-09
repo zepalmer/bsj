@@ -30,4 +30,5 @@ public interface MetaAnnotatableNode extends Node
      */
     @Override
     public MetaAnnotatableNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -62,6 +62,7 @@ public interface VariableDeclaratorNode extends Node
      */
     @Override
     public VariableDeclaratorNode deepCopy(BsjNodeFactory factory);
+    
 	/**
 	 * Retrieves the type of the variable declared by this variable declarator.  This is usually a copy of the type
 	 * on the declaration but may be different if this declarator adds an array type level (such as in

@@ -17,4 +17,5 @@ public interface LongLiteralNode extends LiteralNode<Long>
      */
     @Override
     public LongLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

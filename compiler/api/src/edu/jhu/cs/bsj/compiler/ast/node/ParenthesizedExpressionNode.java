@@ -37,4 +37,5 @@ public interface ParenthesizedExpressionNode extends Node, RestrictedPrimaryExpr
      */
     @Override
     public ParenthesizedExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

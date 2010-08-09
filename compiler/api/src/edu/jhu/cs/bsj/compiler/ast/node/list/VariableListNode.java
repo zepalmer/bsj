@@ -18,4 +18,5 @@ public interface VariableListNode extends ListNode<VariableNode>
      */
     @Override
     public VariableListNode deepCopy(BsjNodeFactory factory);
+    
 }

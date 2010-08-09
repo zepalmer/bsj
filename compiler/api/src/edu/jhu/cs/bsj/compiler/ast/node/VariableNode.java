@@ -56,4 +56,5 @@ public interface VariableNode extends Node, ModifiedNode<VariableModifiersNode>
      */
     @Override
     public VariableNode deepCopy(BsjNodeFactory factory);
+    
 }

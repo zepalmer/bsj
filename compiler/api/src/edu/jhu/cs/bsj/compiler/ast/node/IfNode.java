@@ -56,4 +56,5 @@ public interface IfNode extends Node, StatementNode
      */
     @Override
     public IfNode deepCopy(BsjNodeFactory factory);
+    
 }

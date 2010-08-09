@@ -45,4 +45,5 @@ public interface ModifiersNode extends Node, MetaAnnotatableNode
      */
     @Override
     public ModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

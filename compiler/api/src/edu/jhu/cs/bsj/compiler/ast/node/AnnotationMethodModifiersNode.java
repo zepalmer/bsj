@@ -19,4 +19,5 @@ public interface AnnotationMethodModifiersNode extends ModifiersNode
      */
     @Override
     public AnnotationMethodModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

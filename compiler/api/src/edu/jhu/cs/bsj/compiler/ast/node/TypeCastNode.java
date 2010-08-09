@@ -44,4 +44,5 @@ public interface TypeCastNode extends Node, NonAssignmentExpressionNode
      */
     @Override
     public TypeCastNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -43,4 +43,5 @@ public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionN
      */
     @Override
     public MethodInvocationNode deepCopy(BsjNodeFactory factory);
+    
 }

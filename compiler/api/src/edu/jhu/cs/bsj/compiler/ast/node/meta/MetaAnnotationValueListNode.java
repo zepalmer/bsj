@@ -19,4 +19,5 @@ public interface MetaAnnotationValueListNode extends ListNode<MetaAnnotationValu
      */
     @Override
     public MetaAnnotationValueListNode deepCopy(BsjNodeFactory factory);
+    
 }

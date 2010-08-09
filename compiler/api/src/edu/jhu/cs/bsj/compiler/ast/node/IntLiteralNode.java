@@ -17,4 +17,5 @@ public interface IntLiteralNode extends LiteralNode<Integer>
      */
     @Override
     public IntLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

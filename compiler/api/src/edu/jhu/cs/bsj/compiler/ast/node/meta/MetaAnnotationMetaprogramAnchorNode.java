@@ -18,4 +18,5 @@ public interface MetaAnnotationMetaprogramAnchorNode extends MetaprogramAnchorNo
      */
     @Override
     public MetaAnnotationMetaprogramAnchorNode deepCopy(BsjNodeFactory factory);
+    
 }

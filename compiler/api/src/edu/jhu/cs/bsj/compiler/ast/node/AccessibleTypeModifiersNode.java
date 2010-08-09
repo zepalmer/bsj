@@ -30,4 +30,5 @@ public interface AccessibleTypeModifiersNode extends ModifiersNode
      */
     @Override
     public AccessibleTypeModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

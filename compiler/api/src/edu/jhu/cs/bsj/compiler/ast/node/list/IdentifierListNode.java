@@ -18,4 +18,5 @@ public interface IdentifierListNode extends ListNode<IdentifierNode>
      */
     @Override
     public IdentifierListNode deepCopy(BsjNodeFactory factory);
+    
 }

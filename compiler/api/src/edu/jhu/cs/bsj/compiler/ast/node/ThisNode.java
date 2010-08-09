@@ -46,4 +46,5 @@ public interface ThisNode extends Node, RestrictedPrimaryExpressionNode
      */
     @Override
     public ThisNode deepCopy(BsjNodeFactory factory);
+    
 }

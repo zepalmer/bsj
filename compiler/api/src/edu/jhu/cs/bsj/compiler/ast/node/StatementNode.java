@@ -17,4 +17,5 @@ public interface StatementNode extends BlockStatementNode, MetaAnnotatableNode
      */
     @Override
     public StatementNode deepCopy(BsjNodeFactory factory);
+    
 }

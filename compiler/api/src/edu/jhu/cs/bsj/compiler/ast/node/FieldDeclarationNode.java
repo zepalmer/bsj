@@ -17,4 +17,5 @@ public interface FieldDeclarationNode extends AbstractMemberVariableDeclarationN
      */
     @Override
     public FieldDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

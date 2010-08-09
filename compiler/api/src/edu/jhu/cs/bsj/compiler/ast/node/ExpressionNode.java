@@ -17,4 +17,5 @@ public interface ExpressionNode extends Node, VariableInitializerNode
      */
     @Override
     public ExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

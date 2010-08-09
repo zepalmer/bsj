@@ -30,4 +30,5 @@ public interface InterfaceBodyNode extends Node, TypeBodyNode<InterfaceMemberNod
      */
     @Override
     public InterfaceBodyNode deepCopy(BsjNodeFactory factory);
+    
 }

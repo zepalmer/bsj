@@ -53,4 +53,5 @@ public interface WildcardTypeNode extends Node, TypeArgumentNode
      */
     @Override
     public WildcardTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

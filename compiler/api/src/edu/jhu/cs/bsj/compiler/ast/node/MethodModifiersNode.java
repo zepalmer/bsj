@@ -102,4 +102,5 @@ public interface MethodModifiersNode extends ModifiersNode
      */
     @Override
     public MethodModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

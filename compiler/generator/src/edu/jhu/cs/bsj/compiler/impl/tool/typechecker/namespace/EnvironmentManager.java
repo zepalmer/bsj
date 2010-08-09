@@ -7,7 +7,6 @@ import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
@@ -68,10 +67,19 @@ public class EnvironmentManager
 		Environment ret = environmentMap.get(node);
 		if (ret == null)
 		{
-			node.getNearestAncestorOfType(CompilationUnitNode.class).executeOperation(
-					this.environmentMapPopulatingOperation, null);
-			ret = environmentMap.get(node);
+			ret = calculateEnvironment(node);
+			environmentMap.put(node,ret);
 		}
 		return ret;
+	}
+	
+	/**
+	 * Calculates the environment for the specified node.
+	 * @param node The node for which to calculate an environment.
+	 * @return The resulting environment (or <code>null</code> if the node is a package node).
+	 */
+	public Environment calculateEnvironment(Node node)
+	{
+		
 	}
 }

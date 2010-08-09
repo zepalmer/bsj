@@ -66,4 +66,5 @@ public interface AbstractMemberVariableDeclarationNode<T extends ModifiersNode> 
      */
     @Override
     public AbstractMemberVariableDeclarationNode<T> deepCopy(BsjNodeFactory factory);
+    
 }

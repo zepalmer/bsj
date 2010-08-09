@@ -38,4 +38,5 @@ public interface SuperclassConstructorInvocationNode extends ConstructorInvocati
      */
     @Override
     public SuperclassConstructorInvocationNode deepCopy(BsjNodeFactory factory);
+    
 }

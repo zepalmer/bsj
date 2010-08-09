@@ -19,4 +19,5 @@ public interface AnonymousClassMemberMetaprogramAnchorNode extends ExplicitMetap
      */
     @Override
     public AnonymousClassMemberMetaprogramAnchorNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 import javax.tools.Diagnostic;
-import javax.tools.DiagnosticListener;
 import javax.tools.Diagnostic.Kind;
+import javax.tools.DiagnosticListener;
 
 import org.junit.Assert;
 

@@ -48,4 +48,5 @@ public interface AssertStatementNode extends Node, StatementNode
      */
     @Override
     public AssertStatementNode deepCopy(BsjNodeFactory factory);
+    
 }

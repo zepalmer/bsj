@@ -18,4 +18,5 @@ public interface ImportListNode extends ListNode<ImportNode>
      */
     @Override
     public ImportListNode deepCopy(BsjNodeFactory factory);
+    
 }

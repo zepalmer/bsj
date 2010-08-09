@@ -56,4 +56,5 @@ public interface ConditionalExpressionNode extends Node, NonAssignmentExpression
      */
     @Override
     public ConditionalExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

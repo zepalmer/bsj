@@ -38,4 +38,5 @@ public interface MethodInvocationByNameNode extends MethodInvocationNode
      */
     @Override
     public MethodInvocationByNameNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -65,15 +65,17 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNod
  *
  * @author Zachary Palmer
  */
+
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P,R>
 {
-	/**
-	 * The default operation which all default node operation implementations will call.
-	 * @param node The node in question.
-	 * @param p The parameter to the execution method.
-	 */
-	public abstract R executeDefault(Node node, P p);
+    /**
+     * The default operation which all default node operation implementations will call.
+     * @param node The node in question.
+     * @param p The parameter to the execution method.
+     */
+    public abstract R executeDefault(Node node, P p);
+    
     /**
      * Executes the default operation for this node.
      * @param node The node in question.

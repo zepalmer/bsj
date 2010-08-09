@@ -30,4 +30,5 @@ public interface AnnotationBodyNode extends Node, TypeBodyNode<AnnotationMemberN
      */
     @Override
     public AnnotationBodyNode deepCopy(BsjNodeFactory factory);
+    
 }

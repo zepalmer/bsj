@@ -19,4 +19,5 @@ public interface TypeDeclarationMetaprogramAnchorNode extends ExplicitMetaprogra
      */
     @Override
     public TypeDeclarationMetaprogramAnchorNode deepCopy(BsjNodeFactory factory);
+    
 }

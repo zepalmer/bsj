@@ -18,4 +18,5 @@ public interface AnnotationMemberListNode extends ListNode<AnnotationMemberNode>
      */
     @Override
     public AnnotationMemberListNode deepCopy(BsjNodeFactory factory);
+    
 }

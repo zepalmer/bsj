@@ -18,4 +18,5 @@ public interface PrimaryExpressionNode extends Node, NonAssignmentExpressionNode
      */
     @Override
     public PrimaryExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

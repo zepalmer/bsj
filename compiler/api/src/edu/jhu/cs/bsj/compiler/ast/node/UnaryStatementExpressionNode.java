@@ -51,4 +51,5 @@ public interface UnaryStatementExpressionNode extends Node, NonAssignmentExpress
      */
     @Override
     public UnaryStatementExpressionNode deepCopy(BsjNodeFactory factory);
+    
 }

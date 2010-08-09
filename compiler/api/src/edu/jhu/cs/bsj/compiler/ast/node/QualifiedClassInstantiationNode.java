@@ -75,4 +75,5 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
      */
     @Override
     public QualifiedClassInstantiationNode deepCopy(BsjNodeFactory factory);
+    
 }

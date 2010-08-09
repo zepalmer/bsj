@@ -47,4 +47,5 @@ public interface MetaprogramNode extends Node, BsjSpecificNode
      */
     @Override
     public MetaprogramNode deepCopy(BsjNodeFactory factory);
+    
 }

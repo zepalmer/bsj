@@ -88,4 +88,5 @@ public interface AbstractlyUnmodifiedClassDeclarationNode<T extends ModifiersNod
      */
     @Override
     public AbstractlyUnmodifiedClassDeclarationNode<T> deepCopy(BsjNodeFactory factory);
+    
 }

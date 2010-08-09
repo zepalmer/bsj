@@ -17,4 +17,5 @@ public interface FloatLiteralNode extends LiteralNode<Float>
      */
     @Override
     public FloatLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -47,4 +47,5 @@ public interface SynchronizedNode extends Node, StatementNode
      */
     @Override
     public SynchronizedNode deepCopy(BsjNodeFactory factory);
+    
 }

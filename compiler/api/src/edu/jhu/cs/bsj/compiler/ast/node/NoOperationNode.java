@@ -22,4 +22,5 @@ public interface NoOperationNode extends Node, StatementNode, TypeDeclarationNod
      */
     @Override
     public NoOperationNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -44,4 +44,5 @@ public interface DoWhileLoopNode extends Node, StatementNode
      */
     @Override
     public DoWhileLoopNode deepCopy(BsjNodeFactory factory);
+    
 }

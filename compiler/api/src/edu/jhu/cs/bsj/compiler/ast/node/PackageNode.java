@@ -27,6 +27,7 @@ public interface PackageNode extends Node
      */
     @Override
     public PackageNode deepCopy(BsjNodeFactory factory);
+    
 	/**
 	 * Adds a new subpackage to this node. This subpackage cannot already be a member of another package.
 	 * 

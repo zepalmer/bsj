@@ -32,4 +32,5 @@ public interface MetaAnnotationExpressionValueNode extends Node, MetaAnnotationV
      */
     @Override
     public MetaAnnotationExpressionValueNode deepCopy(BsjNodeFactory factory);
+    
 }

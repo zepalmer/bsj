@@ -145,4 +145,5 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      */
     @Override
     public MethodDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

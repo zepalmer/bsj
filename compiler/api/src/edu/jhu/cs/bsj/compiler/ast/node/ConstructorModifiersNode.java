@@ -30,4 +30,5 @@ public interface ConstructorModifiersNode extends ModifiersNode
      */
     @Override
     public ConstructorModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

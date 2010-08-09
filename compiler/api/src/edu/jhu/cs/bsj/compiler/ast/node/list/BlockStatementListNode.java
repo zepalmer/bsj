@@ -18,4 +18,5 @@ public interface BlockStatementListNode extends ListNode<BlockStatementNode>
      */
     @Override
     public BlockStatementListNode deepCopy(BsjNodeFactory factory);
+    
 }

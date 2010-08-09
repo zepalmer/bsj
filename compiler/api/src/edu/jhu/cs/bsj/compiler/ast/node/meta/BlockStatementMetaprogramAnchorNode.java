@@ -19,4 +19,5 @@ public interface BlockStatementMetaprogramAnchorNode extends ExplicitMetaprogram
      */
     @Override
     public BlockStatementMetaprogramAnchorNode deepCopy(BsjNodeFactory factory);
+    
 }

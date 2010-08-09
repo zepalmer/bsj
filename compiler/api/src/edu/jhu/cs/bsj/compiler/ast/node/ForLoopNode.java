@@ -74,4 +74,5 @@ public interface ForLoopNode extends Node, StatementNode
      */
     @Override
     public ForLoopNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -31,4 +31,5 @@ public interface UnparameterizedTypeNode extends Node, DeclaredTypeNode, Literal
      */
     @Override
     public UnparameterizedTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -18,4 +18,5 @@ public interface InterfaceMemberNode extends Node
      */
     @Override
     public InterfaceMemberNode deepCopy(BsjNodeFactory factory);
+    
 }

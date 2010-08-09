@@ -38,6 +38,7 @@ public interface NameNode extends Node
      */
     @Override
     public NameNode deepCopy(BsjNodeFactory factory);
+    
 	/**
 	 * Retrieves the category for this node's name.
 	 * @return The category into which this node falls.

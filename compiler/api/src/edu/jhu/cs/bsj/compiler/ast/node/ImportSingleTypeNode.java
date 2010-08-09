@@ -29,4 +29,5 @@ public interface ImportSingleTypeNode extends Node, ImportNode
      */
     @Override
     public ImportSingleTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

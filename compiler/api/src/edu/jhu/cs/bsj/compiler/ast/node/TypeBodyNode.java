@@ -24,4 +24,5 @@ public interface TypeBodyNode<T extends Node> extends Node
      */
     @Override
     public TypeBodyNode<T> deepCopy(BsjNodeFactory factory);
+    
 }

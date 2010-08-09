@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.tools.DiagnosticListener;
 import javax.tools.Diagnostic.Kind;
+import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationMethodNameErrorType;

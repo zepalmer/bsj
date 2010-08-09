@@ -17,4 +17,5 @@ public interface TypeDeclarationNode extends Node, ClassMemberNode, InterfaceMem
      */
     @Override
     public TypeDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

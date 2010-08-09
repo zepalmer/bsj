@@ -45,4 +45,5 @@ public interface WhileLoopNode extends Node, StatementNode
      */
     @Override
     public WhileLoopNode deepCopy(BsjNodeFactory factory);
+    
 }

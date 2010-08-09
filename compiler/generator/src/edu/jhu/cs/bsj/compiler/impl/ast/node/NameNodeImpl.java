@@ -182,6 +182,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     }
     
     
+    
 	public NameCategory getCategory()
 	{
 		return NameCategorizer.SINGLETON.categorize(this);

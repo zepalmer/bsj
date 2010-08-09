@@ -44,4 +44,5 @@ public interface AnnotationElementNode extends Node
      */
     @Override
     public AnnotationElementNode deepCopy(BsjNodeFactory factory);
+    
 }

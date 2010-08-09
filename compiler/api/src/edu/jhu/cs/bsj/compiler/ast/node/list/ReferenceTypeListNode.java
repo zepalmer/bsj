@@ -18,4 +18,5 @@ public interface ReferenceTypeListNode extends ListNode<ReferenceTypeNode>
      */
     @Override
     public ReferenceTypeListNode deepCopy(BsjNodeFactory factory);
+    
 }

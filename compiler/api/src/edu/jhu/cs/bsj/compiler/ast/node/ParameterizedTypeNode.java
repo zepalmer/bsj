@@ -44,4 +44,5 @@ public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
      */
     @Override
     public ParameterizedTypeNode deepCopy(BsjNodeFactory factory);
+    
 }

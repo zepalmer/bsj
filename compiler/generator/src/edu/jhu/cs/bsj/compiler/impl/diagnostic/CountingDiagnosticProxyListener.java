@@ -1,8 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic;
 
 import javax.tools.Diagnostic;
-import javax.tools.DiagnosticListener;
 import javax.tools.Diagnostic.Kind;
+import javax.tools.DiagnosticListener;
 
 /**
  * Acts as a proxy to an existing diagnostic listener. This listener counts the number of each type of diagnostic it

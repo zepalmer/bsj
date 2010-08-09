@@ -17,4 +17,5 @@ public interface DeclarationNode extends Node
      */
     @Override
     public DeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

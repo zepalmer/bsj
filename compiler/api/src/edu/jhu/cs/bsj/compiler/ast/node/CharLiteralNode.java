@@ -17,4 +17,5 @@ public interface CharLiteralNode extends LiteralNode<Character>
      */
     @Override
     public CharLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

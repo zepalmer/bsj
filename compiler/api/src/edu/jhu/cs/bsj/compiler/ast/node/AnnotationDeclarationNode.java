@@ -48,4 +48,5 @@ public interface AnnotationDeclarationNode extends Node, NamedTypeDeclarationNod
      */
     @Override
     public AnnotationDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

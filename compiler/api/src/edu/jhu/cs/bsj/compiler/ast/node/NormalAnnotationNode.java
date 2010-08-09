@@ -35,4 +35,5 @@ public interface NormalAnnotationNode extends AnnotationNode
      */
     @Override
     public NormalAnnotationNode deepCopy(BsjNodeFactory factory);
+    
 }

@@ -78,4 +78,5 @@ public interface FieldModifiersNode extends ModifiersNode
      */
     @Override
     public FieldModifiersNode deepCopy(BsjNodeFactory factory);
+    
 }

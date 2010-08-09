@@ -18,4 +18,5 @@ public interface CatchListNode extends ListNode<CatchNode>
      */
     @Override
     public CatchListNode deepCopy(BsjNodeFactory factory);
+    
 }

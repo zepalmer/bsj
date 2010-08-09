@@ -20,4 +20,5 @@ public interface CodeLiteralNode extends LiteralNode<Node>, BsjSpecificNode
      */
     @Override
     public CodeLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

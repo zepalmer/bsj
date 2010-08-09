@@ -17,4 +17,5 @@ public interface NullLiteralNode extends LiteralNode<Void>
      */
     @Override
     public NullLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }

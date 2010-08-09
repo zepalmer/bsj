@@ -19,4 +19,5 @@ public interface AnnotationMemberMetaprogramAnchorNode extends ExplicitMetaprogr
      */
     @Override
     public AnnotationMemberMetaprogramAnchorNode deepCopy(BsjNodeFactory factory);
+    
 }

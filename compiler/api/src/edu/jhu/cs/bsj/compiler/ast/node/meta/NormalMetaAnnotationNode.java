@@ -35,4 +35,5 @@ public interface NormalMetaAnnotationNode extends MetaAnnotationNode, BsjSpecifi
      */
     @Override
     public NormalMetaAnnotationNode deepCopy(BsjNodeFactory factory);
+    
 }

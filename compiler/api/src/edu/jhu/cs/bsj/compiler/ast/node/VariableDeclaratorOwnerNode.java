@@ -42,4 +42,5 @@ public interface VariableDeclaratorOwnerNode extends Node
      */
     @Override
     public VariableDeclaratorOwnerNode deepCopy(BsjNodeFactory factory);
+    
 }

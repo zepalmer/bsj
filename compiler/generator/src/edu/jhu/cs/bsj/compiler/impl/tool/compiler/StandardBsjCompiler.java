@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.tools.Diagnostic.Kind;
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
-import javax.tools.Diagnostic.Kind;
 
 import org.apache.log4j.Logger;
 

@@ -36,4 +36,5 @@ public interface JavadocNode extends Node
      */
     @Override
     public JavadocNode deepCopy(BsjNodeFactory factory);
+    
 }

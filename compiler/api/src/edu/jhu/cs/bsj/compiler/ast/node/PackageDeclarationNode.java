@@ -63,4 +63,5 @@ public interface PackageDeclarationNode extends Node, MetaAnnotatableNode, Decla
      */
     @Override
     public PackageDeclarationNode deepCopy(BsjNodeFactory factory);
+    
 }

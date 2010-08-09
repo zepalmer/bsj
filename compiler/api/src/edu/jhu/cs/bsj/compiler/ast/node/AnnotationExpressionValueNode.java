@@ -29,4 +29,5 @@ public interface AnnotationExpressionValueNode extends Node, AnnotationValueNode
      */
     @Override
     public AnnotationExpressionValueNode deepCopy(BsjNodeFactory factory);
+    
 }

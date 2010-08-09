@@ -17,4 +17,5 @@ public interface DoubleLiteralNode extends LiteralNode<Double>
      */
     @Override
     public DoubleLiteralNode deepCopy(BsjNodeFactory factory);
+    
 }
