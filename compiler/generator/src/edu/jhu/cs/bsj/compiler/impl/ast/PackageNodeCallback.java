@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
@@ -68,31 +69,38 @@ public class PackageNodeCallback
 	/**
 	 * Creates an iterable object which moves over {@link BsjFileObject}s which represent compilation units in the
 	 * current package.
+	 * 
+	 * @param pname The name of the package.
+	 * @param binaryOnly <code>true</code> if only binaries should be listed; <code>false</code> if sources should be
+	 *            listed as well.
 	 */
-	protected List<BsjFileObject> findCompilationUnits(String pname)
+	protected List<BsjFileObject> findCompilationUnits(String pname, boolean binaryOnly)
 	{
 		List<BsjFileObject> files = new ArrayList<BsjFileObject>();
 		Set<String> names = new HashSet<String>();
 		try
 		{
-			for (BsjFileObject file : this.fileManager.listFiles(BsjCompilerLocation.SOURCE_PATH, pname,
-					Arrays.asList(Kind.OTHER), false))
+			if (!binaryOnly)
 			{
-				if (StringUtilities.getSuffix(file.getName(), '.').equals("bsj"))
+				for (BsjFileObject file : this.fileManager.listFiles(BsjCompilerLocation.SOURCE_PATH, pname,
+						Arrays.asList(Kind.OTHER), false))
 				{
-					if (names.add(getCompilationUnitName(file)))
+					if (StringUtilities.getSuffix(file.getName(), '.').equals("bsj"))
+					{
+						if (names.add(getCompilationUnitName(file)) && !binaryOnly)
+						{
+							files.add(file);
+						}
+					}
+				}
+
+				for (BsjFileObject file : this.fileManager.listFiles(BsjCompilerLocation.SOURCE_PATH, pname,
+						Arrays.asList(Kind.SOURCE), false))
+				{
+					if (names.add(getCompilationUnitName(file)) && !binaryOnly)
 					{
 						files.add(file);
 					}
-				}
-			}
-
-			for (BsjFileObject file : this.fileManager.listFiles(BsjCompilerLocation.SOURCE_PATH, pname,
-					Arrays.asList(Kind.SOURCE), false))
-			{
-				if (names.add(getCompilationUnitName(file)))
-				{
-					files.add(file);
 				}
 			}
 
@@ -118,7 +126,7 @@ public class PackageNodeCallback
 		} catch (IOException ioe)
 		{
 			// TODO: how do we handle this?
-			throw new IllegalStateException(ioe);
+			throw new NotImplementedYetException(ioe);
 		}
 
 		return files;
@@ -139,7 +147,7 @@ public class PackageNodeCallback
 			return false;
 		}
 
-		for (BsjFileObject file : findCompilationUnits(pname))
+		for (BsjFileObject file : findCompilationUnits(pname, false))
 		{
 			if (StringUtilities.getSuffix(file.inferBinaryName(), '.').equals(name))
 			{
@@ -176,7 +184,7 @@ public class PackageNodeCallback
 			return null;
 		}
 
-		for (BsjFileObject file : findCompilationUnits(pname))
+		for (BsjFileObject file : findCompilationUnits(pname, false))
 		{
 			if (getCompilationUnitName(file).equals(name))
 			{
@@ -189,7 +197,7 @@ public class PackageNodeCallback
 			LOGGER.trace("No such compilation unit " + name + " exists in package node \""
 					+ packageNode.getFullyQualifiedName() + "\"");
 		}
-		
+
 		return null;
 	}
 
@@ -197,9 +205,11 @@ public class PackageNodeCallback
 	 * Lists all of the compilation units which appear to be in the specified package.
 	 * 
 	 * @param packageNode The package node making the request.
+	 * @param binaryOnly <code>true</code> if only binaries should be listed; <code>false</code> if sources should be
+	 *            listed as well.
 	 * @return An iterator over the names of the compilation units in the package.
 	 */
-	public List<String> listCompilationUnitNames(PackageNode packageNode)
+	public List<String> listCompilationUnitNames(PackageNode packageNode, boolean binaryOnly)
 	{
 		String pname = packageNode.getFullyQualifiedName();
 		if (pname == null)
@@ -208,7 +218,7 @@ public class PackageNodeCallback
 		}
 
 		List<String> names = new ArrayList<String>();
-		for (BsjFileObject file : findCompilationUnits(pname))
+		for (BsjFileObject file : findCompilationUnits(pname, binaryOnly))
 		{
 			names.add(getCompilationUnitName(file));
 		}

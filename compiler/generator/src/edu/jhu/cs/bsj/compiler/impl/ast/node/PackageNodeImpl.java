@@ -335,6 +335,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public CompilationUnitNode getCompilationUnit(String name)
 	{
+		loadAllBinary();
 		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.READ);
 		return this.compilationUnitNodes.get(name);
 	}
@@ -344,6 +345,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public Iterator<CompilationUnitNode> getCompilationUnitIterator()
 	{
+		loadAllBinary();
 		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.READ);
 		return Collections.unmodifiableMap(compilationUnitNodes).values().iterator();
 	}
@@ -498,6 +500,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public boolean contains(String name)
 	{
+		loadAllBinary();
 		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.READ);
 		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.READ);
 		if (compilationUnitNodes.get(name) != null)
@@ -542,13 +545,33 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 
 		return compilationUnitNode;
 	}
+	
+	
+	private boolean loadedAllBinary = false;
+	/**
+	 * Loads just the binary files for this package.  This is necessary to ensure that introspectors looking at things
+	 * like java.io.* will be able to see the contents without inadvertently seeing their own sources that they hadn't
+	 * loaded (like some kind of garbage test file in java.io.*).
+	 */
+	private void loadAllBinary()
+	{
+		if (this.loadedAllBinary)
+			return;
+		
+		this.loadedAllBinary = true;
+		
+		for (String name : packageNodeCallback.listCompilationUnitNames(this, true))
+		{
+			load(name);
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void loadAll()
 	{
-		for (String name : packageNodeCallback.listCompilationUnitNames(this))
+		for (String name : packageNodeCallback.listCompilationUnitNames(this, false))
 		{
 			load(name);
 		}
