@@ -112,5 +112,12 @@ public abstract class AbstractAttribute<T extends AccessType<T>> implements Attr
 				return false;
 			return true;
 		}
+
+		@Override
+		public String toString()
+		{
+			return "AccessRecord [type=" + type + ", metaprogramId=" + metaprogramId + "]";
+		}
+		
 	}
 }

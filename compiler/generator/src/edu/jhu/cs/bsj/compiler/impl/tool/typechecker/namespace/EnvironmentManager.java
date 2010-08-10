@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
  * This class manages the calculation and storage of environments in the type checker. An environment represents
@@ -29,10 +30,11 @@ public class EnvironmentManager
 	 * @param toolkit The typechecker toolkit to use to build elements.
 	 */
 	public EnvironmentManager(PackageNode rootPackage, DiagnosticListener<BsjSourceLocation> listener,
+			CompilationUnitLoader loader,
 			TypecheckerToolkit toolkit)
 	{
 		super();
-		this.environmentCalculatingOperation = new EnvironmentCalculatingOperation(toolkit, listener);
+		this.environmentCalculatingOperation = new EnvironmentCalculatingOperation(toolkit, loader, listener);
 	}
 
 	/**

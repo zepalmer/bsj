@@ -2,15 +2,14 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
 import java.util.WeakHashMap;
 
+import javax.tools.Diagnostic;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.DiagnosticListener;
 
@@ -20,26 +19,26 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.AbstractCompilationUnitBuilderTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ExecuteMetaprogramTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.InjectionInfo;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.LoadBinaryCompilationUnitTask;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.InstantiateMetaAnnotationObjectTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.SanityCheckTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.TaskPriority;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
- * This class represents the data structure which manages metacompilation. It tracks the progress which has been made on
- * a given compilation unit and, indirectly, any data specifically associated with it (such as its AST). The manager
- * maintains work in the form of a priority queue and is not finished until all of the work units in the priority queue
- * have been exhausted. Once a compilation unit manager reports that its work is complete, all sources have been
- * meta-compiled; the resulting generated source must still be compiled to finish BSJ compilation.
+ * This class represents the data structure which manages metacompilation from post-parsing up to and including source
+ * generation. It tracks the progress which has been made on a given compilation unit and, indirectly, any data
+ * specifically associated with it (such as its AST). The manager maintains work in the form of a priority queue and is
+ * not finished until all of the work units in the priority queue have been exhausted. Once a compilation unit manager
+ * reports that its work is complete, all compilation units have been meta-compiled; the resulting generated source must
+ * still be compiled as Java source to finish BSJ compilation.
  * 
  * @author Zachary Palmer
  */
@@ -48,10 +47,6 @@ public class MetacompilationManager implements MetacompilationContext
 	/** A logger for this metacompilation manager. */
 	private final Logger LOGGER = Logger.getLogger(this.getClass());
 
-	/**
-	 * The collection of binary names we have been asked to compile. This is used to prevent duplicate loads.
-	 */
-	private Set<String> observedBinaryNames;
 	/**
 	 * Represents the work queue. Work to be performed is enqueued here. The queue is prioritized to allow preemption of
 	 * more basic tasks (such as when the type checker or metacompiler brings in another source unit for parsing).
@@ -65,6 +60,10 @@ public class MetacompilationManager implements MetacompilationContext
 	 * The node manager to use.
 	 */
 	private BsjNodeManager nodeManager;
+	/**
+	 * The package node listener we are using to notice new compilation units.
+	 */
+	private PackageNodeListener packageNodeListener;
 	/**
 	 * The listener to which we will report events.
 	 */
@@ -93,26 +92,30 @@ public class MetacompilationManager implements MetacompilationContext
 	 * 
 	 * @param toolkit The toolkit to use.
 	 * @param nodeManager The node manager to use.
+	 * @param rootPackage The root package to use.
 	 * @param diagnosticListener The listener to which diagnostics will be reported. Must not be <code>null</code>.
 	 * @param random A random number generator used to select the order in which operations are performed. If
 	 *            <code>null</code>, operations are performed in an arbitrary order. This generator can be used to
-	 *            produce repeatable compilation passes over the same source code.  This is intended for debugging
+	 *            produce repeatable compilation passes over the same source code. This is intended for debugging
 	 *            purposes and reduces the performance of the metacompiler somewhat.
 	 */
-	public MetacompilationManager(BsjToolkit toolkit, BsjNodeManager nodeManager,
+	public MetacompilationManager(BsjToolkit toolkit, BsjNodeManager nodeManager, PackageNode rootPackage,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener, Random random)
 	{
-		this.observedBinaryNames = new HashSet<String>();
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
 		this.dependencyManager = new DependencyManager(random);
 
 		this.toolkit = toolkit;
 		this.nodeManager = nodeManager;
+		this.packageNodeListener = new PackageNodeListener();
 		this.diagnosticListener = new CountingDiagnosticProxyListener<BsjSourceLocation>(diagnosticListener);
 
-		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
+		this.rootPackage = rootPackage;
 		this.serializedFiles = new ArrayList<BsjFileObject>();
 		this.observedAnchors = new WeakHashMap<MetaprogramAnchorNode<?>, Object>();
+
+		// Whenever a new compilation unit is parsed, ensure that it is handled correctly
+		this.nodeManager.getPackageNodeManager().addListener(packageNodeListener);
 
 		// Add some initial tasks to the task queue
 		this.priorityQueue.offer(new ExecuteMetaprogramTask());
@@ -131,157 +134,6 @@ public class MetacompilationManager implements MetacompilationContext
 			LOGGER.trace("Received compiler task " + task);
 		}
 		this.priorityQueue.offer(task);
-	}
-
-	/**
-	 * Adds a compilation unit target.
-	 * 
-	 * @param file The file to load.
-	 * @return <code>true</code> if the target of the specified name was added; <code>false</code> if it did not exist
-	 *         or was previously loaded.
-	 */
-	public boolean addCompilationUnit(BsjFileObject file)
-	{
-		String binaryName = file.inferBinaryName();
-		if (observedBinaryNames.contains(binaryName))
-		{
-			LOGGER.trace("Not loading " + file + ": already loaded.");
-			// Already have that target.
-			return false;
-		}
-
-		if (LOGGER.isTraceEnabled())
-		{
-			LOGGER.trace("Loading " + file);
-		}
-
-		observedBinaryNames.add(binaryName);
-
-		// pick a task based on whether or not the file appears to be a binary
-		AbstractCompilationUnitBuilderTask task;
-		InjectionInfo info = new InjectionInfo(getCurrentMetaprogram(), false);
-		if (file.getName().endsWith(".class"))
-		{
-			task = new LoadBinaryCompilationUnitTask(file, info);
-		} else
-		{
-			task = new ParseCompilationUnitTask(file, info);
-		}
-		this.registerTask(task);
-		return true;
-	}
-
-	/**
-	 * Adds a compilation unit target. This method does not schedule the file for parsing in the queue but rather
-	 * performs the immediate parsing and metaprogram extraction of the named compilation unit.
-	 * 
-	 * @param file The file to load.
-	 * @return The compilation unit which was loaded or <code>null</code> if the compilation unit does not exist.
-	 */
-	public CompilationUnitNode addCompilationUnitNow(BsjFileObject file)
-	{
-		String binaryName = file.inferBinaryName();
-		if (observedBinaryNames.contains(binaryName))
-		{
-			// Already have that target. Let's go find it.
-			LOGGER.trace("Not loading " + file + " immediately: already loaded.");
-			String compilationUnitName;
-			PackageNode packageNode = rootPackage;
-			if (binaryName.indexOf('.') != -1)
-			{
-				String packageName;
-				packageName = binaryName.substring(0, binaryName.lastIndexOf('.'));
-				compilationUnitName = binaryName.substring(binaryName.lastIndexOf('.') + 1);
-				packageNode = packageNode.getSubpackage(packageName);
-			} else
-			{
-				compilationUnitName = binaryName;
-			}
-			return packageNode.getCompilationUnit(compilationUnitName);
-		}
-
-		if (LOGGER.isTraceEnabled())
-		{
-			LOGGER.trace("Loading " + file + " immediately.");
-		}
-
-		observedBinaryNames.add(binaryName);
-
-		// Rather than blindly executing tasks, let's proxy out task addition so we can actively execute the ones we
-		// want
-		final PriorityQueue<BsjCompilerTask> queue = new PriorityQueue<BsjCompilerTask>();
-		MetacompilationContext contextProxy = new MetacompilationContextProxy(this)
-		{
-			@Override
-			public void registerTask(BsjCompilerTask task)
-			{
-				if (task.getPriority().getPriority() >= TaskPriority.EXECUTE.getPriority())
-				{
-					queue.offer(task);
-				} else
-				{
-					MetacompilationManager.this.registerTask(task);
-				}
-			}
-		};
-
-		AbstractCompilationUnitBuilderTask task;
-		InjectionInfo info = new InjectionInfo(getCurrentMetaprogram(), false);
-		if (file.getSimpleName().endsWith(".class"))
-		{
-			task = new LoadBinaryCompilationUnitTask(file, info);
-		} else
-		{
-			task = new ParseCompilationUnitTask(file, info);
-		}
-		queue.offer(task);
-
-		while (queue.size() > 0)
-		{
-			if (LOGGER.isTraceEnabled())
-			{
-				LOGGER.trace("Executing task " + task + " for immediate load of " + file);
-			}
-			try
-			{
-				queue.poll().execute(contextProxy);
-			} catch (IOException e)
-			{
-				// TODO: now what?
-				throw new IllegalStateException(e);
-			}
-		}
-
-		String compilationUnitName;
-		PackageNode packageNode = rootPackage;
-		if (binaryName.indexOf('.') != -1)
-		{
-			String packageName;
-			packageName = binaryName.substring(0, binaryName.lastIndexOf('.'));
-			compilationUnitName = binaryName.substring(binaryName.lastIndexOf('.') + 1);
-			packageNode = packageNode.getSubpackageByQualifiedName(packageName);
-		} else
-		{
-			compilationUnitName = binaryName;
-		}
-		return packageNode.load(compilationUnitName);
-	}
-
-	/**
-	 * Retrieves the profile of the currently running metaprogram.
-	 * 
-	 * @return The profile of the currently running metaprogram or <code>null</code> if no such metaprogram exists.
-	 */
-	private MetaprogramProfile<?> getCurrentMetaprogram()
-	{
-		Integer id = getNodeManager().getCurrentMetaprogramId();
-		if (id != null)
-		{
-			return getDependencyManager().getMetaprogramProfileByID(id);
-		} else
-		{
-			return null;
-		}
 	}
 
 	/**
@@ -376,4 +228,100 @@ public class MetacompilationManager implements MetacompilationContext
 		this.observedAnchors.put(anchor, null);
 		return true;
 	}
+
+	/**
+	 * Detaches this metacompilation manager from any of the resources it is holding. This method should always be
+	 * called when the creator has finished with this manager, as it is necessary to prevent invasive listeners from
+	 * causing problems.
+	 */
+	public void cleanup()
+	{
+		this.nodeManager.getPackageNodeManager().removeListener(packageNodeListener);
+	}
+
+	/**
+	 * Used to observe changes to packages in order to properly generate meta-annotation objects, extract metaprograms,
+	 * and so on.
+	 */
+	private class PackageNodeListener implements edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeListener
+	{
+		@Override
+		public void compilationUnitAdded(PackageNode packageNode, CompilationUnitNode compilationUnitNode,
+				boolean purelyInjected)
+		{
+			if (!compilationUnitNode.isBinary())
+			{
+				// React to the addition of a new compilation unit by including it in the metacompilation process.
+				final PriorityQueue<BsjCompilerTask> queue = new PriorityQueue<BsjCompilerTask>();
+				MetacompilationContext contextProxy = new MetacompilationContextProxy(MetacompilationManager.this)
+				{
+					@Override
+					public void registerTask(BsjCompilerTask task)
+					{
+						if (task.getPriority().getPriority() >= TaskPriority.EXECUTE.getPriority())
+						{
+							queue.offer(task);
+						} else
+						{
+							MetacompilationManager.this.registerTask(task);
+						}
+					}
+				};
+
+				// TODO-SOON: how do we know if this is purely injected? argument probably won't work out...
+				queue.offer(new InstantiateMetaAnnotationObjectTask(compilationUnitNode, new InjectionInfo(
+						MetacompilationManager.this.getNodeManager().getCurrentMetaprogram(), purelyInjected)));
+
+				MetacompilationManager.this.getNodeManager().pushNull();
+				try
+				{
+					while (queue.size() > 0)
+					{
+						if (LOGGER.isTraceEnabled())
+						{
+							String name = (packageNode.getName() == null ? ""
+									: (packageNode.getFullyQualifiedName() + ".")) + compilationUnitNode.getName();
+							LOGGER.trace("Executing task " + queue.peek() + " for load of " + name);
+						}
+						try
+						{
+							queue.poll().execute(contextProxy);
+						} catch (IOException e)
+						{
+							// TODO: now what?
+							throw new NotImplementedYetException("Can't handle abrupt I/O error here yet", e);
+						}
+					}
+				} finally
+				{
+					MetacompilationManager.this.getNodeManager().popAll();
+				}
+			}
+		}
+
+		@Override
+		public void subpackageAdded(PackageNode packageNode, PackageNode subPackageNode)
+		{
+		}
+
+		@Override
+		public void compilationUnitInjected(CompilationUnitNode compilationUnitNode)
+		{
+			Integer id = MetacompilationManager.this.getNodeManager().getCurrentMetaprogramId();
+			if (id == null)
+			{
+				return;
+			}
+			MetacompilationManager.this.getDependencyManager().registerAsInjectorOf(
+					MetacompilationManager.this.getDependencyManager().getMetaprogramProfileByID(id),
+					compilationUnitNode, MetacompilationManager.this.getDiagnosticListener());
+		}
+
+		@Override
+		public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
+		{
+			MetacompilationManager.this.diagnosticListener.report(diagnostic);
+		}
+	}
+
 }

@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.metaprogram;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.user.BsjUserDiagnosticListener;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 /**
@@ -19,18 +20,20 @@ public class ContextImpl<T extends MetaprogramAnchorNode<?>> implements Context<
 	private BsjNodeFactory factory;
 	/** The diagnostic listener for this context. */
 	private BsjUserDiagnosticListener diagnosticListener;
+	/** The compilation unit loader for this context. */
+	private CompilationUnitLoader compilationUnitLoader;
 	
 	/**
 	 * Creates a standard context implementation.
-	 * @param anchor The anchor to use.
-	 * @param factory The node factory to use.
 	 */
-	public ContextImpl(T anchor, BsjNodeFactory factory, BsjUserDiagnosticListener diagnosticListener)
+	public ContextImpl(T anchor, BsjNodeFactory factory, BsjUserDiagnosticListener diagnosticListener,
+			CompilationUnitLoader compilationUnitLoader)
 	{
 		super();
 		this.anchor = anchor;
 		this.factory = factory;
 		this.diagnosticListener = diagnosticListener;
+		this.compilationUnitLoader = compilationUnitLoader;
 	}
 
 	@Override
@@ -50,4 +53,11 @@ public class ContextImpl<T extends MetaprogramAnchorNode<?>> implements Context<
 	{
 		return this.diagnosticListener;
 	}
+
+	@Override
+	public CompilationUnitLoader getCompilationUnitLoader()
+	{
+		return compilationUnitLoader;
+	}
+	
 }

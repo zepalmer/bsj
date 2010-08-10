@@ -54,6 +54,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.NodeMappingSerializationOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.SerializedNodeMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -149,7 +150,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 						// Then the base name is the fully qualified form of the specified base name
 						QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) dependsName;
 						NamedTypeDeclarationNode<?> namedTypeDeclarationNode = dependsName.executeOperation(
-								new TypeDeclarationLocatingNodeOperation(qualifiedNameNode.getBase()), null);
+								new TypeDeclarationLocatingNodeOperation(qualifiedNameNode.getBase(),
+										metacompilationContext.getToolkit().getCompilationUnitLoader(
+												metacompilationContext.getDiagnosticListener())), null);
 						if (namedTypeDeclarationNode == null)
 						{
 							// We could not find the type name contained in the dependency. This is an error; the
@@ -184,9 +187,11 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		anchor.setMetaprogram(null);
 
 		// now build the metaprogram itself
+		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoader(
+				this.metacompilationContext.getDiagnosticListener());
 		Context<ExplicitMetaprogramAnchorNode<R>> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>>(anchor,
 				factory, new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
-						this.anchor.getStartLocation()));
+						this.anchor.getStartLocation()), loader);
 
 		Metaprogram<ExplicitMetaprogramAnchorNode<R>> metaprogram = compileMetaprogram(metaprogramNode,
 				anchor.getClass().getName(), this.metacompilationContext.getDiagnosticListener());
@@ -269,8 +274,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 				factory.makeVariableListNode(factory.makeVariableNode(
 						factory.makeVariableModifiersNode(),
 						factory.makeParameterizedTypeNode(
-								factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-										factory.makeIdentifierNode("Context"))),
+								factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("Context"))),
 								factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)))),
 						factory.makeIdentifierNode("context"))), factory.makeVoidTypeNode(), null);
 

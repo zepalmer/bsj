@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.NameCategorizer;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NameNodeImpl extends NodeImpl implements NameNode
 {
@@ -183,8 +184,8 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     
     
     
-	public NameCategory getCategory()
+	public NameCategory getCategory(CompilationUnitLoader loader)
 	{
-		return NameCategorizer.SINGLETON.categorize(this);
+		return NameCategorizer.SINGLETON.categorize(this, loader);
 	}
 }

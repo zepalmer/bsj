@@ -124,9 +124,6 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         } else
         {
             sb.append(getIdentifier().getIdentifier());
-            sb.append('[');
-            sb.append(this.getCategory());
-            sb.append(']');
         }
         return sb.toString();
     }

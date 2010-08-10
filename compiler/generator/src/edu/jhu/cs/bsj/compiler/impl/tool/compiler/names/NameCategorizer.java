@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
  * This tool is used to categorize names according to &#xA7;6.5 of the JLS v3. It is mostly separated from the
@@ -26,7 +27,7 @@ public class NameCategorizer
 	 * @param node The node to categorize.
 	 * @return That node's category.
 	 */
-	public NameCategory categorize(NameNode name)
+	public NameCategory categorize(NameNode name, CompilationUnitLoader loader)
 	{
 		NameCategory category;
 
@@ -36,7 +37,7 @@ public class NameCategorizer
 			switch (category)
 			{
 				case PACKAGE_OR_TYPE:
-					category = PackageOrTypeNameCategorizer.SINGLETON.categorize(name);
+					category = PackageOrTypeNameCategorizer.SINGLETON.categorize(name, loader);
 					break;
 				case AMBIGUOUS:
 					category = AmbiguousNameCategorizer.SINGLETON.categorize(name);

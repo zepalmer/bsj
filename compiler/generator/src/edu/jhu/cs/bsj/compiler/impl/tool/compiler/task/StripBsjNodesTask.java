@@ -4,21 +4,24 @@ import java.io.IOException;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 
 /**
- * This task removes meta-annotation nodes from the provided compilation unit to prepare it for serialization.
+ * This task removes meta-annotation nodes and other BSJ-specific content from the provided compilation unit to prepare
+ * it for serialization.
+ * 
  * @author Zachary Palmer
  */
-public class StripMetaAnnotationsTask extends AbstractBsjCompilerTask
+public class StripBsjNodesTask extends AbstractBsjCompilerTask
 {
-	/** The compilation unit for which meta-annotations should be stripped. */
+	/** The compilation unit for which BSJ nodes should be stripped. */
 	private CompilationUnitNode node;
 
-	public StripMetaAnnotationsTask(CompilationUnitNode node)
+	public StripBsjNodesTask(CompilationUnitNode node)
 	{
-		super(TaskPriority.STRIP_METAANNOTATIONS);
+		super(TaskPriority.STRIP_BSJ_NODES);
 		this.node = node;
 	}
 
@@ -32,9 +35,15 @@ public class StripMetaAnnotationsTask extends AbstractBsjCompilerTask
 			{
 				node.clear();
 			}
+
+			@Override
+			public void visitMetaprogramImportListNodeStop(MetaprogramImportListNode node, boolean mostSpecific)
+			{
+				node.clear();
+			}
 		});
-		
+
 		// Now serialize
 		context.registerTask(new SourceSerializationTask(node));
-	}	
+	}
 }

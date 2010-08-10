@@ -263,9 +263,6 @@
                 } else
                 {
                     sb.append(getIdentifier().getIdentifier());
-                    sb.append('[');
-                    sb.append(this.getCategory());
-                    sb.append(']');
                 }
             ]]></toString>
         </type>
@@ -285,9 +282,6 @@
                 } else
                 {
                     sb.append(getIdentifier().getIdentifier());
-                    sb.append('[');
-                    sb.append(this.getCategory());
-                    sb.append(']');
                 }
             ]]></toString>
         </type>
@@ -2044,12 +2038,13 @@
 
         <type name="PackageNode" super="Node">
             <prop name="name" type="IdentifierNode" mode="readOnly" desc="the simple name of this package" />
-            <prop name="packageNodeCallback" type="PackageNodeCallback" mode="hide"
-                desc="the callback module for this package node" />
             <include file="PackageNode.java" />
             <doc><![CDATA[
                 A node representing a package.  This node has no syntactic equivalent; it is used to represent the
-                object program package hierarchy.  
+                object program package hierarchy.  In addition to the typical duties performed by an AST node, however,
+                a {@link PackageNode} provides mechanisms which allow source to be parsed from the underlying file
+                manager.  Compilation units which are loaded using the package node's {@link PackageNode#load(String)}
+                method will be read from disk, parsed, and stored as a child of the package node in the AST. 
             ]]></doc>
         </type>
 

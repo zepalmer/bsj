@@ -66,12 +66,14 @@ import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationClassTypeM
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationMissingPropertyDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationNonConstantPropertyValueDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MissingMetaAnnotationClassDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.metaannotation.MetaAnnotationProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.metaannotation.MetaAnnotationProfileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
@@ -92,25 +94,31 @@ public class MetaAnnotationObjectInstantiator
 	 * The toolkit for this module to use.
 	 */
 	private BsjToolkit toolkit;
-	
+
 	/**
-	 * Creates a new {@link MetaAnnotationObjectInstantiator}.  A toolkit must be provided before it is usable.
+	 * The package node manager to use for loaders.
 	 */
-	public MetaAnnotationObjectInstantiator()
-	{
-		this.toolkit = null;
-	}
-	
-	public void setToolkit(BsjToolkit toolkit)
-	{
-		this.toolkit = toolkit;
-	}
+	private PackageNodeManager packageNodeManager;
 
 	/**
 	 * The meta-annotation profile manager used to cache meta-annotation analysis.
 	 */
 	private MetaAnnotationProfileManager metaAnnotationProfileManager = new MetaAnnotationProfileManager();
-	
+
+	/**
+	 * Creates a new {@link MetaAnnotationObjectInstantiator}.
+	 */
+	public MetaAnnotationObjectInstantiator(BsjToolkit toolkit, PackageNodeManager packageNodeManager)
+	{
+		this.toolkit = toolkit;
+		this.packageNodeManager = packageNodeManager;
+	}
+
+	private CompilationUnitLoader getLoader(DiagnosticListener<BsjSourceLocation> listener)
+	{
+		return new CompilationUnitLoaderImpl(this.packageNodeManager, listener);
+	}
+
 	/**
 	 * Creates a new meta-annotation metaprogram anchor. This functionality is provided here to prevent nodes from
 	 * needing access to a factory. It is intended to be used by the {@link MetaAnnotationNode} when an anchor is
@@ -260,7 +268,7 @@ public class MetaAnnotationObjectInstantiator
 		Class<?> clazz = null;
 
 		// If the base name is a type, then an import might apply
-		if (baseNameNode.getCategory().equals(NameCategory.TYPE))
+		if (baseNameNode.getCategory(getLoader(listener)).equals(NameCategory.TYPE))
 		{
 			// Next, see if we can find a suitable class using a single type import
 			for (ImportNode importNode : imports)
@@ -270,7 +278,7 @@ public class MetaAnnotationObjectInstantiator
 					if (importNode.getName().getIdentifier().getIdentifier().equals(
 							baseNameNode.getIdentifier().getIdentifier()))
 					{
-						clazz = tryClass(importNode.getName(), nameNode, true);
+						clazz = tryClass(importNode.getName(), nameNode, true, listener);
 						if (clazz != null)
 							break;
 					}
@@ -284,7 +292,7 @@ public class MetaAnnotationObjectInstantiator
 				{
 					if (importNode instanceof ImportOnDemandNode || importNode instanceof StaticImportOnDemandNode)
 					{
-						clazz = tryClass(importNode.getName(), nameNode, false);
+						clazz = tryClass(importNode.getName(), nameNode, false, listener);
 						if (clazz != null)
 							break;
 					}
@@ -295,7 +303,7 @@ public class MetaAnnotationObjectInstantiator
 		if (clazz == null)
 		{
 			// The imports were no help. Does the class exist in the base package?
-			clazz = tryClass(null, node.getAnnotationType().getName(), false);
+			clazz = tryClass(null, node.getAnnotationType().getName(), false, listener);
 		}
 
 		BsjSourceLocation location = node.getStartLocation();
@@ -325,9 +333,11 @@ public class MetaAnnotationObjectInstantiator
 	 * @param importNode The import name to consider or <code>null</code> for no import name.
 	 * @param name The name of the type to consider.
 	 * @param ignoreLast <code>true</code> to ignore the last component of the import's name.
+	 * @param listener The listener to use to report any problems.
 	 * @return The class if it is found; <code>null</code> if it is not.
 	 */
-	private Class<?> tryClass(NameNode importName, NameNode name, boolean ignoreLast)
+	private Class<?> tryClass(NameNode importName, NameNode name, boolean ignoreLast,
+			DiagnosticListener<BsjSourceLocation> listener)
 	{
 		// Create a list of names to consider in order from right to left in the name string
 		List<NameNode> names;
@@ -361,7 +371,7 @@ public class MetaAnnotationObjectInstantiator
 			{
 				if (sb.length() > 0)
 				{
-					if (nameNode.getCategory() == NameCategory.TYPE)
+					if (nameNode.getCategory(getLoader(listener)) == NameCategory.TYPE)
 					{
 						sb.insert(0, '$');
 					} else

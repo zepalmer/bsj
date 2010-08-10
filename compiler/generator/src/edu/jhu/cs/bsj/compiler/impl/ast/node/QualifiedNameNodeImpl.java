@@ -198,9 +198,6 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         } else
         {
             sb.append(getIdentifier().getIdentifier());
-            sb.append('[');
-            sb.append(this.getCategory());
-            sb.append(']');
         }
         return sb.toString();
     }

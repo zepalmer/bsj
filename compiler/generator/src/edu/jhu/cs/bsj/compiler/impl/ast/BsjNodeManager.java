@@ -36,15 +36,18 @@ public class BsjNodeManager
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 
 	/**
-	 * The current dependency manager for metaprogram dependency analysis. If null, all metaprograms are assumed to
-	 * cooperate.
-	 */
-	private DependencyManager dependencyManager;
-	/**
 	 * The meta-annotation object instantiator used by this manager.
 	 */
-	private MetaAnnotationObjectInstantiator instantiator = new MetaAnnotationObjectInstantiator();
-
+	private MetaAnnotationObjectInstantiator instantiator;
+	/**
+	 * The callback mechanism used specifically for package node management.
+	 */
+	private PackageNodeManager packageNodeManager;
+	/**
+	 * The current dependency manager.
+	 */
+	private DependencyManager dependencyManager;
+	
 	/**
 	 * The stack of running metaprograms. This is specifically in place to permit code to temporarily suspend the
 	 * running metaprograms' effects (by pushing <code>null</code> onto the stack).
@@ -59,12 +62,16 @@ public class BsjNodeManager
 	/**
 	 * Creates a new node manager.
 	 */
-	public BsjNodeManager()
+	public BsjNodeManager(BsjToolkit toolkit)
 	{
 		this.metaprogramStack = new Stack<MetaprogramProfile<?>>();
 		this.permissionPolicyStack = new Stack<PermissionPolicyManager>();
+		this.packageNodeManager = new PackageNodeManager(toolkit, this);
+		this.instantiator = new MetaAnnotationObjectInstantiator(toolkit, this.packageNodeManager);
 	}
 
+	// *** Permission policy management methods
+	
 	public PermissionPolicyManager getPermissionPolicyManager()
 	{
 		if (this.permissionPolicyStack.isEmpty())
@@ -85,10 +92,12 @@ public class BsjNodeManager
 	{
 		this.permissionPolicyStack.pop();
 	}
-
+	
+	// *** Dependency management methods
+	
 	public DependencyManager getDependencyManager()
 	{
-		return dependencyManager;
+		return this.dependencyManager;
 	}
 
 	public void setDependencyManager(DependencyManager dependencyManager)
@@ -96,6 +105,8 @@ public class BsjNodeManager
 		this.dependencyManager = dependencyManager;
 	}
 
+	// *** Active metaprogram tracking methods
+	
 	public MetaprogramProfile<?> getCurrentMetaprogram()
 	{
 		if (metaprogramStack.isEmpty())
@@ -121,6 +132,35 @@ public class BsjNodeManager
 	{
 		MetaprogramProfile<?> metaprogram = getCurrentMetaprogram();
 		return metaprogram == null ? null : metaprogram.getMetaprogram().getID();
+	}
+	
+	// *** Submodule access methods
+	
+	public PackageNodeManager getPackageNodeManager()
+	{
+		return packageNodeManager;
+	}
+	
+	// *** Other methods
+	
+	/**
+	 * Pushes the state of all metaprogram value stacks with a <code>null</code> value.  This is used internally by the compiler to
+	 * perform privileged, unrecorded operations while being called on behalf of a metaprogram.
+	 */
+	public void pushNull()
+	{
+		this.pushCurrentMetaprogram(null);
+		this.pushPermissionPolicyManager(null);
+	}
+	
+	/**
+	 * Pops the state of all metaprogram value stacks.  This is used internally by the compiler to pop values associated
+	 * with an execution context (such as that created by {@link #pushNull()}.
+	 */
+	public void popAll()
+	{
+		this.popCurrentMetaprogram();
+		this.popPermissionPolicyManager();
 	}
 
 	/**
@@ -197,7 +237,7 @@ public class BsjNodeManager
 	 */
 	public MetaprogramAnchorNode<?> getAnchorByID(int id)
 	{
-		MetaprogramProfile<?> profile = this.dependencyManager.getMetaprogramProfileByID(id);
+		MetaprogramProfile<?> profile = this.getDependencyManager().getMetaprogramProfileByID(id);
 		return profile == null ? null : profile.getAnchor();
 	}
 
@@ -209,10 +249,10 @@ public class BsjNodeManager
 	 */
 	public boolean hasCooperation(int id)
 	{
-		if (this.dependencyManager == null || getCurrentMetaprogramId() == null)
+		if (this.getDependencyManager() == null || getCurrentMetaprogramId() == null)
 			return true;
 
-		if (this.dependencyManager.checkCooperation(getCurrentMetaprogramId(), id))
+		if (this.getDependencyManager().checkCooperation(getCurrentMetaprogramId(), id))
 			return true;
 
 		return false;
@@ -236,8 +276,8 @@ public class BsjNodeManager
 						+ " over node " + node.getUid() + " and failed.");
 			}
 			throw new MetaprogramAttributeConflictExceptionImpl(
-					this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
-					this.dependencyManager.getMetaprogramProfileByID(getCurrentMetaprogramId()).getAnchor(), node);
+					this.getDependencyManager().getMetaprogramProfileByID(id).getAnchor(),
+					this.getDependencyManager().getMetaprogramProfileByID(getCurrentMetaprogramId()).getAnchor(), node);
 		}
 	}
 
@@ -269,15 +309,5 @@ public class BsjNodeManager
 			DiagnosticListener<BsjSourceLocation> listener) throws MetaAnnotationInstantiationFailureException
 	{
 		return this.instantiator.instantiateMetaAnnotationObject(node, listener);
-	}
-
-	/**
-	 * Sets the toolkit that this node manager should use.
-	 * 
-	 * @param toolkit The toolkit to use.
-	 */
-	public void setToolkit(BsjToolkit toolkit)
-	{
-		this.instantiator.setToolkit(toolkit);
 	}
 }

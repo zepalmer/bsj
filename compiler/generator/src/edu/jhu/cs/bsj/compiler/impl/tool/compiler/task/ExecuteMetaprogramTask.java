@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import javax.tools.Diagnostic.Kind;
 
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
@@ -46,6 +47,7 @@ import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.compiler.tool.data.BsjThreadLocalData;
 
 /**
  * This metacompilation task attempts to execute a single metaprogram. If a metaprogram is available for execution, it
@@ -93,7 +95,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			CompilationUnitNode node = it.next();
 			if (!node.isBinary())
 			{
-				context.registerTask(new StripMetaAnnotationsTask(node));
+				context.registerTask(new StripBsjNodesTask(node));
 			}
 		}
 	}
@@ -122,6 +124,8 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		context.getNodeManager().pushPermissionPolicyManager(policyManager);
 		context.getNodeManager().pushCurrentMetaprogram(profile);
 		context.getNodeManager().setDependencyManager(context.getDependencyManager());
+		BsjServiceRegistry.getThreadLocalData().push(BsjThreadLocalData.Element.CONTEXT, profile.getContext());
+		BsjServiceRegistry.getThreadLocalData().push(BsjThreadLocalData.Element.NODE_FACTORY, profile.getContext().getFactory());
 
 		// Run the metaprogram
 		BsjDiagnostic diagnostic = doExecute(profile);
@@ -129,7 +133,8 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		// Release the managers
 		context.getNodeManager().popPermissionPolicyManager();
 		context.getNodeManager().popCurrentMetaprogram();
-		context.getNodeManager().setDependencyManager(null);
+		BsjServiceRegistry.getThreadLocalData().pop(BsjThreadLocalData.Element.CONTEXT);
+		BsjServiceRegistry.getThreadLocalData().pop(BsjThreadLocalData.Element.NODE_FACTORY);
 
 		// Respond to error as necessary
 		if (diagnostic != null)

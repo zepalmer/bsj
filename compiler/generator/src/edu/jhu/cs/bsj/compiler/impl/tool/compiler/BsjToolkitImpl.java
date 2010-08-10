@@ -1,12 +1,16 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
+import javax.tools.DiagnosticListener;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
@@ -29,23 +33,19 @@ public class BsjToolkitImpl implements BsjToolkit
 	/** This toolkit's serializer. */
 	private BsjSourceSerializer serializer;
 	
+	/** The node manager used to create compilation unit loaders. */
+	private BsjNodeManager nodeManager;
+	
 	public BsjToolkitImpl(BsjFileManager fileManager)
 	{
 		super();
 		this.fileManager = fileManager;
 		
-		PackageNodeCallback packageNodeCallback = new PackageNodeCallback();
-		packageNodeCallback.setFileManager(fileManager);
+		this.nodeManager = new BsjNodeManager(this);
 		
-		BsjNodeManager nodeManager = new BsjNodeManager();
-		nodeManager.setToolkit(this);
-		
-		this.factory = new BsjNodeFactoryImpl(packageNodeCallback, nodeManager);
-		
-		packageNodeCallback.setFactory(this.factory);
-		
+		this.factory = new BsjNodeFactoryImpl(nodeManager);
 		this.parser = new BsjParserImpl(this.factory);
-		this.compiler = new StandardBsjCompiler(this, packageNodeCallback, nodeManager);
+		this.compiler = new StandardBsjCompiler(this, nodeManager);
 		this.serializer = new BsjSourceSerializerImpl();
 	}
 
@@ -77,5 +77,11 @@ public class BsjToolkitImpl implements BsjToolkit
 	public BsjSourceSerializer getSerializer()
 	{
 		return this.serializer;
+	}
+	
+	@Override
+	public CompilationUnitLoader getCompilationUnitLoader(DiagnosticListener<BsjSourceLocation> listener)
+	{
+		return new CompilationUnitLoaderImpl(this.nodeManager.getPackageNodeManager(), listener);
 	}
 }

@@ -4,6 +4,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
  * A common supertype for all nodes representing a name.  In Java, a name is either a simple name (a single
@@ -41,9 +42,12 @@ public interface NameNode extends Node
     
 	/**
 	 * Retrieves the category for this node's name.
+	 * @param loader The compilation unit loader to use if compilation units need to be loaded when determining the
+	 * 				 name category.  This may be necessary if, for example, the meaning of the name is determined by
+	 * 				 an on-demand import.
 	 * @return The category into which this node falls.
 	 */
-	public NameCategory getCategory();
+	public NameCategory getCategory(CompilationUnitLoader loader);
 	
 	/**
 	 * Retrieves a qualified string representation of this name.  For simple names, this is merely the text of the name;

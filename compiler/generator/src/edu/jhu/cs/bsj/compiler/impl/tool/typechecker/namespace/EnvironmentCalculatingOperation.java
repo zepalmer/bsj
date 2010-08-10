@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
  * Calculates the environment for a specific node. The environment for a node contains all of the names which are in
@@ -34,13 +35,14 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 	 */
 	private DiagnosticListener<BsjSourceLocation> listener;
 
-	public EnvironmentCalculatingOperation(TypecheckerToolkit toolkit, DiagnosticListener<BsjSourceLocation> listener)
+	public EnvironmentCalculatingOperation(TypecheckerToolkit toolkit, CompilationUnitLoader loader,
+			DiagnosticListener<BsjSourceLocation> listener)
 	{
 		this.listener = listener;
 
 		this.environmentCache = new HashMap<Node, Environment>();
 		this.locator = new ParentEnvironmentNodeIdentifyingOperation();
-		this.modifier = new EnvironmentModifyingNodeOperation(toolkit, this.listener);
+		this.modifier = new EnvironmentModifyingNodeOperation(toolkit, loader, this.listener);
 	}
 
 	@Override
@@ -65,17 +67,17 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 			{
 				// Find the parent environment
 				Environment parentEnvironment = parentEnvironmentNode.executeOperation(this, null);
-				
+
 				// Apply changes to its environment as necessary
 				environment = parentEnvironmentNode.executeOperation(this.modifier, parentEnvironment, node);
-				
+
 				// Lock the environment to ensure that it does not change
 				environment.lock();
-				
+
 				// Reduce the environment if possible
 				environment = environment.reduce(parentEnvironment);
 			}
-			
+
 			// Store the result
 			this.environmentCache.put(node, environment);
 		}

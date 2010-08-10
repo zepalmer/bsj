@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
@@ -40,6 +41,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.compiler.tool.data.BsjThreadLocalData;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
 
@@ -327,8 +329,9 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		List<MethodDeclarationNode> returnValue = new ArrayList<MethodDeclarationNode>();
 
 		NameNode name = getNameFromType(callerType);
+		Context<?> context = BsjServiceRegistry.getThreadLocalData().get(BsjThreadLocalData.Element.CONTEXT);
 		NamedTypeDeclarationNode<?> type = new TypeDeclarationLocatingNodeOperation(
-				name).executeDefault(anchor, null);
+				name, context.getCompilationUnitLoader()).executeDefault(anchor, null);
 		TypeBodyNode<?> typeBody = type.getBody();
 		ListNode<? extends Node> listOfMembers = typeBody.getMembers();
 		for (Node node : listOfMembers.filter(new FilterByMethodName(methodName))) {

@@ -17,12 +17,13 @@ import javax.tools.ToolProvider;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.JavaToBsjAdaptiveDiagnosticListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -48,16 +49,16 @@ public class StandardBsjCompiler implements BsjCompiler
 	 */
 	private BsjToolkit toolkit;
 	/**
-	 * The package callback module used in package nodes.
-	 */
-	private PackageNodeCallback packageNodeCallback;
-	/**
 	 * The node manager which is managing nodes which are passed to this compiler.
 	 */
 	private BsjNodeManager manager;
 
-	/*       *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
+	/* *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
+	/**
+	 * The root package to use.
+	 */
+	private PackageNode rootPackage;
 	/**
 	 * Tracks the progress of compilation units through the compilation process. This data structure performs the
 	 * accounting of source files and source file-specific data structures.
@@ -68,14 +69,12 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * Creates a new standard BSJ compiler.
 	 * 
 	 * @param toolkit The toolkit used to satisfy resource requirements.
-	 * @param packageNodeCallback The {@link PackageNodeCallback} to manipulate when compilation starts.
 	 * @param manager The manager which is managing all of the nodes provided to this compiler.
 	 */
-	public StandardBsjCompiler(BsjToolkit toolkit, PackageNodeCallback packageNodeCallback, BsjNodeManager manager)
+	public StandardBsjCompiler(BsjToolkit toolkit, BsjNodeManager manager)
 	{
 		super();
 		this.toolkit = toolkit;
-		this.packageNodeCallback = packageNodeCallback;
 		this.manager = manager;
 	}
 
@@ -130,7 +129,19 @@ public class StandardBsjCompiler implements BsjCompiler
 			// Initialize the compilation unit manager with the names of the files it must compile
 			for (BsjFileObject file : units)
 			{
-				this.metacompilationManager.addCompilationUnit(file);
+				String binaryName = file.inferBinaryName();
+				String compilationUnitName = StringUtilities.getSuffix(binaryName, '.');
+				PackageNode packageNode;
+				if (binaryName.indexOf('.') == -1)
+				{
+					packageNode = this.rootPackage;
+				} else
+				{
+					String packageName = StringUtilities.removeSuffix(binaryName, '.');
+					packageNode = this.rootPackage.getSubpackage(packageName);
+				}
+				
+				this.manager.getPackageNodeManager().load(packageNode, compilationUnitName, listener);
 			}
 
 			// Allow the compilation unit manager to handle the work in the sense of a work queue
@@ -231,8 +242,10 @@ public class StandardBsjCompiler implements BsjCompiler
 		{
 			LOGGER.trace("Initializing compiler data structures.");
 		}
-		this.metacompilationManager = new MetacompilationManager(this.toolkit, this.manager, listener, random);
-		this.packageNodeCallback.setMetacompilationManager(metacompilationManager);
+		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
+		;
+		this.metacompilationManager = new MetacompilationManager(this.toolkit, this.manager, this.rootPackage,
+				listener, random);
 	}
 
 	/**
@@ -240,7 +253,8 @@ public class StandardBsjCompiler implements BsjCompiler
 	 */
 	private void terminate()
 	{
+		this.metacompilationManager.cleanup();
 		this.metacompilationManager = null;
-		this.packageNodeCallback.setMetacompilationManager(null);
+		this.rootPackage = null;
 	}
 }

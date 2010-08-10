@@ -7,9 +7,9 @@ import static edu.jhu.cs.bsj.compiler.ast.NameCategory.*;
 public abstract class NameNodeImpl
 {
 	/* GEN:start */
-	public NameCategory getCategory()
+	public NameCategory getCategory(CompilationUnitLoader loader)
 	{
-		return NameCategorizer.SINGLETON.categorize(this);
+		return NameCategorizer.SINGLETON.categorize(this, loader);
 	}
 	/* GEN:stop */
 }

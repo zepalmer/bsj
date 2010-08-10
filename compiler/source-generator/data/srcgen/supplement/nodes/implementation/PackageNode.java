@@ -24,28 +24,36 @@ public class PackageNodeImpl
 	/** The compilation units we are currently maintaining. */
 	private Map<String, CompilationUnitNode> compilationUnitNodes = new HashMap<String, CompilationUnitNode>();
 	/**
-	 * The compilation units which cannot be loaded.  Requests to load these compilation units will result in
-	 * <code>null</code> returns.  This set is used primarily to cache failed loads but is also used to prevent the
-	 * call to {@link #addPackageNode(PackageNode)} which is caused by {@link #load(String)} from causing a loop.
-	 */
-	private Set<String> unloadableCompilationUnitNames = new HashSet<String>();
-	/**
 	 * The attributes which are tracking access to compilation units.
 	 */
-	private Map<String, PackageCompilationUnitAttribute> compilationUnitAttributes =
-			new HashMap<String, PackageCompilationUnitAttribute>();
+	private Map<String, PackageCompilationUnitAttribute> compilationUnitAttributes = new HashMap<String, PackageCompilationUnitAttribute>();
 	/**
 	 * An attribute to track the iterator for this node.
 	 */
 	private NonConflictingReadWriteAttribute iteratorAttribute = new NonConflictingReadWriteAttribute(this);
-	
+
+	protected void fireCompilationUnitAdded(CompilationUnitNode compilationUnitNode, boolean purelyInjected)
+	{
+		this.getManager().getPackageNodeManager().fireCompilationUnitAdded(this, compilationUnitNode, purelyInjected);
+	}
+
+	protected void fireSubpackageAdded(PackageNode subPackageNode)
+	{
+		this.getManager().getPackageNodeManager().fireSubpackageAdded(this, subPackageNode);
+	}
+
+	protected void fireRegisterAsInjector(CompilationUnitNode compilationUnitNode)
+	{
+		this.getManager().getPackageNodeManager().fireRegisterAsInjector(compilationUnitNode);
+	}
+
 	/**
 	 * Lazily creates compilation unit attributes.
 	 */
-	private PackageCompilationUnitAttribute getPackageCompilationUnitAttribute(String compilationUnitName)
+	public PackageCompilationUnitAttribute getPackageCompilationUnitAttribute(String compilationUnitName)
 	{
 		PackageCompilationUnitAttribute ret = this.compilationUnitAttributes.get(compilationUnitName);
-		if (ret==null)
+		if (ret == null)
 		{
 			ret = new PackageCompilationUnitAttribute(this);
 			this.compilationUnitAttributes.put(compilationUnitName, ret);
@@ -53,6 +61,11 @@ public class PackageNodeImpl
 		return ret;
 	}
 	
+	public NonConflictingReadWriteAttribute getIteratorAttribute()
+	{
+		return this.iteratorAttribute;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -65,6 +78,7 @@ public class PackageNodeImpl
 		getManager().assertInsertable(this);
 		this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
 		setAsChild(packageNode, true);
+		fireSubpackageAdded(packageNode);
 	}
 
 	/**
@@ -75,10 +89,11 @@ public class PackageNodeImpl
 		PackageNode packageNode = this.packageNodes.get(name);
 		if (packageNode == null)
 		{
-			BsjNodeFactory factory = packageNodeCallback.getFactory();
+			BsjNodeFactory factory = this.getManager().getPackageNodeManager().getFactory();
 			packageNode = factory.makePackageNode(factory.makeIdentifierNode(name));
 			setAsChild(packageNode, true);
 			this.packageNodes.put(name, packageNode);
+			fireSubpackageAdded(packageNode);
 		}
 		return packageNode;
 	}
@@ -88,16 +103,22 @@ public class PackageNodeImpl
 	 */
 	public void addCompilationUnit(CompilationUnitNode compilationUnit)
 	{
+		this.addCompilationUnit(compilationUnit, true);
+	}
+	
+	public void addCompilationUnit(CompilationUnitNode compilationUnit, boolean purelyInjected)
+	{
 		getManager().assertInsertable(this);
 		getPackageCompilationUnitAttribute(compilationUnit.getName()).recordAccess(
 				PackageCompilationUnitAttribute.AccessType.WRITE);
 		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.WRITE);
-		if (this.load(compilationUnit.getName()) != null)
+		if (this.compilationUnitNodes.containsKey(compilationUnit.getName()))
 		{
 			throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
 		}
 		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);
 		setAsChild(compilationUnit, true);
+		fireCompilationUnitAdded(compilationUnit, purelyInjected);
 	}
 
 	/**
@@ -105,7 +126,6 @@ public class PackageNodeImpl
 	 */
 	public CompilationUnitNode getCompilationUnit(String name)
 	{
-		loadAllBinary();
 		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.READ);
 		return this.compilationUnitNodes.get(name);
 	}
@@ -115,7 +135,6 @@ public class PackageNodeImpl
 	 */
 	public Iterator<CompilationUnitNode> getCompilationUnitIterator()
 	{
-		loadAllBinary();
 		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.READ);
 		return Collections.unmodifiableMap(compilationUnitNodes).values().iterator();
 	}
@@ -136,6 +155,7 @@ public class PackageNodeImpl
 
 	/**
 	 * Used to allow visitation over the children of this package.
+	 * 
 	 * @return An iterator which iterates over the compilation units in this package and all of its subpackages.
 	 */
 	protected Iterator<? extends Node> getHiddenVisitorChildren()
@@ -270,81 +290,14 @@ public class PackageNodeImpl
 	 */
 	public boolean contains(String name)
 	{
-		loadAllBinary();
 		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.READ);
 		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.READ);
 		if (compilationUnitNodes.get(name) != null)
 		{
 			return true;
 		}
-		return this.packageNodeCallback.contains(this, name);
+		return this.getManager().getPackageNodeManager().contains(this, name);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public CompilationUnitNode load(String name)
-	{
-		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.LOAD);
-		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.WRITE);
-		
-		CompilationUnitNode compilationUnitNode;
-
-		if (compilationUnitNodes.get(name) != null)
-		{
-			compilationUnitNode = compilationUnitNodes.get(name);
-		} else if (unloadableCompilationUnitNames.contains(name))
-		{
-			return null;
-		} else
-		{
-			// Try to load the compilation unit.  Temporarily add it to the unloadable names set to prevent a loop.
-			unloadableCompilationUnitNames.add(name);
-			compilationUnitNode = this.packageNodeCallback.load(this, name);
-			unloadableCompilationUnitNames.remove(name);
-			
-			if (compilationUnitNode == null)
-			{
-				unloadableCompilationUnitNames.add(name);
-				return null;
-			}
-			this.compilationUnitNodes.put(compilationUnitNode.getName(), compilationUnitNode);
-		}
-
-		this.packageNodeCallback.registerAsInjectorOf(compilationUnitNode);
-
-		return compilationUnitNode;
-	}
-	
-	
-	private boolean loadedAllBinary = false;
-	/**
-	 * Loads just the binary files for this package.  This is necessary to ensure that introspectors looking at things
-	 * like java.io.* will be able to see the contents without inadvertently seeing their own sources that they hadn't
-	 * loaded (like some kind of garbage test file in java.io.*).
-	 */
-	private void loadAllBinary()
-	{
-		if (this.loadedAllBinary)
-			return;
-		
-		this.loadedAllBinary = true;
-		
-		for (String name : packageNodeCallback.listCompilationUnitNames(this, true))
-		{
-			load(name);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void loadAll()
-	{
-		for (String name : packageNodeCallback.listCompilationUnitNames(this, false))
-		{
-			load(name);
-		}
-	}
 	/* GEN:stop */
 }

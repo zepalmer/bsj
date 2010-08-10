@@ -33,6 +33,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 // TODO: this class does not properly handle the implicitly imported contents of java.lang
 
@@ -51,13 +52,19 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 	/** The categories of the name to find. */
 	private List<NameCategory> categories;
 	
+	/** The compilation unit loader to use if necessary. */
+	private CompilationUnitLoader loader;
+	
 	/**
 	 * Creates a new type declaration locating operation.  Uses the category of the provided name as guidance.
 	 * @param simpleName The name of the type to locate.
 	 * @param category The category to use; this overrides the actual category of the name.
+	 * @param loader The compilation unit loader to use as necessary.
 	 */
-	public TypeDeclarationLocatingNodeOperation(SimpleNameNode name, NameCategory category)
+	public TypeDeclarationLocatingNodeOperation(SimpleNameNode name, NameCategory category, CompilationUnitLoader loader)
 	{
+		this.loader = loader;
+		
 		if (name == null)
 			throw new IllegalArgumentException("Cannot handle null name");
 
@@ -72,9 +79,12 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 	 * Creates a new type declaration locating operation.
 	 * 
 	 * @param name The name of the type to locate.
+	 * @param loader The compilation unit loader to use as necessary.
 	 */
-	public TypeDeclarationLocatingNodeOperation(NameNode name)
+	public TypeDeclarationLocatingNodeOperation(NameNode name, CompilationUnitLoader loader)
 	{
+		this.loader = loader;
+		
 		if (name == null)
 			throw new IllegalArgumentException("Cannot handle null name");
 
@@ -88,13 +98,13 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 			{
 				SimpleNameNode simpleNameNode = (SimpleNameNode) node;
 				components.add(0, simpleNameNode.getIdentifier().getIdentifier());
-				categories.add(0, simpleNameNode.getCategory());
+				categories.add(0, simpleNameNode.getCategory(loader));
 				node = null;
 			} else
 			{
 				QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) node;
 				components.add(0, qualifiedNameNode.getIdentifier().getIdentifier());
-				categories.add(0, qualifiedNameNode.getCategory());
+				categories.add(0, qualifiedNameNode.getCategory(loader));
 				node = qualifiedNameNode.getBase();
 			}
 		}
@@ -148,10 +158,10 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 	}
 
 	// TODO: possibly generalize this function?
-	private static NamedTypeDeclarationNode<?> findTopLevelTypeDeclarationInPackage(PackageNode packageNode,
+	private NamedTypeDeclarationNode<?> findTopLevelTypeDeclarationInPackage(PackageNode packageNode,
 			List<String> components)
 	{
-		CompilationUnitNode compilationUnitNode = packageNode.load(components.get(0));
+		CompilationUnitNode compilationUnitNode = loader.load(packageNode, components.get(0));
 		if (compilationUnitNode != null)
 		{
 			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(compilationUnitNode,
@@ -234,7 +244,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 	 * meant to be used in conjunction with an {@link AncestryExecutingNodeOperation} to find a type declaration in
 	 * scope for the visited node. This ancestor operation assumes that the simple name is a type category name.
 	 */
-	private static class TopLevelTypeDeclarationLocatingAncestorOperation extends
+	private class TopLevelTypeDeclarationLocatingAncestorOperation extends
 			BsjDefaultNodeOperation<List<Node>, NamedTypeDeclarationNode<?>>
 	{
 		private String name;
@@ -368,7 +378,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 			// Handle default package classes
 			if (node.getName() == null)
 			{
-				CompilationUnitNode compilationUnitNode = node.load(name);
+				CompilationUnitNode compilationUnitNode = loader.load(node, name);
 				if (compilationUnitNode != null)
 				{
 					for (TypeDeclarationNode typeDecl : compilationUnitNode.getTypeDecls())
@@ -398,7 +408,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 			@Override
 			public NamedTypeDeclarationNode<?> executeImportOnDemandNode(ImportOnDemandNode node, Void p)
 			{
-				if (node.getName().getCategory() == NameCategory.PACKAGE)
+				if (node.getName().getCategory(loader) == NameCategory.PACKAGE)
 				{
 					// Find the mentioned package
 					PackageNode rootPackage = node.getRootPackage();
@@ -409,11 +419,11 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 					PackageNode packageNode = rootPackage.getSubpackageByQualifiedName(node.getName());
 					return findTopLevelTypeDeclarationInPackage(packageNode,
 							Arrays.asList(TopLevelTypeDeclarationLocatingAncestorOperation.this.name));
-				} else if (node.getName().getCategory() == NameCategory.TYPE)
+				} else if (node.getName().getCategory(loader) == NameCategory.TYPE)
 				{
 					// Find the mentioned type
 					NamedTypeDeclarationNode<?> result = node.executeOperation(
-							new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+							new TypeDeclarationLocatingNodeOperation(node.getName(), loader), null);
 					if (result == null)
 					{
 						return null;
@@ -425,7 +435,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 				{
 					// Hard to imagine how this is legal.
 					throw new IllegalArgumentException("Found ImportOnDemandNode with name " + node.getName()
-							+ " categorized as " + node.getName().getCategory() + " (must be PACKAGE or TYPE)");
+							+ " categorized as " + node.getName().getCategory(loader) + " (must be PACKAGE or TYPE)");
 				}
 			}
 
@@ -437,7 +447,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 				{
 					// Figure out to which type declaration this import node refers
 					NamedTypeDeclarationNode<?> result = node.executeOperation(
-							new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+							new TypeDeclarationLocatingNodeOperation(node.getName(), loader), null);
 					// Use that type
 					return result;
 				}
@@ -454,7 +464,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 				{
 					// Figure out to which type declaration this import node refers
 					NamedTypeDeclarationNode<?> result = node.executeOperation(
-							new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+							new TypeDeclarationLocatingNodeOperation(node.getName(), loader), null);
 					if (result == null)
 					{
 						return null;
@@ -472,7 +482,7 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 			{
 				// Find the mentioned type
 				NamedTypeDeclarationNode<?> result = node.executeOperation(new TypeDeclarationLocatingNodeOperation(
-						node.getName()), null);
+						node.getName(), loader), null);
 				if (result == null)
 				{
 					return null;

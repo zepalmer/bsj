@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramDependencyTypeNameResolutionDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingListener;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.UserMetaprogramWrapper;
 import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
@@ -16,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.Dependency;
 import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 public class PrepareMetaAnnotationMetaprorgamTask extends
@@ -49,11 +51,12 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 			return null;
 
 		// TODO: validate that the target names and dependency names are not bogus
-
+		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoader(
+				this.metacompilationContext.getDiagnosticListener());
 		Context<MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode>(
 				this.anchor, this.metacompilationContext.getToolkit().getNodeFactory(),
 				new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
-						this.anchor.getStartLocation()));
+						this.anchor.getStartLocation()), loader);
 
 		MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode>(
 				new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode>(this.metaprogramObject), this.anchor,
@@ -67,6 +70,7 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 		for (String depName : depNames)
 		{
 			String qualifiedDepName;
+			// TODO: clean this up; using raw strings is a bit dangerous
 			if (!depName.contains("."))
 			{
 				// Then the dependency name is simple. Qualify it with the enclosing type
@@ -76,7 +80,11 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 				// Then the name is at least partially qualified
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.anchor.executeOperation(
 						new TypeDeclarationLocatingNodeOperation(
-								this.metacompilationContext.getToolkit().getNodeFactory().parseNameNode(depName)), null);
+								this.metacompilationContext.getToolkit().getNodeFactory().parseNameNode(depName),
+								new CompilationUnitLoaderImpl(
+										metacompilationContext.getNodeManager().getPackageNodeManager(),
+										metacompilationContext.getDiagnosticListener()
+								)), null);
 				if (namedTypeDeclarationNode == null)
 				{
 					// We could not find the type name contained in the dependency. This is an error; the

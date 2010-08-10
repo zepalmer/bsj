@@ -138,9 +138,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	/** The stop location to use for new nodes. */
 	private BsjSourceLocation stopLocation;
 
-	/** The callback module to provide to package nodes. */
-	private PackageNodeCallback packageNodeCallback;
-
 	/** The node manager to provide to all nodes. */
 	private BsjNodeManager manager;
 	
@@ -155,9 +152,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	 * @param manager The node manager to provide to all nodes to allow them to obtain and report information to a
 	 *            global authority.
 	 */
-	public BsjNodeFactoryImpl(PackageNodeCallback packageNodeCallback, BsjNodeManager manager)
+	public BsjNodeFactoryImpl(BsjNodeManager manager)
 	{
-		this.packageNodeCallback = packageNodeCallback;
 		this.manager = manager;
 		this.binary = false;
 	}
@@ -5260,7 +5256,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public PackageNode makePackageNode(
             IdentifierNode name)
     {
-        PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation, manager, binary);
+        PackageNode ret = new PackageNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5274,7 +5270,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation, manager, binary);
+        PackageNode ret = new PackageNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

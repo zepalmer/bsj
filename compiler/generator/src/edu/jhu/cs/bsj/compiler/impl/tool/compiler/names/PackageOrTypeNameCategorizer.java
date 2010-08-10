@@ -25,6 +25,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.operations.AncestryExecutingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
  * This visitor categorizes <i>PackageOrTypeName</i>s as specified by &#xA7;6.5.3 of the JLS v3. To do so, it must have
@@ -40,13 +41,16 @@ public class PackageOrTypeNameCategorizer
 
 	/** The logger for this object. */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
-	
+
 	/**
 	 * This method categorizes names which fall into {@link NameCategory#PACKAGE_OR_TYPE} according to the rules of
 	 * &#xA7;6.5.1.
+	 * 
+	 * @param name The name to categorize.
+	 * @param loader The {@link CompilationUnitLoader} to use if loading becomes necessary.
 	 * @return An indication of whether the name is a package name or a type name.
 	 */
-	public NameCategory categorize(NameNode name)
+	public NameCategory categorize(NameNode name, CompilationUnitLoader loader)
 	{
 		if (LOGGER.isTraceEnabled())
 		{
@@ -59,7 +63,7 @@ public class PackageOrTypeNameCategorizer
 			// If a type is in scope which has the same name as this node, the node refers to a type. Otherwise, this
 			// node refers to a package.
 			TypeDeclarationNode typeDeclarationNode = name.executeOperation(new TypeDeclarationLocatingNodeOperation(
-					(SimpleNameNode)name, NameCategory.TYPE), null);
+					(SimpleNameNode) name, NameCategory.TYPE, loader), null);
 			if (typeDeclarationNode == null)
 			{
 				category = NameCategory.PACKAGE;
@@ -72,7 +76,7 @@ public class PackageOrTypeNameCategorizer
 			// If the base name of this node refers to a package or type containing a member type matching the name of
 			// this node's identifier, then this node refers to a type. Otherwise, it refers to a package.
 			QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) name;
-			if (qualifiedNameNode.getBase().getCategory() == NameCategory.PACKAGE)
+			if (qualifiedNameNode.getBase().getCategory(loader) == NameCategory.PACKAGE)
 			{
 				category = NameCategory.PACKAGE;
 				PackageNode rootPackage = name.getRootPackage();
@@ -87,10 +91,10 @@ public class PackageOrTypeNameCategorizer
 						}
 					}
 				}
-			} else if (qualifiedNameNode.getBase().getCategory() == NameCategory.TYPE)
+			} else if (qualifiedNameNode.getBase().getCategory(loader) == NameCategory.TYPE)
 			{
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = name.executeOperation(
-						new TypeDeclarationLocatingNodeOperation(name), null);
+						new TypeDeclarationLocatingNodeOperation(name, loader), null);
 				if (namedTypeDeclarationNode == null)
 				{
 					// TODO: this means that this is a type declaration which should contain another type declaration
@@ -109,7 +113,8 @@ public class PackageOrTypeNameCategorizer
 			} else
 			{
 				throw new IllegalStateException(
-						"Typing to disambiguate PACKAGE_OR_TYPE category for name with base of " + name.getCategory());
+						"Typing to disambiguate PACKAGE_OR_TYPE category for name with base of "
+								+ name.getCategory(loader));
 			}
 		} else
 		{
@@ -137,6 +142,8 @@ public class PackageOrTypeNameCategorizer
 		/** The name for which we are looking. */
 		private String name;
 
+		private CompilationUnitLoader loader;
+
 		/**
 		 * A flag which is flipped once we pass a type declaration. This is used to ensure that imports only influence
 		 * the decision if the node in question is inside of a type declaration (as that is the only scope that imports
@@ -147,10 +154,11 @@ public class PackageOrTypeNameCategorizer
 		/**
 		 * Creates a new operation for checking whether or not a node is in a particular type scope.
 		 */
-		public TypeScopeCheckingOperation(String name)
+		public TypeScopeCheckingOperation(String name, CompilationUnitLoader loader)
 		{
 			super();
 			this.name = name;
+			this.loader = loader;
 			this.nodeContainedWithinTypeDeclaration = false;
 		}
 
@@ -206,7 +214,7 @@ public class PackageOrTypeNameCategorizer
 		{
 			while (nameNode != null)
 			{
-				if (nameNode.getCategory() == NameCategory.PACKAGE || nameNode.getCategory() == NameCategory.TYPE)
+				if (nameNode.getCategory(loader) == NameCategory.PACKAGE || nameNode.getCategory(loader) == NameCategory.TYPE)
 				{
 					if (nameNode instanceof QualifiedNameNode)
 					{
@@ -280,7 +288,7 @@ public class PackageOrTypeNameCategorizer
 				if (!node.getName().getIdentifier().getIdentifier().equals(name))
 					return null;
 
-				return node.executeOperation(new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+				return node.executeOperation(new TypeDeclarationLocatingNodeOperation(node.getName(), loader), null);
 			}
 
 			@Override
@@ -290,7 +298,7 @@ public class PackageOrTypeNameCategorizer
 					return null;
 
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = node.executeOperation(
-						new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+						new TypeDeclarationLocatingNodeOperation(node.getName(), loader), null);
 				if (namedTypeDeclarationNode == null)
 				{
 					return null;
@@ -317,7 +325,7 @@ public class PackageOrTypeNameCategorizer
 			@Override
 			public NamedTypeDeclarationNode<?> executeImportOnDemandNode(ImportOnDemandNode node, Void p)
 			{
-				if (node.getName().getCategory() == NameCategory.PACKAGE)
+				if (node.getName().getCategory(loader) == NameCategory.PACKAGE)
 				{
 					PackageNode rootPackage = node.getRootPackage();
 					if (rootPackage != null)
@@ -332,7 +340,7 @@ public class PackageOrTypeNameCategorizer
 				} else
 				{
 					NamedTypeDeclarationNode<?> namedTypeDeclarationNode = node.executeOperation(
-							new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+							new TypeDeclarationLocatingNodeOperation(node.getName(), loader), null);
 					if (namedTypeDeclarationNode == null)
 					{
 						return null;
@@ -346,7 +354,7 @@ public class PackageOrTypeNameCategorizer
 			public NamedTypeDeclarationNode<?> executeStaticImportOnDemandNode(StaticImportOnDemandNode node, Void p)
 			{
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = node.executeOperation(
-						new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+						new TypeDeclarationLocatingNodeOperation(node.getName(), loader), null);
 				if (namedTypeDeclarationNode == null)
 				{
 					return null;

@@ -19,15 +19,20 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNode
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 public class TypecheckerToolkit
 {
 	private TypecheckerModelManager manager;
+	private CompilationUnitLoader loader;
 
-	public TypecheckerToolkit(TypecheckerModelManager manager)
+	public TypecheckerToolkit(TypecheckerModelManager manager, CompilationUnitLoader loader)
 	{
 		super();
 		this.manager = manager;
+		// TODO: what does it mean if we need to load compilation units during type-checking?  what if they contain
+		// metaprograms?
+		this.loader = loader;
 	}
 
 	protected TypecheckerModelManager getManager()
@@ -106,12 +111,12 @@ public class TypecheckerToolkit
 	 */
 	private NameNode extractTypePortionOfName(NameNode name, List<String> typeNames)
 	{
-		while (name != null && name.getCategory() != NameCategory.PACKAGE)
+		while (name != null && name.getCategory(loader) != NameCategory.PACKAGE)
 		{
-			if (name.getCategory() != NameCategory.TYPE)
+			if (name.getCategory(loader) != NameCategory.TYPE)
 			{
 				throw new IllegalStateException("Name categorizer gave non-package, non-type category to type name: "
-						+ name.getNameString() + " has category " + name.getCategory());
+						+ name.getNameString() + " has category " + name.getCategory(loader));
 			}
 			typeNames.add(name.getIdentifier().getIdentifier());
 			if (name instanceof SimpleNameNode)

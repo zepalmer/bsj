@@ -1,7 +1,11 @@
 package edu.jhu.cs.bsj.compiler.tool;
 
+import javax.tools.DiagnosticListener;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 
@@ -40,4 +44,10 @@ public interface BsjToolkit
 	 * Retrieves this toolkit's source serializer.
 	 */
 	public BsjSourceSerializer getSerializer();
+	
+	/**
+	 * Retrieves a {@link CompilationUnitLoader} which can be used to read compilation units from the file manager.
+	 * @param listener The listener to use to report diagnostics.
+	 */
+	public CompilationUnitLoader getCompilationUnitLoader(DiagnosticListener<BsjSourceLocation> listener);
 }

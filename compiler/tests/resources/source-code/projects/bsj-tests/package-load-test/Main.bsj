@@ -1,6 +1,6 @@
 [:
 	#target a;
-	context.getAnchor().getRootPackage().load("Loaded");
+	context.getCompilationUnitLoader().load(context.getAnchor().getRootPackage(), "Loaded");
 :]
 
 public class Main

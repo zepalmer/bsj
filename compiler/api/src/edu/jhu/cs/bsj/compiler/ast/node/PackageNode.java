@@ -9,7 +9,10 @@ import edu.jhu.cs.bsj.compiler.ast.exception.DuplicatePackageMemberException;
 
 /**
  * A node representing a package.  This node has no syntactic equivalent; it is used to represent the
- * object program package hierarchy.  
+ * object program package hierarchy.  In addition to the typical duties performed by an AST node, however,
+ * a {@link PackageNode} provides mechanisms which allow source to be parsed from the underlying file
+ * manager.  Compilation units which are loaded using the package node's {@link PackageNode#load(String)}
+ * method will be read from disk, parsed, and stored as a child of the package node in the AST. 
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface PackageNode extends Node
@@ -126,21 +129,4 @@ public interface PackageNode extends Node
 	 */
 	public boolean contains(String name);
 
-	/**
-	 * Starts to load the specified compilation unit in this package. A compilation unit must be loaded before it is
-	 * visible in the package hierarchy. Typically, compilation units are loaded by explicit mention when compilation is
-	 * started or by dependency inference (such as when a metaprorgam mentions a dependency on a target which is in a
-	 * different file or when a type reference is found in an on-demand import). It is possible for metaprograms to
-	 * explicitly load compilation units which are not possible to infer, such as when the name of a compilation unit is
-	 * mentioned in metaprogram code but no object program code causes a direct reference.
-	 * 
-	 * @param name The simple name of the compilation unit to load. No file extension should be provided.
-	 * @return The loaded compilation unit.
-	 */
-	public CompilationUnitNode load(String name);
-
-	/**
-	 * Performs the load of every compilation unit available in this package.
-	 */
-	public void loadAll();
 }

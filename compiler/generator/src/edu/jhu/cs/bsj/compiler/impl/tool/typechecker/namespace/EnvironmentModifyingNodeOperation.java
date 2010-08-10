@@ -67,6 +67,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
  * Applies the environment changes that a parent environment node has on its environment child. This operation operates
@@ -83,13 +84,17 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 {
 	/** The typechecker toolkit to use. */
 	private TypecheckerToolkit toolkit;
+	/** The compilation unit loader to use. */
+	private CompilationUnitLoader loader;
 	/** The diagnostic listener to use. */
 	private DiagnosticListener<BsjSourceLocation> listener;
 
-	public EnvironmentModifyingNodeOperation(TypecheckerToolkit toolkit, DiagnosticListener<BsjSourceLocation> listener)
+	public EnvironmentModifyingNodeOperation(TypecheckerToolkit toolkit, CompilationUnitLoader loader,
+			DiagnosticListener<BsjSourceLocation> listener)
 	{
 		super();
 		this.toolkit = toolkit;
+		this.loader = loader;
 		this.listener = listener;
 	}
 
@@ -1301,7 +1306,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		{
 			if (importNode instanceof ImportOnDemandNode)
 			{
-				switch (importNode.getName().getCategory())
+				switch (importNode.getName().getCategory(loader))
 				{
 					case PACKAGE:
 						PackageNode packageNode = importNode.getRootPackage().getSubpackageByQualifiedName(
@@ -1331,7 +1336,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 						throw new IllegalStateException(
 								"Name categorizer gave non-package, non-type category to import name: "
 										+ importNode.getName().getNameString() + " has category "
-										+ importNode.getName().getCategory());
+										+ importNode.getName().getCategory(loader));
 				}
 			}
 		}
@@ -1345,7 +1350,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		{
 			if (importNode instanceof StaticImportOnDemandNode)
 			{
-				if (importNode.getName().getCategory() != NameCategory.TYPE)
+				if (importNode.getName().getCategory(loader) != NameCategory.TYPE)
 				{
 					// On-demand static imports can only name types.
 					// TODO: report an appropriate diagnostic
@@ -1395,7 +1400,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		{
 			if (importNode instanceof SingleStaticImportNode)
 			{
-				if (importNode.getName().getCategory() != NameCategory.TYPE)
+				if (importNode.getName().getCategory(loader) != NameCategory.TYPE)
 				{
 					// On-demand static imports can only name types.
 					// TODO: report an appropriate diagnostic

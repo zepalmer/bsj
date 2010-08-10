@@ -34,8 +34,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 		
 		// Suspend policy management and conflict detection for a moment to allow the compilation unit to be created
 		// This might be necessary if we are within the scope of a metaprogram (such as with a call to PackageNode.load)
-		context.getNodeManager().pushPermissionPolicyManager(null);
-		context.getNodeManager().pushCurrentMetaprogram(null);
+		context.getNodeManager().pushNull();
 		
 		// Parse the file into a compilation unit
 		CompilationUnitNode node = createCompilationUnit(context, this.file);
@@ -53,8 +52,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 		packageNode.addCompilationUnit(node);
 
 		// Reinstate policy management and conflict detection
-		context.getNodeManager().popPermissionPolicyManager();
-		context.getNodeManager().popCurrentMetaprogram();
+		context.getNodeManager().popAll();
 
 		// Enqueue the compilation unit for name categorization
 		context.registerTask(new InstantiateMetaAnnotationObjectTask(node, this.info));
