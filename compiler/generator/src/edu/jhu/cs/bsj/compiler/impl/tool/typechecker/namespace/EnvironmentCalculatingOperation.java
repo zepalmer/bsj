@@ -59,9 +59,8 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 			if (parentEnvironmentNode == null)
 			{
 				// There is no parent environment; start a fresh one
-				environment = new Environment(NamespaceMap.makeType(null, this.listener, false),
-						NamespaceMap.makeMethod(null, this.listener, false), NamespaceMap.makeVariable(null,
-								this.listener, false));
+				environment = new Environment(new TypeNamespaceMap(null, this.listener, false), new MethodNamespaceMap(
+						null, this.listener, false), new VariableNamespaceMap(null, this.listener, false));
 				environment.lock();
 			} else
 			{

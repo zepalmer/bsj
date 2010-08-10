@@ -123,9 +123,9 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeAnnotationBodyNode(AnnotationBodyNode node, Environment env, Node child)
 	{
 		// *** Declare variables for symbol table
-		NamespaceMap<BsjTypeElement> typeNamespaceMap = env.getTypeNamespaceMap();
-		NamespaceMap<BsjExecutableElement> methodNamespaceMap = env.getMethodNamespaceMap();
-		NamespaceMap<BsjVariableElement> variableNamespaceMap = env.getVariableNamespaceMap();
+		TypeNamespaceMap typeNamespaceMap = env.getTypeNamespaceMap();
+		MethodNamespaceMap methodNamespaceMap = env.getMethodNamespaceMap();
+		VariableNamespaceMap variableNamespaceMap = env.getVariableNamespaceMap();
 
 		// *** Create a new scope for inherited member elements
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
@@ -363,9 +363,9 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeClassBodyNode(ClassBodyNode node, Environment env, Node child)
 	{
-		NamespaceMap<BsjTypeElement> typeNamespaceMap = env.getTypeNamespaceMap();
-		NamespaceMap<BsjExecutableElement> methodNamespaceMap = env.getMethodNamespaceMap();
-		NamespaceMap<BsjVariableElement> variableNamespaceMap = env.getVariableNamespaceMap();
+		TypeNamespaceMap typeNamespaceMap = env.getTypeNamespaceMap();
+		MethodNamespaceMap methodNamespaceMap = env.getMethodNamespaceMap();
+		VariableNamespaceMap variableNamespaceMap = env.getVariableNamespaceMap();
 
 		// *** Create a new scope for inherited member elements
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
@@ -398,9 +398,9 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeClassDeclarationNode(ClassDeclarationNode node, Environment env, Node child)
 	{
 		// *** Declare variables for symbol table
-		NamespaceMap<BsjTypeElement> typeNamespaceMap = env.getTypeNamespaceMap();
-		NamespaceMap<BsjExecutableElement> methodNamespaceMap = env.getMethodNamespaceMap();
-		NamespaceMap<BsjVariableElement> variableNamespaceMap = env.getVariableNamespaceMap();
+		TypeNamespaceMap typeNamespaceMap = env.getTypeNamespaceMap();
+		MethodNamespaceMap methodNamespaceMap = env.getMethodNamespaceMap();
+		VariableNamespaceMap variableNamespaceMap = env.getVariableNamespaceMap();
 
 		// *** Create a new scope for type parameters
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
@@ -464,9 +464,9 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		}
 
 		// *** Create variables for the symbol table
-		NamespaceMap<BsjTypeElement> typeNamespaceMap = env.getTypeNamespaceMap();
-		NamespaceMap<BsjExecutableElement> methodNamespaceMap = env.getMethodNamespaceMap();
-		NamespaceMap<BsjVariableElement> variableNamespaceMap = env.getVariableNamespaceMap();
+		TypeNamespaceMap typeNamespaceMap = env.getTypeNamespaceMap();
+		MethodNamespaceMap methodNamespaceMap = env.getMethodNamespaceMap();
+		VariableNamespaceMap variableNamespaceMap = env.getVariableNamespaceMap();
 		
 		// *** Create a new scope for the on-demand imports
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, false);
@@ -1305,7 +1305,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 
 	// ***** BEGIN UTILITY METHODS *******************************************
 
-	private void populateOnDemandImports(NamespaceMap<BsjTypeElement> typeNamespaceMap,
+	private void populateOnDemandImports(TypeNamespaceMap typeNamespaceMap,
 			Iterable<ImportNode> imports)
 	{
 		for (ImportNode importNode : imports)
@@ -1349,8 +1349,8 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		}
 	}
 
-	private void populateOnDemandStaticImports(NamespaceMap<BsjTypeElement> typeNamespaceMap,
-			NamespaceMap<BsjExecutableElement> methodNamespaceMap, NamespaceMap<BsjVariableElement> variableNamespaceMap,
+	private void populateOnDemandStaticImports(TypeNamespaceMap typeNamespaceMap,
+			MethodNamespaceMap methodNamespaceMap, VariableNamespaceMap variableNamespaceMap,
 			Iterable<ImportNode> imports)
 	{
 		for (ImportNode importNode : imports)
@@ -1379,7 +1379,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		}
 	}
 
-	private void populateSingleTypeImports(NamespaceMap<BsjTypeElement> map, Iterable<ImportNode> imports)
+	private void populateSingleTypeImports(TypeNamespaceMap map, Iterable<ImportNode> imports)
 	{
 		for (ImportNode importNode : imports)
 		{
@@ -1399,8 +1399,8 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		}
 	}
 
-	private void populateSingleStaticImports(NamespaceMap<BsjTypeElement> typeNamespaceMap,
-			NamespaceMap<BsjExecutableElement> methodNamespaceMap, NamespaceMap<BsjVariableElement> variableNamespaceMap,
+	private void populateSingleStaticImports(TypeNamespaceMap typeNamespaceMap,
+			MethodNamespaceMap methodNamespaceMap, VariableNamespaceMap variableNamespaceMap,
 			Iterable<ImportNode> imports)
 	{
 		for (ImportNode importNode : imports)
@@ -1441,8 +1441,8 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param nodes The list of nodes from which to extract the elements to populate.
 	 * @param access The level of access to use during population.
 	 */
-	private void populateElements(NamespaceMap<BsjTypeElement> typeNamespaceMap,
-			NamespaceMap<BsjExecutableElement> methodNamespaceMap, NamespaceMap<BsjVariableElement> variableNamespaceMap,
+	private void populateElements(TypeNamespaceMap typeNamespaceMap,
+			MethodNamespaceMap methodNamespaceMap, VariableNamespaceMap variableNamespaceMap,
 			Iterable<? extends Node> nodes, AccessModifier access)
 	{
 		populateElements(typeNamespaceMap, methodNamespaceMap, variableNamespaceMap, nodes, access, false, null);
@@ -1461,8 +1461,8 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 *            otherwise.
 	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
-	private void populateElements(NamespaceMap<BsjTypeElement> typeNamespaceMap,
-			NamespaceMap<BsjExecutableElement> methodNamespaceMap, NamespaceMap<BsjVariableElement> variableNamespaceMap,
+	private void populateElements(TypeNamespaceMap typeNamespaceMap,
+			MethodNamespaceMap methodNamespaceMap, VariableNamespaceMap variableNamespaceMap,
 			Iterable<? extends Node> nodes, AccessModifier access, boolean skipNonMembers, String name)
 	{
 		for (Node node : nodes)
@@ -1502,8 +1502,8 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param variableNamespaceMap The variable namespace into which to populate.
 	 * @param typeNode The type from which elements are being inherited.
 	 */
-	private void populateInheritedElements(NamespaceMap<BsjTypeElement> typeNamespaceMap,
-			NamespaceMap<BsjExecutableElement> methodNamespaceMap, NamespaceMap<BsjVariableElement> variableNamespaceMap,
+	private void populateInheritedElements(TypeNamespaceMap typeNamespaceMap,
+			MethodNamespaceMap methodNamespaceMap, VariableNamespaceMap variableNamespaceMap,
 			DeclaredTypeNode typeNode)
 	{
 		if (typeNode == null)
@@ -1521,8 +1521,8 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param variableNamespaceMap The variable namespace into which to populate.
 	 * @param type The type from which elements are being inherited.
 	 */
-	private void populateInheritedElements(NamespaceMap<BsjTypeElement> typeNamespaceMap,
-			NamespaceMap<BsjExecutableElement> methodNamespaceMap, NamespaceMap<BsjVariableElement> variableNamespaceMap,
+	private void populateInheritedElements(TypeNamespaceMap typeNamespaceMap,
+			MethodNamespaceMap methodNamespaceMap, VariableNamespaceMap variableNamespaceMap,
 			DeclaredType type)
 	{
 		// TODO: detect cycles to prevent stack overflow
@@ -1549,7 +1549,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param access The maximum level of restriction this mapping can tolerate.
 	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
-	private void tryPopulateMemberType(NamespaceMap<BsjTypeElement> typeNamespaceMap, Node indicator,
+	private void tryPopulateMemberType(TypeNamespaceMap typeNamespaceMap, Node indicator,
 			NamedTypeDeclarationNode<?> memberType, AccessModifier access, String name)
 	{
 		if (memberType.getModifiers() instanceof AccessibleTypeModifiersNode
@@ -1571,7 +1571,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param access The maximum level of restriction this mapping can tolerate.
 	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
-	private void tryPopulateMemberMethod(NamespaceMap<BsjExecutableElement> methodNamespaceMap, Node indicator,
+	private void tryPopulateMemberMethod(MethodNamespaceMap methodNamespaceMap, Node indicator,
 			MethodDeclarationNode memberMethod, AccessModifier access, String name)
 	{
 		if (((AccessibleTypeModifiersNode) memberMethod.getModifiers()).getAccess().compareTo(access) < 0
@@ -1592,7 +1592,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param access The maximum level of restriction this mapping can tolerate.
 	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
-	private void tryPopulateMemberField(NamespaceMap<BsjVariableElement> variableNamespaceMap, Node indicator,
+	private void tryPopulateMemberField(VariableNamespaceMap variableNamespaceMap, Node indicator,
 			FieldDeclarationNode memberField, AccessModifier access, String name)
 	{
 		if (((AccessibleTypeModifiersNode) memberField.getModifiers()).getAccess().compareTo(access) < 0)
@@ -1616,7 +1616,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param memberConstant The declaration which is being populated.
 	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
-	private void tryPopulateMemberConstant(NamespaceMap<BsjVariableElement> variableNamespaceMap, Node indicator,
+	private void tryPopulateMemberConstant(VariableNamespaceMap variableNamespaceMap, Node indicator,
 			ConstantDeclarationNode memberConstant, String name)
 	{
 		for (VariableDeclaratorNode declaratorNode : memberConstant.getDeclarators())
@@ -1638,7 +1638,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param constructor The declaration which is being populated.
 	 * @param access The maximum level of restriction this mapping can tolerate.
 	 */
-	private void tryPopulateMemberConstructor(NamespaceMap<BsjExecutableElement> methodNamespaceMap, Node indicator,
+	private void tryPopulateMemberConstructor(MethodNamespaceMap methodNamespaceMap, Node indicator,
 			ConstructorDeclarationNode constructor, AccessModifier access)
 	{
 		if (((AccessibleTypeModifiersNode) constructor.getModifiers()).getAccess().compareTo(access) < 0)
@@ -1656,7 +1656,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param memberMethod The declaration which is being populated.
 	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
 	 */
-	private void tryPopulateAnnotationMemberMethod(NamespaceMap<BsjExecutableElement> methodNamespaceMap, Node indicator,
+	private void tryPopulateAnnotationMemberMethod(MethodNamespaceMap methodNamespaceMap, Node indicator,
 			AnnotationMethodDeclarationNode memberMethod, String name)
 	{
 		if (name == null || name.equals(memberMethod.getIdentifier().getIdentifier()))
@@ -1674,7 +1674,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 * @param packageNode The package in question.
 	 * @param indicator The indicator node to which each entry is to be attributed.
 	 */
-	private void populateNamespaceMapWithPackage(NamespaceMap<BsjTypeElement> map, PackageNode packageNode,
+	private void populateNamespaceMapWithPackage(TypeNamespaceMap map, PackageNode packageNode,
 			Node indicator)
 	{
 		Iterator<CompilationUnitNode> siblingIterator = packageNode.getCompilationUnitIterator();
@@ -1707,25 +1707,25 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	/**
 	 * Convenience method for creating a type namespace.
 	 */
-	private NamespaceMap<BsjTypeElement> makeTypeNamespace(NamespaceMap<BsjTypeElement> map,
+	private TypeNamespaceMap makeTypeNamespace(TypeNamespaceMap map,
 			boolean eager)
 	{
-		return NamespaceMap.makeType(map, this.listener, eager);
+		return new TypeNamespaceMap(map, listener, eager);
 	}
 
 	/**
 	 * Convenience method for creating a method namespace.
 	 */
-	private NamespaceMap<BsjExecutableElement> makeMethodNamespace(NamespaceMap<BsjExecutableElement> map, boolean eager)
+	private MethodNamespaceMap makeMethodNamespace(MethodNamespaceMap map, boolean eager)
 	{
-		return NamespaceMap.makeMethod(map, this.listener, eager);
+		return new MethodNamespaceMap(map, listener, eager);
 	}
 
 	/**
 	 * Convenience method for creating a variable namespace.
 	 */
-	private NamespaceMap<BsjVariableElement> makeVariableNamespace(NamespaceMap<BsjVariableElement> map, boolean eager)
+	private VariableNamespaceMap makeVariableNamespace(VariableNamespaceMap map, boolean eager)
 	{
-		return NamespaceMap.makeVariable(map, this.listener, eager);
+		return new VariableNamespaceMap(map, listener, eager);
 	}
 }

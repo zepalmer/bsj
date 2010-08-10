@@ -1,8 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 
 /**
  * This class represents a compilation environment in BSJ. An environment corresponds to an AST subtree; each subtree
@@ -17,14 +14,14 @@ public class Environment
 	// TODO: environment doesn't handle definite assignment
 	// but none of this is necessary for code literal analysis, so they're in the nice-to-have category
 	/** The type namespace in this environment. */
-	private NamespaceMap<BsjTypeElement> typeNamespaceMap;
+	private TypeNamespaceMap typeNamespaceMap;
 	/** The method namespace in this environment. */
-	private NamespaceMap<BsjExecutableElement> methodNamespaceMap;
+	private MethodNamespaceMap methodNamespaceMap;
 	/** The variable namespace in this environment. */
-	private NamespaceMap<BsjVariableElement> variableNamespaceMap;
+	private VariableNamespaceMap variableNamespaceMap;
 
-	public Environment(NamespaceMap<BsjTypeElement> typeNamespaceMap,
-			NamespaceMap<BsjExecutableElement> methodNamespaceMap, NamespaceMap<BsjVariableElement> variableNamespaceMap)
+	public Environment(TypeNamespaceMap typeNamespaceMap,
+			MethodNamespaceMap methodNamespaceMap, VariableNamespaceMap variableNamespaceMap)
 	{
 		super();
 		this.typeNamespaceMap = typeNamespaceMap;
@@ -32,17 +29,17 @@ public class Environment
 		this.variableNamespaceMap = variableNamespaceMap;
 	}
 
-	public NamespaceMap<BsjTypeElement> getTypeNamespaceMap()
+	public TypeNamespaceMap getTypeNamespaceMap()
 	{
 		return typeNamespaceMap;
 	}
 
-	public NamespaceMap<BsjExecutableElement> getMethodNamespaceMap()
+	public MethodNamespaceMap getMethodNamespaceMap()
 	{
 		return methodNamespaceMap;
 	}
 
-	public NamespaceMap<BsjVariableElement> getVariableNamespaceMap()
+	public VariableNamespaceMap getVariableNamespaceMap()
 	{
 		return variableNamespaceMap;
 	}

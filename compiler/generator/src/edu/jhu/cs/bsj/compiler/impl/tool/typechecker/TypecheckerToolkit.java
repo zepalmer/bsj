@@ -18,8 +18,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
@@ -27,14 +27,14 @@ public class TypecheckerToolkit
 {
 	private TypecheckerModelManager manager;
 	private CompilationUnitLoader loader;
-	
+
 	private Logger LOGGER = Logger.getLogger(TypecheckerToolkit.class);
 
 	public TypecheckerToolkit(TypecheckerModelManager manager, CompilationUnitLoader loader)
 	{
 		super();
 		this.manager = manager;
-		// TODO: what does it mean if we need to load compilation units during type-checking?  what if they contain
+		// TODO: what does it mean if we need to load compilation units during type-checking? what if they contain
 		// metaprograms?
 		this.loader = loader;
 	}
@@ -144,27 +144,27 @@ public class TypecheckerToolkit
 	 * @param typeNamespaceMap The namespace map from which to obtain types.
 	 * @return The resulting type declaration.
 	 */
-	public NamedTypeDeclarationNode<?> getAccessibleTypeFromName(NameNode name,
-			NamespaceMap<BsjTypeElement> typeNamespaceMap)
+	public NamedTypeDeclarationNode<?> getAccessibleTypeFromName(NameNode name, TypeNamespaceMap typeNamespaceMap)
 	{
 		List<String> typeNames = new ArrayList<String>();
 		NameNode packageName = extractTypePortionOfName(name, typeNames);
-		
+
 		if (packageName == null)
 		{
 			// ...then the name was referring to either (1) a top level type or (2) a type which is in the symbol table.
 			// Let's see if the last name component (which represents the first identifier) is in the symbol table.
-			BsjTypeElement typeElement = typeNamespaceMap.lookup(typeNames.get(typeNames.size()-1), name.getStartLocation());
-			if (typeElement != null)
+			BsjTypeLikeElement typeLikeElement = typeNamespaceMap.lookup(typeNames.get(typeNames.size() - 1),
+					name.getStartLocation());
+			if (typeLikeElement != null)
 			{
-				// It looks like our type is in the symbol table!  Now we just need to resolve the remaining components.
+				// It looks like our type is in the symbol table! Now we just need to resolve the remaining components.
 				// TODO
 				return null;
 			}
 		}
-		
+
 		// Reaching this point means that either the name is rooted in a package or that the type name was not in the
-		// symbol table (indicating a member of the root package).  Resolve the name as a fully-qualified name.
+		// symbol table (indicating a member of the root package). Resolve the name as a fully-qualified name.
 		return getAccessibleTypeFromFullyQualifiedName(name);
 	}
 
@@ -182,7 +182,7 @@ public class TypecheckerToolkit
 		{
 			LOGGER.trace("Attempting to load accessible type " + name.getNameString());
 		}
-		
+
 		// Get the name of the package.
 		List<String> typeNames = new ArrayList<String>();
 		name = extractTypePortionOfName(name, typeNames);
