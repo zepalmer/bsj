@@ -35,6 +35,7 @@ public class NameCategorizationTest extends AbstractPerFileTest
 	{
 		BsjToolkit toolkit = getToolkit(null);
 		BsjParser parser = toolkit.getParser();
+		@SuppressWarnings("unused")
 		CompilationUnitNode node = parser.parse(StringUtilities.removeSuffix(file.getName(), '.'),
 				new InputStreamReader(new FileInputStream(file)), new DiagnosticListener<BsjSourceLocation>()
 				{

@@ -3,8 +3,6 @@ package edu.jhu.cs.bsj.compiler.impl.ast;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
@@ -20,9 +18,6 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
  */
 public class PackageNodeManager
 {
-	/** The logger for this class. */
-	private static final Logger LOGGER = Logger.getLogger(PackageNodeManager.class);
-
 	/** The toolkit to use during callback operations. */
 	private BsjToolkit toolkit;
 
