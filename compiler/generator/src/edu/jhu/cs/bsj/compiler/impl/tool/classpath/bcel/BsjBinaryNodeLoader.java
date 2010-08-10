@@ -73,6 +73,8 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
  */
 public class BsjBinaryNodeLoader
 {
+	// TODO: this module does not properly set BSJ source locations
+	
     /**
      * The logging for this class.
      */

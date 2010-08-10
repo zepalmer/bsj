@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.exception.DuplicatePackageMemberException;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
  * A node representing a package.  This node has no syntactic equivalent; it is used to represent the
@@ -101,10 +102,12 @@ public interface PackageNode extends Node
 	 * Retrieves a type declaration for a top level type in this package.
 	 * 
 	 * @param name The simple name of the top level type.
+	 * @param loader The loader to use to look for the top level type.
 	 * @return The type's declaration or <code>null</code> if no such declaration exists.
 	 */
 	// TODO: what if the name is ambiguous? (a non-public top-level type with this name also exists, for example)
-	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name);
+	// should we report the error?
+	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name, CompilationUnitLoader loader);
 
 	/**
 	 * Retrieves the full name of this package node. This method only returns a valid result if the package is attached

@@ -1,16 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
-import javax.tools.DiagnosticListener;
-
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoaderFactory;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
@@ -32,8 +28,10 @@ public class BsjToolkitImpl implements BsjToolkit
 	private BsjCompiler compiler;
 	/** This toolkit's serializer. */
 	private BsjSourceSerializer serializer;
+	/** This toolkit's compilation unit loader factory. */
+	private CompilationUnitLoaderFactory loaderFactory;
 	
-	/** The node manager used to create compilation unit loaders. */
+	/** The node manager used in each of the toolkit components. */
 	private BsjNodeManager nodeManager;
 	
 	public BsjToolkitImpl(BsjFileManager fileManager)
@@ -47,6 +45,7 @@ public class BsjToolkitImpl implements BsjToolkit
 		this.parser = new BsjParserImpl(this.factory);
 		this.compiler = new StandardBsjCompiler(this, nodeManager);
 		this.serializer = new BsjSourceSerializerImpl();
+		this.loaderFactory = new CompilationUnitLoaderFactoryImpl(this, this.nodeManager);
 	}
 
 	@Override
@@ -78,10 +77,10 @@ public class BsjToolkitImpl implements BsjToolkit
 	{
 		return this.serializer;
 	}
-	
+
 	@Override
-	public CompilationUnitLoader getCompilationUnitLoader(DiagnosticListener<BsjSourceLocation> listener)
+	public CompilationUnitLoaderFactory getCompilationUnitLoaderFactory()
 	{
-		return new CompilationUnitLoaderImpl(this.nodeManager.getPackageNodeManager(), listener);
+		return this.loaderFactory;
 	}
 }

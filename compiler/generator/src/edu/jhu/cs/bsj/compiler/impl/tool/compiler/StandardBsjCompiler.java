@@ -25,6 +25,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
@@ -127,6 +128,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		try
 		{
 			// Initialize the compilation unit manager with the names of the files it must compile
+			CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener);
 			for (BsjFileObject file : units)
 			{
 				String binaryName = file.inferBinaryName();
@@ -140,8 +142,7 @@ public class StandardBsjCompiler implements BsjCompiler
 					String packageName = StringUtilities.removeSuffix(binaryName, '.');
 					packageNode = this.rootPackage.getSubpackage(packageName);
 				}
-				
-				this.manager.getPackageNodeManager().load(packageNode, compilationUnitName, listener);
+				loader.load(packageNode, compilationUnitName);
 			}
 
 			// Allow the compilation unit manager to handle the work in the sense of a work queue

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.lang.model.element.Element;
 import javax.lang.model.type.TypeMirror;
 
+import org.apache.log4j.Logger;
+
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
@@ -25,6 +27,8 @@ public class TypecheckerToolkit
 {
 	private TypecheckerModelManager manager;
 	private CompilationUnitLoader loader;
+	
+	private Logger LOGGER = Logger.getLogger(TypecheckerToolkit.class);
 
 	public TypecheckerToolkit(TypecheckerModelManager manager, CompilationUnitLoader loader)
 	{
@@ -95,7 +99,7 @@ public class TypecheckerToolkit
 				throw new IllegalArgumentException("No such package exists: " + name[i]);
 			}
 		}
-		return packageNode.getTopLevelTypeDeclaration(name[name.length - 1]);
+		return packageNode.getTopLevelTypeDeclaration(name[name.length - 1], loader);
 	}
 
 	/**
@@ -174,6 +178,11 @@ public class TypecheckerToolkit
 	 */
 	public NamedTypeDeclarationNode<?> getAccessibleTypeFromFullyQualifiedName(NameNode name)
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Attempting to load accessible type " + name.getNameString());
+		}
+		
 		// Get the name of the package.
 		List<String> typeNames = new ArrayList<String>();
 		name = extractTypePortionOfName(name, typeNames);
@@ -193,7 +202,7 @@ public class TypecheckerToolkit
 		}
 
 		// Obtain the type from the package
-		NamedTypeDeclarationNode<?> type = packageNode.getTopLevelTypeDeclaration(typeNames.get(0));
+		NamedTypeDeclarationNode<?> type = packageNode.getTopLevelTypeDeclaration(typeNames.get(0), loader);
 		if (type == null)
 		{
 			// The type does not exist

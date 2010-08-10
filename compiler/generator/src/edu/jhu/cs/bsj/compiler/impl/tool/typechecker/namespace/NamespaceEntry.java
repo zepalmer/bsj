@@ -28,22 +28,22 @@ public class NamespaceEntry<T extends Element>
 	/** A mapping from nodes which brought types into scope to the type declarations that they indicated. */
 	private Map<Node, T> indicatorNodeMap;
 
-	public NamespaceEntry(T type, Node indicator)
+	public NamespaceEntry(T value, Node indicator)
 	{
 		this.values = new HashSet<T>();
 		this.indicatorNodeMap = new HashMap<Node, T>();
-		add(type, indicator);
+		add(value, indicator);
 	}
 
-	public void add(T type, Node indicator)
+	public void add(T value, Node indicator)
 	{
 		if (this.values.size() == 0)
 		{
-			firstValue = type;
+			firstValue = value;
 			firstIndicator = indicator;
 		}
-		this.values.add(type);
-		this.indicatorNodeMap.put(indicator, type);
+		this.values.add(value);
+		this.indicatorNodeMap.put(indicator, value);
 	}
 
 	public Set<T> getValues()

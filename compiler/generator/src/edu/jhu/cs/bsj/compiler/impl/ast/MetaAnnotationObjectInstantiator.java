@@ -66,7 +66,6 @@ import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationClassTypeM
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationMissingPropertyDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationNonConstantPropertyValueDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MissingMetaAnnotationClassDiagnosticImpl;
-import edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.metaannotation.MetaAnnotationProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.metaannotation.MetaAnnotationProfileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
@@ -96,11 +95,6 @@ public class MetaAnnotationObjectInstantiator
 	private BsjToolkit toolkit;
 
 	/**
-	 * The package node manager to use for loaders.
-	 */
-	private PackageNodeManager packageNodeManager;
-
-	/**
 	 * The meta-annotation profile manager used to cache meta-annotation analysis.
 	 */
 	private MetaAnnotationProfileManager metaAnnotationProfileManager = new MetaAnnotationProfileManager();
@@ -108,15 +102,9 @@ public class MetaAnnotationObjectInstantiator
 	/**
 	 * Creates a new {@link MetaAnnotationObjectInstantiator}.
 	 */
-	public MetaAnnotationObjectInstantiator(BsjToolkit toolkit, PackageNodeManager packageNodeManager)
+	public MetaAnnotationObjectInstantiator(BsjToolkit toolkit)
 	{
 		this.toolkit = toolkit;
-		this.packageNodeManager = packageNodeManager;
-	}
-
-	private CompilationUnitLoader getLoader(DiagnosticListener<BsjSourceLocation> listener)
-	{
-		return new CompilationUnitLoaderImpl(this.packageNodeManager, listener);
 	}
 
 	/**
@@ -268,7 +256,8 @@ public class MetaAnnotationObjectInstantiator
 		Class<?> clazz = null;
 
 		// If the base name is a type, then an import might apply
-		if (baseNameNode.getCategory(getLoader(listener)).equals(NameCategory.TYPE))
+		CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener);
+		if (baseNameNode.getCategory(loader).equals(NameCategory.TYPE))
 		{
 			// Next, see if we can find a suitable class using a single type import
 			for (ImportNode importNode : imports)
@@ -365,13 +354,14 @@ public class MetaAnnotationObjectInstantiator
 		StringBuilder sb = new StringBuilder();
 
 		// For each name, remove the components and build the binary name appropriately
+		CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener);
 		for (NameNode nameNode : names)
 		{
 			while (nameNode != null)
 			{
 				if (sb.length() > 0)
 				{
-					if (nameNode.getCategory(getLoader(listener)) == NameCategory.TYPE)
+					if (nameNode.getCategory(loader) == NameCategory.TYPE)
 					{
 						sb.insert(0, '$');
 					} else
@@ -398,9 +388,9 @@ public class MetaAnnotationObjectInstantiator
 		// Load the class by that name
 		try
 		{
-			ClassLoader loader = this.toolkit.getFileManager().getLocationManager(
+			ClassLoader classLoader = this.toolkit.getFileManager().getLocationManager(
 					BsjCompilerLocation.METAPROGRAM_CLASSPATH).getClassLoader();
-			return loader.loadClass(binaryName);
+			return classLoader.loadClass(binaryName);
 		} catch (ClassNotFoundException e)
 		{
 			return null;

@@ -23,6 +23,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 
 /**
  * A supertype for implementations of the {@link TypeElement} modeling interface for use in the BSJ type checker. This
@@ -32,7 +33,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
  * @author Zachary Palmer
  */
 public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode<?>> extends AbstractElementImpl<T>
-		implements TypeElement
+		implements BsjTypeElement
 {
 	public DeclaredTypeElementImpl(TypecheckerModelManager manager, T backingNode, BsjElement enclosingElement)
 	{

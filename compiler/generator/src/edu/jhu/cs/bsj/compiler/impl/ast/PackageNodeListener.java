@@ -1,8 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.ast;
 
-import javax.tools.DiagnosticListener;
-
-import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 
@@ -12,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
  * 
  * @author Zachary Palmer
  */
-public interface PackageNodeListener extends DiagnosticListener<BsjSourceLocation>
+public interface PackageNodeListener
 {
 	/**
 	 * Invoked when a new compilation unit is added to a package node.

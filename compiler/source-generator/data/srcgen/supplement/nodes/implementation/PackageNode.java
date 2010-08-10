@@ -206,9 +206,9 @@ public class PackageNodeImpl
 	/**
 	 * {@inheritDoc}
 	 */
-	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name)
+	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name, CompilationUnitLoader loader)
 	{
-		CompilationUnitNode compilationUnitNode = getCompilationUnit(name);
+		CompilationUnitNode compilationUnitNode = loader.load(this, name);
 		if (compilationUnitNode != null)
 		{
 			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(compilationUnitNode, name);
@@ -219,6 +219,7 @@ public class PackageNodeImpl
 		}
 
 		// If we couldn't find it in its own compilation unit node, let's go find it by searching the package
+		loader.loadAll(this);
 		Iterator<CompilationUnitNode> it = getCompilationUnitIterator();
 		while (it.hasNext())
 		{

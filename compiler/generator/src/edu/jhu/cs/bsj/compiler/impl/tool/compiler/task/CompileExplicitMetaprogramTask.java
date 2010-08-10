@@ -109,6 +109,8 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		List<String> qualifiedTargetNames = new ArrayList<String>();
 		List<Dependency> dependencies = new ArrayList<Dependency>();
 		final String metaprogramTypeName = getMetaprogramTypeName();
+		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
+				this.metacompilationContext.getDiagnosticListener());
 
 		// if there's a preamble, deal with it
 		if (metaprogramNode.getPreamble() != null)
@@ -150,9 +152,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 						// Then the base name is the fully qualified form of the specified base name
 						QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) dependsName;
 						NamedTypeDeclarationNode<?> namedTypeDeclarationNode = dependsName.executeOperation(
-								new TypeDeclarationLocatingNodeOperation(qualifiedNameNode.getBase(),
-										metacompilationContext.getToolkit().getCompilationUnitLoader(
-												metacompilationContext.getDiagnosticListener())), null);
+								new TypeDeclarationLocatingNodeOperation(qualifiedNameNode.getBase(), loader), null);
 						if (namedTypeDeclarationNode == null)
 						{
 							// We could not find the type name contained in the dependency. This is an error; the
@@ -187,8 +187,6 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		anchor.setMetaprogram(null);
 
 		// now build the metaprogram itself
-		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoader(
-				this.metacompilationContext.getDiagnosticListener());
 		Context<ExplicitMetaprogramAnchorNode<R>> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>>(anchor,
 				factory, new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
 						this.anchor.getStartLocation()), loader);

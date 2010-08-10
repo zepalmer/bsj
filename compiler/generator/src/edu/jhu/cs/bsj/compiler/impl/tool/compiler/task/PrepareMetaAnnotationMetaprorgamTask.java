@@ -9,7 +9,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramDependencyTypeNameResolutionDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingListener;
-import edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.UserMetaprogramWrapper;
 import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
@@ -51,7 +50,7 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 			return null;
 
 		// TODO: validate that the target names and dependency names are not bogus
-		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoader(
+		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
 				this.metacompilationContext.getDiagnosticListener());
 		Context<MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode>(
 				this.anchor, this.metacompilationContext.getToolkit().getNodeFactory(),
@@ -78,13 +77,12 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 			} else
 			{
 				// Then the name is at least partially qualified
+				CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
+						this.metacompilationContext.getDiagnosticListener());
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.anchor.executeOperation(
 						new TypeDeclarationLocatingNodeOperation(
 								this.metacompilationContext.getToolkit().getNodeFactory().parseNameNode(depName),
-								new CompilationUnitLoaderImpl(
-										metacompilationContext.getNodeManager().getPackageNodeManager(),
-										metacompilationContext.getDiagnosticListener()
-								)), null);
+								loader), null);
 				if (namedTypeDeclarationNode == null)
 				{
 					// We could not find the type name contained in the dependency. This is an error; the

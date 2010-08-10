@@ -411,6 +411,8 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
 		for (TypeParameterNode typeParameterNode : node.getTypeParameters())
 		{
+			// TODO: This should be a BsjTypeParameterElement.  Is it okay to store type parameters and types in the
+			// same namespace map?
 			typeNamespaceMap.add(typeParameterNode.getIdentifier().getIdentifier(),
 					(BsjTypeElement) this.toolkit.makeElement(typeParameterNode), typeParameterNode);
 		}
@@ -456,7 +458,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		// Only the type declarations contained in a compilation unit benefit from the declarations contained within
 		// it; import statements, for instance, do not apply to other import statements. Leave now if we're not
 		// processing for a type declaration.
-		if (!(child instanceof TypeDeclarationNode))
+		if (!(child instanceof TypeDeclarationListNode))
 		{
 			return env;
 		}
@@ -465,6 +467,11 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		NamespaceMap<BsjTypeElement> typeNamespaceMap = env.getTypeNamespaceMap();
 		NamespaceMap<BsjExecutableElement> methodNamespaceMap = env.getMethodNamespaceMap();
 		NamespaceMap<BsjVariableElement> variableNamespaceMap = env.getVariableNamespaceMap();
+		
+		// *** Create a new scope for the on-demand imports
+		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, false);
+		methodNamespaceMap = makeMethodNamespace(methodNamespaceMap, false);
+		variableNamespaceMap = makeVariableNamespace(variableNamespaceMap, false);
 
 		// *** Process on-demand imports. This namespace has a lazy error policy, as ambiguities in on-demand
 		// imports (such as "import java.util.*; import java.awt.*;" only matter if the ambiguous name is used
@@ -993,8 +1000,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executePackageNode(PackageNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1311,6 +1317,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 					case PACKAGE:
 						PackageNode packageNode = importNode.getRootPackage().getSubpackageByQualifiedName(
 								importNode.getName());
+						loader.loadAll(packageNode);
 						populateNamespaceMapWithPackage(typeNamespaceMap, packageNode, importNode);
 						break;
 					case TYPE:

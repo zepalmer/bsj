@@ -85,7 +85,7 @@ public class PackageOrTypeNameCategorizer
 					PackageNode packageNode = rootPackage.getSubpackageByQualifiedName(qualifiedNameNode.getBase());
 					if (packageNode != null)
 					{
-						if (packageNode.getTopLevelTypeDeclaration(name.getIdentifier().getIdentifier()) != null)
+						if (packageNode.getTopLevelTypeDeclaration(name.getIdentifier().getIdentifier(), loader) != null)
 						{
 							category = NameCategory.TYPE;
 						}
@@ -333,7 +333,7 @@ public class PackageOrTypeNameCategorizer
 						PackageNode packageNode = rootPackage.getSubpackageByQualifiedName(node.getName());
 						if (packageNode != null)
 						{
-							return packageNode.getTopLevelTypeDeclaration(name);
+							return packageNode.getTopLevelTypeDeclaration(name, loader);
 						}
 					}
 					return null;

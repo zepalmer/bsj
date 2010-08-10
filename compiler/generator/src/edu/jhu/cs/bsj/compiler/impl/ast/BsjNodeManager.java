@@ -66,8 +66,8 @@ public class BsjNodeManager
 	{
 		this.metaprogramStack = new Stack<MetaprogramProfile<?>>();
 		this.permissionPolicyStack = new Stack<PermissionPolicyManager>();
-		this.packageNodeManager = new PackageNodeManager(toolkit, this);
-		this.instantiator = new MetaAnnotationObjectInstantiator(toolkit, this.packageNodeManager);
+		this.packageNodeManager = new PackageNodeManager(toolkit);
+		this.instantiator = new MetaAnnotationObjectInstantiator(toolkit);
 	}
 
 	// *** Permission policy management methods
@@ -310,4 +310,5 @@ public class BsjNodeManager
 	{
 		return this.instantiator.instantiateMetaAnnotationObject(node, listener);
 	}
+
 }

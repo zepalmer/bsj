@@ -9,7 +9,6 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.WeakHashMap;
 
-import javax.tools.Diagnostic;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.DiagnosticListener;
 
@@ -315,12 +314,6 @@ public class MetacompilationManager implements MetacompilationContext
 			MetacompilationManager.this.getDependencyManager().registerAsInjectorOf(
 					MetacompilationManager.this.getDependencyManager().getMetaprogramProfileByID(id),
 					compilationUnitNode, MetacompilationManager.this.getDiagnosticListener());
-		}
-
-		@Override
-		public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
-		{
-			MetacompilationManager.this.diagnosticListener.report(diagnostic);
 		}
 	}
 

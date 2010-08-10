@@ -32,6 +32,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.attribute.PackageCompilationUnitAttribut
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.DuplicatePackageMemberExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PackageNodeImpl extends NodeImpl implements PackageNode
@@ -426,9 +427,9 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	/**
 	 * {@inheritDoc}
 	 */
-	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name)
+	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name, CompilationUnitLoader loader)
 	{
-		CompilationUnitNode compilationUnitNode = getCompilationUnit(name);
+		CompilationUnitNode compilationUnitNode = loader.load(this, name);
 		if (compilationUnitNode != null)
 		{
 			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(compilationUnitNode, name);
@@ -439,6 +440,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		}
 
 		// If we couldn't find it in its own compilation unit node, let's go find it by searching the package
+		loader.loadAll(this);
 		Iterator<CompilationUnitNode> it = getCompilationUnitIterator();
 		while (it.hasNext())
 		{
