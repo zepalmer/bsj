@@ -66,6 +66,7 @@ import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
@@ -414,7 +415,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 			// TODO: This should be a BsjTypeParameterElement.  Is it okay to store type parameters and types in the
 			// same namespace map?
 			typeNamespaceMap.add(typeParameterNode.getIdentifier().getIdentifier(),
-					(BsjTypeElement) this.toolkit.makeElement(typeParameterNode), typeParameterNode);
+					(BsjTypeLikeElement) this.toolkit.makeElement(typeParameterNode), typeParameterNode);
 		}
 
 		// *** Finished!
