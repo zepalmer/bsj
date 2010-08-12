@@ -60,8 +60,8 @@ import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
 // can only take a single methodName and forwardedMethodName
 public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 
-	private String[] methodNames = null;
-	private String[] forwardedMethodNames = null;
+	private String[] methodName = null;
+	private String[] forwardedMethodName = null;
 	private String fieldNameOverride = null;
 	private MetaAnnotationMetaprogramAnchorNode anchor;
 	private BsjNodeFactory factory;
@@ -75,12 +75,12 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	@BsjMetaAnnotationElementGetter
-	public String[] getMethodNames() {
-		return this.methodNames;
+	public String[] getMethodName() {
+		return this.methodName;
 	}
 	@BsjMetaAnnotationElementSetter
-	public void setMethodNames(String[] methodNames) {
-		this.methodNames = methodNames;
+	public void setMethodName(String[] methodName) {
+		this.methodName = methodName;
 	}
 
 	@BsjMetaAnnotationElementSetter
@@ -108,14 +108,14 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 	
 	@BsjMetaAnnotationElementGetter
-	public String[] getForwardedMethodNames() {
-		return forwardedMethodNames;
+	public String[] getForwardedMethodName() {
+		return forwardedMethodName;
 	} // TODO add specify arbitrary targets
 
 	
 	@BsjMetaAnnotationElementSetter
-	public void setForwardedMethodNames(String[] forwardedMethodNames) {
-		this.forwardedMethodNames = forwardedMethodNames;
+	public void setForwardedMethodName(String[] forwardedMethodName) {
+		this.forwardedMethodName = forwardedMethodName;
 	}
 	
 	@BsjMetaAnnotationElementSetter
@@ -202,26 +202,15 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 
-	private String trimName(String identifier) {
-		if (identifier.startsWith("get")) {
-			return downCase(identifier.substring(3));
-		} else {
-			return identifier;
-		}
-	}
 
 
-	private String downCase(String string) {
-		// TODO Auto-generated method stub
-		return Character.toLowerCase(string.charAt(0)) + string.substring(1);
-	}
 
 	private void getAllMethods(
 			String fieldNameString, TypeNode fieldType,
 			List<ClassMemberNode> classDeclarationList) {
 		int i = 0;
 		IdentifierNode fieldName = factory.makeIdentifierNode(fieldNameString);
-		for (String methodName : getMethodNames()) {
+		for (String methodName : getMethodName()) {
 			String forwardedMethodName = getForwardedMethodName(fieldName.getIdentifier(), i);
 			classDeclarationList.addAll(createForwardedMethod(
 					fieldType, fieldName, methodName, forwardedMethodName));
@@ -229,23 +218,11 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		}
 	}	
 	
-	private void getAllMethods(
-			String fieldNameString, String forwardedMethodName, TypeNode fieldType,
-			List<ClassMemberNode> classDeclarationList) {
-		int i = 0;
-		IdentifierNode fieldName = factory.makeIdentifierNode(fieldNameString);
-		for (String methodName : getMethodNames()) {
-//			String forwardedMethodName = getForwardedMethodName(fieldName.getIdentifier(), i);
-			classDeclarationList.addAll(createForwardedMethod(
-					fieldType, fieldName, methodName, forwardedMethodName));
-			i++;
-		}
-	}
 
 	public String getForwardedMethodName(String fieldName, int i) {
-		String methodName = getMethodNames()[i];
-		if (forwardedMethodNames != null && forwardedMethodNames.length < i && forwardedMethodNames[i] != null) {
-			return forwardedMethodNames[i];
+		String methodName = getMethodName()[i];
+		if (forwardedMethodName != null && forwardedMethodName.length < i && forwardedMethodName[i] != null) {
+			return forwardedMethodName[i];
 		} else {
 			if (fieldNameOverride != null) {
 				fieldName = fieldNameOverride;
