@@ -2,9 +2,7 @@ package edu.jhu.cs.bsj.stdlib.metaannotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
@@ -12,10 +10,9 @@ import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
-import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
@@ -28,10 +25,10 @@ import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
-import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
-import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.AbstractPropertyListMetaannotationMetaprogram;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.MetaannotationMetaprogramToolkit;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
@@ -44,65 +41,28 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * 
  * @author Zachary Palmer
  */
-public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprogram
+public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotationMetaprogram
 {
-	/** The explicitly-specified list of properties. */
-	private String[] properties = null;
+	// TODO This doesn't seem to work, because the metaannotation properties defined in the abstract superclass are not detected, and it throws errors indicating that the property "properties" does not exist. 
+	private ClassDeclarationNode classDeclaration;
 
 	public GenerateEqualsAndHashCode()
 	{
 		super(Arrays.asList("equalsAndHashCode"), Arrays.asList("property"));
 	}
 
-	@BsjMetaAnnotationElementGetter
-	public String[] getProperties()
-	{
-		return this.properties;
-	}
-
-	@BsjMetaAnnotationElementSetter
-	public void setProperties(String[] properties)
-	{
-		this.properties = properties;
-	}
 
 	@Override
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+	public void execute(Context<MetaAnnotationMetaprogramAnchorNode> context,
+			List<Pair<String, TypeNode>> getterDescriptions)
 	{
+		
+		classDeclaration = context.getAnchor()
+		.getNearestAncestorOfType(ClassDeclarationNode.class);
 		// get the other members of our class
 		ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
 
 		// Establish the list of properties we will be using
-		List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
-		if (this.properties == null)
-		{
-			for (ClassMemberNode member : members.filter(new GetterFilter()))
-			{
-				MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-				getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
-						methodDecl.getReturnType()));
-			}
-		} else
-		{
-			Map<String, MethodDeclarationNode> methodMap = new HashMap<String, MethodDeclarationNode>();
-			for (ClassMemberNode member : members.filter(new GetterFilter()))
-			{
-				MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-				methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
-			}
-			for (String propName : this.properties)
-			{
-				String getterName = "get" + Character.toUpperCase(propName.charAt(0)) + propName.substring(1);
-				MethodDeclarationNode getterDeclaration = methodMap.get(getterName);
-				if (getterDeclaration == null)
-				{
-					context.getDiagnosticListener().report(
-							new MissingMethodDeclarationDiagnosticImpl(members, getterName));
-					throw new MetaprogramExecutionFailureException();
-				}
-				getterDescriptions.add(new Pair<String, TypeNode>(getterName, getterDeclaration.getReturnType()));
-			}
-		}
 
 		// Now generate equals and hashCode methods
 		members.addLast(generateEquals(context, getterDescriptions));
@@ -114,7 +74,14 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 	{
 		// Determine whether or not a call to super.equals is appropriate.
 		// This is the case if any of the type declarations above this one declare equals (except for java.lang.Object)
-		boolean invokeSuper = false; // TODO
+		boolean invokeSuper = true; // TODO
+		MetaannotationMetaprogramToolkit toolkit = new MetaannotationMetaprogramToolkit(this, context);
+		String extendsName = toolkit.getExtendsName(classDeclaration);
+		if (invokeSuper && extendsName.equals("java.lang.Object")) {
+			invokeSuper = true;
+		} else {
+			invokeSuper = false;
+		}
 
 		BsjNodeFactory factory = context.getFactory();
 		List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
