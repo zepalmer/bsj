@@ -22,13 +22,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
-import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
-import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.metaannotations.utils.AbstractPropertyListMetaannotationMetaprogram;
 import edu.jhu.cs.bsj.stdlib.metaannotations.utils.MetaannotationMetaprogramToolkit;
-import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
