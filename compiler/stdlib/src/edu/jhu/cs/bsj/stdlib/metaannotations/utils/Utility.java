@@ -44,14 +44,13 @@ public class Utility {
 		return fieldDescriptions;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> List<T> filterByClass(Collection list,
+	public static <T> List<T> filterByClass(Collection<?> list,
 			java.lang.Class<T> type) {
 		List<T> ret = new ArrayList<T>();
 
 		for (Object obj : list) {
 			if (type.isInstance(obj)) {
-				ret.add((T) obj);
+				ret.add(type.cast(obj));
 			}
 		}
 		return ret;
