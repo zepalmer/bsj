@@ -332,15 +332,13 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeCaseListNode(CaseListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeCaseNode(CaseNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -947,8 +945,24 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeMetaprogramNode(MetaprogramNode node, Environment env, Node child)
 	{
-		// TODO: Add context variable?
-		return null;
+		// TODO: complete this section.
+		/*
+		 * Properly implementing this code would require the following:
+		 * 
+		 * 1. Metaprogram imports both from the compilation unit as well as the preamble would need to apply to the
+		 * preamble's non-import section and the metaprogram body. Note that these imports would be coming from the
+		 * *metaprogram's* classpath, not the object program's classpath.
+		 * 
+		 * 2. The metaprogram body needs to have a local variable be defined of type Context<T>. Note that, to be a
+		 * correct implementation, the type of T must be properly filled out.
+		 * 
+		 * There is some question as to whether or not this method should ever be implemented; it probably wouldn't be
+		 * necessary for a metaprogram to do this kind of analysis and the modeling of the imported types would get
+		 * tedious at best. For now, we're just clearing out the environment to make clear the fact that none of the
+		 * object program logic applies.
+		 */
+		return new Environment(new TypeNamespaceMap(null, this.listener, false, false), new MethodNamespaceMap(null,
+				this.listener, false, false), new VariableNamespaceMap(null, this.listener, false, false));
 	}
 
 	@Override
@@ -1163,8 +1177,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeSwitchNode(SwitchNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1368,7 +1381,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 						NamedTypeDeclarationNode<?> type = this.toolkit.getAccessibleTypeFromFullyQualifiedName(importNode.getName());
 						if (type == null)
 						{
-							// TODO: emit an appropriate diagnostic
+							// TODO: emit an appropriate diagnostic - the type from which to import doesn't exist
 							throw new NotImplementedYetException();
 						} else
 						{

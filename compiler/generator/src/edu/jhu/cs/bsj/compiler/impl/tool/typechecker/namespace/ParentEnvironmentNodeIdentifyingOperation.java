@@ -1,10 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 
@@ -56,6 +58,27 @@ public class ParentEnvironmentNodeIdentifyingOperation extends BsjDefaultNodeOpe
 		} else if (node instanceof PackageNode)
 		{
 			return null;
+		} else if (node instanceof BlockStatementListNode && node.getParent() instanceof CaseNode)
+		{
+			// If this is not the first case node in the list, then this case node bestows onto its children an
+			// environment based on the most recent statement contained in a preceeding case node.
+			CaseNode caseNode = (CaseNode)node.getParent();
+			CaseListNode parent = (CaseListNode)caseNode.getParent();
+			CaseNode previousCaseNode = (CaseNode)caseNode;
+			// iterate until we run out of options or we find a preceeding case node with at least one statement
+			do
+			{
+				previousCaseNode = parent.getBefore(previousCaseNode);
+			} while (previousCaseNode != null && previousCaseNode.getStatements().size() == 0);
+			if (previousCaseNode != null)
+			{
+				// Use the previous case node's last statement.
+				return previousCaseNode.getStatements().getLast();
+			} else
+			{
+				// In this case, there is no candidate.  Just go with the structural parent.
+				return node.getParent();
+			}
 		} else
 		{
 			return node.getParent();
