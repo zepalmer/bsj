@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
 import java.util.Iterator;
+import java.util.List;
 
 import javax.tools.DiagnosticListener;
 
@@ -305,8 +306,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -382,11 +382,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		env = makeEnvironment(env, true);
 
 		// *** Populate type parameters (which are in scope of the entire declaration)
-		for (TypeParameterNode typeParameterNode : node.getTypeParameters())
-		{
-			env.getTypeNamespaceMap().add(typeParameterNode.getIdentifier().getIdentifier(),
-					(BsjTypeLikeElement) this.toolkit.makeElement(typeParameterNode), typeParameterNode);
-		}
+		populateTypeParameters(env, node.getTypeParameters());
 
 		// *** Finished!
 		return env;
@@ -480,8 +476,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeConstantDeclarationNode(ConstantDeclarationNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -741,29 +736,23 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		env = makeEnvironment(env, true);
 
 		// *** Populate type parameters (which are in scope of the entire declaration)
-		for (TypeParameterNode typeParameterNode : node.getTypeParameters())
-		{
-			env.getTypeNamespaceMap().add(typeParameterNode.getIdentifier().getIdentifier(),
-					(BsjTypeLikeElement) this.toolkit.makeElement(typeParameterNode), typeParameterNode);
-		}
+		populateTypeParameters(env, node.getTypeParameters());
 
 		// *** Finished!
 		return env;
 	}
-
+	
 	@Override
 	public Environment executeInterfaceMemberListNode(InterfaceMemberListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -862,8 +851,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -877,80 +865,83 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, Environment env,
 			Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaprogramDependencyNode(MetaprogramDependencyNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaprogramImportListNode(MetaprogramImportListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaprogramImportNode(MetaprogramImportNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaprogramNode(MetaprogramNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
+		// TODO: Add context variable?
 		return null;
 	}
 
 	@Override
 	public Environment executeMetaprogramPreambleNode(MetaprogramPreambleNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaprogramTargetListNode(MetaprogramTargetListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaprogramTargetNode(MetaprogramTargetNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMethodDeclarationNode(MethodDeclarationNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// *** Create a new environment for type parameter population
+		env = makeEnvironment(env, true);
+		
+		// *** Populate type parameters (which are in scope of the entire declaration)
+		populateTypeParameters(env, node.getTypeParameters());
+		
+		// *** Populate method parameters into method body
+		if (child instanceof BlockStatementListNode)
+		{
+			populateParameters(env, node.getParameters());
+		}
+		
+		// *** Finished!
+		return env;
 	}
 
 	@Override
@@ -1113,8 +1104,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeSuperFieldAccessNode(SuperFieldAccessNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1168,8 +1158,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeTypeArgumentListNode(TypeArgumentListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1272,8 +1261,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeVariableListNode(VariableListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1285,8 +1273,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeVariableNode(VariableNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1693,6 +1680,32 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 			// then inherit from Object
 			BsjTypeElement objectElement = (BsjTypeElement) toolkit.getElementByName("java", "lang", "Object");
 			populateInheritedMembersWithDynamicDispatchFor(objectElement.getDeclarationNode(), env);
+		}
+	}
+	
+	/**
+	 * Populates the specified parameters into the current environment.
+	 */
+	private void populateParameters(Environment env, List<VariableNode> parameters)
+	{
+		for (VariableNode parameter : parameters)
+		{
+			env.getVariableNamespaceMap().add(parameter.getIdentifier().getIdentifier(),
+					(BsjVariableElement) this.toolkit.makeElement(parameter), parameter);
+		}
+	}
+
+	/**
+	 * Populates the specified type parameters into the current environment.
+	 * @param env The environment to use.
+	 * @param typeParameters The type parameters to populate.
+	 */
+	private void populateTypeParameters(Environment env, List<TypeParameterNode> typeParameters)
+	{
+		for (TypeParameterNode typeParameterNode : typeParameters)
+		{
+			env.getTypeNamespaceMap().add(typeParameterNode.getIdentifier().getIdentifier(),
+					(BsjTypeLikeElement) this.toolkit.makeElement(typeParameterNode), typeParameterNode);
 		}
 	}
 

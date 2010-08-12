@@ -8,6 +8,7 @@ import javax.tools.DiagnosticListener;
 import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
+import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -26,6 +27,9 @@ import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
  */
 public class BsjParserImpl implements BsjParser
 {
+	/** The logger for this class. */
+	private static final Logger LOGGER = Logger.getLogger(BsjParserImpl.class);
+	
 	/**
 	 * The factory that this parser will use to construct AST nodes.
 	 */
@@ -48,6 +52,11 @@ public class BsjParserImpl implements BsjParser
 	public CompilationUnitNode parse(String name, Reader reader,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException
 	{
+		if (LOGGER.isDebugEnabled())
+		{
+			LOGGER.debug("Parsing compilation unit with name " + name);
+		}
+		
 		if (diagnosticListener == null)
 		{
 			diagnosticListener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.jhu.cs.bsj.compiler.ast.node.AbstractInvokableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
@@ -104,8 +105,8 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 	@Override
 	public BsjElement executeConstructorDeclarationNode(ConstructorDeclarationNode node, Void p)
 	{
-		return new ConstructorExecutableElementImpl(this.manager, node,
-				(BsjTypeElement) findImmediatelyEnclosingType(node).executeOperation(this, null));
+		return new ConstructorExecutableElementImpl(this.manager, node, (BsjTypeElement) findImmediatelyEnclosingType(
+				node).executeOperation(this, null));
 	}
 
 	@Override
@@ -129,8 +130,8 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 	@Override
 	public BsjElement executeInitializerDeclarationNode(InitializerDeclarationNode node, Void p)
 	{
-		return new InitializerExecutableElementImpl(this.manager, node,
-				(BsjTypeElement) findImmediatelyEnclosingType(node).executeOperation(this, null));
+		return new InitializerExecutableElementImpl(this.manager, node, (BsjTypeElement) findImmediatelyEnclosingType(
+				node).executeOperation(this, null));
 	}
 
 	@Override
@@ -188,4 +189,11 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 		}
 	}
 
+	@Override
+	public BsjElement executeVariableNode(VariableNode node, Void p)
+	{
+		boolean isVarArgs = (node.getParent() instanceof AbstractInvokableDeclarationNode<?>)
+				&& ((AbstractInvokableDeclarationNode<?>) node.getParent()).getVarargParameter().equals(node);
+		return new ActualVariableElementImpl(this.manager, node, findImmediatelyEnclosingElement(node), isVarArgs);
+	}
 }
