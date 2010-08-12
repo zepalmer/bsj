@@ -58,7 +58,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	@Test
 	public void testLifterOnExamples()
 	{
-		System.out.println("STARTING TESTS WITH " + ((double)(Runtime.getRuntime().maxMemory()))/1024/1024+"Mb");
+		System.out.println("STARTING TESTS WITH " + ((double) (Runtime.getRuntime().maxMemory())) / 1024 / 1024 + "Mb");
 		findAndTestJavaFiles(EXAMPLES);
 	}
 
@@ -182,31 +182,37 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		}
 		BsjFileObject bfo = bfm.getJavaFileForOutput(BsjCompilerLocation.SOURCE_PATH, "WrapperClass", Kind.SOURCE, null);
 		bfo.setCharContent(wrapperCode);
-		List<BsjFileObject> fileObjects = Arrays.asList(bfo);
+		try
+		{
+			List<BsjFileObject> fileObjects = Arrays.asList(bfo);
 
-		// create a toolkit
-		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
-		toolkitFactory.setFileManager(bfm);
-		BsjToolkit toolkit = toolkitFactory.newToolkit();
+			// create a toolkit
+			BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+			toolkitFactory.setFileManager(bfm);
+			BsjToolkit toolkit = toolkitFactory.newToolkit();
 
-		// compile
-		CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
-				new DiagnosticListener<BsjSourceLocation>()
-				{
-					@Override
-					public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
+			// compile
+			CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
+					new DiagnosticListener<BsjSourceLocation>()
 					{
-						System.err.println(diagnostic.getMessage(null));
-					}
-				});
-		toolkit.getCompiler().compile(fileObjects, listener);
-		Assert.assertTrue(listener.getCount(Diagnostic.Kind.ERROR) == 0);
+						@Override
+						public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
+						{
+							System.err.println(diagnostic.getMessage(null));
+						}
+					});
+			toolkit.getCompiler().compile(fileObjects, listener);
+			Assert.assertTrue(listener.getCount(Diagnostic.Kind.ERROR) == 0);
 
-		// run the compiled wrapper and return the node created by the lifted code
-		Class<?> wrapper = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass("WrapperClass");
-		Method method = wrapper.getDeclaredMethod("runLiftedCode", (Class<?>[]) null);
-		Object object = wrapper.getConstructor(BsjNodeFactory.class).newInstance(toolkit.getNodeFactory());
-		bfm.close();
-		return (CompilationUnitNode) method.invoke(object, (Object[]) null);
+			// run the compiled wrapper and return the node created by the lifted code
+			Class<?> wrapper = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass("WrapperClass");
+			Method method = wrapper.getDeclaredMethod("runLiftedCode", (Class<?>[]) null);
+			Object object = wrapper.getConstructor(BsjNodeFactory.class).newInstance(toolkit.getNodeFactory());
+			bfm.close();
+			return (CompilationUnitNode) method.invoke(object, (Object[]) null);
+		} finally
+		{
+			bfo.delete();
+		}
 	}
 }
