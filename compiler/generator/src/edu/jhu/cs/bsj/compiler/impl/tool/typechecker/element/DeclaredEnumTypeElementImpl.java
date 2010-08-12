@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
-import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
 
@@ -19,8 +18,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitlyDeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDeclarationNode>
 {
@@ -55,14 +57,14 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 	@Override
 	public TypeMirror getSuperclass()
 	{
-		TypeElement enumElement = (TypeElement) getElementByName("java", "lang", "Enum");
+		BsjTypeElement enumElement = (BsjTypeElement) getElementByName("java", "lang", "Enum");
 		NamedTypeDeclarationNode<?> enclosingTypeDeclaration = this.getBackingNode().getNearestAncestorOfType(
 				NamedTypeDeclarationNode.class);
-		TypeElement enclosingTypeElement = (TypeElement) makeElement(enclosingTypeDeclaration);
-		TypeMirror enclosingTypeMirror = enclosingTypeElement.asType();
-		TypeMirror selfType = new DeclaredTypeImpl(getManager(), this, Collections.<TypeMirror> emptyList(),
+		BsjTypeElement enclosingTypeElement = makeElement(enclosingTypeDeclaration);
+		BsjDeclaredType enclosingTypeMirror = (BsjDeclaredType) enclosingTypeElement.asType();
+		BsjType selfType = new ExplicitlyDeclaredTypeImpl(getManager(), this, Collections.<BsjType> emptyList(),
 				enclosingTypeMirror);
-		TypeMirror enumType = new DeclaredTypeImpl(getManager(), enumElement, Collections.singletonList(selfType), null);
+		BsjType enumType = new ExplicitlyDeclaredTypeImpl(getManager(), enumElement, Collections.singletonList(selfType), null);
 		return enumType;
 	}
 
@@ -83,4 +85,9 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 		return Collections.emptyList();
 	}
 
+	@Override
+	protected List<? extends BsjType> getPrototypicalTypeArgumentList()
+	{
+		return Collections.emptyList();
+	}
 }

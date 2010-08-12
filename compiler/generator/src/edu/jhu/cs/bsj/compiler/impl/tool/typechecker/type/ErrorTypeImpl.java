@@ -3,15 +3,16 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import java.util.Collections;
 import java.util.List;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.type.ErrorType;
 import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
-public class ErrorTypeImpl extends TypeMirrorImpl implements ErrorType
+public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 {
 	public ErrorTypeImpl(TypecheckerModelManager manager)
 	{
@@ -19,19 +20,19 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements ErrorType
 	}
 
 	@Override
-	public Element asElement()
+	public BsjTypeElement asElement()
 	{
 		return null;
 	}
 
 	@Override
-	public TypeMirror getEnclosingType()
+	public BsjDeclaredType getEnclosingType()
 	{
 		return null;
 	}
 
 	@Override
-	public List<? extends TypeMirror> getTypeArguments()
+	public List<? extends BsjType> getTypeArguments()
 	{
 		return Collections.emptyList();
 	}
@@ -64,5 +65,11 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements ErrorType
 	public String toString()
 	{
 		return "<error>";
+	}
+
+	@Override
+	public boolean isImplicit()
+	{
+		return false;
 	}
 }

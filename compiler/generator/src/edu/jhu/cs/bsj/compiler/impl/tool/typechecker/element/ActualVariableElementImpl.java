@@ -10,11 +10,11 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
-import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class ActualVariableElementImpl extends AbstractVariableElementImpl<VariableNode>
 {
@@ -39,7 +39,7 @@ public class ActualVariableElementImpl extends AbstractVariableElementImpl<Varia
 	}
 
 	@Override
-	public TypeMirror asType()
+	public BsjType asType()
 	{
 		// TODO Auto-generated method stub
 		return null;

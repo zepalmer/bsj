@@ -13,14 +13,15 @@ import javax.lang.model.element.ElementVisitor;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
-import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class PackageElementImpl extends AbstractElementImpl<PackageNode> implements PackageElement
 {
@@ -54,7 +55,7 @@ public class PackageElementImpl extends AbstractElementImpl<PackageNode> impleme
 	}
 
 	@Override
-	public TypeMirror asType()
+	public BsjType asType()
 	{
 		return NoTypeImpl.makePackage(getManager());
 	}
@@ -85,7 +86,7 @@ public class PackageElementImpl extends AbstractElementImpl<PackageNode> impleme
 	}
 
 	@Override
-	public Element getEnclosingElement()
+	public BsjElement getEnclosingElement()
 	{
 		return null;
 	}

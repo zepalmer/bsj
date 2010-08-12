@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationModifiersNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<AnnotationDeclarationNode>
 {
@@ -60,6 +61,12 @@ public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<A
 
 	@Override
 	public List<? extends TypeParameterElement> getTypeParameters()
+	{
+		return Collections.emptyList();
+	}
+
+	@Override
+	protected List<? extends BsjType> getPrototypicalTypeArgumentList()
 	{
 		return Collections.emptyList();
 	}

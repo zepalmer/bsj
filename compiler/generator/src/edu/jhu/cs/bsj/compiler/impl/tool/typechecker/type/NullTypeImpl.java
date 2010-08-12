@@ -1,12 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import javax.lang.model.type.NullType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNullType;
 
-public class NullTypeImpl extends TypeMirrorImpl implements NullType
+public class NullTypeImpl extends TypeMirrorImpl implements BsjNullType
 {
 	public NullTypeImpl(TypecheckerModelManager manager)
 	{

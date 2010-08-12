@@ -18,12 +18,18 @@ import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class AnonymousClassTypeElementImpl extends AbstractElementImpl<AnonymousClassBodyNode> implements TypeElement
 {
@@ -33,8 +39,7 @@ public class AnonymousClassTypeElementImpl extends AbstractElementImpl<Anonymous
 		super(manager, backingNode, enclosingElement);
 	}
 	
-	// TODO: once we have this, how do we determine if the resulting TypeMirror represents a class or an interface?
-	private TypeMirror getTypeMirrorForSupertype()
+	private BsjExplicitlyDeclaredType getSupertype()
 	{
 		Node parent = getBackingNode().getParent();
 		if (parent instanceof QualifiedClassInstantiationNode)
@@ -44,7 +49,17 @@ public class AnonymousClassTypeElementImpl extends AbstractElementImpl<Anonymous
 		} else if (parent instanceof UnqualifiedClassInstantiationNode)
 		{
 			UnqualifiedClassInstantiationNode node = (UnqualifiedClassInstantiationNode)parent;
-			return makeType(node.getType());
+			BsjNamedReferenceType referenceType = makeType(node.getType());
+			if (referenceType instanceof BsjExplicitlyDeclaredType)
+			{
+				return (BsjExplicitlyDeclaredType)referenceType;
+			} else
+			{
+				// This means that the programmer attempted to instantiate a type variable, such as in new T()
+				// TODO: report an appropriate diagnostic
+				throw new NotImplementedYetException();
+				// TODO: then return the type for java.lang.Object
+			}
 		} else
 		{
 			throw new IllegalStateException("Don't know how to handle supertype " + parent.getClass());
@@ -52,10 +67,16 @@ public class AnonymousClassTypeElementImpl extends AbstractElementImpl<Anonymous
 	}
 	
 	@Override
-	public List<? extends TypeMirror> getInterfaces()
+	public List<? extends BsjType> getInterfaces()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		BsjExplicitlyDeclaredType type = getSupertype();
+		if (type.asElement().getDeclarationNode() instanceof InterfaceDeclarationNode)
+		{
+			return Collections.singletonList(type);
+		} else
+		{
+			return Collections.emptyList();
+		}
 	}
 
 	@Override
@@ -73,8 +94,14 @@ public class AnonymousClassTypeElementImpl extends AbstractElementImpl<Anonymous
 	@Override
 	public TypeMirror getSuperclass()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		BsjExplicitlyDeclaredType type = getSupertype();
+		if (type.asElement().getDeclarationNode() instanceof ClassDeclarationNode)
+		{
+			return type;
+		} else
+		{
+			return NoTypeImpl.makeNone(getManager());
+		}
 	}
 
 	@Override
@@ -90,7 +117,7 @@ public class AnonymousClassTypeElementImpl extends AbstractElementImpl<Anonymous
 	}
 
 	@Override
-	public TypeMirror asType()
+	public BsjType asType()
 	{
 		// TODO Auto-generated method stub
 		return null;

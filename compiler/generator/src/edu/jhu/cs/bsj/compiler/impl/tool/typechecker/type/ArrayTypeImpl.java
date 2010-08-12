@@ -1,13 +1,13 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 
-public class ArrayTypeImpl extends TypeMirrorImpl implements ArrayType
+public class ArrayTypeImpl extends TypeMirrorImpl implements BsjArrayType
 {
 	private TypeMirror componentType;
 	

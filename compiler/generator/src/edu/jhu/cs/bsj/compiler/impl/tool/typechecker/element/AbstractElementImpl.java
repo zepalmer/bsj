@@ -6,7 +6,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
@@ -57,7 +56,7 @@ public abstract class AbstractElementImpl<T extends Node> extends TypecheckerMod
 	}
 	
 	@Override
-	public Element getEnclosingElement()
+	public BsjElement getEnclosingElement()
 	{
 		return enclosingElement;
 	}

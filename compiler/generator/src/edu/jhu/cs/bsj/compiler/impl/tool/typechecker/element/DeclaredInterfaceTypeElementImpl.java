@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class DeclaredInterfaceTypeElementImpl extends DeclaredTypeElementImpl<InterfaceDeclarationNode>
 {
@@ -75,5 +76,11 @@ public class DeclaredInterfaceTypeElementImpl extends DeclaredTypeElementImpl<In
 			list.add((TypeParameterElement) makeElement(typeParameterNode));
 		}
 		return list;
+	}
+
+	@Override
+	protected List<? extends BsjType> getPrototypicalTypeArgumentList()
+	{
+		return makeTypeMirrorsFromTypeParameters(getBackingNode().getTypeParameters());
 	}
 }

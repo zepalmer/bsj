@@ -1,12 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import javax.lang.model.type.NoType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
 
-public class NoTypeImpl extends TypeMirrorImpl implements NoType
+public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 {
 	private TypeKind kind;
 

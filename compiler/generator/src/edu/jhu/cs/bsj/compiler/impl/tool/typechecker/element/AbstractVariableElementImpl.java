@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementVisitor;
-import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public abstract class AbstractVariableElementImpl<T extends Node> extends AbstractElementImpl<T> implements
 		BsjVariableElement
@@ -34,7 +34,7 @@ public abstract class AbstractVariableElementImpl<T extends Node> extends Abstra
 	 * variable which was declared in both the Sun JDK and OpenJDK implementations.
 	 */
 	@Override
-	public abstract TypeMirror asType();
+	public abstract BsjType asType();
 
 	@Override
 	public List<? extends Element> getEnclosedElements()

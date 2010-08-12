@@ -16,14 +16,23 @@ import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 
-public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, TypeMirror>
+public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, BsjType>
 {
 	private TypecheckerModelManager manager;
 
@@ -34,19 +43,19 @@ public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, Typ
 	}
 
 	@Override
-	public TypeMirror executeArrayTypeNode(ArrayTypeNode node, Void p)
+	public BsjArrayType executeArrayTypeNode(ArrayTypeNode node, Void p)
 	{
 		return new ArrayTypeImpl(this.manager, node.getType().executeOperation(this, p));
 	}
 
 	@Override
-	public TypeMirror executeDefault(Node node, Void p)
+	public BsjType executeDefault(Node node, Void p)
 	{
 		return null;
 	}
 
 	@Override
-	public TypeMirror executeParameterizedTypeNode(ParameterizedTypeNode node, Void p)
+	public BsjDeclaredType executeParameterizedTypeNode(ParameterizedTypeNode node, Void p)
 	{
 		NamedTypeDeclarationNode<?> typeDeclaration = this.manager.getToolkit().getAccessibleTypeFromName(
 				node.getBaseType().getName(),
@@ -55,9 +64,9 @@ public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, Typ
 	}
 
 	@Override
-	public TypeMirror executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, Void p)
+	public BsjDeclaredType executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, Void p)
 	{
-		TypeMirror accumulatedType = null;
+		BsjDeclaredType accumulatedType = null;
 		DeclaredTypeNode iterativeNode = node;
 
 		// Each iteration of this loop will handle the left-hand branch and then descend recursively into the right
@@ -71,12 +80,12 @@ public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, Typ
 					this.manager.getEnvironmentManager().getEnvironment(node).getTypeNamespaceMap());
 			accumulatedType = makeDeclarationTypeFromDeclaration(typeDeclaration,
 					parameterizedSelectNode.getBase().getTypeArguments(), accumulatedType);
-			
+
 			// Move iteration forward
 			iterativeNode = parameterizedSelectNode.getSelect();
 		}
-		
-		// At this point, we know the selectNode is not a ParameterizedSelectNode because we have exited the loop.  We
+
+		// At this point, we know the selectNode is not a ParameterizedSelectNode because we have exited the loop. We
 		// just need to handle the last selection and we're done.
 		if (iterativeNode instanceof UnparameterizedTypeNode)
 		{
@@ -98,18 +107,57 @@ public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, Typ
 		{
 			throw new IllegalStateException("Don't know how to handle select type of " + iterativeNode.getClass());
 		}
-		
+
 		return accumulatedType;
 	}
 
 	@Override
-	public TypeMirror executePrimitiveTypeNode(PrimitiveTypeNode node, Void p)
+	public BsjPrimitiveType executePrimitiveTypeNode(PrimitiveTypeNode node, Void p)
 	{
 		return new PrimitiveTypeImpl(this.manager, node.getPrimitiveType());
 	}
 
 	@Override
-	public TypeMirror executeUnparameterizedTypeNode(UnparameterizedTypeNode node, Void p)
+	public BsjTypeVariable executeTypeParameterNode(TypeParameterNode node, Void p)
+	{
+		TypeMirror upperBound;
+		if (node.getBounds().size() == 0)
+		{
+			upperBound = null;
+		} else if (node.getBounds().size() == 1)
+		{
+			upperBound = node.getBounds().get(0).executeOperation(this, null);
+		} else
+		{
+			/*
+			 * note: we are assuming that implicitly-defined types never have an enclosing type rationale: assume the
+			 * following declarations: class Foo { class Bar<T extends A & B> { } } class Baz<T extends A & B> { } both
+			 * Bar and Baz should have the same type bound for their respective type parameters
+			 */
+			/*
+			 * note: we are assuming that the type arguments for an implicitly-defined type are the union of the type
+			 * arguments for all of the inherited types rationale: the type bound <T extends A<X> & B<Y>> implicitly
+			 * represents the following: * the type bound <T extends Z> * the declaration of a type Z which extends or
+			 * implements A<X> and implements B<Y> * the declaration that every member which extends or implements A<X>
+			 * and implements B<Y> is a subtype of Z If this is true, then Z must provide arguments for X and Y to be a
+			 * fully instantiated type... and since it doesn't get them on its own, it must obtain them from its
+			 * implicit subtypes. For instance, if we have: class Sub extends A<String> implements B<Integer> then we
+			 * implicitly have class Sub extends Z<String,Integer>
+			 */
+			List<BsjType> typeArgs = new ArrayList<BsjType>();
+			for (DeclaredTypeNode boundType : node.getBounds())
+			{
+				BsjDeclaredType boundTypeMirror = (BsjDeclaredType) boundType.executeOperation(this, null);
+				typeArgs.addAll(boundTypeMirror.getTypeArguments());
+			}
+			upperBound = new ImplicitlyDeclaredTypeImpl(this.manager,
+					(BsjTypeParameterElement) this.manager.getToolkit().makeElement(node), typeArgs, null);
+		}
+		return new TypeVariableImpl(this.manager, null, upperBound);
+	}
+
+	@Override
+	public BsjDeclaredType executeUnparameterizedTypeNode(UnparameterizedTypeNode node, Void p)
 	{
 		NamedTypeDeclarationNode<?> typeDeclaration = this.manager.getToolkit().getAccessibleTypeFromName(
 				node.getName(), this.manager.getEnvironmentManager().getEnvironment(node).getTypeNamespaceMap());
@@ -117,49 +165,48 @@ public class TypeBuildingNodeOperation extends BsjDefaultNodeOperation<Void, Typ
 	}
 
 	@Override
-	public TypeMirror executeVoidTypeNode(VoidTypeNode node, Void p)
+	public BsjNoType executeVoidTypeNode(VoidTypeNode node, Void p)
 	{
 		return NoTypeImpl.makeVoid(this.manager);
 	}
 
-	private TypeMirror makeDeclarationTypeFromDeclaration(NamedTypeDeclarationNode<?> typeDeclaration,
-			Collection<? extends TypeArgumentNode> typeArgumentNodes, TypeMirror providedEnclosingType)
+	@Override
+	public BsjWildcardType executeWildcardTypeNode(WildcardTypeNode node, Void p)
 	{
-		BsjTypeElement typeElement = (BsjTypeElement) this.manager.getToolkit().makeElement(
-				typeDeclaration);
-		TypeMirror enclosingType;
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private BsjDeclaredType makeDeclarationTypeFromDeclaration(NamedTypeDeclarationNode<?> typeDeclaration,
+			Collection<? extends TypeArgumentNode> typeArgumentNodes, BsjDeclaredType providedEnclosingType)
+	{
+		BsjDeclaredTypeElement typeElement = this.manager.getToolkit().makeElement(typeDeclaration);
+		BsjDeclaredType enclosingType;
 		if (providedEnclosingType != null)
 		{
 			enclosingType = providedEnclosingType;
 		} else if (typeElement.getNestingKind() == NestingKind.MEMBER)
 		{
-			enclosingType = typeDeclaration.getNearestAncestorOfType(NamedTypeDeclarationNode.class).executeOperation(
-					this, null);
+			enclosingType = this.manager.getToolkit().makeElement(
+					typeDeclaration.getNearestAncestorOfType(NamedTypeDeclarationNode.class)).asType();
 		} else
 		{
 			enclosingType = null;
 		}
 
-		List<TypeMirror> typeArguments;
+		List<BsjType> typeArguments;
 		if (typeArgumentNodes.size() > 0)
 		{
-			typeArguments = new ArrayList<TypeMirror>();
+			typeArguments = new ArrayList<BsjType>();
 			for (TypeArgumentNode argument : typeArgumentNodes)
 			{
 				typeArguments.add(argument.executeOperation(this, null));
 			}
 		} else
 		{
-			typeArguments = Collections.<TypeMirror> emptyList();
+			typeArguments = Collections.<BsjType> emptyList();
 		}
 
-		return new DeclaredTypeImpl(this.manager, typeElement, typeArguments, enclosingType);
-	}
-
-	@Override
-	public TypeMirror executeWildcardTypeNode(WildcardTypeNode node, Void p)
-	{
-		// TODO Auto-generated method stub
-		return super.executeWildcardTypeNode(node, p);
+		return new ExplicitlyDeclaredTypeImpl(this.manager, typeElement, typeArguments, enclosingType);
 	}
 }

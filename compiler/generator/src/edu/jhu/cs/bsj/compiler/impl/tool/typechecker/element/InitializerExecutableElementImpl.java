@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class InitializerExecutableElementImpl extends AbstractExecutableElementImpl<InitializerDeclarationNode>
 {
@@ -28,7 +29,7 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	}
 
 	@Override
-	public TypeMirror asType()
+	public BsjType asType()
 	{
 		// TODO Auto-generated method stub
 		return null;

@@ -3,12 +3,12 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
-import javax.lang.model.type.WildcardType;
 
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 
-public class WildcardTypeImpl extends TypeMirrorImpl implements WildcardType
+public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
 {
 	private WildcardTypeNode wildcardTypeNode;
 	

@@ -9,6 +9,7 @@ import javax.lang.model.type.TypeMirror;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -16,17 +17,29 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 public class TypecheckerToolkit
 {
 	private TypecheckerModelManager manager;
 	private CompilationUnitLoader loader;
+	
+	private ElementBuildingNodeOperation elementBuilder;
+	private TypeBuildingNodeOperation typeBuilder;
 
 	private Logger LOGGER = Logger.getLogger(TypecheckerToolkit.class);
 
@@ -37,6 +50,8 @@ public class TypecheckerToolkit
 		// TODO: what does it mean if we need to load compilation units during type-checking? what if they contain
 		// metaprograms?
 		this.loader = loader;
+		this.elementBuilder = new ElementBuildingNodeOperation(getManager());
+		this.typeBuilder = new TypeBuildingNodeOperation(getManager());
 	}
 
 	protected TypecheckerModelManager getManager()
@@ -50,9 +65,31 @@ public class TypecheckerToolkit
 	 * @param node The node for which to create an element.
 	 * @return The resulting element.
 	 */
-	public Element makeElement(Node node)
+	public BsjElement makeElement(Node node)
 	{
-		return node.executeOperation(new ElementBuildingNodeOperation(getManager()), null);
+		return node.executeOperation(this.elementBuilder, null);
+	}
+	
+	/**
+	 * Creates an appropriate {@link Element} for the provided node (if possible).
+	 * 
+	 * @param node The node for which to create an element.
+	 * @return The resulting element.
+	 */
+	public BsjDeclaredTypeElement makeElement(NamedTypeDeclarationNode<?> node)
+	{
+		return (BsjDeclaredTypeElement) node.executeOperation(this.elementBuilder, null);
+	}
+	
+	/**
+	 * Creates an appropriate {@link TypeMirror} for the provided node (if possible).
+	 * 
+	 * @param node The node for which to create a type.
+	 * @return The resulting type.
+	 */
+	public BsjType makeType(TypeNode node)
+	{
+		return node.executeOperation(this.typeBuilder, null);
 	}
 
 	/**
@@ -61,9 +98,31 @@ public class TypecheckerToolkit
 	 * @param node The node for which to create a type.
 	 * @return The resulting type.
 	 */
-	public TypeMirror makeType(TypeNode node)
+	public BsjTypeVariable makeType(TypeParameterNode node)
 	{
-		return node.executeOperation(new TypeBuildingNodeOperation(getManager()), null);
+		return this.typeBuilder.executeTypeParameterNode(node, null);
+	}
+
+	/**
+	 * Creates an appropriate {@link TypeMirror} for the provided node (if possible).
+	 * 
+	 * @param node The node for which to create a type.
+	 * @return The resulting type.
+	 */
+	public BsjWildcardType makeType(WildcardTypeNode node)
+	{
+		return this.typeBuilder.executeWildcardTypeNode(node, null);
+	}
+
+	/**
+	 * Creates an appropriate {@link TypeMirror} for the provided node (if possible).
+	 * 
+	 * @param node The node for which to create a type.
+	 * @return The resulting type.
+	 */
+	public BsjNamedReferenceType makeType(DeclaredTypeNode node)
+	{
+		return (BsjNamedReferenceType) node.executeOperation(this.typeBuilder, null);
 	}
 
 	/**
@@ -73,9 +132,9 @@ public class TypecheckerToolkit
 	 * @param name The name of the top-level type to obtain.
 	 * @return An element for that top-level type.
 	 */
-	public Element getElementByName(String... name)
+	public BsjTypeElement getElementByName(String... name)
 	{
-		return makeElement(findTopLevelTypeByName(name));
+		return (BsjTypeElement)makeElement(findTopLevelTypeByName(name));
 	}
 
 	/**
@@ -94,10 +153,6 @@ public class TypecheckerToolkit
 		for (int i = 0; i < name.length - 1; i++)
 		{
 			packageNode = packageNode.getSubpackage(name[i]);
-			if (packageNode == null)
-			{
-				throw new IllegalArgumentException("No such package exists: " + name[i]);
-			}
 		}
 		return packageNode.getTopLevelTypeDeclaration(name[name.length - 1], loader);
 	}

@@ -7,11 +7,11 @@ import java.util.Set;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class ConstantVariableElementImpl extends AbstractMemberVariableElementImpl<ConstantDeclarationNode>
 {
@@ -22,7 +22,7 @@ public class ConstantVariableElementImpl extends AbstractMemberVariableElementIm
 	}
 
 	@Override
-	public TypeMirror asType()
+	public BsjType asType()
 	{
 		return makeType(getBackingNode().getType());
 	}

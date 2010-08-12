@@ -1,14 +1,15 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVariable;
 import javax.lang.model.type.TypeVisitor;
 
+import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
-public class TypeVariableImpl extends TypeMirrorImpl implements TypeVariable
+public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 {
 	private TypeMirror lowerBound;
 	private TypeMirror upperBound;
@@ -20,8 +21,9 @@ public class TypeVariableImpl extends TypeMirrorImpl implements TypeVariable
 		this.upperBound = upperBound;
 	}
 
+	// TODO: is this return type correct?  aren't wildcards also type variables?
 	@Override
-	public Element asElement()
+	public BsjTypeParameterElement asElement()
 	{
 		// TODO: possibly have to split into subclasses to remember the source of the type variable?
 		// TODO Auto-generated method stub
@@ -31,13 +33,27 @@ public class TypeVariableImpl extends TypeMirrorImpl implements TypeVariable
 	@Override
 	public TypeMirror getLowerBound()
 	{
-		return this.lowerBound;
+		if (this.lowerBound == null)
+		{
+			return new NullTypeImpl(getManager());
+		} else
+		{
+			return this.lowerBound;
+		}
 	}
 
 	@Override
 	public TypeMirror getUpperBound()
 	{
-		return this.upperBound;
+		if (this.upperBound == null)
+		{
+			NamedTypeDeclarationNode<?> objectDeclaration = getManager().getToolkit().findTopLevelTypeByName("java",
+					"lang", "Object");
+			return makeElement(objectDeclaration).asType();
+		} else
+		{
+			return this.upperBound;
+		}
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class MethodExecutableElementImpl extends AbstractInvokableExecutableElementImpl<MethodDeclarationNode>
 {
@@ -28,7 +29,7 @@ public class MethodExecutableElementImpl extends AbstractInvokableExecutableElem
 	}
 
 	@Override
-	public TypeMirror asType()
+	public BsjType asType()
 	{
 		// TODO Auto-generated method stub
 		return null;

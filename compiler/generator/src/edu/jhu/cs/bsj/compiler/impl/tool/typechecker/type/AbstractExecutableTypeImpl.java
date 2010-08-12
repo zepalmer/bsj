@@ -1,13 +1,13 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 
-public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMirrorImpl implements ExecutableType
+public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMirrorImpl implements BsjExecutableType
 {
 	private T backingNode;
 

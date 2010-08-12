@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends AbstractlyUnmodifiedClassDeclarationNode<?>>
 		extends DeclaredTypeElementImpl<T>
@@ -70,5 +71,11 @@ public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends Abstrac
 			list.add((TypeParameterElement) makeElement(typeParameterNode));
 		}
 		return list;
+	}
+
+	@Override
+	protected List<? extends BsjType> getPrototypicalTypeArgumentList()
+	{
+		return makeTypeMirrorsFromTypeParameters(getBackingNode().getTypeParameters());
 	}
 }

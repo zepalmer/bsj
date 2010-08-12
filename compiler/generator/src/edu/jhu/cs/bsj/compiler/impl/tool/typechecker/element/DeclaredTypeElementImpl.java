@@ -11,7 +11,6 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AccessibleTypeModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
@@ -19,11 +18,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.LocalClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitlyDeclaredTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
  * A supertype for implementations of the {@link TypeElement} modeling interface for use in the BSJ type checker. This
@@ -33,16 +36,22 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
  * @author Zachary Palmer
  */
 public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode<?>> extends AbstractElementImpl<T>
-		implements BsjTypeElement
+		implements BsjDeclaredTypeElement
 {
 	public DeclaredTypeElementImpl(TypecheckerModelManager manager, T backingNode, BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}
-	
+
 	public T getBackingNode()
 	{
 		return super.getBackingNode();
+	}
+
+	@Override
+	public NamedTypeDeclarationNode<?> getDeclarationNode()
+	{
+		return getBackingNode();
 	}
 
 	@Override
@@ -102,11 +111,19 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 	}
 
 	@Override
-	public TypeMirror asType()
+	public BsjDeclaredType asType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		BsjElement enclosingElement = getEnclosingElement();
+		while (enclosingElement != null && !(enclosingElement instanceof BsjDeclaredTypeElement))
+		{
+			enclosingElement = enclosingElement.getEnclosingElement();
+		}
+		BsjDeclaredType enclosingType = enclosingElement == null ? null
+				: ((BsjDeclaredTypeElement) enclosingElement).asType();
+		return new ExplicitlyDeclaredTypeImpl(getManager(), this, getPrototypicalTypeArgumentList(), enclosingType);
 	}
+
+	protected abstract List<? extends BsjType> getPrototypicalTypeArgumentList();
 
 	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
@@ -123,7 +140,7 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 			Element element;
 			if (node instanceof VariableDeclaratorOwnerNode)
 			{
-				for (VariableDeclaratorNode declaratorNode : ((VariableDeclaratorOwnerNode)node).getDeclarators())
+				for (VariableDeclaratorNode declaratorNode : ((VariableDeclaratorOwnerNode) node).getDeclarators())
 				{
 					element = makeElement(declaratorNode);
 					if (element != null)
@@ -159,5 +176,15 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 		{
 			return EnumSet.noneOf(Modifier.class);
 		}
+	}
+
+	protected List<? extends BsjType> makeTypeMirrorsFromTypeParameters(List<? extends TypeParameterNode> list)
+	{
+		List<BsjType> ret = new ArrayList<BsjType>();
+		for (TypeParameterNode typeParameterNode : list)
+		{
+			ret.add(makeType(typeParameterNode));
+		}
+		return ret;
 	}
 }

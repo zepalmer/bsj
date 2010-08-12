@@ -3,8 +3,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.type.DeclaredType;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -14,6 +12,8 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 
 public abstract class AnnotationMirrorImpl<T extends AnnotationNode> extends TypecheckerModelComponentImpl implements
 		AnnotationMirror
@@ -32,19 +32,19 @@ public abstract class AnnotationMirrorImpl<T extends AnnotationNode> extends Typ
 	}
 
 	@Override
-	public DeclaredType getAnnotationType()
+	public BsjDeclaredType getAnnotationType()
 	{
-		return (DeclaredType) makeType(this.backingNode.getAnnotationType());
+		return (BsjDeclaredType) makeType(this.backingNode.getAnnotationType());
 	}
 
-	protected ExecutableElement getAnnotationExecutableElementForIdent(String ident)
+	protected BsjExecutableElement getAnnotationExecutableElementForIdent(String ident)
 	{
 		for (Element element : this.getAnnotationType().asElement().getEnclosedElements())
 		{
 			if (element.getKind() == ElementKind.METHOD && element.getSimpleName().contentEquals(ident)
-					&& element instanceof ExecutableElement)
+					&& element instanceof BsjExecutableElement)
 			{
-				return (ExecutableElement) element;
+				return (BsjExecutableElement) element;
 			}
 		}
 		// TODO: report an appropriate diagnostic here

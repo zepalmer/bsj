@@ -5,13 +5,14 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 
 /**
  * Represents a primitive type in the BSJ type checker.
  * 
  * @author Zachary Palmer
  */
-public class PrimitiveTypeImpl extends TypeMirrorImpl implements javax.lang.model.type.PrimitiveType
+public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveType
 {
 	private PrimitiveType primitiveType;
 	

@@ -19,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class AnnotationMethodExecutableElementImpl extends AbstractExecutableElementImpl<AnnotationMethodDeclarationNode>
 {
@@ -29,7 +30,7 @@ public class AnnotationMethodExecutableElementImpl extends AbstractExecutableEle
 	}
 
 	@Override
-	public TypeMirror asType()
+	public BsjType asType()
 	{
 		// TODO Auto-generated method stub
 		return null;

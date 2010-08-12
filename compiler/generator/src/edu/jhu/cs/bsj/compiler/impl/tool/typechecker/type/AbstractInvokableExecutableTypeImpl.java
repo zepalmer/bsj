@@ -11,7 +11,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 
-public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvokableDeclarationNode<?>> extends AbstractExecutableTypeImpl<T>
+public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvokableDeclarationNode<?>> extends
+		AbstractExecutableTypeImpl<T>
 {
 	public AbstractInvokableExecutableTypeImpl(TypecheckerModelManager manager, T backingNode)
 	{
@@ -26,7 +27,13 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 		{
 			list.add(var.getType().executeOperation(new TypeBuildingNodeOperation(getManager()), null));
 		}
-		// TODO: vararg parameter?
+		// TODO: consider - do we need a special representation for varargs?
+		if (getBackingNode().getVarargParameter() != null)
+		{
+			VariableNode var = getBackingNode().getVarargParameter();
+			list.add(new ArrayTypeImpl(getManager(), var.getType().executeOperation(
+					new TypeBuildingNodeOperation(getManager()), null)));
+		}
 		return list;
 	}
 
