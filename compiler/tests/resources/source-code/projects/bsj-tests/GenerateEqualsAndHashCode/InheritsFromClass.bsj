@@ -1,0 +1,10 @@
+#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
+
+@@GenerateEqualsAndHashCode(properties={"b"})
+public class InheritsFromClass extends InheritsFromObjectWithEquals {
+	@@Property private int b;
+	public InheritsFromClass(int a, int b) {
+		super(a);
+		this.b = b;
+	}
+}
