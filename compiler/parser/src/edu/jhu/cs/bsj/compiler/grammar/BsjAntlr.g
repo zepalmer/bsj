@@ -2881,6 +2881,8 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("interfaceMethodDeclaration");
+            TypeParameterListNode typeParametersNode =
+                    factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
             TypeNode returnTypeNode = null;
             UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
@@ -2889,7 +2891,12 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         }
     :   
         javadoc methodModifiers
-        typeParameters?
+        (
+            typeParameters
+            {
+                typeParametersNode = $typeParameters.ret;
+            }
+        )?
         methodReturnType
         {
             returnTypeNode = $methodReturnType.ret;
@@ -2918,7 +2925,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                     $formalParameters.varargParameter,
                     returnTypeNode,
                     throwsNode,
-                    $typeParameters.ret,
+                    typeParametersNode,
                     $javadoc.ret);
         }         
     ;
