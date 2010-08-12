@@ -13,8 +13,8 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElem
 public class TypeNamespaceMap extends NamespaceMap<BsjTypeLikeElement>
 {
 	public TypeNamespaceMap(TypeNamespaceMap deferenceMap, DiagnosticListener<BsjSourceLocation> diagnosticListener,
-			boolean eager)
+			boolean eager, boolean prohibitsOverlap)
 	{
-		super(SymbolType.TYPE, deferenceMap, diagnosticListener, eager);
+		super(SymbolType.TYPE, deferenceMap, diagnosticListener, eager, prohibitsOverlap);
 	}
 }

@@ -44,7 +44,7 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 		this.locator = new ParentEnvironmentNodeIdentifyingOperation();
 		this.modifier = new EnvironmentModifyingNodeOperation(toolkit, loader, this.listener);
 	}
-
+	
 	@Override
 	public Environment executeDefault(Node node, Void p)
 	{
@@ -59,8 +59,9 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 			if (parentEnvironmentNode == null)
 			{
 				// There is no parent environment; start a fresh one
-				environment = new Environment(new TypeNamespaceMap(null, this.listener, false), new MethodNamespaceMap(
-						null, this.listener, false), new VariableNamespaceMap(null, this.listener, false));
+				environment = new Environment(new TypeNamespaceMap(null, this.listener, false, false),
+						new MethodNamespaceMap(null, this.listener, false, false), new VariableNamespaceMap(null,
+								this.listener, false, false));
 				environment.lock();
 			} else
 			{
@@ -69,6 +70,13 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 
 				// Apply changes to its environment as necessary
 				environment = parentEnvironmentNode.executeOperation(this.modifier, parentEnvironment, node);
+
+				// Sanity check
+				if (environment == null)
+				{
+					throw new IllegalStateException("Parent environment produced by node of type "
+							+ parentEnvironmentNode.getClass() + " was null for child of type " + node.getClass());
+				}
 
 				// Lock the environment to ensure that it does not change
 				environment.lock();
@@ -80,6 +88,7 @@ public class EnvironmentCalculatingOperation extends BsjDefaultNodeOperation<Voi
 			// Store the result
 			this.environmentCache.put(node, environment);
 		}
+		
 		return environment;
 	}
 }

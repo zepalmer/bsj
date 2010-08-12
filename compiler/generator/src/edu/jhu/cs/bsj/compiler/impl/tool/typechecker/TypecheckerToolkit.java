@@ -33,6 +33,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
+// TODO: consider renaming to, for example, EnvironmentToolkit
 public class TypecheckerToolkit
 {
 	private TypecheckerModelManager manager;

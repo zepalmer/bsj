@@ -1571,7 +1571,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeTypeDeclarationListNode(TypeDeclarationListNode node, PrependablePrintStream p)
 	{
-		executeListNode(node, p);
+		handleListNode(node, "", "\n", "", p, true);
 		return null;
 	}
 

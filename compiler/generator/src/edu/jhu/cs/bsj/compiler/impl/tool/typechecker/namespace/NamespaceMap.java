@@ -1,8 +1,13 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -43,11 +48,13 @@ public class NamespaceMap<T extends BsjElement>
 	private DiagnosticListener<BsjSourceLocation> diagnosticListener;
 	/** Whether or not this map reports errors eagerly. */
 	private boolean eager;
+	/** Whether or not this map considers overlap with its immediate deference map to be a conflict. */
+	private boolean prohibitsOverlap;
 	/** Whether or not this environment is locked. */
 	private boolean locked;
 
 	protected NamespaceMap(SymbolType symbolType, NamespaceMap<? extends T> deferenceMap,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager)
+			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager, boolean prohibitsOverlap)
 	{
 		super();
 		this.symbolType = symbolType;
@@ -55,11 +62,12 @@ public class NamespaceMap<T extends BsjElement>
 		this.deferenceMap = deferenceMap;
 		this.diagnosticListener = diagnosticListener;
 		this.eager = eager;
+		this.prohibitsOverlap = prohibitsOverlap;
 		this.locked = false;
 	}
-	
+
 	/**
-	 * Locks this namespace.  A locked namespace cannot be modified; any attempts to do so produce a runtime error.
+	 * Locks this namespace. A locked namespace cannot be modified; any attempts to do so produce a runtime error.
 	 */
 	public void lock()
 	{
@@ -80,7 +88,9 @@ public class NamespaceMap<T extends BsjElement>
 	{
 		if (this.locked)
 			throw new IllegalStateException("Attempted to modify locked namespace map");
-		
+		if (element == null)
+			throw new IllegalStateException("Attempted to store null value in namespace map");
+
 		NamespaceEntry<T> entry = this.backingMap.get(name);
 		if (entry == null)
 		{
@@ -90,11 +100,25 @@ public class NamespaceMap<T extends BsjElement>
 		{
 			entry.add(element, indicator);
 		}
-		if (this.eager && entry.getValues().size() > 1)
+		
+		if (this.eager)
 		{
-			this.diagnosticListener.report(new AmbiguousSymbolNameDiagnosticImpl(indicator.getStartLocation(), name,
-					this.symbolType, entry.getIndicatorNodeMap().keySet()));
+			Diagnostic<BsjSourceLocation> diagnostic = considerAmbiguity(name, indicator.getStartLocation());
+			if (diagnostic != null)
+			{
+				this.diagnosticListener.report(diagnostic);
+			}
 		}
+	}
+
+	/**
+	 * Determines whether or not an entry for the given name exists in this map.
+	 * @param name The name of the entry.
+	 * @return <code>true</code> if that entry exists; <code>false</code> if it does not.
+	 */
+	public boolean contains(String name)
+	{
+		return this.backingMap.containsKey(name) || (this.deferenceMap != null && this.deferenceMap.contains(name));
 	}
 
 	/**
@@ -108,12 +132,15 @@ public class NamespaceMap<T extends BsjElement>
 	{
 		if (this.backingMap.containsKey(name))
 		{
-			NamespaceEntry<T> entry = this.backingMap.get(name);
-			if (!this.eager && entry.getValues().size() > 1)
+			if (!this.eager)
 			{
-				this.diagnosticListener.report(new AmbiguousSymbolNameDiagnosticImpl(sourceLocation, name,
-						this.symbolType, entry.getIndicatorNodeMap().keySet()));
+				Diagnostic<BsjSourceLocation> diagnostic = considerAmbiguity(name, sourceLocation);
+				if (diagnostic != null)
+				{
+					this.diagnosticListener.report(diagnostic);
+				}
 			}
+			NamespaceEntry<T> entry = this.backingMap.get(name);
 			return entry.getFirstValue();
 		} else if (this.deferenceMap != null)
 		{
@@ -121,6 +148,83 @@ public class NamespaceMap<T extends BsjElement>
 		} else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * Determines whether or not the map is currently ambiguous for the specified name.  If it is, produces a diagnostic
+	 * to that effect.
+	 * @param name The name to consider.
+	 * @param sourceLocation The source location to use when reporting errors.
+	 * @return The diagnostic to report or <code>null</code> for no diagnostic.
+	 */
+	protected Diagnostic<BsjSourceLocation> considerAmbiguity(String name, BsjSourceLocation sourceLocation)
+	{
+		Collection<? extends T> values = getAll(name);
+		if (values.size() > 1)
+		{
+			Map<? extends Node, ? extends T> map = getIndicatorMapFor(name);
+			return new AmbiguousSymbolNameDiagnosticImpl(sourceLocation, name, this.symbolType, map.keySet());
+		} else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * Retrieves all of the values which are mapped to the specified name in this namespace map.
+	 * @param name The name to look up.
+	 * @return The entries which are mapped to that name in the namespace map.
+	 */
+	public Collection<? extends T> getAll(String name)
+	{
+		if (this.backingMap.containsKey(name))
+		{
+			if (this.prohibitsOverlap && this.deferenceMap != null)
+			{
+				Set<T> set = new HashSet<T>();
+				set.addAll(this.backingMap.get(name).getValues());
+				set.addAll(this.deferenceMap.getAll(name));
+				return set;
+			} else
+			{
+				return this.backingMap.get(name).getValues();
+			}
+		} else if (this.deferenceMap != null)
+		{
+			return this.deferenceMap.getAll(name);
+		} else
+		{
+			return Collections.emptySet();
+		}
+	}
+	
+	/**
+	 * Retrieves a mapping from indicator nodes to the values which are mapped to a given name in the namespace map.
+	 * This method is used for error reporting.
+	 * @param name The name to look up.
+	 * @return The mapping.
+	 */
+	protected Map<? extends Node, ? extends T> getIndicatorMapFor(String name)
+	{
+		if (this.backingMap.containsKey(name))
+		{
+			if (this.prohibitsOverlap && this.deferenceMap != null)
+			{
+				Map<Node,T> map = new HashMap<Node, T>();
+				map.putAll(this.backingMap.get(name).getIndicatorNodeMap());
+				map.putAll(this.deferenceMap.getIndicatorMapFor(name));
+				return map;
+			} else
+			{
+				return this.backingMap.get(name).getIndicatorNodeMap();
+			}
+		} else if (this.deferenceMap != null)
+		{
+			return this.deferenceMap.getIndicatorMapFor(name);
+		} else
+		{
+			return Collections.emptyMap();
 		}
 	}
 
@@ -153,7 +257,7 @@ public class NamespaceMap<T extends BsjElement>
 
 		return false;
 	}
-	
+
 	/**
 	 * Creates a string representation of this namespace.
 	 */
@@ -175,13 +279,13 @@ public class NamespaceMap<T extends BsjElement>
 	{
 		for (Map.Entry<String, NamespaceEntry<E>> entry : map.backingMap.entrySet())
 		{
-			if (sb.length()>0)
+			if (sb.length() > 0)
 			{
 				sb.append(", ");
 			}
 			sb.append(entry.getKey());
 			sb.append(" -> ");
-			if (entry.getValue().getValues().size()>1)
+			if (entry.getValue().getValues().size() > 1)
 			{
 				sb.append("{");
 				boolean first = true;

@@ -13,8 +13,8 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableEl
 public class MethodNamespaceMap extends NamespaceMap<BsjExecutableElement>
 {
 	public MethodNamespaceMap(NamespaceMap<? extends BsjExecutableElement> deferenceMap,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager)
+			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager, boolean prohibitsOverlap)
 	{
-		super(SymbolType.METHOD, deferenceMap, diagnosticListener, eager);
+		super(SymbolType.METHOD, deferenceMap, diagnosticListener, eager, prohibitsOverlap);
 	}
 }

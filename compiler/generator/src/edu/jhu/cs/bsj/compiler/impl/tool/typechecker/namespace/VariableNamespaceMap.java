@@ -14,9 +14,9 @@ public class VariableNamespaceMap extends NamespaceMap<BsjVariableElement>
 {
 
 	public VariableNamespaceMap(NamespaceMap<? extends BsjVariableElement> deferenceMap,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager)
+			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager, boolean prohibitsOverlap)
 	{
-		super(SymbolType.VARIABLE, deferenceMap, diagnosticListener, eager);
+		super(SymbolType.VARIABLE, deferenceMap, diagnosticListener, eager, prohibitsOverlap);
 	}
 
 }

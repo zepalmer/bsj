@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
@@ -19,23 +18,27 @@ public class ParentEnvironmentNodeIdentifyingOperation extends BsjDefaultNodeOpe
 	@Override
 	public Node executeDefault(Node node, Void p)
 	{
-		if (node instanceof StatementNode)
+		if (node instanceof BlockStatementNode)
 		{
 			if (node.getParent() instanceof BlockStatementListNode)
 			{
 				// In this case, the statement appears within a block or similar construct.  We want to defer scope to
-				// the statement which appears immediately before this one (or to the parent if this is the first
-				// statement in the block).
+				// the statement which appears immediately before this one.
 				BlockStatementListNode parent = (BlockStatementListNode)node.getParent();
 				BlockStatementNode before = parent.getBefore((BlockStatementNode)node);
 				if (before == null)
 				{
+					// In this case, there is no immediately preceeding statement.  Defer to the environment of the
+					// enclosing list.
+					// TODO: for a block list inside of a constructor, we should instead defer to the alternate or
+					// super constructor invocation, if any.  Other BlockStatementListNode containers may have other
+					// rules, too.
 					return parent;
 				} else
 				{
 					return before;
 				}
-			} else if (node.getParent() instanceof StatementNode)
+			} else if (node.getParent() instanceof BlockStatementNode)
 			{
 				// In this case, the statement appears in a context such as a do-while loop, for loop, or if statement.
 				// Just use that parent as the scope.

@@ -108,8 +108,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -129,14 +128,14 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeAnnotationBodyNode(AnnotationBodyNode node, Environment env, Node child)
 	{
 		// *** Create a new scope for inherited member elements
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Populate elements inherited from java.lang.annotation.Annotation
 		AnnotationDeclarationNode declarationNode = (AnnotationDeclarationNode) node.getParent();
 		populateInheritedMembersFor(declarationNode, env);
 
 		// *** Create a new scope for declared member elements
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Populate member elements
 		populateElements(env, node.getMembers(), AccessModifier.PRIVATE);
@@ -291,15 +290,13 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeBlockNode(BlockNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeBlockStatementListNode(BlockStatementListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -359,14 +356,14 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeClassBodyNode(ClassBodyNode node, Environment env, Node child)
 	{
 		// *** Create a new scope for inherited member elements
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Inherit member elements
 		ClassDeclarationNode declarationNode = (ClassDeclarationNode) node.getParent();
 		populateInheritedMembersFor(declarationNode, env);
 
 		// *** Create a new scope for declared member elements
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Populate member elements
 		populateElements(env, node.getMembers(), AccessModifier.PRIVATE);
@@ -379,7 +376,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeClassDeclarationNode(ClassDeclarationNode node, Environment env, Node child)
 	{
 		// *** Create a new scope for type parameters
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Populate type parameters (which are in scope of the entire declaration)
 		populateTypeParameters(env, node.getTypeParameters());
@@ -431,7 +428,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		}
 
 		// *** Create a new scope for the on-demand imports
-		env = makeEnvironment(env, false);
+		env = makeEnvironment(env, EnvType.ON_DEMAND_IMPORT);
 
 		// *** Process on-demand imports. This namespace has a lazy error policy, as ambiguities in on-demand
 		// imports (such as "import java.util.*; import java.awt.*;" only matter if the ambiguous name is used
@@ -443,18 +440,19 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 
 		// *** Process top-level package peers. This namespace has an eager error policy as any duplication means
 		// a name conflict in the local package.
-		TypeNamespaceMap typeNamespaceMap = makeTypeNamespace(env.getTypeNamespaceMap(), true);
-		populateNamespaceMapWithPackage(typeNamespaceMap, (PackageNode) node.getParent(), node.getPackageDeclaration());
+		TypeNamespaceMap typeNamespaceMap = makeTypeNamespace(env.getTypeNamespaceMap(), true, false);
+		populateNamespaceMapWithPackage(typeNamespaceMap, (PackageNode) node.getParent(),
+				node.getPackageDeclaration() == null ? node : node.getPackageDeclaration());
 
 		// *** Process single-type imports. This namespace has a eager error policy, as ambiguities in single-type
 		// imports cause the import statements to be useless in any context (such as
 		// "import java.util.List; import java.awt.List;").
-		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true);
+		typeNamespaceMap = makeTypeNamespace(typeNamespaceMap, true, false);
 		populateSingleTypeImports(typeNamespaceMap, node.getImports());
 
 		// *** Process single-type static imports.
-		env = new Environment(typeNamespaceMap, makeMethodNamespace(env.getMethodNamespaceMap(), true),
-				makeVariableNamespace(env.getVariableNamespaceMap(), true));
+		env = new Environment(typeNamespaceMap, makeMethodNamespace(env.getMethodNamespaceMap(), true, false),
+				makeVariableNamespace(env.getVariableNamespaceMap(), true, false));
 		populateSingleStaticImports(env, node.getImports());
 
 		// *** Process top-level type declarations. The addition of the public top-level type declaration will, of
@@ -541,14 +539,14 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeEnumBodyNode(EnumBodyNode node, Environment env, Node child)
 	{
 		// *** Create a new scope for inherited member elements
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Inherit member elements
 		EnumDeclarationNode declarationNode = (EnumDeclarationNode) node.getParent();
 		populateInheritedMembersFor(declarationNode, env);
 
 		// *** Create a new scope for declared member elements
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Add hard-coded elements as specified in JLS v3 S8.9
 		// TODO: how do we create elements which are not backed by AST nodes?
@@ -607,15 +605,13 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeExpressionStatementNode(ExpressionStatementNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeFieldDeclarationNode(FieldDeclarationNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -713,14 +709,14 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeInterfaceBodyNode(InterfaceBodyNode node, Environment env, Node child)
 	{
 		// *** Create a new scope for inherited member elements
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Inherit member elements
 		InterfaceDeclarationNode declarationNode = (InterfaceDeclarationNode) node.getParent();
 		populateInheritedMembersFor(declarationNode, env);
 
 		// *** Create a new scope for declared member elements
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Populate member elements
 		populateElements(env, node.getMembers(), AccessModifier.PRIVATE);
@@ -733,7 +729,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeInterfaceDeclarationNode(InterfaceDeclarationNode node, Environment env, Node child)
 	{
 		// *** Create a new scope for type parameters
-		env = makeEnvironment(env, true);
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
 
 		// *** Populate type parameters (which are in scope of the entire declaration)
 		populateTypeParameters(env, node.getTypeParameters());
@@ -741,7 +737,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		// *** Finished!
 		return env;
 	}
-	
+
 	@Override
 	public Environment executeInterfaceMemberListNode(InterfaceMemberListNode node, Environment env, Node child)
 	{
@@ -791,8 +787,9 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, Environment env,
 			Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		env = makeEnvironment(env, EnvType.STATEMENT);
+		tryPopulateLocalVariable(env.getVariableNamespaceMap(), node);
+		return env;
 	}
 
 	@Override
@@ -929,17 +926,17 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeMethodDeclarationNode(MethodDeclarationNode node, Environment env, Node child)
 	{
 		// *** Create a new environment for type parameter population
-		env = makeEnvironment(env, true);
-		
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
+
 		// *** Populate type parameters (which are in scope of the entire declaration)
 		populateTypeParameters(env, node.getTypeParameters());
-		
+
 		// *** Populate method parameters into method body
 		if (child instanceof BlockStatementListNode)
 		{
 			populateParameters(env, node.getParameters());
 		}
-		
+
 		// *** Finished!
 		return env;
 	}
@@ -1240,22 +1237,19 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeVariableDeclaratorListNode(VariableDeclaratorListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeVariableDeclaratorNode(VariableDeclaratorNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeVariableInitializerListNode(VariableInitializerListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1665,8 +1659,9 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 				BsjNamedReferenceType referenceType = toolkit.makeType(declaredTypeNode);
 				if (referenceType instanceof BsjExplicitlyDeclaredType)
 				{
-					BsjExplicitlyDeclaredType explicitlyDeclaredType = (BsjExplicitlyDeclaredType)referenceType;
-					populateInheritedMembersWithDynamicDispatchFor(explicitlyDeclaredType.asElement().getDeclarationNode(), env);
+					BsjExplicitlyDeclaredType explicitlyDeclaredType = (BsjExplicitlyDeclaredType) referenceType;
+					populateInheritedMembersWithDynamicDispatchFor(
+							explicitlyDeclaredType.asElement().getDeclarationNode(), env);
 				} else
 				{
 					// This indicates that the code tries to extend a type parameter, such as "Foo<T> extends T".
@@ -1682,7 +1677,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 			populateInheritedMembersWithDynamicDispatchFor(objectElement.getDeclarationNode(), env);
 		}
 	}
-	
+
 	/**
 	 * Populates the specified parameters into the current environment.
 	 */
@@ -1697,6 +1692,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 
 	/**
 	 * Populates the specified type parameters into the current environment.
+	 * 
 	 * @param env The environment to use.
 	 * @param typeParameters The type parameters to populate.
 	 */
@@ -1801,6 +1797,22 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	}
 
 	/**
+	 * Populates a local variable into the provided method namespace map.
+	 * 
+	 * @param variableNamespaceMap The namespace into which to populate the variable.
+	 * @param memberConstant The declaration which is being populated.
+	 */
+	private void tryPopulateLocalVariable(VariableNamespaceMap variableNamespaceMap,
+			LocalVariableDeclarationNode declarationNode)
+	{
+		for (VariableDeclaratorNode declaratorNode : declarationNode.getDeclarators())
+		{
+			variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+					(BsjVariableElement) this.toolkit.makeElement(declaratorNode), declaratorNode);
+		}
+	}
+
+	/**
 	 * Attempts to populate a constructor into the provided method namespace map. This will succeed if and only if the
 	 * constructor's access modifier is less restrictive or equally restrictive to the level of access provided.
 	 * 
@@ -1901,33 +1913,74 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	/**
 	 * Convenience method for creating a type namespace.
 	 */
-	private TypeNamespaceMap makeTypeNamespace(TypeNamespaceMap map, boolean eager)
+	private TypeNamespaceMap makeTypeNamespace(TypeNamespaceMap map, boolean eager, boolean prohibitsOverlap)
 	{
-		return new TypeNamespaceMap(map, listener, eager);
+		return new TypeNamespaceMap(map, listener, eager, prohibitsOverlap);
 	}
 
 	/**
 	 * Convenience method for creating a method namespace.
 	 */
-	private MethodNamespaceMap makeMethodNamespace(MethodNamespaceMap map, boolean eager)
+	private MethodNamespaceMap makeMethodNamespace(MethodNamespaceMap map, boolean eager, boolean prohibitsOverlap)
 	{
-		return new MethodNamespaceMap(map, listener, eager);
+		return new MethodNamespaceMap(map, listener, eager, prohibitsOverlap);
 	}
 
 	/**
 	 * Convenience method for creating a variable namespace.
 	 */
-	private VariableNamespaceMap makeVariableNamespace(VariableNamespaceMap map, boolean eager)
+	private VariableNamespaceMap makeVariableNamespace(VariableNamespaceMap map, boolean eager, boolean prohibitsOverlap)
 	{
-		return new VariableNamespaceMap(map, listener, eager);
+		return new VariableNamespaceMap(map, listener, eager, prohibitsOverlap);
 	}
 
 	/**
 	 * Convenience method for making a new environment.
 	 */
-	private Environment makeEnvironment(Environment env, boolean eager)
+	private Environment makeEnvironment(Environment env, boolean eager, boolean prohibitsOverlap)
 	{
-		return new Environment(makeTypeNamespace(env.getTypeNamespaceMap(), eager), makeMethodNamespace(
-				env.getMethodNamespaceMap(), eager), makeVariableNamespace(env.getVariableNamespaceMap(), eager));
+		return new Environment(makeTypeNamespace(env.getTypeNamespaceMap(), eager, prohibitsOverlap),
+				makeMethodNamespace(env.getMethodNamespaceMap(), eager, prohibitsOverlap), makeVariableNamespace(
+						env.getVariableNamespaceMap(), eager, prohibitsOverlap));
+	}
+
+	/**
+	 * Convenience method for making a new environment.
+	 */
+	private Environment makeEnvironment(Environment env, EnvType envType)
+	{
+		return makeEnvironment(env, envType.isEager(), envType.isProhibitsOverlap());
+	}
+
+	/**
+	 * An enumeration which categorizes environments based on their usual behaviors.
+	 */
+	private static enum EnvType
+	{
+		/** The category used for environments which handle on-demand imports. */
+		ON_DEMAND_IMPORT(false, false),
+		/** The category used for types and members. This is used for single imports as well. */
+		TYPE_OR_MEMBER(true, false),
+		/** The category used for sequential statements. */
+		STATEMENT(true, true);
+
+		private boolean eager;
+		private boolean prohibitsOverlap;
+
+		private EnvType(boolean eager, boolean prohibitsOverlap)
+		{
+			this.eager = eager;
+			this.prohibitsOverlap = prohibitsOverlap;
+		}
+
+		public boolean isEager()
+		{
+			return eager;
+		}
+
+		public boolean isProhibitsOverlap()
+		{
+			return prohibitsOverlap;
+		}
 	}
 }
