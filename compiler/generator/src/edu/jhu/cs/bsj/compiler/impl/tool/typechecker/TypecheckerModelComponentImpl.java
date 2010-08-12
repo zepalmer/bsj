@@ -91,10 +91,10 @@ public class TypecheckerModelComponentImpl
 	
 	/**
 	 * Delegation method to toolkit.
-	 * @see TypecheckerToolkit#getElementByName(String...)
+	 * @see TypecheckerToolkit#getTypeElementByName(String...)
 	 */
 	public Element getElementByName(String... name)
 	{
-		return getManager().getToolkit().getElementByName(name);
+		return getManager().getToolkit().getTypeElementByName(name);
 	}
 }

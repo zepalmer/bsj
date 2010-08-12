@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -65,12 +66,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNod
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
@@ -219,8 +218,20 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeAnonymousClassBodyNode(AnonymousClassBodyNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// *** Make a new environment for inherited members
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
+
+		// *** Populate inherited members
+		populateInheritedMembersFor(node, env);
+
+		// *** Create a new environment for declared members
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
+
+		// *** Populate declared members
+		populateElements(env, node.getMembers(), AccessModifier.PRIVATE);
+
+		// *** Finished!
+		return env;
 	}
 
 	@Override
@@ -335,15 +346,20 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeCatchListNode(CatchListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeCatchNode(CatchNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// *** The scope of the parameter in a catch block is the body of that catch block
+		if (node.getBody().equals(child))
+		{
+			env = makeEnvironment(env, EnvType.STATEMENT);
+			populateParameters(env, Collections.singletonList(node.getParameter()));
+
+		}
+		return env;
 	}
 
 	@Override
@@ -486,15 +502,26 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeConstructorBodyNode(ConstructorBodyNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeConstructorDeclarationNode(ConstructorDeclarationNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// *** Create a new environment for type parameter population
+		env = makeEnvironment(env, EnvType.TYPE_OR_MEMBER);
+
+		// *** Populate type parameters (which are in scope of the entire declaration)
+		populateTypeParameters(env, node.getTypeParameters());
+
+		// *** Populate constructor parameters into constructor invocation and constructor body
+		if (child instanceof ConstructorBodyNode)
+		{
+			populateParameters(env, node.getParameters());
+		}
+
+		// *** Finished!
+		return env;
 	}
 
 	@Override
@@ -518,8 +545,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeDoWhileLoopNode(DoWhileLoopNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -531,8 +557,13 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeEnhancedForLoopNode(EnhancedForLoopNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// *** The scope of the parameter to the enhanced for loop is the body of that loop
+		if (node.getStatement().equals(child))
+		{
+			env = makeEnvironment(env, EnvType.STATEMENT);
+			populateParameters(env, Collections.singletonList(node.getVariable()));
+		}
+		return env;
 	}
 
 	@Override
@@ -630,23 +661,35 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, Environment env,
 			Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeForInitializerExpressionNode(ForInitializerExpressionNode node, Environment env,
 			Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeForLoopNode(ForLoopNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if (child.equals(node.getInitializer()))
+		{
+			// Addressed by the children of this node. Either it's a statement expression list (in which case
+			// no changes occur) or it's a local variable declaration (in which case the local variable declaration
+			// handler will populate things properly).
+		} else
+		{
+			// Populate all of the contents of the initializer
+			if (node.getInitializer() instanceof ForInitializerDeclarationNode)
+			{
+				env = makeEnvironment(env, EnvType.STATEMENT);
+				tryPopulateLocalVariable(env.getVariableNamespaceMap(),
+						((ForInitializerDeclarationNode) node.getInitializer()).getDeclaration());
+			}
+		}
+		return env;
 	}
 
 	@Override
@@ -664,8 +707,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeIfNode(IfNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -689,8 +731,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeInitializerDeclarationNode(InitializerDeclarationNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -766,15 +807,20 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeLabeledStatementNode(LabeledStatementNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeLocalClassDeclarationNode(LocalClassDeclarationNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// *** Create a new environment to contain the declaration
+		env = makeEnvironment(env, EnvType.STATEMENT);
+
+		// *** Populate the type itself into the namespace
+		env.getTypeNamespaceMap().add(node.getIdentifier().getIdentifier(), this.toolkit.makeElement(node), node);
+
+		// *** Finished
+		return env;
 	}
 
 	@Override
@@ -787,8 +833,16 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, Environment env,
 			Node child)
 	{
-		env = makeEnvironment(env, EnvType.STATEMENT);
-		tryPopulateLocalVariable(env.getVariableNamespaceMap(), node);
+		if (node.getType().equals(child) || node.getModifiers().equals(child) || node.getDeclarators().equals(child))
+		{
+			// In this case, none of the declarators apply. We're going to let the declarator list sort out which of
+			// its children get which values in scope. The only environment children that get all of the declarators
+			// are those which follow this statement.
+		} else
+		{
+			env = makeEnvironment(env, EnvType.STATEMENT);
+			tryPopulateLocalVariable(env.getVariableNamespaceMap(), node);
+		}
 		return env;
 	}
 
@@ -802,46 +856,40 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, Environment env,
 			Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, Environment env,
 			Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaAnnotationElementNode(MetaAnnotationElementNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaAnnotationListNode(MetaAnnotationListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -854,8 +902,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -975,8 +1022,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1043,8 +1089,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeReferenceTypeListNode(ReferenceTypeListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1069,8 +1114,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, Environment env,
 			Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1082,8 +1126,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeStatementExpressionListNode(StatementExpressionListNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1114,8 +1157,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	public Environment executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node,
 			Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1128,8 +1170,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeSynchronizedNode(SynchronizedNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1141,15 +1182,13 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeThrowNode(ThrowNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeTryNode(TryNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
@@ -1237,12 +1276,33 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeVariableDeclaratorListNode(VariableDeclaratorListNode node, Environment env, Node child)
 	{
+		// *** A variable declarator child of this list has in its scope all declarators which appear before it in the
+		// list (but not itself; that is handled at a finer granularity).
+
+		if (child instanceof VariableDeclaratorNode)
+		{
+			env = makeEnvironment(env, EnvType.STATEMENT);
+			VariableDeclaratorNode it = (VariableDeclaratorNode) child;
+			it = node.getBefore(it);
+			while (it != null)
+			{
+				tryPopulateVariableDeclarator(env.getVariableNamespaceMap(), it);
+				it = node.getBefore(it);
+			}
+		}
 		return env;
 	}
 
 	@Override
 	public Environment executeVariableDeclaratorNode(VariableDeclaratorNode node, Environment env, Node child)
 	{
+		// *** The scope of a variable declarator includes its own initializer.
+		if (child.equals(node.getInitializer()))
+		{
+			env = makeEnvironment(env, EnvType.STATEMENT);
+			tryPopulateVariableDeclarator(env.getVariableNamespaceMap(), node);
+		}
+
 		return env;
 	}
 
@@ -1279,15 +1339,13 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	@Override
 	public Environment executeWhileLoopNode(WhileLoopNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	@Override
 	public Environment executeWildcardTypeNode(WildcardTypeNode node, Environment env, Node child)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return env;
 	}
 
 	// ***** BEGIN UTILITY METHODS *******************************************
@@ -1443,7 +1501,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 			{
 				tryPopulateMemberType(environment.getTypeNamespaceMap(), node, (NamedTypeDeclarationNode<?>) node,
 						access, name);
-			} else if (node instanceof AbstractMemberVariableDeclarationNode<?>)
+			} else if (node instanceof FieldDeclarationNode)
 			{
 				tryPopulateMemberField(environment.getVariableNamespaceMap(), node, (FieldDeclarationNode) node,
 						access, name);
@@ -1535,6 +1593,46 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	/**
 	 * Populates an environment with the members inherited by the given type. This method populates a scope for
 	 * inherited members by recursively inheriting the parent members of this type. Note that it does not populate the
+	 * members or other elements of the provided type. For instance, if the anonymous class is an implicit subtype of
+	 * the <tt>Foo</tt> class, the members of <tt>Foo</tt> will be populated.
+	 * 
+	 * @param declarationNode The type for which the inherited environment is desired.
+	 * @param env The environment to populate.
+	 */
+	private void populateInheritedMembersFor(AnonymousClassBodyNode declarationNode, Environment env)
+	{
+		if (declarationNode.getParent() instanceof ClassInstantiationNode)
+		{
+			if (declarationNode.getParent() instanceof QualifiedClassInstantiationNode)
+			{
+				// TODO
+				throw new NotImplementedYetException();
+			} else if (declarationNode.getParent() instanceof UnqualifiedClassInstantiationNode)
+			{
+				UnqualifiedClassInstantiationNode instantiationNode = (UnqualifiedClassInstantiationNode) declarationNode.getParent();
+				populateDeclaredSupertype(instantiationNode.getType(), env);
+			} else
+			{
+				throw new IllegalStateException("Don't know how to handle class instantiation node of type "
+						+ declarationNode.getParent().getClass());
+			}
+		} else if (declarationNode.getParent() instanceof EnumConstantDeclarationNode)
+		{
+			EnumDeclarationNode enumDeclarationNode = declarationNode.getNearestAncestorOfType(EnumDeclarationNode.class);
+			populateInheritedMembersWithDynamicDispatchFor(enumDeclarationNode, env);
+		} else
+		{
+			throw new IllegalStateException("Don't know how to handle anonymous class body parent of type "
+					+ declarationNode.getParent().getClass());
+		}
+
+		BsjTypeElement annotationElement = toolkit.getTypeElementByName("java", "lang", "annotation", "Annotation");
+		populateInheritedMembersWithDynamicDispatchFor(annotationElement.getDeclarationNode(), env);
+	}
+
+	/**
+	 * Populates an environment with the members inherited by the given type. This method populates a scope for
+	 * inherited members by recursively inheriting the parent members of this type. Note that it does not populate the
 	 * members or other elements of the provided type. For instance, if class <tt>Foo</tt> is provided to this method
 	 * and <tt>Foo</tt> extends <tt>Object</tt>, the returned environment will contain all <tt>Object</tt> methods.
 	 * 
@@ -1543,7 +1641,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 */
 	private void populateInheritedMembersFor(AnnotationDeclarationNode declarationNode, Environment env)
 	{
-		BsjTypeElement annotationElement = toolkit.getElementByName("java", "lang", "annotation", "Annotation");
+		BsjTypeElement annotationElement = toolkit.getTypeElementByName("java", "lang", "annotation", "Annotation");
 		populateInheritedMembersWithDynamicDispatchFor(annotationElement.getDeclarationNode(), env);
 	}
 
@@ -1558,7 +1656,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 */
 	private void populateInheritedMembersFor(ClassDeclarationNode declarationNode, Environment env)
 	{
-		BsjTypeElement objectElement = (BsjTypeElement) toolkit.getElementByName("java", "lang", "Object");
+		BsjTypeElement objectElement = (BsjTypeElement) toolkit.getTypeElementByName("java", "lang", "Object");
 		if (objectElement.equals(toolkit.makeElement(declarationNode)))
 		{
 			// Then we're already done; Object inherits nothing.
@@ -1569,18 +1667,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		BsjTypeElement superclassElement = null;
 		if (declarationNode.getExtendsClause() != null)
 		{
-			BsjNamedReferenceType referenceType = toolkit.makeType(declarationNode.getExtendsClause());
-			BsjTypeLikeElement uncheckedSuperclassElement = ((BsjDeclaredType) referenceType).asElement();
-			if (uncheckedSuperclassElement instanceof BsjTypeElement)
-			{
-				superclassElement = (BsjTypeElement) uncheckedSuperclassElement;
-			} else
-			{
-				// This indicates that the code tries to extend a type parameter, such as "Foo extends T" as a
-				// member class of Bar<T>. This is not legal.
-				// TODO: raise an appropriate diagnostic
-				throw new NotImplementedYetException();
-			}
+			populateDeclaredSupertype(declarationNode.getExtendsClause(), env);
 		} else
 		{
 			superclassElement = objectElement;
@@ -1593,18 +1680,7 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 		// populate everything from the superinterfaces
 		for (DeclaredTypeNode declaredTypeNode : declarationNode.getImplementsClause())
 		{
-			BsjElement uncheckedSuperinterfaceElement = toolkit.makeType(declaredTypeNode).asElement();
-			if (uncheckedSuperinterfaceElement instanceof BsjTypeElement)
-			{
-				BsjTypeElement superinterfaceElement = (BsjTypeElement) uncheckedSuperinterfaceElement;
-				populateInheritedMembersWithDynamicDispatchFor(superinterfaceElement.getDeclarationNode(), env);
-			} else
-			{
-				// This indicates that the code tries to implement a type parameter, such as "Foo implements T" as
-				// a member class of Bar<T>. This is not legal.
-				// TODO: raise an appropriate diagnostic
-				throw new NotImplementedYetException();
-			}
+			populateDeclaredSupertype(declaredTypeNode, env);
 		}
 	}
 
@@ -1619,24 +1695,13 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	 */
 	private void populateInheritedMembersFor(EnumDeclarationNode declarationNode, Environment env)
 	{
-		BsjTypeElement enumElement = toolkit.getElementByName("java", "lang", "Enum");
+		BsjTypeElement enumElement = toolkit.getTypeElementByName("java", "lang", "Enum");
 		populateInheritedMembersWithDynamicDispatchFor(enumElement.getDeclarationNode(), env);
 
 		// populate everything from the superinterfaces
 		for (DeclaredTypeNode declaredTypeNode : declarationNode.getImplementsClause())
 		{
-			BsjElement uncheckedSuperinterfaceElement = toolkit.makeType(declaredTypeNode).asElement();
-			if (uncheckedSuperinterfaceElement instanceof BsjTypeElement)
-			{
-				BsjTypeElement superinterfaceElement = (BsjTypeElement) uncheckedSuperinterfaceElement;
-				populateInheritedMembersWithDynamicDispatchFor(superinterfaceElement.getDeclarationNode(), env);
-			} else
-			{
-				// This indicates that the code tries to implement a type parameter, such as "Foo implements T" as
-				// a member class of Bar<T>. This is not legal.
-				// TODO: raise an appropriate diagnostic
-				throw new NotImplementedYetException();
-			}
+			populateDeclaredSupertype(declaredTypeNode, env);
 		}
 	}
 
@@ -1656,25 +1721,55 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 			// then inherit from each superinterface
 			for (DeclaredTypeNode declaredTypeNode : declarationNode.getExtendsClause())
 			{
-				BsjNamedReferenceType referenceType = toolkit.makeType(declaredTypeNode);
-				if (referenceType instanceof BsjExplicitlyDeclaredType)
-				{
-					BsjExplicitlyDeclaredType explicitlyDeclaredType = (BsjExplicitlyDeclaredType) referenceType;
-					populateInheritedMembersWithDynamicDispatchFor(
-							explicitlyDeclaredType.asElement().getDeclarationNode(), env);
-				} else
-				{
-					// This indicates that the code tries to extend a type parameter, such as "Foo<T> extends T".
-					// This is not legal.
-					// TODO: raise an appropriate diagnostic
-					throw new NotImplementedYetException();
-				}
+				populateDeclaredSupertype(declaredTypeNode, env);
 			}
 		} else
 		{
 			// then inherit from Object
-			BsjTypeElement objectElement = (BsjTypeElement) toolkit.getElementByName("java", "lang", "Object");
+			BsjTypeElement objectElement = (BsjTypeElement) toolkit.getTypeElementByName("java", "lang", "Object");
 			populateInheritedMembersWithDynamicDispatchFor(objectElement.getDeclarationNode(), env);
+		}
+	}
+
+	/**
+	 * Attempts to recurisvely populate an environment with the inherited members of a certain type. If the provided
+	 * type is not a legal supertype, java.lang.Object is populated and a diagnostic is raised.
+	 */
+	private void populateDeclaredSupertype(DeclaredTypeNode node, Environment env)
+	{
+		BsjExplicitlyDeclaredType explicitlyDeclaredType = getExplicitlyDeclaredTypeFromNode(node);
+		BsjTypeElement typeElement;
+		if (explicitlyDeclaredType == null)
+		{
+			// This indicates that the code tried to extend or implement a type parameter. This is not legal.
+			// TODO: raise an appropriate diagnostic
+			typeElement = toolkit.getTypeElementByName("java", "lang", "Object");
+			// TODO: remove the following once a diagnostic is reported
+			throw new NotImplementedYetException();
+		} else
+		{
+			typeElement = explicitlyDeclaredType.asElement();
+		}
+		populateInheritedMembersWithDynamicDispatchFor(typeElement.getDeclarationNode(), env);
+	}
+
+	/**
+	 * Converts a {@link DeclaredTypeNode} into a {@link BsjExplicitlyDeclaredType} if possible. This will not be
+	 * possible if the {@link DeclaredTypeNode} actually refers to a type parameter. If this is the case,
+	 * <code>null</code> is returned instead.
+	 * 
+	 * @param node The node to convert.
+	 * @return The resulting type or <code>null</code> if the node indicates a type parameter.
+	 */
+	private BsjExplicitlyDeclaredType getExplicitlyDeclaredTypeFromNode(DeclaredTypeNode node)
+	{
+		BsjNamedReferenceType referenceType = toolkit.makeType(node);
+		if (referenceType instanceof BsjExplicitlyDeclaredType)
+		{
+			return (BsjExplicitlyDeclaredType) referenceType;
+		} else
+		{
+			return null;
 		}
 	}
 
@@ -1762,14 +1857,14 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 	private void tryPopulateMemberField(VariableNamespaceMap variableNamespaceMap, Node indicator,
 			FieldDeclarationNode memberField, AccessModifier access, String name)
 	{
-		if ((memberField.getModifiers()).getAccess().compareTo(access) < 0)
+		if ((memberField.getModifiers()).getAccess().compareTo(access) <= 0)
 		{
 			for (VariableDeclaratorNode declaratorNode : memberField.getDeclarators())
 			{
 				if (name == null || declaratorNode.getName().getIdentifier().equals(name))
 				{
 					variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
-							(BsjVariableElement) this.toolkit.makeElement(memberField), declaratorNode);
+							(BsjVariableElement) this.toolkit.makeElement(declaratorNode), declaratorNode);
 				}
 			}
 		}
@@ -1810,6 +1905,19 @@ public class EnvironmentModifyingNodeOperation implements BsjNodeOperation2Argum
 			variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
 					(BsjVariableElement) this.toolkit.makeElement(declaratorNode), declaratorNode);
 		}
+	}
+
+	/**
+	 * Populates a local variable into the provided method namespace map.
+	 * 
+	 * @param variableNamespaceMap The namespace into which to populate the variable.
+	 * @param memberConstant The declaration which is being populated.
+	 */
+	private void tryPopulateVariableDeclarator(VariableNamespaceMap variableNamespaceMap,
+			VariableDeclaratorNode declaratorNode)
+	{
+		variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+				(BsjVariableElement) this.toolkit.makeElement(declaratorNode), declaratorNode);
 	}
 
 	/**

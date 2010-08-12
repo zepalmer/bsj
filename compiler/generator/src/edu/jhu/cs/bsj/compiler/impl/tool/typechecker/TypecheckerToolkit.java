@@ -133,7 +133,7 @@ public class TypecheckerToolkit
 	 * @param name The name of the top-level type to obtain.
 	 * @return An element for that top-level type.
 	 */
-	public BsjTypeElement getElementByName(String... name)
+	public BsjTypeElement getTypeElementByName(String... name)
 	{
 		return (BsjTypeElement)makeElement(findTopLevelTypeByName(name));
 	}

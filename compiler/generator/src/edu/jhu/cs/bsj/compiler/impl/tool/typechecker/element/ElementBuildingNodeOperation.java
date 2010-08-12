@@ -149,8 +149,8 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 	@Override
 	public BsjElement executeMethodDeclarationNode(MethodDeclarationNode node, Void p)
 	{
-		return new MethodExecutableElementImpl(this.manager, node,
-				(BsjTypeElement) findImmediatelyEnclosingType(node).executeOperation(this, null));
+		return new MethodExecutableElementImpl(this.manager, node, findImmediatelyEnclosingType(node).executeOperation(
+				this, null));
 	}
 
 	@Override

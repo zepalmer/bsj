@@ -265,9 +265,10 @@ public class NamespaceMap<T extends BsjElement>
 	{
 		StringBuilder sb = new StringBuilder();
 		NamespaceMap<? extends T> map = this;
+		Set<String> names = new HashSet<String>();
 		while (map != null)
 		{
-			renderString(map, sb);
+			renderString(map, sb, names);
 			map = map.deferenceMap;
 		}
 		sb.insert(0, '{');
@@ -275,10 +276,13 @@ public class NamespaceMap<T extends BsjElement>
 		return sb.toString();
 	}
 
-	private static <E extends BsjElement> void renderString(NamespaceMap<E> map, StringBuilder sb)
+	private static <E extends BsjElement> void renderString(NamespaceMap<E> map, StringBuilder sb, Set<String> names)
 	{
 		for (Map.Entry<String, NamespaceEntry<E>> entry : map.backingMap.entrySet())
 		{
+			if (!names.add(entry.getKey()))
+				continue;
+			
 			if (sb.length() > 0)
 			{
 				sb.append(", ");
