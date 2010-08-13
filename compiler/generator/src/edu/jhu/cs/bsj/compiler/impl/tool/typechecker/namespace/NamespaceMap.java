@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -98,21 +97,17 @@ public class NamespaceMap<T extends BsjElement>
 			this.backingMap.put(name, entry);
 		} else
 		{
-			entry.add(element, indicator);
-		}
-		
-		if (this.eager)
-		{
-			Diagnostic<BsjSourceLocation> diagnostic = considerAmbiguity(name, indicator.getStartLocation());
-			if (diagnostic != null)
+			if (this.eager)
 			{
-				this.diagnosticListener.report(diagnostic);
+				considerAmbiguityEagerly(name, element, indicator);
 			}
+			entry.add(element, indicator);
 		}
 	}
 
 	/**
 	 * Determines whether or not an entry for the given name exists in this map.
+	 * 
 	 * @param name The name of the entry.
 	 * @return <code>true</code> if that entry exists; <code>false</code> if it does not.
 	 */
@@ -134,11 +129,7 @@ public class NamespaceMap<T extends BsjElement>
 		{
 			if (!this.eager)
 			{
-				Diagnostic<BsjSourceLocation> diagnostic = considerAmbiguity(name, sourceLocation);
-				if (diagnostic != null)
-				{
-					this.diagnosticListener.report(diagnostic);
-				}
+				considerAmbiguityLazily(name, sourceLocation);
 			}
 			NamespaceEntry<T> entry = this.backingMap.get(name);
 			return entry.getFirstValue();
@@ -150,29 +141,47 @@ public class NamespaceMap<T extends BsjElement>
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Determines whether or not the map is currently ambiguous for the specified name.  If it is, produces a diagnostic
-	 * to that effect.
-	 * @param name The name to consider.
-	 * @param sourceLocation The source location to use when reporting errors.
-	 * @return The diagnostic to report or <code>null</code> for no diagnostic.
+	 * Considers ambiguity eagerly on the provided name entry. This method is called before the entry in question is
+	 * added to the underlying mapping. If ambiguities exist, a diagnostic is produced.
+	 * 
+	 * @param name The name of the entry.
+	 * @param element The element which is to be added.
+	 * @param indicator The node which was responsible for adding this mapping.
 	 */
-	protected Diagnostic<BsjSourceLocation> considerAmbiguity(String name, BsjSourceLocation sourceLocation)
+	protected void considerAmbiguityEagerly(String name, T element, Node indicator)
 	{
-		Collection<? extends T> values = getAll(name);
-		if (values.size() > 1)
+		if (this.contains(name))
 		{
-			Map<? extends Node, ? extends T> map = getIndicatorMapFor(name);
-			return new AmbiguousSymbolNameDiagnosticImpl(sourceLocation, name, this.symbolType, map.keySet());
-		} else
+			Set<Node> set = new HashSet<Node>(getIndicatorMapFor(name).keySet());
+			set.add(indicator);
+			this.diagnosticListener.report(new AmbiguousSymbolNameDiagnosticImpl(indicator.getStartLocation(), name,
+					this.symbolType, set));
+		}
+	}
+
+	/**
+	 * Considers ambiguity lazily on the provided name entry. This method is called when the provided name is requested.
+	 * If ambiguities exist, a diagnostic is produced.
+	 * 
+	 * @param name The name of the entry.
+	 * @param sourceLocation The location to use in diagnostics. This is typically the location where the name was used.
+	 */
+	protected void considerAmbiguityLazily(String name, BsjSourceLocation sourceLocation)
+	{
+		Collection<? extends T> all = getAll(name);
+		if (all.size() > 1)
 		{
-			return null;
+			Collection<? extends Node> nodes = getIndicatorMapFor(name).keySet();
+			this.diagnosticListener.report(new AmbiguousSymbolNameDiagnosticImpl(sourceLocation, name, this.symbolType,
+					nodes));
 		}
 	}
 
 	/**
 	 * Retrieves all of the values which are mapped to the specified name in this namespace map.
+	 * 
 	 * @param name The name to look up.
 	 * @return The entries which are mapped to that name in the namespace map.
 	 */
@@ -198,10 +207,11 @@ public class NamespaceMap<T extends BsjElement>
 			return Collections.emptySet();
 		}
 	}
-	
+
 	/**
 	 * Retrieves a mapping from indicator nodes to the values which are mapped to a given name in the namespace map.
 	 * This method is used for error reporting.
+	 * 
 	 * @param name The name to look up.
 	 * @return The mapping.
 	 */
@@ -211,7 +221,7 @@ public class NamespaceMap<T extends BsjElement>
 		{
 			if (this.prohibitsOverlap && this.deferenceMap != null)
 			{
-				Map<Node,T> map = new HashMap<Node, T>();
+				Map<Node, T> map = new HashMap<Node, T>();
 				map.putAll(this.backingMap.get(name).getIndicatorNodeMap());
 				map.putAll(this.deferenceMap.getIndicatorMapFor(name));
 				return map;
@@ -282,7 +292,7 @@ public class NamespaceMap<T extends BsjElement>
 		{
 			if (!names.add(entry.getKey()))
 				continue;
-			
+
 			if (sb.length() > 0)
 			{
 				sb.append(", ");
