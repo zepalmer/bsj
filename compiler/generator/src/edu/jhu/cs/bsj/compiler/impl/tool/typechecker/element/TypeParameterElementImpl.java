@@ -14,9 +14,11 @@ import javax.lang.model.element.Name;
 
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeVariableImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterNode> implements BsjTypeParameterElement
@@ -60,8 +62,22 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	@Override
 	public BsjType asType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<? extends BsjType> bounds = getBounds();
+		if (bounds.size() == 0)
+		{
+			return new TypeVariableImpl(getManager(), null, null);
+		} else if (bounds.size() == 1)
+		{
+			return new TypeVariableImpl(getManager(), null, bounds.get(0));
+		} else
+		{
+			// TODO: does an intersection type have an enclosing type?
+			/*
+			BsjIntersectionType bound = new ImplicitlyDeclaredTypeImpl(getManager(), this, bounds);
+			return new TypeVariableImpl(getManager(), null, bound);
+			*/
+			throw new NotImplementedYetException();
+		}
 	}
 
 	@Override

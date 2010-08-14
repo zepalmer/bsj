@@ -13,6 +13,7 @@ public class ImplicitlyDeclaredTypeImpl extends AbstractDeclaredTypeImpl<BsjType
 	public ImplicitlyDeclaredTypeImpl(TypecheckerModelManager manager, BsjTypeParameterElement typeElement,
 			List<? extends BsjType> typeArguments, BsjDeclaredType enclosingType)
 	{
+		// TODO: is it possible for an implicitly declared type to have an enclosing type?  does that make sense?
 		super(manager, typeElement, typeArguments, enclosingType, true);
 	}
 
