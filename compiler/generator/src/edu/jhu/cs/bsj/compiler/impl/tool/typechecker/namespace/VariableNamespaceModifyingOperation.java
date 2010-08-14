@@ -328,7 +328,9 @@ public class VariableNamespaceModifyingOperation extends
 			Node child)
 	{
 		// *** The scope of a variable declarator includes its own initializer.
-		if (child.equals(node.getInitializer()))
+		// We're also going to include the variable name here.  This has no appreciable effect on the behavior of the
+		// system except in that it encourages the generation of diagnostics when no initializer exists.
+		if (child.equals(node.getInitializer()) || child.equals(node.getName()))
 		{
 			map = makeMap(map, EnvType.STATEMENT);
 			tryPopulateVariableDeclarator(map, node);
