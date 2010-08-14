@@ -60,6 +60,17 @@ getstats()
     statsforlist "$ngenfiles"
 }
 
+if [ -n "$1" -a "$#" -eq "1" ]; then
+    if [ -d "$1" ]; then
+        echo "$1:"
+        getstats "$1"
+        exit 0
+    else
+        echo "$1 does not exist"
+        exit 1
+    fi
+fi
+
 tdir api
 tdir generator
 tdir parser
