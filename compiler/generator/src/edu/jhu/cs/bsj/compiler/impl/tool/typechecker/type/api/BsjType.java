@@ -8,4 +8,9 @@ import javax.lang.model.type.TypeMirror;
  */
 public interface BsjType extends TypeMirror
 {
+	/**
+	 * Calculates the erasure of this type.
+	 * @return The resulting type.
+	 */
+	public BsjType calculateErasure();
 }

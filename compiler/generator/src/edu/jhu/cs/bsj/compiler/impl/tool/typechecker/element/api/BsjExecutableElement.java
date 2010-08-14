@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api;
 
+import java.util.List;
+
 import javax.lang.model.element.ExecutableElement;
 
 /**
@@ -8,4 +10,5 @@ import javax.lang.model.element.ExecutableElement;
  */
 public interface BsjExecutableElement extends BsjElement, ExecutableElement
 {
+	public List<? extends BsjVariableElement> getParameters();
 }

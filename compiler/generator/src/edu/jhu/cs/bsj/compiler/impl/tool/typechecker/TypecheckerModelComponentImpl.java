@@ -2,18 +2,11 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
 import javax.lang.model.element.Element;
 
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
-import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuilder;
 
 /**
  * This class is intended to represent a typechecker model component.  It contains functionality which is useful to
@@ -55,38 +48,11 @@ public class TypecheckerModelComponentImpl
 	
 	/**
 	 * Delegation method to toolkit.
-	 * @see TypecheckerToolkit#makeType(TypeNode)
+	 * @see TypecheckerToolkit#getTypeBuilder()
 	 */
-	protected BsjType makeType(TypeNode node)
+	protected TypeBuilder getTypeBuilder()
 	{
-		return getManager().getToolkit().makeType(node);
-	}
-	
-	/**
-	 * Delegation method to toolkit.
-	 * @see TypecheckerToolkit#makeType(TypeParameterNode)
-	 */
-	protected BsjTypeVariable makeType(TypeParameterNode node)
-	{
-		return getManager().getToolkit().makeType(node);
-	}
-	
-	/**
-	 * Delegation method to toolkit.
-	 * @see TypecheckerToolkit#makeType(WildcardTypeNode)
-	 */
-	protected BsjWildcardType makeType(WildcardTypeNode node)
-	{
-		return getManager().getToolkit().makeType(node);
-	}
-	
-	/**
-	 * Delegation method to toolkit.
-	 * @see TypecheckerToolkit#makeType(DeclaredTypeNode)
-	 */
-	protected BsjNamedReferenceType makeType(DeclaredTypeNode node)
-	{
-		return getManager().getToolkit().makeType(node);
+		return getManager().getToolkit().getTypeBuilder();
 	}
 	
 	/**

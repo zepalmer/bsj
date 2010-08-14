@@ -8,4 +8,5 @@ import javax.lang.model.type.ArrayType;
  */
 public interface BsjArrayType extends ArrayType, BsjReferenceType
 {
+	public BsjType getComponentType();
 }

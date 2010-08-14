@@ -1,14 +1,12 @@
 package edu.jhu.cs.bsj.stdlib.metaannotations.utils;
 
 import java.util.ArrayList;
-
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
-
 import java.util.Collection;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;

@@ -41,6 +41,6 @@ public abstract class AbstractMemberVariableElementImpl<T extends AbstractMember
 	@Override
 	public BsjType asType()
 	{
-		return makeType(getBackingNode().getType());
+		return getTypeBuilder().makeType(getBackingNode().getType());
 	}
 }

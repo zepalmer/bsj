@@ -1,11 +1,11 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 
 public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
@@ -60,11 +60,11 @@ public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
 	}
 
 	@Override
-	public TypeMirror getExtendsBound()
+	public BsjType getExtendsBound()
 	{
 		if (this.wildcardTypeNode.getUpperBound())
 		{
-			return this.wildcardTypeNode.getBound().executeOperation(new TypeBuildingNodeOperation(getManager()), null);
+			return getTypeBuilder().makeArgumentType(this.wildcardTypeNode.getBound());
 		} else
 		{
 			return null;
@@ -72,15 +72,20 @@ public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
 	}
 
 	@Override
-	public TypeMirror getSuperBound()
+	public BsjType getSuperBound()
 	{
 		if (this.wildcardTypeNode.getUpperBound())
 		{
 			return null;
 		} else
 		{
-			return this.wildcardTypeNode.getBound().executeOperation(new TypeBuildingNodeOperation(getManager()), null);
+			return getTypeBuilder().makeArgumentType(this.wildcardTypeNode.getBound());
 		}
 	}
 
+	@Override
+	public BsjType calculateErasure()
+	{
+		return this;
+	}
 }

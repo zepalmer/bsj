@@ -1,4 +1,6 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
+package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map;
+
+import java.util.Collection;
 
 import javax.tools.DiagnosticListener;
 
@@ -10,13 +12,11 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElem
  * The type of namespace map used in the BSJ typechecker which stores the mappings for the variable namespace.
  * @author Zachary Palmer
  */
-public class VariableNamespaceMap extends NamespaceMap<BsjVariableElement>
+public class VariableNamespaceMap extends NamespaceMap<String,BsjVariableElement>
 {
-
-	public VariableNamespaceMap(NamespaceMap<? extends BsjVariableElement> deferenceMap,
+	public VariableNamespaceMap(Collection<VariableNamespaceMap> deferenceMaps,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager, boolean prohibitsOverlap)
 	{
-		super(SymbolType.VARIABLE, deferenceMap, diagnosticListener, eager, prohibitsOverlap);
+		super(SymbolType.VARIABLE, deferenceMaps, diagnosticListener, eager, prohibitsOverlap);
 	}
-
 }

@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDeclaratorOwnerNode> extends
 		AbstractVariableElementImpl<T>
@@ -47,6 +48,13 @@ public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDecla
 		if (index != other.index)
 			return false;
 		return true;
+	}
+
+	@Override
+	public BsjType asType()
+	{
+		// TODO: what about array levels?
+		return getTypeBuilder().makeType(getBackingNode().getType());
 	}
 
 	protected VariableDeclaratorNode getDeclarator()

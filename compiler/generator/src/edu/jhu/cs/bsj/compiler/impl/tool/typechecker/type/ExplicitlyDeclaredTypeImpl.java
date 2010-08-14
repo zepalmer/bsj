@@ -15,4 +15,12 @@ public class ExplicitlyDeclaredTypeImpl extends AbstractDeclaredTypeImpl<BsjType
 	{
 		super(manager, typeElement, typeArguments, enclosingType, false);
 	}
+
+	@Override
+	protected ExplicitlyDeclaredTypeImpl makeAnother(BsjTypeElement typeElement, List<? extends BsjType> typeArguments,
+			BsjDeclaredType enclosingType)
+	{
+		return new ExplicitlyDeclaredTypeImpl(getManager(), typeElement, typeArguments, enclosingType);
+	}
+	
 }

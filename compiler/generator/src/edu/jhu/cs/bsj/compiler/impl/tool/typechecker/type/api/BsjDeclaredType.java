@@ -44,4 +44,10 @@ public interface BsjDeclaredType extends DeclaredType, BsjBoundingType
 	 * @see DeclaredType#asElement()
 	 */
 	public BsjTypeLikeElement asElement();
+	
+	/**
+	 * Creates an erasure for this declared type which is guaranteed to be another declared type.
+	 * @see BsjType#calculateErasure()
+	 */
+	public BsjDeclaredType calculateErasure();
 }

@@ -1,17 +1,17 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class ArrayTypeImpl extends TypeMirrorImpl implements BsjArrayType
 {
-	private TypeMirror componentType;
+	private BsjType componentType;
 	
-	public ArrayTypeImpl(TypecheckerModelManager manager, TypeMirror componentType)
+	public ArrayTypeImpl(TypecheckerModelManager manager, BsjType componentType)
 	{
 		super(manager);
 		this.componentType = componentType;
@@ -62,8 +62,14 @@ public class ArrayTypeImpl extends TypeMirrorImpl implements BsjArrayType
 	}
 
 	@Override
-	public TypeMirror getComponentType()
+	public BsjType getComponentType()
 	{
 		return this.componentType;
+	}
+
+	@Override
+	public BsjType calculateErasure()
+	{
+		return new ArrayTypeImpl(getManager(), getComponentType().calculateErasure());
 	}
 }

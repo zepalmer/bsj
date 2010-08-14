@@ -5,6 +5,7 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 {
@@ -59,5 +60,11 @@ public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 	public static NoTypeImpl makeVoid(TypecheckerModelManager manager)
 	{
 		return new NoTypeImpl(manager, TypeKind.VOID);
+	}
+
+	@Override
+	public BsjType calculateErasure()
+	{
+		return this;
 	}
 }

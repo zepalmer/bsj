@@ -6,6 +6,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
  * Represents a primitive type in the BSJ type checker.
@@ -85,5 +86,11 @@ public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveTyp
 	public String toString()
 	{
 		return this.primitiveType.toString().toLowerCase();
+	}
+
+	@Override
+	public BsjType calculateErasure()
+	{
+		return this;
 	}
 }

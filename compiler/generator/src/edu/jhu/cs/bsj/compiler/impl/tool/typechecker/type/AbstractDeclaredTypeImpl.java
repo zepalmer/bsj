@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.lang.model.type.TypeKind;
@@ -68,6 +69,15 @@ public abstract class AbstractDeclaredTypeImpl<T extends BsjTypeLikeElement> ext
 	{
 		return this.typeElement;
 	}
+
+	@Override
+	public BsjDeclaredType calculateErasure()
+	{
+		BsjDeclaredType erasedEnclosingType = enclosingType == null ? null : enclosingType.calculateErasure();
+		return makeAnother(this.typeElement, Collections.<BsjType>emptyList(), erasedEnclosingType);
+	}
+	
+	protected abstract BsjDeclaredType makeAnother(T typeElement, List<? extends BsjType> typeArguments, BsjDeclaredType enclosingType);
 
 	@Override
 	public BsjDeclaredType getEnclosingType()

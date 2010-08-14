@@ -6,6 +6,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMirrorImpl implements BsjExecutableType
 {
@@ -54,5 +55,11 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
 		if (this.getBackingNode().getUid() != other.getBackingNode().getUid())
 			return false;
 		return true;
+	}
+
+	@Override
+	public BsjType calculateErasure()
+	{
+		return this;
 	}
 }

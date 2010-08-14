@@ -1,20 +1,20 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 {
-	private TypeMirror lowerBound;
-	private TypeMirror upperBound;
+	private BsjType lowerBound;
+	private BsjType upperBound;
 
-	public TypeVariableImpl(TypecheckerModelManager manager, TypeMirror lowerBound, TypeMirror upperBound)
+	public TypeVariableImpl(TypecheckerModelManager manager, BsjType lowerBound, BsjType upperBound)
 	{
 		super(manager);
 		this.lowerBound = lowerBound;
@@ -31,7 +31,7 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 	}
 
 	@Override
-	public TypeMirror getLowerBound()
+	public BsjType getLowerBound()
 	{
 		if (this.lowerBound == null)
 		{
@@ -43,7 +43,7 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 	}
 
 	@Override
-	public TypeMirror getUpperBound()
+	public BsjType getUpperBound()
 	{
 		if (this.upperBound == null)
 		{
@@ -107,4 +107,10 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 		return true;
 	}
 
+
+	@Override
+	public BsjType calculateErasure()
+	{
+		return getUpperBound().calculateErasure();
+	}
 }

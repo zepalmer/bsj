@@ -20,7 +20,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitlyDeclaredTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
@@ -74,7 +73,7 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 		List<TypeMirror> list = new ArrayList<TypeMirror>();
 		for (DeclaredTypeNode declaredTypeNode : getBackingNode().getImplementsClause())
 		{
-			list.add(declaredTypeNode.executeOperation(new TypeBuildingNodeOperation(getManager()), null));
+			list.add(getTypeBuilder().makeArgumentType(declaredTypeNode));
 		}
 		return list;
 	}

@@ -14,7 +14,6 @@ import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfiguration
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
-import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
 
 
 public abstract class AbstractPropertyListMetaannotationMetaprogram extends

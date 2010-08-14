@@ -6,7 +6,6 @@ import java.util.List;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.TypeParameterElement;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractInvokableDeclarationNode;
@@ -15,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 
 public abstract class AbstractInvokableExecutableElementImpl<T extends AbstractInvokableDeclarationNode<?>> extends
 		AbstractExecutableElementImpl<T>
@@ -33,9 +32,9 @@ public abstract class AbstractInvokableExecutableElementImpl<T extends AbstractI
 	}
 
 	@Override
-	public List<? extends VariableElement> getParameters()
+	public List<? extends BsjVariableElement> getParameters()
 	{
-		List<VariableElement> list = new ArrayList<VariableElement>();
+		List<BsjVariableElement> list = new ArrayList<BsjVariableElement>();
 		for (VariableNode var : getBackingNode().getParameters())
 		{
 			list.add(new ActualVariableElementImpl(getManager(), var, this, false));
@@ -53,7 +52,7 @@ public abstract class AbstractInvokableExecutableElementImpl<T extends AbstractI
 		List<TypeMirror> list = new ArrayList<TypeMirror>();
 		for (TypeNode type : getBackingNode().getThrowTypes())
 		{
-			list.add(type.executeOperation(new TypeBuildingNodeOperation(getManager()), null));
+			list.add(getTypeBuilder().makeType(type));
 		}
 		return list;
 	}

@@ -10,12 +10,12 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeParameterElement;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
@@ -72,7 +72,7 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	}
 
 	@Override
-	public List<? extends VariableElement> getParameters()
+	public List<? extends BsjVariableElement> getParameters()
 	{
 		return Collections.emptyList();
 	}

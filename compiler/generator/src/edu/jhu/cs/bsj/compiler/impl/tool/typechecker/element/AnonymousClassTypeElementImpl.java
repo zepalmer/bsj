@@ -49,7 +49,7 @@ public class AnonymousClassTypeElementImpl extends AbstractElementImpl<Anonymous
 		} else if (parent instanceof UnqualifiedClassInstantiationNode)
 		{
 			UnqualifiedClassInstantiationNode node = (UnqualifiedClassInstantiationNode)parent;
-			BsjNamedReferenceType referenceType = makeType(node.getType());
+			BsjNamedReferenceType referenceType = getTypeBuilder().makeDeclaredType(node.getType());
 			if (referenceType instanceof BsjExplicitlyDeclaredType)
 			{
 				return (BsjExplicitlyDeclaredType)referenceType;

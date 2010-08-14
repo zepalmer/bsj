@@ -183,8 +183,14 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 		List<BsjType> ret = new ArrayList<BsjType>();
 		for (TypeParameterNode typeParameterNode : list)
 		{
-			ret.add(makeType(typeParameterNode));
+			ret.add(getTypeBuilder().makeTypeVariable(typeParameterNode));
 		}
 		return ret;
+	}
+
+	@Override
+	public String toString()
+	{
+		return getBackingNode().getFullyQualifiedName();
 	}
 }

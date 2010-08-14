@@ -72,4 +72,10 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 	{
 		return false;
 	}
+
+	@Override
+	public BsjDeclaredType calculateErasure()
+	{
+		return this;
+	}
 }

@@ -14,6 +14,7 @@ import javax.lang.model.element.Name;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class ActualVariableElementImpl extends AbstractVariableElementImpl<VariableNode>
@@ -41,8 +42,13 @@ public class ActualVariableElementImpl extends AbstractVariableElementImpl<Varia
 	@Override
 	public BsjType asType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		BsjType type = getTypeBuilder().makeType(getBackingNode().getType());
+		if (this.isVarArgs())
+		{
+			// TODO: mark the ArrayTypeImpl so that it knows it represents a varargs type?
+			type = new ArrayTypeImpl(getManager(), type);
+		}
+		return type;
 	}
 
 	@Override

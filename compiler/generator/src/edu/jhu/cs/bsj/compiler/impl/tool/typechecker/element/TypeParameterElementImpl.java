@@ -11,7 +11,6 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ElementVisitor;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
-import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
@@ -29,12 +28,18 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	}
 
 	@Override
-	public List<? extends TypeMirror> getBounds()
+	public TypeParameterNode getBackingNode()
 	{
-		List<TypeMirror> list = new ArrayList<TypeMirror>();
+		return (TypeParameterNode) super.getBackingNode();
+	}
+
+	@Override
+	public List<? extends BsjType> getBounds()
+	{
+		List<BsjType> list = new ArrayList<BsjType>();
 		for (DeclaredTypeNode typeNode : getBackingNode().getBounds())
 		{
-			list.add(makeType(typeNode));
+			list.add(getTypeBuilder().makeArgumentType(typeNode));
 		}
 		return list;
 	}

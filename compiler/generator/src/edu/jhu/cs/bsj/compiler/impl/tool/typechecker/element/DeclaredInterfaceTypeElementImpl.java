@@ -17,7 +17,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class DeclaredInterfaceTypeElementImpl extends DeclaredTypeElementImpl<InterfaceDeclarationNode>
@@ -62,7 +61,7 @@ public class DeclaredInterfaceTypeElementImpl extends DeclaredTypeElementImpl<In
 		List<TypeMirror> list = new ArrayList<TypeMirror>();
 		for (DeclaredTypeNode declaredTypeNode : getBackingNode().getExtendsClause())
 		{
-			list.add(declaredTypeNode.executeOperation(new TypeBuildingNodeOperation(getManager()),null));
+			list.add(getTypeBuilder().makeArgumentType(declaredTypeNode));
 		}
 		return list;
 	}

@@ -1,36 +1,29 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.lang.model.element.Element;
-import javax.lang.model.type.TypeMirror;
 
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
-import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.TypeNamespaceMap;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuilder;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 // TODO: consider renaming to, for example, EnvironmentToolkit
@@ -38,9 +31,9 @@ public class TypecheckerToolkit
 {
 	private TypecheckerModelManager manager;
 	private CompilationUnitLoader loader;
-	
+
 	private ElementBuildingNodeOperation elementBuilder;
-	private TypeBuildingNodeOperation typeBuilder;
+	private TypeBuilder typeBuilder;
 
 	private Logger LOGGER = Logger.getLogger(TypecheckerToolkit.class);
 
@@ -52,12 +45,17 @@ public class TypecheckerToolkit
 		// metaprograms?
 		this.loader = loader;
 		this.elementBuilder = new ElementBuildingNodeOperation(getManager());
-		this.typeBuilder = new TypeBuildingNodeOperation(getManager());
+		this.typeBuilder = new TypeBuilder(getManager());
 	}
 
 	protected TypecheckerModelManager getManager()
 	{
 		return this.manager;
+	}
+
+	public TypeBuilder getTypeBuilder()
+	{
+		return typeBuilder;
 	}
 
 	/**
@@ -70,7 +68,7 @@ public class TypecheckerToolkit
 	{
 		return node.executeOperation(this.elementBuilder, null);
 	}
-	
+
 	/**
 	 * Creates an appropriate {@link Element} for the provided node (if possible).
 	 * 
@@ -80,50 +78,6 @@ public class TypecheckerToolkit
 	public BsjDeclaredTypeElement makeElement(NamedTypeDeclarationNode<?> node)
 	{
 		return (BsjDeclaredTypeElement) node.executeOperation(this.elementBuilder, null);
-	}
-	
-	/**
-	 * Creates an appropriate {@link TypeMirror} for the provided node (if possible).
-	 * 
-	 * @param node The node for which to create a type.
-	 * @return The resulting type.
-	 */
-	public BsjType makeType(TypeNode node)
-	{
-		return node.executeOperation(this.typeBuilder, null);
-	}
-
-	/**
-	 * Creates an appropriate {@link TypeMirror} for the provided node (if possible).
-	 * 
-	 * @param node The node for which to create a type.
-	 * @return The resulting type.
-	 */
-	public BsjTypeVariable makeType(TypeParameterNode node)
-	{
-		return this.typeBuilder.executeTypeParameterNode(node, null);
-	}
-
-	/**
-	 * Creates an appropriate {@link TypeMirror} for the provided node (if possible).
-	 * 
-	 * @param node The node for which to create a type.
-	 * @return The resulting type.
-	 */
-	public BsjWildcardType makeType(WildcardTypeNode node)
-	{
-		return this.typeBuilder.executeWildcardTypeNode(node, null);
-	}
-
-	/**
-	 * Creates an appropriate {@link TypeMirror} for the provided node (if possible).
-	 * 
-	 * @param node The node for which to create a type.
-	 * @return The resulting type.
-	 */
-	public BsjNamedReferenceType makeType(DeclaredTypeNode node)
-	{
-		return (BsjNamedReferenceType) node.executeOperation(this.typeBuilder, null);
 	}
 
 	/**
@@ -135,7 +89,7 @@ public class TypecheckerToolkit
 	 */
 	public BsjTypeElement getTypeElementByName(String... name)
 	{
-		return (BsjTypeElement)makeElement(findTopLevelTypeByName(name));
+		return (BsjTypeElement) makeElement(findTopLevelTypeByName(name));
 	}
 
 	/**
@@ -169,7 +123,7 @@ public class TypecheckerToolkit
 	 * @param typeNames The list to which to add the type name components.
 	 * @return The package name, or <code>null</code> if no part of the name indicated a package.
 	 */
-	private NameNode extractTypePortionOfName(NameNode name, List<String> typeNames)
+	private NameNode extractTypePortionOfName(NameNode name, List<NameNode> typeNames)
 	{
 		while (name != null && name.getCategory(loader) != NameCategory.PACKAGE)
 		{
@@ -178,7 +132,7 @@ public class TypecheckerToolkit
 				throw new IllegalStateException("Name categorizer gave non-package, non-type category to type name: "
 						+ name.getNameString() + " has category " + name.getCategory(loader));
 			}
-			typeNames.add(name.getIdentifier().getIdentifier());
+			typeNames.add(name);
 			if (name instanceof SimpleNameNode)
 			{
 				name = null;
@@ -191,37 +145,71 @@ public class TypecheckerToolkit
 	}
 
 	/**
-	 * Obtains a named type declaration from the specified name. If the name is fully-qualified, it is obtained by
+	 * Obtains a named type-like element from the specified name. If the name is fully-qualified, it is obtained by
 	 * advancing from the root package. If the name is not fully qualified, the declaration is obtained by reading from
 	 * the provided type namespace. As a result, the provided type namespace must be populated at least as far as is
 	 * necessary to resolve the provided name.
 	 * 
 	 * @param name The name in question.
 	 * @param typeNamespaceMap The namespace map from which to obtain types.
-	 * @return The resulting type declaration.
+	 * @return The resulting type-like element or <code>null</code> if no such element could be found.
 	 */
-	public NamedTypeDeclarationNode<?> getAccessibleTypeFromName(NameNode name, TypeNamespaceMap typeNamespaceMap)
+	public BsjTypeLikeElement getAccessibleTypeFromName(NameNode name, TypeNamespaceMap typeNamespaceMap)
 	{
-		List<String> typeNames = new ArrayList<String>();
+		List<NameNode> typeNames = new ArrayList<NameNode>();
 		NameNode packageName = extractTypePortionOfName(name, typeNames);
 
 		if (packageName == null)
 		{
 			// ...then the name was referring to either (1) a top level type or (2) a type which is in the symbol table.
 			// Let's see if the last name component (which represents the first identifier) is in the symbol table.
-			BsjTypeLikeElement typeLikeElement = typeNamespaceMap.lookup(typeNames.get(typeNames.size() - 1),
-					name.getStartLocation());
-			if (typeLikeElement != null)
+			Collections.reverse(typeNames);
+			if (typeNamespaceMap.contains(typeNames.get(0).getIdentifier().getIdentifier()))
 			{
-				// It looks like our type is in the symbol table! Now we just need to resolve the remaining components.
-				// TODO
-				return null;
+				// Then we've found the first component of the name in our symbol table. No turning back now; we expect
+				// to find the type element there.
+				BsjTypeLikeElement element = typeNamespaceMap.lookup(name.getIdentifier().getIdentifier(),
+						typeNames.get(0).getStartLocation());
+				Iterator<NameNode> it = typeNames.iterator();
+				it.next();
+				// If the name has multiple components, keep iterating until we get to the last one or until we fail
+				// due to a missing type definition.
+				while (it.hasNext())
+				{
+					NameNode nextName = it.next();
+					TypeNamespaceMap nextNamespace;
+					if (element.getDeclarationNode() instanceof NamedTypeDeclarationNode<?>)
+					{
+						NamedTypeDeclarationNode<?> typeDeclarationNode = (NamedTypeDeclarationNode<?>) element.getDeclarationNode();
+						nextNamespace = this.getManager().getEnvironmentManager().getTypeNamespace(
+								typeDeclarationNode.getBody().getMembers());
+						element = nextNamespace.lookup(nextName.getIdentifier().getIdentifier(),
+								nextName.getStartLocation());
+						if (element == null)
+						{
+							// Then this qualification failed.
+							// TODO: Report an appropriate diagnostic using this name node
+							throw new NotImplementedYetException();
+						}
+					} else
+					{
+						// It isn't legal to qualify a type parameter.
+						// TODO: report an appropriate diagnostic and return null
+						throw new NotImplementedYetException();
+					}
+				}
+				return element;
+			} else
+			{
+				// It looks like we can't find that type. We'll treat it like a fully-qualified name and hope that
+				// the caller intended a type in the root package.
+				return makeElement(getAccessibleTypeFromFullyQualifiedName(name));
 			}
+		} else
+		{
+			// The name includes a package; this means that it is fully qualified.
+			return makeElement(getAccessibleTypeFromFullyQualifiedName(name));
 		}
-
-		// Reaching this point means that either the name is rooted in a package or that the type name was not in the
-		// symbol table (indicating a member of the root package). Resolve the name as a fully-qualified name.
-		return getAccessibleTypeFromFullyQualifiedName(name);
 	}
 
 	/**
@@ -240,7 +228,7 @@ public class TypecheckerToolkit
 		}
 
 		// Get the name of the package.
-		List<String> typeNames = new ArrayList<String>();
+		List<NameNode> typeNames = new ArrayList<NameNode>();
 		name = extractTypePortionOfName(name, typeNames);
 
 		if (typeNames.size() == 0)
@@ -258,7 +246,8 @@ public class TypecheckerToolkit
 		}
 
 		// Obtain the type from the package
-		NamedTypeDeclarationNode<?> type = packageNode.getTopLevelTypeDeclaration(typeNames.get(0), loader);
+		NamedTypeDeclarationNode<?> type = packageNode.getTopLevelTypeDeclaration(
+				typeNames.get(0).getIdentifier().getIdentifier(), loader);
 		if (type == null)
 		{
 			// The type does not exist
@@ -267,7 +256,7 @@ public class TypecheckerToolkit
 		}
 		for (int index = 1; index < typeNames.size(); index++)
 		{
-			type = type.getTypeDeclaration(typeNames.get(index));
+			type = type.getTypeDeclaration(typeNames.get(index).getIdentifier().getIdentifier());
 			if (type == null)
 			{
 				// The type does not exist

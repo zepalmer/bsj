@@ -22,6 +22,6 @@ public class MethodExecutableTypeImpl extends AbstractInvokableExecutableTypeImp
 	@Override
 	public TypeMirror getReturnType()
 	{
-		return getBackingNode().getReturnType().executeOperation(new TypeBuildingNodeOperation(getManager()), null);
+		return getTypeBuilder().makeType(getBackingNode().getReturnType());
 	}
 }

@@ -13,7 +13,8 @@ import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
 
 public abstract class AnnotationMirrorImpl<T extends AnnotationNode> extends TypecheckerModelComponentImpl implements
 		AnnotationMirror
@@ -32,9 +33,18 @@ public abstract class AnnotationMirrorImpl<T extends AnnotationNode> extends Typ
 	}
 
 	@Override
-	public BsjDeclaredType getAnnotationType()
+	public BsjExplicitlyDeclaredType getAnnotationType()
 	{
-		return (BsjDeclaredType) makeType(this.backingNode.getAnnotationType());
+		BsjNamedReferenceType type = getTypeBuilder().makeUnparameterizedType(this.backingNode.getAnnotationType());
+		if (type instanceof BsjExplicitlyDeclaredType)
+		{
+			return (BsjExplicitlyDeclaredType)type;
+		} else
+		{
+			// This means that the programmer has written something like @T
+			// TODO: now what?
+			throw new NotImplementedYetException();
+		}
 	}
 
 	protected BsjExecutableElement getAnnotationExecutableElementForIdent(String ident)

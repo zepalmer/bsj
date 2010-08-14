@@ -37,4 +37,10 @@ public class NameImpl implements Name
 		return new NameImpl(this.name.substring(start,end));
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.name;
+	}
+
 }

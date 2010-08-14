@@ -13,7 +13,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuildingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends AbstractlyUnmodifiedClassDeclarationNode<?>>
@@ -36,8 +35,7 @@ public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends Abstrac
 	{
 		if (getBackingNode().getExtendsClause() != null)
 		{
-			return getBackingNode().getExtendsClause().executeOperation(new TypeBuildingNodeOperation(getManager()),
-					null);
+			return getTypeBuilder().makeArgumentType(getBackingNode().getExtendsClause());
 		} else
 		{
 			NamedTypeDeclarationNode<?> objectDeclaration = getManager().getToolkit().findTopLevelTypeByName("java", "lang", "Object");
@@ -57,7 +55,7 @@ public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends Abstrac
 		List<TypeMirror> list = new ArrayList<TypeMirror>();
 		for (DeclaredTypeNode declaredTypeNode : getBackingNode().getImplementsClause())
 		{
-			list.add(declaredTypeNode.executeOperation(new TypeBuildingNodeOperation(getManager()), null));
+			list.add(getTypeBuilder().makeArgumentType(declaredTypeNode));
 		}
 		return list;
 	}
