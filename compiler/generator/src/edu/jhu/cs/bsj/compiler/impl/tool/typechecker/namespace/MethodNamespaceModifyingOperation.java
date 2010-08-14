@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 import javax.tools.DiagnosticListener;
 
@@ -21,7 +22,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
@@ -55,13 +55,16 @@ public class MethodNamespaceModifyingOperation extends
 	 * Performs a default operation for nodes which do not affect the method namespace.
 	 */
 	@Override
-	public MethodNamespaceMap executeDefault(Node node, MethodNamespaceMap map, Node child)
+	public ChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap> executeDefault(
+			Node node, MethodNamespaceMap map)
 	{
-		return map;
+		return new ConsistentChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
+				map);
 	}
 
 	@Override
-	public MethodNamespaceMap executeAnnotationBodyNode(AnnotationBodyNode node, MethodNamespaceMap map, Node child)
+	public ChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap> executeAnnotationBodyNode(
+			AnnotationBodyNode node, MethodNamespaceMap map)
 	{
 		// *** Populate elements inherited from java.lang.annotation.Annotation
 		AnnotationDeclarationNode declarationNode = (AnnotationDeclarationNode) node.getParent();
@@ -74,12 +77,13 @@ public class MethodNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
+				map);
 	}
 
 	@Override
-	public MethodNamespaceMap executeAnonymousClassBodyNode(AnonymousClassBodyNode node, MethodNamespaceMap map,
-			Node child)
+	public ChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap> executeAnonymousClassBodyNode(
+			AnonymousClassBodyNode node, MethodNamespaceMap map)
 	{
 		// *** Populate inherited members
 		map = makeInheritedMapFor(node, map);
@@ -91,11 +95,13 @@ public class MethodNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
+				map);
 	}
 
 	@Override
-	public MethodNamespaceMap executeClassBodyNode(ClassBodyNode node, MethodNamespaceMap map, Node child)
+	public ChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap> executeClassBodyNode(
+			ClassBodyNode node, MethodNamespaceMap map)
 	{
 		// *** Inherit member elements
 		ClassDeclarationNode declarationNode = (ClassDeclarationNode) node.getParent();
@@ -108,19 +114,17 @@ public class MethodNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
+				map);
 	}
 
 	@Override
-	public MethodNamespaceMap executeCompilationUnitNode(CompilationUnitNode node, MethodNamespaceMap map, Node child)
+	public ChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap> executeCompilationUnitNode(
+			CompilationUnitNode node, MethodNamespaceMap map)
 	{
 		// Only the type declarations contained in a compilation unit benefit from the declarations contained within
-		// it; import statements, for instance, do not apply to other import statements. Leave now if we're not
-		// processing for a type declaration.
-		if (!(child instanceof TypeDeclarationListNode))
-		{
-			return map;
-		}
+		// it; import statements, for instance, do not apply to other import statements.
+		MethodNamespaceMap defaultMap = map;
 
 		// *** Create a new scope for the on-demand imports
 		map = makeMap(map, EnvType.ON_DEMAND_IMPORT);
@@ -141,11 +145,15 @@ public class MethodNamespaceModifyingOperation extends
 		populateElements(map, node.getTypeDecls(), AccessModifier.PUBLIC);
 
 		// *** Finished!
-		return map;
+		Map<Node, MethodNamespaceMap> namespaceMap = Collections.<Node, MethodNamespaceMap> singletonMap(
+				node.getTypeDecls(), map);
+		return new MappedChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
+				defaultMap, namespaceMap);
 	}
 
 	@Override
-	public MethodNamespaceMap executeEnumBodyNode(EnumBodyNode node, MethodNamespaceMap map, Node child)
+	public ChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap> executeEnumBodyNode(
+			EnumBodyNode node, MethodNamespaceMap map)
 	{
 		// *** Inherit member elements
 		EnumDeclarationNode declarationNode = (EnumDeclarationNode) node.getParent();
@@ -163,11 +171,13 @@ public class MethodNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
+				map);
 	}
 
 	@Override
-	public MethodNamespaceMap executeInterfaceBodyNode(InterfaceBodyNode node, MethodNamespaceMap map, Node child)
+	public ChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap> executeInterfaceBodyNode(
+			InterfaceBodyNode node, MethodNamespaceMap map)
 	{
 		// *** Inherit member elements
 		InterfaceDeclarationNode declarationNode = (InterfaceDeclarationNode) node.getParent();
@@ -180,11 +190,13 @@ public class MethodNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
+				map);
 	}
 
 	@Override
-	public MethodNamespaceMap executeMetaprogramNode(MetaprogramNode node, MethodNamespaceMap map, Node child)
+	public ChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap> executeMetaprogramNode(
+			MetaprogramNode node, MethodNamespaceMap map)
 	{
 		// TODO: complete this section.
 		/*
@@ -202,8 +214,10 @@ public class MethodNamespaceModifyingOperation extends
 		 * tedious at best. For now, we're just clearing out the environment to make clear the fact that none of the
 		 * object program logic applies.
 		 */
-		return new MethodNamespaceMap(Collections.<MethodNamespaceMap> emptySet(), getListener(), true,
+		map = new MethodNamespaceMap(Collections.<MethodNamespaceMap> emptySet(), getListener(), true,
 				OverlapMode.BY_SIGNATURE);
+		return new ConsistentChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
+				map);
 	}
 
 	// ***** UTILITY METHODS **************************************************

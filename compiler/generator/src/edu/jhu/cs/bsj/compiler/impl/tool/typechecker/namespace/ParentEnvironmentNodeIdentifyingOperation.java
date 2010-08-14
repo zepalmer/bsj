@@ -5,8 +5,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 
@@ -78,6 +80,18 @@ public class ParentEnvironmentNodeIdentifyingOperation extends BsjDefaultNodeOpe
 			{
 				// In this case, there is no candidate.  Just go with the structural parent.
 				return node.getParent();
+			}
+		} else if (node instanceof VariableDeclaratorNode)
+		{
+			// The environment parent of a variable declarator is always the preceeding declarator in the list.
+			VariableDeclaratorListNode parent = (VariableDeclaratorListNode)node.getParent();
+			VariableDeclaratorNode envParent = parent.getBefore((VariableDeclaratorNode)node);
+			if (envParent == null)
+			{
+				return parent;
+			} else
+			{
+				return envParent;
 			}
 		} else
 		{

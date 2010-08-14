@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.tools.DiagnosticListener;
 
@@ -32,7 +33,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
@@ -66,9 +66,10 @@ public class TypeNamespaceModifyingOperation extends
 	 * Performs a default operation for nodes which do not affect the type namespace.
 	 */
 	@Override
-	public TypeNamespaceMap executeDefault(Node node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeDefault(Node node,
+			TypeNamespaceMap map)
 	{
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	/*
@@ -79,7 +80,8 @@ public class TypeNamespaceModifyingOperation extends
 	 */
 
 	@Override
-	public TypeNamespaceMap executeAnnotationBodyNode(AnnotationBodyNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeAnnotationBodyNode(
+			AnnotationBodyNode node, TypeNamespaceMap map)
 	{
 		// *** Inherit elements from java.lang.annotation.Annotation
 		AnnotationDeclarationNode declarationNode = (AnnotationDeclarationNode) node.getParent();
@@ -92,11 +94,12 @@ public class TypeNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeAnonymousClassBodyNode(AnonymousClassBodyNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeAnonymousClassBodyNode(
+			AnonymousClassBodyNode node, TypeNamespaceMap map)
 	{
 		// *** Populate inherited members
 		makeInheritedMapFor(node, map);
@@ -108,11 +111,12 @@ public class TypeNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeClassBodyNode(ClassBodyNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeClassBodyNode(
+			ClassBodyNode node, TypeNamespaceMap map)
 	{
 		// *** Inherit member elements
 		ClassDeclarationNode declarationNode = (ClassDeclarationNode) node.getParent();
@@ -125,11 +129,12 @@ public class TypeNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeClassDeclarationNode(ClassDeclarationNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeClassDeclarationNode(
+			ClassDeclarationNode node, TypeNamespaceMap map)
 	{
 		// *** Create a new scope for type parameters
 		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
@@ -138,19 +143,16 @@ public class TypeNamespaceModifyingOperation extends
 		populateTypeParameters(map, node.getTypeParameters());
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeCompilationUnitNode(CompilationUnitNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeCompilationUnitNode(
+			CompilationUnitNode node, TypeNamespaceMap map)
 	{
 		// Only the type declarations contained in a compilation unit benefit from the declarations contained within
-		// it; import statements, for instance, do not apply to other import statements. Leave now if we're not
-		// processing for a type declaration.
-		if (!(child instanceof TypeDeclarationListNode))
-		{
-			return map;
-		}
+		// it; import statements, for instance, do not apply to other import statements.
+		TypeNamespaceMap defaultNamespace = map; // used for everything other than the type declaration list
 
 		// *** Create a new scope for the on-demand imports
 		map = makeMap(map, EnvType.ON_DEMAND_IMPORT);
@@ -179,12 +181,15 @@ public class TypeNamespaceModifyingOperation extends
 		populateSingleStaticImports(map, node.getImports());
 
 		// *** Finished!
-		return map;
+		Map<Node, TypeNamespaceMap> namespaceMap = Collections.<Node, TypeNamespaceMap> singletonMap(
+				node.getTypeDecls(), map);
+		return new MappedChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(defaultNamespace,
+				namespaceMap);
 	}
 
 	@Override
-	public TypeNamespaceMap executeConstructorDeclarationNode(ConstructorDeclarationNode node, TypeNamespaceMap map,
-			Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeConstructorDeclarationNode(
+			ConstructorDeclarationNode node, TypeNamespaceMap map)
 	{
 		// *** Create a new environment for type parameter population
 		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
@@ -193,11 +198,12 @@ public class TypeNamespaceModifyingOperation extends
 		populateTypeParameters(map, node.getTypeParameters());
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeEnumBodyNode(EnumBodyNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeEnumBodyNode(EnumBodyNode node,
+			TypeNamespaceMap map)
 	{
 		// *** Inherit member elements
 		EnumDeclarationNode declarationNode = (EnumDeclarationNode) node.getParent();
@@ -210,11 +216,12 @@ public class TypeNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeInterfaceBodyNode(InterfaceBodyNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeInterfaceBodyNode(
+			InterfaceBodyNode node, TypeNamespaceMap map)
 	{
 		// *** Inherit member elements
 		InterfaceDeclarationNode declarationNode = (InterfaceDeclarationNode) node.getParent();
@@ -227,12 +234,12 @@ public class TypeNamespaceModifyingOperation extends
 		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeInterfaceDeclarationNode(InterfaceDeclarationNode node, TypeNamespaceMap map,
-			Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeInterfaceDeclarationNode(
+			InterfaceDeclarationNode node, TypeNamespaceMap map)
 	{
 		// *** Create a new scope for type parameters
 		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
@@ -241,12 +248,12 @@ public class TypeNamespaceModifyingOperation extends
 		populateTypeParameters(map, node.getTypeParameters());
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeLocalClassDeclarationNode(LocalClassDeclarationNode node, TypeNamespaceMap map,
-			Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeLocalClassDeclarationNode(
+			LocalClassDeclarationNode node, TypeNamespaceMap map)
 	{
 		// *** Create a new environment to contain the declaration
 		map = makeMap(map, EnvType.STATEMENT);
@@ -255,11 +262,12 @@ public class TypeNamespaceModifyingOperation extends
 		map.add(node.getIdentifier().getIdentifier(), this.getToolkit().makeElement(node), node);
 
 		// *** Finished
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeMetaprogramNode(MetaprogramNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeMetaprogramNode(
+			MetaprogramNode node, TypeNamespaceMap map)
 	{
 		// TODO: complete this section.
 		/*
@@ -277,11 +285,13 @@ public class TypeNamespaceModifyingOperation extends
 		 * tedious at best. For now, we're just clearing out the environment to make clear the fact that none of the
 		 * object program logic applies.
 		 */
-		return new TypeNamespaceMap(Collections.<TypeNamespaceMap> emptySet(), getListener(), true, false);
+		map = new TypeNamespaceMap(Collections.<TypeNamespaceMap> emptySet(), getListener(), true, false);
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	@Override
-	public TypeNamespaceMap executeMethodDeclarationNode(MethodDeclarationNode node, TypeNamespaceMap map, Node child)
+	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeMethodDeclarationNode(
+			MethodDeclarationNode node, TypeNamespaceMap map)
 	{
 		// *** Create a new environment for type parameter population
 		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
@@ -290,7 +300,7 @@ public class TypeNamespaceModifyingOperation extends
 		populateTypeParameters(map, node.getTypeParameters());
 
 		// *** Finished!
-		return map;
+		return new ConsistentChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(map);
 	}
 
 	// ***** UTILITY FUNCTIONS ************************************************
@@ -351,7 +361,8 @@ public class TypeNamespaceModifyingOperation extends
 						PackageNode packageNode = importNode.getRootPackage().getSubpackageByQualifiedName(
 								importNode.getName());
 						getLoader().loadAll(packageNode);
-						populateNamespaceMapWithPackage(typeNamespaceMap, packageNode, importNode, AccessModifier.PUBLIC);
+						populateNamespaceMapWithPackage(typeNamespaceMap, packageNode, importNode,
+								AccessModifier.PUBLIC);
 						break;
 					case TYPE:
 						NamedTypeDeclarationNode<?> type = this.getToolkit().getAccessibleTypeFromFullyQualifiedName(
@@ -428,7 +439,7 @@ public class TypeNamespaceModifyingOperation extends
 					if (modifiersNode instanceof AccessibleTypeModifiersNode)
 					{
 						AccessibleTypeModifiersNode accessibleTypeModifiersNode = (AccessibleTypeModifiersNode) modifiersNode;
-						if (accessibleTypeModifiersNode.getAccess().compareTo(access)<=0)
+						if (accessibleTypeModifiersNode.getAccess().compareTo(access) <= 0)
 						{
 							// then this sibling is a publically accessible type and is available in the namespace
 							// by default

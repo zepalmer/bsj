@@ -30,7 +30,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
-import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
@@ -55,7 +54,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
  * @author Zachary Palmer
  */
 public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElement, T extends NamespaceMap<K, V>>
-		extends BsjDefaultNodeOperation2Arguments<T, Node, T>
+		extends BsjDefaultNodeOperation<T, ChildNamespaceProducer<K, V, T>>
 {
 	private static Logger LOGGER = Logger.getLogger(AbstractNamespaceModifyingOperation.class);
 
