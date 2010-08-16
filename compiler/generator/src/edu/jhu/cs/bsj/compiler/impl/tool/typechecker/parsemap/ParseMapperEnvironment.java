@@ -51,7 +51,7 @@ public class ParseMapperEnvironment
 	 * @param node The new node to use.
 	 * @return The resulting environment.
 	 */
-	public ParseMapperEnvironment deriveForType(BsjType codeLiteralExpectedType)
+	public ParseMapperEnvironment deriveForExpectedType(BsjType codeLiteralExpectedType)
 	{
 		if (codeLiteralExpectedType.equals(this.codeLiteralExpectedType))
 		{

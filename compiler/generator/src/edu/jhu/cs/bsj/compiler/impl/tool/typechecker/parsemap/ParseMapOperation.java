@@ -18,26 +18,18 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
-import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.LocalClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NoOperationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
@@ -48,7 +40,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperFieldAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ThisNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByExpressionNode;
@@ -58,9 +49,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
@@ -68,7 +56,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNo
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
@@ -111,16 +98,12 @@ public class ParseMapOperation extends
 
 		this.nodeType = this.manager.getToolkit().getNodeElement().asType();
 	}
-	
-	/* TODO: rules not yet implemented
+
+	/*
+	 * TODO: rules not yet implemented
 	 * 
-	 * * Code Literal Rule (p49)
-	 * * Assignment Rule (p49)
-	 * * Return Rule (p49)
-	 * * Method Declaration Rule (p50)
-	 * * Meta-Annotation Rule (p50)
-	 * * Array Value Rule (p50)
-	 * * Method Invocation Rule (p51)
+	 * * Code Literal Rule (p49) * Assignment Rule (p49) * Return Rule (p49) * Method Declaration Rule (p50) *
+	 * Meta-Annotation Rule (p50) * Array Value Rule (p50) * Method Invocation Rule (p51)
 	 */
 
 	/**
@@ -130,14 +113,18 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeDefault(Node node, ParseMapperEnvironment env)
 	{
-		ParseMapperEnvironment childEnv = env.deriveForType(this.nodeType);
+		ParseMapperEnvironment childEnv = env.deriveForExpectedType(this.nodeType);
 		Iterator<? extends Node> childIterator = node.getChildIterable().iterator();
 		if (childIterator.hasNext())
 		{
 			Map<RawCodeLiteralNode, ParseMapEntry> map = new HashMap<RawCodeLiteralNode, ParseMapEntry>();
 			while (childIterator.hasNext())
 			{
-				map.putAll(childIterator.next().executeOperation(this, childEnv));
+				Node child = childIterator.next();
+				if (child != null)
+				{
+					map.putAll(child.executeOperation(this, childEnv));
+				}
 			}
 			return Collections.unmodifiableMap(map);
 		} else
@@ -283,14 +270,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAssertStatementNode(AssertStatementNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAssignmentNode(AssignmentNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -314,19 +293,11 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeCodeLiteralNode(CodeLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeConditionalExpressionNode(ConditionalExpressionNode node,
 			ParseMapperEnvironment env)
 	{
 		Map<RawCodeLiteralNode, ParseMapEntry> map = new HashMap<RawCodeLiteralNode, ParseMapEntry>();
-		map.putAll(node.getCondition().executeOperation(this, env.deriveForType(this.nodeType)));
+		map.putAll(node.getCondition().executeOperation(this, env.deriveForExpectedType(this.nodeType)));
 		map.putAll(node.getTrueExpression().executeOperation(this, env));
 		map.putAll(node.getFalseExpression().executeOperation(this, env));
 		return map;
@@ -344,29 +315,13 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO: Complete this method.  Observe that an enum constant declaration is much like a constructor invocation.
+		// TODO: Complete this method. Observe that an enum constant declaration is much like a constructor invocation.
 		// As a result, there may be an overloaded invocation here and we can't simply dismiss this as a default case.
 		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumDeclarationNode(EnumDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeExpressionListNode(ExpressionListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeExpressionStatementNode(ExpressionStatementNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -398,21 +353,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeForLoopNode(ForLoopNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeIdentifierListNode(IdentifierListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeInstanceOfNode(InstanceOfNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -422,29 +362,6 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeInterfaceMemberMetaprogramAnchorNode(
 			InterfaceMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeJavadocNode(JavadocNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeLabeledStatementNode(LabeledStatementNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeLocalClassDeclarationNode(LocalClassDeclarationNode node,
-			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -555,14 +472,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeNoOperationNode(NoOperationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeNormalAnnotationNode(NormalAnnotationNode node,
 			ParseMapperEnvironment env)
 	{
@@ -581,8 +490,9 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executePackageNode(PackageNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// Requesting the parse map for an entire package doesn't make a lot of sense.  This wouldn't specify if we
+		// wanted on-demand loading or not and would be quite expensive.  Return a dummy value instead.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -609,18 +519,16 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeReferenceTypeListNode(ReferenceTypeListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeReturnNode(ReturnNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		if (node.getExpression() != null)
+		{
+			return node.getExpression().executeOperation(this,
+					env.deriveForExpectedType(env.getCodeLiteralExpectedReturnType()));
+		} else
+		{
+			return Collections.emptyMap();
+		}
 	}
 
 	@Override
@@ -634,14 +542,6 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeSingleElementMetaAnnotationNode(
 			SingleElementMetaAnnotationNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeStatementExpressionListNode(StatementExpressionListNode node,
-			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -672,17 +572,10 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeThisNode(ThisNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeCastNode(TypeCastNode node, ParseMapperEnvironment env)
 	{
 		BsjType type = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
-		return node.getExpression().executeOperation(this, env.deriveForType(type));
+		return node.getExpression().executeOperation(this, env.deriveForExpectedType(type));
 	}
 
 	@Override
