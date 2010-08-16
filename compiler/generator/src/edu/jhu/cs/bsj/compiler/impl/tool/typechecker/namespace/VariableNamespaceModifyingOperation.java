@@ -2,7 +2,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -261,29 +260,15 @@ public class VariableNamespaceModifyingOperation extends
 		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
 	}
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeLocalVariableDeclarationNode(
-			LocalVariableDeclarationNode node, VariableNamespaceMap map)
-	{
-		// If the node is a child of the declaration, none of the declarators apply at this scope. We're going to let
-		// the declarator list sort out which of its children get which values in scope. The only environment children
-		// that get all of the declarators are those which follow this statement.
-		VariableNamespaceMap defaultMap = map;
-
-		// Populate declarators for environment children following this statement.
-		map = makeMap(map, EnvType.STATEMENT);
-		tryPopulateLocalVariable(map, node);
-
-		// Configure a map to use the default namespace when this node's children are present.
-		Map<Node, VariableNamespaceMap> namespaceMap = new HashMap<Node, VariableNamespaceMap>(3);
-		namespaceMap.put(node.getType(), defaultMap);
-		namespaceMap.put(node.getModifiers(), defaultMap);
-		namespaceMap.put(node.getDeclarators(), defaultMap);
-
-		// Finished!
-		return new MappedChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map,
-				namespaceMap);
-	}
+	/*
+	 * *** NOTE: local variable declaration is not handled here. This is because of the fashion in which the parent
+	 * environments are assigned. The structural children of the local variable declaration do not have a consistent
+	 * scope change based on the declaration node; for instance, each declarator has different variables in scope.
+	 * Furthermore, to prevent redundant diagnostic production, nodes immediately following a variable declaration are
+	 * environmental children of the last declarator in a local variable declaration. Thus, none of the nodes which are
+	 * affected by a local variable declaration node are the environmental children of the declaration node itself and
+	 * it does not need to be handled here.
+	 */
 
 	@Override
 	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeMetaprogramNode(

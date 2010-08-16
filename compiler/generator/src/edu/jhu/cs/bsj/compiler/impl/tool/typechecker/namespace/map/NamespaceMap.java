@@ -47,10 +47,10 @@ public class NamespaceMap<K, V extends BsjElement>
 	private boolean eager;
 	/**
 	 * Indicates whether or not this map prohibits overrides - that is, if additions should be prevented from hiding
-	 * previous values.  A <code>true</code> value indicates that the deference maps' values are included as well
-	 * (such as in local variable scope where an inner local variable cannot shadow an outer one); a <code>false</code>
-	 * value indicates that new mappings shadow old mappings (such as in a member type scope where fields can shadow
-	 * the enclosing type's fields).
+	 * previous values. A <code>true</code> value indicates that the deference maps' values are included as well (such
+	 * as in local variable scope where an inner local variable cannot shadow an outer one); a <code>false</code> value
+	 * indicates that new mappings shadow old mappings (such as in a member type scope where fields can shadow the
+	 * enclosing type's fields).
 	 */
 	private boolean prohibitsOverlap;
 	/** Determines whether or not this namespace map is locked. */
@@ -143,7 +143,11 @@ public class NamespaceMap<K, V extends BsjElement>
 	 */
 	public void lock()
 	{
-		this.locked = true;
+		if (!this.locked)
+		{
+			this.locked = true;
+			checkAmbiguities();
+		}
 	}
 
 	/**
@@ -235,7 +239,7 @@ public class NamespaceMap<K, V extends BsjElement>
 	{
 		if (this.backingMap.containsKey(key))
 			return true;
-		
+
 		if (this.blockedKeySet.contains(key))
 			return false;
 

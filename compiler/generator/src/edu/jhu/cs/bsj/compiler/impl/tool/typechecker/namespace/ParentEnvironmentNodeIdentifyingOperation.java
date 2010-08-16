@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
@@ -42,7 +43,15 @@ public class ParentEnvironmentNodeIdentifyingOperation extends BsjDefaultNodeOpe
 					return parent;
 				} else
 				{
-					return before;
+					// If the node before is a local variable declaration, we want to be in the scope of it's last
+					// initializer.
+					if (before instanceof LocalVariableDeclarationNode)
+					{
+						return ((LocalVariableDeclarationNode)before).getDeclarators().getLast();
+					} else
+					{
+						return before;
+					}
 				}
 			} else if (node.getParent() instanceof BlockStatementNode)
 			{

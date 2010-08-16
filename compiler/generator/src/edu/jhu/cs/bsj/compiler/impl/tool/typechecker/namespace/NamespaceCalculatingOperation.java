@@ -106,9 +106,6 @@ public abstract class NamespaceCalculatingOperation<K, V extends BsjElement, T e
 
 			// Store the result
 			this.cache.put(node, namespace);
-
-			// Report ambiguities if any are found
-			namespace.checkAmbiguities();
 		}
 
 		return namespace;
