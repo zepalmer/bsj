@@ -22,8 +22,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -58,7 +56,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
@@ -111,7 +108,21 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeDefault(Node node, ParseMapperEnvironment env)
 	{
 		ParseMapperEnvironment childEnv = env.deriveForExpectedType(this.nodeType);
-		Iterator<? extends Node> childIterator = node.getChildIterable().iterator();
+		return calculateNodeUnionWithEnvironment(node.getChildIterable(), childEnv);
+	}
+
+	/**
+	 * Calculates the union of the parse maps of all of the specified nodes. The children are provided the specified
+	 * environment.
+	 * 
+	 * @param nodes The node whose children are to be used.
+	 * @param env The environment to provide the children.
+	 * @return The union of the parse maps of the children.
+	 */
+	private Map<RawCodeLiteralNode, ParseMapEntry> calculateNodeUnionWithEnvironment(Iterable<? extends Node> nodes,
+			ParseMapperEnvironment env)
+	{
+		Iterator<? extends Node> childIterator = nodes.iterator();
 		if (childIterator.hasNext())
 		{
 			Map<RawCodeLiteralNode, ParseMapEntry> map = new HashMap<RawCodeLiteralNode, ParseMapEntry>();
@@ -120,7 +131,7 @@ public class ParseMapOperation extends
 				Node child = childIterator.next();
 				if (child != null)
 				{
-					map.putAll(child.executeOperation(this, childEnv));
+					map.putAll(child.executeOperation(this, env));
 				}
 			}
 			return Collections.unmodifiableMap(map);
@@ -326,22 +337,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeForInitializerDeclarationNode(
-			ForInitializerDeclarationNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeForInitializerExpressionNode(
-			ForInitializerExpressionNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeInstanceOfNode(InstanceOfNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -397,14 +392,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationListNode(MetaAnnotationListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationMetaAnnotationValueNode(
 			MetaAnnotationMetaAnnotationValueNode node, ParseMapperEnvironment env)
 	{
@@ -440,8 +427,9 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMethodDeclarationNode(MethodDeclarationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType returnType = this.manager.getToolkit().getTypeBuilder().makeType(node.getReturnType());
+		ParseMapperEnvironment childEnv = env.deriveForExpectedReturnType(returnType);
+		return calculateNodeUnionWithEnvironment(node.getChildIterable(), childEnv);
 	}
 
 	@Override
@@ -479,8 +467,8 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executePackageNode(PackageNode node, ParseMapperEnvironment env)
 	{
-		// Requesting the parse map for an entire package doesn't make a lot of sense.  This wouldn't specify if we
-		// wanted on-demand loading or not and would be quite expensive.  Return a dummy value instead.
+		// Requesting the parse map for an entire package doesn't make a lot of sense. This wouldn't specify if we
+		// wanted on-demand loading or not and would be quite expensive. Return a dummy value instead.
 		return Collections.emptyMap();
 	}
 
