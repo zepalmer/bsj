@@ -1,12 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Collections;
 import java.util.List;
-
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVariable;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class AnnotationMethodExecutableTypeImpl extends AbstractExecutableTypeImpl<AnnotationMethodDeclarationNode>
 {
@@ -17,37 +17,26 @@ public class AnnotationMethodExecutableTypeImpl extends AbstractExecutableTypeIm
 	}
 
 	@Override
-	public List<? extends TypeMirror> getParameterTypes()
+	public List<? extends BsjType> getParameterTypes()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
-	public TypeMirror getReturnType()
+	public BsjType getReturnType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getTypeBuilder().makeType(getBackingNode().getType());
 	}
 
 	@Override
-	public List<? extends TypeMirror> getThrownTypes()
+	public List<? extends BsjType> getThrownTypes()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
-	public List<? extends TypeVariable> getTypeVariables()
+	public List<? extends BsjTypeVariable> getTypeVariables()
 	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String toString()
-	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 }

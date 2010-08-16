@@ -1,12 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Collections;
 import java.util.List;
-
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVariable;
 
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class InitializerExecutableTypeImpl extends AbstractExecutableTypeImpl<InitializerDeclarationNode>
 {
@@ -16,36 +16,32 @@ public class InitializerExecutableTypeImpl extends AbstractExecutableTypeImpl<In
 	}
 
 	@Override
-	public List<? extends TypeMirror> getParameterTypes()
+	public List<? extends BsjType> getParameterTypes()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
-	public TypeMirror getReturnType()
+	public BsjType getReturnType()
 	{
 		return NoTypeImpl.makeVoid(getManager());
 	}
 
 	@Override
-	public List<? extends TypeMirror> getThrownTypes()
+	public List<? extends BsjType> getThrownTypes()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
-	public List<? extends TypeVariable> getTypeVariables()
+	public List<? extends BsjTypeVariable> getTypeVariables()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public String toString()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return "<initailizer>";
 	}
 }

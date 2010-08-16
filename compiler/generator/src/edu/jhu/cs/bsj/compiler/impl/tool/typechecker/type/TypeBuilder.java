@@ -312,8 +312,7 @@ public class TypeBuilder
 
 	public BsjWildcardType makeWildcardType(WildcardTypeNode node)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return new WildcardTypeImpl(this.manager, node);
 	}
 
 	private BsjExplicitlyDeclaredType makeDeclarationTypeFromDeclaration(NamedTypeDeclarationNode<?> typeDeclaration,

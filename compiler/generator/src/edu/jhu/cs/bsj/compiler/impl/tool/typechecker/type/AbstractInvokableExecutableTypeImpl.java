@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVariable;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractInvokableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvokableDeclarationNode<?>> extends
 		AbstractExecutableTypeImpl<T>
@@ -20,9 +22,9 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 	}
 
 	@Override
-	public List<? extends TypeMirror> getParameterTypes()
+	public List<? extends BsjType> getParameterTypes()
 	{
-		List<TypeMirror> list = new ArrayList<TypeMirror>();
+		List<BsjType> list = new ArrayList<BsjType>();
 		for (VariableNode var : getBackingNode().getParameters())
 		{
 			list.add(getTypeBuilder().makeType(var.getType()));
@@ -38,7 +40,7 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 	}
 
 	@Override
-	public List<? extends TypeMirror> getThrownTypes()
+	public List<? extends BsjType> getThrownTypes()
 	{
 		List<TypeMirror> list = new ArrayList<TypeMirror>();
 		for (TypeNode type : getBackingNode().getThrowTypes())
@@ -49,9 +51,13 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 	}
 
 	@Override
-	public List<? extends TypeVariable> getTypeVariables()
+	public List<? extends BsjTypeVariable> getTypeVariables()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<BsjTypeVariable> list = new ArrayList<BsjTypeVariable>();
+		for (TypeParameterNode typeParameterNode: getBackingNode().getTypeParameters())
+		{
+			list.add(getTypeBuilder().makeTypeVariable(typeParameterNode));
+		}
+		return list;
 	}
 }

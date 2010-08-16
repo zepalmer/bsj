@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
  * 
  * @author Zachary Palmer
  */
-public class TypeChecker
+public class Typechecker
 {
 	/** The toolkit to be used by this type checker. */
 	private BsjToolkit toolkit;
@@ -25,7 +25,7 @@ public class TypeChecker
 	 * 
 	 * @param toolkit The toolkit to be used by this type checker.
 	 */
-	public TypeChecker(BsjToolkit toolkit)
+	public Typechecker(BsjToolkit toolkit)
 	{
 		super();
 		this.toolkit = toolkit;

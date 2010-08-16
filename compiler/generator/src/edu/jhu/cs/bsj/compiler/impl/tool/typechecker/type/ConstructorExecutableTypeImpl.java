@@ -1,12 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import java.util.List;
-
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVariable;
-
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class ConstructorExecutableTypeImpl extends AbstractInvokableExecutableTypeImpl<ConstructorDeclarationNode>
 {
@@ -16,36 +12,8 @@ public class ConstructorExecutableTypeImpl extends AbstractInvokableExecutableTy
 	}
 
 	@Override
-	public String toString()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<? extends TypeMirror> getParameterTypes()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TypeMirror getReturnType()
+	public BsjType getReturnType()
 	{
 		return NoTypeImpl.makeVoid(getManager());
-	}
-
-	@Override
-	public List<? extends TypeMirror> getThrownTypes()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<? extends TypeVariable> getTypeVariables()
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

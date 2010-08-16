@@ -1,9 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import javax.lang.model.type.TypeMirror;
-
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class MethodExecutableTypeImpl extends AbstractInvokableExecutableTypeImpl<MethodDeclarationNode>
 {
@@ -13,14 +12,7 @@ public class MethodExecutableTypeImpl extends AbstractInvokableExecutableTypeImp
 	}
 
 	@Override
-	public String toString()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TypeMirror getReturnType()
+	public BsjType getReturnType()
 	{
 		return getTypeBuilder().makeType(getBackingNode().getReturnType());
 	}

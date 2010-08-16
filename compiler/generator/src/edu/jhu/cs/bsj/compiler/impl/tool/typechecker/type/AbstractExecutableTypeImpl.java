@@ -62,4 +62,23 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
 	{
 		return this;
 	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append('(');
+		boolean first = true;
+		for (BsjType paramType : getParameterTypes())
+		{
+			if (!first)
+				sb.append(',');
+			sb.append(paramType.toString());
+			first = false;
+		}
+		sb.append(")->");
+		sb.append(getReturnType().toString());
+		return sb.toString();
+	}
+	
 }
