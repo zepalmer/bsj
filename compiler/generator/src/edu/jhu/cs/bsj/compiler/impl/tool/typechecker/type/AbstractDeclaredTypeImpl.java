@@ -7,7 +7,7 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
@@ -54,7 +54,7 @@ public abstract class AbstractDeclaredTypeImpl<T extends BsjTypeLikeElement> ext
 	 */
 	private boolean implicit;
 
-	public AbstractDeclaredTypeImpl(TypecheckerModelManager manager, T typeElement,
+	public AbstractDeclaredTypeImpl(TypecheckerManager manager, T typeElement,
 			List<? extends BsjType> typeArguments, BsjDeclaredType enclosingType, boolean implicit)
 	{
 		super(manager);

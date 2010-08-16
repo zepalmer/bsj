@@ -9,14 +9,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 
 public abstract class AbstractAnnotationValueImpl<T extends AnnotationValueNode> extends TypecheckerModelComponentImpl
 		implements AnnotationValue
 {
 	private T backingNode;
 
-	public AbstractAnnotationValueImpl(TypecheckerModelManager manager, T backingNode)
+	public AbstractAnnotationValueImpl(TypecheckerManager manager, T backingNode)
 	{
 		super(manager);
 		this.backingNode = backingNode;
@@ -27,7 +27,7 @@ public abstract class AbstractAnnotationValueImpl<T extends AnnotationValueNode>
 		return this.backingNode;
 	}
 
-	public static AnnotationValue makeForNode(final TypecheckerModelManager manager, AnnotationValueNode annotationNode)
+	public static AnnotationValue makeForNode(final TypecheckerManager manager, AnnotationValueNode annotationNode)
 	{
 		return annotationNode.executeOperation(new BsjDefaultNodeOperation<Void, AnnotationValue>()
 		{

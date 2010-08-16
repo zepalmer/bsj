@@ -5,7 +5,7 @@ import javax.lang.model.element.Name;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
@@ -14,7 +14,7 @@ public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDecla
 {
 	private int index;
 
-	public VariableDeclaratorOwnerElementImpl(TypecheckerModelManager manager, T backingNode, BsjElement enclosingElement,
+	public VariableDeclaratorOwnerElementImpl(TypecheckerManager manager, T backingNode, BsjElement enclosingElement,
 			int index)
 	{
 		super(manager, backingNode, enclosingElement);

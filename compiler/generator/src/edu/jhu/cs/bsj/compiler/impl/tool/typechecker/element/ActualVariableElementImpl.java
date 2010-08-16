@@ -12,7 +12,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
@@ -21,7 +21,7 @@ public class ActualVariableElementImpl extends AbstractVariableElementImpl<Varia
 {
 	private boolean varArgs;
 	
-	public ActualVariableElementImpl(TypecheckerModelManager manager, VariableNode backingNode, BsjElement enclosingElement,
+	public ActualVariableElementImpl(TypecheckerManager manager, VariableNode backingNode, BsjElement enclosingElement,
 			boolean varArgs)
 	{
 		super(manager, backingNode, enclosingElement);

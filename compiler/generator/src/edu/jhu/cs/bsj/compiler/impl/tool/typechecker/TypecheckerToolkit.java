@@ -10,6 +10,7 @@ import javax.lang.model.element.Element;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -20,24 +21,53 @@ import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PrimitiveTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuilder;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
-// TODO: consider renaming to, for example, EnvironmentToolkit
 public class TypecheckerToolkit
 {
-	private TypecheckerModelManager manager;
+	private static Logger LOGGER = Logger.getLogger(TypecheckerToolkit.class);
+
+	private TypecheckerManager manager;
 	private CompilationUnitLoader loader;
 
 	private ElementBuildingNodeOperation elementBuilder;
 	private TypeBuilder typeBuilder;
 
-	private Logger LOGGER = Logger.getLogger(TypecheckerToolkit.class);
+	/** A field to hold the element for {@link Object java.lang.Object}. */
+	private BsjDeclaredTypeElement objectElement;
+	/** A field to hold the element for {@link String java.lang.String}. */
+	private BsjDeclaredTypeElement stringElement;
+	/** A field to hold the element for {@link Enum java.lang.Enum}. */
+	private BsjDeclaredTypeElement enumElement;
+	/** A field to hold the element for {@link Annotation java.lang.annotation.Annotation}. */
+	private BsjDeclaredTypeElement annotationElement;
 
-	public TypecheckerToolkit(TypecheckerModelManager manager, CompilationUnitLoader loader)
+	/** A field to hold the element for {@link Node edu.jhu.cs.bsj.compiler.ast.node.Node}. */
+	private BsjDeclaredTypeElement nodeElement;
+	
+	/** A field to hold the element for the primitive <tt>byte</tt> type. */
+	private BsjPrimitiveType byteType;
+	/** A field to hold the element for the primitive <tt>short</tt> type. */
+	private BsjPrimitiveType shortType;
+	/** A field to hold the element for the primitive <tt>char</tt> type. */
+	private BsjPrimitiveType charType;
+	/** A field to hold the element for the primitive <tt>int</tt> type. */
+	private BsjPrimitiveType intType;
+	/** A field to hold the element for the primitive <tt>long</tt> type. */
+	private BsjPrimitiveType longType;
+	/** A field to hold the element for the primitive <tt>float</tt> type. */
+	private BsjPrimitiveType floatType;
+	/** A field to hold the element for the primitive <tt>double</tt> type. */
+	private BsjPrimitiveType doubleType;
+	/** A field to hold the element for the primitive <tt>boolean</tt> type. */
+	private BsjPrimitiveType booleanType;
+
+	public TypecheckerToolkit(TypecheckerManager manager, CompilationUnitLoader loader)
 	{
 		super();
 		this.manager = manager;
@@ -46,9 +76,25 @@ public class TypecheckerToolkit
 		this.loader = loader;
 		this.elementBuilder = new ElementBuildingNodeOperation(getManager());
 		this.typeBuilder = new TypeBuilder(getManager());
+
+		this.objectElement = getTypeElementByName("java", "lang", "Object");
+		this.stringElement = getTypeElementByName("java", "lang", "String");
+		this.enumElement = getTypeElementByName("java", "lang", "Enum");
+		this.annotationElement = getTypeElementByName("java","lang","annotation","Annotation");
+
+		this.nodeElement = getTypeElementByName("edu", "jhu", "cs", "bsj", "compiler", "ast", "node", "Node");
+		
+		this.byteType = new PrimitiveTypeImpl(getManager(), PrimitiveType.BYTE);
+		this.shortType = new PrimitiveTypeImpl(getManager(), PrimitiveType.SHORT);
+		this.charType = new PrimitiveTypeImpl(getManager(), PrimitiveType.CHAR);
+		this.intType = new PrimitiveTypeImpl(getManager(), PrimitiveType.INT);
+		this.longType = new PrimitiveTypeImpl(getManager(), PrimitiveType.LONG);
+		this.floatType = new PrimitiveTypeImpl(getManager(), PrimitiveType.FLOAT);
+		this.doubleType = new PrimitiveTypeImpl(getManager(), PrimitiveType.DOUBLE);
+		this.booleanType = new PrimitiveTypeImpl(getManager(), PrimitiveType.BOOLEAN);
 	}
 
-	protected TypecheckerModelManager getManager()
+	protected TypecheckerManager getManager()
 	{
 		return this.manager;
 	}
@@ -56,6 +102,71 @@ public class TypecheckerToolkit
 	public TypeBuilder getTypeBuilder()
 	{
 		return typeBuilder;
+	}
+
+	public BsjDeclaredTypeElement getObjectElement()
+	{
+		return objectElement;
+	}
+
+	public BsjDeclaredTypeElement getStringElement()
+	{
+		return stringElement;
+	}
+
+	public BsjDeclaredTypeElement getEnumElement()
+	{
+		return enumElement;
+	}
+
+	public BsjDeclaredTypeElement getAnnotationElement()
+	{
+		return annotationElement;
+	}
+
+	public BsjDeclaredTypeElement getNodeElement()
+	{
+		return nodeElement;
+	}
+
+	public BsjPrimitiveType getByteType()
+	{
+		return byteType;
+	}
+
+	public BsjPrimitiveType getShortType()
+	{
+		return shortType;
+	}
+
+	public BsjPrimitiveType getCharType()
+	{
+		return charType;
+	}
+
+	public BsjPrimitiveType getIntType()
+	{
+		return intType;
+	}
+
+	public BsjPrimitiveType getLongType()
+	{
+		return longType;
+	}
+
+	public BsjPrimitiveType getFloatType()
+	{
+		return floatType;
+	}
+
+	public BsjPrimitiveType getDoubleType()
+	{
+		return doubleType;
+	}
+
+	public BsjPrimitiveType getBooleanType()
+	{
+		return booleanType;
 	}
 
 	/**
@@ -85,20 +196,27 @@ public class TypecheckerToolkit
 	 * to represent package names.
 	 * 
 	 * @param name The name of the top-level type to obtain.
-	 * @return An element for that top-level type.
+	 * @return An element for that top-level type or <code>null</code> if that top level type does not exist.
 	 */
-	public BsjTypeElement getTypeElementByName(String... name)
+	public BsjDeclaredTypeElement getTypeElementByName(String... name)
 	{
-		return (BsjTypeElement) makeElement(findTopLevelTypeByName(name));
+		NamedTypeDeclarationNode<?> declaration = findTopLevelTypeDeclarationByName(name);
+		if (declaration == null)
+		{
+			return null;
+		} else
+		{
+			return makeElement(declaration);
+		}
 	}
 
 	/**
 	 * Finds a top-level type declaration by name.
 	 * 
 	 * @param name The components of the name. All but the last are assumed to be package names.
-	 * @return The resulting type.
+	 * @return The resulting type or <code>null</code> if no such type exists.
 	 */
-	public NamedTypeDeclarationNode<?> findTopLevelTypeByName(String... name)
+	public NamedTypeDeclarationNode<?> findTopLevelTypeDeclarationByName(String... name)
 	{
 		if (name.length == 0)
 		{
@@ -181,7 +299,7 @@ public class TypecheckerToolkit
 					if (element.getDeclarationNode() instanceof NamedTypeDeclarationNode<?>)
 					{
 						NamedTypeDeclarationNode<?> typeDeclarationNode = (NamedTypeDeclarationNode<?>) element.getDeclarationNode();
-						nextNamespace = this.getManager().getEnvironmentManager().getTypeNamespace(
+						nextNamespace = this.getManager().getNamespaceBuilder().getTypeNamespace(
 								typeDeclarationNode.getBody().getMembers());
 						element = nextNamespace.lookup(nextName.getIdentifier().getIdentifier(),
 								nextName.getStartLocation());

@@ -7,11 +7,11 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ExecutableElement;
 
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 
 public class SingleElementAnnotationMirrorImpl extends AnnotationMirrorImpl<SingleElementAnnotationNode>
 {
-	public SingleElementAnnotationMirrorImpl(TypecheckerModelManager manager, SingleElementAnnotationNode backingNode)
+	public SingleElementAnnotationMirrorImpl(TypecheckerManager manager, SingleElementAnnotationNode backingNode)
 	{
 		super(manager, backingNode);
 	}

@@ -11,13 +11,13 @@ import javax.lang.model.element.Name;
 
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class EnumConstantVariableElementImpl extends AbstractVariableElementImpl<EnumConstantDeclarationNode>
 {
-	public EnumConstantVariableElementImpl(TypecheckerModelManager manager, EnumConstantDeclarationNode backingNode,
+	public EnumConstantVariableElementImpl(TypecheckerManager manager, EnumConstantDeclarationNode backingNode,
 			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);

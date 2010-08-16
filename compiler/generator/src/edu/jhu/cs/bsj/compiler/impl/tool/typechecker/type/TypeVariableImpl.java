@@ -4,7 +4,7 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
@@ -14,7 +14,7 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 	private BsjType lowerBound;
 	private BsjType upperBound;
 
-	public TypeVariableImpl(TypecheckerModelManager manager, BsjType lowerBound, BsjType upperBound)
+	public TypeVariableImpl(TypecheckerManager manager, BsjType lowerBound, BsjType upperBound)
 	{
 		super(manager);
 		this.lowerBound = lowerBound;
@@ -47,7 +47,7 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 	{
 		if (this.upperBound == null)
 		{
-			NamedTypeDeclarationNode<?> objectDeclaration = getManager().getToolkit().findTopLevelTypeByName("java",
+			NamedTypeDeclarationNode<?> objectDeclaration = getManager().getToolkit().findTopLevelTypeDeclarationByName("java",
 					"lang", "Object");
 			return makeElement(objectDeclaration).asType();
 		} else

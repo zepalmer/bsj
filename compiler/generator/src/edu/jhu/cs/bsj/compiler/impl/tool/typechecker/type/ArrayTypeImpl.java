@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
@@ -11,7 +11,7 @@ public class ArrayTypeImpl extends TypeMirrorImpl implements BsjArrayType
 {
 	private BsjType componentType;
 	
-	public ArrayTypeImpl(TypecheckerModelManager manager, BsjType componentType)
+	public ArrayTypeImpl(TypecheckerManager manager, BsjType componentType)
 	{
 		super(manager);
 		this.componentType = componentType;

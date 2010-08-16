@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
@@ -21,7 +21,7 @@ public abstract class AnnotationMirrorImpl<T extends AnnotationNode> extends Typ
 {
 	private T backingNode;
 
-	public AnnotationMirrorImpl(TypecheckerModelManager manager, T backingNode)
+	public AnnotationMirrorImpl(TypecheckerManager manager, T backingNode)
 	{
 		super(manager);
 		this.backingNode = backingNode;
@@ -70,7 +70,7 @@ public abstract class AnnotationMirrorImpl<T extends AnnotationNode> extends Typ
 		throw new NotImplementedYetException();
 	}
 
-	public static AnnotationMirror makeForNode(final TypecheckerModelManager manager, AnnotationNode annotationNode)
+	public static AnnotationMirror makeForNode(final TypecheckerManager manager, AnnotationNode annotationNode)
 	{
 		return annotationNode.executeOperation(new BsjDefaultNodeOperation<Void, AnnotationMirror>()
 		{

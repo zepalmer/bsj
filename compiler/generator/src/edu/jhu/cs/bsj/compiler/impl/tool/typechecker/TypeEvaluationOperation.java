@@ -55,8 +55,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PrimitiveTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
@@ -66,1157 +69,1152 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
  * 
  * @author Zachary Palmer
  */
-public class TypeEvaluationOperation implements BsjNodeOperation<BsjEnvironment, BsjType>
+public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvironment, BsjType>
 {
 	/** The typechecker model managegr for this operation. */
-	private TypecheckerModelManager manager;
+	private TypecheckerManager manager;
 
-	public TypeEvaluationOperation(TypecheckerModelManager manager)
+	public TypeEvaluationOperation(TypecheckerManager manager)
 	{
 		super();
 		this.manager = manager;
 	}
+	
+	// TODO: handle rejection which comes as a result of lacking context (such as "<:x:>") differently
+	// This could be accomplished by creating a second operation.  The second operation calls this operation for all
+	// requests.  Whenever this operation returns an error type indicating failure due to insufficient context, however,
+	// the second operation would then perform a parse map operation and call this operation again.  Only in the cae of
+	// a second failure would the second operation return the insufficient context error type.
 
 	@Override
-	public BsjType executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, BsjEnvironment env)
+	public BsjType executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, BsjEnvironment env)
+	public BsjType executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationArrayValueNode(AnnotationArrayValueNode node, BsjEnvironment env)
+	public BsjType executeAnnotationArrayValueNode(AnnotationArrayValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationBodyNode(AnnotationBodyNode node, BsjEnvironment env)
+	public BsjType executeAnnotationBodyNode(AnnotationBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationDeclarationNode(AnnotationDeclarationNode node, BsjEnvironment env)
+	public BsjType executeAnnotationDeclarationNode(AnnotationDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationElementListNode(AnnotationElementListNode node, BsjEnvironment env)
+	public BsjType executeAnnotationElementListNode(AnnotationElementListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationElementNode(AnnotationElementNode node, BsjEnvironment env)
+	public BsjType executeAnnotationElementNode(AnnotationElementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, BsjEnvironment env)
+	public BsjType executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationListNode(AnnotationListNode node, BsjEnvironment env)
+	public BsjType executeAnnotationListNode(AnnotationListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationMemberListNode(AnnotationMemberListNode node, BsjEnvironment env)
+	public BsjType executeAnnotationMemberListNode(AnnotationMemberListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
-			BsjEnvironment env)
+	public BsjType executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, BsjEnvironment env)
+	public BsjType executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, BsjEnvironment env)
+	public BsjType executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationModifiersNode(AnnotationModifiersNode node, BsjEnvironment env)
+	public BsjType executeAnnotationModifiersNode(AnnotationModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationValueListNode(AnnotationValueListNode node, BsjEnvironment env)
+	public BsjType executeAnnotationValueListNode(AnnotationValueListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnonymousClassBodyNode(AnonymousClassBodyNode node, BsjEnvironment env)
+	public BsjType executeAnonymousClassBodyNode(AnonymousClassBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, BsjEnvironment env)
+	public BsjType executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public BsjType executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node,
-			BsjEnvironment env)
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeArrayAccessNode(ArrayAccessNode node, BsjEnvironment env)
+	public BsjType executeArrayAccessNode(ArrayAccessNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, BsjEnvironment env)
+	public BsjType executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeArrayInitializerNode(ArrayInitializerNode node, BsjEnvironment env)
+	public BsjType executeArrayInitializerNode(ArrayInitializerNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, BsjEnvironment env)
+	public BsjType executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeArrayTypeNode(ArrayTypeNode node, BsjEnvironment env)
+	public BsjType executeArrayTypeNode(ArrayTypeNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAssertStatementNode(AssertStatementNode node, BsjEnvironment env)
+	public BsjType executeAssertStatementNode(AssertStatementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAssignmentNode(AssignmentNode node, BsjEnvironment env)
+	public BsjType executeAssignmentNode(AssignmentNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeBinaryExpressionNode(BinaryExpressionNode node, BsjEnvironment env)
+	public BsjType executeBinaryExpressionNode(BinaryExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeBlockNode(BlockNode node, BsjEnvironment env)
+	public BsjType executeBlockNode(BlockNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeBlockStatementListNode(BlockStatementListNode node, BsjEnvironment env)
+	public BsjType executeBlockStatementListNode(BlockStatementListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
-			BsjEnvironment env)
+	public BsjType executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeBooleanLiteralNode(BooleanLiteralNode node, BsjEnvironment env)
+	public BsjType executeBooleanLiteralNode(BooleanLiteralNode node, TypecheckerEnvironment env)
 	{
-		return new PrimitiveTypeImpl(this.manager, PrimitiveType.BOOLEAN);
+		return this.manager.getToolkit().getBooleanType();
 	}
 
 	@Override
-	public BsjType executeBreakNode(BreakNode node, BsjEnvironment env)
+	public BsjType executeBreakNode(BreakNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeCaseListNode(CaseListNode node, BsjEnvironment env)
+	public BsjType executeCaseListNode(CaseListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeCaseNode(CaseNode node, BsjEnvironment env)
+	public BsjType executeCaseNode(CaseNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeCatchListNode(CatchListNode node, BsjEnvironment env)
+	public BsjType executeCatchListNode(CatchListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeCatchNode(CatchNode node, BsjEnvironment env)
+	public BsjType executeCatchNode(CatchNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeCharLiteralNode(CharLiteralNode node, BsjEnvironment env)
+	public BsjType executeCharLiteralNode(CharLiteralNode node, TypecheckerEnvironment env)
 	{
-		return new PrimitiveTypeImpl(this.manager, PrimitiveType.CHAR);
+		return this.manager.getToolkit().getCharType();
 	}
 
 	@Override
-	public BsjType executeClassBodyNode(ClassBodyNode node, BsjEnvironment env)
+	public BsjType executeClassBodyNode(ClassBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeClassDeclarationNode(ClassDeclarationNode node, BsjEnvironment env)
+	public BsjType executeClassDeclarationNode(ClassDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeClassLiteralNode(ClassLiteralNode node, BsjEnvironment env)
+	public BsjType executeClassLiteralNode(ClassLiteralNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeClassMemberListNode(ClassMemberListNode node, BsjEnvironment env)
+	public BsjType executeClassMemberListNode(ClassMemberListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, BsjEnvironment env)
+	public BsjType executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeClassModifiersNode(ClassModifiersNode node, BsjEnvironment env)
+	public BsjType executeClassModifiersNode(ClassModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeCodeLiteralNode(CodeLiteralNode node, BsjEnvironment env)
+	public BsjType executeCodeLiteralNode(CodeLiteralNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeCompilationUnitNode(CompilationUnitNode node, BsjEnvironment env)
+	public BsjType executeCompilationUnitNode(CompilationUnitNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeConditionalExpressionNode(ConditionalExpressionNode node, BsjEnvironment env)
+	public BsjType executeConditionalExpressionNode(ConditionalExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeConstantDeclarationNode(ConstantDeclarationNode node, BsjEnvironment env)
+	public BsjType executeConstantDeclarationNode(ConstantDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeConstantModifiersNode(ConstantModifiersNode node, BsjEnvironment env)
+	public BsjType executeConstantModifiersNode(ConstantModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeConstructorBodyNode(ConstructorBodyNode node, BsjEnvironment env)
+	public BsjType executeConstructorBodyNode(ConstructorBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeConstructorDeclarationNode(ConstructorDeclarationNode node, BsjEnvironment env)
+	public BsjType executeConstructorDeclarationNode(ConstructorDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeConstructorModifiersNode(ConstructorModifiersNode node, BsjEnvironment env)
+	public BsjType executeConstructorModifiersNode(ConstructorModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeContinueNode(ContinueNode node, BsjEnvironment env)
+	public BsjType executeContinueNode(ContinueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeDeclaredTypeListNode(DeclaredTypeListNode node, BsjEnvironment env)
+	public BsjType executeDeclaredTypeListNode(DeclaredTypeListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeDoWhileLoopNode(DoWhileLoopNode node, BsjEnvironment env)
+	public BsjType executeDoWhileLoopNode(DoWhileLoopNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeDoubleLiteralNode(DoubleLiteralNode node, BsjEnvironment env)
+	public BsjType executeDoubleLiteralNode(DoubleLiteralNode node, TypecheckerEnvironment env)
 	{
-		return new PrimitiveTypeImpl(this.manager, PrimitiveType.DOUBLE);
+		return this.manager.getToolkit().getDoubleType();
 	}
 
 	@Override
-	public BsjType executeEnhancedForLoopNode(EnhancedForLoopNode node, BsjEnvironment env)
+	public BsjType executeEnhancedForLoopNode(EnhancedForLoopNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeEnumBodyNode(EnumBodyNode node, BsjEnvironment env)
+	public BsjType executeEnumBodyNode(EnumBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node, BsjEnvironment env)
+	public BsjType executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, BsjEnvironment env)
+	public BsjType executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeEnumConstantModifiersNode(EnumConstantModifiersNode node, BsjEnvironment env)
+	public BsjType executeEnumConstantModifiersNode(EnumConstantModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeEnumDeclarationNode(EnumDeclarationNode node, BsjEnvironment env)
+	public BsjType executeEnumDeclarationNode(EnumDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeEnumModifiersNode(EnumModifiersNode node, BsjEnvironment env)
+	public BsjType executeEnumModifiersNode(EnumModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeExpressionListNode(ExpressionListNode node, BsjEnvironment env)
+	public BsjType executeExpressionListNode(ExpressionListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeExpressionStatementNode(ExpressionStatementNode node, BsjEnvironment env)
+	public BsjType executeExpressionStatementNode(ExpressionStatementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeFieldDeclarationNode(FieldDeclarationNode node, BsjEnvironment env)
+	public BsjType executeFieldDeclarationNode(FieldDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeFieldModifiersNode(FieldModifiersNode node, BsjEnvironment env)
+	public BsjType executeFieldModifiersNode(FieldModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeFloatLiteralNode(FloatLiteralNode node, BsjEnvironment env)
+	public BsjType executeFloatLiteralNode(FloatLiteralNode node, TypecheckerEnvironment env)
 	{
-		return new PrimitiveTypeImpl(this.manager, PrimitiveType.FLOAT);
+		return this.manager.getToolkit().getFloatType();
 	}
 
 	@Override
-	public BsjType executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, BsjEnvironment env)
+	public BsjType executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeForInitializerExpressionNode(ForInitializerExpressionNode node, BsjEnvironment env)
+	public BsjType executeForInitializerExpressionNode(ForInitializerExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeForLoopNode(ForLoopNode node, BsjEnvironment env)
+	public BsjType executeForLoopNode(ForLoopNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeIdentifierListNode(IdentifierListNode node, BsjEnvironment env)
+	public BsjType executeIdentifierListNode(IdentifierListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeIdentifierNode(IdentifierNode node, BsjEnvironment env)
+	public BsjType executeIdentifierNode(IdentifierNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeIfNode(IfNode node, BsjEnvironment env)
+	public BsjType executeIfNode(IfNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeImportListNode(ImportListNode node, BsjEnvironment env)
+	public BsjType executeImportListNode(ImportListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeImportOnDemandNode(ImportOnDemandNode node, BsjEnvironment env)
+	public BsjType executeImportOnDemandNode(ImportOnDemandNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeImportSingleTypeNode(ImportSingleTypeNode node, BsjEnvironment env)
+	public BsjType executeImportSingleTypeNode(ImportSingleTypeNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeInitializerDeclarationNode(InitializerDeclarationNode node, BsjEnvironment env)
+	public BsjType executeInitializerDeclarationNode(InitializerDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeInstanceOfNode(InstanceOfNode node, BsjEnvironment env)
+	public BsjType executeInstanceOfNode(InstanceOfNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeIntLiteralNode(IntLiteralNode node, BsjEnvironment env)
+	public BsjType executeIntLiteralNode(IntLiteralNode node, TypecheckerEnvironment env)
 	{
-		return new PrimitiveTypeImpl(this.manager, PrimitiveType.INT);
+		return this.manager.getToolkit().getIntType();
 	}
 
 	@Override
-	public BsjType executeInterfaceBodyNode(InterfaceBodyNode node, BsjEnvironment env)
+	public BsjType executeInterfaceBodyNode(InterfaceBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeInterfaceDeclarationNode(InterfaceDeclarationNode node, BsjEnvironment env)
+	public BsjType executeInterfaceDeclarationNode(InterfaceDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeInterfaceMemberListNode(InterfaceMemberListNode node, BsjEnvironment env)
+	public BsjType executeInterfaceMemberListNode(InterfaceMemberListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node,
-			BsjEnvironment env)
+	public BsjType executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeInterfaceModifiersNode(InterfaceModifiersNode node, BsjEnvironment env)
+	public BsjType executeInterfaceModifiersNode(InterfaceModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeJavadocNode(JavadocNode node, BsjEnvironment env)
+	public BsjType executeJavadocNode(JavadocNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeLabeledStatementNode(LabeledStatementNode node, BsjEnvironment env)
+	public BsjType executeLabeledStatementNode(LabeledStatementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeLocalClassDeclarationNode(LocalClassDeclarationNode node, BsjEnvironment env)
+	public BsjType executeLocalClassDeclarationNode(LocalClassDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeLocalClassModifiersNode(LocalClassModifiersNode node, BsjEnvironment env)
+	public BsjType executeLocalClassModifiersNode(LocalClassModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, BsjEnvironment env)
+	public BsjType executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeLongLiteralNode(LongLiteralNode node, BsjEnvironment env)
+	public BsjType executeLongLiteralNode(LongLiteralNode node, TypecheckerEnvironment env)
 	{
-		return new PrimitiveTypeImpl(this.manager, PrimitiveType.LONG);
+		return this.manager.getToolkit().getLongType();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, BsjEnvironment env)
+	public BsjType executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, BsjEnvironment env)
+	public BsjType executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationElementNode(MetaAnnotationElementNode node, BsjEnvironment env)
+	public BsjType executeMetaAnnotationElementNode(MetaAnnotationElementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, BsjEnvironment env)
+	public BsjType executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationListNode(MetaAnnotationListNode node, BsjEnvironment env)
+	public BsjType executeMetaAnnotationListNode(MetaAnnotationListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node,
-			BsjEnvironment env)
+	public BsjType executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node,
-			BsjEnvironment env)
+	public BsjType executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, BsjEnvironment env)
+	public BsjType executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node,
-			BsjEnvironment env)
+	public BsjType executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node,
-			BsjEnvironment env)
+	public BsjType executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, BsjEnvironment env)
+	public BsjType executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramDependencyNode(MetaprogramDependencyNode node, BsjEnvironment env)
+	public BsjType executeMetaprogramDependencyNode(MetaprogramDependencyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramImportListNode(MetaprogramImportListNode node, BsjEnvironment env)
+	public BsjType executeMetaprogramImportListNode(MetaprogramImportListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramImportNode(MetaprogramImportNode node, BsjEnvironment env)
+	public BsjType executeMetaprogramImportNode(MetaprogramImportNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramNode(MetaprogramNode node, BsjEnvironment env)
+	public BsjType executeMetaprogramNode(MetaprogramNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramPreambleNode(MetaprogramPreambleNode node, BsjEnvironment env)
+	public BsjType executeMetaprogramPreambleNode(MetaprogramPreambleNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramTargetListNode(MetaprogramTargetListNode node, BsjEnvironment env)
+	public BsjType executeMetaprogramTargetListNode(MetaprogramTargetListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramTargetNode(MetaprogramTargetNode node, BsjEnvironment env)
+	public BsjType executeMetaprogramTargetNode(MetaprogramTargetNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMethodDeclarationNode(MethodDeclarationNode node, BsjEnvironment env)
+	public BsjType executeMethodDeclarationNode(MethodDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, BsjEnvironment env)
+	public BsjType executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMethodInvocationByNameNode(MethodInvocationByNameNode node, BsjEnvironment env)
+	public BsjType executeMethodInvocationByNameNode(MethodInvocationByNameNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMethodModifiersNode(MethodModifiersNode node, BsjEnvironment env)
+	public BsjType executeMethodModifiersNode(MethodModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeNoOperationNode(NoOperationNode node, BsjEnvironment env)
+	public BsjType executeNoOperationNode(NoOperationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeNormalAnnotationNode(NormalAnnotationNode node, BsjEnvironment env)
+	public BsjType executeNormalAnnotationNode(NormalAnnotationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, BsjEnvironment env)
+	public BsjType executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeNullLiteralNode(NullLiteralNode node, BsjEnvironment env)
+	public BsjType executeNullLiteralNode(NullLiteralNode node, TypecheckerEnvironment env)
 	{
 		return new NullTypeImpl(this.manager);
 	}
 
 	@Override
-	public BsjType executePackageDeclarationNode(PackageDeclarationNode node, BsjEnvironment env)
+	public BsjType executePackageDeclarationNode(PackageDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executePackageNode(PackageNode node, BsjEnvironment env)
+	public BsjType executePackageNode(PackageNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return NoTypeImpl.makePackage(this.manager);
 	}
 
 	@Override
-	public BsjType executeParameterizedTypeNode(ParameterizedTypeNode node, BsjEnvironment env)
+	public BsjType executeParameterizedTypeNode(ParameterizedTypeNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, BsjEnvironment env)
+	public BsjType executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, BsjEnvironment env)
+	public BsjType executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return node.getExpression().executeOperation(this, env);
 	}
 
 	@Override
-	public BsjType executePrimitiveTypeNode(PrimitiveTypeNode node, BsjEnvironment env)
+	public BsjType executePrimitiveTypeNode(PrimitiveTypeNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, BsjEnvironment env)
+	public BsjType executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeQualifiedNameNode(QualifiedNameNode node, BsjEnvironment env)
+	public BsjType executeQualifiedNameNode(QualifiedNameNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeRawCodeLiteralNode(RawCodeLiteralNode node, BsjEnvironment env)
+	public BsjType executeRawCodeLiteralNode(RawCodeLiteralNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeReferenceTypeListNode(ReferenceTypeListNode node, BsjEnvironment env)
+	public BsjType executeReferenceTypeListNode(ReferenceTypeListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeReturnNode(ReturnNode node, BsjEnvironment env)
+	public BsjType executeReturnNode(ReturnNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeSimpleNameNode(SimpleNameNode node, BsjEnvironment env)
+	public BsjType executeSimpleNameNode(SimpleNameNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeSingleElementAnnotationNode(SingleElementAnnotationNode node, BsjEnvironment env)
+	public BsjType executeSingleElementAnnotationNode(SingleElementAnnotationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, BsjEnvironment env)
+	public BsjType executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeSingleStaticImportNode(SingleStaticImportNode node, BsjEnvironment env)
+	public BsjType executeSingleStaticImportNode(SingleStaticImportNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeStatementExpressionListNode(StatementExpressionListNode node, BsjEnvironment env)
+	public BsjType executeStatementExpressionListNode(StatementExpressionListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeStaticImportOnDemandNode(StaticImportOnDemandNode node, BsjEnvironment env)
+	public BsjType executeStaticImportOnDemandNode(StaticImportOnDemandNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeStringLiteralNode(StringLiteralNode node, BsjEnvironment env)
+	public BsjType executeStringLiteralNode(StringLiteralNode node, TypecheckerEnvironment env)
 	{
-		return this.manager.getToolkit().getTypeElementByName("java", "lang", "String").asType();
+		return this.manager.getToolkit().getStringElement().asType();
 	}
 
 	@Override
-	public BsjType executeSuperFieldAccessNode(SuperFieldAccessNode node, BsjEnvironment env)
+	public BsjType executeSuperFieldAccessNode(SuperFieldAccessNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeSuperMethodInvocationNode(SuperMethodInvocationNode node, BsjEnvironment env)
+	public BsjType executeSuperMethodInvocationNode(SuperMethodInvocationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node,
-			BsjEnvironment env)
+	public BsjType executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeSwitchNode(SwitchNode node, BsjEnvironment env)
+	public BsjType executeSwitchNode(SwitchNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeSynchronizedNode(SynchronizedNode node, BsjEnvironment env)
+	public BsjType executeSynchronizedNode(SynchronizedNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeThisNode(ThisNode node, BsjEnvironment env)
+	public BsjType executeThisNode(ThisNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeThrowNode(ThrowNode node, BsjEnvironment env)
+	public BsjType executeThrowNode(ThrowNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeTryNode(TryNode node, BsjEnvironment env)
+	public BsjType executeTryNode(TryNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeTypeArgumentListNode(TypeArgumentListNode node, BsjEnvironment env)
+	public BsjType executeTypeArgumentListNode(TypeArgumentListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeTypeCastNode(TypeCastNode node, BsjEnvironment env)
+	public BsjType executeTypeCastNode(TypeCastNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeTypeDeclarationListNode(TypeDeclarationListNode node, BsjEnvironment env)
+	public BsjType executeTypeDeclarationListNode(TypeDeclarationListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node,
-			BsjEnvironment env)
+	public BsjType executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeTypeParameterListNode(TypeParameterListNode node, BsjEnvironment env)
+	public BsjType executeTypeParameterListNode(TypeParameterListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeTypeParameterNode(TypeParameterNode node, BsjEnvironment env)
+	public BsjType executeTypeParameterNode(TypeParameterNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeUnaryExpressionNode(UnaryExpressionNode node, BsjEnvironment env)
+	public BsjType executeUnaryExpressionNode(UnaryExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, BsjEnvironment env)
+	public BsjType executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, BsjEnvironment env)
+	public BsjType executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeUnparameterizedTypeNode(UnparameterizedTypeNode node, BsjEnvironment env)
+	public BsjType executeUnparameterizedTypeNode(UnparameterizedTypeNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, BsjEnvironment env)
+	public BsjType executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, BsjEnvironment env)
+	public BsjType executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVariableAccessByNameNode(VariableAccessByNameNode node, BsjEnvironment env)
+	public BsjType executeVariableAccessByNameNode(VariableAccessByNameNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVariableDeclaratorListNode(VariableDeclaratorListNode node, BsjEnvironment env)
+	public BsjType executeVariableDeclaratorListNode(VariableDeclaratorListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVariableDeclaratorNode(VariableDeclaratorNode node, BsjEnvironment env)
+	public BsjType executeVariableDeclaratorNode(VariableDeclaratorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVariableInitializerListNode(VariableInitializerListNode node, BsjEnvironment env)
+	public BsjType executeVariableInitializerListNode(VariableInitializerListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVariableListNode(VariableListNode node, BsjEnvironment env)
+	public BsjType executeVariableListNode(VariableListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVariableModifiersNode(VariableModifiersNode node, BsjEnvironment env)
+	public BsjType executeVariableModifiersNode(VariableModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVariableNode(VariableNode node, BsjEnvironment env)
+	public BsjType executeVariableNode(VariableNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeVoidTypeNode(VoidTypeNode node, BsjEnvironment env)
+	public BsjType executeVoidTypeNode(VoidTypeNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeWhileLoopNode(WhileLoopNode node, BsjEnvironment env)
+	public BsjType executeWhileLoopNode(WhileLoopNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeWildcardTypeNode(WildcardTypeNode node, BsjEnvironment env)
+	public BsjType executeWildcardTypeNode(WildcardTypeNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 }

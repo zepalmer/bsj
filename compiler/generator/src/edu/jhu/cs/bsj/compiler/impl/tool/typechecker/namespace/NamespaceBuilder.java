@@ -25,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
  * 
  * @author Zachary Palmer
  */
-public class EnvironmentManager
+public class NamespaceBuilder
 {
 	/** The node operation which calculates the type namespace for a node. */
 	private BsjNodeOperation<Void, TypeNamespaceMap> typeNamespaceCalculatingOperation;
@@ -41,7 +41,7 @@ public class EnvironmentManager
 	 * @param listener The listener to which lookup and declaration errors should be reported.
 	 * @param toolkit The typechecker toolkit to use to build elements.
 	 */
-	public EnvironmentManager(PackageNode rootPackage, final DiagnosticListener<BsjSourceLocation> listener,
+	public NamespaceBuilder(PackageNode rootPackage, final DiagnosticListener<BsjSourceLocation> listener,
 			CompilationUnitLoader loader, TypecheckerToolkit toolkit)
 	{
 		super();

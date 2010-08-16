@@ -15,7 +15,7 @@ import javax.lang.model.element.Name;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeVariableImpl;
@@ -23,7 +23,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterNode> implements BsjTypeParameterElement
 {
-	public TypeParameterElementImpl(TypecheckerModelManager manager, TypeParameterNode backingNode,
+	public TypeParameterElementImpl(TypecheckerManager manager, TypeParameterNode backingNode,
 			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);

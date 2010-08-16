@@ -12,14 +12,14 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationModifiersNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<AnnotationDeclarationNode>
 {
-	public DeclaredAnnotationTypeElementImpl(TypecheckerModelManager manager, AnnotationDeclarationNode backingNode,
+	public DeclaredAnnotationTypeElementImpl(TypecheckerManager manager, AnnotationDeclarationNode backingNode,
 			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
@@ -56,7 +56,7 @@ public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<A
 	@Override
 	public List<? extends TypeMirror> getInterfaces()
 	{
-		return Collections.singletonList(getElementByName("java", "lang", "annotation", "Annotation").asType());
+		return Collections.singletonList(getManager().getToolkit().getAnnotationElement().asType());
 	}
 
 	@Override

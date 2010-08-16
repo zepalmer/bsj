@@ -3,11 +3,11 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 import javax.lang.model.element.AnnotationValueVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 
 public class AnnotationExpressionValueImpl extends AbstractAnnotationValueImpl<AnnotationExpressionValueNode>
 {
-	public AnnotationExpressionValueImpl(TypecheckerModelManager manager, AnnotationExpressionValueNode backingNode)
+	public AnnotationExpressionValueImpl(TypecheckerManager manager, AnnotationExpressionValueNode backingNode)
 	{
 		super(manager, backingNode);
 	}

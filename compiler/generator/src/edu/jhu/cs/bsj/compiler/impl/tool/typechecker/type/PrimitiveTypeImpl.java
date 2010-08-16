@@ -4,7 +4,7 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
@@ -17,7 +17,7 @@ public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveTyp
 {
 	private PrimitiveType primitiveType;
 	
-	public PrimitiveTypeImpl(TypecheckerModelManager manager, PrimitiveType primitiveType)
+	public PrimitiveTypeImpl(TypecheckerManager manager, PrimitiveType primitiveType)
 	{
 		super(manager);
 		this.primitiveType = primitiveType;

@@ -1,7 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -34,8 +34,8 @@ public abstract class NamespaceCalculatingOperation<K, V extends BsjElement, T e
 		this.modifier = modifier;
 
 		this.parentLocator = new ParentEnvironmentNodeIdentifyingOperation();
-		this.cache = new HashMap<Node, T>();
-		this.producerCache = new HashMap<Node, ChildNamespaceProducer<K, V, T>>();
+		this.cache = new WeakHashMap<Node, T>();
+		this.producerCache = new WeakHashMap<Node, ChildNamespaceProducer<K, V, T>>();
 	}
 
 	/**

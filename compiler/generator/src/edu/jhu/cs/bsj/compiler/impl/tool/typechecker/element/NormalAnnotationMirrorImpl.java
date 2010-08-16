@@ -8,11 +8,11 @@ import javax.lang.model.element.ExecutableElement;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 
 public class NormalAnnotationMirrorImpl extends AnnotationMirrorImpl<NormalAnnotationNode>
 {
-	public NormalAnnotationMirrorImpl(TypecheckerModelManager manager, NormalAnnotationNode backingNode)
+	public NormalAnnotationMirrorImpl(TypecheckerManager manager, NormalAnnotationNode backingNode)
 	{
 		super(manager, backingNode);
 	}

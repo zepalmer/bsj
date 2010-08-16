@@ -12,14 +12,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.AbstractInvokableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 
 public abstract class AbstractInvokableExecutableElementImpl<T extends AbstractInvokableDeclarationNode<?>> extends
 		AbstractExecutableElementImpl<T>
 {
-	public AbstractInvokableExecutableElementImpl(TypecheckerModelManager manager, T backingNode,
+	public AbstractInvokableExecutableElementImpl(TypecheckerManager manager, T backingNode,
 			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);

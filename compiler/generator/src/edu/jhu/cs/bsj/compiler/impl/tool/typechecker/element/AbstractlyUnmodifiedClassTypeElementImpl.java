@@ -9,16 +9,17 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractlyUnmodifiedClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends AbstractlyUnmodifiedClassDeclarationNode<?>>
 		extends DeclaredTypeElementImpl<T>
 {
-	public AbstractlyUnmodifiedClassTypeElementImpl(TypecheckerModelManager manager, T backingNode,
+	public AbstractlyUnmodifiedClassTypeElementImpl(TypecheckerManager manager, T backingNode,
 			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
@@ -38,13 +39,13 @@ public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends Abstrac
 			return getTypeBuilder().makeArgumentType(getBackingNode().getExtendsClause());
 		} else
 		{
-			NamedTypeDeclarationNode<?> objectDeclaration = getManager().getToolkit().findTopLevelTypeByName("java", "lang", "Object");
-			if (objectDeclaration.getUid() == getBackingNode().getUid())
+			BsjDeclaredTypeElement objectElement = getManager().getToolkit().getObjectElement();
+			if (this.equals(objectElement))
 			{
-				return null;
+				return NoTypeImpl.makeNone(getManager());
 			} else
 			{
-				return makeElement(objectDeclaration).asType();
+				return objectElement.asType();
 			}
 		}
 	}

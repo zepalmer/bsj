@@ -28,7 +28,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.utils.TwoElementImmutableSet;
@@ -53,9 +53,9 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 		VALID_NODE_TYPES = Collections.unmodifiableSet(classes);
 	}
 
-	private TypecheckerModelManager manager;
+	private TypecheckerManager manager;
 
-	public ElementBuildingNodeOperation(TypecheckerModelManager manager)
+	public ElementBuildingNodeOperation(TypecheckerManager manager)
 	{
 		super();
 		this.manager = manager;

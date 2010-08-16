@@ -4,11 +4,11 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValueVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 
 public class AnnotationAnnotationValueImpl extends AbstractAnnotationValueImpl<AnnotationAnnotationValueNode>
 {
-	public AnnotationAnnotationValueImpl(TypecheckerModelManager manager, AnnotationAnnotationValueNode backingNode)
+	public AnnotationAnnotationValueImpl(TypecheckerManager manager, AnnotationAnnotationValueNode backingNode)
 	{
 		super(manager, backingNode);
 	}

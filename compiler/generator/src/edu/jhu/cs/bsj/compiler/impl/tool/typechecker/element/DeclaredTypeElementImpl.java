@@ -21,11 +21,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitlyDeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
@@ -38,7 +39,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode<?>> extends AbstractElementImpl<T>
 		implements BsjDeclaredTypeElement
 {
-	public DeclaredTypeElementImpl(TypecheckerModelManager manager, T backingNode, BsjElement enclosingElement)
+	public DeclaredTypeElementImpl(TypecheckerManager manager, T backingNode, BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
 	}
@@ -111,7 +112,7 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 	}
 
 	@Override
-	public BsjDeclaredType asType()
+	public BsjExplicitlyDeclaredType asType()
 	{
 		BsjElement enclosingElement = getEnclosingElement();
 		while (enclosingElement != null && !(enclosingElement instanceof BsjDeclaredTypeElement))

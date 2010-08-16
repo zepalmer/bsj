@@ -4,7 +4,7 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 
@@ -12,7 +12,7 @@ public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
 {
 	private WildcardTypeNode wildcardTypeNode;
 	
-	public WildcardTypeImpl(TypecheckerModelManager manager, WildcardTypeNode wildcardTypeNode)
+	public WildcardTypeImpl(TypecheckerManager manager, WildcardTypeNode wildcardTypeNode)
 	{
 		super(manager);
 		this.wildcardTypeNode = wildcardTypeNode;

@@ -9,12 +9,12 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 
 public class LocalVariableElementImpl extends VariableDeclaratorOwnerElementImpl<LocalVariableDeclarationNode>
 {
-	public LocalVariableElementImpl(TypecheckerModelManager manager, LocalVariableDeclarationNode backingNode,
+	public LocalVariableElementImpl(TypecheckerManager manager, LocalVariableDeclarationNode backingNode,
 			BsjElement enclosingElement, int index)
 	{
 		super(manager, backingNode, enclosingElement, index);

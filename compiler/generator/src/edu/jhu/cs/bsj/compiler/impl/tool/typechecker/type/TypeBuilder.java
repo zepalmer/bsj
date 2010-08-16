@@ -23,7 +23,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
@@ -46,9 +46,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
  */
 public class TypeBuilder
 {
-	private TypecheckerModelManager manager;
+	private TypecheckerManager manager;
 
-	public TypeBuilder(TypecheckerModelManager manager)
+	public TypeBuilder(TypecheckerManager manager)
 	{
 		super();
 		this.manager = manager;
@@ -56,7 +56,7 @@ public class TypeBuilder
 
 	private TypeNamespaceMap getTypeNamespaceMap(Node node)
 	{
-		return this.manager.getEnvironmentManager().getTypeNamespace(node);
+		return this.manager.getNamespaceBuilder().getTypeNamespace(node);
 	}
 
 	public BsjType makeArgumentType(TypeArgumentNode node)

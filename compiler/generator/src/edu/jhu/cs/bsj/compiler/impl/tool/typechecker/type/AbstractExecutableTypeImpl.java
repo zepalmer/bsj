@@ -4,7 +4,7 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
@@ -12,7 +12,7 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
 {
 	private T backingNode;
 
-	public AbstractExecutableTypeImpl(TypecheckerModelManager manager, T backingNode)
+	public AbstractExecutableTypeImpl(TypecheckerManager manager, T backingNode)
 	{
 		super(manager);
 		this.backingNode = backingNode;

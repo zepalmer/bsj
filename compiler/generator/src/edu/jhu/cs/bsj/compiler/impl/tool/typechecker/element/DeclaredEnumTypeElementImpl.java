@@ -16,7 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitlyDeclaredTypeImpl;
@@ -25,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDeclarationNode>
 {
-	public DeclaredEnumTypeElementImpl(TypecheckerModelManager manager, EnumDeclarationNode backingNode,
+	public DeclaredEnumTypeElementImpl(TypecheckerManager manager, EnumDeclarationNode backingNode,
 			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
@@ -56,7 +56,7 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 	@Override
 	public TypeMirror getSuperclass()
 	{
-		BsjTypeElement enumElement = (BsjTypeElement) getElementByName("java", "lang", "Enum");
+		BsjTypeElement enumElement = getManager().getToolkit().getEnumElement();
 		NamedTypeDeclarationNode<?> enclosingTypeDeclaration = this.getBackingNode().getNearestAncestorOfType(
 				NamedTypeDeclarationNode.class);
 		BsjTypeElement enclosingTypeElement = makeElement(enclosingTypeDeclaration);

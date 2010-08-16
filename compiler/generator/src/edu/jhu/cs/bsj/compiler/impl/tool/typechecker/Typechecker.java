@@ -1,60 +1,41 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
-import java.util.Collection;
-
-import javax.tools.DiagnosticListener;
-
-import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
  * This module performs type checking as per the Java Language Specification v3. It also includes the modifications
  * indicated in the Backstage Java Language Specification, specifically with regard to code literals and parse mapping.
+ * It relies on some underlying caching mechanisms (such as through the namespace builder) and so should not be reused
+ * if the AST changes.
  * 
  * @author Zachary Palmer
  */
 public class Typechecker
 {
-	/** The toolkit to be used by this type checker. */
-	private BsjToolkit toolkit;
+	/** The manager which is overseeing this typechecker. */
+	private TypecheckerManager manager;
 
-	/**
-	 * Creates a new type checker.
-	 * 
-	 * @param toolkit The toolkit to be used by this type checker.
-	 */
-	public Typechecker(BsjToolkit toolkit)
+	/** The operation used to calculate type results. */
+	private TypeEvaluationOperation typeEvaluationOperation;
+
+	public Typechecker(TypecheckerManager manager)
 	{
 		super();
-		this.toolkit = toolkit;
+		this.manager = manager;
+
+		this.typeEvaluationOperation = new TypeEvaluationOperation(this.manager);
 	}
 
 	/**
-	 * Performs a type checking operation on the provided {@link CompilationUnitNode}s. Type checking failures are
-	 * reported to the provided {@link DiagnosticListener}.
-	 * 
-	 * @param compilationUnitNodes The {@link CompilationUnitNode}s which should be typechecked.
-	 * @param diagnosticListener The {@link DiagnosticListener} to which diagnostic information should be reported.
-	 * @throws IllegalStateException If any of the provided {@link CompilationUnitNode}s are not connected to a root
-	 *             package.
+	 * Calculates the type for a provided AST node. Only expressions have normal Java types (such as {@link String} or
+	 * <tt>int</tt>). If the AST node legitimately has no type, an appropriate pseudo-type (such as {@link BsjNoType})
+	 * is returned. If the AST node has no type due to a type calculation failure, an error type is returned.
 	 */
-	public void typecheck(Collection<CompilationUnitNode> compilationUnitNodes,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener)
+	public BsjType getType(Node node)
 	{
-		// Precondition: root package must be available
-		for (CompilationUnitNode compilationUnitNode : compilationUnitNodes)
-		{
-			PackageNode rootPackage = compilationUnitNode.getRootPackage();
-			if (rootPackage == null)
-			{
-				throw new IllegalStateException(
-						"Cannot typecheck a compilation unit which is not connected to a package hierarchy.");
-			}
-		}
-		
-		// TODO: implement overall typechecking algorithm
-
+		// TODO: this is the wrong environment - which is the correct starting one?
+		return node.executeOperation(this.typeEvaluationOperation, null);
 	}
 }

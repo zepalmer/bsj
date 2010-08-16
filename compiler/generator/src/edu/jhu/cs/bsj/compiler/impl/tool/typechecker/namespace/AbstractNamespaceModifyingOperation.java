@@ -265,7 +265,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 */
 	protected T makeInheritedMapFor(AnnotationDeclarationNode declarationNode, T map)
 	{
-		BsjTypeElement annotationElement = toolkit.getTypeElementByName("java", "lang", "annotation", "Annotation");
+		BsjTypeElement annotationElement = toolkit.getAnnotationElement();
 		return makeInheritedMapFromSupertypes(map, Collections.singleton(annotationElement));
 	}
 
@@ -287,7 +287,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 			LOGGER.trace("Populating inherited members for " + declarationNode.getFullyQualifiedName());
 		}
 
-		BsjTypeElement objectElement = toolkit.getTypeElementByName("java", "lang", "Object");
+		BsjTypeElement objectElement = toolkit.getObjectElement();
 		if (objectElement.equals(toolkit.makeElement(declarationNode)))
 		{
 			// Then we're already done; Object inherits nothing.
@@ -339,7 +339,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 */
 	protected T makeInheritedMapFor(EnumDeclarationNode declarationNode, T map)
 	{
-		BsjTypeElement enumElement = toolkit.getTypeElementByName("java", "lang", "Enum");
+		BsjTypeElement enumElement = toolkit.getEnumElement();
 
 		Set<BsjTypeElement> supertypes = new HashSet<BsjTypeElement>();
 		supertypes.add(enumElement);
@@ -404,7 +404,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 		// ensure that there is at least one supertype
 		if (supertypes.size() == 0)
 		{
-			BsjTypeElement objectElement = (BsjTypeElement) toolkit.getTypeElementByName("java", "lang", "Object");
+			BsjTypeElement objectElement = (BsjTypeElement) toolkit.getObjectElement();
 			supertypes.add(objectElement);
 		}
 

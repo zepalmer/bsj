@@ -15,15 +15,15 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuilder;
  */
 public class TypecheckerModelComponentImpl
 {
-	private TypecheckerModelManager manager;
+	private TypecheckerManager manager;
 
-	public TypecheckerModelComponentImpl(TypecheckerModelManager manager)
+	public TypecheckerModelComponentImpl(TypecheckerManager manager)
 	{
 		super();
 		this.manager = manager;
 	}
 	
-	protected TypecheckerModelManager getManager()
+	protected TypecheckerManager getManager()
 	{
 		return this.manager;
 	}

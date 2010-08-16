@@ -8,11 +8,11 @@ import javax.lang.model.element.AnnotationValueVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 
 public class AnnotationArrayValueImpl extends AbstractAnnotationValueImpl<AnnotationArrayValueNode>
 {
-	public AnnotationArrayValueImpl(TypecheckerModelManager manager, AnnotationArrayValueNode backingNode)
+	public AnnotationArrayValueImpl(TypecheckerManager manager, AnnotationArrayValueNode backingNode)
 	{
 		super(manager, backingNode);
 	}

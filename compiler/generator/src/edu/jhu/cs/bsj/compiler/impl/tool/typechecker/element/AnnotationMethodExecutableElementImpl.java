@@ -15,14 +15,14 @@ import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class AnnotationMethodExecutableElementImpl extends AbstractExecutableElementImpl<AnnotationMethodDeclarationNode>
 {
-	public AnnotationMethodExecutableElementImpl(TypecheckerModelManager manager,
+	public AnnotationMethodExecutableElementImpl(TypecheckerManager manager,
 			AnnotationMethodDeclarationNode backingNode, BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);

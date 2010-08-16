@@ -4,13 +4,13 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class InitializerExecutableTypeImpl extends AbstractExecutableTypeImpl<InitializerDeclarationNode>
 {
-	public InitializerExecutableTypeImpl(TypecheckerModelManager manager, InitializerDeclarationNode backingNode)
+	public InitializerExecutableTypeImpl(TypecheckerManager manager, InitializerDeclarationNode backingNode)
 	{
 		super(manager, backingNode);
 	}

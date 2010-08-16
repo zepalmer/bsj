@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
@@ -11,7 +11,7 @@ public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 {
 	private TypeKind kind;
 
-	public NoTypeImpl(TypecheckerModelManager manager, TypeKind kind)
+	public NoTypeImpl(TypecheckerManager manager, TypeKind kind)
 	{
 		super(manager);
 		this.kind = kind;
@@ -47,17 +47,17 @@ public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 		return "(no type)";
 	}
 
-	public static NoTypeImpl makeNone(TypecheckerModelManager manager)
+	public static NoTypeImpl makeNone(TypecheckerManager manager)
 	{
 		return new NoTypeImpl(manager, TypeKind.NONE);
 	}
 
-	public static NoTypeImpl makePackage(TypecheckerModelManager manager)
+	public static NoTypeImpl makePackage(TypecheckerManager manager)
 	{
 		return new NoTypeImpl(manager, TypeKind.PACKAGE);
 	}
 
-	public static NoTypeImpl makeVoid(TypecheckerModelManager manager)
+	public static NoTypeImpl makeVoid(TypecheckerManager manager)
 	{
 		return new NoTypeImpl(manager, TypeKind.VOID);
 	}

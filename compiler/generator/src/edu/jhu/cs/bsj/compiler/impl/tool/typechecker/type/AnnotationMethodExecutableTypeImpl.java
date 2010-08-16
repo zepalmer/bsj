@@ -4,13 +4,13 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class AnnotationMethodExecutableTypeImpl extends AbstractExecutableTypeImpl<AnnotationMethodDeclarationNode>
 {
-	public AnnotationMethodExecutableTypeImpl(TypecheckerModelManager manager,
+	public AnnotationMethodExecutableTypeImpl(TypecheckerManager manager,
 			AnnotationMethodDeclarationNode backingNode)
 	{
 		super(manager, backingNode);

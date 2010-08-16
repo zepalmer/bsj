@@ -7,14 +7,14 @@ import javax.lang.model.element.ElementKind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractMemberVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public abstract class AbstractMemberVariableElementImpl<T extends AbstractMemberVariableDeclarationNode<?>> extends
 		VariableDeclaratorOwnerElementImpl<T>
 {
-	public AbstractMemberVariableElementImpl(TypecheckerModelManager manager, T backingNode, BsjElement enclosingElement,
+	public AbstractMemberVariableElementImpl(TypecheckerManager manager, T backingNode, BsjElement enclosingElement,
 			int index)
 	{
 		super(manager, backingNode, enclosingElement, index);
