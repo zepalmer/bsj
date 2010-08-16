@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap;
+package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.rule;
 
 import java.util.Set;
 

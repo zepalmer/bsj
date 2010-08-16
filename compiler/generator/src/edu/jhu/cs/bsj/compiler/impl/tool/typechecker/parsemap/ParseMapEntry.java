@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap;
 
 import java.util.Set;
 
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.rule.ParseRule;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 
 /**
