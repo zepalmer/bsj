@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
  * Objects of this class act as an environment for the BSJ type checker. In addition to (lazily) providing access to the
@@ -13,12 +13,12 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDecla
 public class ParseMapperEnvironment
 {
 	/** The current expected type of an upcoming code literal. */
-	private BsjExplicitlyDeclaredType codeLiteralExpectedType;
+	private BsjType codeLiteralExpectedType;
 	/** The current expected type of a code literal in a return expression. */
-	private BsjExplicitlyDeclaredType codeLiteralExpectedReturnType;
+	private BsjType codeLiteralExpectedReturnType;
 
-	public ParseMapperEnvironment(BsjExplicitlyDeclaredType codeLiteralExpectedType,
-			BsjExplicitlyDeclaredType codeLiteralExpectedReturnType)
+	public ParseMapperEnvironment(BsjType codeLiteralExpectedType,
+			BsjType codeLiteralExpectedReturnType)
 	{
 		super();
 		this.codeLiteralExpectedType = codeLiteralExpectedType;
@@ -30,7 +30,7 @@ public class ParseMapperEnvironment
 	 * 
 	 * @return The code literal to test.
 	 */
-	public BsjExplicitlyDeclaredType getCodeLiteralExpectedType()
+	public BsjType getCodeLiteralExpectedType()
 	{
 		return codeLiteralExpectedType;
 	}
@@ -40,7 +40,7 @@ public class ParseMapperEnvironment
 	 * 
 	 * @return The code literal to test.
 	 */
-	public BsjExplicitlyDeclaredType getCodeLiteralExpectedReturnType()
+	public BsjType getCodeLiteralExpectedReturnType()
 	{
 		return codeLiteralExpectedReturnType;
 	}
@@ -51,7 +51,7 @@ public class ParseMapperEnvironment
 	 * @param node The new node to use.
 	 * @return The resulting environment.
 	 */
-	public ParseMapperEnvironment deriveForType(BsjExplicitlyDeclaredType codeLiteralExpectedType)
+	public ParseMapperEnvironment deriveForType(BsjType codeLiteralExpectedType)
 	{
 		if (codeLiteralExpectedType.equals(this.codeLiteralExpectedType))
 		{
@@ -68,7 +68,7 @@ public class ParseMapperEnvironment
 	 * @param node The new node to use.
 	 * @return The resulting environment.
 	 */
-	public ParseMapperEnvironment deriveForExpectedReturnType(BsjExplicitlyDeclaredType codeLiteralReturnType)
+	public ParseMapperEnvironment deriveForExpectedReturnType(BsjType codeLiteralReturnType)
 	{
 		if (codeLiteralExpectedReturnType.equals(this.codeLiteralExpectedReturnType))
 		{

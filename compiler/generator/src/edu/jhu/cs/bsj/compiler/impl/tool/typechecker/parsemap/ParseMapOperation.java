@@ -61,6 +61,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNod
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
  * This operation is intended to evaluate the parse map relation as specified in the BSJ Language Specification. The
@@ -84,6 +85,17 @@ public class ParseMapOperation extends
 
 		this.nodeType = this.manager.getToolkit().getNodeElement().asType();
 	}
+	
+	/* TODO: rules not yet implemented
+	 * 
+	 * * Code Literal Rule (p49)
+	 * * Assignment Rule (p49)
+	 * * Return Rule (p49)
+	 * * Method Declaration Rule (p50)
+	 * * Meta-Annotation Rule (p50)
+	 * * Array Value Rule (p50)
+	 * * Method Invocation Rule (p51)
+	 */
 
 	/**
 	 * Provides a simple default operation most AST nodes: derive a new environment using {@link Node} as the expected
@@ -199,22 +211,6 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationMethodDeclarationNode(
 			AnnotationMethodDeclarationNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationMethodModifiersNode(
-			AnnotationMethodModifiersNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationModifiersNode(AnnotationModifiersNode node,
-			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -424,23 +420,7 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeClassModifiersNode(ClassModifiersNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeCodeLiteralNode(CodeLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeCompilationUnitNode(CompilationUnitNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -451,20 +431,15 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeConditionalExpressionNode(ConditionalExpressionNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Map<RawCodeLiteralNode, ParseMapEntry> map = new HashMap<RawCodeLiteralNode, ParseMapEntry>();
+		map.putAll(node.getCondition().executeOperation(this, env.deriveForType(this.nodeType)));
+		map.putAll(node.getTrueExpression().executeOperation(this, env));
+		map.putAll(node.getFalseExpression().executeOperation(this, env));
+		return map;
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeConstantDeclarationNode(ConstantDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeConstantModifiersNode(ConstantModifiersNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -481,14 +456,6 @@ public class ParseMapOperation extends
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeConstructorDeclarationNode(ConstructorDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeConstructorModifiersNode(ConstructorModifiersNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -556,23 +523,7 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumConstantModifiersNode(EnumConstantModifiersNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumDeclarationNode(EnumDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumModifiersNode(EnumModifiersNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -597,14 +548,6 @@ public class ParseMapOperation extends
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeFieldDeclarationNode(FieldDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeFieldModifiersNode(FieldModifiersNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -740,14 +683,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeInterfaceModifiersNode(InterfaceModifiersNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeJavadocNode(JavadocNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -764,14 +699,6 @@ public class ParseMapOperation extends
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeLocalClassDeclarationNode(LocalClassDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeLocalClassModifiersNode(LocalClassModifiersNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -962,14 +889,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMethodModifiersNode(MethodModifiersNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeNoOperationNode(NoOperationNode node,
 			ParseMapperEnvironment env)
 	{
@@ -1035,8 +954,7 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeParenthesizedExpressionNode(ParenthesizedExpressionNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return node.getExpression().executeOperation(this, env);
 	}
 
 	@Override
@@ -1211,8 +1129,8 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeCastNode(TypeCastNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		BsjType type = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
+		return node.getExpression().executeOperation(this, env.deriveForType(type));
 	}
 
 	@Override
@@ -1329,14 +1247,6 @@ public class ParseMapOperation extends
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableListNode(VariableListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableModifiersNode(VariableModifiersNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
