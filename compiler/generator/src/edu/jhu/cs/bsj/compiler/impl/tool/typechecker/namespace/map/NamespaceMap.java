@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,27 +37,29 @@ public class NamespaceMap<K, V extends BsjElement>
 {
 	/** The symbol type that this map will use when reporting errors. */
 	private SymbolType symbolType;
-	/** The backing data structure which maintains an image of this map's original state. */
-	private Map<K, Entry<V>> oldMap;
+	/** The underlying maps which are being used. */
+	private List<NamespaceMap<K, V>> deferenceMaps;
 	/** The backing data structure which overlays the old map to represent this map's changes. */
-	private Map<K, Entry<V>> newMap;
+	private Map<K, Entry<V>> backingMap;
 	/** The diagnostic listener to which this namespace map reports errors. */
 	private DiagnosticListener<BsjSourceLocation> diagnosticListener;
 	/** Indicates whether or not ambiguity analysis is performed eagerly in this map. */
 	private boolean eager;
 	/**
 	 * Indicates whether or not this map prohibits overrides - that is, if additions should be prevented from hiding
-	 * previous values.
+	 * previous values.  A <code>true</code> value indicates that the deference maps' values are included as well
+	 * (such as in local variable scope where an inner local variable cannot shadow an outer one); a <code>false</code>
+	 * value indicates that new mappings shadow old mappings (such as in a member type scope where fields can shadow
+	 * the enclosing type's fields).
 	 */
 	private boolean prohibitsOverlap;
 	/** Determines whether or not this namespace map is locked. */
 	private boolean locked;
-
 	/**
-	 * Contains the single deference map from which this map was constructed or <code>null</code> if this map was not
-	 * created from exactly one underlying map.
+	 * A set containing those keys which this namespace map has erased. These keys may be mapped in the deference maps;
+	 * however, this namespace map acts as if they are not present.
 	 */
-	private NamespaceMap<K, V> singleDeferenceMap;
+	private Set<K> blockedKeySet;
 
 	/**
 	 * Creates a new namespace map.
@@ -68,49 +72,70 @@ public class NamespaceMap<K, V extends BsjElement>
 		this.eager = eager;
 		this.prohibitsOverlap = prohibitsOverlap;
 		this.locked = false;
-		this.singleDeferenceMap = null;
 
-		if (deferenceMaps.size() == 0)
-		{
-			this.oldMap = Collections.emptyMap();
-		} else if (deferenceMaps.size() == 1)
-		{
-			this.singleDeferenceMap = deferenceMaps.iterator().next();
-			this.oldMap = this.singleDeferenceMap.getMapView();
-		} else
-		{
-			this.oldMap = new HashMap<K, NamespaceMap.Entry<V>>();
-			for (NamespaceMap<K, V> deferenceMap : deferenceMaps)
-			{
-				for (Map.Entry<K, Entry<V>> mapEntry : deferenceMap.getMapView().entrySet())
-				{
-					if (this.oldMap.containsKey(mapEntry.getKey()))
-					{
-						for (Map.Entry<Node, V> entryEntry : mapEntry.getValue().getIndicatorNodeMap().entrySet())
-						{
-							this.oldMap.get(mapEntry.getKey()).add(entryEntry.getValue(), entryEntry.getKey());
-						}
-					} else
-					{
-						this.oldMap.put(mapEntry.getKey(), mapEntry.getValue().duplicate());
-					}
-				}
-			}
-		}
-
-		this.newMap = new HashMap<K, NamespaceMap.Entry<V>>();
+		this.deferenceMaps = new ArrayList<NamespaceMap<K, V>>(deferenceMaps);
+		this.backingMap = new HashMap<K, Entry<V>>();
+		this.blockedKeySet = new HashSet<K>(0);
 	}
 
-	private Map<K, Entry<V>> getMapView()
+	/**
+	 * Retrieves a collection of all keys in this namespace map which are mapped to a value.
+	 * 
+	 * @return The keys for this namespace map.
+	 */
+	public Collection<K> getKeys()
 	{
-		Map<K, Entry<V>> ret = new HashMap<K, Entry<V>>();
-		ret.putAll(this.oldMap);
-		for (K name : this.newMap.keySet())
+		Set<K> ret = new HashSet<K>();
+		for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
 		{
-			ret.remove(name);
-			ret.put(name, this.newMap.get(name));
+			ret.addAll(deferenceMap.getKeys());
 		}
-		return ret;
+		ret.addAll(this.backingMap.keySet());
+		ret.removeAll(this.blockedKeySet);
+		return Collections.unmodifiableSet(ret);
+	}
+
+	/**
+	 * Retrieves all values mapped to a given key in this namespace map.
+	 * 
+	 * @param key The key to use.
+	 * @return The values for the key.
+	 */
+	public Collection<V> getValues(K key)
+	{
+		if (this.backingMap.containsKey(key))
+		{
+			if (!this.prohibitsOverlap || this.deferenceMaps.size() == 0)
+			{
+				return Collections.unmodifiableSet(this.backingMap.get(key).getValues());
+			} else
+			{
+				Set<V> ret = new HashSet<V>();
+				ret.addAll(this.backingMap.get(key).getValues());
+				for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
+				{
+					ret.addAll(deferenceMap.getValues(key));
+				}
+				return Collections.unmodifiableSet(ret);
+			}
+		} else if (this.blockedKeySet.contains(key))
+		{
+			return Collections.emptySet();
+		} else if (this.deferenceMaps.size() == 0)
+		{
+			return Collections.emptySet();
+		} else if (this.deferenceMaps.size() == 1)
+		{
+			return this.deferenceMaps.iterator().next().getValues(key);
+		} else
+		{
+			Set<V> ret = new HashSet<V>();
+			for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
+			{
+				ret.addAll(deferenceMap.getValues(key));
+			}
+			return Collections.unmodifiableSet(ret);
+		}
 	}
 
 	/**
@@ -127,14 +152,13 @@ public class NamespaceMap<K, V extends BsjElement>
 	 */
 	public void checkAmbiguities()
 	{
-		// TODO: this is producing the same diagnostic over and over because inherited maps notice the problem - fix
-		// could we only report ambiguities on things in the new map?
 		if (this.eager)
 		{
-			for (K key : getNames())
+			// Only concern ourselves with ambiguities which are locally mapped. Everything else has already been
+			// checked by one of our deference maps.
+			for (Map.Entry<K, Entry<V>> entry : this.backingMap.entrySet())
 			{
-				Entry<V> e = getRelevantEntry(key);
-				considerAmbiguity(key, e.getFirstIndicator().getStartLocation());
+				considerAmbiguity(entry.getKey(), entry.getValue().getFirstIndicator().getStartLocation());
 			}
 		}
 	}
@@ -156,135 +180,137 @@ public class NamespaceMap<K, V extends BsjElement>
 		if (indicator == null)
 			throw new IllegalStateException("Attempted to store null indicator in namespace map");
 
-		Entry<V> entry = this.newMap.get(name);
+		Entry<V> entry = this.backingMap.get(name);
 		if (entry == null)
 		{
-			if (this.prohibitsOverlap && this.oldMap.containsKey(name))
-			{
-				entry = this.oldMap.get(name).duplicate();
-			} else
-			{
-				entry = new Entry<V>(element, indicator);
-			}
-			this.newMap.put(name, entry);
-			// Get rid of any entry in the old map as it is no longer relevant
-			removeOld(name, this.oldMap);
+			entry = new Entry<V>(element, indicator);
+			this.backingMap.put(name, entry);
+			notifyNewKey(name);
+		} else
+		{
+			entry.add(element, indicator);
 		}
-
-		entry.add(element, indicator);
 
 	}
 
-	/**
-	 * Removes old entries from the underlying old entry map.  This method is called when new entries are added to the
-	 * map.  The default implementation of this method simply removes any entry associated with the specified key from
-	 * the map.  Subclasses may choose to override this functionality as necessary.
-	 * @param name The name of the element that was just added.
-	 * @param oldMap The map containing this object's old values.
-	 */
-	protected void removeOld(K name, Map<K, Entry<V>> oldMap)
+	protected List<NamespaceMap<K, V>> getDeferenceMaps()
 	{
-		if (oldMap.containsKey(name))
-		{
-			oldMap.remove(name);
-		}
+		return deferenceMaps;
+	}
+
+	protected Map<K, Entry<V>> getBackingMap()
+	{
+		return backingMap;
+	}
+
+	protected boolean isProhibitsOverlap()
+	{
+		return prohibitsOverlap;
+	}
+
+	protected Set<K> getBlockedKeySet()
+	{
+		return blockedKeySet;
+	}
+
+	/**
+	 * Used to notify subclasses of the presence of a new key. This method is called to permit the subclass the
+	 * opportunity to make changes to the backing map, which is provided as an argument. The default implementation
+	 * takes no action.
+	 * 
+	 * @param key The key of the element that was added.
+	 * @param backingMap The backing map that this method may modify.
+	 */
+	protected void notifyNewKey(K key)
+	{
 	}
 
 	/**
 	 * Determines whether or not an entry for the given name exists in this map.
 	 * 
-	 * @param name The name of the entry.
+	 * @param key The name of the entry.
 	 * @return <code>true</code> if that entry exists; <code>false</code> if it does not.
 	 */
-	public boolean contains(K name)
+	public boolean contains(K key)
 	{
-		return this.newMap.containsKey(name) || this.oldMap.containsKey(name);
-	}
+		if (this.backingMap.containsKey(key))
+			return true;
+		
+		if (this.blockedKeySet.contains(key))
+			return false;
 
-	/**
-	 * Retrieves the currently relevant entry for a given name, if any.
-	 * 
-	 * @param name The name.
-	 * @return The current entry or <code>null</code> if no entry exists.
-	 */
-	private Entry<V> getRelevantEntry(K name)
-	{
-		Entry<V> ret = this.newMap.get(name);
-		if (ret == null)
+		for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
 		{
-			ret = this.oldMap.get(name);
+			if (deferenceMap.contains(key))
+				return true;
 		}
-		return ret;
+
+		return false;
 	}
 
 	/**
 	 * Retrieves a type element based on a name in this namespace.
 	 * 
-	 * @param name The name to use.
+	 * @param key The name to use.
 	 * @param sourceLocation The source location of the node which indicates this name.
-	 * @return The corresponding type element.
+	 * @return The corresponding type element or <code>null</code> if the specified key is not mapped.
 	 */
-	public V lookup(K name, BsjSourceLocation sourceLocation)
+	public V lookup(K key, BsjSourceLocation sourceLocation)
 	{
-		Entry<V> entry = getRelevantEntry(name);
-		if (entry == null)
-		{
-			return null;
-		}
-
 		if (!this.eager)
 		{
-			considerAmbiguity(name, sourceLocation);
+			considerAmbiguity(key, sourceLocation);
 		}
-		return entry.getFirstValue();
+
+		return doLookup(key);
+	}
+
+	/**
+	 * Performs the lookup of a given key; this method does not perform ambiguity checking. It is therefore suitable to
+	 * recurse on itself, as it will not generate redundant diagnostics.
+	 * 
+	 * @param key The key to look up.
+	 * @return The appropriate value.
+	 */
+	public V doLookup(K key)
+	{
+		if (this.backingMap.containsKey(key))
+		{
+			Entry<V> entry = this.backingMap.get(key);
+			return entry.getFirstValue();
+		} else if (this.blockedKeySet.contains(key))
+		{
+			return null;
+		} else
+		{
+			for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
+			{
+				V ret = deferenceMap.doLookup(key);
+				if (ret != null)
+				{
+					return ret;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**
 	 * Considers ambiguity for the provided name entry. If ambiguity exists, an appropriate diagnostic should be
 	 * produced. The default implementation considers any entry with more than one value to be ambiguous.
 	 * 
-	 * @param name The name of the entry.
+	 * @param key The name of the entry.
 	 * @param sourceLocation The location to use in diagnostics. This is typically the location where the name was used.
 	 */
-	protected void considerAmbiguity(K name, BsjSourceLocation sourceLocation)
+	protected void considerAmbiguity(K key, BsjSourceLocation sourceLocation)
 	{
-		Collection<? extends V> all = getAll(name);
+		Collection<? extends V> all = getValues(key);
 		if (all.size() > 1)
 		{
-			Collection<? extends Node> nodes = getIndicatorMapFor(name).keySet();
-			this.diagnosticListener.report(new AmbiguousSymbolNameDiagnosticImpl(sourceLocation, name.toString(),
+			Collection<? extends Node> nodes = getIndicatorMapFor(key).keySet();
+			this.diagnosticListener.report(new AmbiguousSymbolNameDiagnosticImpl(sourceLocation, key.toString(),
 					this.symbolType, nodes));
-		}
-	}
-
-	/**
-	 * Retrieves all of the names mapped in this namespace map.
-	 * 
-	 * @return The names mapped in this namespace map.
-	 */
-	public Collection<? extends K> getNames()
-	{
-		Set<K> ret = new HashSet<K>();
-		ret.addAll(this.newMap.keySet());
-		ret.addAll(this.oldMap.keySet());
-		return ret;
-	}
-
-	/**
-	 * Retrieves all of the values which are mapped to the specified name in this namespace map.
-	 * 
-	 * @param name The name to look up.
-	 * @return The entries which are mapped to that name in the namespace map.
-	 */
-	public Collection<? extends V> getAll(K name)
-	{
-		Entry<V> entry = getRelevantEntry(name);
-		if (entry == null)
-		{
-			return Collections.emptySet();
-		} else
-		{
-			return entry.getValues();
 		}
 	}
 
@@ -292,18 +318,30 @@ public class NamespaceMap<K, V extends BsjElement>
 	 * Retrieves a mapping from indicator nodes to the values which are mapped to a given name in the namespace map.
 	 * This method is used for error reporting.
 	 * 
-	 * @param name The name to look up.
+	 * @param key The name to look up.
 	 * @return The mapping.
 	 */
-	protected Map<? extends Node, ? extends V> getIndicatorMapFor(K name)
+	protected Map<? extends Node, ? extends V> getIndicatorMapFor(K key)
 	{
-		Entry<V> entry = getRelevantEntry(name);
-		if (entry == null)
+		if (this.backingMap.containsKey(key) && (!this.prohibitsOverlap || this.blockedKeySet.contains(key)))
+		{
+			return Collections.unmodifiableMap(this.backingMap.get(key).getIndicatorNodeMap());
+		} else if (this.blockedKeySet.contains(key))
 		{
 			return Collections.emptyMap();
 		} else
 		{
-			return entry.getIndicatorNodeMap();
+			Map<Node, V> ret = new HashMap<Node, V>();
+			if (this.backingMap.containsKey(key))
+			{
+				ret.putAll(this.backingMap.get(key).getIndicatorNodeMap());
+			}
+			for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
+			{
+				Map<? extends Node, ? extends V> map = deferenceMap.getIndicatorMapFor(key);
+				ret.putAll(map);
+			}
+			return Collections.unmodifiableMap(ret);
 		}
 	}
 
@@ -318,7 +356,17 @@ public class NamespaceMap<K, V extends BsjElement>
 	 */
 	public boolean isTransparent()
 	{
-		return this.newMap.size() == 0;
+		return this.backingMap.size() == 0;
+	}
+
+	/**
+	 * Determines whether or not this map is locked.
+	 * 
+	 * @return <code>true</code> if this map is locked; <code>false</code> if it is not.
+	 */
+	public boolean isLocked()
+	{
+		return locked;
 	}
 
 	/**
@@ -331,13 +379,10 @@ public class NamespaceMap<K, V extends BsjElement>
 	 */
 	public boolean definitelyReplacableBy(NamespaceMap<K, V> other)
 	{
-		if (this.singleDeferenceMap == other && other != null && this.isTransparent() && this.singleDeferenceMap.locked
-				&& this.locked)
-			return true;
-
-		return false;
+		return this.locked && this.deferenceMaps.size() == 1 && this.deferenceMaps.iterator().next() == other
+				&& other.isLocked() && this.isTransparent() && this.blockedKeySet.isEmpty();
 	}
-	
+
 	/**
 	 * Creates a string representation of this namespace.
 	 */
@@ -345,13 +390,13 @@ public class NamespaceMap<K, V extends BsjElement>
 	{
 		StringBuilder sb = new StringBuilder("{");
 		boolean first = true;
-		for (Map.Entry<K, Entry<V>> mapEntry : getMapView().entrySet())
+		for (K key : getKeys())
 		{
 			if (!first)
 				sb.append(", ");
-			sb.append(mapEntry.getKey());
+			sb.append(key.toString());
 			sb.append(" -> ");
-			sb.append(mapEntry.getValue().toString());
+			sb.append(stringOfElements(getValues(key)));
 			first = false;
 		}
 		sb.append("}");
@@ -359,41 +404,71 @@ public class NamespaceMap<K, V extends BsjElement>
 	}
 
 	/**
+	 * Creates a string for an element collection.
+	 * 
+	 * @param elements The collection in question.
+	 * @return The generated string.
+	 */
+	private static String stringOfElements(Collection<? extends BsjElement> elements)
+	{
+		if (elements.size() == 0)
+		{
+			return "{}";
+		} else if (elements.size() == 1)
+		{
+			return elements.iterator().next().getDeclarationNode().getStartLocation().toString();
+		} else
+		{
+			StringBuilder sb = new StringBuilder("{");
+			boolean first = true;
+			for (BsjElement element : elements)
+			{
+				if (!first)
+					sb.append(", ");
+				sb.append(element.getDeclarationNode().getStartLocation().toString());
+				first = false;
+			}
+			sb.append("}");
+			return sb.toString();
+		}
+	}
+
+	/**
 	 * The type of an entry in a namespace map. An entry is capable of storing multiple values and recording the first
 	 * value which was stored with it.
 	 */
-	protected static class Entry<T extends BsjElement>
+	protected static class Entry<V extends BsjElement>
 	{
 		/** The first type which was provided to this entry. */
-		private T firstValue;
+		private V firstValue;
 		/** The first indicator which was provied to this entry. */
 		private Node firstIndicator;
 		/** The types which are mapped to the specified name. */
-		private Set<T> values;
+		private Set<V> values;
 		/** A mapping from nodes which brought types into scope to the type declarations that they indicated. */
-		private Map<Node, T> indicatorNodeMap;
+		private Map<Node, V> indicatorNodeMap;
 
 		public Entry()
 		{
-			this.values = new HashSet<T>();
-			this.indicatorNodeMap = new HashMap<Node, T>();
+			this.values = new HashSet<V>();
+			this.indicatorNodeMap = new HashMap<Node, V>();
 		}
 
-		public Entry(T value, Node indicator)
+		public Entry(V value, Node indicator)
 		{
 			this();
 			add(value, indicator);
 		}
 
-		public Entry(Entry<T> entry)
+		public Entry(Entry<V> entry)
 		{
-			this.values = new HashSet<T>(entry.values);
-			this.indicatorNodeMap = new HashMap<Node, T>(entry.indicatorNodeMap);
+			this.values = new HashSet<V>(entry.values);
+			this.indicatorNodeMap = new HashMap<Node, V>(entry.indicatorNodeMap);
 			this.firstIndicator = entry.firstIndicator;
 			this.firstValue = entry.firstValue;
 		}
 
-		public void add(T value, Node indicator)
+		public void add(V value, Node indicator)
 		{
 			if (this.values.size() == 0)
 			{
@@ -404,17 +479,17 @@ public class NamespaceMap<K, V extends BsjElement>
 			this.indicatorNodeMap.put(indicator, value);
 		}
 
-		public Set<T> getValues()
+		public Set<V> getValues()
 		{
 			return values;
 		}
 
-		public Map<Node, T> getIndicatorNodeMap()
+		public Map<Node, V> getIndicatorNodeMap()
 		{
 			return indicatorNodeMap;
 		}
 
-		public T getFirstValue()
+		public V getFirstValue()
 		{
 			return firstValue;
 		}
@@ -424,32 +499,14 @@ public class NamespaceMap<K, V extends BsjElement>
 			return firstIndicator;
 		}
 
-		public Entry<T> duplicate()
+		public Entry<V> duplicate()
 		{
-			return new Entry<T>(this);
+			return new Entry<V>(this);
 		}
 
 		public String toString()
 		{
-			if (this.values.size() == 0)
-			{
-				return "{}";
-			} else if (this.values.size() == 1)
-			{
-				return this.values.iterator().next().getDeclarationNode().getStartLocation().toString();
-			} else
-			{
-				StringBuilder sb = new StringBuilder("{");
-				boolean first = true;
-				for (T t : this.values)
-				{
-					if (!first)
-						sb.append(", ");
-					sb.append(t.getDeclarationNode().getStartLocation().toString());
-				}
-				sb.append("}");
-				return sb.toString();
-			}
+			return stringOfElements(getValues());
 		}
 	}
 }

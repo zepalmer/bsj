@@ -1,8 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
 
 import javax.tools.DiagnosticListener;
 
@@ -103,24 +101,19 @@ public class MethodNamespaceMap extends NamespaceMap<ErasedMethodSignature, BsjE
 	}
 
 	@Override
-	protected void removeOld(ErasedMethodSignature name, Map<ErasedMethodSignature, Entry<BsjExecutableElement>> oldMap)
+	protected void notifyNewKey(ErasedMethodSignature key)
 	{
-		switch (this.overlapMode)
+		super.notifyNewKey(key);
+		if (this.overlapMode == OverlapMode.BY_NAME)
 		{
-			case BY_NAME:
-				Iterator<ErasedMethodSignature> keyIterator = oldMap.keySet().iterator();
-				while (keyIterator.hasNext())
+			for (ErasedMethodSignature signature : this.getKeys())
+			{
+				if (!signature.equals(key) && signature.getName().equals(key.getName()))
 				{
-					ErasedMethodSignature key = keyIterator.next();
-					if (key.getName().equals(name.getName()))
-					{
-						keyIterator.remove();
-					}
+					// Same name but different signature.  Block it.
+					getBlockedKeySet().add(signature);
 				}
-				break;
-			case BY_SIGNATURE:
-				super.removeOld(name, oldMap);
-				break;
+			}
 		}
 	}
 
