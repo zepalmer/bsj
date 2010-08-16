@@ -5,28 +5,62 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
+import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NoOperationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SuperFieldAccessNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ThisNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
@@ -44,21 +78,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
@@ -125,7 +151,7 @@ public class ParseMapOperation extends
 			AlternateConstructorInvocationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -133,7 +159,7 @@ public class ParseMapOperation extends
 			AnnotationAnnotationValueNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -141,7 +167,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -149,7 +175,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -157,7 +183,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -165,7 +191,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -173,7 +199,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -181,23 +207,7 @@ public class ParseMapOperation extends
 			AnnotationExpressionValueNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationListNode(AnnotationListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationMemberListNode(AnnotationMemberListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -205,7 +215,7 @@ public class ParseMapOperation extends
 			AnnotationMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -213,7 +223,7 @@ public class ParseMapOperation extends
 			AnnotationMethodDeclarationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -221,7 +231,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -229,15 +239,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnonymousClassMemberListNode(
-			AnonymousClassMemberListNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -245,7 +247,7 @@ public class ParseMapOperation extends
 			AnonymousClassMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -253,7 +255,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -261,7 +263,7 @@ public class ParseMapOperation extends
 			ArrayInitializerCreationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -269,7 +271,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -277,14 +279,7 @@ public class ParseMapOperation extends
 			ArrayInstantiatorCreationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeArrayTypeNode(ArrayTypeNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -292,37 +287,14 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAssignmentNode(AssignmentNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeBinaryExpressionNode(BinaryExpressionNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeBlockNode(BlockNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeBlockStatementListNode(BlockStatementListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -330,85 +302,7 @@ public class ParseMapOperation extends
 			BlockStatementMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeBooleanLiteralNode(BooleanLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeBreakNode(BreakNode node, ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeCaseListNode(CaseListNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeCaseNode(CaseNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeCatchListNode(CatchListNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeCatchNode(CatchNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeCharLiteralNode(CharLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeClassBodyNode(ClassBodyNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeClassDeclarationNode(ClassDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeClassLiteralNode(ClassLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeClassMemberListNode(ClassMemberListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -416,7 +310,7 @@ public class ParseMapOperation extends
 			ClassMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -424,7 +318,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -443,83 +337,16 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeConstructorBodyNode(ConstructorBodyNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeConstructorDeclarationNode(ConstructorDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeContinueNode(ContinueNode node, ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeDeclaredTypeListNode(DeclaredTypeListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeDoWhileLoopNode(DoWhileLoopNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeDoubleLiteralNode(DoubleLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnhancedForLoopNode(EnhancedForLoopNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumBodyNode(EnumBodyNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumConstantDeclarationListNode(
-			EnumConstantDeclarationListNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// TODO: Complete this method.  Observe that an enum constant declaration is much like a constructor invocation.
+		// As a result, there may be an overloaded invocation here and we can't simply dismiss this as a default case.
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -527,7 +354,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -535,7 +362,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -543,7 +370,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -551,14 +378,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeFloatLiteralNode(FloatLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -566,7 +386,7 @@ public class ParseMapOperation extends
 			ForInitializerDeclarationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -574,14 +394,14 @@ public class ParseMapOperation extends
 			ForInitializerExpressionNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeForLoopNode(ForLoopNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -589,89 +409,14 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeIdentifierNode(IdentifierNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeIfNode(IfNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeImportListNode(ImportListNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeImportOnDemandNode(ImportOnDemandNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeImportSingleTypeNode(ImportSingleTypeNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeInitializerDeclarationNode(InitializerDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeInstanceOfNode(InstanceOfNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeIntLiteralNode(IntLiteralNode node, ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeInterfaceBodyNode(InterfaceBodyNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeInterfaceDeclarationNode(InterfaceDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeInterfaceMemberListNode(InterfaceMemberListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -679,14 +424,14 @@ public class ParseMapOperation extends
 			InterfaceMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeJavadocNode(JavadocNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -694,7 +439,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -702,7 +447,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -710,14 +455,7 @@ public class ParseMapOperation extends
 			LocalVariableDeclarationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeLongLiteralNode(LongLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -725,7 +463,7 @@ public class ParseMapOperation extends
 			MetaAnnotationArrayValueNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -733,7 +471,7 @@ public class ParseMapOperation extends
 			MetaAnnotationElementListNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -741,7 +479,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -749,7 +487,7 @@ public class ParseMapOperation extends
 			MetaAnnotationExpressionValueNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -757,7 +495,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -765,7 +503,7 @@ public class ParseMapOperation extends
 			MetaAnnotationMetaAnnotationValueNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -773,7 +511,7 @@ public class ParseMapOperation extends
 			MetaAnnotationMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -781,55 +519,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramDependencyDeclarationListNode(
-			MetaprogramDependencyDeclarationListNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramDependencyDeclarationNode(
-			MetaprogramDependencyDeclarationNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramDependencyListNode(
-			MetaprogramDependencyListNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramDependencyNode(MetaprogramDependencyNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramImportListNode(MetaprogramImportListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramImportNode(MetaprogramImportNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -837,31 +527,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramPreambleNode(MetaprogramPreambleNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramTargetListNode(MetaprogramTargetListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramTargetNode(MetaprogramTargetNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -869,7 +535,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -877,7 +543,7 @@ public class ParseMapOperation extends
 			MethodInvocationByExpressionNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -885,7 +551,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -893,7 +559,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -901,7 +567,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -909,45 +575,14 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeNullLiteralNode(NullLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executePackageDeclarationNode(PackageDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executePackageNode(PackageNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeParameterizedTypeNode(ParameterizedTypeNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -958,27 +593,11 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executePrimitiveTypeNode(PrimitiveTypeNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeQualifiedClassInstantiationNode(
 			QualifiedClassInstantiationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeQualifiedNameNode(QualifiedNameNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -986,7 +605,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -994,21 +613,14 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeReturnNode(ReturnNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeSimpleNameNode(SimpleNameNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1016,7 +628,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1024,15 +636,7 @@ public class ParseMapOperation extends
 			SingleElementMetaAnnotationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeSingleStaticImportNode(SingleStaticImportNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1040,22 +644,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeStaticImportOnDemandNode(StaticImportOnDemandNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeStringLiteralNode(StringLiteralNode node,
-			ParseMapperEnvironment env)
-	{
-		return Collections.emptyMap();
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1063,7 +652,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1071,7 +660,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1079,51 +668,14 @@ public class ParseMapOperation extends
 			SuperclassConstructorInvocationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeSwitchNode(SwitchNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeSynchronizedNode(SynchronizedNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeThisNode(ThisNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeThrowNode(ThrowNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeTryNode(TryNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeArgumentListNode(TypeArgumentListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1134,67 +686,11 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeDeclarationListNode(TypeDeclarationListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeDeclarationMetaprogramAnchorNode(
 			TypeDeclarationMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeParameterListNode(TypeParameterListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeParameterNode(TypeParameterNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeUnaryExpressionNode(UnaryExpressionNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeUnaryStatementExpressionNode(
-			UnaryStatementExpressionNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeUnparameterizedTypeNode(UnparameterizedTypeNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1202,7 +698,7 @@ public class ParseMapOperation extends
 			UnqualifiedClassInstantiationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1210,7 +706,7 @@ public class ParseMapOperation extends
 			VariableAccessByExpressionNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1218,7 +714,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1226,7 +722,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1234,7 +730,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1242,7 +738,7 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1250,35 +746,13 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableNode(VariableNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeVoidTypeNode(VoidTypeNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeWhileLoopNode(WhileLoopNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeWildcardTypeNode(WildcardTypeNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 }
