@@ -45,13 +45,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
@@ -629,21 +627,6 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableInitializerListNode(VariableInitializerListNode node,
 			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableListNode(VariableListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableNode(VariableNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
