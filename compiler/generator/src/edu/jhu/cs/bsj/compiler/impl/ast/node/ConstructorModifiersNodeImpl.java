@@ -76,6 +76,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     public void setAccess(AccessModifier access)
     {
             setAccess(access, true);
+            getManager().notifyChange(this);
     }
     
     private void setAccess(AccessModifier access, boolean checkPermissions)

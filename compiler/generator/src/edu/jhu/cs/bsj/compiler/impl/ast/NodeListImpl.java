@@ -102,6 +102,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 				{
 					((NodeImpl) element).setParent(NodeListImpl.this.parent);
 				}
+				NodeListImpl.this.manager.notifyChange(NodeListImpl.this.parent);
 			}
 
 			@Override
@@ -115,6 +116,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 				{
 					((NodeImpl) element).setParent(null);
 				}
+				NodeListImpl.this.manager.notifyChange(NodeListImpl.this.parent);
 			}
 
 			@Override

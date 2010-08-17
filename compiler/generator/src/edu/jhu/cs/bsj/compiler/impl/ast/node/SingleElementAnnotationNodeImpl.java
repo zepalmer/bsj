@@ -74,6 +74,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     public void setValue(AnnotationValueNode value)
     {
             setValue(value, true);
+            getManager().notifyChange(this);
     }
     
     private void setValue(AnnotationValueNode value, boolean checkPermissions)

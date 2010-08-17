@@ -76,6 +76,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
     public void setArguments(ExpressionListNode arguments)
     {
             setArguments(arguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
@@ -107,6 +108,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
             setTypeArguments(typeArguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeArguments(ReferenceTypeListNode typeArguments, boolean checkPermissions)

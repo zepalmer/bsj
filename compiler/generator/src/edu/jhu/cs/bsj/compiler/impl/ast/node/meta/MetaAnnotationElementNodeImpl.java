@@ -81,6 +81,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -112,6 +113,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
     public void setValue(MetaAnnotationValueNode value)
     {
             setValue(value, true);
+            getManager().notifyChange(this);
     }
     
     private void setValue(MetaAnnotationValueNode value, boolean checkPermissions)

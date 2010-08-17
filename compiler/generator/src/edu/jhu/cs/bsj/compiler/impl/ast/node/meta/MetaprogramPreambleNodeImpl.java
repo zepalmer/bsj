@@ -105,6 +105,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setImports(MetaprogramImportListNode imports)
     {
             setImports(imports, true);
+            getManager().notifyChange(this);
     }
     
     private void setImports(MetaprogramImportListNode imports, boolean checkPermissions)
@@ -136,6 +137,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setLocalMode(MetaprogramLocalMode localMode)
     {
             setLocalMode(localMode, true);
+            getManager().notifyChange(this);
     }
     
     private void setLocalMode(MetaprogramLocalMode localMode, boolean checkPermissions)
@@ -165,6 +167,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setPackageMode(MetaprogramPackageMode packageMode)
     {
             setPackageMode(packageMode, true);
+            getManager().notifyChange(this);
     }
     
     private void setPackageMode(MetaprogramPackageMode packageMode, boolean checkPermissions)
@@ -194,6 +197,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setTargets(MetaprogramTargetListNode targets)
     {
             setTargets(targets, true);
+            getManager().notifyChange(this);
     }
     
     private void setTargets(MetaprogramTargetListNode targets, boolean checkPermissions)
@@ -225,6 +229,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setDependencies(MetaprogramDependencyDeclarationListNode dependencies)
     {
             setDependencies(dependencies, true);
+            getManager().notifyChange(this);
     }
     
     private void setDependencies(MetaprogramDependencyDeclarationListNode dependencies, boolean checkPermissions)

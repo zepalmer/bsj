@@ -72,6 +72,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     public void setPrimitiveType(PrimitiveType primitiveType)
     {
             setPrimitiveType(primitiveType, true);
+            getManager().notifyChange(this);
     }
     
     private void setPrimitiveType(PrimitiveType primitiveType, boolean checkPermissions)

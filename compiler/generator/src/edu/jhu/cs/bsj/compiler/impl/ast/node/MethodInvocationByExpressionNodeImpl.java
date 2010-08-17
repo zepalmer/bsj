@@ -84,6 +84,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     public void setExpression(PrimaryExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(PrimaryExpressionNode expression, boolean checkPermissions)
@@ -115,6 +116,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)

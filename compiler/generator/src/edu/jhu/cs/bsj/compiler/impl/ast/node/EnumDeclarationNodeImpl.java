@@ -106,6 +106,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     public void setModifiers(EnumModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(EnumModifiersNode modifiers, boolean checkPermissions)
@@ -137,6 +138,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
             setImplementsClause(implementsClause, true);
+            getManager().notifyChange(this);
     }
     
     private void setImplementsClause(DeclaredTypeListNode implementsClause, boolean checkPermissions)
@@ -168,6 +170,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     public void setBody(EnumBodyNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(EnumBodyNode body, boolean checkPermissions)
@@ -199,6 +202,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -230,6 +234,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)

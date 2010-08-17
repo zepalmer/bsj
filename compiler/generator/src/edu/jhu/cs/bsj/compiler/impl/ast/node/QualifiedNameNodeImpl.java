@@ -74,6 +74,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     public void setBase(NameNode base)
     {
             setBase(base, true);
+            getManager().notifyChange(this);
     }
     
     private void setBase(NameNode base, boolean checkPermissions)

@@ -166,7 +166,7 @@ public class AmbiguousNameCategorizer
 			if (node.getInitializer().equals(prior))
 			{
 				// We're inside of a variable declarator's initializer. Does its name match ours?
-				if (node.getName().getIdentifier().equals(name))
+				if (node.getIdentifier().getIdentifier().equals(name))
 				{
 					// We found it! (This is something insane, like "int x = (x=2)*2;".)
 					return node;
@@ -189,7 +189,7 @@ public class AmbiguousNameCategorizer
 			{
 				index--;
 				VariableDeclaratorNode otherDeclarator = node.get(index);
-				if (otherDeclarator.getName().getIdentifier().equals(name))
+				if (otherDeclarator.getIdentifier().getIdentifier().equals(name))
 				{
 					// Found one
 					return otherDeclarator;
@@ -219,7 +219,7 @@ public class AmbiguousNameCategorizer
 					LocalVariableDeclarationNode variableDeclarationNode = (LocalVariableDeclarationNode) node.get(index);
 					for (VariableDeclaratorNode variableDeclaratorNode : variableDeclarationNode.getDeclarators())
 					{
-						if (variableDeclaratorNode.getName().getIdentifier().equals(name))
+						if (variableDeclaratorNode.getIdentifier().getIdentifier().equals(name))
 						{
 							// We found something in a parent block with the name we want.
 							return variableDeclarationNode;
@@ -272,7 +272,7 @@ public class AmbiguousNameCategorizer
 			{
 				index--;
 				VariableDeclaratorNode variableDeclaratorNode = initializer.getDeclaration().getDeclarators().get(index);
-				if (variableDeclaratorNode.getName().getIdentifier().equals(name))
+				if (variableDeclaratorNode.getIdentifier().getIdentifier().equals(name))
 				{
 					// We found a variable declaration in the for loop that covers our node
 					return variableDeclaratorNode;
@@ -376,7 +376,7 @@ public class AmbiguousNameCategorizer
 					FieldDeclarationNode fieldDeclarationNode = (FieldDeclarationNode) member;
 					for (VariableDeclaratorNode declarator : fieldDeclarationNode.getDeclarators())
 					{
-						if (declarator.getName().getIdentifier().equals(name))
+						if (declarator.getIdentifier().getIdentifier().equals(name))
 						{
 							return declarator;
 						}

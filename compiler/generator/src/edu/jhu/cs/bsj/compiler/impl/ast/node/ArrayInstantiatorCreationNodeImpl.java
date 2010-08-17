@@ -75,6 +75,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     public void setDimExpressions(ExpressionListNode dimExpressions)
     {
             setDimExpressions(dimExpressions, true);
+            getManager().notifyChange(this);
     }
     
     private void setDimExpressions(ExpressionListNode dimExpressions, boolean checkPermissions)

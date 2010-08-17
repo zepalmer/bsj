@@ -80,6 +80,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public void setBody(BlockStatementListNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(BlockStatementListNode body, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public void setParameter(VariableNode parameter)
     {
             setParameter(parameter, true);
+            getManager().notifyChange(this);
     }
     
     private void setParameter(VariableNode parameter, boolean checkPermissions)

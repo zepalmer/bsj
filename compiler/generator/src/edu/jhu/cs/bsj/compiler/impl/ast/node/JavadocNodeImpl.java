@@ -71,6 +71,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     public void setText(String text)
     {
             setText(text, true);
+            getManager().notifyChange(this);
     }
     
     private void setText(String text, boolean checkPermissions)

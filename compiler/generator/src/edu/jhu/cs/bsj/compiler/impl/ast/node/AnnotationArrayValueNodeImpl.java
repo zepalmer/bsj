@@ -72,6 +72,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     public void setValues(AnnotationValueListNode values)
     {
             setValues(values, true);
+            getManager().notifyChange(this);
     }
     
     private void setValues(AnnotationValueListNode values, boolean checkPermissions)

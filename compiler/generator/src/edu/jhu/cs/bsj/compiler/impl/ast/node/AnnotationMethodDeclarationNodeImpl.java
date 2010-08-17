@@ -104,6 +104,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setModifiers(AnnotationMethodModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(AnnotationMethodModifiersNode modifiers, boolean checkPermissions)
@@ -135,6 +136,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setType(TypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(TypeNode type, boolean checkPermissions)
@@ -166,6 +168,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -197,6 +200,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setDefaultValue(AnnotationValueNode defaultValue)
     {
             setDefaultValue(defaultValue, true);
+            getManager().notifyChange(this);
     }
     
     private void setDefaultValue(AnnotationValueNode defaultValue, boolean checkPermissions)
@@ -228,6 +232,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
@@ -332,12 +337,14 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         visitor.visitNodeStart(this);
         visitor.visitAnnotationMemberNodeStart(this);
         visitor.visitDeclarationNodeStart(this);
+        visitor.visitInvokableNameBindingNodeStart(this);
         visitor.visitModifiedNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitAnnotationMemberNodeStop(this);
         visitor.visitDeclarationNodeStop(this);
+        visitor.visitInvokableNameBindingNodeStop(this);
         visitor.visitModifiedNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAnnotationMethodDeclarationNodeStop(this, true);

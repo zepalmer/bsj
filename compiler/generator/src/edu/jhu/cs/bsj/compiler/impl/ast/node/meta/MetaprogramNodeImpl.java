@@ -81,6 +81,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public void setPreamble(MetaprogramPreambleNode preamble)
     {
             setPreamble(preamble, true);
+            getManager().notifyChange(this);
     }
     
     private void setPreamble(MetaprogramPreambleNode preamble, boolean checkPermissions)
@@ -112,6 +113,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public void setBody(BlockStatementListNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(BlockStatementListNode body, boolean checkPermissions)

@@ -20,20 +20,20 @@ public class FieldVariableElementImpl extends AbstractMemberVariableElementImpl<
 	@Override
 	public Set<Modifier> getModifiers()
 	{
-		EnumSet<Modifier> set = getAccessModifierSet(getBackingNode().getModifiers().getAccess());
-		if (getBackingNode().getModifiers().getFinalFlag())
+		EnumSet<Modifier> set = getAccessModifierSet(getOwner().getModifiers().getAccess());
+		if (getOwner().getModifiers().getFinalFlag())
 		{
 			set.add(Modifier.FINAL);
 		}
-		if (getBackingNode().getModifiers().getStaticFlag())
+		if (getOwner().getModifiers().getStaticFlag())
 		{
 			set.add(Modifier.STATIC);
 		}
-		if (getBackingNode().getModifiers().getTransientFlag())
+		if (getOwner().getModifiers().getTransientFlag())
 		{
 			set.add(Modifier.TRANSIENT);
 		}
-		if (getBackingNode().getModifiers().getVolatileFlag())
+		if (getOwner().getModifiers().getVolatileFlag())
 		{
 			set.add(Modifier.VOLATILE);
 		}

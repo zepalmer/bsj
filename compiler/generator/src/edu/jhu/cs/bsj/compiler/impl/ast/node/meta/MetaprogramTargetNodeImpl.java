@@ -73,6 +73,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     public void setTargets(IdentifierListNode targets)
     {
             setTargets(targets, true);
+            getManager().notifyChange(this);
     }
     
     private void setTargets(IdentifierListNode targets, boolean checkPermissions)

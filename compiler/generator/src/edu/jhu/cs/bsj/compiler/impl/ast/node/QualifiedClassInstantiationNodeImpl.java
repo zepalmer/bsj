@@ -93,6 +93,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     public void setEnclosingExpression(ExpressionNode enclosingExpression)
     {
             setEnclosingExpression(enclosingExpression, true);
+            getManager().notifyChange(this);
     }
     
     private void setEnclosingExpression(ExpressionNode enclosingExpression, boolean checkPermissions)
@@ -124,6 +125,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -155,6 +157,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
             setTypeArguments(typeArguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeArguments(TypeArgumentListNode typeArguments, boolean checkPermissions)

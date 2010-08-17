@@ -88,6 +88,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public void setLabel(IdentifierNode label)
     {
             setLabel(label, true);
+            getManager().notifyChange(this);
     }
     
     private void setLabel(IdentifierNode label, boolean checkPermissions)
@@ -119,6 +120,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public void setStatement(StatementNode statement)
     {
             setStatement(statement, true);
+            getManager().notifyChange(this);
     }
     
     private void setStatement(StatementNode statement, boolean checkPermissions)
@@ -150,6 +152,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

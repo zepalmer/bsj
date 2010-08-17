@@ -92,6 +92,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     public void setModifiers(T modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(T modifiers, boolean checkPermissions)
@@ -123,6 +124,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     public void setType(TypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(TypeNode type, boolean checkPermissions)
@@ -154,6 +156,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
             setDeclarators(declarators, true);
+            getManager().notifyChange(this);
     }
     
     private void setDeclarators(VariableDeclaratorListNode declarators, boolean checkPermissions)
@@ -185,6 +188,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)

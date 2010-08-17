@@ -72,6 +72,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     public void setMembers(InterfaceMemberListNode members)
     {
             setMembers(members, true);
+            getManager().notifyChange(this);
     }
     
     private void setMembers(InterfaceMemberListNode members, boolean checkPermissions)

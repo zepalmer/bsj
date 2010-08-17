@@ -83,6 +83,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     public void setAccess(AccessModifier access)
     {
             setAccess(access, true);
+            getManager().notifyChange(this);
     }
     
     private void setAccess(AccessModifier access, boolean checkPermissions)
@@ -112,6 +113,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     public void setStrictfpFlag(boolean strictfpFlag)
     {
             setStrictfpFlag(strictfpFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)

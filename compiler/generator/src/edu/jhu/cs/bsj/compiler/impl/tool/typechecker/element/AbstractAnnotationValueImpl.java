@@ -8,8 +8,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
 
 public abstract class AbstractAnnotationValueImpl<T extends AnnotationValueNode> extends TypecheckerModelComponentImpl
 		implements AnnotationValue

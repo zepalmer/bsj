@@ -104,6 +104,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setModifiers(EnumConstantModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(EnumConstantModifiersNode modifiers, boolean checkPermissions)
@@ -135,6 +136,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -166,6 +168,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setArguments(ExpressionListNode arguments)
     {
             setArguments(arguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
@@ -197,6 +200,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setBody(AnonymousClassBodyNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(AnonymousClassBodyNode body, boolean checkPermissions)
@@ -228,6 +232,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
@@ -331,11 +336,13 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         visitor.visitEnumConstantDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitDeclarationNodeStart(this);
+        visitor.visitVariableNameBindingNodeStart(this);
         visitor.visitModifiedNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitDeclarationNodeStop(this);
+        visitor.visitVariableNameBindingNodeStop(this);
         visitor.visitModifiedNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitEnumConstantDeclarationNodeStop(this, true);

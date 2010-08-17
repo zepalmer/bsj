@@ -76,6 +76,7 @@ public class SingleElementMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl 
     public void setValue(MetaAnnotationValueNode value)
     {
             setValue(value, true);
+            getManager().notifyChange(this);
     }
     
     private void setValue(MetaAnnotationValueNode value, boolean checkPermissions)

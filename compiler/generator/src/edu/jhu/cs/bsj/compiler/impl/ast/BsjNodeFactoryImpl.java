@@ -6930,11 +6930,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             int arrayLevels,
             VariableInitializerNode initializer)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(name, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6944,13 +6944,13 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             int arrayLevels,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(name, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6960,10 +6960,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             VariableInitializerNode initializer)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(name, 0, initializer, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, 0, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6973,12 +6973,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(name, 0, initializer, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, 0, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

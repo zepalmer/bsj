@@ -88,6 +88,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public void setName(NameNode name)
     {
             setName(name, true);
+            getManager().notifyChange(this);
     }
     
     private void setName(NameNode name, boolean checkPermissions)
@@ -119,6 +120,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
@@ -150,6 +152,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public void setAnnotations(AnnotationListNode annotations)
     {
             setAnnotations(annotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setAnnotations(AnnotationListNode annotations, boolean checkPermissions)

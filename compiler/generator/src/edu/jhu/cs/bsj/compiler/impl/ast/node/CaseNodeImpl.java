@@ -80,6 +80,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     public void setExpression(ExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(ExpressionNode expression, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     public void setStatements(BlockStatementListNode statements)
     {
             setStatements(statements, true);
+            getManager().notifyChange(this);
     }
     
     private void setStatements(BlockStatementListNode statements, boolean checkPermissions)

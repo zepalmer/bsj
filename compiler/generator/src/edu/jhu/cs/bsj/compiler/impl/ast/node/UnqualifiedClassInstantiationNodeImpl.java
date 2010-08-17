@@ -78,6 +78,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     public void setType(DeclaredTypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(DeclaredTypeNode type, boolean checkPermissions)

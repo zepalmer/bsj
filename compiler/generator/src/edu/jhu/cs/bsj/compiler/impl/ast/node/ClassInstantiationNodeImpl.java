@@ -84,6 +84,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments)
     {
             setConstructorTypeArguments(constructorTypeArguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments, boolean checkPermissions)
@@ -115,6 +116,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setArguments(ExpressionListNode arguments)
     {
             setArguments(arguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
@@ -146,6 +148,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setBody(AnonymousClassBodyNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(AnonymousClassBodyNode body, boolean checkPermissions)

@@ -67,6 +67,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     public void setValue(T value)
     {
             setValue(value, true);
+            getManager().notifyChange(this);
     }
     
     private void setValue(T value, boolean checkPermissions)

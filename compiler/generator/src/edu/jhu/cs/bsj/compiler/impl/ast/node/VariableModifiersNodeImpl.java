@@ -75,6 +75,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     public void setFinalFlag(boolean finalFlag)
     {
             setFinalFlag(finalFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setFinalFlag(boolean finalFlag, boolean checkPermissions)

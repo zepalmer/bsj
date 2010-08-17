@@ -96,6 +96,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public void setVariable(VariableNode variable)
     {
             setVariable(variable, true);
+            getManager().notifyChange(this);
     }
     
     private void setVariable(VariableNode variable, boolean checkPermissions)
@@ -127,6 +128,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public void setExpression(ExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(ExpressionNode expression, boolean checkPermissions)
@@ -158,6 +160,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public void setStatement(StatementNode statement)
     {
             setStatement(statement, true);
+            getManager().notifyChange(this);
     }
     
     private void setStatement(StatementNode statement, boolean checkPermissions)
@@ -189,6 +192,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

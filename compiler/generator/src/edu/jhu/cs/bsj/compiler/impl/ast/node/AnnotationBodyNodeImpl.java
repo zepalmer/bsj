@@ -72,6 +72,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     public void setMembers(AnnotationMemberListNode members)
     {
             setMembers(members, true);
+            getManager().notifyChange(this);
     }
     
     private void setMembers(AnnotationMemberListNode members, boolean checkPermissions)

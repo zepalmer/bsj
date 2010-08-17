@@ -91,7 +91,7 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 
 	private MethodDeclarationNode createGetter(BsjNodeFactory factory, VariableDeclaratorNode var)
 	{
-		String varname = var.getName().getIdentifier();
+		String varname = var.getIdentifier().getIdentifier();
 		IdentifierNode getterName = factory.makeIdentifierNode("get" + Character.toUpperCase(varname.charAt(0))
 				+ varname.substring(1));
 		MethodDeclarationNode getterMethod = factory.makeMethodDeclarationNode(
@@ -108,7 +108,7 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 
 	private MethodDeclarationNode createSetter(BsjNodeFactory factory, VariableDeclaratorNode var)
 	{
-		String varname = var.getName().getIdentifier();
+		String varname = var.getIdentifier().getIdentifier();
 		IdentifierNode setterName = factory.makeIdentifierNode("set" + Character.toUpperCase(varname.charAt(0))
 				+ varname.substring(1));
 		MethodDeclarationNode setterMethod = factory.makeMethodDeclarationNode(

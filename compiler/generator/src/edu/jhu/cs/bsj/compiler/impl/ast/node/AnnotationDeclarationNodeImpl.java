@@ -98,6 +98,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public void setModifiers(AnnotationModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(AnnotationModifiersNode modifiers, boolean checkPermissions)
@@ -129,6 +130,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public void setBody(AnnotationBodyNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(AnnotationBodyNode body, boolean checkPermissions)
@@ -160,6 +162,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -191,6 +194,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)

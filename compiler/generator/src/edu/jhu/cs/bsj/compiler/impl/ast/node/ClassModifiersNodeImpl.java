@@ -104,6 +104,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setAccess(AccessModifier access)
     {
             setAccess(access, true);
+            getManager().notifyChange(this);
     }
     
     private void setAccess(AccessModifier access, boolean checkPermissions)
@@ -133,6 +134,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setAbstractFlag(boolean abstractFlag)
     {
             setAbstractFlag(abstractFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setAbstractFlag(boolean abstractFlag, boolean checkPermissions)
@@ -162,6 +164,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setStaticFlag(boolean staticFlag)
     {
             setStaticFlag(staticFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
@@ -191,6 +194,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setFinalFlag(boolean finalFlag)
     {
             setFinalFlag(finalFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
@@ -220,6 +224,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setStrictfpFlag(boolean strictfpFlag)
     {
             setStrictfpFlag(strictfpFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)

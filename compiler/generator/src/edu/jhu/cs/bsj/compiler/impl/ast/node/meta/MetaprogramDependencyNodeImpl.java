@@ -80,6 +80,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
     public void setTargetName(NameNode targetName)
     {
             setTargetName(targetName, true);
+            getManager().notifyChange(this);
     }
     
     private void setTargetName(NameNode targetName, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
     public void setWeak(boolean weak)
     {
             setWeak(weak, true);
+            getManager().notifyChange(this);
     }
     
     private void setWeak(boolean weak, boolean checkPermissions)

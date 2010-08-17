@@ -4425,7 +4425,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             int arrayLevels,
             VariableInitializerNode initializer);
     
@@ -4434,7 +4434,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             int arrayLevels,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
@@ -4445,7 +4445,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             VariableInitializerNode initializer);
     
     /**
@@ -4453,7 +4453,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);

@@ -80,6 +80,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     public void setBounds(DeclaredTypeListNode bounds)
     {
             setBounds(bounds, true);
+            getManager().notifyChange(this);
     }
     
     private void setBounds(DeclaredTypeListNode bounds, boolean checkPermissions)
@@ -189,9 +191,11 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         visitor.visitStartBegin(this);
         visitor.visitTypeParameterNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitTypeNameBindingNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitTypeNameBindingNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitTypeParameterNodeStop(this, true);
         visitor.visitStopEnd(this);

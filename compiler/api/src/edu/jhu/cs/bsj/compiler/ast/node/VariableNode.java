@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  *     </pre>        
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface VariableNode extends Node, ModifiedNode<VariableModifiersNode>
+public interface VariableNode extends Node, VariableNameBindingNode, ModifiedNode<VariableModifiersNode>
 {
     /**
      * Gets the modifiers of this parameter.

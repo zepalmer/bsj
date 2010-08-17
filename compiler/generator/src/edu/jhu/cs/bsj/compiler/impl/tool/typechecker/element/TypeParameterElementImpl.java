@@ -13,6 +13,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
@@ -33,6 +34,12 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	public TypeParameterNode getBackingNode()
 	{
 		return (TypeParameterNode) super.getBackingNode();
+	}
+
+	@Override
+	public TypeNameBindingNode getDeclarationNode()
+	{
+		return getBackingNode();
 	}
 
 	@Override

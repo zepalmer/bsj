@@ -95,6 +95,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setBody(BlockStatementListNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(BlockStatementListNode body, boolean checkPermissions)
@@ -126,6 +127,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setCatches(CatchListNode catches)
     {
             setCatches(catches, true);
+            getManager().notifyChange(this);
     }
     
     private void setCatches(CatchListNode catches, boolean checkPermissions)
@@ -157,6 +159,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setFinallyBlock(BlockStatementListNode finallyBlock)
     {
             setFinallyBlock(finallyBlock, true);
+            getManager().notifyChange(this);
     }
     
     private void setFinallyBlock(BlockStatementListNode finallyBlock, boolean checkPermissions)
@@ -188,6 +191,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

@@ -72,6 +72,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     public void setMembers(AnonymousClassMemberListNode members)
     {
             setMembers(members, true);
+            getManager().notifyChange(this);
     }
     
     private void setMembers(AnonymousClassMemberListNode members, boolean checkPermissions)

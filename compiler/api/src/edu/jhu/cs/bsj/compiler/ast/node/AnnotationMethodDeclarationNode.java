@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberNode, DeclarationNode, ModifiedNode<AnnotationMethodModifiersNode>
+public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberNode, DeclarationNode, InvokableNameBindingNode, ModifiedNode<AnnotationMethodModifiersNode>
 {
     /**
      * Gets the modifiers for this annotation method.

@@ -1186,6 +1186,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type InvokableNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitInvokableNameBindingNodeStart(InvokableNameBindingNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type JavadocNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2044,6 +2052,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type TypeNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeNameBindingNodeStart(TypeNameBindingNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type TypeNode.
      * @param node The node being visited.
      */
@@ -2226,6 +2242,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitVariableModifiersNodeStart(VariableModifiersNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VariableNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableNameBindingNodeStart(VariableNameBindingNode node)
     {
     }
 
@@ -3355,6 +3379,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type InvokableNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitInvokableNameBindingNodeStop(InvokableNameBindingNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type JavadocNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -4213,6 +4245,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type TypeNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeNameBindingNodeStop(TypeNameBindingNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type TypeNode.
      * @param node The node being visited.
      */
@@ -4395,6 +4435,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitVariableModifiersNodeStop(VariableModifiersNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VariableNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableNameBindingNodeStop(VariableNameBindingNode node)
     {
     }
 

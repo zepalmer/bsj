@@ -72,6 +72,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     public void setDeclaration(LocalVariableDeclarationNode declaration)
     {
             setDeclaration(declaration, true);
+            getManager().notifyChange(this);
     }
     
     private void setDeclaration(LocalVariableDeclarationNode declaration, boolean checkPermissions)

@@ -73,6 +73,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     public void setImportNode(ImportNode importNode)
     {
             setImportNode(importNode, true);
+            getManager().notifyChange(this);
     }
     
     private void setImportNode(ImportNode importNode, boolean checkPermissions)

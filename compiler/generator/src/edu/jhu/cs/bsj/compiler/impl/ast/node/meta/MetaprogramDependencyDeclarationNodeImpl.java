@@ -73,6 +73,7 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
     public void setTargets(MetaprogramDependencyListNode targets)
     {
             setTargets(targets, true);
+            getManager().notifyChange(this);
     }
     
     private void setTargets(MetaprogramDependencyListNode targets, boolean checkPermissions)

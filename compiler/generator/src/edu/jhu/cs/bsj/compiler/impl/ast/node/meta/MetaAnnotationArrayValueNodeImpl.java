@@ -73,6 +73,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     public void setValues(MetaAnnotationValueListNode values)
     {
             setValues(values, true);
+            getManager().notifyChange(this);
     }
     
     private void setValues(MetaAnnotationValueListNode values, boolean checkPermissions)

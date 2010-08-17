@@ -80,6 +80,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
     public void setExpression(StatementExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(StatementExpressionNode expression, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

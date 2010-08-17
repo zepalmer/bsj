@@ -136,6 +136,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setBody(BlockStatementListNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(BlockStatementListNode body, boolean checkPermissions)
@@ -167,6 +168,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setModifiers(MethodModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(MethodModifiersNode modifiers, boolean checkPermissions)
@@ -198,6 +200,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -229,6 +232,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setParameters(VariableListNode parameters)
     {
             setParameters(parameters, true);
+            getManager().notifyChange(this);
     }
     
     private void setParameters(VariableListNode parameters, boolean checkPermissions)
@@ -260,6 +264,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setVarargParameter(VariableNode varargParameter)
     {
             setVarargParameter(varargParameter, true);
+            getManager().notifyChange(this);
     }
     
     private void setVarargParameter(VariableNode varargParameter, boolean checkPermissions)
@@ -291,6 +296,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setReturnType(TypeNode returnType)
     {
             setReturnType(returnType, true);
+            getManager().notifyChange(this);
     }
     
     private void setReturnType(TypeNode returnType, boolean checkPermissions)
@@ -322,6 +328,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setThrowTypes(UnparameterizedTypeListNode throwTypes)
     {
             setThrowTypes(throwTypes, true);
+            getManager().notifyChange(this);
     }
     
     private void setThrowTypes(UnparameterizedTypeListNode throwTypes, boolean checkPermissions)
@@ -353,6 +360,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
             setTypeParameters(typeParameters, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
@@ -384,6 +392,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
@@ -521,12 +530,14 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         visitor.visitInterfaceMemberNodeStart(this);
         visitor.visitAnonymousClassMemberNodeStart(this);
         visitor.visitAbstractInvokableDeclarationNodeStart(this);
+        visitor.visitInvokableNameBindingNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitInterfaceMemberNodeStop(this);
         visitor.visitAnonymousClassMemberNodeStop(this);
         visitor.visitAbstractInvokableDeclarationNodeStop(this);
+        visitor.visitInvokableNameBindingNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitMethodDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

@@ -23,7 +23,7 @@ public class LocalVariableElementImpl extends VariableDeclaratorOwnerElementImpl
 	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
 	{
-		return makeAnnotationMirrors(getBackingNode().getModifiers().getAnnotations());
+		return makeAnnotationMirrors(getOwner().getModifiers().getAnnotations());
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class LocalVariableElementImpl extends VariableDeclaratorOwnerElementImpl
 	@Override
 	public Set<Modifier> getModifiers()
 	{
-		if (this.getBackingNode().getModifiers().getFinalFlag())
+		if (this.getOwner().getModifiers().getFinalFlag())
 		{
 			return EnumSet.of(Modifier.FINAL);
 		} else

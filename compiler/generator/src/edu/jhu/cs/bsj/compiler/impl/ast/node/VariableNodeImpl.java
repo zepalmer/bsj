@@ -88,6 +88,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     public void setModifiers(VariableModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(VariableModifiersNode modifiers, boolean checkPermissions)
@@ -119,6 +120,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     public void setType(TypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(TypeNode type, boolean checkPermissions)
@@ -150,6 +152,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -236,10 +239,12 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         visitor.visitStartBegin(this);
         visitor.visitVariableNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitVariableNameBindingNodeStart(this);
         visitor.visitModifiedNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitVariableNameBindingNodeStop(this);
         visitor.visitModifiedNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitVariableNodeStop(this, true);

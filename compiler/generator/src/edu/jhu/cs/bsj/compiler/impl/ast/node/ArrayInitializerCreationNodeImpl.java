@@ -75,6 +75,7 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
     public void setInitializer(ArrayInitializerNode initializer)
     {
             setInitializer(initializer, true);
+            getManager().notifyChange(this);
     }
     
     private void setInitializer(ArrayInitializerNode initializer, boolean checkPermissions)

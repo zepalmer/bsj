@@ -17,19 +17,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * <tt>initializer</tt> field is <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface VariableDeclaratorNode extends Node
+public interface VariableDeclaratorNode extends Node, VariableNameBindingNode
 {
     /**
      * Gets the name of this variable.
      * @return The name of this variable.
      */
-    public IdentifierNode getName();
+    public IdentifierNode getIdentifier();
     
     /**
      * Changes the name of this variable.
-     * @param name The name of this variable.
+     * @param identifier The name of this variable.
      */
-    public void setName(IdentifierNode name);
+    public void setIdentifier(IdentifierNode identifier);
     
     /**
      * Gets the number of additional array levels added to the type of this variable.

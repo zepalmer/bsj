@@ -80,6 +80,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     public void setAnnotationType(UnparameterizedTypeNode annotationType)
     {
             setAnnotationType(annotationType, true);
+            getManager().notifyChange(this);
     }
     
     private void setAnnotationType(UnparameterizedTypeNode annotationType, boolean checkPermissions)

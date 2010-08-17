@@ -104,6 +104,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setAccess(AccessModifier access)
     {
             setAccess(access, true);
+            getManager().notifyChange(this);
     }
     
     private void setAccess(AccessModifier access, boolean checkPermissions)
@@ -133,6 +134,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setStaticFlag(boolean staticFlag)
     {
             setStaticFlag(staticFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
@@ -162,6 +164,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setFinalFlag(boolean finalFlag)
     {
             setFinalFlag(finalFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
@@ -191,6 +194,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setTransientFlag(boolean transientFlag)
     {
             setTransientFlag(transientFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setTransientFlag(boolean transientFlag, boolean checkPermissions)
@@ -220,6 +224,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setVolatileFlag(boolean volatileFlag)
     {
             setVolatileFlag(volatileFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setVolatileFlag(boolean volatileFlag, boolean checkPermissions)

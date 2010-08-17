@@ -175,7 +175,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			getAllMethods(fieldName, fieldType, classDeclarationList);
 		} else {
 			for (VariableDeclaratorNode variableDeclaration : fieldNode.getDeclarators().getChildren()) {
-				fieldName = variableDeclaration.getName().getIdentifier();
+				fieldName = variableDeclaration.getIdentifier().getIdentifier();
 
 				fieldType = variableDeclaration.getEffectiveType(factory);
 				getAllMethods(fieldName, fieldType, classDeclarationList);

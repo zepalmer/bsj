@@ -72,6 +72,7 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
     public void setName(NameNode name)
     {
             setName(name, true);
+            getManager().notifyChange(this);
     }
     
     private void setName(NameNode name, boolean checkPermissions)

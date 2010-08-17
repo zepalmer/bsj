@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api;
 
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
+
 /**
  * This interface is implemented by element types which represent type declarations either directly or indirectly.  A
  * type-like element is an element which may be used as a type, such as in the type reference of a variable declaration.
@@ -9,4 +11,9 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api;
  */
 public interface BsjTypeLikeElement extends BsjElement
 {
+	/**
+	 * Retrieves the declaration backing this element.  As all elements in the BSJ language correspond to some
+	 * declaration, this method obtains for the caller the AST node representing that declaration.
+	 */
+	public TypeNameBindingNode getDeclarationNode();
 }

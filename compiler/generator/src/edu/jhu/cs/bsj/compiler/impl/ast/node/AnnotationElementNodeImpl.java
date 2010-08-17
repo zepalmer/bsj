@@ -80,6 +80,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     public void setValue(AnnotationValueNode value)
     {
             setValue(value, true);
+            getManager().notifyChange(this);
     }
     
     private void setValue(AnnotationValueNode value, boolean checkPermissions)

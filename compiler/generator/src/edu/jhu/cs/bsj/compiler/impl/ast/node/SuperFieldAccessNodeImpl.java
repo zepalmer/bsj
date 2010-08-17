@@ -80,6 +80,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     public void setType(UnparameterizedTypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(UnparameterizedTypeNode type, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)

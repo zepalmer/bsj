@@ -72,6 +72,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     public void setType(UnparameterizedTypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(UnparameterizedTypeNode type, boolean checkPermissions)

@@ -28,7 +28,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
  * in the AST API.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MethodDeclarationNode extends Node, InterfaceMemberNode, AnonymousClassMemberNode, AbstractInvokableDeclarationNode<MethodModifiersNode>
+public interface MethodDeclarationNode extends Node, InterfaceMemberNode, AnonymousClassMemberNode, AbstractInvokableDeclarationNode<MethodModifiersNode>, InvokableNameBindingNode
 {
     /**
      * Gets the body of this method.

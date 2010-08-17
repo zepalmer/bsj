@@ -188,5 +188,26 @@ public abstract class NodeImpl
 	{
 		return this.executeOperation(new BsjSourceSerializerImpl(), null);
 	}
+
+	public Collection<? extends Node> getDeclarationsInScope(NameNode name)
+	{
+		return this.getManager().getDeclarationsInScope(this, name);
+	}
+	
+	public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(String name)
+	{
+		return this.getManager().getTypeDeclarationsInScope(this, name);
+	}
+	
+	public Collection<? extends InvokableNameBindingNode> getMethodDeclarationsInScope(String name)
+	{
+		return this.getManager().getMethodDeclarationsInScope(this, name);
+	}
+	
+	public Collection<? extends VariableNameBindingNode> getVariableDeclarationsInScope(String name)
+	{
+		return this.getManager().getVariableDeclarationsInScope(this, name);
+	}
+
 	/* GEN:stop */
 }

@@ -102,7 +102,7 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
                     FieldDeclarationNode field = (FieldDeclarationNode)member;
                     for (VariableDeclaratorNode var : field.getDeclarators())
                     {
-                        if (propsList.contains(var.getName().getIdentifier()))
+                        if (propsList.contains(var.getIdentifier().getIdentifier()))
                         {
                             variables.add(var);
                         }
@@ -131,11 +131,11 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
         for (VariableDeclaratorNode variable : variables)
         {
             statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                    factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getName().getIdentifier())), 
+                    factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getIdentifier().getIdentifier())), 
                     AssignmentOperator.ASSIGNMENT, 
                     factory.makeVariableAccessByExpressionNode(
                             factory.makeVariableAccessByNameNode(factory.parseNameNode("builder")), 
-                            variable.getName().deepCopy(factory)))));
+                            variable.getIdentifier().deepCopy(factory)))));
         }
         
         // create the private builder constructor
@@ -170,12 +170,12 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
                 // required variable, add to constructor
                 constructorVariables.add(factory.makeVariableNode(
                         variable.getEffectiveType(factory), 
-                        variable.getName().deepCopy(factory)));
-                javadoc.append("@param " + variable.getName().getIdentifier());
+                        variable.getIdentifier().deepCopy(factory)));
+                javadoc.append("@param " + variable.getIdentifier().getIdentifier());
                 constructorStatements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                        factory.makeVariableAccessByExpressionNode(factory.makeThisNode(), variable.getName().deepCopy(factory)), 
+                        factory.makeVariableAccessByExpressionNode(factory.makeThisNode(), variable.getIdentifier().deepCopy(factory)), 
                         AssignmentOperator.ASSIGNMENT, 
-                        factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getName().getIdentifier())))));
+                        factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getIdentifier().getIdentifier())))));
             }
             else
             {
@@ -183,15 +183,15 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
                 builderMembers.add(factory.makeMethodDeclarationNode(
                         factory.makeBlockStatementListNode(
                                 factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                                        factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getName().getIdentifier())), 
+                                        factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getIdentifier().getIdentifier())), 
                                         AssignmentOperator.ASSIGNMENT, 
                                         factory.makeVariableAccessByNameNode(factory.parseNameNode("val")))), 
                                 factory.makeReturnNode(factory.makeThisNode())), 
                         factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
-                        variable.getName().deepCopy(factory), 
+                        variable.getIdentifier().deepCopy(factory), 
                         factory.makeVariableListNode(factory.makeVariableNode(variable.getEffectiveType(factory), factory.makeIdentifierNode("val"))), 
                         factory.makeUnparameterizedTypeNode(factory.parseNameNode(builderName)), 
-                        factory.makeJavadocNode("Builder parameter for " + variable.getName().getIdentifier() + ".")));
+                        factory.makeJavadocNode("Builder parameter for " + variable.getIdentifier().getIdentifier() + ".")));
             }
         }
         

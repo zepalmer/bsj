@@ -10,15 +10,17 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDeclaratorOwnerNode> extends
-		AbstractVariableElementImpl<T>
+		AbstractVariableElementImpl<VariableDeclaratorNode>
 {
 	private int index;
+	private T owner;
 
-	public VariableDeclaratorOwnerElementImpl(TypecheckerManager manager, T backingNode, BsjElement enclosingElement,
-			int index)
+	public VariableDeclaratorOwnerElementImpl(TypecheckerManager manager, T owner,
+			BsjElement enclosingElement, int index)
 	{
-		super(manager, backingNode, enclosingElement);
+		super(manager, owner.getDeclarators().get(index), enclosingElement);
 		this.index = index;
+		this.owner = owner;
 	}
 
 	public int getIndex()
@@ -54,12 +56,17 @@ public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDecla
 	public BsjType asType()
 	{
 		// TODO: what about array levels?
-		return getTypeBuilder().makeType(getBackingNode().getType());
+		return getTypeBuilder().makeType(getOwner().getType());
+	}
+	
+	protected T getOwner()
+	{
+		return this.owner;
 	}
 
 	protected VariableDeclaratorNode getDeclarator()
 	{
-		return getBackingNode().getDeclarators().get(getIndex());
+		return getBackingNode();
 	}
 
 	@Override
@@ -71,6 +78,6 @@ public abstract class VariableDeclaratorOwnerElementImpl<T extends VariableDecla
 	@Override
 	public Name getSimpleName()
 	{
-		return new NameImpl(getDeclarator().getName().getIdentifier());
+		return new NameImpl(getDeclarator().getIdentifier().getIdentifier());
 	}
 }

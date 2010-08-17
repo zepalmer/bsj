@@ -88,6 +88,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     public void setExpression(ExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(ExpressionNode expression, boolean checkPermissions)
@@ -119,6 +120,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     public void setBody(BlockStatementListNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(BlockStatementListNode body, boolean checkPermissions)
@@ -150,6 +152,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

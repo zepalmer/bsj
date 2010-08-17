@@ -68,6 +68,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     public void setAnnotationType(UnparameterizedTypeNode annotationType)
     {
             setAnnotationType(annotationType, true);
+            getManager().notifyChange(this);
     }
     
     private void setAnnotationType(UnparameterizedTypeNode annotationType, boolean checkPermissions)

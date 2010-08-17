@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
  * <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface EnumConstantDeclarationNode extends Node, DeclarationNode, ModifiedNode<EnumConstantModifiersNode>
+public interface EnumConstantDeclarationNode extends Node, DeclarationNode, VariableNameBindingNode, ModifiedNode<EnumConstantModifiersNode>
 {
     /**
      * Gets the modifiers for this enum constant.

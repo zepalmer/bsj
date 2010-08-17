@@ -72,6 +72,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     public void setExpressions(StatementExpressionListNode expressions)
     {
             setExpressions(expressions, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpressions(StatementExpressionListNode expressions, boolean checkPermissions)

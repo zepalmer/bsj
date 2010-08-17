@@ -75,6 +75,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     public void setBaseType(BaseTypeNode baseType)
     {
             setBaseType(baseType, true);
+            getManager().notifyChange(this);
     }
     
     private void setBaseType(BaseTypeNode baseType, boolean checkPermissions)
@@ -106,6 +107,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     public void setArrayLevels(int arrayLevels)
     {
             setArrayLevels(arrayLevels, true);
+            getManager().notifyChange(this);
     }
     
     private void setArrayLevels(int arrayLevels, boolean checkPermissions)

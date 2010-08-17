@@ -76,6 +76,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     public void setArguments(MetaAnnotationElementListNode arguments)
     {
             setArguments(arguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setArguments(MetaAnnotationElementListNode arguments, boolean checkPermissions)

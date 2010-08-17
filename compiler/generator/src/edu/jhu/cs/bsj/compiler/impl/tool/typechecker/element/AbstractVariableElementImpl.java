@@ -6,13 +6,13 @@ import java.util.List;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementVisitor;
 
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableNameBindingNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
-public abstract class AbstractVariableElementImpl<T extends Node> extends AbstractElementImpl<T> implements
+public abstract class AbstractVariableElementImpl<T extends VariableNameBindingNode> extends AbstractElementImpl<T> implements
 		BsjVariableElement
 {
 	public AbstractVariableElementImpl(TypecheckerManager manager, T backingNode, BsjElement enclosingElement)
@@ -40,5 +40,11 @@ public abstract class AbstractVariableElementImpl<T extends Node> extends Abstra
 	public List<? extends Element> getEnclosedElements()
 	{
 		return Collections.emptyList();
+	}
+
+	@Override
+	public VariableNameBindingNode getDeclarationNode()
+	{
+		return getBackingNode();
 	}
 }

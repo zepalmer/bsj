@@ -92,6 +92,13 @@
             ]]></doc>
         </type>
 
+        <type name="InvokableNameBindingNode" super="Node" mode="tag">
+            <prop name="identifier" type="IdentifierNode" desc="the identifier naming the invokable which is declared"/>
+            <doc><![CDATA[
+                This interface is implemented by invokable nodes which occupy positions in the method namespace.
+            ]]></doc>
+        </type>
+
         <type name="LiteralizableTypeNode" super="Node" mode="tag">
             <tag name="TypeNode" />
             <doc><![CDATA[
@@ -115,7 +122,7 @@
                 This interface is implemented by nodes which have modifiers.
             ]]></doc>
         </type>
-
+        
         <type name="NonAssignmentExpressionNode" super="Node" mode="tag">
             <tag name="ExpressionNode" />
             <doc><![CDATA[
@@ -175,7 +182,14 @@
             <tag name="AnonymousClassMemberNode" />
             <tag name="DeclarationNode" />
             <doc><![CDATA[
-                This tagging interface is used to denoate AST nodes which declare types.
+                This tagging interface is used to denote AST nodes which declare types.
+            ]]></doc>
+        </type>
+        
+        <type name="TypeNameBindingNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which may be represented by a type reference's
+                bound element.  These nodes are those which are capable of binding a name to a type.
             ]]></doc>
         </type>
 
@@ -204,6 +218,13 @@
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which represent a variable initialization using either an
                 expression or an array initializer.          
+            ]]></doc>
+        </type>
+        
+        <type name="VariableNameBindingNode" super="Node" mode="tag">
+            <prop name="identifier" type="IdentifierNode" desc="the identifier naming the variable being declared"/>
+            <doc><![CDATA[
+                A common supertype for all nodes which declare a single variable.
             ]]></doc>
         </type>
 
@@ -1237,7 +1258,8 @@
         </type>
 
         <type name="VariableDeclaratorNode" super="Node">
-            <prop name="name" type="IdentifierNode" desc="the name of this variable" />
+            <tag name="VariableNameBindingNode" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of this variable" />
             <prop name="arrayLevels" type="int"
                 desc="the number of additional array levels added to the type of this variable" default="0" />
             <prop name="initializer" type="VariableInitializerNode" desc="the initializer to use" />
@@ -1451,6 +1473,7 @@
         <type name="AnnotationMethodDeclarationNode" super="Node">
             <tag name="AnnotationMemberNode" />
             <tag name="DeclarationNode" />
+            <tag name="InvokableNameBindingNode"/>
             <tag name="ModifiedNode" typeArg="AnnotationMethodModifiersNode"/>
             <prop name="modifiers" type="AnnotationMethodModifiersNode" desc="the modifiers for this annotation method" />
             <prop name="type" type="TypeNode" desc="the return type of this annotation method" />
@@ -1501,6 +1524,7 @@
 
         <type name="EnumConstantDeclarationNode" super="Node">
             <tag name="DeclarationNode" />
+            <tag name="VariableNameBindingNode" />
             <tag name="ModifiedNode" typeArg="EnumConstantModifiersNode"/>
             <prop name="modifiers" type="EnumConstantModifiersNode" desc="the modifiers for this enum constant" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
@@ -1550,6 +1574,7 @@
             <tag name="InterfaceMemberNode" />
             <tag name="AnonymousClassMemberNode" />
             <tag name="AbstractInvokableDeclarationNode" typeArg="MethodModifiersNode" />
+            <tag name="InvokableNameBindingNode" />
             <prop name="body" type="BlockStatementListNode" desc="the body of this method" />
             <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
             <prop name="identifier" type="IdentifierNode" desc="this method's name" />
@@ -1749,6 +1774,7 @@
 
         <type name="NamedTypeDeclarationNode" typeParam="T extends Node" super="Node" mode="tag">
             <tag name="TypeDeclarationNode" />
+            <tag name="TypeNameBindingNode" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this declared type" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <prop name="modifiers" type="ModifiersNode" desc="the modifiers associated with this node"
@@ -2086,6 +2112,7 @@
         </type>
 
         <type name="TypeParameterNode" super="Node">
+            <tag name="TypeNameBindingNode" />
             <prop name="identifier" type="IdentifierNode" desc="the base type name for the parameter" />
             <prop name="bounds" type="DeclaredTypeListNode" desc="the bounds over the base type" />
             <doc><![CDATA[
@@ -2105,6 +2132,7 @@
         </type>
 
         <type name="VariableNode" super="Node">
+            <tag name="VariableNameBindingNode" />
             <tag name="ModifiedNode" typeArg="VariableModifiersNode"/>
             <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers of this parameter"
                 default="makeVariableModifiersNode()" />

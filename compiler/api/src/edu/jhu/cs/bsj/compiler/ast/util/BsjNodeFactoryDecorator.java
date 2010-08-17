@@ -7809,12 +7809,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             int arrayLevels,
             VariableInitializerNode initializer)
     {
         this.before();
-        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(name, arrayLevels, initializer);
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(identifier, arrayLevels, initializer);
         this.after(node);
         return node;
     }
@@ -7825,14 +7825,14 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             int arrayLevels,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(name, arrayLevels, initializer, startLocation, stopLocation);
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(identifier, arrayLevels, initializer, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7843,11 +7843,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             VariableInitializerNode initializer)
     {
         this.before();
-        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(name, initializer);
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(identifier, initializer);
         this.after(node);
         return node;
     }
@@ -7858,13 +7858,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(name, initializer, startLocation, stopLocation);
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(identifier, initializer, startLocation, stopLocation);
         this.after(node);
         return node;
     }

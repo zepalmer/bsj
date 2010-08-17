@@ -113,6 +113,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setPackageDeclaration(PackageDeclarationNode packageDeclaration)
     {
             setPackageDeclaration(packageDeclaration, true);
+            getManager().notifyChange(this);
     }
     
     private void setPackageDeclaration(PackageDeclarationNode packageDeclaration, boolean checkPermissions)
@@ -144,6 +145,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setMetaimports(MetaprogramImportListNode metaimports)
     {
             setMetaimports(metaimports, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaimports(MetaprogramImportListNode metaimports, boolean checkPermissions)
@@ -175,6 +177,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setImports(ImportListNode imports)
     {
             setImports(imports, true);
+            getManager().notifyChange(this);
     }
     
     private void setImports(ImportListNode imports, boolean checkPermissions)
@@ -206,6 +209,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setTypeDecls(TypeDeclarationListNode typeDecls)
     {
             setTypeDecls(typeDecls, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeDecls(TypeDeclarationListNode typeDecls, boolean checkPermissions)

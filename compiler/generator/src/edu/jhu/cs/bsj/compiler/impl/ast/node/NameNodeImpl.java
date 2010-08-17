@@ -70,6 +70,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)

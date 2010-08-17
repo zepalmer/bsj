@@ -80,6 +80,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     public void setConstants(EnumConstantDeclarationListNode constants)
     {
             setConstants(constants, true);
+            getManager().notifyChange(this);
     }
     
     private void setConstants(EnumConstantDeclarationListNode constants, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     public void setMembers(ClassMemberListNode members)
     {
             setMembers(members, true);
+            getManager().notifyChange(this);
     }
     
     private void setMembers(ClassMemberListNode members, boolean checkPermissions)

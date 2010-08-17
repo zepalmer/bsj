@@ -80,6 +80,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     public void setConstructorInvocation(ConstructorInvocationNode constructorInvocation)
     {
             setConstructorInvocation(constructorInvocation, true);
+            getManager().notifyChange(this);
     }
     
     private void setConstructorInvocation(ConstructorInvocationNode constructorInvocation, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     public void setStatements(BlockStatementListNode statements)
     {
             setStatements(statements, true);
+            getManager().notifyChange(this);
     }
     
     private void setStatements(BlockStatementListNode statements, boolean checkPermissions)

@@ -87,6 +87,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setLeftOperand(ExpressionNode leftOperand)
     {
             setLeftOperand(leftOperand, true);
+            getManager().notifyChange(this);
     }
     
     private void setLeftOperand(ExpressionNode leftOperand, boolean checkPermissions)
@@ -118,6 +119,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setRightOperand(ExpressionNode rightOperand)
     {
             setRightOperand(rightOperand, true);
+            getManager().notifyChange(this);
     }
     
     private void setRightOperand(ExpressionNode rightOperand, boolean checkPermissions)
@@ -149,6 +151,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setOperator(BinaryOperator operator)
     {
             setOperator(operator, true);
+            getManager().notifyChange(this);
     }
     
     private void setOperator(BinaryOperator operator, boolean checkPermissions)

@@ -80,6 +80,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     public void setStatements(BlockStatementListNode statements)
     {
             setStatements(statements, true);
+            getManager().notifyChange(this);
     }
     
     private void setStatements(BlockStatementListNode statements, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

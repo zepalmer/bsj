@@ -80,6 +80,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression)
     {
             setArrayExpression(arrayExpression, true);
+            getManager().notifyChange(this);
     }
     
     private void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     public void setIndexExpression(ExpressionNode indexExpression)
     {
             setIndexExpression(indexExpression, true);
+            getManager().notifyChange(this);
     }
     
     private void setIndexExpression(ExpressionNode indexExpression, boolean checkPermissions)

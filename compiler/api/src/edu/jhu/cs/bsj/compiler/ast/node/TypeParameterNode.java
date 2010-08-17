@@ -20,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface TypeParameterNode extends Node
+public interface TypeParameterNode extends Node, TypeNameBindingNode
 {
     /**
      * Gets the base type name for the parameter.

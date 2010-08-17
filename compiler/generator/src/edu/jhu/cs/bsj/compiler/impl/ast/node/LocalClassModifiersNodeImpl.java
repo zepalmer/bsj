@@ -89,6 +89,7 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
     public void setAbstractFlag(boolean abstractFlag)
     {
             setAbstractFlag(abstractFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setAbstractFlag(boolean abstractFlag, boolean checkPermissions)
@@ -118,6 +119,7 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
     public void setFinalFlag(boolean finalFlag)
     {
             setFinalFlag(finalFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
@@ -147,6 +149,7 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
     public void setStrictfpFlag(boolean strictfpFlag)
     {
             setStrictfpFlag(strictfpFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)

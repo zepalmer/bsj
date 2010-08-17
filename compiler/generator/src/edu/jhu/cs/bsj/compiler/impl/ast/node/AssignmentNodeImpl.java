@@ -87,6 +87,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     public void setVariable(ExpressionNode variable)
     {
             setVariable(variable, true);
+            getManager().notifyChange(this);
     }
     
     private void setVariable(ExpressionNode variable, boolean checkPermissions)
@@ -118,6 +119,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     public void setOperator(AssignmentOperator operator)
     {
             setOperator(operator, true);
+            getManager().notifyChange(this);
     }
     
     private void setOperator(AssignmentOperator operator, boolean checkPermissions)
@@ -147,6 +149,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     public void setExpression(ExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(ExpressionNode expression, boolean checkPermissions)

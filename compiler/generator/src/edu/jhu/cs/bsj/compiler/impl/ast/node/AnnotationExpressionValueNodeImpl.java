@@ -72,6 +72,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     public void setExpression(NonAssignmentExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(NonAssignmentExpressionNode expression, boolean checkPermissions)

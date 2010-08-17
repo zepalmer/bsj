@@ -76,6 +76,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
@@ -107,6 +108,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public void setAnnotations(AnnotationListNode annotations)
     {
             setAnnotations(annotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setAnnotations(AnnotationListNode annotations, boolean checkPermissions)

@@ -96,6 +96,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public void setType(UnparameterizedTypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(UnparameterizedTypeNode type, boolean checkPermissions)
@@ -127,6 +128,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -158,6 +160,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public void setArguments(ExpressionListNode arguments)
     {
             setArguments(arguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
@@ -189,6 +192,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
             setTypeArguments(typeArguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeArguments(ReferenceTypeListNode typeArguments, boolean checkPermissions)

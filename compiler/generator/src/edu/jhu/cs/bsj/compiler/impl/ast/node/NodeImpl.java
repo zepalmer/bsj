@@ -14,8 +14,12 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.InvokableNameBindingNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableNameBindingNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MultipleParentNodeExceptionImpl;
@@ -350,4 +354,25 @@ public abstract class NodeImpl implements Node
 	{
 		return this.executeOperation(new BsjSourceSerializerImpl(), null);
 	}
+
+	public Collection<? extends Node> getDeclarationsInScope(NameNode name)
+	{
+		return this.getManager().getDeclarationsInScope(this, name);
+	}
+	
+	public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(String name)
+	{
+		return this.getManager().getTypeDeclarationsInScope(this, name);
+	}
+	
+	public Collection<? extends InvokableNameBindingNode> getMethodDeclarationsInScope(String name)
+	{
+		return this.getManager().getMethodDeclarationsInScope(this, name);
+	}
+	
+	public Collection<? extends VariableNameBindingNode> getVariableDeclarationsInScope(String name)
+	{
+		return this.getManager().getVariableDeclarationsInScope(this, name);
+	}
+
 }

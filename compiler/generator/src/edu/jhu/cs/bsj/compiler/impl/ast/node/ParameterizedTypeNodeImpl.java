@@ -80,6 +80,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     public void setBaseType(UnparameterizedTypeNode baseType)
     {
             setBaseType(baseType, true);
+            getManager().notifyChange(this);
     }
     
     private void setBaseType(UnparameterizedTypeNode baseType, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
             setTypeArguments(typeArguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeArguments(TypeArgumentListNode typeArguments, boolean checkPermissions)

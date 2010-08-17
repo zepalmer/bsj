@@ -1686,7 +1686,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, PrependablePrintStream p)
 	{
-		node.getName().executeOperation(this, p);
+		node.getIdentifier().executeOperation(this, p);
 		for (int i = 0; i < node.getArrayLevels(); i++)
 		{
 			p.print("[]");

@@ -88,6 +88,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     public void setExpression(ExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(ExpressionNode expression, boolean checkPermissions)
@@ -119,6 +120,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     public void setCases(CaseListNode cases)
     {
             setCases(cases, true);
+            getManager().notifyChange(this);
     }
     
     private void setCases(CaseListNode cases, boolean checkPermissions)
@@ -150,6 +152,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Acts as a superclass for all named type declarations.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDeclarationNode
+public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDeclarationNode, TypeNameBindingNode
 {
     /**
      * Gets the name of this declared type.

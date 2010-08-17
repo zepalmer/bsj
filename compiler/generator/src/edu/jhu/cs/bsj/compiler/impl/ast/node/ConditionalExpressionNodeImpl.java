@@ -86,6 +86,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public void setCondition(ExpressionNode condition)
     {
             setCondition(condition, true);
+            getManager().notifyChange(this);
     }
     
     private void setCondition(ExpressionNode condition, boolean checkPermissions)
@@ -117,6 +118,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public void setTrueExpression(ExpressionNode trueExpression)
     {
             setTrueExpression(trueExpression, true);
+            getManager().notifyChange(this);
     }
     
     private void setTrueExpression(ExpressionNode trueExpression, boolean checkPermissions)
@@ -148,6 +150,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public void setFalseExpression(ExpressionNode falseExpression)
     {
             setFalseExpression(falseExpression, true);
+            getManager().notifyChange(this);
     }
     
     private void setFalseExpression(ExpressionNode falseExpression, boolean checkPermissions)

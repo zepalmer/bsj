@@ -104,6 +104,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setInitializer(ForInitializerNode initializer)
     {
             setInitializer(initializer, true);
+            getManager().notifyChange(this);
     }
     
     private void setInitializer(ForInitializerNode initializer, boolean checkPermissions)
@@ -135,6 +136,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setCondition(ExpressionNode condition)
     {
             setCondition(condition, true);
+            getManager().notifyChange(this);
     }
     
     private void setCondition(ExpressionNode condition, boolean checkPermissions)
@@ -166,6 +168,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setUpdate(StatementExpressionListNode update)
     {
             setUpdate(update, true);
+            getManager().notifyChange(this);
     }
     
     private void setUpdate(StatementExpressionListNode update, boolean checkPermissions)
@@ -197,6 +200,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setStatement(StatementNode statement)
     {
             setStatement(statement, true);
+            getManager().notifyChange(this);
     }
     
     private void setStatement(StatementNode statement, boolean checkPermissions)
@@ -228,6 +232,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

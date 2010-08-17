@@ -114,6 +114,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     public void setModifiers(InterfaceModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(InterfaceModifiersNode modifiers, boolean checkPermissions)
@@ -145,6 +146,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     public void setExtendsClause(DeclaredTypeListNode extendsClause)
     {
             setExtendsClause(extendsClause, true);
+            getManager().notifyChange(this);
     }
     
     private void setExtendsClause(DeclaredTypeListNode extendsClause, boolean checkPermissions)
@@ -176,6 +178,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     public void setBody(InterfaceBodyNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(InterfaceBodyNode body, boolean checkPermissions)
@@ -207,6 +210,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
             setTypeParameters(typeParameters, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
@@ -238,6 +242,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -269,6 +274,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)

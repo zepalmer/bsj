@@ -80,6 +80,7 @@ public class VariableAccessByExpressionNodeImpl extends NodeImpl implements Vari
     public void setExpression(PrimaryExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(PrimaryExpressionNode expression, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class VariableAccessByExpressionNodeImpl extends NodeImpl implements Vari
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)

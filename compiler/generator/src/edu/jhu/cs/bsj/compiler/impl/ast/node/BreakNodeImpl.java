@@ -80,6 +80,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
     public void setLabel(IdentifierNode label)
     {
             setLabel(label, true);
+            getManager().notifyChange(this);
     }
     
     private void setLabel(IdentifierNode label, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

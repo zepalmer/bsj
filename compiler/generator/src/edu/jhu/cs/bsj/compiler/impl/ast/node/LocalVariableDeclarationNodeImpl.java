@@ -88,6 +88,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     public void setModifiers(VariableModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(VariableModifiersNode modifiers, boolean checkPermissions)
@@ -119,6 +120,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     public void setType(TypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(TypeNode type, boolean checkPermissions)
@@ -150,6 +152,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
             setDeclarators(declarators, true);
+            getManager().notifyChange(this);
     }
     
     private void setDeclarators(VariableDeclaratorListNode declarators, boolean checkPermissions)

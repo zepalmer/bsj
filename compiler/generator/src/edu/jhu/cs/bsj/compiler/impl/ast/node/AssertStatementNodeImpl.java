@@ -87,6 +87,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public void setTestExpression(ExpressionNode testExpression)
     {
             setTestExpression(testExpression, true);
+            getManager().notifyChange(this);
     }
     
     private void setTestExpression(ExpressionNode testExpression, boolean checkPermissions)
@@ -118,6 +119,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public void setMessageExpression(ExpressionNode messageExpression)
     {
             setMessageExpression(messageExpression, true);
+            getManager().notifyChange(this);
     }
     
     private void setMessageExpression(ExpressionNode messageExpression, boolean checkPermissions)
@@ -149,6 +151,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

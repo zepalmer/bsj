@@ -72,6 +72,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     public void setInitializers(VariableInitializerListNode initializers)
     {
             setInitializers(initializers, true);
+            getManager().notifyChange(this);
     }
     
     private void setInitializers(VariableInitializerListNode initializers, boolean checkPermissions)

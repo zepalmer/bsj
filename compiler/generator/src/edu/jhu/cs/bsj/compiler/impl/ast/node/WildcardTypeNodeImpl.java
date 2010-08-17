@@ -79,6 +79,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     public void setBound(ReferenceTypeNode bound)
     {
             setBound(bound, true);
+            getManager().notifyChange(this);
     }
     
     private void setBound(ReferenceTypeNode bound, boolean checkPermissions)
@@ -110,6 +111,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     public void setUpperBound(boolean upperBound)
     {
             setUpperBound(upperBound, true);
+            getManager().notifyChange(this);
     }
     
     private void setUpperBound(boolean upperBound, boolean checkPermissions)

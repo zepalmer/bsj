@@ -999,7 +999,7 @@ public class SourceGenerator
 					ps.println("this." + p.getName() + " = " + expr + ";");
 				}
 			}
-			if (def.getConstructorFooter()!=null)
+			if (def.getConstructorFooter() != null)
 			{
 				for (String line : def.getConstructorFooter().trim().split("\n"))
 				{
@@ -1060,6 +1060,7 @@ public class SourceGenerator
 						ps.println("{");
 						ps.incPrependCount();
 						ps.println("    set" + capFirst(p.getName()) + "(" + p.getName() + ", true);");
+						ps.println("    getManager().notifyChange(this);");
 						ps.decPrependCount();
 						ps.println("}");
 						ps.println();
@@ -2899,14 +2900,14 @@ public class SourceGenerator
 				classPs.println("this." + prop.getName() + " = " + prop.getName() + ";");
 			}
 
-			if (def.getConstructorFooter()!=null)
+			if (def.getConstructorFooter() != null)
 			{
 				for (String line : def.getConstructorFooter().trim().split("\n"))
 				{
 					classPs.println(line.trim());
 				}
 			}
-			
+
 			classPs.decPrependCount();
 			classPs.println("}");
 			classPs.println();

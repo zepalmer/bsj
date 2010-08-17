@@ -118,6 +118,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     public void setModifiers(T modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(T modifiers, boolean checkPermissions)
@@ -149,6 +150,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     public void setExtendsClause(DeclaredTypeNode extendsClause)
     {
             setExtendsClause(extendsClause, true);
+            getManager().notifyChange(this);
     }
     
     private void setExtendsClause(DeclaredTypeNode extendsClause, boolean checkPermissions)
@@ -180,6 +182,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
             setImplementsClause(implementsClause, true);
+            getManager().notifyChange(this);
     }
     
     private void setImplementsClause(DeclaredTypeListNode implementsClause, boolean checkPermissions)
@@ -211,6 +214,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     public void setBody(ClassBodyNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(ClassBodyNode body, boolean checkPermissions)
@@ -242,6 +246,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
             setTypeParameters(typeParameters, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
@@ -273,6 +278,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -304,6 +310,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)

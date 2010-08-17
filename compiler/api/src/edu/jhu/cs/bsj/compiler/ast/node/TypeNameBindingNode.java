@@ -5,10 +5,11 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * This tagging interface is used to denote AST nodes which declare types.
+ * This tagging interface is used to denote AST nodes which may be represented by a type reference's
+ * bound element.  These nodes are those which are capable of binding a name to a type.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface TypeDeclarationNode extends Node, ClassMemberNode, InterfaceMemberNode, AnnotationMemberNode, AnonymousClassMemberNode, DeclarationNode
+public interface TypeNameBindingNode extends Node
 {
     /**
      * Generates a deep copy of this node.
@@ -16,6 +17,6 @@ public interface TypeDeclarationNode extends Node, ClassMemberNode, InterfaceMem
      * @return The resulting deep copy node.
      */
     @Override
-    public TypeDeclarationNode deepCopy(BsjNodeFactory factory);
+    public TypeNameBindingNode deepCopy(BsjNodeFactory factory);
     
 }

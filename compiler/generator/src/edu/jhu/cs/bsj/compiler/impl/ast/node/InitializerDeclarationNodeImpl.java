@@ -87,6 +87,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     public void setStaticInitializer(boolean staticInitializer)
     {
             setStaticInitializer(staticInitializer, true);
+            getManager().notifyChange(this);
     }
     
     private void setStaticInitializer(boolean staticInitializer, boolean checkPermissions)
@@ -116,6 +117,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     public void setBody(BlockStatementListNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(BlockStatementListNode body, boolean checkPermissions)
@@ -147,6 +149,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

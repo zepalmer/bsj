@@ -69,6 +69,7 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
     public void setMetaprogram(MetaprogramNode metaprogram)
     {
             setMetaprogram(metaprogram, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaprogram(MetaprogramNode metaprogram, boolean checkPermissions)

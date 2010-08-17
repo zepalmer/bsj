@@ -72,6 +72,7 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
     public void setName(NameNode name)
     {
             setName(name, true);
+            getManager().notifyChange(this);
     }
     
     private void setName(NameNode name, boolean checkPermissions)

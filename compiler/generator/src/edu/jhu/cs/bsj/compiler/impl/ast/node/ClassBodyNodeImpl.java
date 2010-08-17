@@ -72,6 +72,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     public void setMembers(ClassMemberListNode members)
     {
             setMembers(members, true);
+            getManager().notifyChange(this);
     }
     
     private void setMembers(ClassMemberListNode members, boolean checkPermissions)

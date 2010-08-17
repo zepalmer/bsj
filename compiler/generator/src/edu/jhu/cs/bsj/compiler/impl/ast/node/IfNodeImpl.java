@@ -95,6 +95,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public void setCondition(ExpressionNode condition)
     {
             setCondition(condition, true);
+            getManager().notifyChange(this);
     }
     
     private void setCondition(ExpressionNode condition, boolean checkPermissions)
@@ -126,6 +127,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public void setThenStatement(StatementNode thenStatement)
     {
             setThenStatement(thenStatement, true);
+            getManager().notifyChange(this);
     }
     
     private void setThenStatement(StatementNode thenStatement, boolean checkPermissions)
@@ -157,6 +159,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public void setElseStatement(StatementNode elseStatement)
     {
             setElseStatement(elseStatement, true);
+            getManager().notifyChange(this);
     }
     
     private void setElseStatement(StatementNode elseStatement, boolean checkPermissions)
@@ -188,6 +191,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

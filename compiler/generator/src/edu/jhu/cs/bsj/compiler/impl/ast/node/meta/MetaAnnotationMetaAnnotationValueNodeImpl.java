@@ -73,6 +73,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     public void setAnnotation(MetaAnnotationNode annotation)
     {
             setAnnotation(annotation, true);
+            getManager().notifyChange(this);
     }
     
     private void setAnnotation(MetaAnnotationNode annotation, boolean checkPermissions)

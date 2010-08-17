@@ -80,6 +80,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     public void setExpression(ExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(ExpressionNode expression, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     public void setOperator(UnaryStatementOperator operator)
     {
             setOperator(operator, true);
+            getManager().notifyChange(this);
     }
     
     private void setOperator(UnaryStatementOperator operator, boolean checkPermissions)

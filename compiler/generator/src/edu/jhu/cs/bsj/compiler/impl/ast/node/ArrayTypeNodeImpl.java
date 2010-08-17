@@ -72,6 +72,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     public void setType(TypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(TypeNode type, boolean checkPermissions)

@@ -80,6 +80,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     public void setBase(ParameterizedTypeNode base)
     {
             setBase(base, true);
+            getManager().notifyChange(this);
     }
     
     private void setBase(ParameterizedTypeNode base, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     public void setSelect(DeclaredTypeNode select)
     {
             setSelect(select, true);
+            getManager().notifyChange(this);
     }
     
     private void setSelect(DeclaredTypeNode select, boolean checkPermissions)

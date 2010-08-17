@@ -80,6 +80,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     public void setName(NameNode name)
     {
             setName(name, true);
+            getManager().notifyChange(this);
     }
     
     private void setName(NameNode name, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)

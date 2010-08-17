@@ -74,6 +74,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     public void setArguments(AnnotationElementListNode arguments)
     {
             setArguments(arguments, true);
+            getManager().notifyChange(this);
     }
     
     private void setArguments(AnnotationElementListNode arguments, boolean checkPermissions)

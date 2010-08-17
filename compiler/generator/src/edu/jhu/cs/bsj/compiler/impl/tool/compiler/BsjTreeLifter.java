@@ -5551,9 +5551,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     @Override
     public ExpressionNode executeVariableDeclaratorNode(VariableDeclaratorNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode liftName = 
-                node.getName() != null ?
-                        node.getName().executeOperation(this,factoryNode) :
+        ExpressionNode liftIdentifier = 
+                node.getIdentifier() != null ?
+                        node.getIdentifier().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode();
         int liftArrayLevelsValue = 
                 node.getArrayLevels();
@@ -5571,7 +5571,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeVariableDeclaratorNode"),
                         factory.makeExpressionListNode(
-                                liftName,
+                                liftIdentifier,
                                 expressionizeInt(liftArrayLevelsValue),
                                 liftInitializer,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),

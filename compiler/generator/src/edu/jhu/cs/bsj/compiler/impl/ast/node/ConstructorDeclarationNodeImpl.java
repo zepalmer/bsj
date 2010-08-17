@@ -128,6 +128,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public void setIdentifier(IdentifierNode identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
@@ -159,6 +160,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public void setBody(ConstructorBodyNode body)
     {
             setBody(body, true);
+            getManager().notifyChange(this);
     }
     
     private void setBody(ConstructorBodyNode body, boolean checkPermissions)
@@ -190,6 +192,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public void setModifiers(ConstructorModifiersNode modifiers)
     {
             setModifiers(modifiers, true);
+            getManager().notifyChange(this);
     }
     
     private void setModifiers(ConstructorModifiersNode modifiers, boolean checkPermissions)
@@ -221,6 +224,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public void setParameters(VariableListNode parameters)
     {
             setParameters(parameters, true);
+            getManager().notifyChange(this);
     }
     
     private void setParameters(VariableListNode parameters, boolean checkPermissions)
@@ -252,6 +256,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public void setVarargParameter(VariableNode varargParameter)
     {
             setVarargParameter(varargParameter, true);
+            getManager().notifyChange(this);
     }
     
     private void setVarargParameter(VariableNode varargParameter, boolean checkPermissions)
@@ -283,6 +288,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public void setThrowTypes(UnparameterizedTypeListNode throwTypes)
     {
             setThrowTypes(throwTypes, true);
+            getManager().notifyChange(this);
     }
     
     private void setThrowTypes(UnparameterizedTypeListNode throwTypes, boolean checkPermissions)
@@ -314,6 +320,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
             setTypeParameters(typeParameters, true);
+            getManager().notifyChange(this);
     }
     
     private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
@@ -345,6 +352,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public void setJavadoc(JavadocNode javadoc)
     {
             setJavadoc(javadoc, true);
+            getManager().notifyChange(this);
     }
     
     private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)

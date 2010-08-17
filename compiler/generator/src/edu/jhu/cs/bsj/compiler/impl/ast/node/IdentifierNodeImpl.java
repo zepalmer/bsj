@@ -71,6 +71,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     public void setIdentifier(String identifier)
     {
             setIdentifier(identifier, true);
+            getManager().notifyChange(this);
     }
     
     private void setIdentifier(String identifier, boolean checkPermissions)

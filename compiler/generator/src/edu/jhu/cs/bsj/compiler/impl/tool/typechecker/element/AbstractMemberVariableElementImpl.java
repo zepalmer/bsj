@@ -8,7 +8,6 @@ import javax.lang.model.element.ElementKind;
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractMemberVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 public abstract class AbstractMemberVariableElementImpl<T extends AbstractMemberVariableDeclarationNode<?>> extends
@@ -35,12 +34,6 @@ public abstract class AbstractMemberVariableElementImpl<T extends AbstractMember
 	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
 	{
-		return makeAnnotationMirrors(getBackingNode().getModifiers().getAnnotations());
-	}
-
-	@Override
-	public BsjType asType()
-	{
-		return getTypeBuilder().makeType(getBackingNode().getType());
+		return makeAnnotationMirrors(getOwner().getModifiers().getAnnotations());
 	}
 }

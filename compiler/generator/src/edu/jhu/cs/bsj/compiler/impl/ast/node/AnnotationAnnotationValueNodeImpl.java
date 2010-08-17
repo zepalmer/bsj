@@ -72,6 +72,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
     public void setAnnotation(AnnotationNode annotation)
     {
             setAnnotation(annotation, true);
+            getManager().notifyChange(this);
     }
     
     private void setAnnotation(AnnotationNode annotation, boolean checkPermissions)

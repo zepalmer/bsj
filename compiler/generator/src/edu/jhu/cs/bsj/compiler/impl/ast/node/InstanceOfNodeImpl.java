@@ -80,6 +80,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     public void setExpression(ExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(ExpressionNode expression, boolean checkPermissions)
@@ -111,6 +112,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     public void setType(TypeNode type)
     {
             setType(type, true);
+            getManager().notifyChange(this);
     }
     
     private void setType(TypeNode type, boolean checkPermissions)

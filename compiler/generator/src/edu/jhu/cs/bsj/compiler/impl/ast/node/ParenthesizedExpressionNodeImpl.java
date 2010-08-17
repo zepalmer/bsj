@@ -72,6 +72,7 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
     public void setExpression(ExpressionNode expression)
     {
             setExpression(expression, true);
+            getManager().notifyChange(this);
     }
     
     private void setExpression(ExpressionNode expression, boolean checkPermissions)

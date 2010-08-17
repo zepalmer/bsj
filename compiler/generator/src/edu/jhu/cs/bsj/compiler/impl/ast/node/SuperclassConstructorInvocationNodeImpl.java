@@ -76,6 +76,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression)
     {
             setQualifyingExpression(qualifyingExpression, true);
+            getManager().notifyChange(this);
     }
     
     private void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression, boolean checkPermissions)

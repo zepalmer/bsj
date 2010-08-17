@@ -118,6 +118,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setAccess(AccessModifier access)
     {
             setAccess(access, true);
+            getManager().notifyChange(this);
     }
     
     private void setAccess(AccessModifier access, boolean checkPermissions)
@@ -147,6 +148,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setAbstractFlag(boolean abstractFlag)
     {
             setAbstractFlag(abstractFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setAbstractFlag(boolean abstractFlag, boolean checkPermissions)
@@ -176,6 +178,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setStaticFlag(boolean staticFlag)
     {
             setStaticFlag(staticFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
@@ -205,6 +208,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setFinalFlag(boolean finalFlag)
     {
             setFinalFlag(finalFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
@@ -234,6 +238,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setSynchronizedFlag(boolean synchronizedFlag)
     {
             setSynchronizedFlag(synchronizedFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setSynchronizedFlag(boolean synchronizedFlag, boolean checkPermissions)
@@ -263,6 +268,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setNativeFlag(boolean nativeFlag)
     {
             setNativeFlag(nativeFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setNativeFlag(boolean nativeFlag, boolean checkPermissions)
@@ -292,6 +298,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setStrictfpFlag(boolean strictfpFlag)
     {
             setStrictfpFlag(strictfpFlag, true);
+            getManager().notifyChange(this);
     }
     
     private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)

@@ -384,9 +384,9 @@ public class VariableNamespaceModifyingOperation extends
 		{
 			for (VariableDeclaratorNode declaratorNode : memberField.getDeclarators())
 			{
-				if (name == null || declaratorNode.getName().getIdentifier().equals(name))
+				if (name == null || declaratorNode.getIdentifier().getIdentifier().equals(name))
 				{
-					variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+					variableNamespaceMap.add(declaratorNode.getIdentifier().getIdentifier(),
 							(BsjVariableElement) this.getToolkit().makeElement(declaratorNode), declaratorNode);
 				}
 			}
@@ -406,9 +406,9 @@ public class VariableNamespaceModifyingOperation extends
 	{
 		for (VariableDeclaratorNode declaratorNode : memberConstant.getDeclarators())
 		{
-			if ((name == null || declaratorNode.getName().getIdentifier().equals(name)))
+			if ((name == null || declaratorNode.getIdentifier().getIdentifier().equals(name)))
 			{
-				variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+				variableNamespaceMap.add(declaratorNode.getIdentifier().getIdentifier(),
 						(BsjVariableElement) this.getToolkit().makeElement(declaratorNode), declaratorNode);
 			}
 		}
@@ -425,7 +425,7 @@ public class VariableNamespaceModifyingOperation extends
 	{
 		for (VariableDeclaratorNode declaratorNode : declarationNode.getDeclarators())
 		{
-			variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+			variableNamespaceMap.add(declaratorNode.getIdentifier().getIdentifier(),
 					(BsjVariableElement) this.getToolkit().makeElement(declaratorNode), declaratorNode);
 		}
 	}
@@ -439,7 +439,7 @@ public class VariableNamespaceModifyingOperation extends
 	protected void tryPopulateVariableDeclarator(VariableNamespaceMap variableNamespaceMap,
 			VariableDeclaratorNode declaratorNode)
 	{
-		variableNamespaceMap.add(declaratorNode.getName().getIdentifier(),
+		variableNamespaceMap.add(declaratorNode.getIdentifier().getIdentifier(),
 				(BsjVariableElement) this.getToolkit().makeElement(declaratorNode), declaratorNode);
 	}
 

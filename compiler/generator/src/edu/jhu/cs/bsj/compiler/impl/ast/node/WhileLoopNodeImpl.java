@@ -88,6 +88,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     public void setCondition(ExpressionNode condition)
     {
             setCondition(condition, true);
+            getManager().notifyChange(this);
     }
     
     private void setCondition(ExpressionNode condition, boolean checkPermissions)
@@ -119,6 +120,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     public void setStatement(StatementNode statement)
     {
             setStatement(statement, true);
+            getManager().notifyChange(this);
     }
     
     private void setStatement(StatementNode statement, boolean checkPermissions)
@@ -150,6 +152,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
             setMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
     }
     
     private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)

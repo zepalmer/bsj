@@ -1025,6 +1025,12 @@ public interface BsjTypedNodeVisitor
     public void visitInterfaceModifiersNodeStart(InterfaceModifiersNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type InvokableNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitInvokableNameBindingNodeStart(InvokableNameBindingNode node);
+
+    /**
      * Starts a visit for nodes of type JavadocNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1715,6 +1721,12 @@ public interface BsjTypedNodeVisitor
     public void visitTypeDeclarationNodeStart(TypeDeclarationNode node);
 
     /**
+     * Starts a visit for nodes of type TypeNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeNameBindingNodeStart(TypeNameBindingNode node);
+
+    /**
      * Starts a visit for nodes of type TypeNode.
      * @param node The node being visited.
      */
@@ -1863,6 +1875,12 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitVariableModifiersNodeStart(VariableModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type VariableNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableNameBindingNodeStart(VariableNameBindingNode node);
 
     /**
      * Starts a visit for nodes of type VariableNode.
@@ -2774,6 +2792,12 @@ public interface BsjTypedNodeVisitor
     public void visitInterfaceModifiersNodeStop(InterfaceModifiersNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type InvokableNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitInvokableNameBindingNodeStop(InvokableNameBindingNode node);
+
+    /**
      * Stops a visit for nodes of type JavadocNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -3464,6 +3488,12 @@ public interface BsjTypedNodeVisitor
     public void visitTypeDeclarationNodeStop(TypeDeclarationNode node);
 
     /**
+     * Stops a visit for nodes of type TypeNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeNameBindingNodeStop(TypeNameBindingNode node);
+
+    /**
      * Stops a visit for nodes of type TypeNode.
      * @param node The node being visited.
      */
@@ -3612,6 +3642,12 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitVariableModifiersNodeStop(VariableModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type VariableNameBindingNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableNameBindingNodeStop(VariableNameBindingNode node);
 
     /**
      * Stops a visit for nodes of type VariableNode.
