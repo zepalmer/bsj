@@ -14,7 +14,7 @@ public class MyForwarder {
 		member = o;
 	}
 
-	@@Forwarder(methodName="add")
+	//@@Forwarder(methodName="add")
 	private Set<String> foo;
 
 	@@Forwarder(

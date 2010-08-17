@@ -4,7 +4,7 @@ package mypackage;
 public class MyForwarder {
 	/*
 	@@Forwarder(
-		methodName={"sayHello"},
+		methodName="sayHello",
 		forwardedMethodName="hiThere")
 	*/
 	@@Forwarder(
