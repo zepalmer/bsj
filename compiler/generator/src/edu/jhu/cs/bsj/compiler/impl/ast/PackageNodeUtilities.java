@@ -9,7 +9,7 @@ import java.util.Set;
 
 import javax.tools.JavaFileObject.Kind;
 
-import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;

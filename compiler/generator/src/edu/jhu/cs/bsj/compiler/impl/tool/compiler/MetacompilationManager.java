@@ -18,7 +18,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
@@ -28,6 +27,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.InjectionInfo;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.InstantiateMetaAnnotationObjectTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.SanityCheckTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.TaskPriority;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 

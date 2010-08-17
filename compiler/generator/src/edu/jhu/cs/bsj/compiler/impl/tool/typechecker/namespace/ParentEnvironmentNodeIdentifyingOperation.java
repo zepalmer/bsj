@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
  * This BSJ node operation ascertains for a given node which node dictates its parent environment. The parent

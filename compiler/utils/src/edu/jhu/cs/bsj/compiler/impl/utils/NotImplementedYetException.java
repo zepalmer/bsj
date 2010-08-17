@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl;
+package edu.jhu.cs.bsj.compiler.impl.utils;
 
 /**
  * This exception is used as a stop-gap to clearly identify when runtime code has reached a part of the BSJ compiler
