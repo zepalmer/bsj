@@ -92,7 +92,7 @@ public class MetaAnnotationProfileManager
 		Map<String, Method> getterMethods = new HashMap<String, Method>();
 		Map<String, Method> setterMethods = new HashMap<String, Method>();
 
-		for (Method m : clazz.getDeclaredMethods())
+		for (Method m : clazz.getMethods())
 		{
 			// If the method has a getter annotation...
 			if (m.getAnnotation(BsjMetaAnnotationElementGetter.class) != null)
