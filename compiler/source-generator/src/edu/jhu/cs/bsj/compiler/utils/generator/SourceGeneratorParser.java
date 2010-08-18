@@ -50,6 +50,19 @@ public class SourceGeneratorParser
 	 */
 	public SourceGenerationData parse(File file) throws IOException, ParserConfigurationException, SAXException
 	{
+		SourceGenerationData data = parseOnly(file);
+
+		establishHierarchy(data.getTypes(), true);
+		establishHierarchy(data.getDiagnostics(), false);
+		establishHierarchy(data.getUserDiagnostics(), false);
+
+		connectParseRules(data.getParseRules(), data.getTypes());
+
+		return data;
+	}
+	
+	private SourceGenerationData parseOnly(File file) throws IOException, ParserConfigurationException, SAXException
+	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -68,10 +81,6 @@ public class SourceGeneratorParser
 
 		SrcgenHandler handler = new SrcgenHandler(file.getParentFile(), new GenerationProfile());
 		SourceGenerationData data = handler.handle(topElement);
-
-		establishHierarchy(data.getTypes(), true);
-		establishHierarchy(data.getDiagnostics(), false);
-		establishHierarchy(data.getUserDiagnostics(), false);
 
 		return data;
 	}
@@ -102,7 +111,29 @@ public class SourceGeneratorParser
 				definition.setNamespaceMap(typeMapByName);
 			}
 		}
+	}
 
+	private void connectParseRules(Collection<ParseRuleDefinition> parseRules, Collection<TypeDefinition> types)
+	{
+		for (ParseRuleDefinition parseRule : parseRules)
+		{
+			for (OutputTypeDefinition outputType : parseRule.getOutputTypes())
+			{
+				for (TypeDefinition type : types)
+				{
+					if (type.getBaseName().equals(outputType.getName()))
+					{
+						outputType.setType(type);
+						break;
+					}
+				}
+				if (outputType.getType() == null)
+				{
+					throw new IllegalStateException("Could not find type for output type " + outputType.getName()
+							+ " in parse rule " + parseRule.getName());
+				}
+			}
+		}
 	}
 
 	private static String getAttributeValue(Element e, String attribute)
@@ -230,6 +261,9 @@ public class SourceGeneratorParser
 		} else if (project.equals("parser"))
 		{
 			return Project.PARSER;
+		} else if (project.equals("pre-parser"))
+		{
+			return Project.PRE_PARSER;
 		} else if (project.equals("bsjutils"))
 		{
 			return Project.BSJ_UTILS;
@@ -263,6 +297,7 @@ public class SourceGeneratorParser
 			Collection<TypeDefinition> types = new ArrayList<TypeDefinition>();
 			Collection<DiagnosticDefinition> diagnostics = new ArrayList<DiagnosticDefinition>();
 			Collection<UserDiagnosticDefinition> userDiagnostics = new ArrayList<UserDiagnosticDefinition>();
+			Collection<ParseRuleDefinition> parseRules = new ArrayList<ParseRuleDefinition>();
 
 			if (e.hasAttribute("ipkg"))
 			{
@@ -314,6 +349,7 @@ public class SourceGeneratorParser
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
 						userDiagnostics.addAll(childData.getUserDiagnostics());
+						parseRules.addAll(childData.getParseRules());
 					} else if (childTag.equals("type"))
 					{
 						TypeHandler handler = new TypeHandler(profile);
@@ -326,6 +362,10 @@ public class SourceGeneratorParser
 					{
 						UserDiagnosticHandler handler = new UserDiagnosticHandler(profile);
 						userDiagnostics.add(handler.handle(childElement));
+					} else if (childTag.equals("parserule"))
+					{
+						ParseRuleHandler handler = new ParseRuleHandler(profile);
+						parseRules.add(handler.handle(childElement));
 					} else if (childTag.equals("import"))
 					{
 						SourceGeneratorParser parser = new SourceGeneratorParser();
@@ -334,7 +374,7 @@ public class SourceGeneratorParser
 						SourceGenerationData childData;
 						try
 						{
-							childData = parser.parse(new File(path));
+							childData = parser.parseOnly(new File(path));
 						} catch (IOException e1)
 						{
 							throw new IllegalStateException("Failure while reading imported file " + path, e1);
@@ -348,6 +388,7 @@ public class SourceGeneratorParser
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
 						userDiagnostics.addAll(childData.getUserDiagnostics());
+						parseRules.addAll(childData.getParseRules());
 					} else if (childTag.equals("factory"))
 					{
 						String factoryInterfaceName = childElement.getAttribute("interface");
@@ -367,7 +408,8 @@ public class SourceGeneratorParser
 						if (childElement.hasAttribute("propertyMode"))
 						{
 							String defaultPropertyMode = childElement.getAttribute("propertyMode");
-							this.profile = this.profile.derive(GenerationProfile.DEFAULT_PROPERTY_MODE,
+							this.profile = this.profile.derive(
+									GenerationProfile.DEFAULT_PROPERTY_MODE,
 									Utilities.getEnumByName(ModalPropertyDefinition.Mode.values(),
 											StringUtilities.convertCamelCaseToUpperCase(defaultPropertyMode)));
 						}
@@ -378,7 +420,7 @@ public class SourceGeneratorParser
 				}
 			}
 
-			return new SourceGenerationData(types, diagnostics, userDiagnostics);
+			return new SourceGenerationData(types, diagnostics, userDiagnostics, parseRules);
 		}
 	}
 
@@ -487,10 +529,10 @@ public class SourceGeneratorParser
 				}
 			}
 
-			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg, constructorFooter, profile,
-					interfaces, tags, constants, props, includes, docString, toStringLines, factoryOverrideMap,
-					constructorOverrideMap, genConstructor, genChildren, genReplace, factoryMethodDefinitions, mode,
-					isBsjSpecific);
+			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg,
+					constructorFooter, profile, interfaces, tags, constants, props, includes, docString, toStringLines,
+					factoryOverrideMap, constructorOverrideMap, genConstructor, genChildren, genReplace,
+					factoryMethodDefinitions, mode, isBsjSpecific);
 			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
 			{
 				factoryMethodDefinition.setParent(typeDefinition);
@@ -772,6 +814,55 @@ public class SourceGeneratorParser
 
 			UserDiagnosticDefinition def = new UserDiagnosticDefinition(name, typeParam, superName, superArg,
 					constructorFooter, this.profile, props, messagePropertyExpressions, docString, code);
+			return def;
+		}
+	}
+
+	static class ParseRuleHandler implements ElementHandler<ParseRuleDefinition>
+	{
+		public ParseRuleHandler(GenerationProfile profile)
+		{
+		}
+
+		@Override
+		public ParseRuleDefinition handle(Element e)
+		{
+			String name = e.getAttribute("name");
+
+			Collection<OutputTypeDefinition> outputTypes = new ArrayList<OutputTypeDefinition>();
+
+			NodeList children = e.getChildNodes();
+			for (int i = 0; i < children.getLength(); i++)
+			{
+				Node node = children.item(i);
+				if (node instanceof Element)
+				{
+					Element childElement = (Element) node;
+					String childTag = childElement.getTagName();
+					if (childTag.equals("outputType"))
+					{
+						OutputTypeHandler handler = new OutputTypeHandler();
+						outputTypes.add(handler.handle(childElement));
+					} else
+					{
+						throw new IllegalStateException("Unknown subtag for type: " + childTag);
+					}
+				}
+			}
+
+			ParseRuleDefinition def = new ParseRuleDefinition(name, outputTypes);
+			return def;
+		}
+	}
+
+	static class OutputTypeHandler implements ElementHandler<OutputTypeDefinition>
+	{
+		@Override
+		public OutputTypeDefinition handle(Element e)
+		{
+			String name = getAttributeValue(e, "name");
+
+			OutputTypeDefinition def = new OutputTypeDefinition(name);
 			return def;
 		}
 	}

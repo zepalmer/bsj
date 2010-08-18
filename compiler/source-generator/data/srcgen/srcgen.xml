@@ -4,4 +4,5 @@
     <import path="ast.xml"/>
     <import path="diagnostic.xml"/>
     <import path="userdiagnostic.xml"/>
+    <import path="parserules.xml" />
 </srcgen>

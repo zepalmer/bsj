@@ -184,6 +184,17 @@
         <xs:attribute name="superTypeArg" type="xs:string" use="optional" />
         <xs:attribute name="code" type="xs:string" use="optional" />
     </xs:complexType>
+    
+    <xs:complexType name="outputType_T">
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="parserule_T">
+        <xs:sequence>
+            <xs:element name="outputType" type="outputType_T" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
 
     <xs:complexType name="import_T">
         <xs:attribute name="path" type="xs:string" use="required" />
@@ -192,6 +203,7 @@
     <xs:simpleType name="project_T">
         <xs:restriction base="xs:string">
             <xs:enumeration value="api" />
+            <xs:enumeration value="pre-parser" />
             <xs:enumeration value="parser" />
             <xs:enumeration value="generator" />
             <xs:enumeration value="bsjutils" />
@@ -217,6 +229,9 @@
             </xs:sequence>
             <xs:sequence>
                 <xs:element name="userDiagnostic" type="userDiagnostic_T" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:sequence>
+                <xs:element name="parserule" type="parserule_T" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:sequence>
                 <xs:element name="import" type="import_T" minOccurs="0" maxOccurs="unbounded" />

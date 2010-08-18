@@ -1,0 +1,350 @@
+<srcgen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./srcgen.xsd">
+    <srcgen>
+        <parserule name="AbstractMethodModifiers">
+            <outputType name="AnnotationMethodModifiersNode" />
+        </parserule>
+        <parserule name="Annotation">
+            <outputType name="NormalAnnotationNode" />
+            <outputType name="SingleElementAnnotationNode" />
+        </parserule>
+        <parserule name="Annotations">
+            <outputType name="AnnotationListNode" />
+        </parserule>
+        <parserule name="AnnotationModifiers">
+            <outputType name="AnnotationModifiersNode" />
+        </parserule>
+        <parserule name="AnnotationTypeBody">
+            <outputType name="AnnotationBodyNode" />
+        </parserule>
+        <parserule name="AnnotationTypeElementDeclarations">
+            <outputType name="AnnotationMemberListNode" />
+        </parserule>
+        <parserule name="AnnotationTypeElementDeclaration">
+            <outputType name="AnnotationDeclarationNode" />
+            <outputType name="AnnotationMemberMetaprogramAnchorNode" />
+            <outputType name="AnnotationMethodDeclarationNode" />
+            <outputType name="ClassDeclarationNode" />
+            <outputType name="ConstantDeclarationNode" />
+            <outputType name="EnumDeclarationNode" />
+            <outputType name="InterfaceDeclarationNode" />
+            <outputType name="NoOperationNode" />
+        </parserule>
+        <parserule name="AnonymousClassBody">
+            <outputType name="AnonymousClassBodyNode" />
+        </parserule>
+        <parserule name="AnonymousClassBodyDeclarations">
+            <outputType name="AnonymousClassMemberListNode" />
+        </parserule>
+        <parserule name="ArgumentList">
+            <outputType name="ExpressionListNode" />
+        </parserule>
+        <parserule name="BlockStatement">
+            <outputType name="AssertStatementNode" />
+            <outputType name="BlockNode" />
+            <outputType name="BreakNode" />
+            <outputType name="ContinueNode" />
+            <outputType name="DoWhileLoopNode" />
+            <outputType name="EnhancedForLoopNode" />
+            <outputType name="ExpressionStatementNode" />
+            <outputType name="ForLoopNode" />
+            <outputType name="IfNode" />
+            <outputType name="LabeledStatementNode" />
+            <outputType name="LocalClassDeclarationNode" />
+            <outputType name="LocalVariableDeclarationNode" />
+            <outputType name="NoOperationNode" />
+            <outputType name="ReturnNode" />
+            <outputType name="StatementNode" />
+            <outputType name="SwitchNode" />
+            <outputType name="SynchronizedNode" />
+            <outputType name="ThrowNode" />
+            <outputType name="TryNode" />
+            <outputType name="WhileLoopNode" />
+        </parserule>
+        <parserule name="BlockStatements">
+            <outputType name="BlockStatementListNode" />
+        </parserule>
+        <parserule name="CatchClause">
+            <outputType name="CatchNode" />
+        </parserule>
+        <parserule name="Catches">
+            <outputType name="CatchListNode" />
+        </parserule>
+        <parserule name="ClassBody">
+            <outputType name="ClassBodyNode" />
+        </parserule>
+        <parserule name="ClassBodyDeclaration">
+            <outputType name="AnnotationDeclarationNode" />
+            <outputType name="ClassDeclarationNode" />
+            <outputType name="ClassMemberMetaprogramAnchorNode" />
+            <outputType name="ConstructorDeclarationNode" />
+            <outputType name="EnumDeclarationNode" />
+            <outputType name="FieldDeclarationNode" />
+            <outputType name="InitializerDeclarationNode" />
+            <outputType name="InterfaceDeclarationNode" />
+            <outputType name="MethodDeclarationNode" />
+            <outputType name="NoOperationNode" />
+        </parserule>
+        <parserule name="ClassBodyDeclarations">
+            <outputType name="ClassMemberListNode" />
+        </parserule>
+        <parserule name="ClassModifiers">
+            <outputType name="ClassModifiersNode" />
+        </parserule>
+        <parserule name="ClassOrInterfaceTypeList">
+            <outputType name="DeclaredTypeListNode" />
+        </parserule>
+        <parserule name="CompilationUnit">
+            <outputType name="CompilationUnitNode" />
+        </parserule>
+        <parserule name="ConstantDeclaration">
+            <outputType name="ConstantDeclarationNode" />
+        </parserule>
+        <parserule name="ConstantModifiers">
+            <outputType name="ConstantModifiersNode" />
+        </parserule>
+        <parserule name="ConstructorBody">
+            <outputType name="ConstructorBodyNode" />
+        </parserule>
+        <parserule name="ConstructorModifiers">
+            <outputType name="ConstructorModifiersNode" />
+        </parserule>
+        <parserule name="ElementValue">
+            <outputType name="AnnotationAnnotationValueNode" />
+            <outputType name="AnnotationArrayValueNode" />
+            <outputType name="AnnotationExpressionValueNode" />
+        </parserule>
+        <parserule name="ElementValues">
+            <outputType name="AnnotationValueListNode" />
+        </parserule>
+        <parserule name="ElementValuePair">
+            <outputType name="AnnotationElementNode" />
+        </parserule>
+        <parserule name="ElementValuePairs">
+            <outputType name="AnnotationElementListNode" />
+        </parserule>
+        <parserule name="EnumBody">
+            <outputType name="EnumBodyNode" />
+        </parserule>
+        <parserule name="EnumConstant">
+            <outputType name="EnumConstantDeclarationNode" />
+        </parserule>
+        <parserule name="EnumConstants">
+            <outputType name="EnumConstantDeclarationListNode" />
+        </parserule>
+        <parserule name="EnumModifiers">
+            <outputType name="EnumModifiersNode" />
+        </parserule>
+        <parserule name="ExceptionTypeList">
+            <outputType name="UnparameterizedTypeListNode" />
+        </parserule>
+        <parserule name="ExplicitConstructorInvocation">
+            <outputType name="AlternateConstructorInvocationNode" />
+            <outputType name="SuperclassConstructorInvocationNode" />
+        </parserule>
+        <parserule name="FieldModifiers">
+            <outputType name="FieldModifiersNode" />
+        </parserule>
+        <parserule name="ForInit">
+            <outputType name="ForInitializerDeclarationNode" />
+            <outputType name="ForInitializerExpressionNode" />
+        </parserule>
+        <parserule name="FormalParameter">
+            <outputType name="VariableNode" />
+        </parserule>
+        <parserule name="FormalParameters">
+            <outputType name="VariableListNode" />
+        </parserule>
+        <parserule name="Identifier">
+            <outputType name="IdentifierNode" />
+        </parserule>
+        <parserule name="IdentifierList">
+            <outputType name="IdentifierListNode" />
+        </parserule>
+        <parserule name="ImportDeclaration">
+            <outputType name="ImportOnDemandNode" />
+            <outputType name="ImportSingleTypeNode" />
+            <outputType name="SingleStaticImportNode" />
+            <outputType name="StaticImportOnDemandNode" />
+        </parserule>
+        <parserule name="ImportDeclarations">
+            <outputType name="ImportListNode" />
+        </parserule>
+        <parserule name="InterfaceBody">
+            <outputType name="InterfaceBodyNode" />
+        </parserule>
+        <parserule name="InterfaceMemberDeclaration">
+            <outputType name="AnnotationDeclarationNode" />
+            <outputType name="ClassDeclarationNode" />
+            <outputType name="ConstantDeclarationNode" />
+            <outputType name="EnumDeclarationNode" />
+            <outputType name="InterfaceDeclarationNode" />
+            <outputType name="InterfaceMemberMetaprogramAnchorNode" />
+            <outputType name="MethodDeclarationNode" />
+            <outputType name="NoOperationNode" />
+        </parserule>
+        <parserule name="InterfaceMemberDeclarations">
+            <outputType name="InterfaceMemberListNode" />
+        </parserule>
+        <parserule name="InterfaceModifiers">
+            <outputType name="InterfaceModifiersNode" />
+        </parserule>
+        <parserule name="JavadocComment">
+            <outputType name="JavadocNode" />
+        </parserule>
+        <parserule name="LocalClassDeclaration">
+            <outputType name="LocalClassDeclarationNode" />
+        </parserule>
+        <parserule name="LocalClassModifiers">
+            <outputType name="LocalClassModifiersNode" />
+        </parserule>
+        <parserule name="MetaAnnotation">
+            <outputType name="NormalMetaAnnotationNode" />
+            <outputType name="SingleElementMetaAnnotationNode" />
+        </parserule>
+        <parserule name="MetaAnnotationList">
+            <outputType name="MetaAnnotationListNode" />
+        </parserule>
+        <parserule name="MetaAnnotationElement">
+            <outputType name="MetaAnnotationElementNode" />
+        </parserule>
+        <parserule name="MetaAnnotationElements">
+            <outputType name="MetaAnnotationElementListNode" />
+        </parserule>
+        <parserule name="MetaAnnotationElementValue">
+            <outputType name="MetaAnnotationArrayValueNode" />
+            <outputType name="MetaAnnotationExpressionValueNode" />
+            <outputType name="MetaAnnotationMetaAnnotationValueNode" />
+        </parserule>
+        <parserule name="MetaAnnotationElementValues">
+            <outputType name="MetaAnnotationValueListNode" />
+        </parserule>
+        <parserule name="Metaprogram">
+            <outputType name="MetaprogramNode" />
+        </parserule>
+        <parserule name="MetaprogramDependency">
+            <outputType name="MetaprogramDependencyNode" />
+        </parserule>
+        <parserule name="MetaprogramDependencyDeclaration">
+            <outputType name="MetaprogramDependencyDeclarationNode" />
+        </parserule>
+        <parserule name="MetaprogramDependencyDeclarationList">
+            <outputType name="MetaprogramDependencyDeclarationListNode" />
+        </parserule>
+        <parserule name="MetaprogramDependencyList">
+            <outputType name="MetaprogramDependencyListNode" />
+        </parserule>
+        <parserule name="MetaprogramImportDeclaration">
+            <outputType name="MetaprogramImportNode" />
+        </parserule>
+        <parserule name="MetaprogramImportDeclarationList">
+            <outputType name="MetaprogramImportListNode" />
+        </parserule>
+        <parserule name="MetaprogramTargetDeclaration">
+            <outputType name="MetaprogramTargetNode" />
+        </parserule>
+        <parserule name="MetaprogramTargetDeclarationList">
+            <outputType name="MetaprogramTargetListNode" />
+        </parserule>
+        <parserule name="MethodModifiers">
+            <outputType name="MethodModifiersNode" />
+        </parserule>
+        <parserule name="Name">
+            <outputType name="QualifiedNameNode" />
+            <outputType name="SimpleNameNode" />
+        </parserule>
+        <parserule name="PackageDeclaration">
+            <outputType name="PackageDeclarationNode" />
+        </parserule>
+        <parserule name="Preamble">
+            <outputType name="MetaprogramPreambleNode" />
+        </parserule>
+        <parserule name="ReferenceTypeList">
+            <outputType name="ReferenceTypeListNode" />
+        </parserule>
+        <parserule name="StatementExpressionList">
+            <outputType name="StatementExpressionListNode" />
+        </parserule>
+        <parserule name="SwitchBlockStatementGroup">
+            <outputType name="CaseNode" />
+        </parserule>
+        <parserule name="SwitchBlockStatementGroups">
+            <outputType name="CaseListNode" />
+        </parserule>
+        <parserule name="Type">
+            <outputType name="ArrayTypeNode" />
+            <outputType name="ParameterizedTypeNode" />
+            <outputType name="ParameterizedTypeSelectNode" />
+            <outputType name="PrimitiveTypeNode" />
+            <outputType name="UnparameterizedTypeNode" />
+            <outputType name="VoidTypeNode" />
+        </parserule>
+        <parserule name="TypeArgumentList">
+            <outputType name="TypeArgumentListNode" />
+        </parserule>
+        <parserule name="TypeDeclaration">
+            <outputType name="AnnotationDeclarationNode" />
+            <outputType name="ClassDeclarationNode" />
+            <outputType name="EnumDeclarationNode" />
+            <outputType name="InterfaceDeclarationNode" />
+            <outputType name="NoOperationNode" />
+        </parserule>
+        <parserule name="TypeDeclarations">
+            <outputType name="TypeDeclarationListNode" />
+        </parserule>
+        <parserule name="TypeParameter">
+            <outputType name="TypeParameterNode" />
+        </parserule>
+        <parserule name="TypeParameterList">
+            <outputType name="TypeParameterListNode" />
+        </parserule>
+        <parserule name="VariableDeclarator">
+            <outputType name="VariableDeclaratorNode" />
+        </parserule>
+        <parserule name="VariableDeclarators">
+            <outputType name="VariableDeclaratorListNode" />
+        </parserule>
+        <parserule name="VariableInitializer">
+            <outputType name="ArrayAccessNode" />
+            <outputType name="ArrayInitializerCreationNode" />
+            <outputType name="ArrayInitializerNode" />
+            <outputType name="ArrayInstantiatorCreationNode" />
+            <outputType name="AssignmentNode" />
+            <outputType name="BinaryExpressionNode" />
+            <outputType name="BooleanLiteralNode" />
+            <outputType name="CharLiteralNode" />
+            <outputType name="ClassLiteralNode" />
+            <outputType name="CodeLiteralNode" />
+            <outputType name="ConditionalExpressionNode" />
+            <outputType name="DoubleLiteralNode" />
+            <outputType name="FloatLiteralNode" />
+            <outputType name="InstanceOfNode" />
+            <outputType name="IntLiteralNode" />
+            <outputType name="LongLiteralNode" />
+            <outputType name="MethodInvocationByExpressionNode" />
+            <outputType name="MethodInvocationByNameNode" />
+            <outputType name="NullLiteralNode" />
+            <outputType name="ParenthesizedExpressionNode" />
+            <outputType name="QualifiedClassInstantiationNode" />
+            <outputType name="RawCodeLiteralNode" />
+            <outputType name="StringLiteralNode" />
+            <outputType name="SuperFieldAccessNode" />
+            <outputType name="SuperMethodInvocationNode" />
+            <outputType name="ThisNode" />
+            <outputType name="TypeCastNode" />
+            <outputType name="UnaryExpressionNode" />
+            <outputType name="UnaryStatementExpressionNode" />
+            <outputType name="UnqualifiedClassInstantiationNode" />
+            <outputType name="VariableAccessByExpressionNode" />
+            <outputType name="VariableAccessByNameNode" />
+        </parserule>
+        <parserule name="VariableInitializers">
+            <outputType name="VariableInitializerListNode" />
+        </parserule>
+        <parserule name="VariableModifiers">
+            <outputType name="VariableModifiersNode" />
+        </parserule>
+        <parserule name="Wildcard">
+            <outputType name="WildcardTypeNode" />
+        </parserule>
+    </srcgen>
+</srcgen>

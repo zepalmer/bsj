@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -166,6 +167,15 @@ public class SourceGenerator
 			for (DefinitionHandler handler : handlers)
 			{
 				handler.handleUserDiagnosticDefinition(userDiagnostic);
+			}
+		}
+
+		// For each parse rule, inform each handler
+		for (ParseRuleDefinition parseRule : data.getParseRules())
+		{
+			for (DefinitionHandler handler : handlers)
+			{
+				handler.handleParseRuleDefinition(parseRule);
 			}
 		}
 
@@ -454,6 +464,8 @@ public class SourceGenerator
 
 		public void handleUserDiagnosticDefinition(UserDiagnosticDefinition def) throws IOException;
 
+		public void handleParseRuleDefinition(ParseRuleDefinition def) throws IOException;
+
 		public void finish() throws IOException;
 	}
 
@@ -610,6 +622,14 @@ public class SourceGenerator
 		}
 
 		/**
+		 * A do-nothing user diagnostic definition handling method for backwards compatibility.
+		 */
+		@Override
+		public void handleParseRuleDefinition(ParseRuleDefinition def) throws IOException
+		{
+		}
+
+		/**
 		 * Creates a templated output file for a handler.
 		 * 
 		 * @param pkg The package for this file.
@@ -759,13 +779,31 @@ public class SourceGenerator
 			}
 		}
 
+		protected Set<TypeDefinition> getDefTypes(TypeDefinition def)
+		{
+			if (def == null)
+				return Collections.emptySet();
+			Set<TypeDefinition> types = new HashSet<TypeDefinition>();
+			types.add(def);
+			if (def.getBaseSuperName() != null)
+			{
+				types.addAll(getDefTypes(map.get(def.getBaseSuperName())));
+			}
+			for (TagReferenceDefinition tag : def.getTags())
+			{
+				types.addAll(getDefTypes(map.get(tag.getName())));
+			}
+			return types;
+		}
+
 		protected boolean defInstanceOf(TypeDefinition def, String classname)
 		{
-			while (def != null)
+			for (TypeDefinition superdef : getDefTypes(def))
 			{
-				if (def.getBaseName().equals(classname))
+				if (superdef.getBaseName().equals(classname))
+				{
 					return true;
-				def = map.get(def.getBaseSuperName());
+				}
 			}
 			return false;
 		}
@@ -3298,5 +3336,223 @@ public class SourceGenerator
 		{
 		}
 
+	}
+
+	static class ParseRuleHandler extends ClassHierarchyBuildingHandler
+	{
+		private List<ParseRuleDefinition> parseRuleDefinitions;
+
+		private PrependablePrintStream protoEnumPs;
+		private PrependablePrintStream parserUtilities;
+
+		private PrependablePrintStream parseFunctionUtility;
+
+		private List<ByteArrayOutputStream> utilityBuffers;
+		private List<PrependablePrintStream> utilityStreams;
+
+		public ParseRuleHandler()
+		{
+		}
+
+		private PrependablePrintStream createBufferedUtilityStream()
+		{
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+			PrependablePrintStream pps = new PrependablePrintStream(buffer, "    ", 0);
+			this.utilityBuffers.add(buffer);
+			this.utilityStreams.add(pps);
+			return pps;
+		}
+
+		private void writeUtilityBuffers()
+		{
+			for (PrependablePrintStream pps : this.utilityStreams)
+			{
+				pps.close();
+			}
+			for (ByteArrayOutputStream buffer : this.utilityBuffers)
+			{
+				String utility = buffer.toString();
+				this.parserUtilities.println(utility);
+			}
+		}
+
+		@Override
+		public void init() throws IOException
+		{
+			super.init();
+
+			utilityBuffers = new ArrayList<ByteArrayOutputStream>();
+			utilityStreams = new ArrayList<PrependablePrintStream>();
+			parseRuleDefinitions = new ArrayList<ParseRuleDefinition>();
+
+			protoEnumPs = createOutputFile("edu.jhu.cs.bsj.compiler.tool.parser", Mode.CONCRETE, Project.API,
+					SupplementCategory.GENERAL, "ParseRule<T extends Node>", true, null, null);
+
+			parserUtilities = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.util", Mode.CONCRETE,
+					Project.PARSER, SupplementCategory.GENERAL, "ParserGeneratedUtilities", false,
+					"import org.antlr.runtime.RecognitionException;\n\n" + "/**\n"
+							+ " * Contains a number of utility functions for parsing operations.  These\n"
+							+ " * operations are separated solely because the source for them is generated.\n" + " */",
+					null);
+
+			parseFunctionUtility = createBufferedUtilityStream();
+
+			protoEnumPs.incPrependCount();
+			parserUtilities.incPrependCount();
+
+			parseFunctionUtility.println("public static <T extends Node> T parseFromAntlr(BsjAntlrParser parser, ParseRule<T> rule)");
+			parseFunctionUtility.println("    throws RecognitionException");
+			parseFunctionUtility.println("{");
+			parseFunctionUtility.incPrependCount();
+			parseFunctionUtility.println("if (rule == null)");
+			parseFunctionUtility.println("{");
+			parseFunctionUtility.println("    throw new IllegalArgumentException(\"Parse rule cannot be null.\");");
+			parseFunctionUtility.println("}");
+		}
+
+		@Override
+		public void handleParseRuleDefinition(ParseRuleDefinition def) throws IOException
+		{
+			parseRuleDefinitions.add(def);
+		}
+
+		@Override
+		public void useDefinition(TypeDefinition def) throws IOException
+		{
+		}
+
+		public void useDefinition(ParseRuleDefinition def) throws IOException
+		{
+			// Calculate the upper bound on types for this parse rule
+			Set<TypeDefinition> bounds = null;
+			for (OutputTypeDefinition oDef : def.getOutputTypes())
+			{
+				if (bounds == null)
+				{
+					bounds = getDefTypes(oDef.getType());
+				} else
+				{
+					bounds.retainAll(getDefTypes(oDef.getType()));
+				}
+			}
+
+			boolean changed;
+			do
+			{
+				changed = false;
+
+				Set<TypeDefinition> oldTypes = bounds;
+				bounds = new HashSet<TypeDefinition>(oldTypes);
+				for (TypeDefinition oldType : oldTypes)
+				{
+					if (bounds.contains(oldType))
+					{
+						Set<TypeDefinition> oldTypeSupertypes = getDefTypes(oldType);
+						oldTypeSupertypes.remove(oldType);
+						changed |= bounds.removeAll(oldTypeSupertypes);
+					}
+				}
+			} while (changed);
+
+			if (bounds.size() > 1)
+			{
+				StringBuilder sb = new StringBuilder();
+				boolean first = true;
+				for (TypeDefinition bound : bounds)
+				{
+					if (!first)
+						sb.append(", ");
+					sb.append(bound.getBaseName());
+					first = false;
+				}
+				throw new IllegalStateException(def.getName() + " has " + bounds.size() + " least upper bounds! ("
+						+ sb.toString() + ")");
+			}
+
+			TypeDefinition leastUpperBound = bounds.iterator().next();
+
+			// Create the proto-enum entry
+			String nodeType = leastUpperBound.getBaseName() + (leastUpperBound.getTypeParameter() != null ? "<?>" : "");
+			String ruleType = "ParseRule<" + nodeType + ">";
+			String elementName = StringUtilities.convertCamelCaseToUpperCase(def.getName());
+			protoEnumPs.println("public static final " + ruleType + " " + elementName + " = ");
+			protoEnumPs.incPrependCount();
+			protoEnumPs.println("new " + ruleType + "(" + leastUpperBound.getBaseName() + ".class);");
+			protoEnumPs.decPrependCount();
+			protoEnumPs.println();
+
+			// Create the appropriate case in the ANTLR-calling utility
+			parseFunctionUtility.println("if (rule.equals(ParseRule." + elementName + "))");
+			parseFunctionUtility.println("{");
+			parseFunctionUtility.incPrependCount();
+			parseFunctionUtility.println(nodeType + " node = parser.parseRule_" + def.getName() + "();");
+			parseFunctionUtility.println("return rule.getNodeClass().cast(node);");
+			parseFunctionUtility.decPrependCount();
+			parseFunctionUtility.println("}");
+
+		}
+
+		private void writeValuesMethod() throws IOException
+		{
+			protoEnumPs.println("private static Iterable<? extends ParseRule<?>> valuesIterable = null;");
+
+			protoEnumPs.println("public static Iterable<? extends ParseRule<?>> values()");
+			protoEnumPs.println("{");
+			protoEnumPs.incPrependCount();
+
+			protoEnumPs.println("if (valuesIterable == null)");
+			protoEnumPs.println("{");
+			protoEnumPs.incPrependCount();
+
+			protoEnumPs.println("List<ParseRule<?>> list = new ArrayList<ParseRule<?>>("
+					+ this.parseRuleDefinitions.size() + ");");
+
+			for (ParseRuleDefinition def : this.parseRuleDefinitions)
+			{
+				protoEnumPs.println("list.add(" + StringUtilities.convertCamelCaseToUpperCase(def.getName()) + ");");
+			}
+
+			protoEnumPs.println("valuesIterable = list;");
+
+			protoEnumPs.decPrependCount();
+			protoEnumPs.println("}");
+			protoEnumPs.println("return valuesIterable;");
+
+			protoEnumPs.decPrependCount();
+			protoEnumPs.println("}");
+			protoEnumPs.println();
+		}
+
+		private void finishUtilities() throws IOException
+		{
+			parseFunctionUtility.println("throw new IllegalStateException(\"Unrecognized parse rule \" + rule);");
+			parseFunctionUtility.decPrependCount();
+			parseFunctionUtility.println("}");
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
+			super.finish();
+
+			for (ParseRuleDefinition def : this.parseRuleDefinitions)
+			{
+				useDefinition(def);
+			}
+
+			writeValuesMethod();
+
+			finishUtilities();
+
+			writeUtilityBuffers();
+
+			protoEnumPs.decPrependCount();
+			protoEnumPs.println("}");
+			protoEnumPs.close();
+
+			parserUtilities.decPrependCount();
+			parserUtilities.println("}");
+			parserUtilities.close();
+		}
 	}
 }

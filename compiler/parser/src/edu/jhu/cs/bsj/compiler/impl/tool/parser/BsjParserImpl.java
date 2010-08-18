@@ -13,10 +13,12 @@ import org.apache.log4j.Logger;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.BsjAntlrLexer;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.BsjAntlrParser;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
+import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
 
 /**
  * This class contains the functionality necessary to parse BSJ source files into BSJ heterogeneous ASTs. It relies on a
@@ -80,4 +82,18 @@ public class BsjParserImpl implements BsjParser
 
 		return compilationUnitNode;
 	}
+
+	@Override
+	public <T extends Node> T parse(String name, int lineNumber, int columnNumber, Reader reader, ParseRule<T> rule,
+			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException
+	{
+		if (diagnosticListener == null)
+		{
+			diagnosticListener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
+		}
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

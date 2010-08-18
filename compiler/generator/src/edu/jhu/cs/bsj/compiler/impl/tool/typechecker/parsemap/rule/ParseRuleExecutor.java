@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDecla
  * associated with the set of AST node types that it may produce.
  * @author Zachary Palmer
  */
-public interface ParseRule
+public interface ParseRuleExecutor
 {
 	/**
 	 * Obtains the set of types that this parse rule produces.

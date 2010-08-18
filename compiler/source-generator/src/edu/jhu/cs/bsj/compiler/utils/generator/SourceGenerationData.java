@@ -12,14 +12,16 @@ public class SourceGenerationData
 	private Collection<TypeDefinition> types;
 	private Collection<DiagnosticDefinition> diagnostics;
 	private Collection<UserDiagnosticDefinition> userDiagnostics;
+	private Collection<ParseRuleDefinition> parseRules;
 
 	public SourceGenerationData(Collection<TypeDefinition> types, Collection<DiagnosticDefinition> diagnostics,
-			Collection<UserDiagnosticDefinition> userDiagnostics)
+			Collection<UserDiagnosticDefinition> userDiagnostics, Collection<ParseRuleDefinition> parseRules)
 	{
 		super();
 		this.types = types;
 		this.diagnostics = diagnostics;
 		this.userDiagnostics = userDiagnostics;
+		this.parseRules = parseRules;
 	}
 
 	public Collection<TypeDefinition> getTypes()
@@ -37,4 +39,8 @@ public class SourceGenerationData
 		return userDiagnostics;
 	}
 
+	public Collection<ParseRuleDefinition> getParseRules()
+	{
+		return parseRules;
+	}
 }

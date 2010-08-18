@@ -5843,6 +5843,1100 @@ localVariableHeader
     :   variableModifiers type IDENTIFIER ('['']')* ('='|','|';')
     ;
 
+/* *** BSJ Code Literal Parse Rules *************************************** */
+
+parseRule_AbstractMethodModifiers returns [AnnotationMethodModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AbstractMethodModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Annotation returns [AnnotationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Annotation");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Annotations returns [AnnotationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Annotations");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_AnnotationModifiers returns [AnnotationModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AnnotationModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_AnnotationTypeBody returns [AnnotationBodyNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AnnotationTypeBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_AnnotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AnnotationTypeElementDeclarations");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_AnnotationTypeElementDeclaration returns [AnnotationMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AnnotationTypeElementDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_AnonymousClassBody returns [AnonymousClassBodyNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AnonymousClassBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_AnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AnonymousClassBodyDeclarations");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ArgumentList returns [ExpressionListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ArgumentList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_BlockStatement returns [BlockStatementNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_BlockStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_BlockStatements returns [BlockStatementListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_BlockStatements");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_CatchClause returns [CatchNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_CatchClause");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Catches returns [CatchListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Catches");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ClassBody returns [ClassBodyNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ClassBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ClassBodyDeclaration returns [ClassMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ClassBodyDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ClassBodyDeclarations returns [ClassMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ClassBodyDeclarations");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ClassModifiers returns [ClassModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ClassModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ClassOrInterfaceTypeList returns [DeclaredTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ClassOrInterfaceTypeList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_CompilationUnit returns [CompilationUnitNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_CompilationUnit");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ConstantDeclaration returns [ConstantDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ConstantDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ConstantModifiers returns [ConstantModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ConstantModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ConstructorBody returns [ConstructorBodyNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ConstructorBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ConstructorModifiers returns [ConstructorModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ConstructorModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ElementValue returns [AnnotationValueNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ElementValue");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ElementValues returns [AnnotationValueListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ElementValues");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ElementValuePair returns [AnnotationElementNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ElementValuePair");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ElementValuePairs returns [AnnotationElementListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ElementValuePairs");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_EnumBody returns [EnumBodyNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_EnumBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_EnumConstant returns [EnumConstantDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_EnumConstant");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_EnumConstants returns [EnumConstantDeclarationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_EnumConstants");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_EnumModifiers returns [EnumModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_EnumModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ExceptionTypeList returns [UnparameterizedTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ExceptionTypeList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ExplicitConstructorInvocation returns [ConstructorInvocationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ExplicitConstructorInvocation");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_FieldModifiers returns [FieldModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_FieldModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ForInit returns [ForInitializerNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ForInit");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_FormalParameter returns [VariableNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_FormalParameter");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_FormalParameters returns [VariableListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_FormalParameters");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Identifier returns [IdentifierNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Identifier");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_IdentifierList returns [IdentifierListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_IdentifierList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ImportDeclaration returns [ImportNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ImportDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ImportDeclarations returns [ImportListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ImportDeclarations");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_InterfaceBody returns [InterfaceBodyNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_InterfaceBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_InterfaceMemberDeclaration returns [InterfaceMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_InterfaceMemberDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_InterfaceMemberDeclarations returns [InterfaceMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_InterfaceMemberDeclarations");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_InterfaceModifiers returns [InterfaceModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_InterfaceModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_JavadocComment returns [JavadocNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_JavadocComment");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_LocalClassDeclaration returns [LocalClassDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_LocalClassDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_LocalClassModifiers returns [LocalClassModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_LocalClassModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaAnnotation returns [MetaAnnotationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaAnnotation");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaAnnotationList returns [MetaAnnotationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaAnnotationList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaAnnotationElement returns [MetaAnnotationElementNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaAnnotationElement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaAnnotationElements returns [MetaAnnotationElementListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaAnnotationElements");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaAnnotationElementValue returns [MetaAnnotationValueNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaAnnotationElementValue");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaAnnotationElementValues");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Metaprogram returns [MetaprogramNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Metaprogram");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaprogramDependency returns [MetaprogramDependencyNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaprogramDependency");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaprogramDependencyDeclaration returns [MetaprogramDependencyDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaprogramDependencyDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaprogramDependencyDeclarationList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaprogramDependencyList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaprogramImportDeclaration returns [MetaprogramImportNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaprogramImportDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaprogramImportDeclarationList returns [MetaprogramImportListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaprogramImportDeclarationList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaprogramTargetDeclaration returns [MetaprogramTargetNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaprogramTargetDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MetaprogramTargetDeclarationList returns [MetaprogramTargetListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MetaprogramTargetDeclarationList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_MethodModifiers returns [MethodModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MethodModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Name returns [NameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Name");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_PackageDeclaration returns [PackageDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_PackageDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Preamble returns [MetaprogramPreambleNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Preamble");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_ReferenceTypeList returns [ReferenceTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ReferenceTypeList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_StatementExpressionList returns [StatementExpressionListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_StatementExpressionList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_SwitchBlockStatementGroup returns [CaseNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_SwitchBlockStatementGroup");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_SwitchBlockStatementGroups returns [CaseListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_SwitchBlockStatementGroups");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Type returns [TypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Type");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_TypeArgumentList returns [TypeArgumentListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_TypeArgumentList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_TypeDeclaration returns [TypeDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_TypeDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_TypeDeclarations returns [TypeDeclarationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_TypeDeclarations");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_TypeParameter returns [TypeParameterNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_TypeParameter");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_TypeParameterList returns [TypeParameterListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_TypeParameterList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_VariableDeclarator returns [VariableDeclaratorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_VariableDeclarator");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_VariableDeclarators returns [VariableDeclaratorListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_VariableDeclarators");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_VariableInitializer returns [VariableInitializerNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_VariableInitializer");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_VariableInitializers returns [VariableInitializerListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_VariableInitializers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_VariableModifiers returns [VariableModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_VariableModifiers");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
+parseRule_Wildcard returns [WildcardTypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Wildcard");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        /* TODO */
+        EOF
+    ;
+
 /********************************************************************************************
                   Lexer section
 *********************************************************************************************/

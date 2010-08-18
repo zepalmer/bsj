@@ -4,10 +4,11 @@ basedir=../out
 
 apisrc=../../api/src
 astsrc=../../generator/src
-parsrc=../../parser/src-pre
+pprsrc=../../parser/src-pre
+parsrc=../../parser/src
 utlsrc=../../stdlib/src
 
-srcs="$apisrc $astsrc $parsrc $utlsrc"
+srcs="$apisrc $astsrc $pprsrc $parsrc $utlsrc"
 
 if [ ! -d "../out" ]; then
 	echo "Must be run from within the tools directory after sources are generated"
@@ -24,10 +25,26 @@ for d in $srcs; do
 	mkdir -p "$d"
 done
 
-n="$(cp -av $basedir/interface/* $apisrc/)"
-m="$(cp -av $basedir/implementation/* $astsrc/)"
-k="$(cp -av $basedir/parser/* $parsrc/)"
-j="$(cp -av $basedir/utils/* $utlsrc/)"
-filecount="$( (echo "$n"; echo "$m"; echo "$k"; echo "$j") | egrep -v '^$' | wc -l )"
+doCopy()
+{
+    sdir=$basedir/$1
+    tdir=$2
+    if [ -d $sdir ]; then
+        count="$(cp -av $sdir/* $tdir | wc -l)"
+    else
+        count=0
+    fi
+    echo $count
+}
+
+filecount="$(\
+        (\
+            doCopy interface      $apisrc; \
+            doCopy implementation $astsrc; \
+            doCopy pre-parser     $pprsrc; \
+            doCopy parser         $parsrc; \
+            doCopy utils          $utlsrc; \
+        ) | (n=0; while read line; do n="$(($n+$line))"; echo $n; done | tail -n 1) \
+    )"
 
 echo "Finished utilizing generated sources.  Found $filecount files."
