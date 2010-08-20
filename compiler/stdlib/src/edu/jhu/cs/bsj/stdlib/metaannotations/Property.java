@@ -23,10 +23,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
-import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.AbstractDeclarationMetaannotationMetaprogram;
 
 /**
  * This BSJ meta-annotation class represents a metaprogram which creates a getter and a setter for the field that it
@@ -35,28 +34,18 @@ import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
  * 
  * @author Zachary Palmer
  */
-public class Property extends AbstractBsjMetaAnnotationMetaprogram
+public class Property extends AbstractDeclarationMetaannotationMetaprogram<FieldDeclarationNode> 
 {
 	public Property()
 	{
-		super(Collections.singletonList("property"), Collections.<String> emptyList());
+		super(Collections.singletonList("property"), Collections.<String> emptyList(), FieldDeclarationNode.class);
 	}
 
 	// TODO: boolean properties for "getter" and "setter" for read-only or write-only properties
 
-	@Override
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context, FieldDeclarationNode fieldNode)
 	{
 		BsjNodeFactory factory = context.getFactory();
-
-		FieldDeclarationNode fieldNode = context.getAnchor().getNearestAncestorOfType(FieldDeclarationNode.class);
-		if (fieldNode == null)
-		{
-			context.getDiagnosticListener().report(
-					new InvalidAnnotatedDeclarationDiagnosticImpl(getClass(), null,
-							Collections.<Class<? extends Node>> singletonList(FieldDeclarationNode.class)));
-			throw new MetaprogramExecutionFailureException();
-		}
 
 		// Try to find the list of members for this field declaration
 		// TODO: we're not necessarily in a type declaration... not exactly.  Consider anonymous classes.
@@ -131,4 +120,5 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 	public void complete() throws InvalidMetaAnnotationConfigurationException
 	{
 	}
+
 }
