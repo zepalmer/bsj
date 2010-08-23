@@ -35,6 +35,17 @@
         <parserule name="AnonymousClassBodyDeclarations">
             <outputType name="AnonymousClassMemberListNode" />
         </parserule>
+        <parserule name="AnonymousClassBodyDeclaration">
+            <outputType name="AnnotationDeclarationNode" />
+            <outputType name="ClassDeclarationNode" />
+            <outputType name="ClassMemberMetaprogramAnchorNode" />
+            <outputType name="EnumDeclarationNode" />
+            <outputType name="FieldDeclarationNode" />
+            <outputType name="InitializerDeclarationNode" />
+            <outputType name="InterfaceDeclarationNode" />
+            <outputType name="MethodDeclarationNode" />
+            <outputType name="NoOperationNode" />
+        </parserule>
         <parserule name="ArgumentList">
             <outputType name="ExpressionListNode" />
         </parserule>
@@ -151,9 +162,15 @@
         <parserule name="FormalParameter">
             <outputType name="VariableNode" />
         </parserule>
+        <!--
+        TODO: consider if we want to keep this one eliminated.
+        The problem is that there is no parse rule that produces just this type of node; methods have a tuple
+        between a list of variables and a varargs variable.  If we create some kind of tuple node, this rule could
+        produce one of those.  The question is whether or not it's worthwhile.
         <parserule name="FormalParameters">
             <outputType name="VariableListNode" />
         </parserule>
+        -->
         <parserule name="Identifier">
             <outputType name="IdentifierNode" />
         </parserule>
@@ -278,7 +295,7 @@
             <outputType name="UnparameterizedTypeNode" />
             <outputType name="VoidTypeNode" />
         </parserule>
-        <parserule name="TypeArgumentList">
+        <parserule name="TypeArguments">
             <outputType name="TypeArgumentListNode" />
         </parserule>
         <parserule name="TypeDeclaration">
@@ -294,7 +311,7 @@
         <parserule name="TypeParameter">
             <outputType name="TypeParameterNode" />
         </parserule>
-        <parserule name="TypeParameterList">
+        <parserule name="TypeParameters">
             <outputType name="TypeParameterListNode" />
         </parserule>
         <parserule name="VariableDeclarator">

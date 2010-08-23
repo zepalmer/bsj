@@ -3400,7 +3400,7 @@ public class SourceGenerator
 			protoEnumPs.incPrependCount();
 			parserUtilities.incPrependCount();
 
-			parseFunctionUtility.println("public static <T extends Node> T parseFromAntlr(BsjAntlrParser parser, ParseRule<T> rule)");
+			parseFunctionUtility.println("public static <T extends Node> T parseFromAntlr(BsjAntlrParser parser, ParseRule<T> rule, String name)");
 			parseFunctionUtility.println("    throws RecognitionException");
 			parseFunctionUtility.println("{");
 			parseFunctionUtility.incPrependCount();
@@ -3485,7 +3485,15 @@ public class SourceGenerator
 			parseFunctionUtility.println("if (rule.equals(ParseRule." + elementName + "))");
 			parseFunctionUtility.println("{");
 			parseFunctionUtility.incPrependCount();
-			parseFunctionUtility.println(nodeType + " node = parser.parseRule_" + def.getName() + "();");
+			final String args;
+			if (def.getName().equals("CompilationUnit"))
+			{
+				args = "name";
+			} else
+			{
+				args = "";
+			}
+			parseFunctionUtility.println(nodeType + " node = parser.parseRule_" + def.getName() + "(" + args + ");");
 			parseFunctionUtility.println("return rule.getNodeClass().cast(node);");
 			parseFunctionUtility.decPrependCount();
 			parseFunctionUtility.println("}");

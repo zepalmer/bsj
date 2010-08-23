@@ -72,7 +72,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
@@ -99,7 +98,7 @@ import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParserGeneratedUtilities
 {
-    public static <T extends Node> T parseFromAntlr(BsjAntlrParser parser, ParseRule<T> rule)
+    public static <T extends Node> T parseFromAntlr(BsjAntlrParser parser, ParseRule<T> rule, String name)
         throws RecognitionException
     {
         if (rule == null)
@@ -149,6 +148,11 @@ public class ParserGeneratedUtilities
         if (rule.equals(ParseRule.ANONYMOUS_CLASS_BODY_DECLARATIONS))
         {
             AnonymousClassMemberListNode node = parser.parseRule_AnonymousClassBodyDeclarations();
+            return rule.getNodeClass().cast(node);
+        }
+        if (rule.equals(ParseRule.ANONYMOUS_CLASS_BODY_DECLARATION))
+        {
+            ClassMemberNode node = parser.parseRule_AnonymousClassBodyDeclaration();
             return rule.getNodeClass().cast(node);
         }
         if (rule.equals(ParseRule.ARGUMENT_LIST))
@@ -203,7 +207,7 @@ public class ParserGeneratedUtilities
         }
         if (rule.equals(ParseRule.COMPILATION_UNIT))
         {
-            CompilationUnitNode node = parser.parseRule_CompilationUnit();
+            CompilationUnitNode node = parser.parseRule_CompilationUnit(name);
             return rule.getNodeClass().cast(node);
         }
         if (rule.equals(ParseRule.CONSTANT_DECLARATION))
@@ -289,11 +293,6 @@ public class ParserGeneratedUtilities
         if (rule.equals(ParseRule.FORMAL_PARAMETER))
         {
             VariableNode node = parser.parseRule_FormalParameter();
-            return rule.getNodeClass().cast(node);
-        }
-        if (rule.equals(ParseRule.FORMAL_PARAMETERS))
-        {
-            VariableListNode node = parser.parseRule_FormalParameters();
             return rule.getNodeClass().cast(node);
         }
         if (rule.equals(ParseRule.IDENTIFIER))
@@ -471,9 +470,9 @@ public class ParserGeneratedUtilities
             TypeNode node = parser.parseRule_Type();
             return rule.getNodeClass().cast(node);
         }
-        if (rule.equals(ParseRule.TYPE_ARGUMENT_LIST))
+        if (rule.equals(ParseRule.TYPE_ARGUMENTS))
         {
-            TypeArgumentListNode node = parser.parseRule_TypeArgumentList();
+            TypeArgumentListNode node = parser.parseRule_TypeArguments();
             return rule.getNodeClass().cast(node);
         }
         if (rule.equals(ParseRule.TYPE_DECLARATION))
@@ -491,9 +490,9 @@ public class ParserGeneratedUtilities
             TypeParameterNode node = parser.parseRule_TypeParameter();
             return rule.getNodeClass().cast(node);
         }
-        if (rule.equals(ParseRule.TYPE_PARAMETER_LIST))
+        if (rule.equals(ParseRule.TYPE_PARAMETERS))
         {
-            TypeParameterListNode node = parser.parseRule_TypeParameterList();
+            TypeParameterListNode node = parser.parseRule_TypeParameters();
             return rule.getNodeClass().cast(node);
         }
         if (rule.equals(ParseRule.VARIABLE_DECLARATOR))

@@ -73,7 +73,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
@@ -145,6 +144,9 @@ public class ParseRule<T extends Node>
     
     public static final ParseRule<AnonymousClassMemberListNode> ANONYMOUS_CLASS_BODY_DECLARATIONS = 
         new ParseRule<AnonymousClassMemberListNode>(AnonymousClassMemberListNode.class);
+    
+    public static final ParseRule<ClassMemberNode> ANONYMOUS_CLASS_BODY_DECLARATION = 
+        new ParseRule<ClassMemberNode>(ClassMemberNode.class);
     
     public static final ParseRule<ExpressionListNode> ARGUMENT_LIST = 
         new ParseRule<ExpressionListNode>(ExpressionListNode.class);
@@ -229,9 +231,6 @@ public class ParseRule<T extends Node>
     
     public static final ParseRule<VariableNode> FORMAL_PARAMETER = 
         new ParseRule<VariableNode>(VariableNode.class);
-    
-    public static final ParseRule<VariableListNode> FORMAL_PARAMETERS = 
-        new ParseRule<VariableListNode>(VariableListNode.class);
     
     public static final ParseRule<IdentifierNode> IDENTIFIER = 
         new ParseRule<IdentifierNode>(IdentifierNode.class);
@@ -338,7 +337,7 @@ public class ParseRule<T extends Node>
     public static final ParseRule<TypeNode> TYPE = 
         new ParseRule<TypeNode>(TypeNode.class);
     
-    public static final ParseRule<TypeArgumentListNode> TYPE_ARGUMENT_LIST = 
+    public static final ParseRule<TypeArgumentListNode> TYPE_ARGUMENTS = 
         new ParseRule<TypeArgumentListNode>(TypeArgumentListNode.class);
     
     public static final ParseRule<TypeDeclarationNode> TYPE_DECLARATION = 
@@ -350,7 +349,7 @@ public class ParseRule<T extends Node>
     public static final ParseRule<TypeParameterNode> TYPE_PARAMETER = 
         new ParseRule<TypeParameterNode>(TypeParameterNode.class);
     
-    public static final ParseRule<TypeParameterListNode> TYPE_PARAMETER_LIST = 
+    public static final ParseRule<TypeParameterListNode> TYPE_PARAMETERS = 
         new ParseRule<TypeParameterListNode>(TypeParameterListNode.class);
     
     public static final ParseRule<VariableDeclaratorNode> VARIABLE_DECLARATOR = 
@@ -386,6 +385,7 @@ public class ParseRule<T extends Node>
             list.add(ANNOTATION_TYPE_ELEMENT_DECLARATION);
             list.add(ANONYMOUS_CLASS_BODY);
             list.add(ANONYMOUS_CLASS_BODY_DECLARATIONS);
+            list.add(ANONYMOUS_CLASS_BODY_DECLARATION);
             list.add(ARGUMENT_LIST);
             list.add(BLOCK_STATEMENT);
             list.add(BLOCK_STATEMENTS);
@@ -414,7 +414,6 @@ public class ParseRule<T extends Node>
             list.add(FIELD_MODIFIERS);
             list.add(FOR_INIT);
             list.add(FORMAL_PARAMETER);
-            list.add(FORMAL_PARAMETERS);
             list.add(IDENTIFIER);
             list.add(IDENTIFIER_LIST);
             list.add(IMPORT_DECLARATION);
@@ -450,11 +449,11 @@ public class ParseRule<T extends Node>
             list.add(SWITCH_BLOCK_STATEMENT_GROUP);
             list.add(SWITCH_BLOCK_STATEMENT_GROUPS);
             list.add(TYPE);
-            list.add(TYPE_ARGUMENT_LIST);
+            list.add(TYPE_ARGUMENTS);
             list.add(TYPE_DECLARATION);
             list.add(TYPE_DECLARATIONS);
             list.add(TYPE_PARAMETER);
-            list.add(TYPE_PARAMETER_LIST);
+            list.add(TYPE_PARAMETERS);
             list.add(VARIABLE_DECLARATOR);
             list.add(VARIABLE_DECLARATORS);
             list.add(VARIABLE_INITIALIZER);

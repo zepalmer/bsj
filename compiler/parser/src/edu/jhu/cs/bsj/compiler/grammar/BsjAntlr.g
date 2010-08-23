@@ -619,43 +619,6 @@ scope Rule {
  * away parser patterns and may not manifest in the AST. 
  * ===========================================================================
  */
- 
-// Represents the combination of an identifier and an initializer.  This construct is necessary on its own to support
-// the multiple declaration sugar ("int x,y;").
-variableDeclarator returns [VariableDeclaratorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("variableDeclarator");
-            int arrayLevels = 0;
-            VariableInitializerNode initializer = null;
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        id=identifier
-        {
-            if (logger.isTraceEnabled())
-            {
-                logger.trace("Parsing variable declarator with name " + $id.ret.getIdentifier());
-            }
-        }
-        (
-            arrayTypeCounter
-            {
-                arrayLevels = $arrayTypeCounter.ret;
-            }
-        )?
-        (
-            '=' variableInitializer
-            {
-                initializer = $variableInitializer.ret;
-            }
-        )?
-        {
-            $ret = factory.makeVariableDeclaratorNode($id.ret, arrayLevels, initializer);
-        }
-    ;
 
 // Represents the declaration of an array type over a normal type.  This construct parses the [] symbols and returns
 // a count of the number encountered.  Note that this rule must parse at least one pair of brackets; thus, it
@@ -714,10 +677,10 @@ bsjMetaprogram returns [MetaprogramNode ret]
     :
         '[:'
         preamble
-        blockStatementList
+        optionalBlockStatementList
         ':]'
         {
-            $ret = factory.makeMetaprogramNode($preamble.ret, $blockStatementList.ret);
+            $ret = factory.makeMetaprogramNode($preamble.ret, $optionalBlockStatementList.ret);
         }
     ;
 
@@ -829,7 +792,7 @@ metaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationLi
 	        {
 	            list.add($metaprogramDependencyDeclaration.ret);
 	        }
-        )
+        )+
     ;
 
 metaprogramDependencyDeclaration returns [MetaprogramDependencyDeclarationNode ret]
@@ -912,7 +875,7 @@ metaprogramTargetList returns [MetaprogramTargetListNode ret]
             {
                 list.add($metaprogramTarget.ret);
             }
-        )
+        )+
     ;
 
 metaprogramTarget returns [MetaprogramTargetNode ret]
@@ -1061,6 +1024,27 @@ blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode 
         }
     ;
 
+// Parses an optional list of meta-annotations.  This rule handles the logic of creating an empty list if no
+// meta-annotations are present.
+optionalMetaAnnotationList returns [MetaAnnotationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalMetaAnnotationList");
+            MetaAnnotationListNode listNode = null;
+        }
+        @after {
+            $ret = (listNode == null ? factory.makeMetaAnnotationListNode() : listNode);
+            ruleStop();
+        }
+    :
+        (
+            metaAnnotationList
+            {
+                listNode = $metaAnnotationList.ret;
+            }
+        )?
+    ;
+
 // Parses a list of meta-annotations.  Note that this rule is not used for declarations, since meta-annotations can be
 // interspersed amongst annotations and modifiers.  This rule is used for meta-annotations which are applied to
 // statements and other constructs which only permit meta-annotations and not other modifiers.
@@ -1080,7 +1064,7 @@ metaAnnotationList returns [MetaAnnotationListNode ret]
             {
                 list.add($metaAnnotation.ret);
             }
-        )*
+        )+
     ;
 
 // Parses a sequence of any annotations: BSJ meta-annotations or Java annotations.  These are returned as two lists.
@@ -1241,6 +1225,38 @@ metaAnnotationElementValue returns [MetaAnnotationValueNode ret]
         }
     ;
 
+// Parses a meta-annotation element value list.
+// For example, in
+//     @@Ann({@@Foo,@@Bar(5)})
+// this rule would parse
+//     @@Foo,@@Bar(5)
+// and in
+//     @@Test({1,2,3})
+// this rule would parse
+//     1,2,3
+metaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaAnnotationElementValues");
+            List<MetaAnnotationValueNode> list = new ArrayList<MetaAnnotationValueNode>();
+        }
+        @after {
+            $ret = factory.makeMetaAnnotationValueListNode(list);
+            ruleStop();
+        }
+    :   
+        a=metaAnnotationElementValue
+        {
+            list.add($a.ret);
+        }
+        (
+            ',' b=metaAnnotationElementValue
+            {
+                list.add($b.ret);
+            }
+        )*
+    ;
+
 // Parses a meta-annotation element array.
 // For example, in
 //     @@Ann({@@Foo,@@Bar(5)})
@@ -1254,25 +1270,19 @@ metaAnnotationElementValueArrayInitializer returns [MetaAnnotationArrayValueNode
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValueArrayInitializer");
-            List<MetaAnnotationValueNode> list = new ArrayList<MetaAnnotationValueNode>();
+            MetaAnnotationValueListNode node = null;
         }
         @after {
-            $ret = factory.makeMetaAnnotationArrayValueNode(factory.makeMetaAnnotationValueListNode(list));
+            $ret = factory.makeMetaAnnotationArrayValueNode(node == null ? factory.makeMetaAnnotationValueListNode() : node);
             ruleStop();
         }
     :   
         '{'
         (
-            a=metaAnnotationElementValue
+            metaAnnotationElementValues
             {
-                list.add($a.ret);
+                node = $metaAnnotationElementValues.ret;
             }
-            (
-                ',' b=metaAnnotationElementValue
-                {
-                    list.add($b.ret);
-                }
-            )*
         )?
         ','?
         '}'
@@ -1456,22 +1466,41 @@ compilationUnit[String name] returns [CompilationUnitNode ret]
         scope Rule;
         @init {
             ruleStart("compilationUnit");
+            MetaprogramImportListNode metaImportList = null;
+            ImportListNode importList = null;
+            TypeDeclarationListNode typeList = null;
         }
         @after {
             ruleStop();
         }
     :
         packageDeclaration?
-        importDeclarations
-        typeDeclarations
+        (
+            metaImportDeclarations
+            {
+                metaImportList = $metaImportDeclarations.ret;
+            }
+        )?
+        (
+            importDeclarations
+            {
+                importList = $importDeclarations.ret;
+            }
+        )?
+        (
+            typeDeclarations
+            {
+                typeList = $typeDeclarations.ret;
+            }
+        )?
         EOF
         {
             $ret = factory.makeCompilationUnitNode(
                         name,
                         $packageDeclaration.ret,
-                        $importDeclarations.metaprogramImportList,
-                        $importDeclarations.importList,
-                        $typeDeclarations.ret);
+                        metaImportList == null ? factory.makeMetaprogramImportListNode() : metaImportList,
+                        importList == null ? factory.makeImportListNode() : importList,
+                        typeList == null ? factory.makeTypeDeclarationListNode() : typeList);
         }
     ;
 
@@ -1502,16 +1531,33 @@ packageDeclaration returns [PackageDeclarationNode ret]
         }
     ;
 
-importDeclarations returns [ImportListNode importList, MetaprogramImportListNode metaprogramImportList]
+metaImportDeclarations returns  [MetaprogramImportListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaImportDeclarations");
+            List<MetaprogramImportNode> metaprogramImportList = new ArrayList<MetaprogramImportNode>();
+        }
+        @after {
+            $ret = factory.makeMetaprogramImportListNode(metaprogramImportList);
+            ruleStop();
+        }
+    :
+        (
+            metaprogramImport
+            {
+                metaprogramImportList.add($metaprogramImport.ret);
+            }
+        )+
+    ;
+    
+importDeclarations returns [ImportListNode ret]
         scope Rule;
         @init {
             ruleStart("importDeclarations");
             List<ImportNode> importList = new ArrayList<ImportNode>();
-            List<MetaprogramImportNode> metaprogramImportList = new ArrayList<MetaprogramImportNode>();
         }
         @after {
-            $importList = factory.makeImportListNode(importList);
-            $metaprogramImportList = factory.makeMetaprogramImportListNode(metaprogramImportList);
+            $ret = factory.makeImportListNode(importList);
             ruleStop();
         }
     :
@@ -1520,12 +1566,7 @@ importDeclarations returns [ImportListNode importList, MetaprogramImportListNode
             {
                 importList.add($importDeclaration.ret);
             }
-        |
-            metaprogramImport
-            {
-                metaprogramImportList.add($metaprogramImport.ret);
-            }
-        )*
+        )+
     ;
 
 importBody returns [boolean staticImport, boolean onDemand, NameNode name]
@@ -1633,7 +1674,7 @@ typeDeclarations returns [TypeDeclarationListNode ret]
             {
                 list.add($typeDeclaration.ret);
             }
-        )*
+        )+
     ;
 
 typeDeclaration returns [TypeDeclarationNode ret]
@@ -1670,10 +1711,10 @@ noOp returns [NoOperationNode ret]
             ruleStop();
         }
     :
-        metaAnnotationList
+        optionalMetaAnnotationList
         ';'
         {
-            $ret = factory.makeNoOperationNode($metaAnnotationList.ret);
+            $ret = factory.makeNoOperationNode($optionalMetaAnnotationList.ret);
         }
     ;
 
@@ -2478,20 +2519,20 @@ classBody returns [ClassBodyNode ret]
         scope Rule;
         @init {
             ruleStart("classBody");
-            List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
+            ClassMemberListNode listNode = null;
         }
         @after {
-            $ret = factory.makeClassBodyNode(factory.makeClassMemberListNode(list));
+            $ret = factory.makeClassBodyNode(listNode == null ? factory.makeClassMemberListNode() : listNode);
             ruleStop();
         }
     :   
-        '{' 
+        '{'
         (
-            classBodyDeclaration
+            classBodyDeclarations
             {
-                list.add($classBodyDeclaration.ret);
+                listNode = $classBodyDeclarations.ret;
             }
-        )* 
+        )?
         '}'
     ;
 
@@ -2499,20 +2540,20 @@ anonymousClassBody returns [AnonymousClassBodyNode ret]
         scope Rule;
         @init {
             ruleStart("anonymousClassBody");
-            List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
+            AnonymousClassMemberListNode listNode = factory.makeAnonymousClassMemberListNode();
         }
         @after {
-            $ret = factory.makeAnonymousClassBodyNode(factory.makeAnonymousClassMemberListNode(list));
+            $ret = factory.makeAnonymousClassBodyNode(listNode);
             ruleStop();
         }
     :   
         '{' 
         (
-            anonymousClassBodyDeclaration
+            anonymousClassBodyDeclarations
             {
-                list.add($anonymousClassBodyDeclaration.ret);
+                listNode = $anonymousClassBodyDeclarations.ret;
             }
-        )* 
+        )?
         '}'
     ;
 
@@ -2520,20 +2561,20 @@ interfaceBody returns [InterfaceBodyNode ret]
         scope Rule;
         @init {
             ruleStart("interfaceBody");
-            List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
+            InterfaceMemberListNode listNode = null;
         }
         @after {
-            $ret = factory.makeInterfaceBodyNode(factory.makeInterfaceMemberListNode(list));
+            $ret = factory.makeInterfaceBodyNode(listNode == null ? factory.makeInterfaceMemberListNode() : listNode);
             ruleStop();
         }
     :   
         '{' 
         (
-            interfaceBodyDeclaration
+            interfaceBodyDeclarations
             {
-                list.add($interfaceBodyDeclaration.ret);
-            }        
-        )* 
+                listNode = $interfaceBodyDeclarations.ret;
+            }
+        )?
         '}'
     ;
 
@@ -2546,15 +2587,34 @@ initializerBlock returns [InitializerDeclarationNode ret]
             ruleStop();
         }
     :
-        metaAnnotationList
+        optionalMetaAnnotationList
         staticText='static'?
         block
         {
             $ret = factory.makeInitializerDeclarationNode(
                     $staticText!=null,
                     $block.ret,
-                    $metaAnnotationList.ret);
+                    $optionalMetaAnnotationList.ret);
         }
+    ;
+    
+classBodyDeclarations returns [ClassMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("classBodyDeclarations");
+            List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
+        }
+        @after {
+            $ret = factory.makeClassMemberListNode(list);
+            ruleStop();
+        }
+    :
+        (
+            classBodyDeclaration
+            {
+                list.add($classBodyDeclaration.ret);
+            }
+        )+
     ;
     
 classBodyDeclaration returns [ClassMemberNode ret]
@@ -2595,6 +2655,25 @@ classBodyDeclaration returns [ClassMemberNode ret]
         }
     ;
 
+anonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("anonymousClassBodyDeclarations");
+            List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
+        }
+        @after {
+            $ret = factory.makeAnonymousClassMemberListNode(list);
+            ruleStop();
+        }
+    :
+        (
+            anonymousClassBodyDeclaration
+            {
+                list.add($anonymousClassBodyDeclaration.ret);
+            }
+        )+
+    ;
+    
 anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
         scope Rule;
         @init {
@@ -2724,9 +2803,7 @@ constructorBody returns [ConstructorBodyNode ret]
             ConstructorInvocationNode constructorInvocationNode = null;
         }
         @after {
-            $ret = factory.makeConstructorBodyNode(
-                    constructorInvocationNode,
-                    listNode);
+            $ret = factory.makeConstructorBodyNode(constructorInvocationNode, listNode);
             ruleStop();
         }
     :
@@ -2737,9 +2814,9 @@ constructorBody returns [ConstructorBodyNode ret]
                 constructorInvocationNode = $explicitConstructorInvocation.ret;
             }
         )?
-        blockStatementList
+        optionalBlockStatementList
         {
-            listNode = $blockStatementList.ret;
+            listNode = $optionalBlockStatementList.ret;
         }
         '}'
     ;
@@ -2809,7 +2886,6 @@ fieldDeclaration returns [FieldDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("fieldDeclaration");
-            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
         }
         @after {
             ruleStop();
@@ -2817,24 +2893,34 @@ fieldDeclaration returns [FieldDeclarationNode ret]
     :   
         javadoc fieldModifiers
         type
-        a=variableDeclarator // process type in case identifier has [] after it
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=variableDeclarator
-            {
-                list.add($b.ret);
-            }
-        )*
+        variableDeclarators
         ';'
         {
             $ret = factory.makeFieldDeclarationNode(
                     $fieldModifiers.ret,
                     $type.ret,
-                    factory.makeVariableDeclaratorListNode(list),
+                    $variableDeclarators.ret,
                     $javadoc.ret);
         }
+    ;
+    
+interfaceBodyDeclarations returns [InterfaceMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("interfaceBodyDeclarations");
+            List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
+        }
+        @after {
+            $ret = factory.makeInterfaceMemberListNode(list);
+            ruleStop();
+        }
+    :
+        (
+            interfaceBodyDeclaration
+            {
+                list.add($interfaceBodyDeclaration.ret);
+            }        
+        )+
     ;
 
 interfaceBodyDeclaration returns [InterfaceMemberNode ret]
@@ -2942,7 +3028,30 @@ constantDeclaration returns [ConstantDeclarationNode ret]
     :   
         javadoc constantModifiers
         type
-        a=variableDeclarator // process type in case identifier has [] after it
+        variableDeclarators
+        ';'
+        {
+            $ret = factory.makeConstantDeclarationNode(
+                    $constantModifiers.ret,
+                    $type.ret,
+                    $variableDeclarators.ret,
+                    $javadoc.ret);
+        }
+    ;
+
+// Represents a non-empty sequence of variable declarators.
+variableDeclarators returns [VariableDeclaratorListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("variableDeclarator");
+            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
+        }
+        @after {
+            $ret = factory.makeVariableDeclaratorListNode(list);
+            ruleStop();
+        }
+    :
+        a=variableDeclarator
         {
             list.add($a.ret);
         }
@@ -2952,20 +3061,49 @@ constantDeclaration returns [ConstantDeclarationNode ret]
                 list.add($b.ret);
             }
         )*
-        ';'
+    ; 
+ 
+// Represents the combination of an identifier and an initializer.  This construct is necessary on its own to support
+// the multiple declaration sugar ("int x,y;").
+variableDeclarator returns [VariableDeclaratorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("variableDeclarator");
+            int arrayLevels = 0;
+            VariableInitializerNode initializer = null;
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        id=identifier
         {
-            $ret = factory.makeConstantDeclarationNode(
-                    $constantModifiers.ret,
-                    $type.ret,
-                    factory.makeVariableDeclaratorListNode(list),
-                    $javadoc.ret);
+            if (logger.isTraceEnabled())
+            {
+                logger.trace("Parsing variable declarator with name " + $id.ret.getIdentifier());
+            }
+        }
+        (
+            arrayTypeCounter
+            {
+                arrayLevels = $arrayTypeCounter.ret;
+            }
+        )?
+        (
+            '=' variableInitializer
+            {
+                initializer = $variableInitializer.ret;
+            }
+        )?
+        {
+            $ret = factory.makeVariableDeclaratorNode($id.ret, arrayLevels, initializer);
         }
     ;
 
-throwsClause returns [UnparameterizedTypeListNode ret]
+unparameterizedTypeList returns [UnparameterizedTypeListNode ret]
         scope Rule;
         @init {
-            ruleStart("throwsClause");
+            ruleStart("unparameterizedTypeList");
             List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
         }
         @after {
@@ -2984,6 +3122,22 @@ throwsClause returns [UnparameterizedTypeListNode ret]
                 list.add(factory.makeUnparameterizedTypeNode($b.ret));
             }
         )*
+    ;
+
+throwsClause returns [UnparameterizedTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("throwsClause");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        THROWS
+        unparameterizedTypeList
+        {
+            $ret = $unparameterizedTypeList.ret;
+        }
     ;
 
 referenceType returns [ReferenceTypeNode ret]
@@ -3195,32 +3349,47 @@ typeArgument returns [TypeArgumentNode ret]
         scope Rule;
         @init {
             ruleStart("typeArgument");
+        } 
+        @after {
+            ruleStop();
+        }
+    :
+        referenceType
+        {
+            $ret = $referenceType.ret;
+        }
+    |
+        wildcard
+        {
+            $ret = $wildcard.ret;
+        }
+    ;
+
+wildcard returns [WildcardTypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("wildcard");
             boolean upper = false;
         } 
         @after {
             ruleStop();
         }
     :
-        unboundedType=referenceType
-        {
-            $ret = $unboundedType.ret;
-        }
-    |   
         '?'
         {
             $ret = factory.makeWildcardTypeNode(null, false);
         }
-    |
-        '?'
         (
-            'extends' { upper = true; }
-        |
-            SUPER { upper = false; }
-        )
-        boundedType=referenceType
-        {
-            $ret = factory.makeWildcardTypeNode($boundedType.ret, upper);
-        }
+	        (
+	            EXTENDS { upper = true; }
+	        |
+	            SUPER { upper = false; }
+	        )
+	        referenceType
+	        {
+	            $ret = factory.makeWildcardTypeNode($referenceType.ret, upper);
+	        }
+        )?
     ;
 
 // Matches a formal parameter list.
@@ -3551,6 +3720,31 @@ elementValue returns [AnnotationValueNode ret]
         }
     ;
 
+// Parses a non-empty list of annotation element values.
+elementValues returns [AnnotationValueListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("elementValue");
+            List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
+        }
+        @after {
+            $ret = factory.makeAnnotationValueListNode(list);
+            ruleStop();
+        }
+    :
+        a=elementValue
+        {
+            list.add($a.ret);
+        }
+        (
+            ',' b=elementValue
+            {
+                list.add($b.ret);
+            }
+        )*
+        ','?
+    ;
+    
 // Parses an annotation element array.
 // For example, in
 //     @Ann({@Foo,@Bar(5)})
@@ -3564,27 +3758,20 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
         scope Rule;
         @init {
             ruleStart("elementValueArrayInitializer");
-            List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
+            AnnotationValueListNode listNode = null;
         }
         @after {
-            $ret = factory.makeAnnotationArrayValueNode(factory.makeAnnotationValueListNode(list));
+            $ret = factory.makeAnnotationArrayValueNode(listNode == null ? factory.makeAnnotationValueListNode() : listNode);
             ruleStop();
         }
     :   
         '{'
         (
-            a=elementValue
+            elementValues
             {
-                list.add($a.ret);
+                listNode = $elementValues.ret;
             }
-            (
-                ',' b=elementValue
-                {
-                    list.add($b.ret);
-                }
-            )*
         )?
-        ','?
         '}'
     ;
 
@@ -3613,26 +3800,43 @@ annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
         }
     ;
 
-
 annotationTypeBody returns [AnnotationBodyNode ret]
         scope Rule;
         @init {
             ruleStart("annotationTypeBody");
-            List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
+            $ret = factory.makeAnnotationBodyNode(factory.makeAnnotationMemberListNode());
         }
         @after {
-            $ret = factory.makeAnnotationBodyNode(factory.makeAnnotationMemberListNode(list));
             ruleStop();
         }
     :   
-        '{' 
+        '{'
+        (
+            annotationTypeElementDeclarations
+	        {
+	            $ret = factory.makeAnnotationBodyNode($annotationTypeElementDeclarations.ret);
+	        } 
+        )?
+        '}'
+    ;
+    
+annotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("annotationTypeElementDeclarations");
+            List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
+        }
+        @after {
+            $ret = factory.makeAnnotationMemberListNode(list);
+            ruleStop();
+        }
+    :
         (
             annotationTypeElementDeclaration
             {
                 list.add($annotationTypeElementDeclaration.ret);
             }
-        )* 
-        '}'
+        )+ 
     ;
 
 annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
@@ -3727,11 +3931,32 @@ block returns [BlockStatementListNode ret]
         }
     :   
         '{'
-        blockStatementList
+        optionalBlockStatementList
         '}'
         {
-            $ret = $blockStatementList.ret;
+            $ret = $optionalBlockStatementList.ret;
         }
+    ;
+
+// This rule encompasses the idea of an optional block statement list.  If no block statements appear in the source
+// code, this rule still parses but returns an empty list.
+optionalBlockStatementList returns [BlockStatementListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalBlockStatementList");
+            BlockStatementListNode listNode = null;
+        }
+        @after {
+            $ret = (listNode == null ? factory.makeBlockStatementListNode() : listNode);
+            ruleStop();
+        }
+    :
+        (
+            blockStatementList
+            {
+                listNode = $blockStatementList.ret;
+            }
+        )?
     ;
 
 blockStatementList returns [BlockStatementListNode ret]
@@ -3750,7 +3975,7 @@ blockStatementList returns [BlockStatementListNode ret]
             {
                 list.add($blockStatement.ret);
             }
-        )*
+        )+
     ;
 
 // Parses a statement from a block of statements.
@@ -3847,8 +4072,8 @@ statement returns [StatementNode ret]
             ruleStop();
         }
     :
-        metaAnnotationList
-        javaStatement[$metaAnnotationList.ret]
+        optionalMetaAnnotationList
+        javaStatement[$optionalMetaAnnotationList.ret]
         {
             $ret = $javaStatement.ret;
         }
@@ -3926,12 +4151,9 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
             $ret = $trystatement.ret;
         }
     |   
-        'switch' parExpression '{' switchBlockStatementGroups '}'
+        switchStatement[metaAnnotations]
         {
-            $ret = factory.makeSwitchNode(
-                $parExpression.ret,
-                $switchBlockStatementGroups.ret,
-                metaAnnotations);
+            $ret = $switchStatement.ret;
         }
     |   
         'synchronized' parExpression block
@@ -4000,6 +4222,38 @@ javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret
         }
     ;
 
+switchStatement[MetaAnnotationListNode metaAnnotations] returns [SwitchNode ret]
+        scope Rule;
+        @init {
+            ruleStart("switchStatement");
+            CaseListNode listNode = null;
+            ExpressionNode expression = null;
+        }
+        @after {
+            $ret = factory.makeSwitchNode(
+                expression,
+                listNode == null ? factory.makeCaseListNode() : listNode,
+                metaAnnotations);
+            ruleStop();
+        }
+    :
+        'switch'
+        '('
+        expression
+        {
+            expression = $expression.ret;
+        }
+        ')'
+        '{'
+        (
+            switchBlockStatementGroups
+            {
+                listNode = $switchBlockStatementGroups.ret;
+            }
+        )?
+        '}'
+    ;
+
 switchBlockStatementGroups returns [CaseListNode ret]
         scope Rule;
         @init {
@@ -4016,7 +4270,7 @@ switchBlockStatementGroups returns [CaseListNode ret]
             {
                 list.add($switchBlockStatementGroup.ret);
             }   
-        )*
+        )+
     ;
 
 switchBlockStatementGroup returns [CaseNode ret]
@@ -4035,9 +4289,9 @@ switchBlockStatementGroup returns [CaseNode ret]
         {
             label = $switchLabel.ret;
         }
-        blockStatementList
+        optionalBlockStatementList
         {
-            listNode = $blockStatementList.ret;
+            listNode = $optionalBlockStatementList.ret;
         }
     ;
 
@@ -4111,16 +4365,12 @@ catches returns [CatchListNode ret]
             ruleStop();
         }
     :   
-        a=catchClause
-        {
-            list.add($a.ret);
-        }
         (
-            b=catchClause
+            catchClause
             {
-                list.add($b.ret);
+                list.add($catchClause.ret);
             }
-        )*
+        )+
     ;
 
 catchClause returns [CatchNode ret]
@@ -5146,8 +5396,7 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
         @init {
             ruleStart("unqualifiedClassInstantiation");
             AnonymousClassBodyNode anonymousClassBodyNode = null;
-            TypeArgumentListNode typeArgumentsNode =
-                    factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
+            TypeArgumentListNode typeArgumentsNode = factory.makeTypeArgumentListNode();
         }
         @after {
             ruleStop();
@@ -5298,10 +5547,8 @@ qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [Qual
         scope Rule;
         @init {
             ruleStart("qualifiedClassInstantiationPrimarySuffix");
-            TypeArgumentListNode constructorTypeArgumentsNode =
-                    factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
-            TypeArgumentListNode classTypeArgumentsNode =
-                    factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
+            TypeArgumentListNode constructorTypeArgumentsNode = factory.makeTypeArgumentListNode();
+            TypeArgumentListNode classTypeArgumentsNode = factory.makeTypeArgumentListNode();
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
         @after {
@@ -5535,30 +5782,46 @@ variableInitializer returns [VariableInitializerNode ret]
         }
     ;
 
+variableInitializers returns [VariableInitializerListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("variableInitializer");
+            List<VariableInitializerNode> list = new ArrayList<VariableInitializerNode>();
+        }
+        @after {
+            $ret = factory.makeVariableInitializerListNode(list);
+            ruleStop();
+        }
+    :
+        v1=variableInitializer
+        {
+            list.add($v1.ret);   
+        }            
+        (
+            ',' v2=variableInitializer
+            {
+                list.add($v2.ret);   
+            }                    
+        )*
+    ;
+
 arrayInitializer returns [ArrayInitializerNode ret]
         scope Rule;
-    @init {
+        @init {
             ruleStart("arrayInitializer");
-            List<VariableInitializerNode> list = new ArrayList<VariableInitializerNode>();
-    }
-    @after {
-            $ret = factory.makeArrayInitializerNode(
-                factory.makeVariableInitializerListNode(list));
+            VariableInitializerListNode listNode = null;
+        }
+        @after {
+            $ret = factory.makeArrayInitializerNode(listNode == null ? factory.makeVariableInitializerListNode() : listNode);
             ruleStop();
-    }
+        }
     :   
         '{' 
             (
-                v1=variableInitializer
+                variableInitializers
                 {
-                    list.add($v1.ret);   
-                }            
-                (
-                    ',' v2=variableInitializer
-                    {
-                        list.add($v2.ret);   
-                    }                    
-                )*
+                    listNode = $variableInitializers.ret;
+                }
             )? 
             (',')? 
         '}'             //Yang's fix, position change.
@@ -5604,20 +5867,20 @@ arguments returns [ExpressionListNode ret]
         scope Rule;
         @init {
             ruleStart("arguments");
+            $ret = factory.makeExpressionListNode();
         }
         @after {
             ruleStop();
         }
     :
-        {
-            // initialize to empty list
-            $ret = factory.makeExpressionListNode(new ArrayList<ExpressionNode>());
-        }
-        '(' (expressionList
+        '('
+        (
+            expressionList
             {
                 $ret = $expressionList.ret;
             }
-        )? ')'
+        )?
+        ')'
     ;
 
 // Parses a name chain.
@@ -5854,8 +6117,11 @@ parseRule_AbstractMethodModifiers returns [AnnotationMethodModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        annotationMethodModifiers
         EOF
+        {
+            $ret = $annotationMethodModifiers.ret;
+        }
     ;
 
 parseRule_Annotation returns [AnnotationNode ret]
@@ -5867,8 +6133,11 @@ parseRule_Annotation returns [AnnotationNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        annotation
         EOF
+        {
+            $ret = $annotation.ret;
+        }
     ;
 
 parseRule_Annotations returns [AnnotationListNode ret]
@@ -5880,8 +6149,11 @@ parseRule_Annotations returns [AnnotationListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        annotations
         EOF
+        {
+            $ret = $annotations.ret;
+        }
     ;
 
 parseRule_AnnotationModifiers returns [AnnotationModifiersNode ret]
@@ -5893,8 +6165,11 @@ parseRule_AnnotationModifiers returns [AnnotationModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        annotationModifiers
         EOF
+        {
+            $ret = $annotationModifiers.ret;
+        }
     ;
 
 parseRule_AnnotationTypeBody returns [AnnotationBodyNode ret]
@@ -5906,8 +6181,11 @@ parseRule_AnnotationTypeBody returns [AnnotationBodyNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        annotationTypeBody
         EOF
+        {
+            $ret = $annotationTypeBody.ret;
+        }
     ;
 
 parseRule_AnnotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
@@ -5919,8 +6197,11 @@ parseRule_AnnotationTypeElementDeclarations returns [AnnotationMemberListNode re
             ruleStop();
         }
     :
-        /* TODO */
+        annotationTypeElementDeclarations 
         EOF
+        {
+            $ret = $annotationTypeElementDeclarations.ret;
+        }
     ;
 
 parseRule_AnnotationTypeElementDeclaration returns [AnnotationMemberNode ret]
@@ -5932,8 +6213,11 @@ parseRule_AnnotationTypeElementDeclaration returns [AnnotationMemberNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        annotationTypeElementDeclaration
         EOF
+        {
+            $ret = $annotationTypeElementDeclaration.ret;
+        }
     ;
 
 parseRule_AnonymousClassBody returns [AnonymousClassBodyNode ret]
@@ -5945,8 +6229,11 @@ parseRule_AnonymousClassBody returns [AnonymousClassBodyNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        anonymousClassBody
         EOF
+        {
+            $ret = $anonymousClassBody.ret;
+        }
     ;
 
 parseRule_AnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
@@ -5958,8 +6245,27 @@ parseRule_AnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode r
             ruleStop();
         }
     :
-        /* TODO */
+        anonymousClassBodyDeclarations
         EOF
+        {
+            $ret = $anonymousClassBodyDeclarations.ret;
+        }
+    ;
+
+parseRule_AnonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AnonymousClassBodyDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        anonymousClassBodyDeclaration
+        EOF
+        {
+            $ret = $anonymousClassBodyDeclaration.ret;
+        }
     ;
 
 parseRule_ArgumentList returns [ExpressionListNode ret]
@@ -5971,8 +6277,11 @@ parseRule_ArgumentList returns [ExpressionListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        expressionList
         EOF
+        {
+            $ret = $expressionList.ret;
+        }
     ;
 
 parseRule_BlockStatement returns [BlockStatementNode ret]
@@ -5984,8 +6293,11 @@ parseRule_BlockStatement returns [BlockStatementNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        blockStatement
         EOF
+        {
+            $ret = $blockStatement.ret;
+        }
     ;
 
 parseRule_BlockStatements returns [BlockStatementListNode ret]
@@ -5997,8 +6309,11 @@ parseRule_BlockStatements returns [BlockStatementListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        blockStatementList
         EOF
+        {
+            $ret = $blockStatementList.ret;
+        }
     ;
 
 parseRule_CatchClause returns [CatchNode ret]
@@ -6010,8 +6325,11 @@ parseRule_CatchClause returns [CatchNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        catchClause
         EOF
+        {
+            $ret = $catchClause.ret;
+        }
     ;
 
 parseRule_Catches returns [CatchListNode ret]
@@ -6023,8 +6341,11 @@ parseRule_Catches returns [CatchListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        catches
         EOF
+        {
+            $ret = $catches.ret;
+        }
     ;
 
 parseRule_ClassBody returns [ClassBodyNode ret]
@@ -6036,8 +6357,11 @@ parseRule_ClassBody returns [ClassBodyNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        classBody
         EOF
+        {
+            $ret = $classBody.ret;
+        }
     ;
 
 parseRule_ClassBodyDeclaration returns [ClassMemberNode ret]
@@ -6049,8 +6373,11 @@ parseRule_ClassBodyDeclaration returns [ClassMemberNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        classBodyDeclaration
         EOF
+        {
+            $ret = $classBodyDeclaration.ret;
+        }
     ;
 
 parseRule_ClassBodyDeclarations returns [ClassMemberListNode ret]
@@ -6062,8 +6389,11 @@ parseRule_ClassBodyDeclarations returns [ClassMemberListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        classBodyDeclarations
         EOF
+        {
+            $ret = $classBodyDeclarations.ret;
+        }
     ;
 
 parseRule_ClassModifiers returns [ClassModifiersNode ret]
@@ -6075,8 +6405,11 @@ parseRule_ClassModifiers returns [ClassModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        classModifiers
         EOF
+        {
+            $ret = $classModifiers.ret;
+        }
     ;
 
 parseRule_ClassOrInterfaceTypeList returns [DeclaredTypeListNode ret]
@@ -6088,11 +6421,14 @@ parseRule_ClassOrInterfaceTypeList returns [DeclaredTypeListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        declaredTypeList
         EOF
+        {
+            $ret = $declaredTypeList.ret;
+        }
     ;
 
-parseRule_CompilationUnit returns [CompilationUnitNode ret]
+parseRule_CompilationUnit[String name] returns [CompilationUnitNode ret]
         scope Rule;
         @init {
             ruleStart("parseRule_CompilationUnit");
@@ -6101,8 +6437,11 @@ parseRule_CompilationUnit returns [CompilationUnitNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        compilationUnit[name]
         EOF
+        {
+            $ret = $compilationUnit.ret;
+        }
     ;
 
 parseRule_ConstantDeclaration returns [ConstantDeclarationNode ret]
@@ -6114,8 +6453,11 @@ parseRule_ConstantDeclaration returns [ConstantDeclarationNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        constantDeclaration
         EOF
+        {
+            $ret = $constantDeclaration.ret;
+        }
     ;
 
 parseRule_ConstantModifiers returns [ConstantModifiersNode ret]
@@ -6127,8 +6469,11 @@ parseRule_ConstantModifiers returns [ConstantModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        constantModifiers
         EOF
+        {
+            $ret = $constantModifiers.ret;
+        }
     ;
 
 parseRule_ConstructorBody returns [ConstructorBodyNode ret]
@@ -6140,8 +6485,11 @@ parseRule_ConstructorBody returns [ConstructorBodyNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        constructorBody
         EOF
+        {
+            $ret = $constructorBody.ret;
+        }
     ;
 
 parseRule_ConstructorModifiers returns [ConstructorModifiersNode ret]
@@ -6153,8 +6501,11 @@ parseRule_ConstructorModifiers returns [ConstructorModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        constructorModifiers
         EOF
+        {
+            $ret = $constructorModifiers.ret;
+        }
     ;
 
 parseRule_ElementValue returns [AnnotationValueNode ret]
@@ -6166,8 +6517,11 @@ parseRule_ElementValue returns [AnnotationValueNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        elementValue
         EOF
+        {
+            $ret = $elementValue.ret;
+        }
     ;
 
 parseRule_ElementValues returns [AnnotationValueListNode ret]
@@ -6179,8 +6533,11 @@ parseRule_ElementValues returns [AnnotationValueListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        elementValues
         EOF
+        {
+            $ret = $elementValues.ret;
+        }
     ;
 
 parseRule_ElementValuePair returns [AnnotationElementNode ret]
@@ -6192,8 +6549,11 @@ parseRule_ElementValuePair returns [AnnotationElementNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        elementValuePair
         EOF
+        {
+            $ret = $elementValuePair.ret;
+        }
     ;
 
 parseRule_ElementValuePairs returns [AnnotationElementListNode ret]
@@ -6205,8 +6565,11 @@ parseRule_ElementValuePairs returns [AnnotationElementListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        elementValuePairs
         EOF
+        {
+            $ret = $elementValuePairs.ret;
+        }
     ;
 
 parseRule_EnumBody returns [EnumBodyNode ret]
@@ -6218,8 +6581,11 @@ parseRule_EnumBody returns [EnumBodyNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        enumBody
         EOF
+        {
+            $ret = $enumBody.ret;
+        }
     ;
 
 parseRule_EnumConstant returns [EnumConstantDeclarationNode ret]
@@ -6231,8 +6597,11 @@ parseRule_EnumConstant returns [EnumConstantDeclarationNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        enumConstant
         EOF
+        {
+            $ret = $enumConstant.ret;
+        }
     ;
 
 parseRule_EnumConstants returns [EnumConstantDeclarationListNode ret]
@@ -6244,8 +6613,11 @@ parseRule_EnumConstants returns [EnumConstantDeclarationListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        enumConstants
         EOF
+        {
+            $ret = $enumConstants.ret;
+        }
     ;
 
 parseRule_EnumModifiers returns [EnumModifiersNode ret]
@@ -6257,8 +6629,11 @@ parseRule_EnumModifiers returns [EnumModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        enumModifiers
         EOF
+        {
+            $ret = $enumModifiers.ret;
+        }
     ;
 
 parseRule_ExceptionTypeList returns [UnparameterizedTypeListNode ret]
@@ -6270,8 +6645,11 @@ parseRule_ExceptionTypeList returns [UnparameterizedTypeListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        unparameterizedTypeList
         EOF
+        {
+            $ret = $unparameterizedTypeList.ret;
+        }
     ;
 
 parseRule_ExplicitConstructorInvocation returns [ConstructorInvocationNode ret]
@@ -6283,8 +6661,11 @@ parseRule_ExplicitConstructorInvocation returns [ConstructorInvocationNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        explicitConstructorInvocation
         EOF
+        {
+            $ret = $explicitConstructorInvocation.ret;
+        }
     ;
 
 parseRule_FieldModifiers returns [FieldModifiersNode ret]
@@ -6296,8 +6677,11 @@ parseRule_FieldModifiers returns [FieldModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        fieldModifiers
         EOF
+        {
+            $ret = $fieldModifiers.ret;
+        }
     ;
 
 parseRule_ForInit returns [ForInitializerNode ret]
@@ -6309,8 +6693,11 @@ parseRule_ForInit returns [ForInitializerNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        forInit
         EOF
+        {
+            $ret = $forInit.ret;
+        }
     ;
 
 parseRule_FormalParameter returns [VariableNode ret]
@@ -6322,21 +6709,11 @@ parseRule_FormalParameter returns [VariableNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        formalParameter
         EOF
-    ;
-
-parseRule_FormalParameters returns [VariableListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("parseRule_FormalParameters");
+        {
+            $ret = $formalParameter.ret;
         }
-        @after {
-            ruleStop();
-        }
-    :
-        /* TODO */
-        EOF
     ;
 
 parseRule_Identifier returns [IdentifierNode ret]
@@ -6348,8 +6725,11 @@ parseRule_Identifier returns [IdentifierNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        identifier
         EOF
+        {
+            $ret = $identifier.ret;
+        }
     ;
 
 parseRule_IdentifierList returns [IdentifierListNode ret]
@@ -6361,8 +6741,11 @@ parseRule_IdentifierList returns [IdentifierListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        identifierList
         EOF
+        {
+            $ret = $identifierList.ret;
+        }
     ;
 
 parseRule_ImportDeclaration returns [ImportNode ret]
@@ -6374,8 +6757,11 @@ parseRule_ImportDeclaration returns [ImportNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        importDeclaration
         EOF
+        {
+            $ret = $importDeclaration.ret;
+        }
     ;
 
 parseRule_ImportDeclarations returns [ImportListNode ret]
@@ -6387,8 +6773,11 @@ parseRule_ImportDeclarations returns [ImportListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        importDeclarations
         EOF
+        {
+            $ret = $importDeclarations.ret;
+        }
     ;
 
 parseRule_InterfaceBody returns [InterfaceBodyNode ret]
@@ -6400,8 +6789,11 @@ parseRule_InterfaceBody returns [InterfaceBodyNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        interfaceBody
         EOF
+        {
+            $ret = $interfaceBody.ret;
+        }
     ;
 
 parseRule_InterfaceMemberDeclaration returns [InterfaceMemberNode ret]
@@ -6413,8 +6805,11 @@ parseRule_InterfaceMemberDeclaration returns [InterfaceMemberNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        interfaceBodyDeclaration
         EOF
+        {
+            $ret = $interfaceBodyDeclaration.ret;
+        }
     ;
 
 parseRule_InterfaceMemberDeclarations returns [InterfaceMemberListNode ret]
@@ -6426,8 +6821,11 @@ parseRule_InterfaceMemberDeclarations returns [InterfaceMemberListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        interfaceBodyDeclarations
         EOF
+        {
+            $ret = $interfaceBodyDeclarations.ret;
+        }
     ;
 
 parseRule_InterfaceModifiers returns [InterfaceModifiersNode ret]
@@ -6439,8 +6837,11 @@ parseRule_InterfaceModifiers returns [InterfaceModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        interfaceModifiers
         EOF
+        {
+            $ret = $interfaceModifiers.ret;
+        }
     ;
 
 parseRule_JavadocComment returns [JavadocNode ret]
@@ -6465,8 +6866,11 @@ parseRule_LocalClassDeclaration returns [LocalClassDeclarationNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        inlineClassDeclaration
         EOF
+        {
+            $ret = $inlineClassDeclaration.ret;
+        }
     ;
 
 parseRule_LocalClassModifiers returns [LocalClassModifiersNode ret]
@@ -6478,8 +6882,11 @@ parseRule_LocalClassModifiers returns [LocalClassModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        inlineClassModifiers
         EOF
+        {
+            $ret = $inlineClassModifiers.ret;
+        }
     ;
 
 parseRule_MetaAnnotation returns [MetaAnnotationNode ret]
@@ -6491,8 +6898,11 @@ parseRule_MetaAnnotation returns [MetaAnnotationNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaAnnotation
         EOF
+        {
+            $ret = $metaAnnotation.ret;
+        }
     ;
 
 parseRule_MetaAnnotationList returns [MetaAnnotationListNode ret]
@@ -6504,8 +6914,11 @@ parseRule_MetaAnnotationList returns [MetaAnnotationListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaAnnotationList
         EOF
+        {
+            $ret = $metaAnnotationList.ret;
+        }
     ;
 
 parseRule_MetaAnnotationElement returns [MetaAnnotationElementNode ret]
@@ -6517,8 +6930,11 @@ parseRule_MetaAnnotationElement returns [MetaAnnotationElementNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaAnnotationElementValuePair
         EOF
+        {
+            $ret = $metaAnnotationElementValuePair.ret;
+        }
     ;
 
 parseRule_MetaAnnotationElements returns [MetaAnnotationElementListNode ret]
@@ -6530,8 +6946,11 @@ parseRule_MetaAnnotationElements returns [MetaAnnotationElementListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaAnnotationElementValuePairs
         EOF
+        {
+            $ret = $metaAnnotationElementValuePairs.ret;
+        }
     ;
 
 parseRule_MetaAnnotationElementValue returns [MetaAnnotationValueNode ret]
@@ -6543,8 +6962,11 @@ parseRule_MetaAnnotationElementValue returns [MetaAnnotationValueNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaAnnotationElementValue
         EOF
+        {
+            $ret = $metaAnnotationElementValue.ret;
+        }
     ;
 
 parseRule_MetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
@@ -6556,8 +6978,11 @@ parseRule_MetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaAnnotationElementValues
         EOF
+        {
+            $ret = $metaAnnotationElementValues.ret;
+        }
     ;
 
 parseRule_Metaprogram returns [MetaprogramNode ret]
@@ -6569,8 +6994,11 @@ parseRule_Metaprogram returns [MetaprogramNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        bsjMetaprogram
         EOF
+        {
+            $ret = $bsjMetaprogram.ret;
+        }
     ;
 
 parseRule_MetaprogramDependency returns [MetaprogramDependencyNode ret]
@@ -6582,8 +7010,11 @@ parseRule_MetaprogramDependency returns [MetaprogramDependencyNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaprogramDependency
         EOF
+        {
+            $ret = $metaprogramDependency.ret;
+        }
     ;
 
 parseRule_MetaprogramDependencyDeclaration returns [MetaprogramDependencyDeclarationNode ret]
@@ -6595,8 +7026,11 @@ parseRule_MetaprogramDependencyDeclaration returns [MetaprogramDependencyDeclara
             ruleStop();
         }
     :
-        /* TODO */
+        metaprogramDependencyDeclaration
         EOF
+        {
+            $ret = $metaprogramDependencyDeclaration.ret;
+        }
     ;
 
 parseRule_MetaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationListNode ret]
@@ -6608,8 +7042,11 @@ parseRule_MetaprogramDependencyDeclarationList returns [MetaprogramDependencyDec
             ruleStop();
         }
     :
-        /* TODO */
+        metaprogramDependencyDeclarationList
         EOF
+        {
+            $ret = $metaprogramDependencyDeclarationList.ret;
+        }
     ;
 
 parseRule_MetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
@@ -6621,8 +7058,11 @@ parseRule_MetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaprogramDependencyList
         EOF
+        {
+            $ret = $metaprogramDependencyList.ret;
+        }
     ;
 
 parseRule_MetaprogramImportDeclaration returns [MetaprogramImportNode ret]
@@ -6634,8 +7074,11 @@ parseRule_MetaprogramImportDeclaration returns [MetaprogramImportNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaprogramImport
         EOF
+        {
+            $ret = $metaprogramImport.ret;
+        }
     ;
 
 parseRule_MetaprogramImportDeclarationList returns [MetaprogramImportListNode ret]
@@ -6647,8 +7090,11 @@ parseRule_MetaprogramImportDeclarationList returns [MetaprogramImportListNode re
             ruleStop();
         }
     :
-        /* TODO */
+        metaImportDeclarations
         EOF
+        {
+            $ret = $metaImportDeclarations.ret;
+        }
     ;
 
 parseRule_MetaprogramTargetDeclaration returns [MetaprogramTargetNode ret]
@@ -6660,8 +7106,11 @@ parseRule_MetaprogramTargetDeclaration returns [MetaprogramTargetNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        metaprogramTarget
         EOF
+        {
+            $ret = $metaprogramTarget.ret;
+        }
     ;
 
 parseRule_MetaprogramTargetDeclarationList returns [MetaprogramTargetListNode ret]
@@ -6673,8 +7122,11 @@ parseRule_MetaprogramTargetDeclarationList returns [MetaprogramTargetListNode re
             ruleStop();
         }
     :
-        /* TODO */
+        metaprogramTargetList
         EOF
+        {
+            $ret = $metaprogramTargetList.ret;
+        }
     ;
 
 parseRule_MethodModifiers returns [MethodModifiersNode ret]
@@ -6686,8 +7138,11 @@ parseRule_MethodModifiers returns [MethodModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        methodModifiers
         EOF
+        {
+            $ret = $methodModifiers.ret;
+        }
     ;
 
 parseRule_Name returns [NameNode ret]
@@ -6699,8 +7154,11 @@ parseRule_Name returns [NameNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        name
         EOF
+        {
+            $ret = $name.ret;
+        }
     ;
 
 parseRule_PackageDeclaration returns [PackageDeclarationNode ret]
@@ -6712,8 +7170,11 @@ parseRule_PackageDeclaration returns [PackageDeclarationNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        packageDeclaration
         EOF
+        {
+            $ret = $packageDeclaration.ret;
+        }
     ;
 
 parseRule_Preamble returns [MetaprogramPreambleNode ret]
@@ -6725,8 +7186,11 @@ parseRule_Preamble returns [MetaprogramPreambleNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        preamble
         EOF
+        {
+            $ret = $preamble.ret;
+        }
     ;
 
 parseRule_ReferenceTypeList returns [ReferenceTypeListNode ret]
@@ -6738,8 +7202,11 @@ parseRule_ReferenceTypeList returns [ReferenceTypeListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        referenceTypeList
         EOF
+        {
+            $ret = $referenceTypeList.ret;
+        }
     ;
 
 parseRule_StatementExpressionList returns [StatementExpressionListNode ret]
@@ -6751,8 +7218,11 @@ parseRule_StatementExpressionList returns [StatementExpressionListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        statementExpressionList
         EOF
+        {
+            $ret = $statementExpressionList.ret;
+        }
     ;
 
 parseRule_SwitchBlockStatementGroup returns [CaseNode ret]
@@ -6764,8 +7234,11 @@ parseRule_SwitchBlockStatementGroup returns [CaseNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        switchBlockStatementGroup
         EOF
+        {
+            $ret = $switchBlockStatementGroup.ret;
+        }
     ;
 
 parseRule_SwitchBlockStatementGroups returns [CaseListNode ret]
@@ -6777,8 +7250,11 @@ parseRule_SwitchBlockStatementGroups returns [CaseListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        switchBlockStatementGroups
         EOF
+        {
+            $ret = $switchBlockStatementGroups.ret;
+        }
     ;
 
 parseRule_Type returns [TypeNode ret]
@@ -6790,11 +7266,14 @@ parseRule_Type returns [TypeNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        type
         EOF
+        {
+            $ret = $type.ret;
+        }
     ;
 
-parseRule_TypeArgumentList returns [TypeArgumentListNode ret]
+parseRule_TypeArguments returns [TypeArgumentListNode ret]
         scope Rule;
         @init {
             ruleStart("parseRule_TypeArgumentList");
@@ -6803,8 +7282,11 @@ parseRule_TypeArgumentList returns [TypeArgumentListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        typeArguments
         EOF
+        {
+            $ret = $typeArguments.ret;
+        }
     ;
 
 parseRule_TypeDeclaration returns [TypeDeclarationNode ret]
@@ -6816,8 +7298,11 @@ parseRule_TypeDeclaration returns [TypeDeclarationNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        typeDeclaration
         EOF
+        {
+            $ret = $typeDeclaration.ret;
+        }
     ;
 
 parseRule_TypeDeclarations returns [TypeDeclarationListNode ret]
@@ -6829,8 +7314,11 @@ parseRule_TypeDeclarations returns [TypeDeclarationListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        typeDeclarations
         EOF
+        {
+            $ret = $typeDeclarations.ret;
+        }
     ;
 
 parseRule_TypeParameter returns [TypeParameterNode ret]
@@ -6842,11 +7330,14 @@ parseRule_TypeParameter returns [TypeParameterNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        typeParameter
         EOF
+        {
+            $ret = $typeParameter.ret;
+        }
     ;
 
-parseRule_TypeParameterList returns [TypeParameterListNode ret]
+parseRule_TypeParameters returns [TypeParameterListNode ret]
         scope Rule;
         @init {
             ruleStart("parseRule_TypeParameterList");
@@ -6855,8 +7346,11 @@ parseRule_TypeParameterList returns [TypeParameterListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        typeParameters
         EOF
+        {
+            $ret = $typeParameters.ret;
+        }
     ;
 
 parseRule_VariableDeclarator returns [VariableDeclaratorNode ret]
@@ -6868,8 +7362,11 @@ parseRule_VariableDeclarator returns [VariableDeclaratorNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        variableDeclarator
         EOF
+        {
+            $ret = $variableDeclarator.ret;
+        }
     ;
 
 parseRule_VariableDeclarators returns [VariableDeclaratorListNode ret]
@@ -6881,8 +7378,11 @@ parseRule_VariableDeclarators returns [VariableDeclaratorListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        variableDeclarators
         EOF
+        {
+            $ret = $variableDeclarators.ret;
+        }
     ;
 
 parseRule_VariableInitializer returns [VariableInitializerNode ret]
@@ -6894,8 +7394,11 @@ parseRule_VariableInitializer returns [VariableInitializerNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        variableInitializer
         EOF
+        {
+            $ret = $variableInitializer.ret;
+        }
     ;
 
 parseRule_VariableInitializers returns [VariableInitializerListNode ret]
@@ -6907,8 +7410,11 @@ parseRule_VariableInitializers returns [VariableInitializerListNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        variableInitializers
         EOF
+        {
+            $ret = $variableInitializers.ret;
+        }
     ;
 
 parseRule_VariableModifiers returns [VariableModifiersNode ret]
@@ -6920,8 +7426,11 @@ parseRule_VariableModifiers returns [VariableModifiersNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        variableModifiers
         EOF
+        {
+            $ret = $variableModifiers.ret;
+        }
     ;
 
 parseRule_Wildcard returns [WildcardTypeNode ret]
@@ -6933,8 +7442,11 @@ parseRule_Wildcard returns [WildcardTypeNode ret]
             ruleStop();
         }
     :
-        /* TODO */
+        wildcard
         EOF
+        {
+            $ret = $wildcard.ret;
+        }
     ;
 
 /********************************************************************************************
