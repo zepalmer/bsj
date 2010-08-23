@@ -43,4 +43,9 @@ public interface ListNode<T extends Node> extends Node, List<T>, NodeList<T>
     @Override
     public ListNode<T> deepCopy(BsjNodeFactory factory);
     
+	/**
+	 * Retrieves the element type of this list.
+	 * @return A class representing the element type of this list.
+	 */
+	public abstract Class<T> getElementType();
 }

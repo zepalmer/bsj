@@ -14,7 +14,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListNode;

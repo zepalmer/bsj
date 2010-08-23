@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -469,4 +470,12 @@ public class TypeNamespaceModifyingOperation extends
 				EnvType.INHERITED.isProhibitsOverlap());
 	}
 
+
+	@Override
+	public Iterable<? extends Class<? extends Node>> getPopulationTypes()
+	{
+		List<Class<? extends Node>> list = new ArrayList<Class<? extends Node>>();
+		list.add(NamedTypeDeclarationNode.class);
+		return list;
+	}
 }

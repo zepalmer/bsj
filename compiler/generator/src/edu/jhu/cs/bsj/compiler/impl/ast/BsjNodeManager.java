@@ -421,7 +421,13 @@ public class BsjNodeManager
 			case EXPRESSION:
 				return getVariableDeclarationsInScope(node, name);
 			case PACKAGE:
-				return Collections.singleton(node.getRootPackage().getSubpackage(name));
+				if (node instanceof PackageNode)
+				{
+					return Collections.singleton(((PackageNode) node).getSubpackage(name));
+				} else
+				{
+					return Collections.singleton(node.getRootPackage().getSubpackage(name));
+				}
 			default:
 				throw new IllegalArgumentException("Name " + nameNode.getNameString() + " is of category " + category);
 		}
@@ -429,15 +435,25 @@ public class BsjNodeManager
 
 	public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(Node node, String name)
 	{
-		TypecheckerManager manager = getTypecheckerManager(node);
-		TypeNamespaceMap namespace = manager.getNamespaceBuilder().getTypeNamespace(node);
-		Collection<BsjTypeLikeElement> elements = namespace.getValues(name);
-		Set<TypeNameBindingNode> ret = new HashSet<TypeNameBindingNode>();
-		for (BsjTypeLikeElement element : elements)
+		if (node instanceof PackageNode)
 		{
-			ret.add(element.getDeclarationNode());
+			PackageNode packageNode = (PackageNode) node;
+			return Collections.singleton(packageNode.getTopLevelTypeDeclaration(
+					name,
+					this.toolkit.getCompilationUnitLoaderFactory().makeLoader(
+							new NoOperationDiagnosticListener<BsjSourceLocation>())));
+		} else
+		{
+			TypecheckerManager manager = getTypecheckerManager(node);
+			TypeNamespaceMap namespace = manager.getNamespaceBuilder().getTypeNamespace(node);
+			Collection<BsjTypeLikeElement> elements = namespace.getValues(name);
+			Set<TypeNameBindingNode> ret = new HashSet<TypeNameBindingNode>();
+			for (BsjTypeLikeElement element : elements)
+			{
+				ret.add(element.getDeclarationNode());
+			}
+			return ret;
 		}
-		return ret;
 	}
 
 	public Collection<? extends InvokableNameBindingNode> getMethodDeclarationsInScope(Node node, String name)

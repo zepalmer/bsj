@@ -49,8 +49,8 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 				throw new IllegalStateException("Error during compilation: " + diagnostic.getMessage(null), cause);
 			}
 		}
-		Object o = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass(paths[0].replaceAll("/", ".")).newInstance();
-		Method mainMethod = o.getClass().getMethod("main", String[].class);
+		Class<?> c = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass(paths[0].replaceAll("/", "."));
+		Method mainMethod = c.getMethod("main", String[].class);
 		mainMethod.invoke(null, new Object[] { new String[0] });
 	}
 

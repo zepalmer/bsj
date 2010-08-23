@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.SubList;
 
 /* GEN:headerstop */
 
-public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
+public abstract class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 {
 	/* GEN:start */
 

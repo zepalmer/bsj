@@ -208,4 +208,13 @@ public class TypeParameterListNodeImpl extends ListNodeImpl<TypeParameterNode> i
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<TypeParameterNode> getElementType()
+    {
+        return TypeParameterNode.class;
+    }
+    
 }

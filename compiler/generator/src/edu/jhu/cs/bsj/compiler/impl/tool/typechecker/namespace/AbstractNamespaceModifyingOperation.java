@@ -29,6 +29,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
@@ -38,6 +39,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.utils.filter.FilterByNodeTypes;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
@@ -446,7 +448,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 * @param nodes The nodes to use.
 	 * @param access The maximum level of access restriction to populate.
 	 */
-	public void populateElements(T map, Iterable<? extends Node> nodes, AccessModifier access)
+	public void populateElements(T map, ListNode<?> nodes, AccessModifier access)
 	{
 		populateElements(map, nodes, access, false, null);
 	}
@@ -460,10 +462,18 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 * @param skipNonMembers <code>true</code> if non-members (such as constructors) should be skipped.
 	 * @param name The name the member must have, or <code>null</code> to skip this check.
 	 */
-	public void populateElements(T map, Iterable<? extends Node> nodes, AccessModifier access, boolean skipNonMembers,
+	public <E extends Node> void populateElements(T map, ListNode<E> nodes, AccessModifier access, boolean skipNonMembers,
 			String name)
 	{
-		for (Node node : nodes)
+		List<Class<? extends E>> types = new ArrayList<Class<? extends E>>();
+		for (Class<? extends Node> clazz : getPopulationTypes())
+		{
+			if (nodes.getElementType().isAssignableFrom(clazz))
+			{
+				types.add(clazz.asSubclass(nodes.getElementType()));
+			}
+		}
+		for (Node node : nodes.filter(new FilterByNodeTypes<E, E>(types)))
 		{
 			populateElement(map, node, access, skipNonMembers, name);
 		}
@@ -479,6 +489,13 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 * @param name The name the member must have, or <code>null</code> to skip this check.
 	 */
 	public abstract void populateElement(T map, Node node, AccessModifier access, boolean skipNonMembers, String name);
+	
+	/**
+	 * Determines which types of nodes the element population elements should use.  This is used to filter unnecessary
+	 * nodes in the event that the namespace is being constructed by a metaprogram.
+	 * @return The types of nodes that this operation should consider when populating.
+	 */
+	public abstract Iterable<? extends Class<? extends Node>> getPopulationTypes();
 
 	/**
 	 * Creates a new map using a single deference map and an environment type.

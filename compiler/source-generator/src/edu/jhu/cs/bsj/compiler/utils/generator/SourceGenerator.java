@@ -1688,6 +1688,28 @@ public class SourceGenerator
 				ps.println();
 			}
 
+			// create element type retrieving method for list nodes
+			boolean isListNodeType = false;
+			for (TypeDefinition sdef : getDefTypes(def))
+			{
+				if (sdef.getBaseName().equals("ListNode"))
+				{
+					isListNodeType = true;
+				}
+			}
+			if (isListNodeType && def.getMode() == Mode.CONCRETE)
+			{
+				ps.println("/**");
+				ps.println(" * Retrieves a class object representing the element type of this node.");
+				ps.println(" * @return The element type of this list node.");
+				ps.println(" */");
+				ps.println("public Class<" + def.getSuperTypeArg() + "> getElementType()");
+				ps.println("{");
+				ps.println("    return " + def.getSuperTypeArg() + ".class;");
+				ps.println("}");
+				ps.println();
+			}
+
 			ps.decPrependCount();
 
 			// add supplements

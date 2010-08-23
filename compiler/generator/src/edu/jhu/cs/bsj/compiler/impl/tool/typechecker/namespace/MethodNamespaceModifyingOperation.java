@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.tools.DiagnosticListener;
@@ -311,5 +313,15 @@ public class MethodNamespaceModifyingOperation extends
 				tryPopulateMemberConstructor(map, node, (ConstructorDeclarationNode) node, access);
 			}
 		}
+	}
+
+	@Override
+	public Iterable<? extends Class<? extends Node>> getPopulationTypes()
+	{
+		List<Class<? extends Node>> list = new ArrayList<Class<? extends Node>>();
+		list.add(MethodDeclarationNode.class);
+		list.add(AnnotationMethodDeclarationNode.class);
+		list.add(ConstructorDeclarationNode.class);
+		return list;
 	}
 }

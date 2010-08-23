@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -353,6 +354,16 @@ public class VariableNamespaceModifyingOperation extends
 		{
 			tryPopulateMemberEnumConstant(map, node, (EnumConstantDeclarationNode) node, name);
 		}
+	}
+
+	@Override
+	public Iterable<? extends Class<? extends Node>> getPopulationTypes()
+	{
+		List<Class<? extends Node>> list = new ArrayList<Class<? extends Node>>();
+		list.add(FieldDeclarationNode.class);
+		list.add(ConstantDeclarationNode.class);
+		list.add(EnumConstantDeclarationNode.class);
+		return list;
 	}
 
 	/**

@@ -208,4 +208,13 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<DeclaredTypeNode> getElementType()
+    {
+        return DeclaredTypeNode.class;
+    }
+    
 }

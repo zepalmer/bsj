@@ -209,4 +209,13 @@ public class MetaprogramTargetListNodeImpl extends ListNodeImpl<MetaprogramTarge
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<MetaprogramTargetNode> getElementType()
+    {
+        return MetaprogramTargetNode.class;
+    }
+    
 }

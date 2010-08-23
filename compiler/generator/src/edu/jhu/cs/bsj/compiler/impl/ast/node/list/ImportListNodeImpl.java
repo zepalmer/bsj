@@ -208,4 +208,13 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<ImportNode> getElementType()
+    {
+        return ImportNode.class;
+    }
+    
 }

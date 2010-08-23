@@ -208,4 +208,13 @@ public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNod
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<InterfaceMemberNode> getElementType()
+    {
+        return InterfaceMemberNode.class;
+    }
+    
 }

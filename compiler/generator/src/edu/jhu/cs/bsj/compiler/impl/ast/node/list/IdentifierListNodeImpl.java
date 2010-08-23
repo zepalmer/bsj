@@ -208,4 +208,13 @@ public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> impleme
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<IdentifierNode> getElementType()
+    {
+        return IdentifierNode.class;
+    }
+    
 }

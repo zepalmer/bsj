@@ -209,4 +209,13 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<MetaAnnotationValueNode> getElementType()
+    {
+        return MetaAnnotationValueNode.class;
+    }
+    
 }

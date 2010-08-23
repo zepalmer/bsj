@@ -83,12 +83,34 @@ public abstract class AbstractTest
 	{
 		return new File("." + File.separator + "local" + File.separator + suffix);
 	}
+	
+	private static void delete(File f)
+	{
+		if (f.isDirectory())
+		{
+			for (File ff : f.listFiles())
+			{
+				delete(ff);
+			}
+		}
+		f.delete();
+	}
+	
+	private static LocationManager getTestLocationManager(String suffix, boolean clear)
+	{
+		File dir = getTestDir(suffix);
+		if (clear)
+		{
+			delete(dir);
+		}
+		dir.mkdirs();
+		return new RegularFileLocationManager(null, dir);
+		
+	}
 
 	private static LocationManager getTestLocationManager(String suffix)
 	{
-		File dir = getTestDir(suffix);
-		dir.mkdirs();
-		return new RegularFileLocationManager(null, dir);
+		return getTestLocationManager(suffix, false);
 	}
 
 	protected BsjFileManager getFileManager(File sourcePath) throws Exception
@@ -109,8 +131,8 @@ public abstract class AbstractTest
 			sourceLocationManager = new RegularFileLocationManager(null, sourcePath);
 		}
 		map.put(BsjCompilerLocation.SOURCE_PATH, sourceLocationManager);
-		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, getTestLocationManager("gensrc"));
-		map.put(BsjCompilerLocation.CLASS_OUTPUT, getTestLocationManager("bin"));
+		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, getTestLocationManager("gensrc", true));
+		map.put(BsjCompilerLocation.CLASS_OUTPUT, getTestLocationManager("bin", true));
 
 		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("sun.boot.class.path")));

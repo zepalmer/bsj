@@ -208,4 +208,13 @@ public class AnonymousClassMemberListNodeImpl extends ListNodeImpl<AnonymousClas
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<AnonymousClassMemberNode> getElementType()
+    {
+        return AnonymousClassMemberNode.class;
+    }
+    
 }

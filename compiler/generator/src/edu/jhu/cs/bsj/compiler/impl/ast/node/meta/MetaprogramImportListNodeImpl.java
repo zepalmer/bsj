@@ -209,4 +209,13 @@ public class MetaprogramImportListNodeImpl extends ListNodeImpl<MetaprogramImpor
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<MetaprogramImportNode> getElementType()
+    {
+        return MetaprogramImportNode.class;
+    }
+    
 }

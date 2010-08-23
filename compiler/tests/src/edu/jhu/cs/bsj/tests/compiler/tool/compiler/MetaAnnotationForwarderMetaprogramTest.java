@@ -9,7 +9,7 @@ public class MetaAnnotationForwarderMetaprogramTest extends AbstractBsjCompilerT
 		public void testBsjCompiler() throws Exception
 		{
 			String s = EXAMPLES + File.separator + "projects" + File.separator + "bsj-tests" + File.separator
-			+ "metaannotation-test";
-			performTest(new File(s), "MyForwarder", "Test");
+			+ "Forwarder";
+			performTest(new File(s), "mypackage/MyForwarder", "mypackage/Test");
 		}
 }

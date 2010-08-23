@@ -208,4 +208,13 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<ClassMemberNode> getElementType()
+    {
+        return ClassMemberNode.class;
+    }
+    
 }

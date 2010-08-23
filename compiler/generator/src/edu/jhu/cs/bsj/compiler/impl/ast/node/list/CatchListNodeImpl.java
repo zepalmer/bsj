@@ -208,4 +208,13 @@ public class CatchListNodeImpl extends ListNodeImpl<CatchNode> implements CatchL
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<CatchNode> getElementType()
+    {
+        return CatchNode.class;
+    }
+    
 }

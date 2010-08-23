@@ -208,4 +208,13 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<UnparameterizedTypeNode> getElementType()
+    {
+        return UnparameterizedTypeNode.class;
+    }
+    
 }

@@ -208,4 +208,13 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<ExpressionNode> getElementType()
+    {
+        return ExpressionNode.class;
+    }
+    
 }

@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.stdlib.metaannotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
@@ -156,6 +157,15 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		List<ClassMemberNode> classDeclarationList = classDeclaration.getBody().getMembers().getChildren();
 
 		if (fieldNode == null) {
+			// TODO: consider: what if this meta-annotation is on neither a field nor a method but is contained within
+			// a method?
+			// ex.
+			// public void foo() {
+			//     @@Forwarder
+			//     class Bar { }
+			// }
+			// this should produce an error but currently would execute the forwarder on foo()
+			
 			methodNode = anchor.getNearestAncestorOfType(MethodDeclarationNode.class);
 			onFieldDeclaration = false;
 			
@@ -172,13 +182,20 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			fieldType = methodNode.getReturnType();
 //			fieldName = trimName(methodNode.getIdentifier().getIdentifier());
 			fieldName = methodNode.getIdentifier().getIdentifier();
-			getAllMethods(fieldName, fieldType, classDeclarationList);
+			getAllMethods(fieldName, fieldType, fieldType, classDeclarationList);
 		} else {
 			for (VariableDeclaratorNode variableDeclaration : fieldNode.getDeclarators().getChildren()) {
 				fieldName = variableDeclaration.getIdentifier().getIdentifier();
-
-				fieldType = variableDeclaration.getEffectiveType(factory);
-				getAllMethods(fieldName, fieldType, classDeclarationList);
+				if (variableDeclaration.getArrayLevels() > 0)
+				{
+					// since we're not able to handle array types as it is, this would be an error anyway
+					// getEffectiveType won't cut it here because we need the type node to be connected
+					throw new NotImplementedYetException("Can't handle more than 0 array levels on declarator");
+				} else
+				{
+					fieldType = fieldNode.getType();
+				}
+				getAllMethods(fieldName, variableDeclaration, fieldType, classDeclarationList);
 			} 
 		}
 
@@ -206,14 +223,14 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 
 
 	private void getAllMethods(
-			String fieldNameString, TypeNode fieldType,
+			String fieldNameString, Node typeScopeNode, TypeNode fieldType,
 			List<ClassMemberNode> classDeclarationList) {
 		int i = 0;
 		IdentifierNode fieldName = factory.makeIdentifierNode(fieldNameString);
 		for (String methodName : getMethodName()) {
 			String forwardedMethodName = getForwardedMethodName(fieldName.getIdentifier(), i);
 			classDeclarationList.addAll(createForwardedMethod(
-					fieldType, fieldName, methodName, forwardedMethodName));
+					typeScopeNode, fieldType, fieldName, methodName, forwardedMethodName));
 			i++;
 		}
 	}	
@@ -240,14 +257,14 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	private List<MethodDeclarationNode> createForwardedMethod(
-			TypeNode variableType, IdentifierNode variableName, String methodName,
+			Node typeScopeNode, TypeNode variableType, IdentifierNode variableName, String methodName,
 			String forwardedMethodName) {
 		// Let fieldName be the name of the field
 		List<MethodDeclarationNode> methodsToAdd = new ArrayList<MethodDeclarationNode>();
 		int i = 0;
 
 		for (MethodDeclarationNode methodToAdd : getMethodsToForward(
-				variableType, methodName)) {
+				typeScopeNode, variableType, methodName)) {
 			// String forwardedMethodName = "";
 
 			IdentifierNode forwardedMethodNameIdentifier = factory
@@ -301,14 +318,29 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	private List<MethodDeclarationNode> getMethodsToForward(
-			TypeNode callerType, String methodName) {
+			Node typeScopeNode, TypeNode callerType, String methodName) {
 
 		List<MethodDeclarationNode> returnValue = new ArrayList<MethodDeclarationNode>();
 
 		NameNode name = getNameFromType(callerType);
 		Context<?> context = BsjServiceRegistry.getThreadLocalData().get(BsjThreadLocalData.Element.CONTEXT);
-		NamedTypeDeclarationNode<?> type = new TypeDeclarationLocatingNodeOperation(
-				name, context.getCompilationUnitLoader()).executeDefault(anchor, null);
+//		NamedTypeDeclarationNode<?> type = new TypeDeclarationLocatingNodeOperation(
+//				name, context.getCompilationUnitLoader()).executeDefault(anchor, null);
+		Collection<? extends Node> declarations = typeScopeNode.getDeclarationsInScope(name);
+		if (declarations.size() != 1)
+		{
+			// then either the declaration isn't in scope or there is more than one declaration in scope
+			// TODO: produce an appropriate diagnostic
+			throw new NotImplementedYetException(declarations.size() + " declarations found for name " + name.getNameString() + " at position " + callerType.getStartLocation());
+		}
+		Node declaration = declarations.iterator().next();
+		if (!(declaration instanceof NamedTypeDeclarationNode<?>))
+		{
+			// then the type we want is obscured by a type or method declaration
+			// TODO: produce an appropriate diagnostic
+			throw new NotImplementedYetException("got " + declaration.getClass().getCanonicalName());
+		}
+		NamedTypeDeclarationNode<?> type = (NamedTypeDeclarationNode<?>)declaration;
 		TypeBodyNode<?> typeBody = type.getBody();
 		ListNode<? extends Node> listOfMembers = typeBody.getMembers();
 		for (Node node : listOfMembers.filter(new FilterByMethodName(methodName))) {
@@ -324,7 +356,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		if (type instanceof UnparameterizedTypeNode) {
 			return ((UnparameterizedTypeNode) type).getName();
 		} else {
-			return null; // TODO throw an error
+			throw new NotImplementedYetException();
 		}
 	}
 	

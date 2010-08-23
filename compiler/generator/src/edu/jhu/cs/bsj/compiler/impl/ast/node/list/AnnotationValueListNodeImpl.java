@@ -208,4 +208,13 @@ public class AnnotationValueListNodeImpl extends ListNodeImpl<AnnotationValueNod
         return false;
     }
     
+    /**
+     * Retrieves a class object representing the element type of this node.
+     * @return The element type of this list node.
+     */
+    public Class<AnnotationValueNode> getElementType()
+    {
+        return AnnotationValueNode.class;
+    }
+    
 }
