@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
@@ -85,12 +86,12 @@ public class MetaannotationMetaprogramToolkit {
 		return getterDescriptions;
 	}
 	
-	public <T extends Node> String getExtendsName(ClassDeclarationNode declaration) {
+	public <T extends Node> NameNode getExtendsNameNode(ClassDeclarationNode declaration) {
 		if (declaration instanceof ClassDeclarationNode) {
 			ClassDeclarationNode classDecl = (ClassDeclarationNode) declaration;
 			DeclaredTypeNode extender = classDecl.getExtendsClause();
 			if (extender == null) {
-				return "java.lang.Object";
+				return null;
 			}
 			if (extender instanceof ParameterizedTypeNode) {
 				ParameterizedTypeNode parameterizedVersion = (ParameterizedTypeNode) extender;
@@ -98,20 +99,28 @@ public class MetaannotationMetaprogramToolkit {
 			} else if (extender instanceof UnparameterizedTypeNode) {
 				UnparameterizedTypeNode unparameterizedVersion = (UnparameterizedTypeNode) extender;
 				NameNode name = unparameterizedVersion.getName();
-				return name.getIdentifier().getIdentifier();
-//				if (name.getIdentifier().getIdentifier().equals("Object")) {
-//					return true;
-//				} else {
-//					return false;
-//				}
+				return name;
+				// if (name.getIdentifier().getIdentifier().equals("Object")) {
+				// return true;
+				// } else {
+				// return false;
+				// }
 			} else {
+				throw new NotImplementedYetException();
 				// TODO flesh this out
 			}
-			return null;
-		} else {
-			return null;
 		}
-	}
+		return null;
+		}
+		
+		public <T extends Node> String getExtendsName(ClassDeclarationNode declaration) {
+			NameNode name = getExtendsNameNode(declaration);
+			if (name == null) {
+				return "java.lang.Object";
+			} else {
+				return name.getIdentifier().getIdentifier();
+			}
+		}
 	
 	
 }
