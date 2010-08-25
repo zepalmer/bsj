@@ -26,6 +26,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
@@ -80,35 +81,34 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
         List<VariableDeclaratorNode> variables = new ArrayList<VariableDeclaratorNode>();
         
         // if properties wasn't specified, just use all fields
+        List<FieldDeclarationNode> fieldDeclarations = Utility.filterByClass(members.getChildren(), FieldDeclarationNode.class);
         if (properties == null)
         {
-            for (ClassMemberNode member : members)
-            {
-                if (member instanceof FieldDeclarationNode)
-                {
-                    FieldDeclarationNode field = (FieldDeclarationNode)member;
-                    variables.addAll(field.getDeclarators());
-                }
-            }
+        	for (FieldDeclarationNode field : fieldDeclarations) {
+                variables.addAll(field.getDeclarators());
+        	}
         }
         // otherwise, only use fields specifically noted in properties
         else
         {
             List<String> propsList = Arrays.asList(properties);
-            for (ClassMemberNode member : members)
-            {
-                if (member instanceof FieldDeclarationNode)
-                {
-                    FieldDeclarationNode field = (FieldDeclarationNode)member;
-                    for (VariableDeclaratorNode var : field.getDeclarators())
-                    {
-                        if (propsList.contains(var.getIdentifier().getIdentifier()))
-                        {
-                            variables.add(var);
-                        }
-                    }
-                }
-            }
+        	for (FieldDeclarationNode field : fieldDeclarations) {
+        		 for (VariableDeclaratorNode var : field.getDeclarators())
+                 {
+                     if (propsList.contains(var.getIdentifier().getIdentifier()))
+                     {
+                         variables.add(var);
+                     }
+                 }
+        	}
+            
+//            for (ClassMemberNode member : members)
+//            {
+//                if (member instanceof FieldDeclarationNode)
+//                {
+//                    FieldDeclarationNode field = (FieldDeclarationNode)member;
+                   
+//            }
         }
         
         // sanity check

@@ -2,10 +2,7 @@ package edu.jhu.cs.bsj.stdlib.metaannotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
@@ -18,7 +15,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
@@ -30,11 +26,11 @@ import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
-import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
-import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.AbstractPropertyListMetaannotationMetaprogram;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.MetaannotationMetaprogramToolkit;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
@@ -44,54 +40,19 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * 
  * @author Joseph Riley
  */
-public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
+public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
 {
     /** The explicitly-specified list of properties. */
-    private String[] properties = null;
-
     public ComparedBy()
     {
         super(Arrays.asList("comparedBy"), Arrays.asList("property", "equalsAndHashCode"));
     }
 
-    @BsjMetaAnnotationElementGetter
-    public String[] getProperties()
-    {
-        return this.properties;
-    }
-
-    @BsjMetaAnnotationElementSetter
-    public void setProperties(String[] properties)
-    {
-        this.properties = properties;
-    }
-    
-    @Override
-    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+    public void execute(Context<MetaAnnotationMetaprogramAnchorNode> context,
+    		List<Pair<String, TypeNode>> getterDescriptions)
     {
         // get all the members of our enclosing class
         ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
-        
-        // get the properties to be used in comparison
-        List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
-        Map<String, MethodDeclarationNode> methodMap = new HashMap<String, MethodDeclarationNode>();
-        for (ClassMemberNode member : members.filter(new GetterFilter()))
-        {
-            MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-            methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
-        }
-        for (String propName : this.properties)
-        {
-            String getterName = "get" + Character.toUpperCase(propName.charAt(0)) + propName.substring(1);
-            MethodDeclarationNode getterDeclaration = methodMap.get(getterName);
-            if (getterDeclaration == null)
-            {
-                context.getDiagnosticListener().report(new MissingMethodDeclarationDiagnosticImpl(members, getterName));
-                throw new MetaprogramExecutionFailureException();
-            }
-            getterDescriptions.add(new Pair<String, TypeNode>(getterName, getterDeclaration.getReturnType()));
-        }
-       
         IdentifierNode className = TypeDeclUtils.getEnclosingTypeName(context, this);
         addComparableInterface(context, className);
         members.add(generateCompareTo(context, getterDescriptions, className));
@@ -221,9 +182,12 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
     @Override
     public void complete() throws InvalidMetaAnnotationConfigurationException
     {
-        if (this.properties == null)
+        if (getProperties() == null)
         {
             throw new InvalidMetaAnnotationConfigurationException(this, "Missing properties value");
         }
     }
+
+
+
 }

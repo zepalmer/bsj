@@ -2,18 +2,13 @@ package edu.jhu.cs.bsj.stdlib.metaannotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -22,13 +17,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
-import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
-import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
-import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
-import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.AbstractPropertyListMetaannotationMetaprogram;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
@@ -41,66 +32,22 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * 
  * @author Joseph Riley
  */
-public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
+public class GenerateToString extends AbstractPropertyListMetaannotationMetaprogram
 {
-    /** The explicitly-specified list of properties. */
-    private String[] properties = null;
 
     public GenerateToString()
     {
         super(Arrays.asList("toString"), Arrays.asList("property"));
     }
 
-    @BsjMetaAnnotationElementGetter
-    public String[] getProperties()
-    {
-        return this.properties;
-    }
-
-    @BsjMetaAnnotationElementSetter
-    public void setProperties(String[] properties)
-    {
-        this.properties = properties;
-    }
-    
     @Override
-    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+    public void execute(Context<MetaAnnotationMetaprogramAnchorNode> context, 
+    		List<Pair<String, TypeNode>> getterDescriptions)
     {
         // get all the members of our enclosing class
         ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
 
-        //TODO roll into utilities class?
-        // establish the list of properties we will be using
-        List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
-        if (this.properties == null)
-        {
-            for (ClassMemberNode member : members.filter(new GetterFilter()))
-            {
-                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-                getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
-                      methodDecl.getReturnType()));
-            }
-        } else
-        {
-            Map<String, MethodDeclarationNode> methodMap = new HashMap<String, MethodDeclarationNode>();
-            for (ClassMemberNode member : members.filter(new GetterFilter()))
-            {
-                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-                methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
-            }
-            for (String propName : this.properties)
-            {
-                String getterName = "get" + Character.toUpperCase(propName.charAt(0)) + propName.substring(1);
-                MethodDeclarationNode getterDeclaration = methodMap.get(getterName);
-                if (getterDeclaration == null)
-                {
-                    context.getDiagnosticListener().report(
-                            new MissingMethodDeclarationDiagnosticImpl(members, getterName));
-                    throw new MetaprogramExecutionFailureException();
-                }
-                getterDescriptions.add(new Pair<String, TypeNode>(getterName, getterDeclaration.getReturnType()));
-            }
-        }
+       
 
         // create and add the actual toString method
         members.addLast(createToString(
