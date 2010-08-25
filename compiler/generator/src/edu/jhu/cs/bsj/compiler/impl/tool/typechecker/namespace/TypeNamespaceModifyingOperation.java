@@ -163,6 +163,11 @@ public class TypeNamespaceModifyingOperation extends
 		// (such as in "List").
 		populateOnDemandImports(map, node.getImports());
 
+		// Automatic import of java.lang.* is treated as an on-demand import
+		PackageNode javaLangPackage = node.getRootPackage().getSubpackageByQualifiedName("java.lang");
+		getLoader().loadAll(javaLangPackage);
+		populateNamespaceMapWithPackage(map, javaLangPackage, node, AccessModifier.PUBLIC);
+
 		// *** Process on-demand static imports.
 		populateOnDemandStaticImports(map, node.getImports());
 
@@ -469,7 +474,6 @@ public class TypeNamespaceModifyingOperation extends
 		return new TypeNamespaceMap(submaps, getListener(), EnvType.INHERITED.isEager(),
 				EnvType.INHERITED.isProhibitsOverlap());
 	}
-
 
 	@Override
 	public Iterable<? extends Class<? extends Node>> getPopulationTypes()
