@@ -9,7 +9,6 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
@@ -18,7 +17,8 @@ import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
-import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.NameUtilities;
+import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
@@ -27,6 +27,7 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * TODO finish
  * 
  * @author Joseph Riley
+ * @author Nathan Krasnopoler
  */
 public class GenerateConstructorFromProperties extends
         AbstractBsjMetaAnnotationMetaprogram
@@ -43,13 +44,10 @@ public class GenerateConstructorFromProperties extends
         BsjNodeFactory factory = context.getFactory();  
         
         // extract field names and types
+        List<Pair<String, TypeNode>> fieldGetterDescriptions = Utility.fieldNamesFromGetters(Utility.getGetters(members));
         List<Pair<String, TypeNode>> fieldDescriptions = new ArrayList<Pair<String, TypeNode>>();
-        for (ClassMemberNode member : members.filter(new GetterFilter()))
-        {
-            MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-            String fieldName = methodDecl.getIdentifier().getIdentifier().substring(3);
-            fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
-            fieldDescriptions.add(new Pair<String, TypeNode>(fieldName, methodDecl.getReturnType()));
+        for (Pair<String, TypeNode> pair : fieldGetterDescriptions) {
+        	fieldDescriptions.add(new Pair<String, TypeNode>(NameUtilities.nameFromGetter(pair.getFirst()), pair.getSecond()));
         }
         
         String className = TypeDeclUtils.getEnclosingTypeName(context, this).getIdentifier();
