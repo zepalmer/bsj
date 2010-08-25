@@ -2,7 +2,10 @@ package edu.jhu.cs.bsj.stdlib.metaannotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.script.Invocable;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
@@ -14,13 +17,17 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InvokableNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
@@ -37,10 +44,12 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * instead.
  * 
  * @author Zachary Palmer
+ * @author Nathan Krasnopoler
  */
 public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotationMetaprogram
 {
-	// TODO This doesn't seem to work, because the metaannotation properties defined in the abstract superclass are not detected, and it throws errors indicating that the property "properties" does not exist. 
+	// TODO This doesn't seem to work, because the metaannotation properties defined in the abstract superclass are not detected, and it throws errors indicating that the property "properties" does not exist.
+	
 	private ClassDeclarationNode classDeclaration;
 
 	public GenerateEqualsAndHashCode()
@@ -71,13 +80,34 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 	{
 		// Determine whether or not a call to super.equals is appropriate.
 		// This is the case if any of the type declarations above this one declare equals (except for java.lang.Object)
-		boolean invokeSuper = true; // TODO
+		boolean invokeSuper; // TODO
+		
 		MetaannotationMetaprogramToolkit toolkit = new MetaannotationMetaprogramToolkit(this, context);
-		String extendsName = toolkit.getExtendsName(classDeclaration);
-		if (invokeSuper && extendsName.equals("java.lang.Object")) {
-			invokeSuper = true;
-		} else {
+
+		ClassDeclarationNode classDeclaration = toolkit.getDeclarationAncestorOfType(ClassDeclarationNode.class, context.getAnchor());
+		NameNode name = toolkit.getExtendsNameNode(classDeclaration);
+		if (name == null) {
 			invokeSuper = false;
+		} else {
+			java.util.Collection<? extends Node> superBinding = context
+					.getAnchor().getDeclarationsInScope(name);
+			if (superBinding.size() != 1) {
+				throw new NotImplementedYetException();
+				// TODO raise a diagnostic
+			}
+
+			java.util.Collection<? extends InvokableNameBindingNode> bindings = superBinding
+					.iterator().next().getMethodDeclarationsInScope("equals");
+			for (InvokableNameBindingNode invokable : bindings) {
+				invokable.getNearestAncestorOfType(ClassDeclarationNode.class);
+
+			}
+			String extendsName = toolkit.getExtendsName(classDeclaration);
+			if (extendsName.equals("java.lang.Object")) {
+				invokeSuper = true;
+			} else {
+				invokeSuper = false;
+			}
 		}
 
 		BsjNodeFactory factory = context.getFactory();
