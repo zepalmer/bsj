@@ -276,7 +276,7 @@ public class NamespaceMap<K, V extends BsjElement>
 	 * @param key The key to look up.
 	 * @return The appropriate value.
 	 */
-	public V doLookup(K key)
+	protected V doLookup(K key)
 	{
 		if (this.backingMap.containsKey(key))
 		{

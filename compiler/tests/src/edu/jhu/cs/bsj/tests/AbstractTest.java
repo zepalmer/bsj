@@ -113,7 +113,7 @@ public abstract class AbstractTest
 		return getTestLocationManager(suffix, false);
 	}
 
-	protected BsjFileManager getFileManager(File sourcePath) throws Exception
+	protected static BsjFileManager getFileManager(File sourcePath) throws Exception
 	{
 		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.newFileManagerFactory();
 
@@ -148,7 +148,7 @@ public abstract class AbstractTest
 		return fileManagerFactory.newFileManager();
 	}
 
-	protected BsjToolkit getToolkit(File sourcePath) throws Exception
+	protected static BsjToolkit getToolkit(File sourcePath) throws Exception
 	{
 		BsjToolkitFactory bsjToolkitFactory = BsjServiceRegistry.newToolkitFactory();
 		bsjToolkitFactory.setFileManager(getFileManager(sourcePath));

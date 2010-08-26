@@ -1,0 +1,11 @@
+public class ExampleNamespace
+{
+	private int x;
+	
+	public void test() {}
+}
+
+class ExampleNamespace2
+{
+	
+}
