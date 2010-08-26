@@ -3497,10 +3497,34 @@ public class SourceGenerator
 			String nodeType = leastUpperBound.getBaseName() + (leastUpperBound.getTypeParameter() != null ? "<?>" : "");
 			String ruleType = "ParseRule<" + nodeType + ">";
 			String elementName = StringUtilities.convertCamelCaseToUpperCase(def.getName());
-			protoEnumPs.println("public static final " + ruleType + " " + elementName + " = ");
-			protoEnumPs.incPrependCount();
-			protoEnumPs.println("new " + ruleType + "(" + leastUpperBound.getBaseName() + ".class);");
-			protoEnumPs.decPrependCount();
+			protoEnumPs.print("public static final " + ruleType + " " + elementName);
+			if (def.getOutputTypes().size() == 1)
+			{
+				protoEnumPs.println(" = ");
+				protoEnumPs.incPrependCount();
+				protoEnumPs.println("new " + ruleType + "(" + leastUpperBound.getBaseName() + ".class,");
+				protoEnumPs.incPrependCount();
+				protoEnumPs.println("Collections.<Class<? extends " + leastUpperBound.getBaseName() + ">>singleton("
+						+ leastUpperBound.getBaseName() + ".class));");
+				protoEnumPs.decPrependCount(2);
+			} else
+			{
+				protoEnumPs.println(";");
+				protoEnumPs.println("static");
+				protoEnumPs.println("{");
+				protoEnumPs.incPrependCount();
+				String genListArg = "<Class<? extends " + leastUpperBound.getBaseName() + ">>";
+				protoEnumPs.println("List" + genListArg + " list = new ArrayList" + genListArg + "("
+						+ def.getOutputTypes().size() + ");");
+				for (OutputTypeDefinition outputTypeDefinition : def.getOutputTypes())
+				{
+					protoEnumPs.println("list.add(" + outputTypeDefinition.getType().getBaseName() + ".class);");
+				}
+				protoEnumPs.println(elementName + " = new " + ruleType + "(" + leastUpperBound.getBaseName()
+						+ ".class, list);");
+				protoEnumPs.decPrependCount();
+				protoEnumPs.println("}");
+			}
 			protoEnumPs.println();
 
 			// Create the appropriate case in the ANTLR-calling utility
