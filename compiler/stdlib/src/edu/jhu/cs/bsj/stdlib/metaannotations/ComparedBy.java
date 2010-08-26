@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.stdlib.metaannotations;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
@@ -23,14 +24,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
-import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
-import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.metaannotations.utils.AbstractPropertyListMetaannotationMetaprogram;
-import edu.jhu.cs.bsj.stdlib.metaannotations.utils.MetaannotationMetaprogramToolkit;
-import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**

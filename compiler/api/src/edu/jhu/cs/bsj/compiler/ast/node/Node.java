@@ -234,7 +234,7 @@ public interface Node
 	 * Retrieves a type declaration in scope which corresponds to the specified simple name component. This operation
 	 * may involve the construction of a symbol table and thus may result in additional nodes being loaded.
 	 * 
-	 * @param name The simple name componenet to use.
+	 * @param name The simple name component to use.
 	 * @return The nodes corresponding to the declaration of that specified name.
 	 */
 	public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(String name);
@@ -243,7 +243,7 @@ public interface Node
 	 * Retrieves a type declaration in scope which corresponds to the specified simple name component. This operation
 	 * may involve the construction of a symbol table and thus may result in additional nodes being loaded.
 	 * 
-	 * @param name The simple name componenet to use.
+	 * @param name The simple name component to use.
 	 * @return The nodes corresponding to the declaration of that specified name.
 	 */
 	public Collection<? extends InvokableNameBindingNode> getMethodDeclarationsInScope(String name);
@@ -254,7 +254,7 @@ public interface Node
 	 * Retrieves a type declaration in scope which corresponds to the specified simple name component. This operation
 	 * may involve the construction of a symbol table and thus may result in additional nodes being loaded.
 	 * 
-	 * @param name The simple name componenet to use.
+	 * @param name The simple name component to use.
 	 * @return The nodes corresponding to the declaration of that specified name.
 	 */
 	public Collection<? extends VariableNameBindingNode> getVariableDeclarationsInScope(String name);

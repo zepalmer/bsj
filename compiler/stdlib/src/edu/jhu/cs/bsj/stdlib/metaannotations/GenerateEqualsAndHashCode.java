@@ -2,10 +2,7 @@ package edu.jhu.cs.bsj.stdlib.metaannotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.script.Invocable;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
