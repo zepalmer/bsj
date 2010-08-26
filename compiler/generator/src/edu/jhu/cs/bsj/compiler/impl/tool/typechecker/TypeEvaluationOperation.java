@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
+import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
@@ -74,18 +75,34 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 {
 	/** The typechecker model managegr for this operation. */
 	private TypecheckerManager manager;
+	/**
+	 * The node operation to use when a child node's type is needed. This is used to allow another node operation to
+	 * proxy all internal calls to this node operation.
+	 */
+	private BsjNodeOperation<TypecheckerEnvironment, BsjType> thisOperation;
 
 	public TypeEvaluationOperation(TypecheckerManager manager)
 	{
 		super();
 		this.manager = manager;
+		this.thisOperation = this;
+	}
+
+	public TypeEvaluationOperation(TypecheckerManager manager,
+			BsjNodeOperation<TypecheckerEnvironment, BsjType> thisOperation)
+	{
+		super();
+		this.manager = manager;
+		this.thisOperation = thisOperation;
 	}
 
 	// TODO: handle rejection which comes as a result of lacking context (such as "<:x:>") differently
 	// This could be accomplished by creating a second operation. The second operation calls this operation for all
 	// requests. Whenever this operation returns an error type indicating failure due to insufficient context, however,
 	// the second operation would then perform a parse map operation and call this operation again. Only in the cae of
-	// a second failure would the second operation return the insufficient context error type.
+	// a second failure would the second operation return the insufficient context error type. Note that this would
+	// require ensuring that this operation never calls executeOperation(this,...); it should instead accept an argument
+	// on construction indicating the "thisOperation" to use (to simulate proxy-like calls).
 
 	@Override
 	public BsjType executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node,
@@ -269,8 +286,155 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeBinaryExpressionNode(BinaryExpressionNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+
+		BsjType leftType = node.getLeftOperand().executeOperation(thisOperation, env);
+		BsjType rightType = node.getRightOperand().executeOperation(thisOperation, env);
+
+		BsjType unboxedLeftType;
+		BsjType unboxedRightType;
+
+		if (node.getOperator() == BinaryOperator.CONDITIONAL_AND || node.getOperator() == BinaryOperator.CONDITIONAL_OR)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (!unboxedLeftType.equals(toolkit.getBooleanType()))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			if (!unboxedRightType.equals(toolkit.getBooleanType()))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return unboxedLeftType;
+		} else if (node.getOperator() == BinaryOperator.MINUS || node.getOperator() == BinaryOperator.PLUS
+				|| node.getOperator() == BinaryOperator.DIVIDE || node.getOperator() == BinaryOperator.MODULUS
+				|| node.getOperator() == BinaryOperator.MULTIPLY)
+		{
+			if (node.getOperator() == BinaryOperator.PLUS
+					&& (leftType.equals(toolkit.getStringElement().asType()) || rightType.equals(toolkit.getStringElement().asType())))
+			{
+				// if it's a + operator and either side is a string, the result is string concatenation
+				return toolkit.getStringElement().asType();
+			}
+
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (!isNumericPrimitive(unboxedLeftType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			if (!isNumericPrimitive(unboxedRightType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return binaryNumericTypePromotion(unboxedLeftType, unboxedRightType);
+		} else if (node.getOperator() == BinaryOperator.EQUAL || node.getOperator() == BinaryOperator.NOT_EQUAL)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+
+			if (unboxedLeftType.equals(toolkit.getBooleanType()))
+			{
+				if (unboxedRightType.equals(toolkit.getBooleanType()))
+				{
+					return toolkit.getBooleanType();
+				} else
+				{
+					// Equality on a boolean type must always be between two boolean types.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else if (isNumericPrimitive(unboxedLeftType))
+			{
+				if (isNumericPrimitive(unboxedRightType))
+				{
+					return toolkit.getBooleanType();
+				} else
+				{
+					// Equality on a numeric type must always be between two numeric types.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else
+			{
+				// TODO: if either operand is assignable to the other, a compile-time error occurs
+				return toolkit.getBooleanType();
+			}
+		} else if (node.getOperator() == BinaryOperator.GREATER_THAN
+				|| node.getOperator() == BinaryOperator.GREATER_THAN_EQUAL
+				|| node.getOperator() == BinaryOperator.LESS_THAN
+				|| node.getOperator() == BinaryOperator.LESS_THAN_EQUAL)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (!isNumericPrimitive(unboxedLeftType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			if (!isNumericPrimitive(unboxedRightType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return toolkit.getBooleanType();
+		} else if (node.getOperator() == BinaryOperator.LEFT_SHIFT || node.getOperator() == BinaryOperator.RIGHT_SHIFT
+				|| node.getOperator() == BinaryOperator.UNSIGNED_RIGHT_SHIFT)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (!isIntegralPrimitive(unboxedLeftType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			if (!isIntegralPrimitive(unboxedRightType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return numericTypePromotion(unboxedLeftType);
+		} else if (node.getOperator() == BinaryOperator.LOGICAL_AND || node.getOperator() == BinaryOperator.LOGICAL_OR ||
+				node.getOperator() == BinaryOperator.XOR)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (unboxedLeftType.equals(toolkit.getBooleanType()))
+			{
+				if (unboxedRightType.equals(toolkit.getBooleanType()))
+				{
+					return toolkit.getBooleanType();
+				} else
+				{
+					// Equality on a boolean type must always be between two boolean types.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else if (isIntegralPrimitive(unboxedLeftType))
+			{
+				if (isIntegralPrimitive(unboxedRightType))
+				{
+					return binaryNumericTypePromotion(unboxedLeftType, unboxedRightType);
+				} else
+				{
+					// Equality on a numeric type must always be between two numeric types.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+		} else
+		{
+			throw new IllegalStateException("Unrecognized binary operator " + node.getOperator());
+		}
 	}
 
 	@Override
@@ -929,7 +1093,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, TypecheckerEnvironment env)
 	{
-		return node.getExpression().executeOperation(this, env);
+		return node.getExpression().executeOperation(thisOperation, env);
 	}
 
 	@Override
@@ -1127,8 +1291,43 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeUnaryExpressionNode(UnaryExpressionNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType type = node.getExpression().executeOperation(thisOperation, env);
+		switch (node.getOperator())
+		{
+			case BITWISE_COMPLEMENT:
+				type = autoUnboxType(type);
+				if (!isIntegralPrimitive(type))
+				{
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				} else
+				{
+					return numericTypePromotion(type);
+				}
+			case LOGICAL_COMPLEMENT:
+				type = autoUnboxType(type);
+				if (type.equals(this.manager.getToolkit().getBooleanType()))
+				{
+					return type;
+				} else
+				{
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			case UNARY_MINUS:
+			case UNARY_PLUS:
+				BsjPrimitiveType primitiveType = numericTypePromotion(type);
+				if (primitiveType == null)
+				{
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				} else
+				{
+					return primitiveType;
+				}
+			default:
+				throw new IllegalStateException("Unrecognized unary expression operator");
+		}
 	}
 
 	@Override
@@ -1136,7 +1335,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	{
 		// All unary statement expressions are numeric in nature (pre- and postfix increment and decrement). If the
 		// expression has a numeric type, it preserves that type. Otherwise, the expression has an error type.
-		BsjType expressionType = node.getExpression().executeOperation(this, env);
+		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
 		expressionType = autoUnboxType(expressionType);
 		if (isNumericPrimitive(expressionType))
 		{
@@ -1344,8 +1543,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	private boolean isNumericPrimitive(BsjType type)
 	{
 		TypecheckerToolkit toolkit = this.manager.getToolkit();
-		return (isIntegralPrimitive(type) || (type.equals(toolkit.getDoubleType()))
-				|| (type.equals(toolkit.getFloatType())));
+		return (isIntegralPrimitive(type) || (type.equals(toolkit.getDoubleType())) || (type.equals(toolkit.getFloatType())));
 	}
 
 	/**
@@ -1358,5 +1556,56 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				|| (type.equals(toolkit.getIntType())) || (type.equals(toolkit.getLongType()))
 				|| (type.equals(toolkit.getShortType())) || (type.equals(toolkit.getDoubleType()))
 				|| (type.equals(toolkit.getFloatType()));
+	}
+
+	/**
+	 * Performs numeric type promotion on the specified type. This is equivalent to both unary numeric conversion (JLSv3
+	 * §5.6.1) and binary numeric conversion (JLSv3 §5.6.2) because those conversions have different effects on the
+	 * values that are converted but not on the types. If the specified type is not a numeric type, <code>null</code> is
+	 * returned.
+	 */
+	private BsjPrimitiveType numericTypePromotion(BsjType type)
+	{
+		BsjType unboxedType = autoUnboxType(type);
+		if (!isNumericPrimitive(unboxedType))
+		{
+			return null;
+		}
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+		if ((type.equals(toolkit.getByteType())) || (type.equals(toolkit.getCharType()))
+				|| (type.equals(toolkit.getShortType())))
+		{
+			return toolkit.getIntType();
+		} else
+		{
+			return (BsjPrimitiveType) unboxedType;
+		}
+	}
+
+	/**
+	 * Performs a binary type promotion as specified in JLSv3 §5.6.2. This is a convenience method which calls
+	 * {@link #numericTypePromotion(BsjType) on both arguments and then returns the type to which either types will be
+	 * upcast (if such a type exists) or which is equal to both types (if not). The arguments to this method <i>must</i>
+	 * be known to be numeric primitive types; if they are not, an {@link IllegalStateException} is thrown.
+	 * 
+	 * @param leftType The left type.
+	 * @param rightType The right type.
+	 * @return The promoted type.
+	 */
+	private BsjType binaryNumericTypePromotion(BsjType leftType, BsjType rightType)
+	{
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+		leftType = numericTypePromotion(leftType);
+		rightType = numericTypePromotion(rightType);
+		for (BsjPrimitiveType type : new BsjPrimitiveType[] { toolkit.getDoubleType(), toolkit.getFloatType(),
+				toolkit.getLongType(), toolkit.getIntType() })
+		{
+			if (leftType.equals(type) || rightType.equals(type))
+			{
+				return type;
+			}
+		}
+		// Anything else should've been upcast to an int. How did we get here?
+		throw new IllegalStateException("Don't know how to handle types " + leftType + " and " + rightType);
 	}
 }
