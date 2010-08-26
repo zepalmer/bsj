@@ -14,15 +14,15 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.ParseMapEntry;
 public class TypecheckerEnvironment
 {
 	/** The parse map to use. */
-	private Map<RawCodeLiteralNode, ParseMapEntry> parseMap;
+	private Map<RawCodeLiteralNode, ParseMapEntry<?>> parseMap;
 
-	public TypecheckerEnvironment(Map<RawCodeLiteralNode, ParseMapEntry> parseMap)
+	public TypecheckerEnvironment(Map<RawCodeLiteralNode, ParseMapEntry<?>> parseMap)
 	{
 		super();
 		this.parseMap = parseMap;
 	}
 
-	public Map<RawCodeLiteralNode, ParseMapEntry> getParseMap()
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> getParseMap()
 	{
 		return parseMap;
 	}

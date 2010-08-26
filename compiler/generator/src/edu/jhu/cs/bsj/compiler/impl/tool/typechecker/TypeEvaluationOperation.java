@@ -54,8 +54,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
@@ -76,15 +80,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		super();
 		this.manager = manager;
 	}
-	
+
 	// TODO: handle rejection which comes as a result of lacking context (such as "<:x:>") differently
-	// This could be accomplished by creating a second operation.  The second operation calls this operation for all
-	// requests.  Whenever this operation returns an error type indicating failure due to insufficient context, however,
-	// the second operation would then perform a parse map operation and call this operation again.  Only in the cae of
+	// This could be accomplished by creating a second operation. The second operation calls this operation for all
+	// requests. Whenever this operation returns an error type indicating failure due to insufficient context, however,
+	// the second operation would then perform a parse map operation and call this operation again. Only in the cae of
 	// a second failure would the second operation return the insufficient context error type.
 
 	@Override
-	public BsjType executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, TypecheckerEnvironment env)
+	public BsjType executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -154,14 +159,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, TypecheckerEnvironment env)
+	public BsjType executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, TypecheckerEnvironment env)
+	public BsjType executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -281,7 +288,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node, TypecheckerEnvironment env)
+	public BsjType executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -363,7 +371,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, TypecheckerEnvironment env)
+	public BsjType executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -474,7 +483,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node, TypecheckerEnvironment env)
+	public BsjType executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -647,7 +657,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, TypecheckerEnvironment env)
+	public BsjType executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -723,7 +734,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, TypecheckerEnvironment env)
+	public BsjType executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -737,14 +749,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node, TypecheckerEnvironment env)
+	public BsjType executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node, TypecheckerEnvironment env)
+	public BsjType executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -758,14 +772,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, TypecheckerEnvironment env)
+	public BsjType executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
 	}
 
 	@Override
-	public BsjType executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, TypecheckerEnvironment env)
+	public BsjType executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -835,7 +851,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, TypecheckerEnvironment env)
+	public BsjType executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -923,7 +940,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, TypecheckerEnvironment env)
+	public BsjType executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -972,7 +990,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, TypecheckerEnvironment env)
+	public BsjType executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -1020,7 +1039,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node, TypecheckerEnvironment env)
+	public BsjType executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -1083,7 +1103,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, TypecheckerEnvironment env)
+	public BsjType executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -1113,8 +1134,18 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// All unary statement expressions are numeric in nature (pre- and postfix increment and decrement). If the
+		// expression has a numeric type, it preserves that type. Otherwise, the expression has an error type.
+		BsjType expressionType = node.getExpression().executeOperation(this, env);
+		expressionType = autoUnboxType(expressionType);
+		if (isNumericPrimitive(expressionType))
+		{
+			return expressionType;
+		} else
+		{
+			// TODO: raise a diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
 	}
 
 	@Override
@@ -1132,7 +1163,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, TypecheckerEnvironment env)
+	public BsjType executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -1213,5 +1245,118 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
+	}
+
+	/**
+	 * Boxes the specified type.
+	 */
+	private BsjExplicitlyDeclaredType boxType(BsjPrimitiveType type)
+	{
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+		if (type.equals(toolkit.getByteType()))
+			return toolkit.getByteWrapperType();
+		if (type.equals(toolkit.getCharType()))
+			return toolkit.getCharacterWrapperType();
+		if (type.equals(toolkit.getIntType()))
+			return toolkit.getIntegerWrapperType();
+		if (type.equals(toolkit.getLongType()))
+			return toolkit.getLongWrapperType();
+		if (type.equals(toolkit.getShortType()))
+			return toolkit.getShortWrapperType();
+		if (type.equals(toolkit.getDoubleType()))
+			return toolkit.getDoubleWrapperType();
+		if (type.equals(toolkit.getFloatType()))
+			return toolkit.getFloatWrapperType();
+		if (type.equals(toolkit.getBooleanType()))
+			return toolkit.getBooleanWrapperType();
+		throw new IllegalStateException("Unrecognized primitive type: " + type);
+	}
+
+	/**
+	 * Auto-boxes the specified type. If the specified type cannot be auto-boxed (because it is not boxable or is
+	 * already boxed), it is returned as it was provided.
+	 */
+	private BsjReferenceType autoboxType(BsjType type)
+	{
+		if (type instanceof BsjPrimitiveType)
+		{
+			return boxType((BsjPrimitiveType) type);
+		} else
+		{
+			return (BsjReferenceType) type;
+		}
+	}
+
+	/**
+	 * Unboxes the specified type. If no unboxing is possible, an exception is raised.
+	 */
+	private BsjPrimitiveType unboxType(BsjExplicitlyDeclaredType type)
+	{
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+		if (type.equals(toolkit.getByteWrapperType()))
+			return toolkit.getByteType();
+		if (type.equals(toolkit.getCharacterWrapperType()))
+			return toolkit.getCharType();
+		if (type.equals(toolkit.getIntegerWrapperType()))
+			return toolkit.getIntType();
+		if (type.equals(toolkit.getLongWrapperType()))
+			return toolkit.getLongType();
+		if (type.equals(toolkit.getShortWrapperType()))
+			return toolkit.getShortType();
+		if (type.equals(toolkit.getDoubleWrapperType()))
+			return toolkit.getDoubleType();
+		if (type.equals(toolkit.getFloatWrapperType()))
+			return toolkit.getFloatType();
+		if (type.equals(toolkit.getBooleanWrapperType()))
+			return toolkit.getBooleanType();
+		throw new IllegalArgumentException("Provided non-box type " + type);
+	}
+
+	/**
+	 * Auto-unboxes the specified type. If no auto-unboxing is possible, the type is returned in the form in which it
+	 * was provided.
+	 */
+	private BsjType autoUnboxType(BsjType type)
+	{
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+		if (type.equals(toolkit.getByteWrapperType()))
+			return toolkit.getByteType();
+		if (type.equals(toolkit.getCharacterWrapperType()))
+			return toolkit.getCharType();
+		if (type.equals(toolkit.getIntegerWrapperType()))
+			return toolkit.getIntType();
+		if (type.equals(toolkit.getLongWrapperType()))
+			return toolkit.getLongType();
+		if (type.equals(toolkit.getShortWrapperType()))
+			return toolkit.getShortType();
+		if (type.equals(toolkit.getDoubleWrapperType()))
+			return toolkit.getDoubleType();
+		if (type.equals(toolkit.getFloatWrapperType()))
+			return toolkit.getFloatType();
+		if (type.equals(toolkit.getBooleanWrapperType()))
+			return toolkit.getBooleanType();
+		return type;
+	}
+
+	/**
+	 * Determines whether or not the specified type is a numeric primitive type.
+	 */
+	private boolean isNumericPrimitive(BsjType type)
+	{
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+		return (isIntegralPrimitive(type) || (type.equals(toolkit.getDoubleType()))
+				|| (type.equals(toolkit.getFloatType())));
+	}
+
+	/**
+	 * Determines whether or not the specified type is an integral primitive type.
+	 */
+	private boolean isIntegralPrimitive(BsjType type)
+	{
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+		return (type.equals(toolkit.getByteType())) || (type.equals(toolkit.getCharType()))
+				|| (type.equals(toolkit.getIntType())) || (type.equals(toolkit.getLongType()))
+				|| (type.equals(toolkit.getShortType())) || (type.equals(toolkit.getDoubleType()))
+				|| (type.equals(toolkit.getFloatType()));
 	}
 }

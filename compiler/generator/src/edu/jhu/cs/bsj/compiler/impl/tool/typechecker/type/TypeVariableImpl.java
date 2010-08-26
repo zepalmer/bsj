@@ -21,7 +21,7 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 		this.upperBound = upperBound;
 	}
 
-	// TODO: is this return type correct?  aren't wildcards also type variables?
+	// TODO: is this return type correct? aren't wildcards also type variables?
 	@Override
 	public BsjTypeParameterElement asElement()
 	{
@@ -47,8 +47,8 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 	{
 		if (this.upperBound == null)
 		{
-			NamedTypeDeclarationNode<?> objectDeclaration = getManager().getToolkit().findTopLevelTypeDeclarationByName("java",
-					"lang", "Object");
+			NamedTypeDeclarationNode<?> objectDeclaration = getManager().getToolkit().findTopLevelTypeDeclarationByName(
+					"java", "lang", "Object");
 			return makeElement(objectDeclaration).asType();
 		} else
 		{
@@ -71,7 +71,7 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 	@Override
 	public String toString()
 	{
-		return this.lowerBound.toString() + " <: ? <: " + this.upperBound.toString();
+		return getLowerBound() + " <: ? <: " + getUpperBound();
 	}
 
 	@Override
@@ -106,7 +106,6 @@ public class TypeVariableImpl extends TypeMirrorImpl implements BsjTypeVariable
 			return false;
 		return true;
 	}
-
 
 	@Override
 	public BsjType calculateErasure()

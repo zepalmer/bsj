@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElem
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PrimitiveTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuilder;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
@@ -49,7 +51,7 @@ public class TypecheckerToolkit
 
 	/** A field to hold the element for {@link Node edu.jhu.cs.bsj.compiler.ast.node.Node}. */
 	private BsjDeclaredTypeElement nodeElement;
-	
+
 	/** A field to hold the element for the primitive <tt>byte</tt> type. */
 	private BsjPrimitiveType byteType;
 	/** A field to hold the element for the primitive <tt>short</tt> type. */
@@ -67,6 +69,23 @@ public class TypecheckerToolkit
 	/** A field to hold the element for the primitive <tt>boolean</tt> type. */
 	private BsjPrimitiveType booleanType;
 
+	/** A field to hold the element for the <tt>Byte</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType byteWrapperType;
+	/** A field to hold the element for the <tt>Short</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType shortWrapperType;
+	/** A field to hold the element for the <tt>Character</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType characterWrapperType;
+	/** A field to hold the element for the <tt>Integer</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType integerWrapperType;
+	/** A field to hold the element for the <tt>Long</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType longWrapperType;
+	/** A field to hold the element for the <tt>Float</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType floatWrapperType;
+	/** A field to hold the element for the <tt>Double</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType doubleWrapperType;
+	/** A field to hold the element for the <tt>Boolean</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType booleanWrapperType;
+
 	public TypecheckerToolkit(TypecheckerManager manager, CompilationUnitLoader loader)
 	{
 		super();
@@ -76,22 +95,6 @@ public class TypecheckerToolkit
 		this.loader = loader;
 		this.elementBuilder = new ElementBuildingNodeOperation(getManager());
 		this.typeBuilder = new TypeBuilder(getManager());
-
-		this.objectElement = getTypeElementByName("java", "lang", "Object");
-		this.stringElement = getTypeElementByName("java", "lang", "String");
-		this.enumElement = getTypeElementByName("java", "lang", "Enum");
-		this.annotationElement = getTypeElementByName("java","lang","annotation","Annotation");
-
-		this.nodeElement = getTypeElementByName("edu", "jhu", "cs", "bsj", "compiler", "ast", "node", "Node");
-		
-		this.byteType = new PrimitiveTypeImpl(getManager(), PrimitiveType.BYTE);
-		this.shortType = new PrimitiveTypeImpl(getManager(), PrimitiveType.SHORT);
-		this.charType = new PrimitiveTypeImpl(getManager(), PrimitiveType.CHAR);
-		this.intType = new PrimitiveTypeImpl(getManager(), PrimitiveType.INT);
-		this.longType = new PrimitiveTypeImpl(getManager(), PrimitiveType.LONG);
-		this.floatType = new PrimitiveTypeImpl(getManager(), PrimitiveType.FLOAT);
-		this.doubleType = new PrimitiveTypeImpl(getManager(), PrimitiveType.DOUBLE);
-		this.booleanType = new PrimitiveTypeImpl(getManager(), PrimitiveType.BOOLEAN);
 	}
 
 	protected TypecheckerManager getManager()
@@ -106,67 +109,191 @@ public class TypecheckerToolkit
 
 	public BsjDeclaredTypeElement getObjectElement()
 	{
+		if (this.objectElement == null)
+		{
+			this.objectElement = getTypeElementByName("java", "lang", "Object");
+		}
 		return objectElement;
 	}
 
 	public BsjDeclaredTypeElement getStringElement()
 	{
-		return stringElement;
+		if (this.stringElement == null)
+		{
+			this.stringElement = getTypeElementByName("java", "lang", "String");
+		}
+		return this.stringElement;
 	}
 
 	public BsjDeclaredTypeElement getEnumElement()
 	{
-		return enumElement;
+		if (this.enumElement == null)
+		{
+			this.enumElement = getTypeElementByName("java", "lang", "Enum");
+		}
+		return this.enumElement;
 	}
 
 	public BsjDeclaredTypeElement getAnnotationElement()
 	{
-		return annotationElement;
+		if (this.annotationElement == null)
+		{
+			this.annotationElement = getTypeElementByName("java", "lang", "annotation", "Annotation");
+		}
+		return this.annotationElement;
 	}
 
 	public BsjDeclaredTypeElement getNodeElement()
 	{
-		return nodeElement;
+		if (this.nodeElement == null)
+		{
+			this.nodeElement = getTypeElementByName("edu", "jhu", "cs", "bsj", "compiler", "ast", "node", "Node");
+		}
+		return this.nodeElement;
 	}
 
 	public BsjPrimitiveType getByteType()
 	{
-		return byteType;
+		if (this.byteType == null)
+		{
+			this.byteType = new PrimitiveTypeImpl(getManager(), PrimitiveType.BYTE);
+		}
+		return this.byteType;
 	}
 
 	public BsjPrimitiveType getShortType()
 	{
-		return shortType;
+		if (this.shortType == null)
+		{
+			this.shortType = new PrimitiveTypeImpl(getManager(), PrimitiveType.SHORT);
+		}
+		return this.shortType;
 	}
 
 	public BsjPrimitiveType getCharType()
 	{
-		return charType;
+		if (this.charType == null)
+		{
+			this.charType = new PrimitiveTypeImpl(getManager(), PrimitiveType.CHAR);
+		}
+		return this.charType;
 	}
 
 	public BsjPrimitiveType getIntType()
 	{
-		return intType;
+		if (this.intType == null)
+		{
+			this.intType = new PrimitiveTypeImpl(getManager(), PrimitiveType.INT);
+		}
+		return this.intType;
 	}
 
 	public BsjPrimitiveType getLongType()
 	{
-		return longType;
+		if (this.longType == null)
+		{
+			this.longType = new PrimitiveTypeImpl(getManager(), PrimitiveType.LONG);
+		}
+		return this.longType;
 	}
 
 	public BsjPrimitiveType getFloatType()
 	{
-		return floatType;
+		if (this.floatType == null)
+		{
+			this.floatType = new PrimitiveTypeImpl(getManager(), PrimitiveType.FLOAT);
+		}
+		return this.floatType;
 	}
 
 	public BsjPrimitiveType getDoubleType()
 	{
-		return doubleType;
+		if (this.doubleType == null)
+		{
+			this.doubleType = new PrimitiveTypeImpl(getManager(), PrimitiveType.DOUBLE);
+		}
+		return this.doubleType;
 	}
 
 	public BsjPrimitiveType getBooleanType()
 	{
-		return booleanType;
+		if (this.booleanType == null)
+		{
+			this.booleanType = new PrimitiveTypeImpl(getManager(), PrimitiveType.BOOLEAN);
+		}
+		return this.booleanType;
+	}
+
+	public BsjExplicitlyDeclaredType getByteWrapperType()
+	{
+		if (this.byteWrapperType == null)
+		{
+			this.byteWrapperType = getTypeElementByName("java", "lang", "Byte").asType();
+		}
+		return this.byteWrapperType;
+	}
+
+	public BsjExplicitlyDeclaredType getShortWrapperType()
+	{
+		if (this.shortWrapperType == null)
+		{
+			this.shortWrapperType = getTypeElementByName("java", "lang", "Short").asType();
+		}
+		return this.shortWrapperType;
+	}
+
+	public BsjExplicitlyDeclaredType getCharacterWrapperType()
+	{
+		if (this.characterWrapperType == null)
+		{
+			this.characterWrapperType = getTypeElementByName("java", "lang", "Character").asType();
+		}
+		return this.characterWrapperType;
+	}
+
+	public BsjExplicitlyDeclaredType getIntegerWrapperType()
+	{
+		if (this.integerWrapperType == null)
+		{
+			this.integerWrapperType = getTypeElementByName("java", "lang", "Integer").asType();
+		}
+		return this.integerWrapperType;
+	}
+
+	public BsjExplicitlyDeclaredType getLongWrapperType()
+	{
+		if (this.longWrapperType == null)
+		{
+			this.longWrapperType = getTypeElementByName("java", "lang", "Long").asType();
+		}
+		return this.longWrapperType;
+	}
+
+	public BsjExplicitlyDeclaredType getFloatWrapperType()
+	{
+		if (this.floatWrapperType == null)
+		{
+			this.floatWrapperType = getTypeElementByName("java", "lang", "Float").asType();
+		}
+		return this.floatWrapperType;
+	}
+
+	public BsjExplicitlyDeclaredType getDoubleWrapperType()
+	{
+		if (this.doubleWrapperType == null)
+		{
+			this.doubleWrapperType = getTypeElementByName("java", "lang", "Double").asType();
+		}
+		return this.doubleWrapperType;
+	}
+
+	public BsjExplicitlyDeclaredType getBooleanWrapperType()
+	{
+		if (this.booleanWrapperType == null)
+		{
+			this.booleanWrapperType = getTypeElementByName("java", "lang", "Boolean").asType();
+		}
+		return this.booleanWrapperType;
 	}
 
 	/**
