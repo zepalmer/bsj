@@ -73,22 +73,22 @@ public class StringUtilities
 	}
 	
 	/**
-	 * Joins the contents of the provided list of strings with the specified delimiter.
-	 * @param list The strings to join.
+	 * Joins the contents of the provided list of objects with the specified delimiter by converting them to strings.
+	 * @param list The objects to join.
 	 * @param delimiter The delimiter in question.
 	 * @return The resulting string.
 	 */
-	public static String join(List<String> list, String delimiter)
+	public static String join(List<?> list, String delimiter)
 	{
 		StringBuilder sb = new StringBuilder();
 		boolean first = true;
-		for (String string : list)
+		for (Object o : list)
 		{
 			if (first)
 			{
 				sb.append(delimiter);
 			}
-			sb.append(string);
+			sb.append(o.toString());
 			first = false;
 		}
 		return sb.toString();

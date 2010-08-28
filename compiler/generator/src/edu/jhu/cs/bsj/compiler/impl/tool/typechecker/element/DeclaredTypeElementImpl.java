@@ -24,10 +24,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitlyDeclaredTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 /**
  * A supertype for implementations of the {@link TypeElement} modeling interface for use in the BSJ type checker. This
@@ -121,10 +121,10 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 		}
 		BsjDeclaredType enclosingType = enclosingElement == null ? null
 				: ((BsjDeclaredTypeElement) enclosingElement).asType();
-		return new ExplicitlyDeclaredTypeImpl(getManager(), this, getPrototypicalTypeArgumentList(), enclosingType);
+		return new DeclaredTypeImpl(getManager(), this, getPrototypicalTypeArgumentList(), enclosingType);
 	}
 
-	protected abstract List<? extends BsjType> getPrototypicalTypeArgumentList();
+	protected abstract List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList();
 
 	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()
@@ -179,9 +179,9 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 		}
 	}
 
-	protected List<? extends BsjType> makeTypeMirrorsFromTypeParameters(List<? extends TypeParameterNode> list)
+	protected List<? extends BsjTypeArgument> makeTypeMirrorsFromTypeParameters(List<? extends TypeParameterNode> list)
 	{
-		List<BsjType> ret = new ArrayList<BsjType>();
+		List<BsjTypeArgument> ret = new ArrayList<BsjTypeArgument>();
 		for (TypeParameterNode typeParameterNode : list)
 		{
 			ret.add(getTypeBuilder().makeTypeVariable(typeParameterNode));

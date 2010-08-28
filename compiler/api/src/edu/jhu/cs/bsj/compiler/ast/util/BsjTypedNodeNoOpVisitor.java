@@ -1680,6 +1680,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type ParameterizableTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitParameterizableTypeDeclarationNodeStart(ParameterizableTypeDeclarationNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type ParameterizedTypeNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -3869,6 +3877,14 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitPackageNodeStop(PackageNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ParameterizableTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitParameterizableTypeDeclarationNodeStop(ParameterizableTypeDeclarationNode node)
     {
     }
 

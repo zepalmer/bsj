@@ -6,6 +6,9 @@ import javax.lang.model.type.WildcardType;
  * Represents a wildcard type in the BSJ typechecker.
  * @author Zachary Palmer
  */
-public interface BsjWildcardType extends WildcardType, BsjType
+public interface BsjWildcardType extends WildcardType, BsjType, BsjTypeArgument
 {
+    BsjTypeArgument getExtendsBound();
+
+    BsjTypeArgument getSuperBound();
 }

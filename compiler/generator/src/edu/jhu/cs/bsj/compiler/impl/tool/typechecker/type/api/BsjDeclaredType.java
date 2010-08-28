@@ -13,17 +13,8 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElem
  * 
  * @author Zachary Palmer
  */
-public interface BsjDeclaredType extends DeclaredType, BsjBoundingType
+public interface BsjDeclaredType extends DeclaredType, BsjReferenceType
 {
-	/**
-	 * Determines whether or not this declared type is implicit. The only implicitly declared types in the Java language
-	 * are those formed by multiple type parameter bounds, such as in the class declaration header
-	 * <tt>public class MyClass&lt;T extends Foo &amp; Bar&gt;</tt>.
-	 * 
-	 * @return <code>true</code> if this type is implicit; <code>false</code> if it is not.
-	 */
-	public boolean isImplicit();
-
 	/**
 	 * Retrieves the enclosing type for this type.
 	 * 
@@ -36,7 +27,7 @@ public interface BsjDeclaredType extends DeclaredType, BsjBoundingType
 	 * 
 	 * @see DeclaredType#getTypeArguments()
 	 */
-	public List<? extends BsjType> getTypeArguments();
+	public List<? extends BsjTypeArgument> getTypeArguments();
 
 	/**
 	 * Retrieves an element for this declared type.

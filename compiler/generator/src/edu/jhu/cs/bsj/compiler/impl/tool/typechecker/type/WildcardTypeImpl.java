@@ -6,6 +6,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 
 public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
@@ -60,7 +61,7 @@ public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
 	}
 
 	@Override
-	public BsjType getExtendsBound()
+	public BsjTypeArgument getExtendsBound()
 	{
 		if (this.wildcardTypeNode.getUpperBound())
 		{
@@ -72,7 +73,7 @@ public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
 	}
 
 	@Override
-	public BsjType getSuperBound()
+	public BsjTypeArgument getSuperBound()
 	{
 		if (this.wildcardTypeNode.getUpperBound())
 		{

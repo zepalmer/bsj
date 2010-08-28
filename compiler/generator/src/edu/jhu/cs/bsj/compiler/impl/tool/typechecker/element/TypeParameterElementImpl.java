@@ -18,8 +18,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeVariableImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitTypeVariableImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterNode> implements BsjTypeParameterElement
@@ -43,9 +45,9 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	}
 
 	@Override
-	public List<? extends BsjType> getBounds()
+	public List<? extends BsjTypeArgument> getBounds()
 	{
-		List<BsjType> list = new ArrayList<BsjType>();
+		List<BsjTypeArgument> list = new ArrayList<BsjTypeArgument>();
 		for (DeclaredTypeNode typeNode : getBackingNode().getBounds())
 		{
 			list.add(getTypeBuilder().makeArgumentType(typeNode));
@@ -67,22 +69,18 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	}
 
 	@Override
-	public BsjType asType()
+	public BsjTypeVariable asType()
 	{
 		List<? extends BsjType> bounds = getBounds();
 		if (bounds.size() == 0)
 		{
-			return new TypeVariableImpl(getManager(), null, null);
+			return new ExplicitTypeVariableImpl(getManager(), this.getBackingNode(), null, null);
 		} else if (bounds.size() == 1)
 		{
-			return new TypeVariableImpl(getManager(), null, bounds.get(0));
+			return new ExplicitTypeVariableImpl(getManager(), this.getBackingNode(), null, bounds.get(0));
 		} else
 		{
-			// TODO: does an intersection type have an enclosing type?
-			/*
-			BsjIntersectionType bound = new ImplicitlyDeclaredTypeImpl(getManager(), this, bounds);
-			return new TypeVariableImpl(getManager(), null, bound);
-			*/
+			// TODO: create an implicit declared type representing the type parameter's bounds			
 			throw new NotImplementedYetException();
 		}
 	}
@@ -115,5 +113,12 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	public Name getSimpleName()
 	{
 		return new NameImpl(getBackingNode().getIdentifier().getIdentifier());
+	}
+
+	@Override
+	public BsjTypeArgument createUpperBoundType()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

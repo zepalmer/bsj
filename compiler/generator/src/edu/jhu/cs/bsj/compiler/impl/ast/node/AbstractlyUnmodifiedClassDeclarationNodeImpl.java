@@ -415,11 +415,13 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         visitor.visitNodeStart(this);
         visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitModifiedNodeStart(this);
+        visitor.visitParameterizableTypeDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNamedTypeDeclarationNodeStop(this);
         visitor.visitModifiedNodeStop(this);
+        visitor.visitParameterizableTypeDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAbstractlyUnmodifiedClassDeclarationNodeStop(this);
         visitor.visitStopEnd(this);

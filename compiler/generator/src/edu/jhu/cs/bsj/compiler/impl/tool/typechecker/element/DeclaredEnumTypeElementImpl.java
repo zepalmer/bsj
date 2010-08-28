@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
-import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
@@ -19,9 +18,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitlyDeclaredTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDeclarationNode>
 {
@@ -61,9 +62,9 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 				NamedTypeDeclarationNode.class);
 		BsjTypeElement enclosingTypeElement = makeElement(enclosingTypeDeclaration);
 		BsjDeclaredType enclosingTypeMirror = (BsjDeclaredType) enclosingTypeElement.asType();
-		BsjType selfType = new ExplicitlyDeclaredTypeImpl(getManager(), this, Collections.<BsjType> emptyList(),
+		BsjTypeArgument selfType = new DeclaredTypeImpl(getManager(), this, Collections.<BsjTypeArgument> emptyList(),
 				enclosingTypeMirror);
-		BsjType enumType = new ExplicitlyDeclaredTypeImpl(getManager(), enumElement, Collections.singletonList(selfType), null);
+		BsjType enumType = new DeclaredTypeImpl(getManager(), enumElement, Collections.singletonList(selfType), null);
 		return enumType;
 	}
 
@@ -79,13 +80,13 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 	}
 
 	@Override
-	public List<? extends TypeParameterElement> getTypeParameters()
+	public List<? extends BsjTypeParameterElement> getTypeParameters()
 	{
 		return Collections.emptyList();
 	}
 
 	@Override
-	protected List<? extends BsjType> getPrototypicalTypeArgumentList()
+	protected List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
 	{
 		return Collections.emptyList();
 	}

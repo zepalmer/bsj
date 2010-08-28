@@ -6,6 +6,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api;
  * 
  * @author Zachary Palmer
  */
-public interface BsjNamedReferenceType extends BsjBoundingType
+public interface BsjNamedReferenceType extends BsjReferenceType
 {
 }

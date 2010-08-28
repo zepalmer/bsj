@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.lang.model.element.NestingKind;
 
-import com.sun.org.apache.bcel.internal.generic.ReferenceType;
-
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
@@ -16,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
@@ -34,7 +33,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDecla
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
@@ -59,11 +60,11 @@ public class TypeBuilder
 		return this.manager.getNamespaceBuilder().getTypeNamespace(node);
 	}
 
-	public BsjType makeArgumentType(TypeArgumentNode node)
+	public BsjTypeArgument makeArgumentType(TypeArgumentNode node)
 	{
-		if (node instanceof ReferenceType)
+		if (node instanceof ReferenceTypeNode)
 		{
-			return makeType((TypeNode) node);
+			return makeReferenceType((ReferenceTypeNode) node);
 		} else if (node instanceof WildcardTypeNode)
 		{
 			return makeWildcardType((WildcardTypeNode) node);
@@ -75,6 +76,26 @@ public class TypeBuilder
 
 	public BsjType makeType(TypeNode node)
 	{
+		if (node instanceof PrimitiveTypeNode)
+		{
+			return makePrimitiveType((PrimitiveTypeNode) node);
+		} else if (node instanceof VoidTypeNode)
+		{
+			return makeVoidType((VoidTypeNode) node);
+		} else if (node instanceof WildcardTypeNode)
+		{
+			return makeWildcardType((WildcardTypeNode) node);
+		} else if (node instanceof ReferenceTypeNode)
+		{
+			return makeReferenceType((ReferenceTypeNode) node);
+		} else
+		{
+			throw new IllegalStateException("Can't create a type for node of type " + node.getClass());
+		}
+	}
+
+	public BsjReferenceType makeReferenceType(ReferenceTypeNode node)
+	{
 		if (node instanceof ArrayTypeNode)
 		{
 			return makeArrayType((ArrayTypeNode) node);
@@ -84,21 +105,12 @@ public class TypeBuilder
 		} else if (node instanceof ParameterizedTypeSelectNode)
 		{
 			return makeParameterizedTypeSelect((ParameterizedTypeSelectNode) node);
-		} else if (node instanceof PrimitiveTypeNode)
-		{
-			return makePrimitiveType((PrimitiveTypeNode) node);
 		} else if (node instanceof TypeParameterNode)
 		{
 			return makeTypeVariable((TypeParameterNode) node);
 		} else if (node instanceof UnparameterizedTypeNode)
 		{
 			return makeUnparameterizedType((UnparameterizedTypeNode) node);
-		} else if (node instanceof VoidTypeNode)
-		{
-			return makeVoidType((VoidTypeNode) node);
-		} else if (node instanceof WildcardTypeNode)
-		{
-			return makeWildcardType((WildcardTypeNode) node);
 		} else
 		{
 			throw new IllegalStateException("Can't create a type for node of type " + node.getClass());
@@ -173,8 +185,8 @@ public class TypeBuilder
 		if (iterativeNode instanceof UnparameterizedTypeNode)
 		{
 			UnparameterizedTypeNode nextSelect = (UnparameterizedTypeNode) iterativeNode;
-			BsjTypeLikeElement element = this.manager.getToolkit().getAccessibleTypeFromName(
-					nextSelect.getName(), getTypeNamespaceMap(node));
+			BsjTypeLikeElement element = this.manager.getToolkit().getAccessibleTypeFromName(nextSelect.getName(),
+					getTypeNamespaceMap(node));
 			NamedTypeDeclarationNode<?> nextTypeDeclaration = coerceElementToNamedTypeDeclaration(element);
 			accumulatedType = makeDeclarationTypeFromDeclaration(nextTypeDeclaration,
 					Collections.<TypeArgumentNode> emptySet(), accumulatedType);
@@ -195,9 +207,9 @@ public class TypeBuilder
 	}
 
 	/**
-	 * Used to coerce a type-like element into a named type declaration if at all possible.  If this fails
-	 * (because, for example, the type-like element is a type variable), an
-	 * appropriate exception is thrown
+	 * Used to coerce a type-like element into a named type declaration if at all possible. If this fails (because, for
+	 * example, the type-like element is a type variable), an appropriate exception is thrown
+	 * 
 	 * @param element The element to coerce.
 	 * @return The resulting type declaration.
 	 */
@@ -223,7 +235,7 @@ public class TypeBuilder
 	{
 		return new PrimitiveTypeImpl(this.manager, node.getPrimitiveType());
 	}
-
+	
 	public BsjTypeVariable makeTypeVariable(TypeParameterNode node)
 	{
 		BsjType upperBound;
@@ -236,7 +248,7 @@ public class TypeBuilder
 		} else
 		{
 			/*
-			 * note: we are assuming that implicitly-defined types never have an enclosing type rationale: assume the
+			 * note: we are assuming that implicitly-defined types never have an enclosing type. rationale: assume the
 			 * following declarations: class Foo { class Bar<T extends A & B> { } } class Baz<T extends A & B> { } both
 			 * Bar and Baz should have the same type bound for their respective type parameters
 			 */
@@ -250,7 +262,7 @@ public class TypeBuilder
 			 * from its implicit subtypes. For instance, if we have: class Sub extends A<String> implements B<Integer>
 			 * then we implicitly have class Sub extends Z<String,Integer>
 			 */
-			List<BsjType> typeArgs = new ArrayList<BsjType>();
+			List<BsjTypeArgument> typeArgs = new ArrayList<BsjTypeArgument>();
 			for (DeclaredTypeNode boundType : node.getBounds())
 			{
 				BsjNamedReferenceType boundTypeMirror = this.makeDeclaredType(boundType);
@@ -268,10 +280,9 @@ public class TypeBuilder
 					throw new NotImplementedYetException();
 				}
 			}
-			upperBound = new ImplicitlyDeclaredTypeImpl(this.manager,
-					(BsjTypeParameterElement) this.manager.getToolkit().makeElement(node), typeArgs, null);
+			upperBound = new IntersectionTypeImpl(this.manager, typeArgs);
 		}
-		return new TypeVariableImpl(this.manager, null, upperBound);
+		return new ExplicitTypeVariableImpl(this.manager, node, null, upperBound);
 	}
 
 	public BsjNamedReferenceType makeUnparameterizedType(UnparameterizedTypeNode node)
@@ -286,17 +297,7 @@ public class TypeBuilder
 		} else if (element instanceof BsjTypeParameterElement)
 		{
 			BsjTypeParameterElement typeParameterElement = (BsjTypeParameterElement) element;
-			if (typeParameterElement.getBounds().size() == 0)
-			{
-				return new TypeVariableImpl(this.manager, null, null);
-			} else if (typeParameterElement.getBounds().size() == 1)
-			{
-				return new TypeVariableImpl(this.manager, null, typeParameterElement.getBounds().iterator().next());
-			} else
-			{
-				// TODO: create an implicit declared type representing the type parameter's bounds
-				throw new NotImplementedYetException("Implicit intersection type declaration not yet implemented.");
-			}
+			return typeParameterElement.asType();
 		} else
 		{
 			// what is it, then?
@@ -332,20 +333,20 @@ public class TypeBuilder
 			enclosingType = null;
 		}
 
-		List<BsjType> typeArguments;
+		List<BsjTypeArgument> typeArguments;
 		if (typeArgumentNodes.size() > 0)
 		{
-			typeArguments = new ArrayList<BsjType>();
+			typeArguments = new ArrayList<BsjTypeArgument>();
 			for (TypeArgumentNode argument : typeArgumentNodes)
 			{
 				typeArguments.add(this.makeArgumentType(argument));
 			}
 		} else
 		{
-			typeArguments = Collections.<BsjType> emptyList();
+			typeArguments = Collections.<BsjTypeArgument> emptyList();
 		}
 
-		return new ExplicitlyDeclaredTypeImpl(this.manager, typeElement, typeArguments, enclosingType);
+		return new DeclaredTypeImpl(this.manager, typeElement, typeArguments, enclosingType);
 	}
 
 }

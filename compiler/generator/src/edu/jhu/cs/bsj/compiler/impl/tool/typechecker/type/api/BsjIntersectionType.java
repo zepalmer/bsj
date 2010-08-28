@@ -1,8 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api;
 
-import javax.lang.model.type.DeclaredType;
+import java.util.List;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 
 /**
  * Represents an implicitly declared intersection type, such as in the bounds of the type parameter declaration
@@ -13,9 +12,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParamete
 public interface BsjIntersectionType extends BsjDeclaredType
 {
 	/**
-	 * Retrieves an element for this declared type.
-	 * 
-	 * @see DeclaredType#asElement()
+	 * Retrieves a list of the supertypes of which this type is an intersection.
 	 */
-	public BsjTypeParameterElement asElement();
+	public List<? extends BsjTypeArgument> getSupertypes();
 }

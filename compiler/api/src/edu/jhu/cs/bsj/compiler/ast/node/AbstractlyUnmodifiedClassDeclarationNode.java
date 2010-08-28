@@ -19,7 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
  * class declaration (as different types of class declarations may permit different modifier sets).
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AbstractlyUnmodifiedClassDeclarationNode<T extends ModifiersNode> extends Node, NamedTypeDeclarationNode<ClassMemberNode>, ModifiedNode<T>
+public interface AbstractlyUnmodifiedClassDeclarationNode<T extends ModifiersNode> extends Node, NamedTypeDeclarationNode<ClassMemberNode>, ModifiedNode<T>, ParameterizableTypeDeclarationNode
 {
     /**
      * Gets the modifiers for this type.

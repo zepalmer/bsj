@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api;
 
+import java.util.List;
+
 import javax.lang.model.element.TypeElement;
 
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
@@ -15,4 +17,6 @@ public interface BsjTypeElement extends BsjTypeLikeElement, TypeElement
 	 * declaration, this method obtains for the caller the AST node representing that declaration.
 	 */
 	public NamedTypeDeclarationNode<?> getDeclarationNode();
+	
+	List<? extends BsjTypeParameterElement> getTypeParameters();
 }

@@ -209,6 +209,23 @@ public abstract class NodeImpl implements Node
 		this.uid = sUid.getAndIncrement();
 	}
 
+	public boolean equals(Object object)
+	{
+		if (object instanceof NodeImpl)
+		{
+			NodeImpl other = (NodeImpl)object;
+			return (this.uid == other.uid);
+		} else
+		{
+			return false;
+		}
+	}
+	
+	public int hashCode()
+	{
+		return (int)this.uid;
+	}
+
 	public void receive(BsjNodeVisitor visitor)
 	{
 		visitor.visitStart(this);

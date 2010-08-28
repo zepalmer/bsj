@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InterfaceDeclarationNode extends Node, NamedTypeDeclarationNode<InterfaceMemberNode>, ModifiedNode<InterfaceModifiersNode>
+public interface InterfaceDeclarationNode extends Node, NamedTypeDeclarationNode<InterfaceMemberNode>, ModifiedNode<InterfaceModifiersNode>, ParameterizableTypeDeclarationNode
 {
     /**
      * Gets the modifiers for this type.

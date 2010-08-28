@@ -56,6 +56,21 @@ public interface Node
     public <P1,P2,R> R executeOperation(BsjNodeOperation2Arguments<P1,P2,R> operation, P1 p1, P2 p2);
     
 	/**
+	 * Determines if two nodes are equal.  Two nodes are only equal if they are compatible with each other as defined
+	 * by the factory that created them; furthermore, two node objects are only equal if they represent the same node
+	 * in an AST.  This is not necessarily a comparison by identity as proxies or other such constructs may implement
+	 * equality in a different fashion than their underlying counterparts.
+	 * @param object The object being compared for equality.
+	 * @return <code>true</code> if that object is equal to this one; <code>false</code> if it is not.
+	 */
+	public boolean equals(Object object);
+	
+	/**
+	 * Calculates a hash code for this node.
+	 */
+	public int hashCode();
+	
+	/**
 	 * Causes this node to receive a visitor. Visitors are received by nodes in a depth-first fashion. The order of the
 	 * children receiving the visitor is dependent upon the type of node; however, a superclass's child nodes are always
 	 * visited before the subclass's child nodes.

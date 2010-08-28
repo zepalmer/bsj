@@ -31,6 +31,7 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.utils.TwoElementImmutableSet;
 
 public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, BsjElement>
@@ -160,7 +161,7 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 	}
 
 	@Override
-	public BsjElement executeTypeParameterNode(TypeParameterNode node, Void p)
+	public BsjTypeParameterElement executeTypeParameterNode(TypeParameterNode node, Void p)
 	{
 		return new TypeParameterElementImpl(this.manager, node, findImmediatelyEnclosingElement(node));
 	}

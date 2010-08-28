@@ -371,11 +371,13 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         visitor.visitNodeStart(this);
         visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitModifiedNodeStart(this);
+        visitor.visitParameterizableTypeDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNamedTypeDeclarationNodeStop(this);
         visitor.visitModifiedNodeStop(this);
+        visitor.visitParameterizableTypeDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitInterfaceDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);

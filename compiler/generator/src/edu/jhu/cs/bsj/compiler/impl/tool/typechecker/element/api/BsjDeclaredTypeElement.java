@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api;
 
+import java.util.List;
+
 import javax.lang.model.element.TypeElement;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
@@ -15,4 +17,13 @@ public interface BsjDeclaredTypeElement extends BsjTypeElement
 	 * @see TypeElement#asType()
 	 */
 	public BsjExplicitlyDeclaredType asType();
+
+    /**
+     * Returns the formal type parameters of this type element
+     * in declaration order.
+     *
+     * @return the formal type parameters, or an empty list
+     * if there are none
+     */
+    List<? extends BsjTypeParameterElement> getTypeParameters();
 }

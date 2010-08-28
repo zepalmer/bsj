@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 {
@@ -32,7 +32,7 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 	}
 
 	@Override
-	public List<? extends BsjType> getTypeArguments()
+	public List<? extends BsjTypeArgument> getTypeArguments()
 	{
 		return Collections.emptyList();
 	}
@@ -65,12 +65,6 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 	public String toString()
 	{
 		return "<error>";
-	}
-
-	@Override
-	public boolean isImplicit()
-	{
-		return false;
 	}
 
 	@Override

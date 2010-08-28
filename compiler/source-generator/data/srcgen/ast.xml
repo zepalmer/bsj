@@ -130,6 +130,16 @@
                 expressions are not permitted (such as in the initializers of annotation values).
             ]]></doc>
         </type>
+        
+        <type name="ParameterizableTypeDeclarationNode" super="Node" mode="tag">
+            <tag name="TypeDeclarationNode" />
+            <tag name="TypeNameBindingNode" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of this type" />
+            <prop name="typeParameters" type="TypeParameterListNode" desc="this type's type parameters" />
+            <doc><![CDATA[
+                This tagging interface describes type declarations which may include type parameters.
+            ]]></doc>
+        </type>
 
         <type name="PrimaryExpressionNode" super="Node" mode="tag">
             <tag name="NonAssignmentExpressionNode" />
@@ -1687,6 +1697,7 @@
             mode="abstract">
             <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode" />
             <tag name="ModifiedNode" typeArg="T"/>
+            <tag name="ParameterizableTypeDeclarationNode" />
             <prop name="modifiers" type="T" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeNode" desc="the extends clause" />
             <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
@@ -1742,6 +1753,7 @@
         <type name="InterfaceDeclarationNode" super="Node">
             <tag name="NamedTypeDeclarationNode" typeArg="InterfaceMemberNode" />
             <tag name="ModifiedNode" typeArg="InterfaceModifiersNode"/>
+            <tag name="ParameterizableTypeDeclarationNode" />
             <prop name="modifiers" type="InterfaceModifiersNode" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeListNode" desc="the extends clause" />
             <prop name="body" type="InterfaceBodyNode" desc="this interface's body" />

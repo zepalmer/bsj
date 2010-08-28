@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParamete
  * Represents a type variable in the BSJ type checker.
  * @author Zachary Palmer
  */
-public interface BsjTypeVariable extends TypeVariable, BsjNamedReferenceType, BsjBoundingType
+public interface BsjTypeVariable extends TypeVariable, BsjNamedReferenceType
 {
 	/**
 	 * Retrieves the type parameter element which defined this type variable.

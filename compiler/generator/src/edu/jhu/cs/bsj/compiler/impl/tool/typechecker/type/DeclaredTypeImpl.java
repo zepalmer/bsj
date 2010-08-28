@@ -8,11 +8,14 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 /**
+ * TODO: fix
+ * 
  * Represents a declared type in the BSJ type checker. Declared types include explicitly declared types (such as named
  * type declarations) as well as implicitly declared intersection types. The latter are declared in type parameter
  * bounds, such as the following:
@@ -30,42 +33,32 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
  * 
  * @author Zachary Palmer
  */
-public abstract class AbstractDeclaredTypeImpl<T extends BsjTypeLikeElement> extends TypeMirrorImpl implements
-		BsjDeclaredType
+public class DeclaredTypeImpl extends TypeMirrorImpl implements BsjExplicitlyDeclaredType
 {
 	/**
-	 * The type element which acts as the backing element for this type. Intersection types in Java are implicitly
-	 * declared by type parameter bounds such as in "MyClass&lt;T extends Foo & Bar, Baz&gt;". As a result, the backing
-	 * element is assumed to be the defining type parameter bounds list.
+	 * The type element which acts as the backing element for this type.
 	 */
-	private T typeElement;
+	private BsjTypeElement typeElement;
 	/**
 	 * The type arguments applied to the underlying type element to form this type.
 	 */
-	private List<? extends BsjType> typeArguments;
+	private List<? extends BsjTypeArgument> typeArguments;
 	/**
 	 * The type which encloses this type.
 	 */
 	private BsjDeclaredType enclosingType;
-	/**
-	 * <code>true</code> if this type is an implicit type; <code>false</code> if another type must explicitly inherit
-	 * this type in order to be a member. The only implicit types which appear in the Java language are those defined by
-	 * multiple type parameter bounds.
-	 */
-	private boolean implicit;
 
-	public AbstractDeclaredTypeImpl(TypecheckerManager manager, T typeElement,
-			List<? extends BsjType> typeArguments, BsjDeclaredType enclosingType, boolean implicit)
+	public DeclaredTypeImpl(TypecheckerManager manager, BsjTypeElement typeElement,
+			List<? extends BsjTypeArgument> typeArguments, BsjDeclaredType enclosingType)
 	{
 		super(manager);
 		this.typeElement = typeElement;
-		this.typeArguments = typeArguments;
+		this.typeArguments = Collections.unmodifiableList(typeArguments);
 		this.enclosingType = enclosingType;
-		this.implicit = implicit;
 	}
 
 	@Override
-	public T asElement()
+	public BsjTypeElement asElement()
 	{
 		return this.typeElement;
 	}
@@ -74,10 +67,9 @@ public abstract class AbstractDeclaredTypeImpl<T extends BsjTypeLikeElement> ext
 	public BsjDeclaredType calculateErasure()
 	{
 		BsjDeclaredType erasedEnclosingType = enclosingType == null ? null : enclosingType.calculateErasure();
-		return makeAnother(this.typeElement, Collections.<BsjType>emptyList(), erasedEnclosingType);
+		return new DeclaredTypeImpl(getManager(), this.typeElement, Collections.<BsjTypeArgument> emptyList(),
+				erasedEnclosingType);
 	}
-	
-	protected abstract BsjDeclaredType makeAnother(T typeElement, List<? extends BsjType> typeArguments, BsjDeclaredType enclosingType);
 
 	@Override
 	public BsjDeclaredType getEnclosingType()
@@ -86,15 +78,9 @@ public abstract class AbstractDeclaredTypeImpl<T extends BsjTypeLikeElement> ext
 	}
 
 	@Override
-	public List<? extends BsjType> getTypeArguments()
+	public List<? extends BsjTypeArgument> getTypeArguments()
 	{
 		return this.typeArguments;
-	}
-
-	@Override
-	public boolean isImplicit()
-	{
-		return implicit;
 	}
 
 	@Override
@@ -143,7 +129,6 @@ public abstract class AbstractDeclaredTypeImpl<T extends BsjTypeLikeElement> ext
 		result = prime * result + ((enclosingType == null) ? 0 : enclosingType.hashCode());
 		result = prime * result + ((typeArguments == null) ? 0 : typeArguments.hashCode());
 		result = prime * result + ((typeElement == null) ? 0 : typeElement.hashCode());
-		result = prime * 2 + (this.implicit ? 1 : 0);
 		return result;
 	}
 
@@ -154,7 +139,7 @@ public abstract class AbstractDeclaredTypeImpl<T extends BsjTypeLikeElement> ext
 			return true;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractDeclaredTypeImpl<?> other = (AbstractDeclaredTypeImpl<?>) obj;
+		DeclaredTypeImpl other = (DeclaredTypeImpl) obj;
 		if (enclosingType == null)
 		{
 			if (other.enclosingType != null)
@@ -172,8 +157,6 @@ public abstract class AbstractDeclaredTypeImpl<T extends BsjTypeLikeElement> ext
 			if (other.typeElement != null)
 				return false;
 		} else if (!typeElement.equals(other.typeElement))
-			return false;
-		if (this.implicit != other.implicit)
 			return false;
 		return true;
 	}

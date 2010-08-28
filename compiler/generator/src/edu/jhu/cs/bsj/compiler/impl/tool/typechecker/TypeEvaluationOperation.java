@@ -1,5 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
@@ -55,13 +59,20 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.CapturedTypeVariableImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
@@ -237,8 +248,29 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeArrayAccessNode(ArrayAccessNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType arrayExpressionType = node.getArrayExpression().executeOperation(thisOperation, env);
+		if (arrayExpressionType instanceof BsjArrayType)
+		{
+			BsjArrayType arrayType = (BsjArrayType) arrayExpressionType;
+			BsjType indexExpressionType = node.getIndexExpression().executeOperation(thisOperation, env);
+			indexExpressionType = autoUnboxType(indexExpressionType);
+			if (isIntegralPrimitive(indexExpressionType))
+			{
+				indexExpressionType = numericTypePromotion(indexExpressionType);
+			}
+			if (!indexExpressionType.equals(this.manager.getToolkit().getIntType()))
+			{
+				// You can't index using anything that doesn't promote to an int
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return captureConversion(arrayType.getComponentType());
+		} else
+		{
+			// You can't dereference a non-array type.
+			// TODO: diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
 	}
 
 	@Override
@@ -399,8 +431,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				return new ErrorTypeImpl(this.manager);
 			}
 			return numericTypePromotion(unboxedLeftType);
-		} else if (node.getOperator() == BinaryOperator.LOGICAL_AND || node.getOperator() == BinaryOperator.LOGICAL_OR ||
-				node.getOperator() == BinaryOperator.XOR)
+		} else if (node.getOperator() == BinaryOperator.LOGICAL_AND || node.getOperator() == BinaryOperator.LOGICAL_OR
+				|| node.getOperator() == BinaryOperator.XOR)
 		{
 			unboxedLeftType = autoUnboxType(leftType);
 			unboxedRightType = autoUnboxType(rightType);
@@ -1607,5 +1639,95 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		}
 		// Anything else should've been upcast to an int. How did we get here?
 		throw new IllegalStateException("Don't know how to handle types " + leftType + " and " + rightType);
+	}
+
+	/**
+	 * Performs the capturing conversion (JLSv3 §5.1.10) on the specified type.
+	 * 
+	 * @param type The type in question.
+	 * @return The capture-converted type.
+	 */
+	private BsjType captureConversion(BsjType type)
+	{
+		if (type instanceof BsjExplicitlyDeclaredType)
+		{
+			BsjExplicitlyDeclaredType explicitType = (BsjExplicitlyDeclaredType) type;
+			List<BsjTypeArgument> captureConversionArguments = new ArrayList<BsjTypeArgument>();
+			// for each type argument, perform the argument capture
+			Iterator<? extends BsjTypeArgument> typeArgIt = explicitType.getTypeArguments().iterator();
+			Iterator<? extends BsjTypeParameterElement> paramIt = explicitType.asElement().getTypeParameters().iterator();
+			while (typeArgIt.hasNext() && paramIt.hasNext())
+			{
+				BsjTypeArgument typeArgument = typeArgIt.next();
+				BsjTypeParameterElement parameterElement = paramIt.next();
+
+				if (typeArgument instanceof BsjWildcardType)
+				{
+					BsjWildcardType wildcardType = (BsjWildcardType) typeArgument;
+					if (wildcardType.getSuperBound() == null)
+					{
+						if (wildcardType.getExtendsBound() == null)
+						{
+							// handle: ?
+							// the argument to add to the list is a fresh type variable bounded from above by the
+							// bound of the corresponding type parameter
+							captureConversionArguments.add(new CapturedTypeVariableImpl(this.manager, null,
+									getParameterBoundAsType(parameterElement)));
+						} else
+						{
+							// handle: ? extends Foo
+							// the argument to add to the list is a fresh type variable bounded from above by the
+							// intersection between the corresponding type parameter and the wildcard bound
+							List<BsjTypeArgument> bounds = new ArrayList<BsjTypeArgument>(parameterElement.getBounds());
+							bounds.add(wildcardType.getExtendsBound());
+							captureConversionArguments.add(new CapturedTypeVariableImpl(this.manager, null,
+									getBoundListAsType(bounds)));
+						}
+					} else
+					{
+						// then extends bound, by definition of WildcardTypeNode, must be null
+						// handle: ? super Foo
+						// the argument to add to the list is a fresh type variable bounded from above by the
+						// bound of the corresponding type parameter and from below by the wildcard bound
+						captureConversionArguments.add(new CapturedTypeVariableImpl(this.manager,
+								wildcardType.getSuperBound(), getParameterBoundAsType(parameterElement)));
+					}
+				} else
+				{
+					captureConversionArguments.add(typeArgument);
+				}
+			}
+			return new DeclaredTypeImpl(this.manager, explicitType.asElement(), captureConversionArguments,
+					explicitType.getEnclosingType());
+		} else
+		{
+			return type;
+		}
+	}
+
+	/**
+	 * Calculates, given a specified type parameter element, a single type representing that type parameter's bound.
+	 * 
+	 * @param typeParameterElement The element in question.
+	 * @return The upper bound of the type parameter represented by that element.
+	 */
+	private BsjTypeArgument getParameterBoundAsType(BsjTypeParameterElement parameter)
+	{
+		List<? extends BsjTypeArgument> bounds = parameter.getBounds();
+		return getBoundListAsType(bounds);
+	}
+
+	private BsjTypeArgument getBoundListAsType(List<? extends BsjTypeArgument> bounds)
+	{
+		if (bounds.size() == 0)
+		{
+			return this.manager.getToolkit().getObjectElement().asType();
+		} else if (bounds.size() == 1)
+		{
+			return bounds.iterator().next();
+		} else
+		{
+			return new IntersectionTypeImpl(this.manager, bounds);
+		}
 	}
 }

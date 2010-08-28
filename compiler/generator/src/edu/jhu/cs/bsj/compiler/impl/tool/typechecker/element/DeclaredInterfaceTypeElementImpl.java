@@ -7,7 +7,6 @@ import java.util.Set;
 
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
@@ -16,8 +15,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public class DeclaredInterfaceTypeElementImpl extends DeclaredTypeElementImpl<InterfaceDeclarationNode>
 {
@@ -67,18 +67,18 @@ public class DeclaredInterfaceTypeElementImpl extends DeclaredTypeElementImpl<In
 	}
 	
 	@Override
-	public List<? extends TypeParameterElement> getTypeParameters()
+	public List<? extends BsjTypeParameterElement> getTypeParameters()
 	{
-		List<TypeParameterElement> list = new ArrayList<TypeParameterElement>();
+		List<BsjTypeParameterElement> list = new ArrayList<BsjTypeParameterElement>();
 		for (TypeParameterNode typeParameterNode : getBackingNode().getTypeParameters())
 		{
-			list.add((TypeParameterElement) makeElement(typeParameterNode));
+			list.add((BsjTypeParameterElement) makeElement(typeParameterNode));
 		}
 		return list;
 	}
 
 	@Override
-	protected List<? extends BsjType> getPrototypicalTypeArgumentList()
+	protected List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
 	{
 		return makeTypeMirrorsFromTypeParameters(getBackingNode().getTypeParameters());
 	}

@@ -1421,6 +1421,12 @@ public interface BsjTypedNodeVisitor
     public void visitPackageNodeStart(PackageNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type ParameterizableTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitParameterizableTypeDeclarationNodeStart(ParameterizableTypeDeclarationNode node);
+
+    /**
      * Starts a visit for nodes of type ParameterizedTypeNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -3186,6 +3192,12 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitPackageNodeStop(PackageNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type ParameterizableTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitParameterizableTypeDeclarationNodeStop(ParameterizableTypeDeclarationNode node);
 
     /**
      * Stops a visit for nodes of type ParameterizedTypeNode.

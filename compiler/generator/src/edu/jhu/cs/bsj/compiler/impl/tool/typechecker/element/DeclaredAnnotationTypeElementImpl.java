@@ -7,15 +7,15 @@ import java.util.Set;
 
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationModifiersNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<AnnotationDeclarationNode>
 {
@@ -60,13 +60,13 @@ public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<A
 	}
 
 	@Override
-	public List<? extends TypeParameterElement> getTypeParameters()
+	public List<? extends BsjTypeParameterElement> getTypeParameters()
 	{
 		return Collections.emptyList();
 	}
 
 	@Override
-	protected List<? extends BsjType> getPrototypicalTypeArgumentList()
+	protected List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
 	{
 		return Collections.emptyList();
 	}
