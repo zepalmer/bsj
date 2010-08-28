@@ -60,6 +60,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.CapturedTypeVariableImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
@@ -290,8 +291,28 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		boolean dimensionError = false;
+		for (ExpressionNode expr : node.getDimExpressions())
+		{
+			BsjType exprType = expr.executeOperation(thisOperation, env);
+			exprType = autoUnboxType(exprType);
+			if (!isIntegralPrimitive(exprType))
+			{
+				dimensionError = true;
+				// TODO: produce a diagnostic
+			}
+		}
+		if (dimensionError)
+		{
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		BsjType baseType = this.manager.getToolkit().getTypeBuilder().makeType(node.getBaseType());
+		for (int i = 0; i < node.getArrayLevels() + node.getDimExpressions().size(); i++)
+		{
+			baseType = new ArrayTypeImpl(this.manager, baseType);
+		}
+		return baseType;
 	}
 
 	@Override
