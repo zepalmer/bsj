@@ -296,7 +296,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		{
 			BsjType exprType = expr.executeOperation(thisOperation, env);
 			exprType = autoUnboxType(exprType);
-			if (!isIntegralPrimitive(exprType))
+			exprType = numericTypePromotion(exprType);
+			if (!this.manager.getToolkit().getIntType().equals(exprType))
 			{
 				dimensionError = true;
 				// TODO: produce a diagnostic
