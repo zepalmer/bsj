@@ -1378,7 +1378,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 
 	/**
 	 * Performs a binary type promotion as specified in JLSv3 §5.6.2. This is a convenience method which calls
-	 * {@link #BsjType.numericTypePromotion()} on both arguments and then returns the type to which either types will be
+	 * {@link BsjType#numericTypePromotion()} on both arguments and then returns the type to which either types will be
 	 * upcast (if such a type exists) or which is equal to both types (if not). The arguments to this method <i>must</i>
 	 * be known to be numeric primitive types; if they are not, an {@link IllegalStateException} is thrown.
 	 * 
