@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
@@ -107,6 +108,19 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		this.manager = manager;
 		this.thisOperation = thisOperation;
 	}
+	
+	// TODO: the current flavor of error handling will produce a slew of diagnostics up a recursive call stack when an
+	// error occurs.  For instance, consider the statement "String[] x = new String[true];".  This is clearly in error;
+	// the array index is not unary promotable to int.  But the current implementation will return an ErrorType for the
+	// array initializer, causing the assignment to generate its own new ErrorType.  Because each error type creation is
+	// associated with the creation of a diagnostic object, two diagnostics will be reported for what amounts to a
+	// single error.
+	//     Rather than this, the desirable approach would be to have each parent typechecker consider the errors it
+	// gets from its child nodes and return that error without a further diagnostic as necessary.  However, it may be
+	// desirable in some cases to be able to ascertain what the type of the expression *would* be if the error were
+	// resolved; this is not always deterministic, but it may be.  Above, for instance, the type would always be
+	// String[] regardless of how the existing error was fixed.  Should this be a mode on the type evaluation operation
+	// or simply a field on the ErrorType?  Either way, deal with this.
 
 	// TODO: handle rejection which comes as a result of lacking context (such as "<:x:>") differently
 	// This could be accomplished by creating a second operation. The second operation calls this operation for all
@@ -333,162 +347,30 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeAssignmentNode(AssignmentNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType variableType = node.getVariable().executeOperation(thisOperation, env);
+		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
+		
+		AssignmentOperator assignmentOperator = node.getOperator();
+		BinaryOperator binaryOperator = assignmentOperator.getBinaryOperator();
+		
+		if (binaryOperator != null)
+		{
+			expressionType = determineBinaryExpressionType(variableType, expressionType, binaryOperator);
+		}
+		
+		// TODO: check variable convertability
+		return expressionType;
 	}
 
 	@Override
 	public BsjType executeBinaryExpressionNode(BinaryExpressionNode node, TypecheckerEnvironment env)
 	{
-		TypecheckerToolkit toolkit = this.manager.getToolkit();
-
 		BsjType leftType = node.getLeftOperand().executeOperation(thisOperation, env);
 		BsjType rightType = node.getRightOperand().executeOperation(thisOperation, env);
+		
+		BinaryOperator operator = node.getOperator();
 
-		BsjType unboxedLeftType;
-		BsjType unboxedRightType;
-
-		if (node.getOperator() == BinaryOperator.CONDITIONAL_AND || node.getOperator() == BinaryOperator.CONDITIONAL_OR)
-		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-			if (!unboxedLeftType.equals(toolkit.getBooleanType()))
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-			if (!unboxedRightType.equals(toolkit.getBooleanType()))
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-			return unboxedLeftType;
-		} else if (node.getOperator() == BinaryOperator.MINUS || node.getOperator() == BinaryOperator.PLUS
-				|| node.getOperator() == BinaryOperator.DIVIDE || node.getOperator() == BinaryOperator.MODULUS
-				|| node.getOperator() == BinaryOperator.MULTIPLY)
-		{
-			if (node.getOperator() == BinaryOperator.PLUS
-					&& (leftType.equals(toolkit.getStringElement().asType()) || rightType.equals(toolkit.getStringElement().asType())))
-			{
-				// if it's a + operator and either side is a string, the result is string concatenation
-				return toolkit.getStringElement().asType();
-			}
-
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-			if (!isNumericPrimitive(unboxedLeftType))
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-			if (!isNumericPrimitive(unboxedRightType))
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-			return binaryNumericTypePromotion(unboxedLeftType, unboxedRightType);
-		} else if (node.getOperator() == BinaryOperator.EQUAL || node.getOperator() == BinaryOperator.NOT_EQUAL)
-		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-
-			if (unboxedLeftType.equals(toolkit.getBooleanType()))
-			{
-				if (unboxedRightType.equals(toolkit.getBooleanType()))
-				{
-					return toolkit.getBooleanType();
-				} else
-				{
-					// Equality on a boolean type must always be between two boolean types.
-					// TODO: diagnostic
-					return new ErrorTypeImpl(this.manager);
-				}
-			} else if (isNumericPrimitive(unboxedLeftType))
-			{
-				if (isNumericPrimitive(unboxedRightType))
-				{
-					return toolkit.getBooleanType();
-				} else
-				{
-					// Equality on a numeric type must always be between two numeric types.
-					// TODO: diagnostic
-					return new ErrorTypeImpl(this.manager);
-				}
-			} else
-			{
-				// TODO: if either operand is assignable to the other, a compile-time error occurs
-				return toolkit.getBooleanType();
-			}
-		} else if (node.getOperator() == BinaryOperator.GREATER_THAN
-				|| node.getOperator() == BinaryOperator.GREATER_THAN_EQUAL
-				|| node.getOperator() == BinaryOperator.LESS_THAN
-				|| node.getOperator() == BinaryOperator.LESS_THAN_EQUAL)
-		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-			if (!isNumericPrimitive(unboxedLeftType))
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-			if (!isNumericPrimitive(unboxedRightType))
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-			return toolkit.getBooleanType();
-		} else if (node.getOperator() == BinaryOperator.LEFT_SHIFT || node.getOperator() == BinaryOperator.RIGHT_SHIFT
-				|| node.getOperator() == BinaryOperator.UNSIGNED_RIGHT_SHIFT)
-		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-			if (!isIntegralPrimitive(unboxedLeftType))
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-			if (!isIntegralPrimitive(unboxedRightType))
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-			return numericTypePromotion(unboxedLeftType);
-		} else if (node.getOperator() == BinaryOperator.LOGICAL_AND || node.getOperator() == BinaryOperator.LOGICAL_OR
-				|| node.getOperator() == BinaryOperator.XOR)
-		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-			if (unboxedLeftType.equals(toolkit.getBooleanType()))
-			{
-				if (unboxedRightType.equals(toolkit.getBooleanType()))
-				{
-					return toolkit.getBooleanType();
-				} else
-				{
-					// Equality on a boolean type must always be between two boolean types.
-					// TODO: diagnostic
-					return new ErrorTypeImpl(this.manager);
-				}
-			} else if (isIntegralPrimitive(unboxedLeftType))
-			{
-				if (isIntegralPrimitive(unboxedRightType))
-				{
-					return binaryNumericTypePromotion(unboxedLeftType, unboxedRightType);
-				} else
-				{
-					// Equality on a numeric type must always be between two numeric types.
-					// TODO: diagnostic
-					return new ErrorTypeImpl(this.manager);
-				}
-			} else
-			{
-				// TODO: diagnostic
-				return new ErrorTypeImpl(this.manager);
-			}
-		} else
-		{
-			throw new IllegalStateException("Unrecognized binary operator " + node.getOperator());
-		}
+		return determineBinaryExpressionType(leftType, rightType, operator);
 	}
 
 	@Override
@@ -1750,6 +1632,156 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		} else
 		{
 			return new IntersectionTypeImpl(this.manager, bounds);
+		}
+	}
+
+	private BsjType determineBinaryExpressionType(BsjType leftType, BsjType rightType, BinaryOperator operator)
+	{
+		TypecheckerToolkit toolkit = this.manager.getToolkit();
+
+		BsjType unboxedLeftType;
+		BsjType unboxedRightType;
+
+		if (operator == BinaryOperator.CONDITIONAL_AND || operator == BinaryOperator.CONDITIONAL_OR)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (!unboxedLeftType.equals(toolkit.getBooleanType()))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			if (!unboxedRightType.equals(toolkit.getBooleanType()))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return unboxedLeftType;
+		} else if (operator == BinaryOperator.MINUS || operator == BinaryOperator.PLUS
+				|| operator == BinaryOperator.DIVIDE || operator == BinaryOperator.MODULUS
+				|| operator == BinaryOperator.MULTIPLY)
+		{
+			if (operator == BinaryOperator.PLUS
+					&& (leftType.equals(toolkit.getStringElement().asType()) || rightType.equals(toolkit.getStringElement().asType())))
+			{
+				// if it's a + operator and either side is a string, the result is string concatenation
+				return toolkit.getStringElement().asType();
+			}
+
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (!isNumericPrimitive(unboxedLeftType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			if (!isNumericPrimitive(unboxedRightType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return binaryNumericTypePromotion(unboxedLeftType, unboxedRightType);
+		} else if (operator == BinaryOperator.EQUAL || operator == BinaryOperator.NOT_EQUAL)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+
+			if (unboxedLeftType.equals(toolkit.getBooleanType()))
+			{
+				if (unboxedRightType.equals(toolkit.getBooleanType()))
+				{
+					return toolkit.getBooleanType();
+				} else
+				{
+					// Equality on a boolean type must always be between two boolean types.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else if (isNumericPrimitive(unboxedLeftType))
+			{
+				if (isNumericPrimitive(unboxedRightType))
+				{
+					return toolkit.getBooleanType();
+				} else
+				{
+					// Equality on a numeric type must always be between two numeric types.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else
+			{
+				// TODO: if either operand is assignable to the other, a compile-time error occurs
+				return toolkit.getBooleanType();
+			}
+		} else if (operator == BinaryOperator.GREATER_THAN
+				|| operator == BinaryOperator.GREATER_THAN_EQUAL
+				|| operator == BinaryOperator.LESS_THAN
+				|| operator == BinaryOperator.LESS_THAN_EQUAL)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (!isNumericPrimitive(unboxedLeftType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			if (!isNumericPrimitive(unboxedRightType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return toolkit.getBooleanType();
+		} else if (operator == BinaryOperator.LEFT_SHIFT || operator == BinaryOperator.RIGHT_SHIFT
+				|| operator == BinaryOperator.UNSIGNED_RIGHT_SHIFT)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (!isIntegralPrimitive(unboxedLeftType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			if (!isIntegralPrimitive(unboxedRightType))
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			return numericTypePromotion(unboxedLeftType);
+		} else if (operator == BinaryOperator.LOGICAL_AND || operator == BinaryOperator.LOGICAL_OR
+				|| operator == BinaryOperator.XOR)
+		{
+			unboxedLeftType = autoUnboxType(leftType);
+			unboxedRightType = autoUnboxType(rightType);
+			if (unboxedLeftType.equals(toolkit.getBooleanType()))
+			{
+				if (unboxedRightType.equals(toolkit.getBooleanType()))
+				{
+					return toolkit.getBooleanType();
+				} else
+				{
+					// Equality on a boolean type must always be between two boolean types.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else if (isIntegralPrimitive(unboxedLeftType))
+			{
+				if (isIntegralPrimitive(unboxedRightType))
+				{
+					return binaryNumericTypePromotion(unboxedLeftType, unboxedRightType);
+				} else
+				{
+					// Equality on a numeric type must always be between two numeric types.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+		} else
+		{
+			throw new IllegalStateException("Unrecognized binary operator " + operator);
 		}
 	}
 }
