@@ -120,7 +120,7 @@ public class TypeDeclUtils
         if (inType instanceof PrimitiveTypeNode)
         {
             PrimitiveTypeNode primitive = (PrimitiveTypeNode)inType;
-            String name = "Void";
+            String name;
             switch (primitive.getPrimitiveType())
             {
                 case BOOLEAN:
@@ -147,9 +147,8 @@ public class TypeDeclUtils
                 case SHORT:
                     name = "Short";
                     break;
-                case VOID:
-                    name = "Void";
-                    break;
+                default:
+                	throw new IllegalStateException("Unrecognized primitive type!");
             }
             return factory.makeUnparameterizedTypeNode(factory.parseNameNode(name));
         }

@@ -6,6 +6,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class ArrayTypeImpl extends TypeMirrorImpl implements BsjArrayType
 {
@@ -71,5 +72,29 @@ public class ArrayTypeImpl extends TypeMirrorImpl implements BsjArrayType
 	public BsjType calculateErasure()
 	{
 		return new ArrayTypeImpl(getManager(), getComponentType().calculateErasure());
+	}
+
+	@Override
+	public boolean isSubtypeOf(BsjType type)
+	{
+		if (type instanceof BsjTypeVariable)
+		{
+			return type.isSubtypeOf(this);
+		} else if (type instanceof BsjArrayType)
+		{
+			return this.getComponentType().isSubtypeOf(((BsjArrayType)type).getComponentType());
+		} else if (type.equals(this.getManager().getToolkit().getObjectElement().asType()))
+		{
+			return true;
+		} else if (type.equals(this.getManager().getToolkit().getCloneableElement().asType()))
+		{
+			return true;
+		} else if (type.equals(this.getManager().getToolkit().getSerializableElement()))
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
 	}
 }

@@ -63,6 +63,12 @@ public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 	}
 
 	@Override
+	public boolean isSubtypeOf(BsjType type)
+	{
+		return this.equals(type);
+	}
+
+	@Override
 	public BsjType calculateErasure()
 	{
 		return this;

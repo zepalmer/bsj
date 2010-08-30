@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
@@ -23,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
  * 
  * @author Zachary Palmer
  */
-public class IntersectionTypeImpl extends TypeMirrorImpl implements BsjIntersectionType
+public class IntersectionTypeImpl extends EnumerableDirectSupertypeTypeImpl implements BsjIntersectionType
 {
 	/**
 	 * The type arguments applied to the underlying type element to form this type.
@@ -109,6 +111,12 @@ public class IntersectionTypeImpl extends TypeMirrorImpl implements BsjIntersect
 
 	@Override
 	public List<? extends BsjTypeArgument> getSupertypes()
+	{
+		return this.supertypes;
+	}
+
+	@Override
+	protected Collection<? extends BsjType> getDirectSupertypes()
 	{
 		return this.supertypes;
 	}

@@ -48,6 +48,10 @@ public class TypecheckerToolkit
 	private BsjDeclaredTypeElement enumElement;
 	/** A field to hold the element for {@link Annotation java.lang.annotation.Annotation}. */
 	private BsjDeclaredTypeElement annotationElement;
+	/** A field to hold the element for {@link Cloneable java.lang.Cloneable}. */
+	private BsjDeclaredTypeElement cloneableElement;
+	/** A field to hold the element for {@link Serializable java.io.Serializable}. */
+	private BsjDeclaredTypeElement serializableElement;
 
 	/** A field to hold the element for {@link Node edu.jhu.cs.bsj.compiler.ast.node.Node}. */
 	private BsjDeclaredTypeElement nodeElement;
@@ -141,6 +145,24 @@ public class TypecheckerToolkit
 			this.annotationElement = getTypeElementByName("java", "lang", "annotation", "Annotation");
 		}
 		return this.annotationElement;
+	}
+
+	public BsjDeclaredTypeElement getCloneableElement()
+	{
+		if (this.cloneableElement == null)
+		{
+			this.cloneableElement = getTypeElementByName("java", "lang", "Cloneable");
+		}
+		return this.cloneableElement;
+	}
+
+	public BsjDeclaredTypeElement getSerializableElement()
+	{
+		if (this.serializableElement == null)
+		{
+			this.serializableElement = getTypeElementByName("java", "lang", "Serializable");
+		}
+		return this.serializableElement;
 	}
 
 	public BsjDeclaredTypeElement getNodeElement()

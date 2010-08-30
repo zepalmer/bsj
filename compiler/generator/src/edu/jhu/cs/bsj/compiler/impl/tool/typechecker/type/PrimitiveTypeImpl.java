@@ -5,6 +5,7 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
@@ -16,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveType
 {
 	private PrimitiveType primitiveType;
-	
+
 	public PrimitiveTypeImpl(TypecheckerManager manager, PrimitiveType primitiveType)
 	{
 		super(manager);
@@ -50,8 +51,6 @@ public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveTyp
 				return TypeKind.LONG;
 			case SHORT:
 				return TypeKind.SHORT;
-			case VOID:
-				return TypeKind.VOID;
 		}
 		throw new IllegalStateException("Unknown mapping from PrimitiveType " + this.primitiveType + " to TypeKind");
 	}
@@ -93,4 +92,63 @@ public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveTyp
 	{
 		return this;
 	}
+
+	public PrimitiveType getPrimitiveType()
+	{
+		return primitiveType;
+	}
+
+	@Override
+	public boolean isSubtypeOf(BsjType type)
+	{
+		if (type instanceof BsjPrimitiveType)
+		{
+			return this.primitiveType.isSubtypeOf(((BsjPrimitiveType) type).getPrimitiveType());
+		} else
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public BsjType boxConvert()
+	{
+		TypecheckerToolkit toolkit = getManager().getToolkit();
+		if (this.equals(toolkit.getByteType()))
+			return toolkit.getByteWrapperType();
+		if (this.equals(toolkit.getCharType()))
+			return toolkit.getCharacterWrapperType();
+		if (this.equals(toolkit.getIntType()))
+			return toolkit.getIntegerWrapperType();
+		if (this.equals(toolkit.getLongType()))
+			return toolkit.getLongWrapperType();
+		if (this.equals(toolkit.getShortType()))
+			return toolkit.getShortWrapperType();
+		if (this.equals(toolkit.getDoubleType()))
+			return toolkit.getDoubleWrapperType();
+		if (this.equals(toolkit.getFloatType()))
+			return toolkit.getFloatWrapperType();
+		if (this.equals(toolkit.getBooleanType()))
+			return toolkit.getBooleanWrapperType();
+		throw new IllegalArgumentException("Unrecognized primitive type while boxing: " + this.primitiveType);
+	}
+
+	@Override
+	public boolean isNumericPrimitive()
+	{
+		TypecheckerToolkit toolkit = getManager().getToolkit();
+		return this.isIntegralPrimitive() || (this.equals(toolkit.getDoubleType()))
+				|| (this.equals(toolkit.getFloatType()));
+	}
+
+	@Override
+	public boolean isIntegralPrimitive()
+	{
+		TypecheckerToolkit toolkit = getManager().getToolkit();
+		return (this.equals(toolkit.getByteType())) || (this.equals(toolkit.getCharType()))
+				|| (this.equals(toolkit.getIntType())) || (this.equals(toolkit.getLongType()))
+				|| (this.equals(toolkit.getShortType())) || (this.equals(toolkit.getDoubleType()))
+				|| (this.equals(toolkit.getFloatType()));
+	}
+
 }

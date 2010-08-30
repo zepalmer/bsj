@@ -1,5 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
@@ -15,7 +18,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
  * @param <T> An identifying attribute which can be used to tell two type variables apart.
  * @author Zachary Palmer
  */
-public abstract class AbstractTypeVariableImpl<T> extends TypeMirrorImpl implements BsjTypeVariable
+public abstract class AbstractTypeVariableImpl<T> extends EnumerableDirectSupertypeTypeImpl implements BsjTypeVariable
 {
 	/** The object representing the identity of this type variable. */
 	private T id;
@@ -69,7 +72,7 @@ public abstract class AbstractTypeVariableImpl<T> extends TypeMirrorImpl impleme
 	{
 		return TypeKind.TYPEVAR;
 	}
-	
+
 	protected T getId()
 	{
 		return this.id;
@@ -81,12 +84,6 @@ public abstract class AbstractTypeVariableImpl<T> extends TypeMirrorImpl impleme
 		return this.id.hashCode();
 	}
 
-	// TODO: this may not be an acceptable definition of equals - there is a notion of identity among type variables
-	// just because A <: \alpha <: B and A <: \beta <: B doesn't mean that \alpha = \beta
-	// There appear to be two general categories of type variables - those which appear as a result of an explicit type
-	// variable or those which appear as the result of capture conversion. If the type variable is the result of an
-	// explicit declaration, the identity of that type variable may be the TypeParameterNode which declares it.
-	// Otherwise, the type variable must always be fresh and could be identified by a UID.
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -102,5 +99,20 @@ public abstract class AbstractTypeVariableImpl<T> extends TypeMirrorImpl impleme
 	public BsjType calculateErasure()
 	{
 		return getUpperBound().calculateErasure();
+	}
+
+	@Override
+	protected Collection<? extends BsjType> getDirectSupertypes()
+	{
+		return Collections.singleton(this.upperBound);
+	}
+
+	/**
+	 * Overriding behavior of supertypes to behave correctly with respect to type variables.
+	 */
+	@Override
+	public boolean isSupertypeOf(BsjType type)
+	{
+		return type.isSubtypeOf(this.lowerBound);
 	}
 }

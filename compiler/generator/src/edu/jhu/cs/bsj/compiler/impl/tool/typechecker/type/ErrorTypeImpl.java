@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
@@ -71,5 +72,11 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 	public BsjDeclaredType calculateErasure()
 	{
 		return this;
+	}
+
+	@Override
+	public boolean isSubtypeOf(BsjType type)
+	{
+		return false;
 	}
 }

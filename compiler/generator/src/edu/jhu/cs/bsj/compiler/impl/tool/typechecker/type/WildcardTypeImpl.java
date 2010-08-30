@@ -89,4 +89,12 @@ public class WildcardTypeImpl extends TypeMirrorImpl implements BsjWildcardType
 	{
 		return this;
 	}
+
+	@Override
+	public boolean isSubtypeOf(BsjType type)
+	{
+		// Strictly speaking, there is no definition of subtyping amongst wildcard types themselves as they appear
+		// in the JLS.
+		return false;
+	}
 }

@@ -684,7 +684,7 @@ public class BsjBinaryNodeLoader
         }
         else if (type.equals(BasicType.VOID))
         {
-            primitiveType = PrimitiveType.VOID;
+            return factory.makeVoidTypeNode();
         }
         else
         {

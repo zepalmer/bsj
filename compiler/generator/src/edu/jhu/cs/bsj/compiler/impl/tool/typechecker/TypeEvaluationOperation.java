@@ -1,9 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
@@ -60,21 +56,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.CapturedTypeVariableImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
@@ -108,19 +96,19 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		this.manager = manager;
 		this.thisOperation = thisOperation;
 	}
-	
+
 	// TODO: the current flavor of error handling will produce a slew of diagnostics up a recursive call stack when an
-	// error occurs.  For instance, consider the statement "String[] x = new String[true];".  This is clearly in error;
-	// the array index is not unary promotable to int.  But the current implementation will return an ErrorType for the
-	// array initializer, causing the assignment to generate its own new ErrorType.  Because each error type creation is
+	// error occurs. For instance, consider the statement "String[] x = new String[true];". This is clearly in error;
+	// the array index is not unary promotable to int. But the current implementation will return an ErrorType for the
+	// array initializer, causing the assignment to generate its own new ErrorType. Because each error type creation is
 	// associated with the creation of a diagnostic object, two diagnostics will be reported for what amounts to a
 	// single error.
-	//     Rather than this, the desirable approach would be to have each parent typechecker consider the errors it
-	// gets from its child nodes and return that error without a further diagnostic as necessary.  However, it may be
+	// Rather than this, the desirable approach would be to have each parent typechecker consider the errors it
+	// gets from its child nodes and return that error without a further diagnostic as necessary. However, it may be
 	// desirable in some cases to be able to ascertain what the type of the expression *would* be if the error were
-	// resolved; this is not always deterministic, but it may be.  Above, for instance, the type would always be
-	// String[] regardless of how the existing error was fixed.  Should this be a mode on the type evaluation operation
-	// or simply a field on the ErrorType?  Either way, deal with this.
+	// resolved; this is not always deterministic, but it may be. Above, for instance, the type would always be
+	// String[] regardless of how the existing error was fixed. Should this be a mode on the type evaluation operation
+	// or simply a field on the ErrorType? Either way, deal with this.
 
 	// TODO: handle rejection which comes as a result of lacking context (such as "<:x:>") differently
 	// This could be accomplished by creating a second operation. The second operation calls this operation for all
@@ -268,10 +256,10 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		{
 			BsjArrayType arrayType = (BsjArrayType) arrayExpressionType;
 			BsjType indexExpressionType = node.getIndexExpression().executeOperation(thisOperation, env);
-			indexExpressionType = autoUnboxType(indexExpressionType);
-			if (isIntegralPrimitive(indexExpressionType))
+			indexExpressionType = indexExpressionType.unboxConvert();
+			if (indexExpressionType.isIntegralPrimitive())
 			{
-				indexExpressionType = numericTypePromotion(indexExpressionType);
+				indexExpressionType = indexExpressionType.numericTypePromotion();
 			}
 			if (!indexExpressionType.equals(this.manager.getToolkit().getIntType()))
 			{
@@ -279,7 +267,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				// TODO: diagnostic
 				return new ErrorTypeImpl(this.manager);
 			}
-			return captureConversion(arrayType.getComponentType());
+			return arrayType.getComponentType().captureConvert();
 		} else
 		{
 			// You can't dereference a non-array type.
@@ -309,8 +297,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		for (ExpressionNode expr : node.getDimExpressions())
 		{
 			BsjType exprType = expr.executeOperation(thisOperation, env);
-			exprType = autoUnboxType(exprType);
-			exprType = numericTypePromotion(exprType);
+			exprType = exprType.unboxConvert();
+			exprType = exprType.numericTypePromotion();
 			if (!this.manager.getToolkit().getIntType().equals(exprType))
 			{
 				dimensionError = true;
@@ -349,16 +337,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	{
 		BsjType variableType = node.getVariable().executeOperation(thisOperation, env);
 		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
-		
+
 		AssignmentOperator assignmentOperator = node.getOperator();
 		BinaryOperator binaryOperator = assignmentOperator.getBinaryOperator();
-		
+
 		if (binaryOperator != null)
 		{
 			expressionType = determineBinaryExpressionType(variableType, expressionType, binaryOperator);
 		}
-		
-		// TODO: check variable convertability
+
+		// TODO: check variable convertability - this is nontrivial! (JLSv3 §5.2)
 		return expressionType;
 	}
 
@@ -367,7 +355,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	{
 		BsjType leftType = node.getLeftOperand().executeOperation(thisOperation, env);
 		BsjType rightType = node.getRightOperand().executeOperation(thisOperation, env);
-		
+
 		BinaryOperator operator = node.getOperator();
 
 		return determineBinaryExpressionType(leftType, rightType, operator);
@@ -1231,17 +1219,17 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		switch (node.getOperator())
 		{
 			case BITWISE_COMPLEMENT:
-				type = autoUnboxType(type);
-				if (!isIntegralPrimitive(type))
+				type = type.unboxConvert();
+				if (!type.isIntegralPrimitive())
 				{
 					// TODO: diagnostic
 					return new ErrorTypeImpl(this.manager);
 				} else
 				{
-					return numericTypePromotion(type);
+					return type.numericTypePromotion();
 				}
 			case LOGICAL_COMPLEMENT:
-				type = autoUnboxType(type);
+				type = type.unboxConvert();
 				if (type.equals(this.manager.getToolkit().getBooleanType()))
 				{
 					return type;
@@ -1252,7 +1240,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				}
 			case UNARY_MINUS:
 			case UNARY_PLUS:
-				BsjPrimitiveType primitiveType = numericTypePromotion(type);
+				BsjPrimitiveType primitiveType = type.numericTypePromotion();
 				if (primitiveType == null)
 				{
 					// TODO: diagnostic
@@ -1272,8 +1260,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		// All unary statement expressions are numeric in nature (pre- and postfix increment and decrement). If the
 		// expression has a numeric type, it preserves that type. Otherwise, the expression has an error type.
 		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
-		expressionType = autoUnboxType(expressionType);
-		if (isNumericPrimitive(expressionType))
+		expressionType = expressionType.unboxConvert();
+		if (expressionType.isNumericPrimitive())
 		{
 			return expressionType;
 		} else
@@ -1383,144 +1371,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	/**
-	 * Boxes the specified type.
-	 */
-	private BsjExplicitlyDeclaredType boxType(BsjPrimitiveType type)
-	{
-		TypecheckerToolkit toolkit = this.manager.getToolkit();
-		if (type.equals(toolkit.getByteType()))
-			return toolkit.getByteWrapperType();
-		if (type.equals(toolkit.getCharType()))
-			return toolkit.getCharacterWrapperType();
-		if (type.equals(toolkit.getIntType()))
-			return toolkit.getIntegerWrapperType();
-		if (type.equals(toolkit.getLongType()))
-			return toolkit.getLongWrapperType();
-		if (type.equals(toolkit.getShortType()))
-			return toolkit.getShortWrapperType();
-		if (type.equals(toolkit.getDoubleType()))
-			return toolkit.getDoubleWrapperType();
-		if (type.equals(toolkit.getFloatType()))
-			return toolkit.getFloatWrapperType();
-		if (type.equals(toolkit.getBooleanType()))
-			return toolkit.getBooleanWrapperType();
-		throw new IllegalStateException("Unrecognized primitive type: " + type);
-	}
-
-	/**
-	 * Auto-boxes the specified type. If the specified type cannot be auto-boxed (because it is not boxable or is
-	 * already boxed), it is returned as it was provided.
-	 */
-	private BsjReferenceType autoboxType(BsjType type)
-	{
-		if (type instanceof BsjPrimitiveType)
-		{
-			return boxType((BsjPrimitiveType) type);
-		} else
-		{
-			return (BsjReferenceType) type;
-		}
-	}
-
-	/**
-	 * Unboxes the specified type. If no unboxing is possible, an exception is raised.
-	 */
-	private BsjPrimitiveType unboxType(BsjExplicitlyDeclaredType type)
-	{
-		TypecheckerToolkit toolkit = this.manager.getToolkit();
-		if (type.equals(toolkit.getByteWrapperType()))
-			return toolkit.getByteType();
-		if (type.equals(toolkit.getCharacterWrapperType()))
-			return toolkit.getCharType();
-		if (type.equals(toolkit.getIntegerWrapperType()))
-			return toolkit.getIntType();
-		if (type.equals(toolkit.getLongWrapperType()))
-			return toolkit.getLongType();
-		if (type.equals(toolkit.getShortWrapperType()))
-			return toolkit.getShortType();
-		if (type.equals(toolkit.getDoubleWrapperType()))
-			return toolkit.getDoubleType();
-		if (type.equals(toolkit.getFloatWrapperType()))
-			return toolkit.getFloatType();
-		if (type.equals(toolkit.getBooleanWrapperType()))
-			return toolkit.getBooleanType();
-		throw new IllegalArgumentException("Provided non-box type " + type);
-	}
-
-	/**
-	 * Auto-unboxes the specified type. If no auto-unboxing is possible, the type is returned in the form in which it
-	 * was provided.
-	 */
-	private BsjType autoUnboxType(BsjType type)
-	{
-		TypecheckerToolkit toolkit = this.manager.getToolkit();
-		if (type.equals(toolkit.getByteWrapperType()))
-			return toolkit.getByteType();
-		if (type.equals(toolkit.getCharacterWrapperType()))
-			return toolkit.getCharType();
-		if (type.equals(toolkit.getIntegerWrapperType()))
-			return toolkit.getIntType();
-		if (type.equals(toolkit.getLongWrapperType()))
-			return toolkit.getLongType();
-		if (type.equals(toolkit.getShortWrapperType()))
-			return toolkit.getShortType();
-		if (type.equals(toolkit.getDoubleWrapperType()))
-			return toolkit.getDoubleType();
-		if (type.equals(toolkit.getFloatWrapperType()))
-			return toolkit.getFloatType();
-		if (type.equals(toolkit.getBooleanWrapperType()))
-			return toolkit.getBooleanType();
-		return type;
-	}
-
-	/**
-	 * Determines whether or not the specified type is a numeric primitive type.
-	 */
-	private boolean isNumericPrimitive(BsjType type)
-	{
-		TypecheckerToolkit toolkit = this.manager.getToolkit();
-		return (isIntegralPrimitive(type) || (type.equals(toolkit.getDoubleType())) || (type.equals(toolkit.getFloatType())));
-	}
-
-	/**
-	 * Determines whether or not the specified type is an integral primitive type.
-	 */
-	private boolean isIntegralPrimitive(BsjType type)
-	{
-		TypecheckerToolkit toolkit = this.manager.getToolkit();
-		return (type.equals(toolkit.getByteType())) || (type.equals(toolkit.getCharType()))
-				|| (type.equals(toolkit.getIntType())) || (type.equals(toolkit.getLongType()))
-				|| (type.equals(toolkit.getShortType())) || (type.equals(toolkit.getDoubleType()))
-				|| (type.equals(toolkit.getFloatType()));
-	}
-
-	/**
-	 * Performs numeric type promotion on the specified type. This is equivalent to both unary numeric conversion (JLSv3
-	 * §5.6.1) and binary numeric conversion (JLSv3 §5.6.2) because those conversions have different effects on the
-	 * values that are converted but not on the types. If the specified type is not a numeric type, <code>null</code> is
-	 * returned.
-	 */
-	private BsjPrimitiveType numericTypePromotion(BsjType type)
-	{
-		BsjType unboxedType = autoUnboxType(type);
-		if (!isNumericPrimitive(unboxedType))
-		{
-			return null;
-		}
-		TypecheckerToolkit toolkit = this.manager.getToolkit();
-		if ((type.equals(toolkit.getByteType())) || (type.equals(toolkit.getCharType()))
-				|| (type.equals(toolkit.getShortType())))
-		{
-			return toolkit.getIntType();
-		} else
-		{
-			return (BsjPrimitiveType) unboxedType;
-		}
-	}
-
-	/**
 	 * Performs a binary type promotion as specified in JLSv3 §5.6.2. This is a convenience method which calls
-	 * {@link #numericTypePromotion(BsjType) on both arguments and then returns the type to which either types will be
+	 * {@link #BsjType.numericTypePromotion()} on both arguments and then returns the type to which either types will be
 	 * upcast (if such a type exists) or which is equal to both types (if not). The arguments to this method <i>must</i>
 	 * be known to be numeric primitive types; if they are not, an {@link IllegalStateException} is thrown.
 	 * 
@@ -1531,8 +1383,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	private BsjType binaryNumericTypePromotion(BsjType leftType, BsjType rightType)
 	{
 		TypecheckerToolkit toolkit = this.manager.getToolkit();
-		leftType = numericTypePromotion(leftType);
-		rightType = numericTypePromotion(rightType);
+		leftType = leftType.numericTypePromotion();
+		rightType = leftType.numericTypePromotion();
 		for (BsjPrimitiveType type : new BsjPrimitiveType[] { toolkit.getDoubleType(), toolkit.getFloatType(),
 				toolkit.getLongType(), toolkit.getIntType() })
 		{
@@ -1545,96 +1397,6 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		throw new IllegalStateException("Don't know how to handle types " + leftType + " and " + rightType);
 	}
 
-	/**
-	 * Performs the capturing conversion (JLSv3 §5.1.10) on the specified type.
-	 * 
-	 * @param type The type in question.
-	 * @return The capture-converted type.
-	 */
-	private BsjType captureConversion(BsjType type)
-	{
-		if (type instanceof BsjExplicitlyDeclaredType)
-		{
-			BsjExplicitlyDeclaredType explicitType = (BsjExplicitlyDeclaredType) type;
-			List<BsjTypeArgument> captureConversionArguments = new ArrayList<BsjTypeArgument>();
-			// for each type argument, perform the argument capture
-			Iterator<? extends BsjTypeArgument> typeArgIt = explicitType.getTypeArguments().iterator();
-			Iterator<? extends BsjTypeParameterElement> paramIt = explicitType.asElement().getTypeParameters().iterator();
-			while (typeArgIt.hasNext() && paramIt.hasNext())
-			{
-				BsjTypeArgument typeArgument = typeArgIt.next();
-				BsjTypeParameterElement parameterElement = paramIt.next();
-
-				if (typeArgument instanceof BsjWildcardType)
-				{
-					BsjWildcardType wildcardType = (BsjWildcardType) typeArgument;
-					if (wildcardType.getSuperBound() == null)
-					{
-						if (wildcardType.getExtendsBound() == null)
-						{
-							// handle: ?
-							// the argument to add to the list is a fresh type variable bounded from above by the
-							// bound of the corresponding type parameter
-							captureConversionArguments.add(new CapturedTypeVariableImpl(this.manager, null,
-									getParameterBoundAsType(parameterElement)));
-						} else
-						{
-							// handle: ? extends Foo
-							// the argument to add to the list is a fresh type variable bounded from above by the
-							// intersection between the corresponding type parameter and the wildcard bound
-							List<BsjTypeArgument> bounds = new ArrayList<BsjTypeArgument>(parameterElement.getBounds());
-							bounds.add(wildcardType.getExtendsBound());
-							captureConversionArguments.add(new CapturedTypeVariableImpl(this.manager, null,
-									getBoundListAsType(bounds)));
-						}
-					} else
-					{
-						// then extends bound, by definition of WildcardTypeNode, must be null
-						// handle: ? super Foo
-						// the argument to add to the list is a fresh type variable bounded from above by the
-						// bound of the corresponding type parameter and from below by the wildcard bound
-						captureConversionArguments.add(new CapturedTypeVariableImpl(this.manager,
-								wildcardType.getSuperBound(), getParameterBoundAsType(parameterElement)));
-					}
-				} else
-				{
-					captureConversionArguments.add(typeArgument);
-				}
-			}
-			return new DeclaredTypeImpl(this.manager, explicitType.asElement(), captureConversionArguments,
-					explicitType.getEnclosingType());
-		} else
-		{
-			return type;
-		}
-	}
-
-	/**
-	 * Calculates, given a specified type parameter element, a single type representing that type parameter's bound.
-	 * 
-	 * @param typeParameterElement The element in question.
-	 * @return The upper bound of the type parameter represented by that element.
-	 */
-	private BsjTypeArgument getParameterBoundAsType(BsjTypeParameterElement parameter)
-	{
-		List<? extends BsjTypeArgument> bounds = parameter.getBounds();
-		return getBoundListAsType(bounds);
-	}
-
-	private BsjTypeArgument getBoundListAsType(List<? extends BsjTypeArgument> bounds)
-	{
-		if (bounds.size() == 0)
-		{
-			return this.manager.getToolkit().getObjectElement().asType();
-		} else if (bounds.size() == 1)
-		{
-			return bounds.iterator().next();
-		} else
-		{
-			return new IntersectionTypeImpl(this.manager, bounds);
-		}
-	}
-
 	private BsjType determineBinaryExpressionType(BsjType leftType, BsjType rightType, BinaryOperator operator)
 	{
 		TypecheckerToolkit toolkit = this.manager.getToolkit();
@@ -1644,8 +1406,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 
 		if (operator == BinaryOperator.CONDITIONAL_AND || operator == BinaryOperator.CONDITIONAL_OR)
 		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
+			unboxedLeftType = leftType.unboxConvert();
+			unboxedRightType = rightType.unboxConvert();
 			if (!unboxedLeftType.equals(toolkit.getBooleanType()))
 			{
 				// TODO: diagnostic
@@ -1668,14 +1430,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				return toolkit.getStringElement().asType();
 			}
 
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-			if (!isNumericPrimitive(unboxedLeftType))
+			unboxedLeftType = leftType.unboxConvert();
+			unboxedRightType = rightType.unboxConvert();
+			if (!unboxedLeftType.isNumericPrimitive())
 			{
 				// TODO: diagnostic
 				return new ErrorTypeImpl(this.manager);
 			}
-			if (!isNumericPrimitive(unboxedRightType))
+			if (!unboxedRightType.isNumericPrimitive())
 			{
 				// TODO: diagnostic
 				return new ErrorTypeImpl(this.manager);
@@ -1683,8 +1445,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			return binaryNumericTypePromotion(unboxedLeftType, unboxedRightType);
 		} else if (operator == BinaryOperator.EQUAL || operator == BinaryOperator.NOT_EQUAL)
 		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
+			unboxedLeftType = leftType.unboxConvert();
+			unboxedRightType = rightType.unboxConvert();
 
 			if (unboxedLeftType.equals(toolkit.getBooleanType()))
 			{
@@ -1697,9 +1459,9 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 					// TODO: diagnostic
 					return new ErrorTypeImpl(this.manager);
 				}
-			} else if (isNumericPrimitive(unboxedLeftType))
+			} else if (unboxedLeftType.isNumericPrimitive())
 			{
-				if (isNumericPrimitive(unboxedRightType))
+				if (unboxedRightType.isNumericPrimitive())
 				{
 					return toolkit.getBooleanType();
 				} else
@@ -1713,19 +1475,17 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				// TODO: if either operand is assignable to the other, a compile-time error occurs
 				return toolkit.getBooleanType();
 			}
-		} else if (operator == BinaryOperator.GREATER_THAN
-				|| operator == BinaryOperator.GREATER_THAN_EQUAL
-				|| operator == BinaryOperator.LESS_THAN
-				|| operator == BinaryOperator.LESS_THAN_EQUAL)
+		} else if (operator == BinaryOperator.GREATER_THAN || operator == BinaryOperator.GREATER_THAN_EQUAL
+				|| operator == BinaryOperator.LESS_THAN || operator == BinaryOperator.LESS_THAN_EQUAL)
 		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-			if (!isNumericPrimitive(unboxedLeftType))
+			unboxedLeftType = leftType.unboxConvert();
+			unboxedRightType = rightType.unboxConvert();
+			if (!unboxedLeftType.isNumericPrimitive())
 			{
 				// TODO: diagnostic
 				return new ErrorTypeImpl(this.manager);
 			}
-			if (!isNumericPrimitive(unboxedRightType))
+			if (!unboxedRightType.isNumericPrimitive())
 			{
 				// TODO: diagnostic
 				return new ErrorTypeImpl(this.manager);
@@ -1734,24 +1494,24 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		} else if (operator == BinaryOperator.LEFT_SHIFT || operator == BinaryOperator.RIGHT_SHIFT
 				|| operator == BinaryOperator.UNSIGNED_RIGHT_SHIFT)
 		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
-			if (!isIntegralPrimitive(unboxedLeftType))
+			unboxedLeftType = leftType.unboxConvert();
+			unboxedRightType = rightType.unboxConvert();
+			if (!unboxedLeftType.isIntegralPrimitive())
 			{
 				// TODO: diagnostic
 				return new ErrorTypeImpl(this.manager);
 			}
-			if (!isIntegralPrimitive(unboxedRightType))
+			if (!unboxedRightType.isIntegralPrimitive())
 			{
 				// TODO: diagnostic
 				return new ErrorTypeImpl(this.manager);
 			}
-			return numericTypePromotion(unboxedLeftType);
+			return unboxedLeftType.numericTypePromotion();
 		} else if (operator == BinaryOperator.LOGICAL_AND || operator == BinaryOperator.LOGICAL_OR
 				|| operator == BinaryOperator.XOR)
 		{
-			unboxedLeftType = autoUnboxType(leftType);
-			unboxedRightType = autoUnboxType(rightType);
+			unboxedLeftType = leftType.unboxConvert();
+			unboxedRightType = rightType.unboxConvert();
 			if (unboxedLeftType.equals(toolkit.getBooleanType()))
 			{
 				if (unboxedRightType.equals(toolkit.getBooleanType()))
@@ -1763,9 +1523,9 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 					// TODO: diagnostic
 					return new ErrorTypeImpl(this.manager);
 				}
-			} else if (isIntegralPrimitive(unboxedLeftType))
+			} else if (unboxedLeftType.isIntegralPrimitive())
 			{
-				if (isIntegralPrimitive(unboxedRightType))
+				if (unboxedRightType.isIntegralPrimitive())
 				{
 					return binaryNumericTypePromotion(unboxedLeftType, unboxedRightType);
 				} else

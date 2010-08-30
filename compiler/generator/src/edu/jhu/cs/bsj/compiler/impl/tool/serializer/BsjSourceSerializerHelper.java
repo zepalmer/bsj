@@ -2180,8 +2180,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 				return "long";
 			case SHORT:
 				return "short";
-			case VOID:
-				return "void";
 			default:
 				throw new IllegalStateException("Invalid PrimitiveType");
 		}

@@ -5,6 +5,7 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNullType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class NullTypeImpl extends TypeMirrorImpl implements BsjNullType
@@ -48,5 +49,11 @@ public class NullTypeImpl extends TypeMirrorImpl implements BsjNullType
 	public BsjType calculateErasure()
 	{
 		return this;
+	}
+
+	@Override
+	public boolean isSubtypeOf(BsjType type)
+	{
+		return (type instanceof BsjReferenceType);
 	}
 }

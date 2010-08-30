@@ -8,4 +8,5 @@ import javax.lang.model.type.PrimitiveType;
  */
 public interface BsjPrimitiveType extends PrimitiveType, BsjType
 {
+	public edu.jhu.cs.bsj.compiler.ast.PrimitiveType getPrimitiveType();
 }
