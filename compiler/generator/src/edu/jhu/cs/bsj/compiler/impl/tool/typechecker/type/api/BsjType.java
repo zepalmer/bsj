@@ -68,4 +68,14 @@ public interface BsjType extends TypeMirror
 	 * are converted but not on the types. If the this type is not a numeric type, <code>null</code> is returned.
 	 */
 	public BsjPrimitiveType numericTypePromotion();
+
+	/**
+	 * Determines whether or not this type is assignment-compatible with another type according to the rules of the
+	 * assignment conversion context (JLSv3 §5.2).
+	 * 
+	 * @param type The type to which to compare this type.
+	 * @return <code>true</code> if this type is assignment-compatible with the other type; <code>false</code> if it is
+	 *         not.
+	 */
+	public boolean isAssignmentCompatibleWith(BsjType type);
 }

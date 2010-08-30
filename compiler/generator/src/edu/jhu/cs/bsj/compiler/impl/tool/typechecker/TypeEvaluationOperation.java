@@ -346,8 +346,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			expressionType = determineBinaryExpressionType(variableType, expressionType, binaryOperator);
 		}
 
-		// TODO: check variable convertability - this is nontrivial! (JLSv3 §5.2)
-		return expressionType;
+		if (!expressionType.isAssignmentCompatibleWith(variableType))
+		{
+			// The assignment is illegal due to a typing error.
+			// TODO: raise a diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		return variableType.captureConvert();
 	}
 
 	@Override

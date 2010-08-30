@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentIm
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl implements BsjType
 {
@@ -84,5 +85,31 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 		{
 			return (BsjPrimitiveType) unboxedType;
 		}
+	}
+
+	@Override
+	public boolean isAssignmentCompatibleWith(BsjType type)
+	{
+		if (this.isSubtypeOf(type))
+			return true;
+		
+		if (this.boxConvert().isSubtypeOf(type))
+			return true;
+		
+		if (this.unboxConvert().isSubtypeOf(type))
+			return true;
+		
+		// If a widening conversion would get us from the original type T to a raw type R, we can use an unchecked
+		// conversion to be assignment compatible with a parameterized type C with a mandatory warning.  This warning
+		// becomes an error if any two parameterized types encountered on the way are not in a subtype relation.
+		// TODO
+		
+		// A narrowing primitive conversion may be used if the type is primitive and the expression is a constant
+		// expression which is representable as the narrower primitive type.  For instance, it is legal to write
+		// short x = 5; because 5 is representable in the type short.
+		// TODO
+		
+		//return false;
+		throw new NotImplementedYetException();
 	}
 }
