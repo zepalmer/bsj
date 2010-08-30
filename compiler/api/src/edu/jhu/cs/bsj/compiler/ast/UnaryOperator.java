@@ -2,8 +2,12 @@ package edu.jhu.cs.bsj.compiler.ast;
 
 public enum UnaryOperator
 {
-	BITWISE_COMPLEMENT,       // ~
-	LOGICAL_COMPLEMENT,       // !
-	UNARY_MINUS,              // -
-	UNARY_PLUS                // +
+	/** Unary expression operator representing the token "<tt>~</tt>". */
+	BITWISE_COMPLEMENT,
+	/** Unary expression operator representing the token "<tt>!</tt>". */
+	LOGICAL_COMPLEMENT,
+	/** Unary expression operator representing the token "<tt>-</tt>". */
+	UNARY_MINUS,
+	/** Unary expression operator representing the token "<tt>+</tt>". */
+	UNARY_PLUS,
 }
