@@ -20,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
@@ -61,7 +61,7 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 		NamedTypeDeclarationNode<?> enclosingTypeDeclaration = this.getBackingNode().getNearestAncestorOfType(
 				NamedTypeDeclarationNode.class);
 		BsjTypeElement enclosingTypeElement = makeElement(enclosingTypeDeclaration);
-		BsjDeclaredType enclosingTypeMirror = (BsjDeclaredType) enclosingTypeElement.asType();
+		BsjExplicitlyDeclaredType enclosingTypeMirror = (BsjExplicitlyDeclaredType) enclosingTypeElement.asType();
 		BsjTypeArgument selfType = new DeclaredTypeImpl(getManager(), this, Collections.<BsjTypeArgument> emptyList(),
 				enclosingTypeMirror);
 		BsjType enumType = new DeclaredTypeImpl(getManager(), enumElement, Collections.singletonList(selfType), null);

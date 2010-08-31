@@ -17,4 +17,8 @@ public interface BsjTypeVariable extends TypeVariable, BsjNamedReferenceType
 	 * @see TypeVariable#asElement()
 	 */
 	public BsjTypeParameterElement asElement();
+	
+	public BsjTypeArgument getUpperBound();
+	
+	public BsjTypeArgument getLowerBound();
 }

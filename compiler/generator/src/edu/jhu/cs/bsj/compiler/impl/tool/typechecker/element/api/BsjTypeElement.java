@@ -5,6 +5,7 @@ import java.util.List;
 import javax.lang.model.element.TypeElement;
 
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 /**
  * An interface representing a type element in the BSJ language.
@@ -18,5 +19,7 @@ public interface BsjTypeElement extends BsjTypeLikeElement, TypeElement
 	 */
 	public NamedTypeDeclarationNode<?> getDeclarationNode();
 	
-	List<? extends BsjTypeParameterElement> getTypeParameters();
+	public BsjTypeArgument asType();
+	
+	public List<? extends BsjTypeParameterElement> getTypeParameters();
 }

@@ -46,6 +46,11 @@ public class TypecheckerManager
 		this.typechecker = new Typechecker(this);
 	}
 
+	public CompilationUnitLoader getLoader()
+	{
+		return loader;
+	}
+
 	public PackageNode getRootPackage()
 	{
 		return rootPackage;

@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Map;
+
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
@@ -7,17 +9,29 @@ import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardType
 {
-	private WildcardTypeNode wildcardTypeNode;
+	private BsjTypeArgument extendsBound;
+	private BsjTypeArgument superBound;
 
 	public WildcardTypeImpl(TypecheckerManager manager, WildcardTypeNode wildcardTypeNode)
 	{
 		super(manager);
-		this.wildcardTypeNode = wildcardTypeNode;
+		BsjTypeArgument boundType = wildcardTypeNode.getBound() != null ? getTypeBuilder().makeArgumentType(
+				wildcardTypeNode.getBound()) : null;
+		this.extendsBound = wildcardTypeNode.getUpperBound() ? boundType : null;
+		this.superBound = wildcardTypeNode.getUpperBound() ? null : boundType;
+	}
+
+	public WildcardTypeImpl(TypecheckerManager manager, BsjTypeArgument extendsBound, BsjTypeArgument superBound)
+	{
+		super(manager);
+		this.extendsBound = extendsBound;
+		this.superBound = superBound;
 	}
 
 	@Override
@@ -37,7 +51,8 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((wildcardTypeNode == null) ? 0 : wildcardTypeNode.hashCode());
+		result = prime * result + ((extendsBound == null) ? 0 : extendsBound.hashCode());
+		result = prime * result + ((superBound == null) ? 0 : superBound.hashCode());
 		return result;
 	}
 
@@ -46,43 +61,51 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
 	{
 		if (this == obj)
 			return true;
+		if (obj == null)
+			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		WildcardTypeImpl other = (WildcardTypeImpl) obj;
-		if (this.wildcardTypeNode.getUid() != other.wildcardTypeNode.getUid())
+		if (extendsBound == null)
+		{
+			if (other.extendsBound != null)
+				return false;
+		} else if (!extendsBound.equals(other.extendsBound))
 			return false;
-
+		if (superBound == null)
+		{
+			if (other.superBound != null)
+				return false;
+		} else if (!superBound.equals(other.superBound))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString()
 	{
-		return this.wildcardTypeNode.toSourceCode();
+		if (this.extendsBound != null)
+		{
+			return "? extends " + this.extendsBound;
+		} else if (this.superBound != null)
+		{
+			return "? super " + this.superBound;
+		} else
+		{
+			return "?";
+		}
 	}
 
 	@Override
 	public BsjTypeArgument getExtendsBound()
 	{
-		if (this.wildcardTypeNode.getUpperBound())
-		{
-			return getTypeBuilder().makeArgumentType(this.wildcardTypeNode.getBound());
-		} else
-		{
-			return null;
-		}
+		return this.extendsBound;
 	}
 
 	@Override
 	public BsjTypeArgument getSuperBound()
 	{
-		if (this.wildcardTypeNode.getUpperBound())
-		{
-			return null;
-		} else
-		{
-			return getTypeBuilder().makeArgumentType(this.wildcardTypeNode.getBound());
-		}
+		return this.superBound;
 	}
 
 	@Override
@@ -144,5 +167,15 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
 				throw new NotImplementedYetException();
 			}
 		}
+	}
+
+	@Override
+	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		BsjTypeArgument extendsBound = this.extendsBound == null ? null
+				: this.extendsBound.performTypeSubstitution(substitutionMap);
+		BsjTypeArgument superBound = this.superBound == null ? null
+				: this.superBound.performTypeSubstitution(substitutionMap);
+		return new WildcardTypeImpl(getManager(), extendsBound, superBound);
 	}
 }

@@ -16,19 +16,12 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElem
 public interface BsjDeclaredType extends DeclaredType, BsjReferenceType
 {
 	/**
-	 * Retrieves the enclosing type for this type.
-	 * 
-	 * @see DeclaredType#getEnclosingType()
-	 */
-	public BsjDeclaredType getEnclosingType();
-
-	/**
 	 * Retrieves the type arguments for this declared type.
 	 * 
 	 * @see DeclaredType#getTypeArguments()
 	 */
 	public List<? extends BsjTypeArgument> getTypeArguments();
-
+	
 	/**
 	 * Retrieves an element for this declared type.
 	 * 

@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
 import java.util.Collections;
+import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
@@ -73,9 +74,11 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPackagePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
@@ -1407,15 +1410,142 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeVariableAccessNode(VariableAccessNode node, TypecheckerEnvironment env)
 	{
+		String id = node.getIdentifier().getIdentifier();
+
 		if (node.getExpression() != null)
 		{
 			// This variable access is qualified on the provided type.
-			// TODO
-			throw new NotImplementedYetException();
+			BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
+			if (expressionType instanceof BsjErrorType)
+				return expressionType;
+
+			if (expressionType instanceof BsjPackagePseudoType)
+			{
+				BsjPackagePseudoType packagePseudoType = (BsjPackagePseudoType) expressionType;
+				// If there is a type in the package corresponding to the identifier, use it as the returned pseudo-type
+				NamedTypeDeclarationNode<?> decl = packagePseudoType.getPackage().getTopLevelTypeDeclaration(id,
+						this.manager.getLoader());
+				if (decl == null)
+				{
+					// In this case, just use a subpackage of the given name
+					return new PackagePseudoTypeImpl(this.manager, packagePseudoType.getPackage().getSubpackage(id));
+				} else
+				{
+					return new TypePseudoTypeImpl(this.manager, decl);
+				}
+			} else if (expressionType instanceof BsjTypePseudoType)
+			{
+				BsjTypePseudoType typePseudoType = (BsjTypePseudoType) expressionType;
+				// If there is a member field with this simple name, then that member field is selected and its
+				// type is used.
+				// TODO: this approach would also include statically imported fields in the target type's declaration
+				// as if they were members. Fix that.
+				VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
+						typePseudoType.getDeclaration().getBody().getMembers());
+				BsjVariableElement variableElement = variableNamespaceMap.lookup(id, node.getStartLocation());
+				if (variableElement != null)
+				{
+					if (!isStaticVariable(variableElement))
+					{
+						// Cannot access a member field from a static context
+						// TODO: diagnostic
+						return new ErrorTypeImpl(this.manager);
+					}
+
+					// TODO: are we ensuring at any point that the static variables are not bound to type parameters?
+
+					return variableElement.asType();
+				} else
+				{
+					// If there is a member type with this simple name, then that member type is selected and used as
+					// a pseudo-type.
+					// TODO: this approach would also include imported types (static and otherwise) in the target
+					// type's declaration as if they were members. Fix that.
+					TypeNamespaceMap typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(
+							typePseudoType.getDeclaration().getBody().getMembers());
+					BsjTypeLikeElement typeLikeElement = typeNamespaceMap.lookup(id, node.getStartLocation());
+					if (typeLikeElement != null)
+					{
+						if (typeLikeElement instanceof BsjDeclaredTypeElement)
+						{
+							// Use this member type
+							BsjDeclaredTypeElement declaredTypeElement = (BsjDeclaredTypeElement) typeLikeElement;
+							return new TypePseudoTypeImpl(this.manager, declaredTypeElement.getDeclarationNode());
+						} else
+						{
+							// It is illegal to refer to a type variable in this way.
+							// TODO: diagnostic
+							return new ErrorTypeImpl(this.manager);
+						}
+					} else
+					{
+						// After dereferencing a type, only a type or a variable can result. We can't resolve the ID.
+						// TODO: diagnostic
+						return new ErrorTypeImpl(this.manager);
+					}
+				}
+			} else
+			{
+				// The qualifying expression names a variable. The identifier must name a variable which is a member
+				// of the object in the qualifying expression; the result is the type of the latter variable after
+				// type variable substitution and capture conversion.
+
+				if (expressionType instanceof BsjTypeVariable)
+				{
+					// Type variables are only dereferencable as their upper bounds.
+					expressionType = ((BsjTypeVariable) expressionType).getUpperBound();
+				}
+
+				if (expressionType instanceof BsjExplicitlyDeclaredType)
+				{
+					BsjExplicitlyDeclaredType explicitlyDeclaredType = (BsjExplicitlyDeclaredType) expressionType;
+					NamedTypeDeclarationNode<?> declarationNode = explicitlyDeclaredType.asElement().getDeclarationNode();
+					VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
+							declarationNode.getBody().getMembers());
+					BsjVariableElement variableElement = variableNamespaceMap.lookup(id, node.getStartLocation());
+					if (variableElement == null)
+					{
+						// Then the id does not exist or is not accessible
+						// TODO: diagnostic
+						return new ErrorTypeImpl(this.manager);
+					}
+
+					BsjType variableType = variableElement.asType();
+					if (explicitlyDeclaredType.isRaw())
+					{
+						return variableType.calculateErasure();
+					} else
+					{
+						Map<BsjTypeVariable, BsjTypeArgument> substitutionMap = explicitlyDeclaredType.calculateSubstitutionMap();
+						variableType = variableType.performTypeSubstitution(substitutionMap);
+						variableType = variableType.captureConvert();
+						return variableType;
+					}
+				} else if (expressionType instanceof BsjWildcardType)
+				{
+					// TODO: consider: shouldn't this be impossible? Capture conversion should happen first.
+					throw new IllegalStateException("Asked to dereference a wildcard type");
+				} else if (expressionType instanceof BsjArrayType)
+				{
+					if (id.equals("length"))
+					{
+						return this.manager.getToolkit().getIntType();
+					} else
+					{
+						// This dereference is meaningless.
+						// TODO: diagnostic
+						return new ErrorTypeImpl(this.manager);
+					}
+				} else
+				{
+					// This dereference is meaningless.
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			}
 		} else
 		{
 			// This variable access is qualified by the existing context.
-			String id = node.getIdentifier().getIdentifier();
 			VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(node);
 			BsjVariableElement variableElement = variableNamespaceMap.lookup(id,
 					node.getIdentifier().getStartLocation());
@@ -1686,6 +1816,41 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		} else
 		{
 			throw new IllegalStateException("Unrecognized binary operator " + operator);
+		}
+	}
+
+	private boolean isStaticVariable(BsjVariableElement variableElement)
+	{
+		VariableNameBindingNode bindingNode = variableElement.getDeclarationNode();
+		if (bindingNode instanceof VariableDeclaratorNode)
+		{
+			VariableDeclaratorNode declaratorNode = (VariableDeclaratorNode) bindingNode;
+			VariableDeclaratorOwnerNode owner = (VariableDeclaratorOwnerNode) declaratorNode.getParent().getParent();
+			if (owner instanceof LocalVariableDeclarationNode)
+			{
+				throw new IllegalStateException(
+						"Managed to directly name a local variable declaration from a static type reference");
+			} else if (owner instanceof ConstantDeclarationNode)
+			{
+				return true;
+			} else if (owner instanceof FieldDeclarationNode)
+			{
+				FieldDeclarationNode declarationNode = (FieldDeclarationNode) owner;
+				return declarationNode.getModifiers().getStaticFlag();
+			} else
+			{
+				throw new IllegalStateException("Unrecognized variable declarator owner type: " + owner.getClass());
+			}
+		} else if (bindingNode instanceof EnumConstantDeclarationNode)
+		{
+			return true;
+		} else if (bindingNode instanceof VariableNode)
+		{
+			throw new IllegalStateException(
+					"Managed to directly name a non-member variable from a static type reference");
+		} else
+		{
+			throw new IllegalStateException("Unrecognized variable binding node type: " + bindingNode.getClass());
 		}
 	}
 }

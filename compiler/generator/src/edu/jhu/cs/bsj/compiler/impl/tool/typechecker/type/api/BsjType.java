@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api;
 
+import java.util.Map;
+
 import javax.lang.model.type.TypeMirror;
 
 /**
@@ -79,4 +81,13 @@ public interface BsjType extends TypeMirror
 	 *         not.
 	 */
 	public boolean isAssignmentCompatibleWith(BsjType type);
+	
+	/**
+	 * Performs type argument substitution for this type.  The resulting type is identical to this type except in that
+	 * any instances of any specified type parameter that appear within this type are replaced with the corresponding
+	 * type argument.
+	 * @param map The substitution map which relates type parameters to the arguments that substitute for them.
+	 * @return The resulting type.
+	 */
+	public BsjType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
 }

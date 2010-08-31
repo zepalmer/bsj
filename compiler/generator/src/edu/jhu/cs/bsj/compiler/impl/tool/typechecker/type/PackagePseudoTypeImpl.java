@@ -7,7 +7,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPackagePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
-public class PackagePseudoTypeImpl extends NoTypeImpl implements BsjPackagePseudoType
+public class PackagePseudoTypeImpl extends PseudoTypeImpl implements BsjPackagePseudoType
 {
 	private PackageNode packageNode;
 

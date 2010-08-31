@@ -28,7 +28,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElem
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
@@ -240,7 +239,7 @@ public class TypeBuilder
 	
 	public BsjTypeVariable makeTypeVariable(TypeParameterNode node)
 	{
-		BsjType upperBound;
+		BsjTypeArgument upperBound;
 		if (node.getBounds().size() == 0)
 		{
 			upperBound = null;
@@ -319,10 +318,10 @@ public class TypeBuilder
 	}
 
 	private BsjExplicitlyDeclaredType makeDeclarationTypeFromDeclaration(NamedTypeDeclarationNode<?> typeDeclaration,
-			Collection<? extends TypeArgumentNode> typeArgumentNodes, BsjDeclaredType providedEnclosingType)
+			Collection<? extends TypeArgumentNode> typeArgumentNodes, BsjExplicitlyDeclaredType providedEnclosingType)
 	{
 		BsjDeclaredTypeElement typeElement = this.manager.getToolkit().makeElement(typeDeclaration);
-		BsjDeclaredType enclosingType;
+		BsjExplicitlyDeclaredType enclosingType;
 		if (providedEnclosingType != null)
 		{
 			enclosingType = providedEnclosingType;

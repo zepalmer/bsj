@@ -2,10 +2,12 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class AnnotationMethodExecutableTypeImpl extends AbstractExecutableTypeImpl<AnnotationMethodDeclarationNode>
@@ -38,5 +40,12 @@ public class AnnotationMethodExecutableTypeImpl extends AbstractExecutableTypeIm
 	public List<? extends BsjTypeVariable> getTypeVariables()
 	{
 		return Collections.emptyList();
+	}
+
+	@Override
+	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		// Annotation methods cannot legally use type parameters in their return types.
+		return this;
 	}
 }

@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Map;
+
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
@@ -7,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
@@ -97,5 +100,11 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 		{
 			return false;
 		}
+	}
+
+	@Override
+	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		return new ArrayTypeImpl(getManager(), this.componentType.performTypeSubstitution(substitutionMap));
 	}
 }

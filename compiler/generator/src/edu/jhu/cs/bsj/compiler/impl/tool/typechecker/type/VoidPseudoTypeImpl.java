@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjVoidPseudoType;
 
-public class VoidPseudoTypeImpl extends NoTypeImpl
+public class VoidPseudoTypeImpl extends PseudoTypeImpl
 {
 	public VoidPseudoTypeImpl(TypecheckerManager manager)
 	{

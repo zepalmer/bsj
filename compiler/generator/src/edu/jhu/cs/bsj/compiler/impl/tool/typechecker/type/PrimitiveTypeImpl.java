@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Map;
+
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
@@ -9,6 +11,8 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 /**
  * Represents a primitive type in the BSJ type checker.
@@ -150,6 +154,12 @@ public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveTyp
 				|| (this.equals(toolkit.getIntType())) || (this.equals(toolkit.getLongType()))
 				|| (this.equals(toolkit.getShortType())) || (this.equals(toolkit.getDoubleType()))
 				|| (this.equals(toolkit.getFloatType()));
+	}
+
+	@Override
+	public BsjType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		return this;
 	}
 
 }

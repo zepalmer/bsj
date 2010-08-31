@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNonePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
-public class NonePseudoTypeImpl extends NoTypeImpl implements BsjNonePseudoType
+public class NonePseudoTypeImpl extends PseudoTypeImpl implements BsjNonePseudoType
 {
 
 	public NonePseudoTypeImpl(TypecheckerManager manager)

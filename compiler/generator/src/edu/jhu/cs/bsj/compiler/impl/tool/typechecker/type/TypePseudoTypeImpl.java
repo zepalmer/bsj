@@ -7,7 +7,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypePseudoType;
 
-public class TypePseudoTypeImpl extends NoTypeImpl implements BsjTypePseudoType
+public class TypePseudoTypeImpl extends PseudoTypeImpl implements BsjTypePseudoType
 {
 	private NamedTypeDeclarationNode<?> declaration;
 

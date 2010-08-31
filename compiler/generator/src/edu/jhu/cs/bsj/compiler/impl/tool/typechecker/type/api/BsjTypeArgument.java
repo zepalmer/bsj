@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api;
 
+import java.util.Map;
+
 /**
  * This tagging interface identifies a type as suitable for use as a type argument.
  * @author Zachary Palmer
@@ -13,4 +15,6 @@ public interface BsjTypeArgument extends BsjType
 	 * does not.
 	 */
 	public boolean contains(BsjTypeArgument argument);
+	
+	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
 }

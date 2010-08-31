@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Map;
+
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
@@ -7,6 +9,8 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNullType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 {
@@ -55,5 +59,11 @@ public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 	public boolean isSubtypeOf(BsjType type)
 	{
 		return (type instanceof BsjReferenceType);
+	}
+
+	@Override
+	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		return this;
 	}
 }

@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
@@ -153,5 +155,16 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
 		}
 
 		return false;
+	}
+
+	@Override
+	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		List<BsjTypeArgument> list = new ArrayList<BsjTypeArgument>();
+		for (BsjTypeArgument arg : this.supertypes)
+		{
+			list.add(arg.performTypeSubstitution(substitutionMap));
+		}
+		return new IntersectionTypeImpl(getManager(), list);
 	}
 }

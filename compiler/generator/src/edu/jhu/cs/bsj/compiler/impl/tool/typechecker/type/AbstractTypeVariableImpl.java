@@ -6,6 +6,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 /**
@@ -20,11 +21,11 @@ public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl impl
 	/** The object representing the identity of this type variable. */
 	private T id;
 	/** The lower bound of this type variable, or <code>null</code> if there is no lower bound. */
-	private BsjType lowerBound;
+	private BsjTypeArgument lowerBound;
 	/** The upper bound of this type variable, or <code>null</code> if there is no upper bound. */
-	private BsjType upperBound;
+	private BsjTypeArgument upperBound;
 
-	public AbstractTypeVariableImpl(TypecheckerManager manager, T id, BsjType lowerBound, BsjType upperBound)
+	public AbstractTypeVariableImpl(TypecheckerManager manager, T id, BsjTypeArgument lowerBound, BsjTypeArgument upperBound)
 	{
 		super(manager);
 		this.id = id;
@@ -33,7 +34,7 @@ public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl impl
 	}
 
 	@Override
-	public BsjType getLowerBound()
+	public BsjTypeArgument getLowerBound()
 	{
 		if (this.lowerBound == null)
 		{
@@ -45,7 +46,7 @@ public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl impl
 	}
 
 	@Override
-	public BsjType getUpperBound()
+	public BsjTypeArgument getUpperBound()
 	{
 		if (this.upperBound == null)
 		{

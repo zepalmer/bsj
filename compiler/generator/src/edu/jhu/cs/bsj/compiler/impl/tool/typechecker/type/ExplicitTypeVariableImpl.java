@@ -1,15 +1,18 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Map;
+
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
 public class ExplicitTypeVariableImpl extends AbstractTypeVariableImpl<TypeParameterNode>
 {
-	public ExplicitTypeVariableImpl(TypecheckerManager manager, TypeParameterNode id, BsjType lowerBound,
-			BsjType upperBound)
+	public ExplicitTypeVariableImpl(TypecheckerManager manager, TypeParameterNode id, BsjTypeArgument lowerBound,
+			BsjTypeArgument upperBound)
 	{
 		super(manager, id, lowerBound, upperBound);
 	}
@@ -25,5 +28,11 @@ public class ExplicitTypeVariableImpl extends AbstractTypeVariableImpl<TypeParam
 	{
 		return getId().getIdentifier().getIdentifier();
 	}
-	
+
+	@Override
+	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		return new ExplicitTypeVariableImpl(getManager(), getId(), getLowerBound().performTypeSubstitution(
+				substitutionMap), getUpperBound().performTypeSubstitution(substitutionMap));
+	}
 }

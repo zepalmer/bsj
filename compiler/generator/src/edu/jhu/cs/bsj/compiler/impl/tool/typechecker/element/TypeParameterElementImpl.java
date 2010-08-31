@@ -19,7 +19,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitTypeVariableImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
@@ -71,7 +70,7 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	@Override
 	public BsjTypeVariable asType()
 	{
-		List<? extends BsjType> bounds = getBounds();
+		List<? extends BsjTypeArgument> bounds = getBounds();
 		if (bounds.size() == 0)
 		{
 			return new ExplicitTypeVariableImpl(getManager(), this.getBackingNode(), null, null);
