@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 public class CapturedTypeVariableImpl extends AbstractTypeVariableImpl<Integer>
 {
-	private static AtomicInteger nextId;
+	private static AtomicInteger nextId = new AtomicInteger(0);
 
 	public CapturedTypeVariableImpl(TypecheckerManager manager, BsjTypeArgument lowerBound, BsjTypeArgument upperBound)
 	{
