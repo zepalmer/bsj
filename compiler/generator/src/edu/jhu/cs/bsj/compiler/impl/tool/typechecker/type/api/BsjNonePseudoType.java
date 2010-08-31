@@ -5,6 +5,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api;
  * themselves, such as import statements or meta-annotation anchors.
  * @author Zachary Palmer
  */
-public interface BsjNoneNoType extends BsjNoType
+public interface BsjNonePseudoType extends BsjNoType
 {
 }

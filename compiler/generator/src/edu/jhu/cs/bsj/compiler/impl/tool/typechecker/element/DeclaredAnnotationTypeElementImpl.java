@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationModifiersNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoneNoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<AnnotationDeclarationNode>
@@ -50,7 +50,7 @@ public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<A
 	@Override
 	public TypeMirror getSuperclass()
 	{
-		return new NoneNoTypeImpl(getManager());
+		return new NonePseudoTypeImpl(getManager());
 	}
 
 	@Override

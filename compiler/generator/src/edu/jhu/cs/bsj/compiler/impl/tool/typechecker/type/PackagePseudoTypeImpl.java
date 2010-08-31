@@ -4,14 +4,14 @@ import javax.lang.model.type.TypeKind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPackageNoType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPackagePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
-public class PackageNoTypeImpl extends NoTypeImpl implements BsjPackageNoType
+public class PackagePseudoTypeImpl extends NoTypeImpl implements BsjPackagePseudoType
 {
 	private PackageNode packageNode;
 
-	public PackageNoTypeImpl(TypecheckerManager manager, PackageNode packageNode)
+	public PackagePseudoTypeImpl(TypecheckerManager manager, PackageNode packageNode)
 	{
 		super(manager, TypeKind.PACKAGE);
 		this.packageNode = packageNode;
@@ -38,9 +38,9 @@ public class PackageNoTypeImpl extends NoTypeImpl implements BsjPackageNoType
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (obj instanceof BsjPackageNoType)
+		if (obj instanceof BsjPackagePseudoType)
 		{
-			BsjPackageNoType other = (BsjPackageNoType) obj;
+			BsjPackagePseudoType other = (BsjPackagePseudoType) obj;
 			return this.packageNode.equals(other.getPackage());
 		} else
 		{

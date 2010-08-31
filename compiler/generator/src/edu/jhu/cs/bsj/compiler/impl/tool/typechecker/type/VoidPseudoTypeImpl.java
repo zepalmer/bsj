@@ -3,38 +3,38 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import javax.lang.model.type.TypeKind;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoneNoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjVoidPseudoType;
 
-public class NoneNoTypeImpl extends NoTypeImpl implements BsjNoneNoType
+public class VoidPseudoTypeImpl extends NoTypeImpl
 {
-
-	public NoneNoTypeImpl(TypecheckerManager manager)
+	public VoidPseudoTypeImpl(TypecheckerManager manager)
 	{
-		super(manager, TypeKind.NONE);
+		super(manager, TypeKind.VOID);
 	}
 
 	@Override
 	public BsjTypeArgument boxConvert()
 	{
-		return null;
+		return getManager().getToolkit().getVoidWrapperType();
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return 1033403275;
+		return 1681749930;
 	}
 
 	@Override
 	public boolean equals(Object obj)
 	{
-		return obj instanceof BsjNoneNoType;
+		return obj instanceof BsjVoidPseudoType;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "(no type)";
+		return "void";
 	}
+
 }

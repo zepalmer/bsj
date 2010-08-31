@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidNoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class ConstructorExecutableElementImpl extends AbstractInvokableExecutableElementImpl<ConstructorDeclarationNode>
@@ -26,7 +26,7 @@ public class ConstructorExecutableElementImpl extends AbstractInvokableExecutabl
 	@Override
 	public TypeMirror getReturnType()
 	{
-		return new VoidNoTypeImpl(getManager());
+		return new VoidPseudoTypeImpl(getManager());
 	}
 
 	@Override

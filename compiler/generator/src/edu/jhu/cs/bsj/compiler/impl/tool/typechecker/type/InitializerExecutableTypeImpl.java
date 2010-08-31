@@ -24,7 +24,7 @@ public class InitializerExecutableTypeImpl extends AbstractExecutableTypeImpl<In
 	@Override
 	public BsjType getReturnType()
 	{
-		return new VoidNoTypeImpl(getManager());
+		return new VoidPseudoTypeImpl(getManager());
 	}
 
 	@Override
