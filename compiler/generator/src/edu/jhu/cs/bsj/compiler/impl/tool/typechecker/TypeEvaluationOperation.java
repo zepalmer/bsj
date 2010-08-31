@@ -58,6 +58,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.VariableNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
@@ -125,6 +127,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	// a second failure would the second operation return the insufficient context error type. Note that this would
 	// require ensuring that this operation never calls executeOperation(this,...); it should instead accept an argument
 	// on construction indicating the "thisOperation" to use (to simulate proxy-like calls).
+	
+	// TODO: this typechecker does not currently handle considerations of the distinction between variables and values
+	// (also often termed lvalues and rvalues, although variables and values are the terms used in the JLS).  As a
+	// result, the expression "5 += 5" will typecheck; this is because int += int : int.  In order to fix this, the
+	// typechecker should really return a tuple between a type and a set of type qualifiers.  The only type qualifier
+	// that currently seems relevant is the variable/value flag.  Most rules would ignore the qualifiers for a given
+	// evaluation and simply extract the type, but the qualifiers could be checked by rules such as assignment to
+	// ensure correct behavior.
 
 	@Override
 	public BsjType executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node,
@@ -1384,8 +1394,29 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeVariableAccessNode(VariableAccessNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		if (node.getExpression() != null)
+		{
+			// This variable access is qualified on the provided type.
+			// TODO
+			throw new NotImplementedYetException();
+		} else
+		{
+			// This variable access is qualified by the existing context.
+			String id = node.getIdentifier().getIdentifier();
+			VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(node);
+			BsjVariableElement element = variableNamespaceMap.lookup(id, node.getIdentifier().getStartLocation());
+			if (element == null)
+			{
+				// Then there is no variable with that name in scope.  Is there a type?
+				// TODO
+				throw new NotImplementedYetException();
+			} else
+			{
+				// Then there exists a variable in scope with that name.  Use its type.
+				// TODO
+				throw new NotImplementedYetException();
+			}
+		}
 	}
 
 	@Override
