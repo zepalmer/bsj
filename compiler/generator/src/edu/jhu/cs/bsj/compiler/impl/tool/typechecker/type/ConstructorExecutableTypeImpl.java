@@ -14,6 +14,6 @@ public class ConstructorExecutableTypeImpl extends AbstractInvokableExecutableTy
 	@Override
 	public BsjType getReturnType()
 	{
-		return NoTypeImpl.makeVoid(getManager());
+		return new VoidNoTypeImpl(getManager());
 	}
 }

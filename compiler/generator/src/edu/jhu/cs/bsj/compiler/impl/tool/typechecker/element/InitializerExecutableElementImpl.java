@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidNoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 public class InitializerExecutableElementImpl extends AbstractExecutableElementImpl<InitializerDeclarationNode>
@@ -80,7 +80,7 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	@Override
 	public TypeMirror getReturnType()
 	{
-		return NoTypeImpl.makeVoid(getManager());
+		return new VoidNoTypeImpl(getManager());
 	}
 
 	@Override

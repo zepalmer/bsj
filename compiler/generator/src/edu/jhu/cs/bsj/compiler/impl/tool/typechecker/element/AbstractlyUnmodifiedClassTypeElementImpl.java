@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoneNoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends AbstractlyUnmodifiedClassDeclarationNode<?>>
@@ -42,7 +42,7 @@ public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends Abstrac
 			BsjDeclaredTypeElement objectElement = getManager().getToolkit().getObjectElement();
 			if (this.equals(objectElement))
 			{
-				return NoTypeImpl.makeNone(getManager());
+				return new NoneNoTypeImpl(getManager());
 			} else
 			{
 				return objectElement.asType();

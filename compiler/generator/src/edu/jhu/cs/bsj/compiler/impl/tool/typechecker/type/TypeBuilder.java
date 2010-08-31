@@ -310,7 +310,7 @@ public class TypeBuilder
 
 	public BsjNoType makeVoidType(VoidTypeNode node)
 	{
-		return NoTypeImpl.makeVoid(this.manager);
+		return new VoidNoTypeImpl(this.manager);
 	}
 
 	public BsjWildcardType makeWildcardType(WildcardTypeNode node)

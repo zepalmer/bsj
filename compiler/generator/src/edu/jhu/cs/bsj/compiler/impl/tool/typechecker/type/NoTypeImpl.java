@@ -6,9 +6,8 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
-public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
+public abstract class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 {
 	private TypeKind kind;
 
@@ -28,51 +27,6 @@ public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 	public TypeKind getKind()
 	{
 		return kind;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		return obj instanceof NoTypeImpl;
-	}
-
-	@Override
-	public int hashCode()
-	{
-		return 51787898;
-	}
-
-	@Override
-	public String toString()
-	{
-		return "(no type)";
-	}
-
-	public static NoTypeImpl makeNone(TypecheckerManager manager)
-	{
-		return new NoTypeImpl(manager, TypeKind.NONE);
-	}
-
-	public static NoTypeImpl makePackage(TypecheckerManager manager)
-	{
-		return new NoTypeImpl(manager, TypeKind.PACKAGE);
-	}
-
-	public static NoTypeImpl makeVoid(TypecheckerManager manager)
-	{
-		return new NoTypeImpl(manager, TypeKind.VOID);
-	}
-
-	@Override
-	public BsjTypeArgument boxConvert()
-	{
-		if (getKind() == TypeKind.VOID)
-		{
-			return getManager().getToolkit().getVoidWrapperType();
-		} else
-		{
-			return null;
-		}
 	}
 
 	@Override
