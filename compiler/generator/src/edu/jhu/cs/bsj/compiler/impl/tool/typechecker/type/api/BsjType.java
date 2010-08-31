@@ -32,9 +32,10 @@ public interface BsjType extends TypeMirror
 
 	/**
 	 * Performs the boxing conversion (JLSv3 §5.1.7) on this type if possible. The resulting type is the boxed version
-	 * of this type (if appropriate) or the same type (if boxing was not possible).
+	 * of this type (if appropriate) or the same type (if boxing was not possible).  If this type should never be boxed
+	 * (because it is representative of a non-type such as a package, for example), <code>null</code> is returned.
 	 */
-	public BsjType boxConvert();
+	public BsjTypeArgument boxConvert();
 
 	/**
 	 * Performs the unboxing conversion (JLSv3 §5.1.8) on this type if possible. The resulting type is the unboxed

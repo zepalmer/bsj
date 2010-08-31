@@ -6,6 +6,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 {
@@ -60,6 +61,18 @@ public class NoTypeImpl extends TypeMirrorImpl implements BsjNoType
 	public static NoTypeImpl makeVoid(TypecheckerManager manager)
 	{
 		return new NoTypeImpl(manager, TypeKind.VOID);
+	}
+
+	@Override
+	public BsjTypeArgument boxConvert()
+	{
+		if (getKind() == TypeKind.VOID)
+		{
+			return getManager().getToolkit().getVoidWrapperType();
+		} else
+		{
+			return null;
+		}
 	}
 
 	@Override

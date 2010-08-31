@@ -85,4 +85,10 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 	{
 		return false;
 	}
+
+	@Override
+	public BsjTypeArgument boxConvert()
+	{
+		return null;
+	}
 }

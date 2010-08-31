@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
+import java.util.Collections;
+
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
@@ -57,6 +59,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
@@ -458,8 +461,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeClassLiteralNode(ClassLiteralNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType argumentType = this.manager.getToolkit().getTypeBuilder().makeType(node.getValue());
+		BsjTypeArgument boxedType = argumentType.boxConvert();
+		if (argumentType instanceof BsjTypeVariable)
+		{
+			// This is illegal; it is impossible to obtain a type parameter's class by use of T.class
+			// TODO: diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+		return new DeclaredTypeImpl(this.manager, this.manager.getToolkit().getClassElement(),
+				Collections.singletonList(boxedType), null);
 	}
 
 	@Override

@@ -45,12 +45,6 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 	}
 
 	@Override
-	public BsjType boxConvert()
-	{
-		return this;
-	}
-
-	@Override
 	public BsjType unboxConvert()
 	{
 		return this;

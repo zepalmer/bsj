@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
@@ -111,7 +112,7 @@ public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveTyp
 	}
 
 	@Override
-	public BsjType boxConvert()
+	public BsjReferenceType boxConvert()
 	{
 		TypecheckerToolkit toolkit = getManager().getToolkit();
 		if (this.equals(toolkit.getByteType()))

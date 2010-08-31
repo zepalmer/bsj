@@ -44,6 +44,8 @@ public class TypecheckerToolkit
 	private BsjDeclaredTypeElement objectElement;
 	/** A field to hold the element for {@link String java.lang.String}. */
 	private BsjDeclaredTypeElement stringElement;
+	/** A field to hold the element for {@link Class java.lang.Class}. */
+	private BsjDeclaredTypeElement classElement;
 	/** A field to hold the element for {@link Enum java.lang.Enum}. */
 	private BsjDeclaredTypeElement enumElement;
 	/** A field to hold the element for {@link Annotation java.lang.annotation.Annotation}. */
@@ -90,6 +92,9 @@ public class TypecheckerToolkit
 	/** A field to hold the element for the <tt>Boolean</tt> wrapper type. */
 	private BsjExplicitlyDeclaredType booleanWrapperType;
 
+	/** A field to hold the element for the <tt>Void</tt> wrapper type. */
+	private BsjExplicitlyDeclaredType voidWrapperType;
+
 	public TypecheckerToolkit(TypecheckerManager manager, CompilationUnitLoader loader)
 	{
 		super();
@@ -127,6 +132,15 @@ public class TypecheckerToolkit
 			this.stringElement = getTypeElementByName("java", "lang", "String");
 		}
 		return this.stringElement;
+	}
+
+	public BsjDeclaredTypeElement getClassElement()
+	{
+		if (this.classElement == null)
+		{
+			this.classElement = getTypeElementByName("java", "lang", "Class");
+		}
+		return this.classElement;
 	}
 
 	public BsjDeclaredTypeElement getEnumElement()
@@ -316,6 +330,15 @@ public class TypecheckerToolkit
 			this.booleanWrapperType = getTypeElementByName("java", "lang", "Boolean").asType();
 		}
 		return this.booleanWrapperType;
+	}
+
+	public BsjExplicitlyDeclaredType getVoidWrapperType()
+	{
+		if (this.voidWrapperType == null)
+		{
+			this.voidWrapperType = getTypeElementByName("java", "lang", "Void").asType();
+		}
+		return this.voidWrapperType;
 	}
 
 	/**

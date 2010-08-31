@@ -17,4 +17,10 @@ public abstract class TypeArgumentImpl extends TypeMirrorImpl implements BsjType
 		// Only wildcard types contain types which are not themselves
 		return this.equals(argument);
 	}
+
+	@Override
+	public BsjTypeArgument boxConvert()
+	{
+		return this;
+	}
 }
