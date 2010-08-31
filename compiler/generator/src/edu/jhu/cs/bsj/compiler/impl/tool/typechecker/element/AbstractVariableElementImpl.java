@@ -26,13 +26,6 @@ public abstract class AbstractVariableElementImpl<T extends VariableNameBindingN
 		return v.visitVariable(this, p);
 	}
 
-	/**
-	 * Returns the type of variable declared by this element.
-	 * <p/>
-	 * Note that the interface specifies that this method returns the type which was declared by this element (which is,
-	 * strictly speaking, no type at all).  In practice, however, this method is used to represent the type of the
-	 * variable which was declared in both the Sun JDK and OpenJDK implementations.
-	 */
 	@Override
 	public abstract BsjType asType();
 

@@ -1413,8 +1413,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			} else
 			{
 				// Then there exists a variable in scope with that name.  Use its type.
-				// TODO
-				throw new NotImplementedYetException();
+				return element.asType();
 			}
 		}
 	}
