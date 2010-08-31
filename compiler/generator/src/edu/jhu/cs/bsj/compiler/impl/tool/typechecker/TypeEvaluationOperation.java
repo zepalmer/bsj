@@ -58,13 +58,17 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.VariableNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PackagePseudoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
@@ -115,12 +119,12 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	// a second failure would the second operation return the insufficient context error type. Note that this would
 	// require ensuring that this operation never calls executeOperation(this,...); it should instead accept an argument
 	// on construction indicating the "thisOperation" to use (to simulate proxy-like calls).
-	
+
 	// TODO: this typechecker does not currently handle considerations of the distinction between variables and values
-	// (also often termed lvalues and rvalues, although variables and values are the terms used in the JLS).  As a
-	// result, the expression "5 += 5" will typecheck; this is because int += int : int.  In order to fix this, the
-	// typechecker should really return a tuple between a type and a set of type qualifiers.  The only type qualifier
-	// that currently seems relevant is the variable/value flag.  Most rules would ignore the qualifiers for a given
+	// (also often termed lvalues and rvalues, although variables and values are the terms used in the JLS). As a
+	// result, the expression "5 += 5" will typecheck; this is because int += int : int. In order to fix this, the
+	// typechecker should really return a tuple between a type and a set of type qualifiers. The only type qualifier
+	// that currently seems relevant is the variable/value flag. Most rules would ignore the qualifiers for a given
 	// evaluation and simply extract the type, but the qualifiers could be checked by rules such as assignment to
 	// ensure correct behavior.
 
@@ -260,7 +264,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		BsjType arrayExpressionType = node.getArrayExpression().executeOperation(thisOperation, env);
 		if (arrayExpressionType instanceof BsjErrorType)
 			return arrayExpressionType;
-		
+
 		if (arrayExpressionType instanceof BsjArrayType)
 		{
 			BsjArrayType arrayType = (BsjArrayType) arrayExpressionType;
@@ -310,7 +314,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			BsjType exprType = expr.executeOperation(thisOperation, env);
 			if (exprType instanceof BsjErrorType)
 				return exprType;
-			
+
 			exprType = exprType.unboxConvert();
 			exprType = exprType.numericTypePromotion();
 			if (!this.manager.getToolkit().getIntType().equals(exprType))
@@ -975,8 +979,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeMethodInvocationNode(MethodInvocationNode node,
-			TypecheckerEnvironment env)
+	public BsjType executeMethodInvocationNode(MethodInvocationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -1247,7 +1250,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		BsjType type = node.getExpression().executeOperation(thisOperation, env);
 		if (type instanceof BsjErrorType)
 			return type;
-		
+
 		switch (node.getOperator())
 		{
 			case BITWISE_COMPLEMENT:
@@ -1294,7 +1297,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
 		if (expressionType instanceof BsjErrorType)
 			return expressionType;
-		
+
 		expressionType = expressionType.unboxConvert();
 		if (expressionType.isNumericPrimitive())
 		{
@@ -1414,16 +1417,36 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			// This variable access is qualified by the existing context.
 			String id = node.getIdentifier().getIdentifier();
 			VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(node);
-			BsjVariableElement element = variableNamespaceMap.lookup(id, node.getIdentifier().getStartLocation());
-			if (element == null)
+			BsjVariableElement variableElement = variableNamespaceMap.lookup(id,
+					node.getIdentifier().getStartLocation());
+			if (variableElement == null)
 			{
-				// Then there is no variable with that name in scope.  Is there a type?
-				// TODO
-				throw new NotImplementedYetException();
+				// Then there is no variable with that name in scope. Is there a type?
+				TypeNamespaceMap typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(node);
+				BsjTypeLikeElement typeLikeElement = typeNamespaceMap.lookup(id,
+						node.getIdentifier().getStartLocation());
+				if (typeLikeElement != null)
+				{
+					// Then use the type in question as the pseudo-type to return
+					if (typeLikeElement instanceof BsjDeclaredTypeElement)
+					{
+						return new TypePseudoTypeImpl(this.manager,
+								(((BsjDeclaredTypeElement) typeLikeElement).getDeclarationNode()));
+					} else
+					{
+						// It is not appropriate to access a type variable in this way.
+						// TODO: diagnostic
+						return new ErrorTypeImpl(this.manager);
+					}
+				} else
+				{
+					// No type or variable is available. Assume that the name refers to a package.
+					return new PackagePseudoTypeImpl(this.manager, this.manager.getRootPackage().getSubpackage(id));
+				}
 			} else
 			{
-				// Then there exists a variable in scope with that name.  Use its type.
-				return element.asType();
+				// Then there exists a variable in scope with that name. Use its type.
+				return variableElement.asType();
 			}
 		}
 	}
