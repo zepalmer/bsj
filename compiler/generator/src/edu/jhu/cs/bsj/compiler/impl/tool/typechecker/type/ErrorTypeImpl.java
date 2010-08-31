@@ -79,4 +79,10 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 	{
 		return false;
 	}
+
+	@Override
+	public boolean contains(BsjTypeArgument argument)
+	{
+		return false;
+	}
 }

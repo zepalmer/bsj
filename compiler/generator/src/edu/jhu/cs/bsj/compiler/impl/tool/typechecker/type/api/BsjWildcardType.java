@@ -8,7 +8,7 @@ import javax.lang.model.type.WildcardType;
  */
 public interface BsjWildcardType extends WildcardType, BsjType, BsjTypeArgument
 {
-    BsjTypeArgument getExtendsBound();
+    public BsjTypeArgument getExtendsBound();
 
-    BsjTypeArgument getSuperBound();
+    public BsjTypeArgument getSuperBound();
 }

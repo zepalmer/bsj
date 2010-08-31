@@ -18,7 +18,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
  * @param <T> An identifying attribute which can be used to tell two type variables apart.
  * @author Zachary Palmer
  */
-public abstract class AbstractTypeVariableImpl<T> extends EnumerableDirectSupertypeTypeImpl implements BsjTypeVariable
+public abstract class AbstractTypeVariableImpl<T> extends EnumerableDirectSupertypeReferenceTypeImpl implements BsjTypeVariable
 {
 	/** The object representing the identity of this type variable. */
 	private T id;

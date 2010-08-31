@@ -11,9 +11,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
  * supertype relation can be defined.
  * @author Zachary Palmer
  */
-public abstract class EnumerableDirectSupertypeTypeImpl extends TypeMirrorImpl
+public abstract class EnumerableDirectSupertypeReferenceTypeImpl extends ReferenceTypeImpl
 {
-	public EnumerableDirectSupertypeTypeImpl(TypecheckerManager manager)
+	public EnumerableDirectSupertypeReferenceTypeImpl(TypecheckerManager manager)
 	{
 		super(manager);
 	}
@@ -23,7 +23,7 @@ public abstract class EnumerableDirectSupertypeTypeImpl extends TypeMirrorImpl
 	{
 		if (type instanceof BsjTypeVariable)
 		{
-			return type.isSubtypeOf(this);
+			return type.isSupertypeOf(this);
 		}
 		
 		if (this.equals(type))

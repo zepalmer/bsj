@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
-public class ArrayTypeImpl extends TypeMirrorImpl implements BsjArrayType
+public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 {
 	private BsjType componentType;
 	
@@ -79,7 +79,7 @@ public class ArrayTypeImpl extends TypeMirrorImpl implements BsjArrayType
 	{
 		if (type instanceof BsjTypeVariable)
 		{
-			return type.isSubtypeOf(this);
+			return type.isSupertypeOf(this);
 		} else if (type instanceof BsjArrayType)
 		{
 			return this.getComponentType().isSubtypeOf(((BsjArrayType)type).getComponentType());

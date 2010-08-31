@@ -24,7 +24,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
  * TODO: fix
@@ -46,7 +48,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
  * 
  * @author Zachary Palmer
  */
-public class DeclaredTypeImpl extends EnumerableDirectSupertypeTypeImpl implements BsjExplicitlyDeclaredType
+public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitlyDeclaredType
 {
 	/**
 	 * The type element which acts as the backing element for this type.
@@ -109,65 +111,145 @@ public class DeclaredTypeImpl extends EnumerableDirectSupertypeTypeImpl implemen
 	}
 
 	@Override
-	protected Collection<? extends BsjType> getDirectSupertypes()
+	public boolean isSubtypeOf(BsjType type)
 	{
-		Collection<BsjType> supertypes = new ArrayList<BsjType>();
-		NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.asElement().getDeclarationNode();
-		if (namedTypeDeclarationNode instanceof ClassDeclarationNode)
+		if (type instanceof BsjTypeVariable)
 		{
-			ClassDeclarationNode decl = (ClassDeclarationNode) namedTypeDeclarationNode;
-			if (decl.getExtendsClause() != null)
-			{
-				supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(decl.getExtendsClause()));
-			} else
-			{
-				supertypes.add(getManager().getToolkit().getObjectElement().asType());
-			}
-			for (TypeNode typeNode : decl.getImplementsClause())
-			{
-				supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(typeNode));
-			}
-			if (decl.getTypeParameters().size() != 0)
-			{
-				supertypes.add(new DeclaredTypeImpl(getManager(), asElement(),
-						Collections.<BsjTypeArgument> emptyList(), getEnclosingType()));
-			}
-		} else if (namedTypeDeclarationNode instanceof InterfaceDeclarationNode)
+			return type.isSupertypeOf(this);
+		}
+
+		// If there is a wildcard in our bound, we are subject to a capturing conversion first.
+		for (BsjTypeArgument typeArgument : getTypeArguments())
 		{
-			InterfaceDeclarationNode decl = (InterfaceDeclarationNode) namedTypeDeclarationNode;
-			if (decl.getExtendsClause().size() == 0)
+			if (typeArgument.getKind() == TypeKind.WILDCARD)
 			{
-				supertypes.add(getManager().getToolkit().getObjectElement().asType());
-			} else
+				return captureConvert().isSubtypeOf(type);
+			}
+		}
+
+		// If the elements of the other type and this type match, then we simply have to unify the type parameters
+		// This is, for instance, the case when we have List<? extends Integer> <?: List<? extends Number>.
+		// We would first capture-convert the problem to List<\alpha extends Integer> <?: List<? extends Number>
+		// and then discover that our type parameter is contained by the wildcard (because Integer <: Number).
+		if (type instanceof BsjExplicitlyDeclaredType)
+		{
+			BsjExplicitlyDeclaredType other = (BsjExplicitlyDeclaredType) type;
+			if (other.asElement().equals(this.asElement()))
 			{
-				for (TypeNode typeNode : decl.getExtendsClause())
+				// This could happen either because
+				// * This type is a raw type of the given type (which means it is not a subtype),
+				// * It is a raw type of our type (which is legal),
+				// * Both types are the same raw type (which is also legal), or
+				// * Both types are parameterized, in which case the subtype relation is decided by ensuring that each
+				// of the other type's parameters contain each of this type's corresponding parameters.
+				if (this.getTypeArguments().size() == 0)
 				{
-					supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(typeNode));
+					if (other.getTypeArguments().size() == 0)
+					{
+						// Same raw or unparameterized type.
+						return true;
+					} else
+					{
+						// This type is a raw type of the other type, making it the *super*type, not the subtype.
+						return false;
+					}
+				} else
+				{
+					if (other.getTypeArguments().size() == 0)
+					{
+						// The other type is the raw type of this type, making this type the subtype.
+						return true;
+					} else
+					{
+						// Check to see if each argument of this type is contained by each argument of the other type.
+						Iterator<? extends BsjTypeArgument> thisArgs = this.getTypeArguments().iterator();
+						Iterator<? extends BsjTypeArgument> otherArgs = other.getTypeArguments().iterator();
+						do
+						{
+							BsjTypeArgument thisArg = thisArgs.next();
+							BsjTypeArgument otherArg = otherArgs.next();
+
+							if (!otherArg.contains(thisArg))
+							{
+								return false;
+							}
+						} while (thisArgs.hasNext() && otherArgs.hasNext());
+						return true;
+					}
 				}
-			}
-			if (decl.getTypeParameters().size() != 0)
+			} else
 			{
-				supertypes.add(new DeclaredTypeImpl(getManager(), asElement(),
-						Collections.<BsjTypeArgument> emptyList(), getEnclosingType()));
+				// If we reach this point, then the only hope for the subtyping relation is that the same thing holds
+				// true for this type and one of our ancestor types.
+				Collection<BsjType> supertypes = new ArrayList<BsjType>();
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.asElement().getDeclarationNode();
+				if (namedTypeDeclarationNode instanceof ClassDeclarationNode)
+				{
+					ClassDeclarationNode decl = (ClassDeclarationNode) namedTypeDeclarationNode;
+					if (decl.getExtendsClause() != null)
+					{
+						supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(decl.getExtendsClause()));
+					} else
+					{
+						supertypes.add(getManager().getToolkit().getObjectElement().asType());
+					}
+					for (TypeNode typeNode : decl.getImplementsClause())
+					{
+						supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(typeNode));
+					}
+					if (decl.getTypeParameters().size() != 0)
+					{
+						supertypes.add(new DeclaredTypeImpl(getManager(), asElement(),
+								Collections.<BsjTypeArgument> emptyList(), getEnclosingType()));
+					}
+				} else if (namedTypeDeclarationNode instanceof InterfaceDeclarationNode)
+				{
+					InterfaceDeclarationNode decl = (InterfaceDeclarationNode) namedTypeDeclarationNode;
+					if (decl.getExtendsClause().size() == 0)
+					{
+						supertypes.add(getManager().getToolkit().getObjectElement().asType());
+					} else
+					{
+						for (TypeNode typeNode : decl.getExtendsClause())
+						{
+							supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(typeNode));
+						}
+					}
+					if (decl.getTypeParameters().size() != 0)
+					{
+						supertypes.add(new DeclaredTypeImpl(getManager(), asElement(),
+								Collections.<BsjTypeArgument> emptyList(), getEnclosingType()));
+					}
+				} else if (namedTypeDeclarationNode instanceof EnumDeclarationNode)
+				{
+					supertypes.add(new DeclaredTypeImpl(getManager(), getManager().getToolkit().getEnumElement(),
+							Collections.singletonList(this), null));
+				} else if (namedTypeDeclarationNode instanceof AnnotationDeclarationNode)
+				{
+					supertypes.add(getManager().getToolkit().getAnnotationElement().asType());
+				} else
+				{
+					throw new IllegalStateException("Unknown named type declaration node type: "
+							+ namedTypeDeclarationNode.getClass());
+				}
+
+				for (BsjType supertype : supertypes)
+				{
+					if (supertype.isSubtypeOf(type))
+						return true;
+				}
+
+				return false;
 			}
-		} else if (namedTypeDeclarationNode instanceof EnumDeclarationNode)
-		{
-			supertypes.add(new DeclaredTypeImpl(getManager(), getManager().getToolkit().getEnumElement(),
-					Collections.singletonList(this), null));
-		} else if (namedTypeDeclarationNode instanceof AnnotationDeclarationNode)
-		{
-			supertypes.add(getManager().getToolkit().getAnnotationElement().asType());
 		} else
 		{
-			throw new IllegalStateException("Unknown named type declaration node type: "
-					+ namedTypeDeclarationNode.getClass());
+			// TODO: how do we deal with other types?
+			throw new NotImplementedYetException();
 		}
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public BsjType captureConvert()
+	public BsjExplicitlyDeclaredType captureConvert()
 	{
 		List<BsjTypeArgument> captureConversionArguments = new ArrayList<BsjTypeArgument>();
 		// for each type argument, perform the argument capture

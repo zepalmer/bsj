@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
-public abstract class AbstractExecutableTypeImpl<T extends Node> extends EnumerableDirectSupertypeTypeImpl implements
+public abstract class AbstractExecutableTypeImpl<T extends Node> extends EnumerableDirectSupertypeReferenceTypeImpl implements
 		BsjExecutableType
 {
 	private T backingNode;

@@ -25,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
  * 
  * @author Zachary Palmer
  */
-public class IntersectionTypeImpl extends EnumerableDirectSupertypeTypeImpl implements BsjIntersectionType
+public class IntersectionTypeImpl extends EnumerableDirectSupertypeReferenceTypeImpl implements BsjIntersectionType
 {
 	/**
 	 * The type arguments applied to the underlying type element to form this type.

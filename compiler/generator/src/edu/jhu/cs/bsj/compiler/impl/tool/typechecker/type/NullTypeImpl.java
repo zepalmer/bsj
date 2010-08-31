@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNullType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
-public class NullTypeImpl extends TypeMirrorImpl implements BsjNullType
+public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 {
 	public NullTypeImpl(TypecheckerManager manager)
 	{
