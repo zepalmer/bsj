@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
@@ -116,7 +116,7 @@ public class InitialNameCategorizer
 
 		// ***** A name is syntactically classified as a MethodName in these contexts:
 		// *** Before the "(" in a method invocation expression (§15.12)
-		if (hasAncestry(node, MethodInvocationByNameNode.class))
+		if (hasAncestry(node, MethodInvocationNode.class))
 		{
 			return NameCategory.METHOD;
 		}

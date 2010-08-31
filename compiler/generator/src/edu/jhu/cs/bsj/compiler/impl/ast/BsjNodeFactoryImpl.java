@@ -4819,26 +4819,26 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -4846,149 +4846,119 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier)
+    {
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(null, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(null, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments)
+    {
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments)
-    {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name)
-    {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments)
-    {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6843,6 +6813,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         VariableAccessNode ret = new VariableAccessNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableAccessNode makeVariableAccessNode(
+            IdentifierNode identifier)
+    {
+        VariableAccessNode ret = new VariableAccessNodeImpl(null, identifier, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableAccessNode makeVariableAccessNode(
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        VariableAccessNode ret = new VariableAccessNodeImpl(null, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

@@ -82,13 +82,18 @@ public class GenerateToString extends AbstractPropertyListMetaannotationMetaprog
 			fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
 			TypeNode type = getter.getSecond();
 			ExpressionNode toStringValueNode;
-			PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
+			PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
 
 			if (type instanceof ArrayTypeNode)
 			{
 				// use Arrays.toString
-				toStringValueNode = factory.makeMethodInvocationByNameNode(
-						factory.parseNameNode("java.util.Arrays.toString"),
+				toStringValueNode = factory.makeMethodInvocationNode(
+						factory.makeVariableAccessNode(
+								factory.makeVariableAccessNode(
+										factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
+										factory.makeIdentifierNode("util")),
+										factory.makeIdentifierNode("Arrays")),
+						factory.makeIdentifierNode("toString"),
 						factory.makeExpressionListNode(getterCallNode));
 			} else
 			{

@@ -1846,28 +1846,14 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node,
+		public Void executeMethodInvocationNode(MethodInvocationNode node,
 				PrependablePrintStream p)
 		{
 
 			before(node);
 			try
 			{
-				return super.executeMethodInvocationByExpressionNode(node, p);
-			} finally
-			{
-				after(node);
-			}
-		}
-
-		@Override
-		public Void executeMethodInvocationByNameNode(MethodInvocationByNameNode node, PrependablePrintStream p)
-		{
-
-			before(node);
-			try
-			{
-				return super.executeMethodInvocationByNameNode(node, p);
+				return super.executeMethodInvocationNode(node, p);
 			} finally
 			{
 				after(node);

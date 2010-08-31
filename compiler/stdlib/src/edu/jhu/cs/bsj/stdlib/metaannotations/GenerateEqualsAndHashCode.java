@@ -122,8 +122,8 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 
 		// if (getClass() != obj.getClass()) return false;
 		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
-				factory.makeMethodInvocationByNameNode(factory.parseNameNode("getClass")),
-				factory.makeMethodInvocationByExpressionNode(
+				factory.makeMethodInvocationNode(factory.makeIdentifierNode("getClass")),
+				factory.makeMethodInvocationNode(
 						factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
 						factory.makeIdentifierNode("getClass")), BinaryOperator.NOT_EQUAL),
 				factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
@@ -155,8 +155,8 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 			String getterName = getter.getFirst();
 			TypeNode type = getter.getSecond();
 			ExpressionNode comparisonExpressionNode;
-			PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
-			PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationByExpressionNode(
+			PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
+			PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationNode(
 					factory.makeVariableAccessNode(null, factory.makeIdentifierNode("other")),
 					factory.makeIdentifierNode(getterName));
 			if (type instanceof PrimitiveTypeNode)
@@ -167,8 +167,14 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 			} else if (type instanceof ArrayTypeNode)
 			{
 				// then compare using Arrays.equals
-				comparisonExpressionNode = factory.makeMethodInvocationByNameNode(
-						factory.parseNameNode("java.util.Arrays.equals"), factory.makeExpressionListNode(
+				comparisonExpressionNode = factory.makeMethodInvocationNode(
+						factory.makeVariableAccessNode(
+								factory.makeVariableAccessNode(
+										factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
+										factory.makeIdentifierNode("util")),
+										factory.makeIdentifierNode("Arrays")),
+										factory.makeIdentifierNode("equals"),
+						factory.makeExpressionListNode(
 								thisGetterNode, otherGetterNode));
 
 			} else
@@ -181,7 +187,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 								factory.makeNullLiteralNode(), BinaryOperator.EQUAL), BinaryOperator.CONDITIONAL_AND),
 						factory.makeBinaryExpressionNode(factory.makeBinaryExpressionNode(
 								thisGetterNode.deepCopy(factory), factory.makeNullLiteralNode(),
-								BinaryOperator.NOT_EQUAL), factory.makeMethodInvocationByExpressionNode(thisGetterNode,
+								BinaryOperator.NOT_EQUAL), factory.makeMethodInvocationNode(thisGetterNode,
 								factory.makeIdentifierNode("equals"), factory.makeExpressionListNode(otherGetterNode)),
 								BinaryOperator.CONDITIONAL_AND), BinaryOperator.CONDITIONAL_OR);
 			}
@@ -228,7 +234,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 			String getterName = getter.getFirst();
 			TypeNode type = getter.getSecond();
 			ExpressionNode hashValueNode;
-			PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
+			PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
 			if (type instanceof PrimitiveTypeNode)
 			{
 				PrimitiveTypeNode primitiveTypeNode = (PrimitiveTypeNode) type;
@@ -253,8 +259,13 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 			} else if (type instanceof ArrayTypeNode)
 			{
 				// then use Arrays.hashCode
-				hashValueNode = factory.makeMethodInvocationByNameNode(
-						factory.parseNameNode("java.util.Arrays.hashCode"),
+				hashValueNode = factory.makeMethodInvocationNode(
+						factory.makeVariableAccessNode(
+								factory.makeVariableAccessNode(
+										factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
+										factory.makeIdentifierNode("util")),
+										factory.makeIdentifierNode("Arrays")),
+										factory.makeIdentifierNode("hashCode"),
 						factory.makeExpressionListNode(getterCallNode));
 
 			} else
@@ -262,7 +273,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 				// then compare using null check and .hashCode
 				hashValueNode = factory.makeConditionalExpressionNode(factory.makeBinaryExpressionNode(
 						getterCallNode.deepCopy(factory), factory.makeNullLiteralNode(), BinaryOperator.EQUAL),
-						factory.makeIntLiteralNode(0), factory.makeMethodInvocationByExpressionNode(getterCallNode,
+						factory.makeIntLiteralNode(0), factory.makeMethodInvocationNode(getterCallNode,
 								factory.makeIdentifierNode("hashCode")));
 			}
 			// Now that we have our hash adjustment mechanism, add the statement

@@ -125,20 +125,20 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
 		// if (!hashMap.containsKey(fooParamTupleInstance)) {hashMap.put(fooParamTupleInstance,
 		// originalMethod(~:arguments:~));}
 		statements.add(factory.makeIfNode(factory.makeUnaryExpressionNode(
-				factory.makeMethodInvocationByExpressionNode(
+				factory.makeMethodInvocationNode(
 						factory.makeVariableAccessNode(null, factory.makeIdentifierNode(hashMapName)),
 						factory.makeIdentifierNode("containsKey"),
 						factory.makeExpressionListNode(factory.makeVariableAccessNode(null,
 								factory.makeIdentifierNode(tupleInstanceName)))), UnaryOperator.LOGICAL_COMPLEMENT),
-				factory.makeExpressionStatementNode(factory.makeMethodInvocationByExpressionNode(
+				factory.makeExpressionStatementNode(factory.makeMethodInvocationNode(
 						factory.makeVariableAccessNode(null, factory.makeIdentifierNode(hashMapName)),
 						factory.makeIdentifierNode("put"), factory.makeExpressionListNode(
 								factory.makeVariableAccessNode(null, factory.makeIdentifierNode(tupleInstanceName)),
-								factory.makeMethodInvocationByNameNode(factory.parseNameNode(newMethodName),
+								factory.makeMethodInvocationNode(factory.makeIdentifierNode(newMethodName),
 										arguments.deepCopy(factory)))))));
 
 		// return hashMap.get(fooParamTupleInstance);
-		statements.add(factory.makeReturnNode(factory.makeMethodInvocationByExpressionNode(
+		statements.add(factory.makeReturnNode(factory.makeMethodInvocationNode(
 				factory.makeVariableAccessNode(null, factory.makeIdentifierNode(hashMapName)),
 				factory.makeIdentifierNode("get"),
 				factory.makeExpressionListNode(factory.makeVariableAccessNode(null,

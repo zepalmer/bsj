@@ -1525,32 +1525,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type MethodInvocationByExpressionNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitMethodInvocationByExpressionNodeStart(MethodInvocationByExpressionNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type MethodInvocationByNameNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitMethodInvocationByNameNodeStart(MethodInvocationByNameNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type MethodInvocationNode.
      * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
      */
-    public void visitMethodInvocationNodeStart(MethodInvocationNode node)
+    public void visitMethodInvocationNodeStart(MethodInvocationNode node, boolean mostSpecific)
     {
     }
 
@@ -3707,32 +3688,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type MethodInvocationByExpressionNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitMethodInvocationByExpressionNodeStop(MethodInvocationByExpressionNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type MethodInvocationByNameNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitMethodInvocationByNameNodeStop(MethodInvocationByNameNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type MethodInvocationNode.
      * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
      */
-    public void visitMethodInvocationNodeStop(MethodInvocationNode node)
+    public void visitMethodInvocationNodeStop(MethodInvocationNode node, boolean mostSpecific)
     {
     }
 

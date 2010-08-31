@@ -3075,20 +3075,20 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments);
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -3097,93 +3097,73 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier);
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier);
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments);
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments);
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ExpressionListNode arguments,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments);
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name);
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments);
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
             ExpressionListNode arguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -4368,6 +4348,22 @@ public interface BsjNodeFactory
      */
     public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableAccessNode makeVariableAccessNode(
+            IdentifierNode identifier);
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableAccessNode makeVariableAccessNode(
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);

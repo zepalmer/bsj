@@ -1260,18 +1260,7 @@ public class BsjNodeNoOpOperation2Arguments<P1,P2,R> implements BsjNodeOperation
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, P1 p1, P2 p2)
-    {
-        return null;
-    }
-    
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeMethodInvocationByNameNode(MethodInvocationByNameNode node, P1 p1, P2 p2)
+    public R executeMethodInvocationNode(MethodInvocationNode node, P1 p1, P2 p2)
     {
         return null;
     }

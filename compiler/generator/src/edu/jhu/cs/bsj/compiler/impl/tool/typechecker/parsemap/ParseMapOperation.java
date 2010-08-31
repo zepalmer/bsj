@@ -25,8 +25,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
@@ -434,16 +433,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeMethodInvocationByExpressionNode(
-			MethodInvocationByExpressionNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeMethodInvocationByNameNode(MethodInvocationByNameNode node,
-			ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeMethodInvocationNode(
+			MethodInvocationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();

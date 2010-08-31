@@ -7,11 +7,56 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 
 /**
- * A superclass for method invocation nodes.
+ * A node representing method invocation, as in:
+ * <pre>
+ * <i>identifier</i>(<i>arg...</i>)
+ * </pre>
+ * or
+ * <pre>
+ * <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
+ * </pre>
+ * For example, this node might be used when an expression produces an object against which we want to call a
+ * method as in
+ * <pre>
+ * new Object().toString()
+ * </pre>
+ * or
+ * <pre>
+ * foo().bar()
+ * </pre>
+ * If a method is invoked without any qualifying expression or type such as in
+ * <pre>
+ * foo()
+ * </pre>
+ * then the <tt>expression</tt> field of the corresponding node is <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionNode, StatementExpressionNode
 {
+    /**
+     * Gets the expression against which to invoke the method.
+     * @return The expression against which to invoke the method.
+     */
+    public PrimaryExpressionNode getExpression();
+    
+    /**
+     * Changes the expression against which to invoke the method.
+     * @param expression The expression against which to invoke the method.
+     */
+    public void setExpression(PrimaryExpressionNode expression);
+    
+    /**
+     * Gets the name of the method to invoke.
+     * @return The name of the method to invoke.
+     */
+    public IdentifierNode getIdentifier();
+    
+    /**
+     * Changes the name of the method to invoke.
+     * @param identifier The name of the method to invoke.
+     */
+    public void setIdentifier(IdentifierNode identifier);
+    
     /**
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.

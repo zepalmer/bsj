@@ -1260,18 +1260,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, P p)
-    {
-        return null;
-    }
-    
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeMethodInvocationByNameNode(MethodInvocationByNameNode node, P p)
+    public R executeMethodInvocationNode(MethodInvocationNode node, P p)
     {
         return null;
     }

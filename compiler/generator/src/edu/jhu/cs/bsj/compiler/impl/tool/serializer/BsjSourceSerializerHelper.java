@@ -1171,33 +1171,17 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print("\n");
 		return null;
 	}
-
+	
 	@Override
-	public Void executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, PrependablePrintStream p)
+	public Void executeMethodInvocationNode(MethodInvocationNode node, PrependablePrintStream p)
 	{
-		node.getExpression().executeOperation(this, p);
-		p.print(".");
+		if (node.getExpression() != null)
+		{
+			node.getExpression().executeOperation(this, p);
+			p.print(".");
+		}
 		handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
 		node.getIdentifier().executeOperation(this, p);
-		handleListNode(node.getArguments(), "(", ", ", ")", p, false);
-		return null;
-	}
-
-	@Override
-	public Void executeMethodInvocationByNameNode(MethodInvocationByNameNode node, PrependablePrintStream p)
-	{
-		// check for need to insert typeArgs inside of name (ie <code>x.<T>foo();</code>)
-		if (node.getName() instanceof QualifiedNameNode)
-		{
-			((QualifiedNameNode) node.getName()).getBase().executeOperation(this, p);
-			p.print('.');
-			handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
-			((QualifiedNameNode) node.getName()).getIdentifier().executeOperation(this, p);
-		} else
-		{
-			handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
-			node.getName().executeOperation(this, p);
-		}
 		handleListNode(node.getArguments(), "(", ", ", ")", p, false);
 		return null;
 	}

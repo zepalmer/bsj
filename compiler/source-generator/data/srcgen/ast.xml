@@ -619,11 +619,22 @@
             ]]></doc>
         </type>
 
-        <type name="MethodInvocationByExpressionNode" super="MethodInvocationNode">
-            <prop name="expression" type="PrimaryExpressionNode" desc="the expression against which to invoke the method" />
+        <type name="MethodInvocationNode" super="Node">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <tag name="StatementExpressionNode" />
+            <prop name="expression" type="PrimaryExpressionNode" desc="the expression against which to invoke the method"
+                default="null"/>
             <prop name="identifier" type="IdentifierNode" desc="the name of the method to invoke" />
+            <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method"
+                default="makeExpressionListNode()" />
+            <prop name="typeArguments" type="ReferenceTypeListNode" desc="the type arguments for the method"
+                default="makeReferenceTypeListNode()" />
             <doc><![CDATA[
-                A node representing method invocation by expression, as in:
+                A node representing method invocation, as in:
+                <pre>
+                <i>identifier</i>(<i>arg...</i>)
+                </pre>
+                or
                 <pre>
                 <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
                 </pre>
@@ -636,8 +647,11 @@
                 <pre>
                 foo().bar()
                 </pre>
-                For simple method invocations (such as <tt>myObjectReference.myMethod()</tt>), see
-                {@link MethodInvocationByNameNode}.
+                If a method is invoked without any qualifying expression or type such as in
+                <pre>
+                foo()
+                </pre>
+                then the <tt>expression</tt> field of the corresponding node is <tt>null</tt>.
             ]]></doc>
             <factory-method>
                 <use-defaults />
@@ -645,45 +659,15 @@
             <factory-method>
                 <prop name="expression" />
                 <prop name="identifier" />
+            </factory-method>
+            <factory-method>
+                <prop name="identifier" />
                 <prop name="arguments" />
             </factory-method>
-        </type>
-
-        <type name="MethodInvocationByNameNode" super="MethodInvocationNode">
-            <prop name="name" type="NameNode" desc="the name of the method to invoke" />
-            <doc><![CDATA[
-                A node representing method invocation by name, as in:
-                <pre>
-                <i>ambiguousName</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
-                </pre>
-                or
-                <pre>
-                <i>methodName</i>(<i>arg...</i>)
-                </pre>
-                This node is used for simple method calls (such as <tt>x.y()</tt>) and not for expression-based method calls
-                (such as <tt>x().y()</tt>).  For expression-based method calls, see {@link MethodInvocationByExpressionNode}.
-            ]]></doc>
             <factory-method>
-                <use-defaults />
-            </factory-method>
-            <factory-method>
-                <prop name="name" />
+                <prop name="expression" />
+                <prop name="identifier" />
                 <prop name="arguments" />
-            </factory-method>
-        </type>
-
-        <type name="MethodInvocationNode" super="Node" mode="abstract">
-            <tag name="RestrictedPrimaryExpressionNode" />
-            <tag name="StatementExpressionNode" />
-            <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method"
-                default="makeExpressionListNode()" />
-            <prop name="typeArguments" type="ReferenceTypeListNode" desc="the type arguments for the method"
-                default="makeReferenceTypeListNode()" />
-            <doc><![CDATA[
-                A superclass for method invocation nodes.
-            ]]></doc>
-            <factory-method>
-                <use-defaults />
             </factory-method>
         </type>
 
@@ -912,7 +896,8 @@
 
         <type name="VariableAccessNode" super="Node">
             <tag name="RestrictedPrimaryExpressionNode" />
-            <prop name="expression" type="PrimaryExpressionNode" desc="the expression from which the variable is being selected" />
+            <prop name="expression" type="PrimaryExpressionNode" desc="the expression from which the variable is being selected"
+            default="null" />
             <prop name="identifier" type="IdentifierNode" desc="the name of the variable" />
             <doc><![CDATA[
                 Represents a field access, as in
@@ -930,6 +915,9 @@
                 If the expression represents the access of a simple identifier name, the <tt>expression</tt> child node
                 is <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <!-- ===================== STATEMENT NODES ====================== -->

@@ -553,7 +553,7 @@ public class ParseRule<T extends Node>
     public static final ParseRule<VariableInitializerNode> VARIABLE_INITIALIZER;
     static
     {
-        List<Class<? extends VariableInitializerNode>> list = new ArrayList<Class<? extends VariableInitializerNode>>(31);
+        List<Class<? extends VariableInitializerNode>> list = new ArrayList<Class<? extends VariableInitializerNode>>(30);
         list.add(ArrayAccessNode.class);
         list.add(ArrayInitializerCreationNode.class);
         list.add(ArrayInitializerNode.class);
@@ -570,8 +570,7 @@ public class ParseRule<T extends Node>
         list.add(InstanceOfNode.class);
         list.add(IntLiteralNode.class);
         list.add(LongLiteralNode.class);
-        list.add(MethodInvocationByExpressionNode.class);
-        list.add(MethodInvocationByNameNode.class);
+        list.add(MethodInvocationNode.class);
         list.add(NullLiteralNode.class);
         list.add(ParenthesizedExpressionNode.class);
         list.add(QualifiedClassInstantiationNode.class);

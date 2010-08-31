@@ -9,8 +9,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
@@ -20,19 +18,20 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 
 /**
- * This visitor operates on a very large expression, rewriting it as a series of methods and method calls.  This is
+ * This visitor operates on a very large expression, rewriting it as a series of methods and method calls. This is
  * necessary for expressions which are large enough to exceed the limit on the bytecode size of a method.
+ * 
  * @author Zachary Palmer
  */
 public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 {
 	private static final int DEFAULT_NODE_COUNT_THRESHOLD = 4000;
-	
+
 	private List<MethodDeclarationNode> methods;
 	private int methodId;
 	private BsjNodeFactory factory;
 	private int liftThreshold;
-	
+
 	public BsjLiftedCodeVisitor(List<MethodDeclarationNode> methods, BsjNodeFactory factory)
 	{
 		this(methods, factory, DEFAULT_NODE_COUNT_THRESHOLD);
@@ -131,9 +130,9 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 			if (argExpr instanceof UnqualifiedClassInstantiationNode)
 			{
 				returnType = ((UnqualifiedClassInstantiationNode) argExpr).getType().deepCopy(factory);
-			} else if (argExpr instanceof MethodInvocationByExpressionNode)
+			} else if (argExpr instanceof MethodInvocationNode)
 			{
-				String retName = ((MethodInvocationByExpressionNode) argExpr).getIdentifier().getIdentifier();
+				String retName = ((MethodInvocationNode) argExpr).getIdentifier().getIdentifier();
 				if (retName.endsWith("asList"))
 				{
 					newArgList.add(argExpr.deepCopy(factory));
@@ -141,21 +140,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 				} else
 				{
 					retName = retName.substring(4);
-					returnType = factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-							factory.makeIdentifierNode(retName)));
-				}
-			} else if (argExpr instanceof MethodInvocationByNameNode)
-			{
-				String retName = ((MethodInvocationByNameNode) argExpr).getName().getNameString();
-				if (retName.endsWith("asList"))
-				{
-					newArgList.add(argExpr.deepCopy(factory));
-					continue;
-				} else
-				{
-					retName = retName.substring(4);
-					returnType = factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-							factory.makeIdentifierNode(retName)));
+					returnType = factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(retName)));
 				}
 			} else if (argExpr instanceof LiteralNode<?> || argExpr instanceof VariableAccessNode)
 			{
@@ -180,9 +165,8 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 			methods.add(newMethod);
 
 			// add a call to the new method to the new argument list
-			newArgList.add(factory.makeMethodInvocationByNameNode(factory.makeSimpleNameNode(
-					factory.makeIdentifierNode(methodName)), factory.makeExpressionListNode(),
-					factory.makeReferenceTypeListNode()));
+			newArgList.add(factory.makeMethodInvocationNode(null, factory.makeIdentifierNode(methodName),
+					factory.makeExpressionListNode(), factory.makeReferenceTypeListNode()));
 		}
 
 		// replace the node's arguments with method calls

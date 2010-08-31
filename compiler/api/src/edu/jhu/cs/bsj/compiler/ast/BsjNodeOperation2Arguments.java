@@ -942,20 +942,12 @@ public interface BsjNodeOperation2Arguments<P1,P2,R>
     public R executeMethodDeclarationNode(MethodDeclarationNode node, P1 p1, P2 p2);
     
     /**
-     * Executes this operation against a MethodInvocationByExpressionNode.
-     * @param node The MethodInvocationByExpressionNode in question.
+     * Executes this operation against a MethodInvocationNode.
+     * @param node The MethodInvocationNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
-    public R executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, P1 p1, P2 p2);
-    
-    /**
-     * Executes this operation against a MethodInvocationByNameNode.
-     * @param node The MethodInvocationByNameNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeMethodInvocationByNameNode(MethodInvocationByNameNode node, P1 p1, P2 p2);
+    public R executeMethodInvocationNode(MethodInvocationNode node, P1 p1, P2 p2);
     
     /**
      * Executes this operation against a MethodModifiersNode.

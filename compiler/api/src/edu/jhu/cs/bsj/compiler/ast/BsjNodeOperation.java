@@ -940,20 +940,12 @@ public interface BsjNodeOperation<P,R>
     public R executeMethodDeclarationNode(MethodDeclarationNode node, P p);
     
     /**
-     * Executes this operation against a MethodInvocationByExpressionNode.
-     * @param node The MethodInvocationByExpressionNode in question.
+     * Executes this operation against a MethodInvocationNode.
+     * @param node The MethodInvocationNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
-    public R executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, P p);
-    
-    /**
-     * Executes this operation against a MethodInvocationByNameNode.
-     * @param node The MethodInvocationByNameNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeMethodInvocationByNameNode(MethodInvocationByNameNode node, P p);
+    public R executeMethodInvocationNode(MethodInvocationNode node, P p);
     
     /**
      * Executes this operation against a MethodModifiersNode.

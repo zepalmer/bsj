@@ -172,7 +172,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         // this.listeners.add(listener);
         BlockStatementListNode statement = factory.makeBlockStatementListNode(
                 factory.makeExpressionStatementNode(
-                factory.makeMethodInvocationByExpressionNode(
+                factory.makeMethodInvocationNode(
                         factory.makeVariableAccessNode(factory.makeThisNode(), 
                                 factory.makeIdentifierNode(listenerListName)), 
                         factory.makeIdentifierNode("add"), 
@@ -199,7 +199,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         // this.listeners.remove(listener);
         BlockStatementListNode statement = factory.makeBlockStatementListNode(
                 factory.makeExpressionStatementNode(
-                factory.makeMethodInvocationByExpressionNode(
+                factory.makeMethodInvocationNode(
                         factory.makeVariableAccessNode(factory.makeThisNode(), 
                                 factory.makeIdentifierNode(listenerListName)), 
                         factory.makeIdentifierNode("remove"), 
@@ -227,7 +227,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         
         // listener.~:eventName:~Occurred(event);
         ExpressionStatementNode methodCall = factory.makeExpressionStatementNode(
-            factory.makeMethodInvocationByExpressionNode(
+            factory.makeMethodInvocationNode(
                     factory.makeVariableAccessNode(null, factory.makeIdentifierNode(varName)), 
                     factory.makeIdentifierNode(eventOccurredName),
                     factory.makeExpressionListNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode(paramName))), 

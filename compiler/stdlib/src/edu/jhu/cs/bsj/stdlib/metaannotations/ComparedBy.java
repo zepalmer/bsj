@@ -111,7 +111,7 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
         
         // if (this.equals(o)) {return 0;}        
         statements.add(factory.makeIfNode(
-                factory.makeMethodInvocationByExpressionNode(
+                factory.makeMethodInvocationNode(
                         factory.makeThisNode(), 
                         factory.makeIdentifierNode("equals"), 
                         factory.makeExpressionListNode(
@@ -126,8 +126,8 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
             ExpressionNode lessThanExpression = null;
             ExpressionNode greaterThanExpression = null;
             
-            PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
-            PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
+            PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationNode(
                     factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
                     factory.makeIdentifierNode(getterName));
             

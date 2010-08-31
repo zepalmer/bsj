@@ -2784,7 +2784,7 @@ public class SourceGenerator
 			// Generate resulting expression
 			ps.println("ExpressionNode ret =");
 			ps.incPrependCount(2);
-			ps.println("factory.makeMethodInvocationByExpressionNode(");
+			ps.println("factory.makeMethodInvocationNode(");
 			ps.incPrependCount(2);
 			ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
 			ps.println("factory.makeIdentifierNode(\"make" + def.getBaseName() + "\"),");
@@ -2819,15 +2819,13 @@ public class SourceGenerator
 
 					public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 					{
-						ps.println("factory.makeMethodInvocationByNameNode(");
+						ps.println("factory.makeMethodInvocationNode(");
 						ps.incPrependCount(2);
-						ps.println("factory.makeQualifiedNameNode(");
+						ps.println("factory.makeVariableAccessNode(");
 						ps.incPrependCount(2);
-						ps.println("factory.makeQualifiedNameNode(");
+						ps.println("factory.makeVariableAccessNode(");
 						ps.incPrependCount(2);
-						ps.println("factory.makeQualifiedNameNode(");
-						ps.incPrependCount(2);
-						ps.println("factory.makeSimpleNameNode(");
+						ps.println("factory.makeVariableAccessNode(");
 						ps.incPrependCount(2);
 						ps.println("factory.makeIdentifierNode(\"java\")),");
 						ps.decPrependCount(2);
@@ -2835,7 +2833,7 @@ public class SourceGenerator
 						ps.decPrependCount(2);
 						ps.println("factory.makeIdentifierNode(\"Arrays\")),");
 						ps.decPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"asList\")),");
+						ps.println("factory.makeIdentifierNode(\"asList\"),");
 						ps.decPrependCount(2);
 						ps.println("factory.makeExpressionListNode(lift" + capFirst(p.getName()) + "List),");
 						ps.println("factory.makeReferenceTypeListNode(");

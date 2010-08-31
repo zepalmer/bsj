@@ -5459,19 +5459,33 @@ superFieldAccess returns [SuperFieldAccessNode ret]
 //     someField.aMethod();
 // or
 //     Utils.stuff();
-methodInvocationByName returns [MethodInvocationByNameNode ret]
+methodInvocationByName returns [MethodInvocationNode ret]
         scope Rule;
         @init {
             ruleStart("methodInvocationByName");
+            RestrictedPrimaryExpressionNode qualifier = null;
+            IdentifierNode ident = null;
         }
         @after {
             ruleStop();
         }
     :
-        name arguments
+        a=identifier
         {
-            $ret = factory.makeMethodInvocationByNameNode(
-                    $name.ret,
+            ident = $a.ret;
+        }
+        (
+            '.' b=identifier
+            {
+                qualifier = factory.makeVariableAccessNode(qualifier, ident);
+                ident = $b.ret;
+            }
+        )*
+        arguments
+        {
+            $ret = factory.makeMethodInvocationNode(
+                    qualifier,
+                    ident,
                     $arguments.ret,
                     factory.makeReferenceTypeListNode());
         }
@@ -5519,22 +5533,31 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
 
 // This rule invokes a method against a type while providing type arguments, as in
 //     Collections.<Integer>emptySet();
-typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationByNameNode ret]
+typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationNode ret]
         scope Rule;
         @init {
             ruleStart("typeQualifiedTypeArgumentMethodInvocation");
+            RestrictedPrimaryExpressionNode qualifier = null;
         }
         @after {
             ruleStop();
         }
     :
-        name '.' nonWildcardTypeArguments identifier arguments
+        a=identifier
         {
-            NameNode name = factory.makeQualifiedNameNode(
-                    $name.ret,
-                    $identifier.ret);
-            $ret = factory.makeMethodInvocationByNameNode(
-                    name,
+            qualifier = factory.makeVariableAccessNode(null, $a.ret);
+        }
+        (
+            '.' b=identifier
+            {
+                qualifier = factory.makeVariableAccessNode(qualifier, $b.ret);
+            }
+        )*
+        '.' nonWildcardTypeArguments c=identifier arguments
+        {
+            $ret = factory.makeMethodInvocationNode(
+                    qualifier,
+                    $c.ret,
                     $arguments.ret,
                     $nonWildcardTypeArguments.ret);
         }
@@ -5610,7 +5633,7 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
         )?
         identifier arguments
         {
-            $ret = factory.makeMethodInvocationByExpressionNode(
+            $ret = factory.makeMethodInvocationNode(
                     in,
                     $identifier.ret,
                     $arguments.ret,

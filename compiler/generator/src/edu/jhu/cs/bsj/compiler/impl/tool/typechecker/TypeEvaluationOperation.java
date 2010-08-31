@@ -961,15 +961,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node,
+	public BsjType executeMethodInvocationNode(MethodInvocationNode node,
 			TypecheckerEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public BsjType executeMethodInvocationByNameNode(MethodInvocationByNameNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();

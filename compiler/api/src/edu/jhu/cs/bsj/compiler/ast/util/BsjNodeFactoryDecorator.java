@@ -5394,28 +5394,28 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
         this.before();
-        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments, typeArguments);
+        MethodInvocationNode node = factory.makeMethodInvocationNode(expression, identifier, arguments, typeArguments);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -5424,65 +5424,127 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         this.before();
-        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments, typeArguments, startLocation, stopLocation);
+        MethodInvocationNode node = factory.makeMethodInvocationNode(expression, identifier, arguments, typeArguments, startLocation, stopLocation);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier)
+    {
+        this.before();
+        MethodInvocationNode node = factory.makeMethodInvocationNode(identifier);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MethodInvocationNode node = factory.makeMethodInvocationNode(identifier, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
         this.before();
-        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier);
+        MethodInvocationNode node = factory.makeMethodInvocationNode(expression, identifier);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, startLocation, stopLocation);
+        MethodInvocationNode node = factory.makeMethodInvocationNode(expression, identifier, startLocation, stopLocation);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments)
+    {
+        this.before();
+        MethodInvocationNode node = factory.makeMethodInvocationNode(identifier, arguments);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MethodInvocationNode node = factory.makeMethodInvocationNode(identifier, arguments, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments)
     {
         this.before();
-        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments);
+        MethodInvocationNode node = factory.makeMethodInvocationNode(expression, identifier, arguments);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a MethodInvocationByExpressionNode.
+     * Creates a MethodInvocationNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -5490,103 +5552,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         this.before();
-        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments)
-    {
-        this.before();
-        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments, typeArguments);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments, typeArguments, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name)
-    {
-        this.before();
-        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments)
-    {
-        this.before();
-        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a MethodInvocationByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
-            NameNode name,
-            ExpressionListNode arguments,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments, startLocation, stopLocation);
+        MethodInvocationNode node = factory.makeMethodInvocationNode(expression, identifier, arguments, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7709,6 +7675,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableAccessNode node = factory.makeVariableAccessNode(expression, identifier, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableAccessNode makeVariableAccessNode(
+            IdentifierNode identifier)
+    {
+        this.before();
+        VariableAccessNode node = factory.makeVariableAccessNode(identifier);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableAccessNode makeVariableAccessNode(
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableAccessNode node = factory.makeVariableAccessNode(identifier, startLocation, stopLocation);
         this.after(node);
         return node;
     }

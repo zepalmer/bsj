@@ -337,8 +337,7 @@
             <outputType name="InstanceOfNode" />
             <outputType name="IntLiteralNode" />
             <outputType name="LongLiteralNode" />
-            <outputType name="MethodInvocationByExpressionNode" />
-            <outputType name="MethodInvocationByNameNode" />
+            <outputType name="MethodInvocationNode" />
             <outputType name="NullLiteralNode" />
             <outputType name="ParenthesizedExpressionNode" />
             <outputType name="QualifiedClassInstantiationNode" />
