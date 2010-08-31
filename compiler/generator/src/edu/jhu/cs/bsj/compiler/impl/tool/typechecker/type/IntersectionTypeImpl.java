@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 
@@ -25,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
  * 
  * @author Zachary Palmer
  */
-public class IntersectionTypeImpl extends EnumerableDirectSupertypeReferenceTypeImpl implements BsjIntersectionType
+public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjIntersectionType
 {
 	/**
 	 * The type arguments applied to the underlying type element to form this type.
@@ -116,8 +116,42 @@ public class IntersectionTypeImpl extends EnumerableDirectSupertypeReferenceType
 	}
 
 	@Override
-	protected Collection<? extends BsjType> getDirectSupertypes()
+	public boolean isSupertypeOf(BsjType type)
 	{
-		return this.supertypes;
+		if (type instanceof BsjTypeVariable)
+		{
+			return type.isSubtypeOf(this);
+		}
+		
+		if (this.equals(type))
+			return true;
+		
+		for (BsjType supertype : this.supertypes)
+		{
+			if (!supertype.isSupertypeOf(type))
+				return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public boolean isSubtypeOf(BsjType type)
+	{
+		if (type instanceof BsjTypeVariable)
+		{
+			return type.isSupertypeOf(this);
+		}
+		
+		if (this.equals(type))
+			return true;
+		
+		for (BsjType supertype : this.supertypes)
+		{
+			if (supertype.isSubtypeOf(type))
+				return true;
+		}
+
+		return false;
 	}
 }

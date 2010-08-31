@@ -1,8 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
@@ -18,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
  * @param <T> An identifying attribute which can be used to tell two type variables apart.
  * @author Zachary Palmer
  */
-public abstract class AbstractTypeVariableImpl<T> extends EnumerableDirectSupertypeReferenceTypeImpl implements BsjTypeVariable
+public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl implements BsjTypeVariable
 {
 	/** The object representing the identity of this type variable. */
 	private T id;
@@ -102,9 +99,15 @@ public abstract class AbstractTypeVariableImpl<T> extends EnumerableDirectSupert
 	}
 
 	@Override
-	protected Collection<? extends BsjType> getDirectSupertypes()
+	public boolean isSubtypeOf(BsjType type)
 	{
-		return Collections.singleton(this.upperBound);
+		if (this.equals(type))
+			return true;
+		
+		if (getUpperBound().isSubtypeOf(type))
+			return true;
+
+		return false;
 	}
 
 	/**

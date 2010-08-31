@@ -22,11 +22,11 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
-import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
  * TODO: fix
@@ -113,7 +113,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 	@Override
 	public boolean isSubtypeOf(BsjType type)
 	{
-		if (type instanceof BsjTypeVariable)
+		if (type instanceof BsjTypeVariable || type instanceof BsjIntersectionType)
 		{
 			return type.isSupertypeOf(this);
 		}
@@ -139,7 +139,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				// This could happen either because
 				// * This type is a raw type of the given type (which means it is not a subtype),
 				// * It is a raw type of our type (which is legal),
-				// * Both types are the same raw type (which is also legal), or
+				// * Both types are the same raw or unparameterized type (which is also legal), or
 				// * Both types are parameterized, in which case the subtype relation is decided by ensuring that each
 				// of the other type's parameters contain each of this type's corresponding parameters.
 				if (this.getTypeArguments().size() == 0)
@@ -183,6 +183,9 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				// true for this type and one of our ancestor types.
 				Collection<BsjType> supertypes = new ArrayList<BsjType>();
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.asElement().getDeclarationNode();
+				// TODO: perform type argument substitution on the supertypes
+				// For instance, suppose we have the elements Foo<T> and Bar<S> extends Foo<S>.  In this case, the
+				// supertype of Bar<String> must be Foo<String>, not Foo<S>.
 				if (namedTypeDeclarationNode instanceof ClassDeclarationNode)
 				{
 					ClassDeclarationNode decl = (ClassDeclarationNode) namedTypeDeclarationNode;
@@ -243,8 +246,9 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			}
 		} else
 		{
-			// TODO: how do we deal with other types?
-			throw new NotImplementedYetException();
+			// If we reach this point, the type is not a type parameter, intersection type, or declared type.  Nothing
+			// else is a supertype of a declared type.
+			return false;
 		}
 	}
 

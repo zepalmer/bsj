@@ -5,6 +5,7 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 
@@ -77,7 +78,7 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 	@Override
 	public boolean isSubtypeOf(BsjType type)
 	{
-		if (type instanceof BsjTypeVariable)
+		if (type instanceof BsjTypeVariable || type instanceof BsjIntersectionType)
 		{
 			return type.isSupertypeOf(this);
 		} else if (type instanceof BsjArrayType)

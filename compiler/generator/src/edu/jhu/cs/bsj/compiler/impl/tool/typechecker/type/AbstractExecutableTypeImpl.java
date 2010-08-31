@@ -1,8 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
@@ -11,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
-public abstract class AbstractExecutableTypeImpl<T extends Node> extends EnumerableDirectSupertypeReferenceTypeImpl implements
+public abstract class AbstractExecutableTypeImpl<T extends Node> extends ReferenceTypeImpl implements
 		BsjExecutableType
 {
 	private T backingNode;
@@ -86,9 +83,9 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends Enumera
 	}
 
 	@Override
-	protected Collection<? extends BsjType> getDirectSupertypes()
+	public boolean isSubtypeOf(BsjType type)
 	{
-		// Note: there is no formal definition of subtyping for executable types in the JLS
-		return Collections.emptySet();
+		// There is no specification in the JLS which permits subtyping of executable elements.
+		return this.equals(type);
 	}
 }

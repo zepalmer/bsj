@@ -47,6 +47,8 @@ import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
  */
 public class TypeBuilder
 {
+	// TODO: the methods in this class do not react well to the requested type being unbound
+	
 	private TypecheckerManager manager;
 
 	public TypeBuilder(TypecheckerManager manager)
@@ -289,7 +291,7 @@ public class TypeBuilder
 	{
 		BsjTypeLikeElement element = this.manager.getToolkit().getAccessibleTypeFromName(node.getName(),
 				getTypeNamespaceMap(node));
-
+		
 		if (element instanceof BsjTypeElement)
 		{
 			NamedTypeDeclarationNode<?> typeDeclaration = ((BsjTypeElement) element).getDeclarationNode();

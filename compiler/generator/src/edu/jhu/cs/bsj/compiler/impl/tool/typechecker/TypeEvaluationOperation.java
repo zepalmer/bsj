@@ -61,8 +61,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
@@ -1295,8 +1300,81 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node,
 			TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// Determine the type being instantiated.
+		BsjNamedReferenceType targetType = this.manager.getToolkit().getTypeBuilder().makeDeclaredType(node.getType());
+		if (targetType instanceof BsjTypeVariable)
+		{
+			// This is an error; it is illegal to attempt to instantiate a type variable.
+			// TODO: diagnostic
+			return new ErrorTypeImpl(this.manager);
+		} else if (!(targetType instanceof BsjExplicitlyDeclaredType))
+		{
+			throw new IllegalStateException("Unrecognized BsjNamedReferenceType: " + targetType.getClass());
+		}
+
+		BsjExplicitlyDeclaredType instantiationType = (BsjExplicitlyDeclaredType) targetType;
+
+		// Ensure that none of the constructor type arguments are wildcard types.
+		for (TypeArgumentNode typeArgumentNode : node.getConstructorTypeArguments())
+		{
+			if (typeArgumentNode instanceof WildcardTypeNode)
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+		}
+
+		// Ensure that none of the instantiation type arguments are wildcard types.
+		for (BsjTypeArgument typeArgument : instantiationType.getTypeArguments())
+		{
+			if (typeArgument instanceof BsjWildcardType)
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+		}
+
+		// Ensure that we are not attempting to instantiate an enum type
+		if (instantiationType.asElement().getDeclarationNode() instanceof EnumDeclarationNode)
+		{
+			// TODO: diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		// If we are instantiating an anonymous inner class, then the base type must be non-final. Otherwise, the
+		// base type must be a non-abstract class.
+		NamedTypeDeclarationNode<?> namedTypeDeclarationNode = instantiationType.asElement().getDeclarationNode();
+		if (node.getBody() != null)
+		{
+			if (namedTypeDeclarationNode instanceof ClassDeclarationNode)
+			{
+				if (((ClassDeclarationNode) namedTypeDeclarationNode).getModifiers().getFinalFlag())
+				{
+					// Cannot extend a final type
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			}
+		} else
+		{
+			if (namedTypeDeclarationNode instanceof ClassDeclarationNode)
+			{
+				if (((ClassDeclarationNode) namedTypeDeclarationNode).getModifiers().getAbstractFlag())
+				{
+					// Cannot instantiate an abstract type
+					// TODO: diagnostic
+					return new ErrorTypeImpl(this.manager);
+				}
+			} else
+			{
+				// Cannot instantiate a non-class type
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+		}
+
+		// "The type of the class instance creation expression is the class type being instantiated." (JLSv3 §15.9.1)
+		return instantiationType;
 	}
 
 	@Override
