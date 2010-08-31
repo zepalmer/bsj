@@ -66,6 +66,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PackageNoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
@@ -106,19 +107,6 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		this.manager = manager;
 		this.thisOperation = thisOperation;
 	}
-
-	// TODO: the current flavor of error handling will produce a slew of diagnostics up a recursive call stack when an
-	// error occurs. For instance, consider the statement "String[] x = new String[true];". This is clearly in error;
-	// the array index is not unary promotable to int. But the current implementation will return an ErrorType for the
-	// array initializer, causing the assignment to generate its own new ErrorType. Because each error type creation is
-	// associated with the creation of a diagnostic object, two diagnostics will be reported for what amounts to a
-	// single error.
-	// Rather than this, the desirable approach would be to have each parent typechecker consider the errors it
-	// gets from its child nodes and return that error without a further diagnostic as necessary. However, it may be
-	// desirable in some cases to be able to ascertain what the type of the expression *would* be if the error were
-	// resolved; this is not always deterministic, but it may be. Above, for instance, the type would always be
-	// String[] regardless of how the existing error was fixed. Should this be a mode on the type evaluation operation
-	// or simply a field on the ErrorType? Either way, deal with this.
 
 	// TODO: handle rejection which comes as a result of lacking context (such as "<:x:>") differently
 	// This could be accomplished by creating a second operation. The second operation calls this operation for all
@@ -270,10 +258,15 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeArrayAccessNode(ArrayAccessNode node, TypecheckerEnvironment env)
 	{
 		BsjType arrayExpressionType = node.getArrayExpression().executeOperation(thisOperation, env);
+		if (arrayExpressionType instanceof BsjErrorType)
+			return arrayExpressionType;
+		
 		if (arrayExpressionType instanceof BsjArrayType)
 		{
 			BsjArrayType arrayType = (BsjArrayType) arrayExpressionType;
 			BsjType indexExpressionType = node.getIndexExpression().executeOperation(thisOperation, env);
+			if (indexExpressionType instanceof BsjErrorType)
+				return indexExpressionType;
 			indexExpressionType = indexExpressionType.unboxConvert();
 			if (indexExpressionType.isIntegralPrimitive())
 			{
@@ -315,6 +308,9 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		for (ExpressionNode expr : node.getDimExpressions())
 		{
 			BsjType exprType = expr.executeOperation(thisOperation, env);
+			if (exprType instanceof BsjErrorType)
+				return exprType;
+			
 			exprType = exprType.unboxConvert();
 			exprType = exprType.numericTypePromotion();
 			if (!this.manager.getToolkit().getIntType().equals(exprType))
@@ -354,7 +350,11 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeAssignmentNode(AssignmentNode node, TypecheckerEnvironment env)
 	{
 		BsjType variableType = node.getVariable().executeOperation(thisOperation, env);
+		if (variableType instanceof BsjErrorType)
+			return variableType;
 		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
+		if (expressionType instanceof BsjErrorType)
+			return expressionType;
 
 		AssignmentOperator assignmentOperator = node.getOperator();
 		BinaryOperator binaryOperator = assignmentOperator.getBinaryOperator();
@@ -378,7 +378,11 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeBinaryExpressionNode(BinaryExpressionNode node, TypecheckerEnvironment env)
 	{
 		BsjType leftType = node.getLeftOperand().executeOperation(thisOperation, env);
+		if (leftType instanceof BsjErrorType)
+			return leftType;
 		BsjType rightType = node.getRightOperand().executeOperation(thisOperation, env);
+		if (rightType instanceof BsjErrorType)
+			return rightType;
 
 		BinaryOperator operator = node.getOperator();
 
@@ -1241,6 +1245,9 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeUnaryExpressionNode(UnaryExpressionNode node, TypecheckerEnvironment env)
 	{
 		BsjType type = node.getExpression().executeOperation(thisOperation, env);
+		if (type instanceof BsjErrorType)
+			return type;
+		
 		switch (node.getOperator())
 		{
 			case BITWISE_COMPLEMENT:
@@ -1285,6 +1292,9 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		// All unary statement expressions are numeric in nature (pre- and postfix increment and decrement). If the
 		// expression has a numeric type, it preserves that type. Otherwise, the expression has an error type.
 		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
+		if (expressionType instanceof BsjErrorType)
+			return expressionType;
+		
 		expressionType = expressionType.unboxConvert();
 		if (expressionType.isNumericPrimitive())
 		{
