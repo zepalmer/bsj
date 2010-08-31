@@ -416,11 +416,36 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 	}
 
 	@Override
-	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	public BsjExplicitlyDeclaredType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
 	{
+		List<BsjTypeArgument> typeArguments = new ArrayList<BsjTypeArgument>();
+		for (BsjTypeArgument typeArgument : this.typeArguments)
+		{
+			if (substitutionMap.containsKey(typeArgument))
+			{
+				typeArguments.add(substitutionMap.get(typeArgument));
+			} else
+			{
+				typeArguments.add(typeArgument);
+			}
+		}
 		
-		// TODO Auto-generated method stub
-		return null;
+		BsjExplicitlyDeclaredType substitutedEnclosingType;
+		if (getEnclosingType() != null)
+		{
+			if (getEnclosingType().isRaw())
+			{
+				substitutedEnclosingType = getEnclosingType();
+			} else
+			{
+				substitutedEnclosingType = getEnclosingType().performTypeSubstitution(substitutionMap);
+			}
+		} else
+		{
+			substitutedEnclosingType = null;
+		}
+		
+		return new DeclaredTypeImpl(getManager(), asElement(), typeArguments, substitutedEnclosingType);
 	}
 
 	@Override

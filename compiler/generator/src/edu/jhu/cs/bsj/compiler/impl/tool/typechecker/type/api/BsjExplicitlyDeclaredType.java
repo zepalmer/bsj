@@ -56,4 +56,6 @@ public interface BsjExplicitlyDeclaredType extends BsjDeclaredType, BsjNamedRefe
 	 * resulting type.
 	 */
 	public Map<BsjTypeVariable, BsjTypeArgument> calculateSubstitutionMap();
+	
+	public BsjExplicitlyDeclaredType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
 }
