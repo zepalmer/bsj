@@ -103,7 +103,7 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
         // if (o == null) {throw new NullPointerException();}        
         statements.add(factory.makeIfNode(
                 factory.makeBinaryExpressionNode(
-                        factory.makeVariableAccessByNameNode(factory.parseNameNode("o")), 
+                        factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")), 
                         factory.makeNullLiteralNode(), 
                         BinaryOperator.EQUAL),
                 factory.makeThrowNode(factory.makeUnqualifiedClassInstantiationNode(
@@ -115,7 +115,7 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
                         factory.makeThisNode(), 
                         factory.makeIdentifierNode("equals"), 
                         factory.makeExpressionListNode(
-                                factory.makeVariableAccessByNameNode(factory.parseNameNode("o")))), 
+                                factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")))), 
                 factory.makeReturnNode(factory.makeIntLiteralNode(0))));
         
         // for each property, in order compare it to the other
@@ -128,7 +128,7 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
             
             PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
             PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationByExpressionNode(
-                    factory.makeVariableAccessByNameNode(factory.parseNameNode("o")),
+                    factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
                     factory.makeIdentifierNode(getterName));
             
             if (type instanceof PrimitiveTypeNode)

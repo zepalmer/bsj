@@ -17,12 +17,12 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class VariableAccessByExpressionNodeImpl extends NodeImpl implements VariableAccessByExpressionNode
+public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNode
 {
     /** The expression from which the variable is being selected. */
     private PrimaryExpressionNode expression;
@@ -36,7 +36,7 @@ public class VariableAccessByExpressionNodeImpl extends NodeImpl implements Vari
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(VariableAccessByExpressionNodeImpl.this);
+            attribute = new ReadWriteAttribute(VariableAccessNodeImpl.this);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
@@ -50,7 +50,7 @@ public class VariableAccessByExpressionNodeImpl extends NodeImpl implements Vari
     }
     
     /** General constructor. */
-    public VariableAccessByExpressionNodeImpl(
+    public VariableAccessNodeImpl(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
@@ -189,15 +189,15 @@ public class VariableAccessByExpressionNodeImpl extends NodeImpl implements Vari
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitVariableAccessByExpressionNodeStart(this, true);
+        visitor.visitVariableAccessNodeStart(this, true);
         visitor.visitNodeStart(this);
-        visitor.visitVariableAccessNodeStart(this);
+        visitor.visitRestrictedPrimaryExpressionNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitVariableAccessNodeStop(this);
+        visitor.visitRestrictedPrimaryExpressionNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitVariableAccessByExpressionNodeStop(this, true);
+        visitor.visitVariableAccessNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -258,7 +258,7 @@ public class VariableAccessByExpressionNodeImpl extends NodeImpl implements Vari
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeVariableAccessByExpressionNode(this, p);
+        return operation.executeVariableAccessNode(this, p);
     }
     
     /**
@@ -271,7 +271,7 @@ public class VariableAccessByExpressionNodeImpl extends NodeImpl implements Vari
     @Override
     public <P1,P2,R> R executeOperation(BsjNodeOperation2Arguments<P1,P2,R> operation, P1 p1, P2 p2)
     {
-        return operation.executeVariableAccessByExpressionNode(this, p1, p2);
+        return operation.executeVariableAccessNode(this, p1, p2);
     }
     
     /**
@@ -280,9 +280,9 @@ public class VariableAccessByExpressionNodeImpl extends NodeImpl implements Vari
      * @return The resulting deep copy node.
      */
     @Override
-    public VariableAccessByExpressionNode deepCopy(BsjNodeFactory factory)
+    public VariableAccessNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeVariableAccessByExpressionNode(
+        return factory.makeVariableAccessNode(
                 getExpression()==null?null:getExpression().deepCopy(factory),
                 getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getStartLocation(),

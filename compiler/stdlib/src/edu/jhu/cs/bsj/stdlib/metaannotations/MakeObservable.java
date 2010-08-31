@@ -173,10 +173,10 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         BlockStatementListNode statement = factory.makeBlockStatementListNode(
                 factory.makeExpressionStatementNode(
                 factory.makeMethodInvocationByExpressionNode(
-                        factory.makeVariableAccessByExpressionNode(factory.makeThisNode(), 
+                        factory.makeVariableAccessNode(factory.makeThisNode(), 
                                 factory.makeIdentifierNode(listenerListName)), 
                         factory.makeIdentifierNode("add"), 
-                        factory.makeExpressionListNode(factory.makeVariableAccessByNameNode(factory.parseNameNode(paramName))), 
+                        factory.makeExpressionListNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode(paramName))), 
                         factory.makeReferenceTypeListNode())));
         
         // build the method declaration
@@ -200,10 +200,10 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         BlockStatementListNode statement = factory.makeBlockStatementListNode(
                 factory.makeExpressionStatementNode(
                 factory.makeMethodInvocationByExpressionNode(
-                        factory.makeVariableAccessByExpressionNode(factory.makeThisNode(), 
+                        factory.makeVariableAccessNode(factory.makeThisNode(), 
                                 factory.makeIdentifierNode(listenerListName)), 
                         factory.makeIdentifierNode("remove"), 
-                        factory.makeExpressionListNode(factory.makeVariableAccessByNameNode(factory.parseNameNode(paramName))), 
+                        factory.makeExpressionListNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode(paramName))), 
                         factory.makeReferenceTypeListNode())));
         
         // build the method declaration
@@ -228,16 +228,16 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         // listener.~:eventName:~Occurred(event);
         ExpressionStatementNode methodCall = factory.makeExpressionStatementNode(
             factory.makeMethodInvocationByExpressionNode(
-                    factory.makeVariableAccessByNameNode(factory.parseNameNode(varName)), 
+                    factory.makeVariableAccessNode(null, factory.makeIdentifierNode(varName)), 
                     factory.makeIdentifierNode(eventOccurredName),
-                    factory.makeExpressionListNode(factory.makeVariableAccessByNameNode(factory.parseNameNode(paramName))), 
+                    factory.makeExpressionListNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode(paramName))), 
                     factory.makeReferenceTypeListNode()));
         
         // for(~:listenerName:~ listener : listeners){listener.~:eventName:~Occurred(event);}
         BlockStatementListNode statements = factory.makeBlockStatementListNode();
         statements.add(factory.makeEnhancedForLoopNode(
                 factory.makeVariableNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(listenerName)), factory.makeIdentifierNode(varName)), 
-                factory.makeVariableAccessByNameNode(factory.parseNameNode(listenerListName)), 
+                factory.makeVariableAccessNode(null, factory.makeIdentifierNode(listenerListName)), 
                 factory.makeBlockNode(factory.makeBlockStatementListNode(methodCall))));
         
         // build the method declaration

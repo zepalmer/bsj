@@ -1661,18 +1661,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, PrependablePrintStream p)
+	public Void executeVariableAccessNode(VariableAccessNode node, PrependablePrintStream p)
 	{
-		node.getExpression().executeOperation(this, p);
-		p.print(".");
+		if (node.getExpression() != null)
+		{
+			node.getExpression().executeOperation(this, p);
+			p.print(".");
+		}
 		node.getIdentifier().executeOperation(this, p);
-		return null;
-	}
-
-	@Override
-	public Void executeVariableAccessByNameNode(VariableAccessByNameNode node, PrependablePrintStream p)
-	{
-		node.getName().executeOperation(this, p);
 		return null;
 	}
 

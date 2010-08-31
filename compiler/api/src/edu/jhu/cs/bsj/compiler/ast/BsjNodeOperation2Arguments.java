@@ -1294,20 +1294,12 @@ public interface BsjNodeOperation2Arguments<P1,P2,R>
     public R executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, P1 p1, P2 p2);
     
     /**
-     * Executes this operation against a VariableAccessByExpressionNode.
-     * @param node The VariableAccessByExpressionNode in question.
+     * Executes this operation against a VariableAccessNode.
+     * @param node The VariableAccessNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
-    public R executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, P1 p1, P2 p2);
-    
-    /**
-     * Executes this operation against a VariableAccessByNameNode.
-     * @param node The VariableAccessByNameNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeVariableAccessByNameNode(VariableAccessByNameNode node, P1 p1, P2 p2);
+    public R executeVariableAccessNode(VariableAccessNode node, P1 p1, P2 p2);
     
     /**
      * Executes this operation against a VariableDeclaratorListNode.

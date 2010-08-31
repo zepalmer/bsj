@@ -6819,56 +6819,30 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a VariableAccessByExpressionNode.
+     * Creates a VariableAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+    public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
-        VariableAccessByExpressionNode ret = new VariableAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
+        VariableAccessNode ret = new VariableAccessNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a VariableAccessByExpressionNode.
+     * Creates a VariableAccessNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+    public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableAccessByExpressionNode ret = new VariableAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableAccessByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VariableAccessByNameNode makeVariableAccessByNameNode(
-            NameNode name)
-    {
-        VariableAccessByNameNode ret = new VariableAccessByNameNodeImpl(name, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableAccessByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableAccessByNameNode makeVariableAccessByNameNode(
-            NameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableAccessByNameNode ret = new VariableAccessByNameNodeImpl(name, startLocation, stopLocation, manager, binary);
+        VariableAccessNode ret = new VariableAccessNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

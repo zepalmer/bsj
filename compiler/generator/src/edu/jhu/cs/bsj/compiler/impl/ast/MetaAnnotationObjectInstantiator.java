@@ -49,7 +49,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
@@ -683,7 +683,7 @@ public class MetaAnnotationObjectInstantiator
 			if (node instanceof ParenthesizedExpressionNode)
 				return;
 
-			if (node instanceof VariableAccessByNameNode)
+			if (node instanceof VariableAccessNode)
 			{
 				// TODO: Ensure that the field being accessed is final or an enum-constant (and therefore final)
 				return;

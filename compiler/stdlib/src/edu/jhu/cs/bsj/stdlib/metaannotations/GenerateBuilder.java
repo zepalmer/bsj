@@ -131,10 +131,10 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
         for (VariableDeclaratorNode variable : variables)
         {
             statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                    factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getIdentifier().getIdentifier())), 
+                    factory.makeVariableAccessNode(null, variable.getIdentifier().deepCopy(factory)), 
                     AssignmentOperator.ASSIGNMENT, 
-                    factory.makeVariableAccessByExpressionNode(
-                            factory.makeVariableAccessByNameNode(factory.parseNameNode("builder")), 
+                    factory.makeVariableAccessNode(
+                            factory.makeVariableAccessNode(null, factory.makeIdentifierNode("builder")), 
                             variable.getIdentifier().deepCopy(factory)))));
         }
         
@@ -173,9 +173,9 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
                         variable.getIdentifier().deepCopy(factory)));
                 javadoc.append("@param " + variable.getIdentifier().getIdentifier());
                 constructorStatements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                        factory.makeVariableAccessByExpressionNode(factory.makeThisNode(), variable.getIdentifier().deepCopy(factory)), 
+                        factory.makeVariableAccessNode(factory.makeThisNode(), variable.getIdentifier().deepCopy(factory)), 
                         AssignmentOperator.ASSIGNMENT, 
-                        factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getIdentifier().getIdentifier())))));
+                        factory.makeVariableAccessNode(null, variable.getIdentifier().deepCopy(factory)))));
             }
             else
             {
@@ -183,9 +183,9 @@ public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
                 builderMembers.add(factory.makeMethodDeclarationNode(
                         factory.makeBlockStatementListNode(
                                 factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-                                        factory.makeVariableAccessByNameNode(factory.parseNameNode(variable.getIdentifier().getIdentifier())), 
+                                        factory.makeVariableAccessNode(null, variable.getIdentifier().deepCopy(factory)), 
                                         AssignmentOperator.ASSIGNMENT, 
-                                        factory.makeVariableAccessByNameNode(factory.parseNameNode("val")))), 
+                                        factory.makeVariableAccessNode(null, factory.makeIdentifierNode("val")))), 
                                 factory.makeReturnNode(factory.makeThisNode())), 
                         factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                         variable.getIdentifier().deepCopy(factory), 

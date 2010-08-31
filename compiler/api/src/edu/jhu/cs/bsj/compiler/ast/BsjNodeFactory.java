@@ -4355,36 +4355,20 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a VariableAccessByExpressionNode.
+     * Creates a VariableAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+    public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier);
     
     /**
-     * Creates a VariableAccessByExpressionNode.
+     * Creates a VariableAccessNode.
      * The specified start and stop locations are used.
      */
-    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+    public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a VariableAccessByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public VariableAccessByNameNode makeVariableAccessByNameNode(
-            NameNode name);
-    
-    /**
-     * Creates a VariableAccessByNameNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableAccessByNameNode makeVariableAccessByNameNode(
-            NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     

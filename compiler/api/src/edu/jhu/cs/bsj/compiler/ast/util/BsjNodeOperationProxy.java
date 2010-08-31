@@ -2082,23 +2082,10 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, PNew p)
+    public RNew executeVariableAccessNode(VariableAccessNode node, PNew p)
     {
         POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeVariableAccessByExpressionNode(node, porig);
-        return after(rorig);
-    }
-    
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
-    public RNew executeVariableAccessByNameNode(VariableAccessByNameNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeVariableAccessByNameNode(node, porig);
+        ROrig rorig = this.backingOp.executeVariableAccessNode(node, porig);
         return after(rorig);
     }
     

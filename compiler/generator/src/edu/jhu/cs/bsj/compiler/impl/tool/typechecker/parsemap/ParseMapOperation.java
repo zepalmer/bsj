@@ -39,8 +39,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
@@ -270,7 +269,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeAssignmentNode(AssignmentNode node, ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeAssignmentNode(AssignmentNode node,
+			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -312,8 +312,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node,
-			ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeEnumConstantDeclarationNode(
+			EnumConstantDeclarationNode node, ParseMapperEnvironment env)
 	{
 		// TODO: Complete this method. Observe that an enum constant declaration is much like a constructor invocation.
 		// As a result, there may be an overloaded invocation here and we can't simply dismiss this as a default case.
@@ -337,7 +337,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeInstanceOfNode(InstanceOfNode node, ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeInstanceOfNode(InstanceOfNode node,
+			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -408,8 +409,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node,
-			ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeMetaAnnotationValueListNode(
+			MetaAnnotationValueListNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -473,8 +474,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeParenthesizedExpressionNode(ParenthesizedExpressionNode node,
-			ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeParenthesizedExpressionNode(
+			ParenthesizedExpressionNode node, ParseMapperEnvironment env)
 	{
 		return node.getExpression().executeOperation(this, env);
 	}
@@ -509,8 +510,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeSingleElementAnnotationNode(SingleElementAnnotationNode node,
-			ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeSingleElementAnnotationNode(
+			SingleElementAnnotationNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -572,15 +573,7 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeVariableAccessByExpressionNode(
-			VariableAccessByExpressionNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeVariableAccessByNameNode(VariableAccessByNameNode node,
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeVariableAccessNode(VariableAccessNode node,
 			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
@@ -604,8 +597,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeVariableInitializerListNode(VariableInitializerListNode node,
-			ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeVariableInitializerListNode(
+			VariableInitializerListNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();

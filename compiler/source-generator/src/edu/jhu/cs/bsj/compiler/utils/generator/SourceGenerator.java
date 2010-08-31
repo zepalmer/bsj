@@ -2664,11 +2664,11 @@ public class SourceGenerator
 				ps.println("} else");
 				ps.println("{");
 				ps.incPrependCount();
-				ps.println("return factory.makeVariableAccessByNameNode(factory.makeQualifiedNameNode(");
-				ps.println("        factory.makeSimpleNameNode(");
+				ps.println("return factory.makeVariableAccessNode(");
+				ps.println("        factory.makeVariableAccessNode(null,");
 				ps.println("                factory.makeIdentifierNode(\"" + etype + "\")");
 				ps.println("                ),");
-				ps.println("        factory.makeIdentifierNode(x.name())));");
+				ps.println("        factory.makeIdentifierNode(x.name()));");
 				ps.decPrependCount();
 				ps.println("}");
 				ps.decPrependCount();

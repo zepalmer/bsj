@@ -112,19 +112,19 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 
 		// if (this == o) return true;
 		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(factory.makeThisNode(),
-				factory.makeVariableAccessByNameNode(factory.parseNameNode("o")), BinaryOperator.EQUAL),
+				factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")), BinaryOperator.EQUAL),
 				factory.makeReturnNode(factory.makeBooleanLiteralNode(true))));
 
 		// if (obj == null) return false;
 		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
-				factory.makeVariableAccessByNameNode(factory.parseNameNode("o")), factory.makeNullLiteralNode(),
+				factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")), factory.makeNullLiteralNode(),
 				BinaryOperator.EQUAL), factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
 
 		// if (getClass() != obj.getClass()) return false;
 		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
 				factory.makeMethodInvocationByNameNode(factory.parseNameNode("getClass")),
 				factory.makeMethodInvocationByExpressionNode(
-						factory.makeVariableAccessByNameNode(factory.parseNameNode("o")),
+						factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
 						factory.makeIdentifierNode("getClass")), BinaryOperator.NOT_EQUAL),
 				factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
 
@@ -133,7 +133,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 		{
 			statements.add(factory.makeIfNode(factory.makeUnaryExpressionNode(factory.makeSuperMethodInvocationNode(
 					factory.makeIdentifierNode("equals"),
-					factory.makeExpressionListNode(factory.makeVariableAccessByNameNode(factory.parseNameNode("o")))),
+					factory.makeExpressionListNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")))),
 					UnaryOperator.LOGICAL_COMPLEMENT), factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
 		}
 
@@ -146,7 +146,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
 						factory.makeIdentifierNode("other"),
 						factory.makeTypeCastNode(
-								factory.makeVariableAccessByNameNode(factory.parseNameNode("o")),
+								factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
 								factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())))))));
 
 		// For each property, do some kind of comparison on it
@@ -157,7 +157,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 			ExpressionNode comparisonExpressionNode;
 			PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
 			PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationByExpressionNode(
-					factory.makeVariableAccessByNameNode(factory.parseNameNode("other")),
+					factory.makeVariableAccessNode(null, factory.makeIdentifierNode("other")),
 					factory.makeIdentifierNode(getterName));
 			if (type instanceof PrimitiveTypeNode)
 			{
@@ -267,16 +267,16 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 			}
 			// Now that we have our hash adjustment mechanism, add the statement
 			statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-					factory.makeVariableAccessByNameNode(factory.parseNameNode("result")), AssignmentOperator.ASSIGNMENT,
+					factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result")), AssignmentOperator.ASSIGNMENT,
 					factory.makeBinaryExpressionNode(
 							factory.makeBinaryExpressionNode(
-									factory.makeVariableAccessByNameNode(factory.parseNameNode("result")),
-									factory.makeVariableAccessByNameNode(factory.parseNameNode("prime")),
+									factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result")),
+									factory.makeVariableAccessNode(null, factory.makeIdentifierNode("prime")),
 									BinaryOperator.MULTIPLY), hashValueNode, BinaryOperator.PLUS))));
 		}
 
 		// Add final return
-		statements.add(factory.makeReturnNode(factory.makeVariableAccessByNameNode(factory.parseNameNode("result"))));
+		statements.add(factory.makeReturnNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result"))));
 
 		// Create hashCode method
 		return factory.makeMethodDeclarationNode(factory.makeBlockStatementListNode(statements),

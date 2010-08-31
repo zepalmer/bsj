@@ -1389,14 +1389,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public BsjType executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, TypecheckerEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public BsjType executeVariableAccessByNameNode(VariableAccessByNameNode node, TypecheckerEnvironment env)
+	public BsjType executeVariableAccessNode(VariableAccessNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();

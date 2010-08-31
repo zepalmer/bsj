@@ -1744,18 +1744,7 @@ public class BsjNodeNoOpOperation2Arguments<P1,P2,R> implements BsjNodeOperation
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, P1 p1, P2 p2)
-    {
-        return null;
-    }
-    
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeVariableAccessByNameNode(VariableAccessByNameNode node, P1 p1, P2 p2)
+    public R executeVariableAccessNode(VariableAccessNode node, P1 p1, P2 p2)
     {
         return null;
     }

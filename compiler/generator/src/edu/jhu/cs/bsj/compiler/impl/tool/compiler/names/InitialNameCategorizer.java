@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessByNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
 
 /**
@@ -109,7 +109,7 @@ public class InitialNameCategorizer
 		// *** As the left-hand operand of an assignment operator (§15.26)
 		// (All of the above seem to indicate the locations in which a field can be accessed by name (directly or
 		// indirectly.)
-		if (hasAncestry(node, VariableAccessByNameNode.class))
+		if (hasAncestry(node, VariableAccessNode.class))
 		{
 			return NameCategory.EXPRESSION;
 		}

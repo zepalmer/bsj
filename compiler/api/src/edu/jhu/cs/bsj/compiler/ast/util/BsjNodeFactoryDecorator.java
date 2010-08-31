@@ -7682,63 +7682,33 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
-     * Creates a VariableAccessByExpressionNode.
+     * Creates a VariableAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+    public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
         this.before();
-        VariableAccessByExpressionNode node = factory.makeVariableAccessByExpressionNode(expression, identifier);
+        VariableAccessNode node = factory.makeVariableAccessNode(expression, identifier);
         this.after(node);
         return node;
     }
     
     /**
-     * Creates a VariableAccessByExpressionNode.
+     * Creates a VariableAccessNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public VariableAccessByExpressionNode makeVariableAccessByExpressionNode(
+    public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableAccessByExpressionNode node = factory.makeVariableAccessByExpressionNode(expression, identifier, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a VariableAccessByNameNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VariableAccessByNameNode makeVariableAccessByNameNode(
-            NameNode name)
-    {
-        this.before();
-        VariableAccessByNameNode node = factory.makeVariableAccessByNameNode(name);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a VariableAccessByNameNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableAccessByNameNode makeVariableAccessByNameNode(
-            NameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        VariableAccessByNameNode node = factory.makeVariableAccessByNameNode(name, startLocation, stopLocation);
+        VariableAccessNode node = factory.makeVariableAccessNode(expression, identifier, startLocation, stopLocation);
         this.after(node);
         return node;
     }

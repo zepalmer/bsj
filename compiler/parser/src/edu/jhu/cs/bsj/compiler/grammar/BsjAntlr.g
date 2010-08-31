@@ -5319,9 +5319,9 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             }
         |
             // field access by expression name (such as "x" or "x.y")
-            name
+            variableAccessByName
             {
-                $ret = factory.makeVariableAccessByNameNode($name.ret);
+                $ret = $variableAccessByName.ret;
             }
         )
         (
@@ -5354,7 +5354,7 @@ primarySuffix returns [RestrictedPrimaryExpressionNode ret]
 	        // field access on an expression
 	        '.' identifier
 	        {
-	            $ret = factory.makeVariableAccessByExpressionNode(in, $identifier.ret);
+	            $ret = factory.makeVariableAccessNode(in, $identifier.ret);
 	        }
 	    |
 	        // method invocation with type arguments
@@ -5616,6 +5616,27 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
                     $arguments.ret,
                     typeArgumentsNode);
         }
+    ;
+
+variableAccessByName returns [VariableAccessNode ret]
+        scope Rule;
+        @init {
+            ruleStart("variableAccessByName");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        a=identifier
+        {
+            $ret = factory.makeVariableAccessNode(null, $a.ret);
+        }
+        (
+            '.' b=identifier
+            {
+                $ret = factory.makeVariableAccessNode($ret, $b.ret);
+            }
+        )*
     ;
     
 arrayAccess[RestrictedPrimaryExpressionNode in] returns [ArrayAccessNode ret]

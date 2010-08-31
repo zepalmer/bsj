@@ -110,7 +110,8 @@ public class NodeMappingSerializationOperation extends
 	{
 		this.ps.close();
 		String src = this.buffer.toString();
-		Pair<String, SerializedNodeMap> ret = new Pair<String, SerializedNodeMap>(src, new SerializedNodeMapImpl(this.outputs));
+		Pair<String, SerializedNodeMap> ret = new Pair<String, SerializedNodeMap>(src, new SerializedNodeMapImpl(
+				this.outputs));
 		this.ps = null;
 		this.positionStream = null;
 		this.buffer = null;
@@ -1694,7 +1695,8 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node, PrependablePrintStream p)
+		public Void executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node,
+				PrependablePrintStream p)
 		{
 			before(node);
 			try
@@ -1707,7 +1709,8 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node, PrependablePrintStream p)
+		public Void executeMetaprogramDependencyDeclarationNode(MetaprogramDependencyDeclarationNode node,
+				PrependablePrintStream p)
 		{
 			before(node);
 			try
@@ -2464,27 +2467,13 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, PrependablePrintStream p)
+		public Void executeVariableAccessNode(VariableAccessNode node, PrependablePrintStream p)
 		{
 
 			before(node);
 			try
 			{
-				return super.executeVariableAccessByExpressionNode(node, p);
-			} finally
-			{
-				after(node);
-			}
-		}
-
-		@Override
-		public Void executeVariableAccessByNameNode(VariableAccessByNameNode node, PrependablePrintStream p)
-		{
-
-			before(node);
-			try
-			{
-				return super.executeVariableAccessByNameNode(node, p);
+				return super.executeVariableAccessNode(node, p);
 			} finally
 			{
 				after(node);

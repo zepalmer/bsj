@@ -1744,18 +1744,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, P p)
-    {
-        return null;
-    }
-    
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeVariableAccessByNameNode(VariableAccessByNameNode node, P p)
+    public R executeVariableAccessNode(VariableAccessNode node, P p)
     {
         return null;
     }

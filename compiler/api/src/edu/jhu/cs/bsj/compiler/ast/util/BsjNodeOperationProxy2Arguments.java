@@ -2243,25 +2243,11 @@ public abstract class BsjNodeOperationProxy2Arguments<P1Orig,P2Orig,ROrig,P1New,
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeVariableAccessByExpressionNode(VariableAccessByExpressionNode node, P1New p1, P2New p2)
+    public RNew executeVariableAccessNode(VariableAccessNode node, P1New p1, P2New p2)
     {
         P1Orig p1orig = before1(p1);
         P2Orig p2orig = before2(p2);
-        ROrig rorig = this.backingOp.executeVariableAccessByExpressionNode(node, p1orig, p2orig);
-        return after(rorig);
-    }
-    
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
-    public RNew executeVariableAccessByNameNode(VariableAccessByNameNode node, P1New p1, P2New p2)
-    {
-        P1Orig p1orig = before1(p1);
-        P2Orig p2orig = before2(p2);
-        ROrig rorig = this.backingOp.executeVariableAccessByNameNode(node, p1orig, p2orig);
+        ROrig rorig = this.backingOp.executeVariableAccessNode(node, p1orig, p2orig);
         return after(rorig);
     }
     

@@ -95,7 +95,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		String originalProgram = ast.executeOperation(toolkit.getSerializer(), null);
 
 		// create a metaFactory for use in the lifted code
-		ExpressionNode metaFactory = factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(factoryName)));
+		ExpressionNode metaFactory = factory.makeVariableAccessNode(null, factory.makeIdentifierNode(factoryName));
 
 		// get the lifted code
 		ExpressionNode metaAst = ast.executeOperation(new BsjTreeLifter(factory), metaFactory);

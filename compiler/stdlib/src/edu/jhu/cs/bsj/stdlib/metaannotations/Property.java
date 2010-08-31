@@ -83,7 +83,7 @@ public class Property extends AbstractDeclarationMetaannotationMetaprogram<Field
 		IdentifierNode getterName = factory.makeIdentifierNode("get" + Character.toUpperCase(varname.charAt(0))
 				+ varname.substring(1));
 		MethodDeclarationNode getterMethod = factory.makeMethodDeclarationNode(
-				factory.makeBlockStatementListNode(factory.makeReturnNode(factory.makeVariableAccessByExpressionNode(
+				factory.makeBlockStatementListNode(factory.makeReturnNode(factory.makeVariableAccessNode(
 						factory.makeThisNode(), factory.makeIdentifierNode(varname)))),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), getterName, factory.makeVariableListNode(),
 				var.getEffectiveType(factory), 
@@ -101,10 +101,9 @@ public class Property extends AbstractDeclarationMetaannotationMetaprogram<Field
 				+ varname.substring(1));
 		MethodDeclarationNode setterMethod = factory.makeMethodDeclarationNode(
 				factory.makeBlockStatementListNode(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-						factory.makeVariableAccessByExpressionNode(factory.makeThisNode(),
+						factory.makeVariableAccessNode(factory.makeThisNode(),
 								factory.makeIdentifierNode(varname)), AssignmentOperator.ASSIGNMENT,
-						factory.makeVariableAccessByNameNode(factory.makeSimpleNameNode(
-								factory.makeIdentifierNode(varname)))))),
+						factory.makeVariableAccessNode(null, factory.makeIdentifierNode(varname))))),
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), setterName,
 				factory.makeVariableListNode(factory.makeVariableNode(factory.makeVariableModifiersNode(),
 						var.getEffectiveType(factory), factory.makeIdentifierNode(varname))),

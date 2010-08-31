@@ -351,8 +351,7 @@
             <outputType name="UnaryExpressionNode" />
             <outputType name="UnaryStatementExpressionNode" />
             <outputType name="UnqualifiedClassInstantiationNode" />
-            <outputType name="VariableAccessByExpressionNode" />
-            <outputType name="VariableAccessByNameNode" />
+            <outputType name="VariableAccessNode" />
         </parserule>
         <parserule name="VariableInitializers">
             <outputType name="VariableInitializerListNode" />

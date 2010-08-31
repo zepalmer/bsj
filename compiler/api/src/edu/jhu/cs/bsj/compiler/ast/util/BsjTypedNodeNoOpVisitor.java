@@ -2153,32 +2153,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type VariableAccessByExpressionNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitVariableAccessByExpressionNodeStart(VariableAccessByExpressionNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type VariableAccessByNameNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitVariableAccessByNameNodeStart(VariableAccessByNameNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type VariableAccessNode.
      * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
      */
-    public void visitVariableAccessNodeStart(VariableAccessNode node)
+    public void visitVariableAccessNodeStart(VariableAccessNode node, boolean mostSpecific)
     {
     }
 
@@ -4354,32 +4335,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type VariableAccessByExpressionNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitVariableAccessByExpressionNodeStop(VariableAccessByExpressionNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type VariableAccessByNameNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitVariableAccessByNameNodeStop(VariableAccessByNameNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type VariableAccessNode.
      * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
      */
-    public void visitVariableAccessNodeStop(VariableAccessNode node)
+    public void visitVariableAccessNodeStop(VariableAccessNode node, boolean mostSpecific)
     {
     }
 

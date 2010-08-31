@@ -209,13 +209,6 @@
             ]]></doc>
         </type>
 
-        <type name="VariableAccessNode" super="Node" mode="tag">
-            <tag name="RestrictedPrimaryExpressionNode" />
-            <doc><![CDATA[
-                This tagging interface is used to denote BSJ AST nodes which represent variable access.
-            ]]></doc>
-        </type>
-
         <type name="VariableDeclaratorOwnerNode" super="Node" mode="tag">
             <prop name="type" type="TypeNode" desc="the type of the declared variables" />
             <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
@@ -917,12 +910,16 @@
             </factory-method>
         </type>
 
-        <type name="VariableAccessByExpressionNode" super="Node">
-            <tag name="VariableAccessNode" />
+        <type name="VariableAccessNode" super="Node">
+            <tag name="RestrictedPrimaryExpressionNode" />
             <prop name="expression" type="PrimaryExpressionNode" desc="the expression from which the variable is being selected" />
             <prop name="identifier" type="IdentifierNode" desc="the name of the variable" />
             <doc><![CDATA[
                 Represents a field access, as in
+                <pre>
+                <i>ident</i>
+                </pre>
+                or
                 <pre>
                 <i>expr</i>.<i>ident</i>
                 </pre>
@@ -930,29 +927,8 @@
                 <pre>
                 foo().bar
                 </pre>
-                This node is not used for simple expressions such as <tt>x</tt> or <tt>y.z</tt>.  For those forms of field
-                access, see {@link VariableAccessByNameNode}.
-            ]]></doc>
-        </type>
-
-        <type name="VariableAccessByNameNode" super="Node">
-            <tag name="VariableAccessNode" />
-            <prop name="name" type="NameNode" desc="the name of the variable to access" />
-            <doc><![CDATA[
-                Represents a field access, as in
-                <pre>
-                <i>name</i>
-                </pre>
-                For example, this node would allow the access of a local variable <tt>x</tt> using the code
-                <pre>
-                x
-                </pre>
-                and allow the access of a <tt>bar</tt> field on a class <tt>Foo</tt> using the code
-                <pre>
-                Foo.bar
-                </pre>
-                This node is not used to represent field access from the evaluation result of a subexpression (such as in the
-                code <tt>foo().bar</tt>).  For that form of access, see {@link VariableAccessByExpressionNode}.
+                If the expression represents the access of a simple identifier name, the <tt>expression</tt> child node
+                is <tt>null</tt>.
             ]]></doc>
         </type>
 
