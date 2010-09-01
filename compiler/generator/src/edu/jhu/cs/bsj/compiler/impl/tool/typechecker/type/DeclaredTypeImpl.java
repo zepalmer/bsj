@@ -14,10 +14,10 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
@@ -245,27 +245,24 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				// true for this type and one of our ancestor types.
 				Collection<BsjType> supertypes = new ArrayList<BsjType>();
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.asElement().getDeclarationNode();
-				// TODO: perform type argument substitution on the supertypes
-				// For instance, suppose we have the elements Foo<T> and Bar<S> extends Foo<S>.  In this case, the
-				// supertype of Bar<String> must be Foo<String>, not Foo<S>.
+
 				if (namedTypeDeclarationNode instanceof ClassDeclarationNode)
 				{
 					ClassDeclarationNode decl = (ClassDeclarationNode) namedTypeDeclarationNode;
 					if (decl.getExtendsClause() != null)
 					{
-						supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(decl.getExtendsClause()));
-					} else
+						supertypes.add(calculateSubstitutedSupertype(decl.getExtendsClause()));
+					} else if (this.equals(this.getManager().getToolkit().getObjectElement()))
 					{
 						supertypes.add(getManager().getToolkit().getObjectElement().asType());
 					}
-					for (TypeNode typeNode : decl.getImplementsClause())
+					for (DeclaredTypeNode typeNode : decl.getImplementsClause())
 					{
-						supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(typeNode));
+						supertypes.add(calculateSubstitutedSupertype(typeNode));
 					}
 					if (decl.getTypeParameters().size() != 0)
 					{
-						supertypes.add(new DeclaredTypeImpl(getManager(), asElement(),
-								Collections.<BsjTypeArgument> emptyList(), getEnclosingType()));
+						supertypes.add(this.calculateErasure());
 					}
 				} else if (namedTypeDeclarationNode instanceof InterfaceDeclarationNode)
 				{
@@ -275,15 +272,14 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 						supertypes.add(getManager().getToolkit().getObjectElement().asType());
 					} else
 					{
-						for (TypeNode typeNode : decl.getExtendsClause())
+						for (DeclaredTypeNode typeNode : decl.getExtendsClause())
 						{
-							supertypes.add(getManager().getToolkit().getTypeBuilder().makeType(typeNode));
+							supertypes.add(calculateSubstitutedSupertype(typeNode));
 						}
 					}
 					if (decl.getTypeParameters().size() != 0)
 					{
-						supertypes.add(new DeclaredTypeImpl(getManager(), asElement(),
-								Collections.<BsjTypeArgument> emptyList(), getEnclosingType()));
+						supertypes.add(this.calculateErasure());
 					}
 				} else if (namedTypeDeclarationNode instanceof EnumDeclarationNode)
 				{
@@ -312,6 +308,20 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			// else is a supertype of a declared type.
 			return false;
 		}
+	}
+
+	private BsjType calculateSubstitutedSupertype(DeclaredTypeNode typeNode)
+	{
+		BsjType type = getManager().getToolkit().getTypeBuilder().makeType(typeNode);
+		if (this.isRaw())
+		{
+			type = type.calculateErasure();
+		} else
+		{
+			type = type.performTypeSubstitution(calculateSubstitutionMap());
+			type = type.captureConvert();
+		}
+		return type;
 	}
 
 	@Override
