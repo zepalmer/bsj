@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.Map;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
+
+import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
@@ -52,6 +55,11 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
  */
 public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitlyDeclaredType
 {
+	/**
+	 * The logger for this class.
+	 */
+	private static final Logger LOGGER = Logger.getLogger(DeclaredTypeImpl.class);
+
 	/**
 	 * The type element which acts as the backing element for this type.
 	 */
@@ -120,11 +128,11 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		NamedTypeDeclarationNode<?> decl = this.asElement().getDeclarationNode();
 		if (decl instanceof ClassDeclarationNode)
 		{
-			ClassDeclarationNode classDeclarationNode = (ClassDeclarationNode)decl;
+			ClassDeclarationNode classDeclarationNode = (ClassDeclarationNode) decl;
 			return (classDeclarationNode.getTypeParameters().getFirst() != null);
 		} else if (decl instanceof InterfaceDeclarationNode)
 		{
-			InterfaceDeclarationNode interfaceDeclarationNode = (InterfaceDeclarationNode)decl;
+			InterfaceDeclarationNode interfaceDeclarationNode = (InterfaceDeclarationNode) decl;
 			return (interfaceDeclarationNode.getTypeParameters().getFirst() != null);
 		} else
 		{
@@ -137,38 +145,38 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 	{
 		if (isRaw())
 			throw new IllegalStateException("Attempted to find substitution map of a raw type.");
-		
+
 		Map<BsjTypeVariable, BsjTypeArgument> map = new HashMap<BsjTypeVariable, BsjTypeArgument>();
 		List<TypeParameterNode> parameters;
 		NamedTypeDeclarationNode<?> decl = this.asElement().getDeclarationNode();
 		if (decl instanceof ClassDeclarationNode)
 		{
-			ClassDeclarationNode classDeclarationNode = (ClassDeclarationNode)decl;
+			ClassDeclarationNode classDeclarationNode = (ClassDeclarationNode) decl;
 			parameters = classDeclarationNode.getTypeParameters();
 		} else if (decl instanceof InterfaceDeclarationNode)
 		{
-			InterfaceDeclarationNode interfaceDeclarationNode = (InterfaceDeclarationNode)decl;
+			InterfaceDeclarationNode interfaceDeclarationNode = (InterfaceDeclarationNode) decl;
 			parameters = interfaceDeclarationNode.getTypeParameters();
 		} else
 		{
 			parameters = Collections.emptyList();
 		}
-		
+
 		Iterator<TypeParameterNode> parametersIt = parameters.iterator();
 		Iterator<? extends BsjTypeArgument> argumentsIt = this.getTypeArguments().iterator();
 		while (parametersIt.hasNext() && argumentsIt.hasNext())
 		{
 			TypeParameterNode parameter = parametersIt.next();
 			BsjTypeArgument argument = argumentsIt.next();
-			
+
 			map.put(getManager().getToolkit().getTypeBuilder().makeTypeVariable(parameter), argument);
 		}
-		
+
 		if (getEnclosingType() != null && !getEnclosingType().isRaw())
 		{
 			map.putAll(getEnclosingType().calculateSubstitutionMap());
 		}
-		
+
 		return map;
 	}
 
@@ -243,6 +251,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			{
 				// If we reach this point, then the only hope for the subtyping relation is that the same thing holds
 				// true for this type and one of our ancestor types.
+				LOGGER.trace("Determining "
+						+ new Formatter().format("%50s <?: %s", this.toString(), type.toString()).out());
 				Collection<BsjType> supertypes = new ArrayList<BsjType>();
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.asElement().getDeclarationNode();
 
@@ -260,7 +270,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 					{
 						supertypes.add(calculateSubstitutedSupertype(typeNode));
 					}
-					if (decl.getTypeParameters().size() != 0)
+					if (decl.getTypeParameters().size() != 0 && !this.isRaw())
 					{
 						supertypes.add(this.calculateErasure());
 					}
@@ -277,7 +287,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 							supertypes.add(calculateSubstitutedSupertype(typeNode));
 						}
 					}
-					if (decl.getTypeParameters().size() != 0)
+					if (decl.getTypeParameters().size() != 0 && !this.isRaw())
 					{
 						supertypes.add(this.calculateErasure());
 					}
@@ -304,7 +314,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			}
 		} else
 		{
-			// If we reach this point, the type is not a type parameter, intersection type, or declared type.  Nothing
+			// If we reach this point, the type is not a type parameter, intersection type, or declared type. Nothing
 			// else is a supertype of a declared type.
 			return false;
 		}
@@ -439,7 +449,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				typeArguments.add(typeArgument);
 			}
 		}
-		
+
 		BsjExplicitlyDeclaredType substitutedEnclosingType;
 		if (getEnclosingType() != null)
 		{
@@ -454,7 +464,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		{
 			substitutedEnclosingType = null;
 		}
-		
+
 		return new DeclaredTypeImpl(getManager(), asElement(), typeArguments, substitutedEnclosingType);
 	}
 
