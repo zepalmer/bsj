@@ -14,6 +14,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
  *         <i>body</i>
  * </pre>
  * See {@link MethodDeclarationNode} for more information.
+ * <p/>
+ * Constructors representative of those found in binary class files will have a <tt>null</tt> body.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ConstructorDeclarationNode extends Node, AbstractInvokableDeclarationNode<ConstructorModifiersNode>

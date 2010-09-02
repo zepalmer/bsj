@@ -1490,6 +1490,8 @@
                         <i>body</i>
                 </pre>
                 See {@link MethodDeclarationNode} for more information.
+                <p/>
+                Constructors representative of those found in binary class files will have a <tt>null</tt> body.
             ]]></doc>
             <factory-method>
                 <use-defaults />
