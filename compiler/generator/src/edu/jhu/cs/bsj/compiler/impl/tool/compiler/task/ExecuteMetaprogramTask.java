@@ -125,7 +125,8 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		context.getNodeManager().pushCurrentMetaprogram(profile);
 		context.getNodeManager().setDependencyManager(context.getDependencyManager());
 		BsjServiceRegistry.getThreadLocalData().push(BsjThreadLocalData.Element.CONTEXT, profile.getContext());
-		BsjServiceRegistry.getThreadLocalData().push(BsjThreadLocalData.Element.NODE_FACTORY, profile.getContext().getFactory());
+		BsjServiceRegistry.getThreadLocalData().push(BsjThreadLocalData.Element.NODE_FACTORY,
+				profile.getContext().getFactory());
 
 		// Run the metaprogram
 		BsjDiagnostic diagnostic = doExecute(profile);
@@ -273,25 +274,26 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 				} else if (node instanceof LocalVariableDeclarationNode || node instanceof StatementNode)
 				{
 					// + If the meta-annotation annotates a local variable declaration or statement, then
-					BlockNode enclosingBlock = node.getNearestAncestorOfType(BlockNode.class);
-					if (enclosingBlock != null
-							&& (enclosingBlock.getParent() instanceof MethodDeclarationNode || enclosingBlock.getParent() instanceof ConstructorDeclarationNode))
+					BlockStatementListNode enclosingBlockStatementList = node.getNearestAncestorOfType(BlockStatementListNode.class);
+					if (enclosingBlockStatementList != null
+							&& (enclosingBlockStatementList.getParent() instanceof MethodDeclarationNode || enclosingBlockStatementList.getParent() instanceof ConstructorDeclarationNode))
 					{
 						// . If the local variable declaration or statement is contained within a block of statements
 						// which serves as the body for a method or constructor declaration, then the metaprogram is
 						// given permission to that declaration.
-						targetNode = enclosingBlock.getParent();
-					} else if (node.getParent() instanceof ForInitializerNode
-							&& node.getParent().getParent() instanceof ForLoopNode)
+						targetNode = enclosingBlockStatementList.getParent();
+					} else if (node.getParent() instanceof BlockNode
+							&& node.getParent().getParent() instanceof ForInitializerNode
+							&& node.getParent().getParent().getParent() instanceof ForLoopNode)
 					{
 						// . If the local variable declaration or statement is contained within the header for a
 						// standard for-loop, then the metaprogram is given permission to the for-loop.
-						targetNode = node.getParent().getParent();
+						targetNode = node.getParent().getParent().getParent();
 					} else
 					{
 						// . Otherwise, the metaprogram is given permission to the block of statements which encloses
 						// the local variable declaration or statement.
-						targetNode = enclosingBlock;
+						targetNode = enclosingBlockStatementList.getParent();
 					}
 				} else if (node instanceof VariableNode)
 				{
