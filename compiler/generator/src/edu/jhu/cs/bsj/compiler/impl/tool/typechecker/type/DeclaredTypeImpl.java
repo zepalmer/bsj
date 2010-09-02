@@ -26,8 +26,10 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
@@ -466,6 +468,98 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		}
 
 		return new DeclaredTypeImpl(getManager(), asElement(), typeArguments, substitutedEnclosingType);
+	}
+
+	@Override
+	public boolean isReifiable()
+	{
+		if (isRaw())
+			return true;
+
+		NamedTypeDeclarationNode<?> declaration = asElement().getDeclarationNode();
+		if (declaration instanceof ClassDeclarationNode)
+		{
+			if (((ClassDeclarationNode) declaration).getTypeParameters().size() != 0)
+				return false;
+		} else if (declaration instanceof InterfaceDeclarationNode)
+		{
+			if (((InterfaceDeclarationNode) declaration).getTypeParameters().size() != 0)
+				return false;
+		}
+
+		if (this.getEnclosingType() != null && !this.getEnclosingType().isReifiable())
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		if (this.equals(type))
+			return false; // this is the identity conversion, not the narrowing reference conversion
+
+		if (this.isSupertypeOf(type) && type instanceof BsjReferenceType)
+			return true;
+
+		NamedTypeDeclarationNode<?> decl = asElement().getDeclarationNode();
+		if (decl instanceof ClassDeclarationNode)
+		{
+			// "From any class type C to any non-parameterized interface type K , provided that C is not final and does
+			// not implement K."
+			if (!((ClassDeclarationNode) decl).getModifiers().getFinalFlag()
+					&& (type instanceof BsjExplicitlyDeclaredType))
+			{
+				BsjExplicitlyDeclaredType otherType = (BsjExplicitlyDeclaredType) type;
+				if (otherType.asElement().getDeclarationNode() instanceof InterfaceDeclarationNode)
+				{
+					InterfaceDeclarationNode otherDeclaration = ((InterfaceDeclarationNode) otherType.asElement().getDeclarationNode());
+					if (otherDeclaration.getTypeParameters().size() == 0 && !this.isSubtypeOf(otherType))
+					{
+						return true;
+					}
+				}
+			}
+		} else if (decl instanceof InterfaceDeclarationNode || decl instanceof AnnotationDeclarationNode)
+		{
+			// "From the interface types Cloneable and java.io.Serializable to any array type T[]"
+			if (asElement().equals(getManager().getToolkit().getCloneableElement())
+					|| asElement().equals(getManager().getToolkit().getSerializableElement()))
+			{
+				if (type instanceof BsjArrayType)
+				{
+					return true;
+				}
+			}
+
+			if (type instanceof BsjExplicitlyDeclaredType)
+			{
+				BsjExplicitlyDeclaredType otherType = (BsjExplicitlyDeclaredType) type;
+				NamedTypeDeclarationNode<?> otherDecl = otherType.asElement().getDeclarationNode();
+				if (otherDecl instanceof ClassDeclarationNode)
+				{
+					// "From any interface type J to any non-parameterized class type C that is not final."
+					ClassDeclarationNode otherClassDecl = (ClassDeclarationNode) otherDecl;
+					if (otherClassDecl.getTypeParameters().size() == 0 && !otherClassDecl.getModifiers().getFinalFlag())
+					{
+						return true;
+					}
+				} else if (otherDecl instanceof InterfaceDeclarationNode
+						|| otherDecl instanceof AnnotationDeclarationNode)
+				{
+					// "From any interface type J to any non-parameterized interface type K, provided that J is not a
+					// subinterface of K."
+					if (!(otherDecl instanceof InterfaceDeclarationNode)
+							|| (((InterfaceDeclarationNode) otherDecl).getTypeParameters().size() == 0))
+					{
+						if (!this.isSubtypeOf(otherType))
+							return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 
 	@Override

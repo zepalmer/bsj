@@ -8,6 +8,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
@@ -15,7 +16,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 {
 	private BsjType componentType;
-	
+
 	public ArrayTypeImpl(TypecheckerManager manager, BsjType componentType)
 	{
 		super(manager);
@@ -86,7 +87,7 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 			return type.isSupertypeOf(this);
 		} else if (type instanceof BsjArrayType)
 		{
-			return this.getComponentType().isSubtypeOf(((BsjArrayType)type).getComponentType());
+			return this.getComponentType().isSubtypeOf(((BsjArrayType) type).getComponentType());
 		} else if (type.equals(this.getManager().getToolkit().getObjectElement().asType()))
 		{
 			return true;
@@ -106,5 +107,32 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
 	{
 		return new ArrayTypeImpl(getManager(), this.componentType.performTypeSubstitution(substitutionMap));
+	}
+
+	@Override
+	public boolean isReifiable()
+	{
+		return this.componentType.isReifiable();
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		if (this.equals(type))
+			return false; // this would be an identity conversion, not a narrowing reference conversion
+
+		if (this.isSupertypeOf(type) && type instanceof BsjReferenceType)
+			return true;
+
+		if (type instanceof BsjArrayType)
+		{
+			BsjArrayType arrayType = (BsjArrayType) type;
+			if (this.getComponentType() instanceof BsjReferenceType
+					&& arrayType.getComponentType() instanceof BsjReferenceType
+					&& this.getComponentType().isNarrowingReferenceConversionTo(arrayType.getComponentType()))
+				return true;
+		}
+		
+		return false;
 	}
 }

@@ -178,4 +178,40 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
 				: this.superBound.performTypeSubstitution(substitutionMap);
 		return new WildcardTypeImpl(getManager(), extendsBound, superBound);
 	}
+
+	@Override
+	public boolean isReifiable()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningAndNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningReferenceConversionTo(BsjType type)
+	{
+		return false;
+	}
 }

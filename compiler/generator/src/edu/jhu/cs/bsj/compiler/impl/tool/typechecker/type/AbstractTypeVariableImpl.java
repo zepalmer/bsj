@@ -5,6 +5,7 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
@@ -119,4 +120,23 @@ public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl impl
 	{
 		return type.isSubtypeOf(this.lowerBound);
 	}
+
+	@Override
+	public boolean isReifiable()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		if (this.equals(type))
+			return false; // this is the identity conversion, not the narrowing reference conversion
+
+		if (this.isSupertypeOf(type) && type instanceof BsjReferenceType)
+			return true;
+
+		return false;
+	}
+	
 }

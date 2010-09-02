@@ -34,7 +34,7 @@ public interface BsjType extends TypeMirror
 
 	/**
 	 * Performs the boxing conversion (JLSv3 §5.1.7) on this type if possible. The resulting type is the boxed version
-	 * of this type (if appropriate) or the same type (if boxing was not possible).  If this type should never be boxed
+	 * of this type (if appropriate) or the same type (if boxing was not possible). If this type should never be boxed
 	 * (because it is representative of a non-type such as a package, for example), <code>null</code> is returned.
 	 */
 	public BsjTypeArgument boxConvert();
@@ -81,13 +81,74 @@ public interface BsjType extends TypeMirror
 	 *         not.
 	 */
 	public boolean isAssignmentCompatibleWith(BsjType type);
-	
+
 	/**
-	 * Performs type argument substitution for this type.  The resulting type is identical to this type except in that
+	 * Performs type argument substitution for this type. The resulting type is identical to this type except in that
 	 * any instances of any specified type parameter that appear within this type are replaced with the corresponding
 	 * type argument.
+	 * 
 	 * @param map The substitution map which relates type parameters to the arguments that substitute for them.
 	 * @return The resulting type.
 	 */
 	public BsjType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
+
+	/**
+	 * Determines whether or not this type is reifiable. (JLSv3 §4.7)
+	 * 
+	 * @return <code>true</code> if this type is reifiable; <code>false</code> if it is not.
+	 */
+	public boolean isReifiable();
+
+	/**
+	 * Determines whether or not this type is cast-compatible with another type according to the casting conversion
+	 * (JLSv3 §5.5).
+	 * 
+	 * @param type The other type.
+	 * @return A corresponding {@link CastCompatibility}.
+	 */
+	public CastCompatibility isCastCompatible(BsjType type);
+
+	/**
+	 * Determines if there is a narrowing primitive conversion (JLSv3 §5.1.3) from this type to the given type.
+	 * 
+	 * @param type The other type.
+	 * @return <code>true</code> if the conversion exists; <code>false</code> if it does not.
+	 */
+	public boolean isNarrowingPrimitiveConversionTo(BsjType type);
+
+	/**
+	 * Determines if there is a narrowing primitive conversion (JLSv3 §5.1.2) from this type to the given type.
+	 * 
+	 * @param type The other type.
+	 * @return <code>true</code> if the conversion exists; <code>false</code> if it does not.
+	 */
+	public boolean isWideningPrimitiveConversionTo(BsjType type);
+
+	/**
+	 * Determines if there is a widening-and-narrowing primitive conversion (JLSv3 §5.1.4) from this type to the given
+	 * type.
+	 * 
+	 * @param type The other type.
+	 * @return <code>true</code> if the conversion exists; <code>false</code> if it does not.
+	 */
+	public boolean isWideningAndNarrowingPrimitiveConversionTo(BsjType type);
+
+	/**
+	 * Determines whether or not there exists a narrowing reference conversion (JLSv3 §5.1.6) from this type to another
+	 * type.
+	 * 
+	 * @param type The other type.
+	 * @return <code>true</code> if a narrowing reference conversion exists; <code>false</code> if not.
+	 */
+	public boolean isNarrowingReferenceConversionTo(BsjType type);
+
+	/**
+	 * Determines whether or not there exists a widening reference conversion (JLSv3 §5.1.5) from this type to another
+	 * type.
+	 * 
+	 * @param type The other type.
+	 * @return <code>true</code> if a widening reference conversion exists; <code>false</code> if not.
+	 */
+	public boolean isWideningReferenceConversionTo(BsjType type);
+
 }

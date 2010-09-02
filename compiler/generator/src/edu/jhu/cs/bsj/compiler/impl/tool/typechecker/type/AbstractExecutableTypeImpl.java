@@ -88,4 +88,16 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends Referen
 		// There is no specification in the JLS which permits subtyping of executable elements.
 		return this.equals(type);
 	}
+
+	@Override
+	public boolean isReifiable()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		return false;
+	}
 }

@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
 
 public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 {
@@ -137,8 +138,52 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 	}
 
 	@Override
+	public boolean isReifiable()
+	{
+		throw new IllegalStateException("Accessed error type");
+	}
+
+	@Override
 	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
 	{
 		throw new IllegalStateException("Accessed error type");
 	}
+
+	@Override
+	public CastCompatibility isCastCompatible(BsjType type)
+	{
+		throw new IllegalStateException("Accessed error type");
+	}
+
+	@Override
+	public boolean isNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		throw new IllegalStateException("Accessed error type");
+	}
+
+	@Override
+	public boolean isWideningPrimitiveConversionTo(BsjType type)
+	{
+		throw new IllegalStateException("Accessed error type");
+	}
+
+	@Override
+	public boolean isWideningAndNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		throw new IllegalStateException("Accessed error type");
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		throw new IllegalStateException("Accessed error type");
+	}
+
+	@Override
+	public boolean isWideningReferenceConversionTo(BsjType type)
+	{
+		throw new IllegalStateException("Accessed error type");
+	}
+
+	
 }

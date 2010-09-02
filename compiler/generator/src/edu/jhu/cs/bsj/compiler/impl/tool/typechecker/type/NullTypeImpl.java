@@ -66,4 +66,19 @@ public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 	{
 		return this;
 	}
+
+	@Override
+	public boolean isReifiable()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		if (this.isSupertypeOf(type) && type instanceof BsjReferenceType)
+			return true;
+
+		return false;
+	}
 }

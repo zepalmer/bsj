@@ -19,7 +19,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
  * 
  * @author Zachary Palmer
  */
-public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveType
+public class PrimitiveTypeImpl extends ActualTypeImpl implements BsjPrimitiveType
 {
 	private PrimitiveType primitiveType;
 
@@ -162,4 +162,115 @@ public class PrimitiveTypeImpl extends TypeMirrorImpl implements BsjPrimitiveTyp
 		return this;
 	}
 
+	@Override
+	public boolean isReifiable()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		if (type instanceof BsjPrimitiveType)
+		{
+			BsjPrimitiveType primitiveType = (BsjPrimitiveType) type;
+			switch (this.primitiveType)
+			{
+				case SHORT:
+					return primitiveType.getPrimitiveType() == PrimitiveType.BYTE
+							|| primitiveType.getPrimitiveType() == PrimitiveType.CHAR;
+				case CHAR:
+					return primitiveType.getPrimitiveType() == PrimitiveType.BYTE
+							|| primitiveType.getPrimitiveType() == PrimitiveType.SHORT;
+				case INT:
+					return primitiveType.getPrimitiveType() == PrimitiveType.BYTE
+							|| primitiveType.getPrimitiveType() == PrimitiveType.SHORT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.CHAR;
+				case LONG:
+					return primitiveType.getPrimitiveType() == PrimitiveType.BYTE
+							|| primitiveType.getPrimitiveType() == PrimitiveType.SHORT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.CHAR
+							|| primitiveType.getPrimitiveType() == PrimitiveType.INT;
+				case FLOAT:
+					return primitiveType.getPrimitiveType() == PrimitiveType.BYTE
+							|| primitiveType.getPrimitiveType() == PrimitiveType.SHORT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.CHAR
+							|| primitiveType.getPrimitiveType() == PrimitiveType.INT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.LONG;
+				case DOUBLE:
+					return primitiveType.getPrimitiveType() == PrimitiveType.BYTE
+							|| primitiveType.getPrimitiveType() == PrimitiveType.SHORT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.CHAR
+							|| primitiveType.getPrimitiveType() == PrimitiveType.INT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.LONG
+							|| primitiveType.getPrimitiveType() == PrimitiveType.FLOAT;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isWideningPrimitiveConversionTo(BsjType type)
+	{
+		if (type instanceof BsjPrimitiveType)
+		{
+			BsjPrimitiveType primitiveType = (BsjPrimitiveType) type;
+			switch (this.primitiveType)
+			{
+				case BYTE:
+					return primitiveType.getPrimitiveType() == PrimitiveType.SHORT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.INT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.LONG
+							|| primitiveType.getPrimitiveType() == PrimitiveType.FLOAT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.DOUBLE;
+				case SHORT:
+					return primitiveType.getPrimitiveType() == PrimitiveType.INT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.LONG
+							|| primitiveType.getPrimitiveType() == PrimitiveType.FLOAT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.DOUBLE;
+				case CHAR:
+					return primitiveType.getPrimitiveType() == PrimitiveType.INT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.LONG
+							|| primitiveType.getPrimitiveType() == PrimitiveType.FLOAT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.DOUBLE;
+				case INT:
+					return primitiveType.getPrimitiveType() == PrimitiveType.LONG
+							|| primitiveType.getPrimitiveType() == PrimitiveType.FLOAT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.DOUBLE;
+				case LONG:
+					return primitiveType.getPrimitiveType() == PrimitiveType.FLOAT
+							|| primitiveType.getPrimitiveType() == PrimitiveType.DOUBLE;
+				case FLOAT:
+					return primitiveType.getPrimitiveType() == PrimitiveType.DOUBLE;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isWideningAndNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		if (type instanceof BsjPrimitiveType)
+		{
+			BsjPrimitiveType primitiveType = (BsjPrimitiveType) type;
+			switch (this.primitiveType)
+			{
+				case BYTE:
+					return primitiveType.getPrimitiveType() == PrimitiveType.CHAR;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningReferenceConversionTo(BsjType type)
+	{
+		return false;
+	}
 }

@@ -8,7 +8,7 @@ import javax.lang.model.type.ExecutableType;
  * Represents an executable type as seen by the BSJ typechecker.
  * @author Zachary Palmer
  */
-public interface BsjExecutableType extends ExecutableType, BsjType
+public interface BsjExecutableType extends ExecutableType, BsjActualType
 {
 	public List<? extends BsjType> getParameterTypes();
 	public BsjType getReturnType();

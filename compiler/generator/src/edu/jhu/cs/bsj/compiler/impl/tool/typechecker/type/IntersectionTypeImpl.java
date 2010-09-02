@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
@@ -55,7 +56,7 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
 	@Override
 	public BsjDeclaredType calculateErasure()
 	{
-		// TODO: what is the erasure of an intersection type?  JLSv3 §4.6 doesn't specify.
+		// TODO: what is the erasure of an intersection type? JLSv3 §4.6 doesn't specify.
 		throw new NotImplementedYetException();
 	}
 
@@ -124,16 +125,16 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
 		{
 			return type.isSubtypeOf(this);
 		}
-		
+
 		if (this.equals(type))
 			return true;
-		
+
 		for (BsjType supertype : this.supertypes)
 		{
 			if (!supertype.isSupertypeOf(type))
 				return false;
 		}
-		
+
 		return true;
 	}
 
@@ -144,10 +145,10 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
 		{
 			return type.isSupertypeOf(this);
 		}
-		
+
 		if (this.equals(type))
 			return true;
-		
+
 		for (BsjType supertype : this.supertypes)
 		{
 			if (supertype.isSubtypeOf(type))
@@ -166,5 +167,23 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
 			list.add(arg.performTypeSubstitution(substitutionMap));
 		}
 		return new IntersectionTypeImpl(getManager(), list);
+	}
+
+	@Override
+	public boolean isReifiable()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		if (this.equals(type))
+			return false; // this is the identity conversion, not the narrowing reference conversion
+
+		if (this.isSupertypeOf(type) && type instanceof BsjReferenceType)
+			return true;
+
+		return false;
 	}
 }

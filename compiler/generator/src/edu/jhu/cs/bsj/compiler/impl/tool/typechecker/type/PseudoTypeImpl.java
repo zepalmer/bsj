@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
 
 public abstract class PseudoTypeImpl extends TypeMirrorImpl implements BsjNoType
 {
@@ -50,4 +51,47 @@ public abstract class PseudoTypeImpl extends TypeMirrorImpl implements BsjNoType
 	{
 		return this;
 	}
+
+	@Override
+	public boolean isReifiable()
+	{
+		return false;
+	}
+
+	@Override
+	public CastCompatibility isCastCompatible(BsjType type)
+	{
+		return CastCompatibility.INCOMPATIBLE;
+	}
+
+	@Override
+	public boolean isNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningAndNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningReferenceConversionTo(BsjType type)
+	{
+		return false;
+	}
+
 }
