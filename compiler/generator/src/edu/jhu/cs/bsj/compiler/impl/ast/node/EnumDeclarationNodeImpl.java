@@ -272,6 +272,14 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         {
             this.body.receive(visitor);
         }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -304,6 +312,14 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (this.body != null)
         {
             this.body.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

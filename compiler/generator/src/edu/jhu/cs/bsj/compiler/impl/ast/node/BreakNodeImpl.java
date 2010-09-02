@@ -142,6 +142,10 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         {
             this.label.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -166,6 +170,10 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         if (this.label != null)
         {
             this.label.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

@@ -142,6 +142,10 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         {
             this.statements.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -166,6 +170,10 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         if (this.statements != null)
         {
             this.statements.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

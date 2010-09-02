@@ -316,6 +316,14 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         {
             this.typeParameters.receive(visitor);
         }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -352,6 +360,14 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         if (this.typeParameters != null)
         {
             this.typeParameters.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

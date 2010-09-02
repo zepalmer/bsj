@@ -186,6 +186,10 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         {
             this.statement.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -214,6 +218,10 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         if (this.statement != null)
         {
             this.statement.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

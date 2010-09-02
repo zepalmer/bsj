@@ -185,6 +185,10 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         {
             this.messageExpression.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -213,6 +217,10 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         if (this.messageExpression != null)
         {
             this.messageExpression.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

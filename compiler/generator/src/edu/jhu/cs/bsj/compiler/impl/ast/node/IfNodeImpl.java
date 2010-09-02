@@ -229,6 +229,10 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         {
             this.elseStatement.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -261,6 +265,10 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (this.elseStatement != null)
         {
             this.elseStatement.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

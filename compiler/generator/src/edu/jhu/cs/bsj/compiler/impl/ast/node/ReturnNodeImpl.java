@@ -142,6 +142,10 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         {
             this.expression.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -166,6 +170,10 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         if (this.expression != null)
         {
             this.expression.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

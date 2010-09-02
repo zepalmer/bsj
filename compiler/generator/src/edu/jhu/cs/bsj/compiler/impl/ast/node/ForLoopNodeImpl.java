@@ -274,6 +274,10 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         {
             this.statement.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -310,6 +314,10 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (this.statement != null)
         {
             this.statement.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

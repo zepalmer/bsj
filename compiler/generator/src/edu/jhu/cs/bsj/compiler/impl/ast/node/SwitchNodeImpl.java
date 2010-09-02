@@ -186,6 +186,10 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         {
             this.cases.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -214,6 +218,10 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         if (this.cases != null)
         {
             this.cases.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

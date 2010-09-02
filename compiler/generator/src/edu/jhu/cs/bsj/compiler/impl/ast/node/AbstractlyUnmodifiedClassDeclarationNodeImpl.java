@@ -356,6 +356,14 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         {
             this.typeParameters.receive(visitor);
         }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -396,6 +404,14 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         if (this.typeParameters != null)
         {
             this.typeParameters.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

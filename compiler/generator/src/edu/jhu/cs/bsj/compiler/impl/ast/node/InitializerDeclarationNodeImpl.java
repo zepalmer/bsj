@@ -179,6 +179,10 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         {
             this.body.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -203,6 +207,10 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (this.body != null)
         {
             this.body.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)

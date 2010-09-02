@@ -1151,7 +1151,7 @@ public class SourceGenerator
 			{
 				ps.println("super.receiveToChildren(visitor);");
 			}
-			for (ModalPropertyDefinition<?> p : def.getProperties())
+			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
 			{
 				if (propInstanceOf(p.getBaseType(), "Node", def))
 				{
@@ -1205,7 +1205,7 @@ public class SourceGenerator
 			{
 				ps.println("super.receiveTypedToChildren(visitor);");
 			}
-			for (ModalPropertyDefinition<?> p : def.getProperties())
+			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
 			{
 				if (propInstanceOf(p.getBaseType(), "Node", def))
 				{
