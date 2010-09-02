@@ -22,6 +22,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
@@ -477,14 +478,32 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			return true;
 
 		NamedTypeDeclarationNode<?> declaration = asElement().getDeclarationNode();
+		TypeParameterListNode typeParameters = null;
 		if (declaration instanceof ClassDeclarationNode)
 		{
-			if (((ClassDeclarationNode) declaration).getTypeParameters().size() != 0)
-				return false;
+			typeParameters = ((ClassDeclarationNode) declaration).getTypeParameters();
 		} else if (declaration instanceof InterfaceDeclarationNode)
 		{
-			if (((InterfaceDeclarationNode) declaration).getTypeParameters().size() != 0)
-				return false;
+			typeParameters = ((InterfaceDeclarationNode) declaration).getTypeParameters();
+		}
+		if (typeParameters != null)
+		{
+			if (typeParameters.size() > 0)
+			{
+				// We're okay as long as all of the arguments are unbounded wildcards.
+				for (BsjTypeArgument argument : this.getTypeArguments())
+				{
+					if (!(argument instanceof BsjWildcardType))
+					{
+						return false;
+					}
+					BsjWildcardType wildcardArgument = (BsjWildcardType)argument;
+					if (wildcardArgument.getExtendsBound() != null || wildcardArgument.getSuperBound() != null)
+					{
+						return false;
+					}
+				}
+			}
 		}
 
 		if (this.getEnclosingType() != null && !this.getEnclosingType().isReifiable())

@@ -101,7 +101,7 @@ public interface BsjType extends TypeMirror
 
 	/**
 	 * Determines whether or not this type is cast-compatible with another type according to the casting conversion
-	 * (JLSv3 §5.5).
+	 * (JLSv3 §5.5).  This is true if and only if a cast from this type to the other type is potentially valid.
 	 * 
 	 * @param type The other type.
 	 * @return A corresponding {@link CastCompatibility}.

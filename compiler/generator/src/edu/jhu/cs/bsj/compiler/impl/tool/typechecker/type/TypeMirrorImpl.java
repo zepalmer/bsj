@@ -84,13 +84,19 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 	@Override
 	public boolean isAssignmentCompatibleWith(BsjType type)
 	{
-		if (this.isSubtypeOf(type))
+		if (this.equals(type))
 			return true;
 		
-		if (this.boxConvert().isSubtypeOf(type))
+		if (this.isWideningPrimitiveConversionTo(type))
 			return true;
 		
-		if (this.unboxConvert().isSubtypeOf(type))
+		if (this.isWideningReferenceConversionTo(type))
+			return true;
+		
+		if (this.boxConvert().isWideningReferenceConversionTo(type))
+			return true;
+		
+		if (this.unboxConvert().isWideningPrimitiveConversionTo(type))
 			return true;
 		
 		// If a widening conversion would get us from the original type T to a raw type R, we can use an unchecked

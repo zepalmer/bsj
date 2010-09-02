@@ -76,11 +76,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDecla
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPackagePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
@@ -756,8 +758,33 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeInstanceOfNode(InstanceOfNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
+		if (!(expressionType instanceof BsjReferenceType))
+		{
+			// TODO: report diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		BsjType checkType = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
+		if (!(checkType instanceof BsjReferenceType))
+		{
+			// TODO: report diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+		if (!checkType.isReifiable())
+		{
+			// TODO: report diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		// Note: we don't have to worry about compatible-with-warning scenarios here because the type must be reifiable
+		if (expressionType.isCastCompatible(checkType) == CastCompatibility.INCOMPATIBLE)
+		{
+			// TODO: report diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		return this.manager.getToolkit().getBooleanType();
 	}
 
 	@Override
@@ -1214,8 +1241,23 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeTypeCastNode(TypeCastNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType expressionType = node.getExpression().executeOperation(thisOperation, env);
+		if (expressionType instanceof BsjErrorType)
+			return expressionType;
+
+		BsjType castType = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
+
+		CastCompatibility castCompatibility = expressionType.isCastCompatible(castType);
+		if (castCompatibility == CastCompatibility.INCOMPATIBLE)
+		{
+			// TODO: report diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+		if (castCompatibility == CastCompatibility.COMPATIBLE_WITH_WARNING)
+		{
+			// TODO: report warning
+		}
+		return castType.captureConvert();
 	}
 
 	@Override
