@@ -114,7 +114,10 @@ public class NamespaceMap<K, V extends BsjElement>
 				ret.addAll(this.backingMap.get(key).getValues());
 				for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
 				{
-					ret.addAll(deferenceMap.getValues(key));
+					if (deferenceMap.isProhibitsOverlap())
+					{
+						ret.addAll(deferenceMap.getValues(key));
+					}
 				}
 				return Collections.unmodifiableSet(ret);
 			}
