@@ -84,6 +84,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.utils.TwoElementImmutableSet;
 
 /**
  * This node operation calculates the type of the provided AST node. All AST nodes are considered to have a type as
@@ -1213,8 +1214,96 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeThisNode(ThisNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// Ensure that the named type is not a type parameter
+		BsjExplicitlyDeclaredType qualifyingType = null;
+		if (node.getType() != null)
+		{
+			BsjNamedReferenceType type = this.manager.getToolkit().getTypeBuilder().makeUnparameterizedType(
+					node.getType());
+			if (!(type instanceof BsjExplicitlyDeclaredType))
+			{
+				// It's illegal to name a type parameter such as in "T.this"
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			}
+			qualifyingType = (BsjExplicitlyDeclaredType) type;
+		}
+
+		// Determine if 'this' is used in a static context
+		Node ancestor = node;
+		boolean validUsage = false;
+		while (ancestor != null && !(ancestor instanceof NamedTypeDeclarationNode<?>))
+		{
+			if (ancestor instanceof FieldDeclarationNode)
+			{
+				FieldDeclarationNode fieldDeclarationNode = (FieldDeclarationNode) ancestor;
+				if (!fieldDeclarationNode.getModifiers().getStaticFlag())
+				{
+					validUsage = true;
+				}
+			} else if (ancestor instanceof MethodDeclarationNode)
+			{
+				MethodDeclarationNode methodDeclarationNode = (MethodDeclarationNode) ancestor;
+				if (!methodDeclarationNode.getModifiers().getStaticFlag())
+				{
+					validUsage = true;
+				}
+			} else if (ancestor instanceof ConstructorDeclarationNode)
+			{
+				validUsage = true;
+			} else if (ancestor instanceof InitializerDeclarationNode)
+			{
+				InitializerDeclarationNode initializerDeclarationNode = (InitializerDeclarationNode) ancestor;
+				if (!initializerDeclarationNode.getStaticInitializer())
+				{
+					validUsage = true;
+				}
+			}
+
+			ancestor = ancestor.getParent();
+		}
+
+		if (!validUsage)
+		{
+			// TODO: diagnostic - cannot use keyword 'this' in a static context
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		// Look for the matching qualifier - a this keyword with no qualifier always matches
+		while (ancestor != null && !(ancestor instanceof CompilationUnitNode))
+		{
+			boolean match;
+			if (qualifyingType == null)
+			{
+				match = true;
+			} else
+			{
+				match = qualifyingType.asElement().getDeclarationNode().equals(ancestor);
+			}
+
+			if (match)
+			{
+				if (ancestor instanceof NamedTypeDeclarationNode<?>)
+				{
+					return this.manager.getToolkit().makeElement(ancestor).asType();
+				} else
+				{
+					throw new IllegalStateException("Unrecognized ancestor type of 'this' keyword: "
+							+ ancestor.getClass());
+				}
+			}
+			ancestor = ancestor.getNearestAncestorOfTypes(new TwoElementImmutableSet<Class<? extends Node>>(
+					NamedTypeDeclarationNode.class, CompilationUnitNode.class));
+		}
+
+		if (ancestor == null)
+		{
+			throw new IllegalStateException("Cannot type 'this' node; not fully connected to its surrounding type");
+		} else
+		{
+			// TODO: diagnostic - no enclosing class is named by the qualifier
+			return new ErrorTypeImpl(this.manager);
+		}
 	}
 
 	@Override
