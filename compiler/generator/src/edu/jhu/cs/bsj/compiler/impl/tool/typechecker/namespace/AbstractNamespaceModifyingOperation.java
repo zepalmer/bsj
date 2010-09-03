@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.node.AbstractlyUnmodifiedClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
@@ -282,7 +283,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 * @param map The map to use as a base.
 	 * @return The resulting map.
 	 */
-	protected T makeInheritedMapFor(ClassDeclarationNode declarationNode, T map)
+	protected T makeInheritedMapFor(AbstractlyUnmodifiedClassDeclarationNode<?> declarationNode, T map)
 	{
 		if (LOGGER.isTraceEnabled())
 		{

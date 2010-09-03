@@ -11,6 +11,7 @@ import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.node.AbstractlyUnmodifiedClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AccessibleTypeModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
@@ -120,7 +121,7 @@ public class TypeNamespaceModifyingOperation extends
 			ClassBodyNode node, TypeNamespaceMap map)
 	{
 		// *** Inherit member elements
-		ClassDeclarationNode declarationNode = (ClassDeclarationNode) node.getParent();
+		AbstractlyUnmodifiedClassDeclarationNode<?> declarationNode = (AbstractlyUnmodifiedClassDeclarationNode<?>) node.getParent();
 		makeInheritedMapFor(declarationNode, map);
 
 		// *** Create a new scope for declared member elements
