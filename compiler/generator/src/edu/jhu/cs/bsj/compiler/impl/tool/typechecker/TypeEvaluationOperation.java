@@ -74,9 +74,11 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.VariableNames
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PackagePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypePseudoTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
@@ -424,8 +426,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeArrayTypeNode(ArrayTypeNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -481,15 +482,13 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeBlockNode(BlockNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return expectNoError(env, node.getMetaAnnotations(), node.getStatements());
 	}
 
 	@Override
 	public BsjType executeBlockStatementListNode(BlockStatementListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return expectNoError(env, node.getChildren());
 	}
 
 	@Override
@@ -509,8 +508,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeBreakNode(BreakNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return new VoidPseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -1326,8 +1324,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeParameterizedTypeNode(ParameterizedTypeNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -1346,8 +1343,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executePrimitiveTypeNode(PrimitiveTypeNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -1715,8 +1711,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeUnparameterizedTypeNode(UnparameterizedTypeNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -2019,8 +2014,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeVoidTypeNode(VoidTypeNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -2033,8 +2027,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeWildcardTypeNode(WildcardTypeNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	/**
@@ -2422,5 +2415,38 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			return typeArguments;
 		}
 
+	}
+	
+	/**
+	 * Performs recursive typechecking on the provided nodes, expecting a non-error type from each of them.  If this
+	 * occurs, the type {@link BsjVoidPseudoType} is returned; otherwise, the first error is returned.  All of the
+	 * provided nodes are evaluated regardless of whether or not an error occurs.
+	 * @param nodes The nodes to check.
+	 * @param env The environment to use.
+	 * @return The resulting type value.
+	 */
+	private BsjType expectNoError(TypecheckerEnvironment env, Iterable<? extends Node> nodes)
+	{
+		BsjErrorType errorType = null;
+		for (Node node : nodes)
+		{
+			BsjType type = node.executeOperation(thisOperation, env);
+			if (type instanceof BsjErrorType)
+			{
+				errorType = (BsjErrorType)type;
+			}
+		}
+		if (errorType == null)
+		{
+			return new VoidPseudoTypeImpl(this.manager);
+		} else
+		{
+			return errorType;
+		}
+	}
+	
+	private BsjType expectNoError(TypecheckerEnvironment env, Node... nodes)
+	{
+		return expectNoError(env, nodes);
 	}
 }
