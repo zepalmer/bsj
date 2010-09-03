@@ -300,15 +300,77 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType arrayType = this.manager.getToolkit().getTypeBuilder().makeType(node.getBaseType());
+		for (int i = 0; i < node.getArrayLevels(); i++)
+		{
+			arrayType = new ArrayTypeImpl(this.manager, arrayType);
+		}
+
+		if (!arrayType.isReifiable())
+		{
+			// Cannot create an array of a non-reifiable type
+			// TODO: raise diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		TypecheckerEnvironment subEnv = env.deriveWithArrayInitializerType(arrayType);
+		return node.getInitializer().executeOperation(thisOperation, subEnv);
 	}
 
 	@Override
 	public BsjType executeArrayInitializerNode(ArrayInitializerNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType arrayType = env.getArrayInitializerType();
+		if (arrayType == null)
+		{
+			// Array initializer not expected here. This might happen in the following case:
+			// int[] x = { { 1, 2 } };
+			// The inner initializer is inappropriate because there is no viable expected component type.
+			// TODO: raise diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		// Begin checking the inner initializers
+		BsjType componentType;
+		if (arrayType instanceof BsjArrayType)
+		{
+			componentType = ((BsjArrayType) arrayType).getComponentType();
+		} else
+		{
+			componentType = null;
+		}
+		TypecheckerEnvironment subEnv = env.deriveWithArrayInitializerType(componentType);
+		// Keep going even if we see an error
+		BsjErrorType errorType = null;
+		for (VariableInitializerNode initializer : node.getInitializers())
+		{
+			BsjType initializerType = initializer.executeOperation(thisOperation, subEnv);
+			// If we couldn't type the initializer, don't generate a redundant error here
+			if (initializerType instanceof BsjErrorType)
+			{
+				if (errorType != null)
+				{
+					errorType = (BsjErrorType) initializerType;
+				}
+				continue;
+			}
+			if (!initializerType.isAssignmentCompatibleWith(componentType))
+			{
+				// This expression can't go in the initializer
+				// TODO: raise diagnostic
+				if (errorType != null)
+				{
+					errorType = new ErrorTypeImpl(this.manager);
+				}
+			}
+		}
+		if (errorType != null)
+		{
+			return errorType;
+		} else
+		{
+			return arrayType;
+		}
 	}
 
 	@Override
