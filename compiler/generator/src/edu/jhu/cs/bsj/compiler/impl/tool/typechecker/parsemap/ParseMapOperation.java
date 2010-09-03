@@ -436,6 +436,11 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeMethodInvocationNode(
 			MethodInvocationNode node, ParseMapperEnvironment env)
 	{
+		// *** NOTE: The initial draft of this rule is not going to work correctly!  Overloading is not as simple as the
+		// BLS makes it out to be.  In order for this routine to function well, the BLS should actually state that the
+		// candidate methods are dependent upon the process described in §15.12.2 of the JLSv3.  If this is not the
+		// case, then the description of how this is implemented is not sound.
+		
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
 	}
