@@ -243,15 +243,13 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled AnnotationMethodModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
 	public BsjType executeAnnotationModifiersNode(AnnotationModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled AnnotationModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -592,8 +590,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeClassModifiersNode(ClassModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled ClassModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -627,8 +624,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeConstantModifiersNode(ConstantModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled ConstantModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -648,8 +644,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeConstructorModifiersNode(ConstructorModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled ConstructorModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -711,8 +706,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeEnumConstantModifiersNode(EnumConstantModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled EnumConstantModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -725,8 +719,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeEnumModifiersNode(EnumModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled EnumModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -753,8 +746,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeFieldModifiersNode(FieldModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled FieldModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -903,8 +895,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeInterfaceModifiersNode(InterfaceModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled InterfaceModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -931,8 +922,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeLocalClassModifiersNode(LocalClassModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled LocalClassModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -1272,15 +1262,13 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeMethodModifiersNode(MethodModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled MethodModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
 	public BsjType executeNoOperationNode(NoOperationNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled NoOperationNode.");
+		return new VoidPseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -1995,8 +1983,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeVariableModifiersNode(VariableModifiersNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled VariableModifiersNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
