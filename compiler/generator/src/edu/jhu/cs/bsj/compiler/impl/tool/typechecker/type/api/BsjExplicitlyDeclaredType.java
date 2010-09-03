@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.lang.model.type.DeclaredType;
@@ -30,13 +31,14 @@ public interface BsjExplicitlyDeclaredType extends BsjDeclaredType, BsjNamedRefe
 	 * @see DeclaredType#asElement()
 	 */
 	public BsjTypeElement asElement();
-	
+
 	/**
 	 * Creates an erasure for this declared type which is guaranteed to be another declared type.
+	 * 
 	 * @see BsjType#calculateErasure()
 	 */
 	public BsjExplicitlyDeclaredType calculateErasure();
-	
+
 	/**
 	 * Determines whether or not this type is raw. Note that a type with no arguments is not raw unless the
 	 * corresponding element has at least one parameter.
@@ -56,6 +58,14 @@ public interface BsjExplicitlyDeclaredType extends BsjDeclaredType, BsjNamedRefe
 	 * resulting type.
 	 */
 	public Map<BsjTypeVariable, BsjTypeArgument> calculateSubstitutionMap();
-	
+
 	public BsjExplicitlyDeclaredType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
+
+	/**
+	 * Retrieves from this type all executables of a given name which may be invoked against it. These executables are returned
+	 * as types with type variable substitution completed.
+	 * @param name The name of the methods to search.
+	 * @return The executable types which may be invoked.
+	 */
+	public Collection<? extends BsjExecutableType> getExecutableTypesOfName(String name);
 }

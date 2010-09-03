@@ -32,7 +32,13 @@ public class ExplicitTypeVariableImpl extends AbstractTypeVariableImpl<TypeParam
 	@Override
 	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
 	{
-		return new ExplicitTypeVariableImpl(getManager(), getId(), getLowerBound().performTypeSubstitution(
-				substitutionMap), getUpperBound().performTypeSubstitution(substitutionMap));
+		if (substitutionMap.containsKey(this))
+		{
+			return substitutionMap.get(this);
+		} else
+		{
+			return new ExplicitTypeVariableImpl(getManager(), getId(), getLowerBound().performTypeSubstitution(
+					substitutionMap), getUpperBound().performTypeSubstitution(substitutionMap));
+		}
 	}
 }

@@ -1,7 +1,14 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
@@ -72,8 +79,10 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PackagePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNullType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPackagePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
@@ -81,6 +90,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypePseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjVoidPseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
@@ -133,6 +143,13 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	// that currently seems relevant is the variable/value flag. Most rules would ignore the qualifiers for a given
 	// evaluation and simply extract the type, but the qualifiers could be checked by rules such as assignment to
 	// ensure correct behavior.
+
+	// TODO: this typechecker does not explicitly handle accessibility in any way; this could lead to incorrect type
+	// checking if an accessible member and an inaccessible member are competing. For instance, if a class has two
+	// methods, public void foo(String s) and private void foo(Integer i), a caller from outside of the method should
+	// be able to call foo(null) and expect to bind to the String method rather than receive an ambiguity error. This
+	// implementation would be capable of handling accessibility considerations, but no such implementation has yet been
+	// completed due to time and resource constraints.
 
 	@Override
 	public BsjType executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node,
@@ -1074,8 +1091,189 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeMethodInvocationNode(MethodInvocationNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// Evaluate the type of each of the arguments in the call
+		List<BsjType> argumentTypes = new ArrayList<BsjType>();
+		BsjErrorType errorType = null;
+		for (ExpressionNode expr : node.getArguments())
+		{
+			BsjType argumentType = expr.executeOperation(thisOperation, env);
+			if (argumentType instanceof BsjErrorType)
+			{
+				// TODO: raise a diagnostic
+				if (errorType == null)
+				{
+					errorType = (BsjErrorType) argumentType;
+				}
+			}
+			argumentTypes.add(argumentType);
+		}
+
+		// §15.12.1: determine class or interface to search
+		BsjExplicitlyDeclaredType searchType;
+		boolean staticContext; // TODO: actually determine static context correctly by retrieving it from environment
+		if (node.getExpression() == null)
+		{
+			// Just an identifier; use the enclosing type.
+			searchType = this.manager.getToolkit().makeElement(
+					node.getNearestAncestorOfType(NamedTypeDeclarationNode.class)).asType();
+			// TODO: actually determine if we're in a static context (preferrably by use of the environment)
+			staticContext = false;
+		} else
+		{
+			// Establish the type of the qualifying expression and use that class.
+			BsjType qualifyingType = node.getExpression().executeOperation(thisOperation, env);
+			while (qualifyingType instanceof BsjTypeVariable)
+			{
+				qualifyingType = ((BsjTypeVariable) qualifyingType).getUpperBound();
+			}
+			if (qualifyingType instanceof BsjExplicitlyDeclaredType)
+			{
+				searchType = (BsjExplicitlyDeclaredType) qualifyingType;
+				staticContext = false;
+			} else if (qualifyingType instanceof BsjTypePseudoType)
+			{
+				searchType = this.manager.getToolkit().makeElement(
+						((BsjTypePseudoType) qualifyingType).getDeclaration()).asType();
+				staticContext = true;
+			} else if (qualifyingType instanceof BsjPackagePseudoType)
+			{
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			} else if (qualifyingType instanceof BsjVoidPseudoType || qualifyingType instanceof BsjNullType
+					|| qualifyingType instanceof BsjArrayType || qualifyingType instanceof BsjPrimitiveType)
+			{
+				// Cannot dereference this type for a method invocation
+				// TODO: diagnostic
+				return new ErrorTypeImpl(this.manager);
+			} else
+			{
+				throw new IllegalStateException("Don't know how to handle method qualification expression of type "
+						+ qualifyingType);
+			}
+		}
+
+		// §15.12.2: determine method signature
+
+		// §15.12.2.1: determine potentially applicable methods
+		Collection<? extends BsjExecutableType> potentiallyApplicableMethods = searchType.getExecutableTypesOfName(node.getIdentifier().getIdentifier());
+		Iterator<? extends BsjExecutableType> methodIterator = potentiallyApplicableMethods.iterator();
+		while (methodIterator.hasNext())
+		{
+			BsjExecutableType type = methodIterator.next();
+
+			boolean applicable = true;
+
+			// Must be accessible
+			// TODO
+
+			// Arity must be less than or equal to the arity of the invocation
+			if (type.getParameterTypes().size() > node.getArguments().size())
+			{
+				applicable = false;
+			}
+
+			// If this is a varargs method with arity n, the arity of the call must be n-1 or greater
+			if (type.isVarargs() && type.getParameterTypes().size() - 1 > node.getArguments().size())
+			{
+				applicable = false;
+			}
+
+			// If this is not a varargs method, the arity of the method must match the arity of the call
+			if (!type.isVarargs() && type.getParameterTypes().size() != node.getArguments().size())
+			{
+				applicable = false;
+			}
+
+			// If the call includes type arguments and the method declares type parameters, their lengths must match
+			// Note that this *does* mean that method calls providing generic type arguments can be made against methods
+			// which do not have type arguments; this is in accordance with JLSv3 §15.12.2.1.
+			if (type.getTypeVariables().size() > 0 && node.getTypeArguments().size() > 0
+					&& type.getTypeVariables().size() != node.getTypeArguments().size())
+			{
+				applicable = false;
+			}
+
+			if (!applicable)
+				methodIterator.remove();
+		}
+
+		if (potentiallyApplicableMethods.size() == 0)
+		{
+			// TODO: raise a diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		// For each potentially applicable method, generate its type variable substitution map and effective parameter
+		// types.
+		Map<BsjExecutableType, GenericMethodData> genericMethodDataMap = extractGenericMethodData(node,
+				potentiallyApplicableMethods);
+
+		// §15.12.2.2: Identify matching arity methods applicable by subtyping.
+		Set<BsjExecutableType> applicableMethods;
+		applicableMethods = identifyMatchingArityMethods(node, argumentTypes, potentiallyApplicableMethods,
+				genericMethodDataMap, false);
+
+		// If we have found at least one applicable method, we can carry on at this point. Otherwise, we must try
+		// again with method invocation conversion.
+		if (applicableMethods.size() == 0)
+		{
+			// §15.12.2.3: Identify matching arity methods applicable by the method invocation conversion.
+			applicableMethods = identifyMatchingArityMethods(node, argumentTypes, potentiallyApplicableMethods,
+					genericMethodDataMap, true);
+		}
+
+		// If we still haven't found at least one applicable method, we must now try the last option: varargs.
+		if (applicableMethods.size() == 0)
+		{
+			// §15.12.2.4: Identify applicable variable arity methods.
+			throw new NotImplementedYetException();
+		}
+
+		if (applicableMethods.size() == 0)
+		{
+			// No methods are applicable for these arguments
+			// TODO: raise diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		// §15.12.2.5: Determine the most specific method from those which are applicable
+		BsjExecutableType mostSpecificMethod = null;
+		outer: for (BsjExecutableType candidateMethod : applicableMethods)
+		{
+			for (BsjExecutableType competitorMethod : applicableMethods)
+			{
+				if (!isMoreSpecific(candidateMethod, competitorMethod))
+				{
+					break outer;
+				}
+			}
+			mostSpecificMethod = candidateMethod;
+			break;
+		}
+
+		if (mostSpecificMethod == null)
+		{
+			// Then there is no single most specific method to invoke.
+			// TODO: raise diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+		
+		// §15.12.2.6: Determine method return and throws types
+		BsjType returnType = mostSpecificMethod.getReturnType();
+		// TODO: if an unchecked conversion was necessary for applicability, then the return type should be erased
+		returnType = returnType.performTypeSubstitution(genericMethodDataMap.get(mostSpecificMethod).getSubstitutionMap());
+		returnType = returnType.captureConvert();
+		
+		// §15.12.2.13: Is the chosen method appropriate?
+		// TODO: depending on the form of the method used, a compile-time error may be appropriate
+		// * If the invocation is made in a static context and the method is not static, we should fail.
+		// * If the invocation was made using a type name, it must be static.
+		// * If the invocation was made using the keyword super, the  method must not be abstract.
+		// * If the invocation was made using a qualified keyword super, the method invocation must be enclosed by the
+		//   specified class.
+		
+		// Finished!
+		return returnType;
 	}
 
 	@Override
@@ -1292,6 +1490,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		}
 
 		// Determine if 'this' is used in a static context
+		// TODO: this should really be handed to us by the typechecking environment, not calculated here
+		// TODO: also, calculate lexically-enclosing classes in the typechecking environment
 		Node ancestor = node;
 		boolean validUsage = false;
 		while (ancestor != null && !(ancestor instanceof NamedTypeDeclarationNode<?>))
@@ -2045,5 +2245,182 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		{
 			throw new IllegalStateException("Unrecognized variable binding node type: " + bindingNode.getClass());
 		}
+	}
+
+	/**
+	 * Used to identify matching arity methods from a set of potentially applicable methods. This method can use either
+	 * the method invocation conversion (§15.12.2.3) or the subtyping conversion (§15.12.2.2) approach to this task.
+	 * 
+	 * @param node The method invocation node.
+	 * @param argumentTypes The types of the arguments being examined.
+	 * @param potentiallyApplicableMethods A set of potentially applicable methods.
+	 * @param genericMethodDataMap The precalculated data about the generic method data to use.
+	 * @param methodInvocationConversion <code>true</code> to use the method invocation conversion; <code>false</code>
+	 *            to use the subtyping conversion.
+	 * @return A set of applicable methods based on the above information.
+	 */
+	private Set<BsjExecutableType> identifyMatchingArityMethods(MethodInvocationNode node, List<BsjType> argumentTypes,
+			Collection<? extends BsjExecutableType> potentiallyApplicableMethods,
+			Map<BsjExecutableType, GenericMethodData> genericMethodDataMap, boolean methodInvocationConversion)
+	{
+		Set<BsjExecutableType> applicableMethods;
+		applicableMethods = new HashSet<BsjExecutableType>();
+		for (BsjExecutableType executableType : potentiallyApplicableMethods)
+		{
+			if (executableType.getParameterTypes().size() != node.getArguments().size())
+			{
+				// Variable arity is forbidden in this phase.
+				continue;
+			}
+
+			GenericMethodData genericMethodData = genericMethodDataMap.get(executableType);
+
+			// Create the effective list of parameter types
+			List<BsjType> parameterTypes = new ArrayList<BsjType>();
+			for (BsjType parameterType : executableType.getParameterTypes())
+			{
+				parameterTypes.add(parameterType.performTypeSubstitution(genericMethodData.getSubstitutionMap()));
+			}
+
+			// Determine if the method is applicable by subtyping
+			boolean applicable = true;
+
+			for (int i = 0; i < parameterTypes.size(); i++)
+			{
+				BsjType parameterType = parameterTypes.get(i);
+				BsjType argumentType = argumentTypes.get(i);
+
+				if (methodInvocationConversion)
+				{
+					if (!argumentType.isMethodInvocationCompatibleWith(parameterType))
+					{
+						applicable = false;
+					}
+				} else
+				{
+					if (argumentType.isSubtypeOf(parameterType))
+					{
+						// Then this parameter is okay
+					} else if (argumentType.isSubtypeOf(parameterType.calculateErasure()))
+					{
+						// TODO: Produce an unchecked warning because of unchecked conversion? We don't want to do this
+						// all the time, do we? Just when this is the method which is selected?
+					} else
+					{
+						applicable = false;
+					}
+				}
+			}
+
+			// For all generic methods, the values provided as type arguments must be subtypes of the original
+			// type parameter bounds after substitution.
+			if (executableType.getTypeVariables().size() > 0)
+			{
+				for (int i = 0; i < executableType.getParameterTypes().size(); i++)
+				{
+					BsjTypeArgument typeArgument = genericMethodData.getTypeArguments().get(i);
+					BsjTypeVariable typeVariable = executableType.getTypeVariables().get(i);
+					BsjType boundType = typeVariable.performTypeSubstitution(genericMethodData.getSubstitutionMap());
+					if (boundType instanceof BsjTypeVariable)
+					{
+						boundType = ((BsjTypeVariable) boundType).getUpperBound();
+					}
+					if (!typeArgument.isSubtypeOf(boundType))
+					{
+						applicable = false;
+					}
+				}
+			}
+
+			if (applicable)
+			{
+				applicableMethods.add(executableType);
+			}
+		}
+		return applicableMethods;
+	}
+
+	/**
+	 * Determines if one method is more specific than another as per the rules in JLSv3 §15.12.2.5.
+	 * 
+	 * @param candidateMethod The candidate to check.
+	 * @param competitorMethod The method to which the candidate is being compared.
+	 * @return <code>true</code> if the candidate is more specific than the competitor; <code>false</code> if it is not.
+	 */
+	private boolean isMoreSpecific(BsjExecutableType candidateMethod, BsjExecutableType competitorMethod)
+	{
+		if (candidateMethod.equals(competitorMethod))
+			return true;
+
+		throw new NotImplementedYetException();
+	}
+
+	private Map<BsjExecutableType, GenericMethodData> extractGenericMethodData(MethodInvocationNode node,
+			Collection<? extends BsjExecutableType> potentiallyApplicableMethods)
+	{
+		Map<BsjExecutableType, GenericMethodData> genericMethodDataMap = new HashMap<BsjExecutableType, GenericMethodData>();
+		for (BsjExecutableType executableType : potentiallyApplicableMethods)
+		{
+			// Create a substitution map for type variables
+			Map<BsjTypeVariable, BsjTypeArgument> substitutionMap;
+			List<BsjTypeArgument> typeArguments;
+			if (executableType.getTypeVariables().size() > 0)
+			{
+				// For a generic method, consider inferring type arguments
+				if (node.getTypeArguments().size() == 0)
+				{
+					// Infer type arguments as per §15.12.2.7
+					throw new NotImplementedYetException();
+				} else
+				{
+					typeArguments = new ArrayList<BsjTypeArgument>();
+					for (TypeArgumentNode typeArgumentNode : node.getTypeArguments())
+					{
+						typeArguments.add(this.manager.getToolkit().getTypeBuilder().makeArgumentType(typeArgumentNode));
+					}
+				}
+
+				substitutionMap = new HashMap<BsjTypeVariable, BsjTypeArgument>();
+				for (int i = 0; i < typeArguments.size(); i++)
+				{
+					substitutionMap.put(executableType.getTypeVariables().get(i), typeArguments.get(i));
+				}
+			} else
+			{
+				substitutionMap = Collections.emptyMap();
+				typeArguments = Collections.emptyList();
+			}
+
+			genericMethodDataMap.put(executableType, new GenericMethodData(substitutionMap, typeArguments));
+		}
+		return genericMethodDataMap;
+	}
+
+	/**
+	 * A data structure which maintains data about a generic method for a given method invocation.
+	 */
+	private static class GenericMethodData
+	{
+		private Map<BsjTypeVariable, BsjTypeArgument> substitutionMap;
+		private List<BsjTypeArgument> typeArguments;
+
+		public GenericMethodData(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap,
+				List<BsjTypeArgument> typeArguments)
+		{
+			super();
+			this.substitutionMap = substitutionMap;
+			this.typeArguments = typeArguments;
+		}
+
+		public Map<BsjTypeVariable, BsjTypeArgument> getSubstitutionMap()
+		{
+			return substitutionMap;
+		}
+
+		public List<BsjTypeArgument> getTypeArguments()
+		{
+			return typeArguments;
+		}
+
 	}
 }

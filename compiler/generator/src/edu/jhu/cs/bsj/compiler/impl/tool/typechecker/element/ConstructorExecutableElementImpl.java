@@ -12,8 +12,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ConstructorExecutableTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 
 public class ConstructorExecutableElementImpl extends AbstractInvokableExecutableElementImpl<ConstructorDeclarationNode>
 {
@@ -30,10 +31,9 @@ public class ConstructorExecutableElementImpl extends AbstractInvokableExecutabl
 	}
 
 	@Override
-	public BsjType asType()
+	public BsjExecutableType asType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new ConstructorExecutableTypeImpl(getManager(), getBackingNode());
 	}
 
 	@Override

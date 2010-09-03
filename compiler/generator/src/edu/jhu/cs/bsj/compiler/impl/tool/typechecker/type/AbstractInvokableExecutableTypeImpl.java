@@ -28,7 +28,7 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 	}
 
 	public AbstractInvokableExecutableTypeImpl(TypecheckerManager manager, T backingNode,
-			Map<BsjTypeVariable, BsjTypeArgument> replacementMap)
+			Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
 	{
 		super(manager, backingNode);
 		this.parameterTypes = new ArrayList<BsjType>();
@@ -38,14 +38,16 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 		// Eagerly compute the lists so we don't have to retain any reference to the replacement map.
 		for (VariableNode var : getBackingNode().getParameters())
 		{
-			parameterTypes.add(getTypeBuilder().makeType(var.getType()));
+			BsjType param = getTypeBuilder().makeType(var.getType());
+			parameterTypes.add(param);
 		}
 		// TODO: consider - do we need a special representation for varargs?
 		if (getBackingNode().getVarargParameter() != null)
 		{
 			VariableNode var = getBackingNode().getVarargParameter();
 			// TODO: flag the array type to indicate that it is a vararg type?
-			parameterTypes.add(new ArrayTypeImpl(getManager(), getTypeBuilder().makeType(var.getType())));
+			BsjType varargsParam = new ArrayTypeImpl(getManager(), getTypeBuilder().makeType(var.getType()));
+			parameterTypes.add(varargsParam);
 		}
 
 		for (TypeNode type : getBackingNode().getThrowTypes())
@@ -55,29 +57,46 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 
 		for (TypeParameterNode typeParameterNode : getBackingNode().getTypeParameters())
 		{
-			typeVariables.add(getTypeBuilder().makeTypeVariable(typeParameterNode));
+			BsjTypeVariable var = getTypeBuilder().makeTypeVariable(typeParameterNode);
+				typeVariables.add(var);
 		}
-
-		// Perform replacement as necessary
-		ListIterator<BsjType> iterator = this.parameterTypes.listIterator();
-		while (iterator.hasNext())
+		
+		substitute(substitutionMap);
+	}
+	
+	public AbstractInvokableExecutableTypeImpl(TypecheckerManager manager, T backingNode, List<BsjType> parameterTypes,
+			List<BsjType> thrownTypes, List<BsjTypeVariable> typeVariables,Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		super(manager, backingNode);
+		this.parameterTypes = parameterTypes;
+		this.thrownTypes = thrownTypes;
+		this.typeVariables = typeVariables;
+		substitute(substitutionMap);
+	}
+	
+	private void substitute(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	{
+		// Substitute for parameters
+		ListIterator<BsjType> typeIt = this.parameterTypes.listIterator();
+		while (typeIt.hasNext())
 		{
-			BsjType type = iterator.next();
-			if (replacementMap.containsKey(type))
-			{
-				iterator.set(replacementMap.get(type));
-			}
+			typeIt.set(typeIt.next().performTypeSubstitution(substitutionMap));
 		}
-
+		
 		// Remove the replaced type variables from the standing type variables of this invokable type
 		boolean removal = false;
-		ListIterator<BsjTypeVariable> varIterator = this.typeVariables.listIterator();
-		while (varIterator.hasNext())
+		ListIterator<BsjTypeVariable> typeVarIt = this.typeVariables.listIterator();
+		while (typeVarIt.hasNext())
 		{
-			if (replacementMap.containsKey(varIterator.next()))
+			BsjTypeVariable var = typeVarIt.next();
+			BsjType repl = var.performTypeSubstitution(substitutionMap);
+			if (repl instanceof BsjTypeVariable)
 			{
+				typeVarIt.set((BsjTypeVariable)repl);
+			} else
+			{
+				typeVarIt.remove();
 				removal = true;
-				varIterator.remove();
 			}
 		}
 
@@ -86,7 +105,7 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 		{
 			// We partially instantiated the type of this invokable without fully instantiating it.
 			throw new IllegalStateException("Replacement of variables did not replace " + this.typeVariables
-					+ " with map " + replacementMap);
+					+ " with map " + substitutionMap);
 		}
 	}
 

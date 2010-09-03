@@ -4,6 +4,7 @@ import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
@@ -28,8 +29,15 @@ public class ConstructorExecutableTypeImpl extends AbstractInvokableExecutableTy
 	}
 
 	@Override
-	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	public BsjExecutableType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
 	{
 		return new ConstructorExecutableTypeImpl(getManager(), getBackingNode(), substitutionMap);
 	}
+
+	@Override
+	public boolean isVarargs()
+	{
+		return this.getBackingNode().getVarargParameter() != null;
+	}
+
 }

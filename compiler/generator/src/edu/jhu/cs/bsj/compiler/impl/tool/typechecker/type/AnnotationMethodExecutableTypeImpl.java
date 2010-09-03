@@ -6,6 +6,7 @@ import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
@@ -43,9 +44,16 @@ public class AnnotationMethodExecutableTypeImpl extends AbstractExecutableTypeIm
 	}
 
 	@Override
-	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
+	public BsjExecutableType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap)
 	{
 		// Annotation methods cannot legally use type parameters in their return types.
 		return this;
 	}
+
+	@Override
+	public boolean isVarargs()
+	{
+		return false;
+	}
+
 }

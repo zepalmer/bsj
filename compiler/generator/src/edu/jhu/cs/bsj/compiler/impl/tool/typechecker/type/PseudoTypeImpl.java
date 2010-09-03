@@ -94,4 +94,9 @@ public abstract class PseudoTypeImpl extends TypeMirrorImpl implements BsjNoType
 		return false;
 	}
 
+	@Override
+	public boolean isMethodInvocationCompatibleWith(BsjType type)
+	{
+		return false;
+	}
 }

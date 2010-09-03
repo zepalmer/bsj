@@ -83,6 +83,16 @@ public interface BsjType extends TypeMirror
 	public boolean isAssignmentCompatibleWith(BsjType type);
 
 	/**
+	 * Determines whether or not this type is method-invocation-compatible with another type according to the rules of
+	 * the method invocation conversion context (JLSv3 §5.3).
+	 * 
+	 * @param type The type to which to compare this type.
+	 * @return <code>true</code> if this type is method-invocation-compatible with the other type; <code>false</code> if
+	 *         it is not.
+	 */
+	public boolean isMethodInvocationCompatibleWith(BsjType type);
+
+	/**
 	 * Performs type argument substitution for this type. The resulting type is identical to this type except in that
 	 * any instances of any specified type parameter that appear within this type are replaced with the corresponding
 	 * type argument.
@@ -101,7 +111,7 @@ public interface BsjType extends TypeMirror
 
 	/**
 	 * Determines whether or not this type is cast-compatible with another type according to the casting conversion
-	 * (JLSv3 §5.5).  This is true if and only if a cast from this type to the other type is potentially valid.
+	 * (JLSv3 §5.5). This is true if and only if a cast from this type to the other type is potentially valid.
 	 * 
 	 * @param type The other type.
 	 * @return A corresponding {@link CastCompatibility}.

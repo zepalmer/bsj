@@ -10,12 +10,12 @@ import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.node.AbstractlyUnmodifiedClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
@@ -106,7 +106,7 @@ public class MethodNamespaceModifyingOperation extends
 			ClassBodyNode node, MethodNamespaceMap map)
 	{
 		// *** Inherit member elements
-		ClassDeclarationNode declarationNode = (ClassDeclarationNode) node.getParent();
+		AbstractlyUnmodifiedClassDeclarationNode<?> declarationNode = (AbstractlyUnmodifiedClassDeclarationNode<?>) node.getParent();
 		map = makeInheritedMapFor(declarationNode, map);
 
 		// *** Create a new scope for declared member elements

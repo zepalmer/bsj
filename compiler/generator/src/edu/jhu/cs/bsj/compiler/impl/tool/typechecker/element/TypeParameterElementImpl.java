@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +20,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParamete
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitTypeVariableImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.utils.Converter;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.utils.UnmodifiableLazyList;
 
 public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterNode> implements BsjTypeParameterElement
 {
@@ -46,11 +47,15 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	@Override
 	public List<? extends BsjTypeArgument> getBounds()
 	{
-		List<BsjTypeArgument> list = new ArrayList<BsjTypeArgument>();
-		for (DeclaredTypeNode typeNode : getBackingNode().getBounds())
-		{
-			list.add(getTypeBuilder().makeArgumentType(typeNode));
-		}
+		List<BsjTypeArgument> list = new UnmodifiableLazyList<BsjTypeArgument, DeclaredTypeNode>(
+				getBackingNode().getBounds(), new Converter<DeclaredTypeNode, BsjTypeArgument>()
+				{
+					@Override
+					public BsjTypeArgument convert(DeclaredTypeNode t)
+					{
+						return getTypeBuilder().makeArgumentType(t);
+					}
+				});
 		return list;
 	}
 
@@ -79,7 +84,7 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 			return new ExplicitTypeVariableImpl(getManager(), this.getBackingNode(), null, bounds.get(0));
 		} else
 		{
-			// TODO: create an implicit declared type representing the type parameter's bounds			
+			// TODO: create an implicit declared type representing the type parameter's bounds
 			throw new NotImplementedYetException();
 		}
 	}

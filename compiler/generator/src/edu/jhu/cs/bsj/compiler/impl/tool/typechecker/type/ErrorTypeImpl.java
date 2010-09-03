@@ -185,5 +185,9 @@ public class ErrorTypeImpl extends TypeMirrorImpl implements BsjErrorType
 		throw new IllegalStateException("Accessed error type");
 	}
 
-	
+	@Override
+	public boolean isMethodInvocationCompatibleWith(BsjType type)
+	{
+		throw new IllegalStateException("Accessed error type");
+	}
 }

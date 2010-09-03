@@ -17,8 +17,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.InitializerExecutableTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 
 public class InitializerExecutableElementImpl extends AbstractExecutableElementImpl<InitializerDeclarationNode>
 {
@@ -29,10 +30,9 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	}
 
 	@Override
-	public BsjType asType()
+	public BsjExecutableType asType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new InitializerExecutableTypeImpl(getManager(), getBackingNode());
 	}
 
 	@Override

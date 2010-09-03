@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Map;
+
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
@@ -7,8 +9,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
 
-public abstract class AbstractExecutableTypeImpl<T extends Node> extends ReferenceTypeImpl implements
+public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMirrorImpl implements
 		BsjExecutableType
 {
 	private T backingNode;
@@ -97,6 +102,45 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends Referen
 
 	@Override
 	public boolean isNarrowingReferenceConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public abstract BsjExecutableType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
+
+	@Override
+	public BsjTypeArgument boxConvert()
+	{
+		return null;
+	}
+
+	@Override
+	public CastCompatibility isCastCompatible(BsjType type)
+	{
+		return CastCompatibility.INCOMPATIBLE;
+	}
+
+	@Override
+	public boolean isNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningAndNarrowingPrimitiveConversionTo(BsjType type)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isWideningReferenceConversionTo(BsjType type)
 	{
 		return false;
 	}

@@ -80,7 +80,7 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 			return (BsjPrimitiveType) unboxedType;
 		}
 	}
-
+	
 	@Override
 	public boolean isAssignmentCompatibleWith(BsjType type)
 	{
@@ -108,6 +108,36 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 		// expression which is representable as the narrower primitive type.  For instance, it is legal to write
 		// short x = 5; because 5 is representable in the type short.
 		// TODO
+		
+		//return false;
+		throw new NotImplementedYetException();
+	}
+
+	@Override
+	public boolean isMethodInvocationCompatibleWith(BsjType type)
+	{
+		if (this.equals(type))
+			return true;
+		
+		if (this.isWideningPrimitiveConversionTo(type))
+			return true;
+		
+		if (this.isWideningReferenceConversionTo(type))
+			return true;
+		
+		if (this.boxConvert().isWideningReferenceConversionTo(type))
+			return true;
+		
+		if (this.unboxConvert().isWideningPrimitiveConversionTo(type))
+			return true;
+		
+		// If a widening conversion would get us from the original type T to a raw type R, we can use an unchecked
+		// conversion to be assignment compatible with a parameterized type C with a mandatory warning.  This warning
+		// becomes an error if any two parameterized types encountered on the way are not in a subtype relation.
+		// TODO
+		
+		// Note that this method is distinct from the isAssignmentCompatibleWith method because method conversion does
+		// not allow primitive narrowing of constant expressions.
 		
 		//return false;
 		throw new NotImplementedYetException();

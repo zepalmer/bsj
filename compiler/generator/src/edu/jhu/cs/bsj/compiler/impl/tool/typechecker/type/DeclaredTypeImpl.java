@@ -5,9 +5,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -25,9 +27,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.MethodNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
@@ -497,7 +502,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 					{
 						return false;
 					}
-					BsjWildcardType wildcardArgument = (BsjWildcardType)argument;
+					BsjWildcardType wildcardArgument = (BsjWildcardType) argument;
 					if (wildcardArgument.getExtendsBound() != null || wildcardArgument.getSuperBound() != null)
 					{
 						return false;
@@ -579,6 +584,25 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		}
 
 		return false;
+	}
+
+	@Override
+	public Collection<? extends BsjExecutableType> getExecutableTypesOfName(String name)
+	{
+		// TODO: this approach is going to bring in statically imported methods too.  This is desirable sometimes
+		// (such as when the method being investigated is unqualified) but not always.  Handle this; a new parameter
+		// will definitely be necessary.
+		
+		MethodNamespaceMap methodNamespaceMap = getManager().getNamespaceBuilder().getMethodNamespace(
+				asElement().getDeclarationNode().getBody().getMembers());
+		Collection<? extends BsjExecutableElement> executables = methodNamespaceMap.getValues(name);
+		Set<BsjExecutableType> ret = new HashSet<BsjExecutableType>();
+		Map<BsjTypeVariable, BsjTypeArgument> substitutionMap = calculateSubstitutionMap();
+		for (BsjExecutableElement element : executables)
+		{
+			ret.add(element.asType().performTypeSubstitution(substitutionMap));
+		}
+		return ret;
 	}
 
 	@Override

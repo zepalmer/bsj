@@ -1,6 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.tools.DiagnosticListener;
 
@@ -121,10 +123,25 @@ public class MethodNamespaceMap extends NamespaceMap<ErasedMethodSignature, BsjE
 	protected void considerAmbiguity(ErasedMethodSignature name, BsjSourceLocation sourceLocation)
 	{
 		// TODO: override to provide methods with their own notion of ambiguity
-		// A method is only ambiguous if there is more than one method with that signature which has a body.
+		// A method is only ambiguous if there is more than one method with that signature which *has a body*.
 		// This should only be possible if, for example, multiple static imports bring in a method with the same
 		// signature. It is also possible if two methods with the same signature are simply declared in the same place.
 		// It is not possible through standard use of inheritance or nesting.
 		super.considerAmbiguity(name, sourceLocation);
 	}
+
+	public Collection<BsjExecutableElement> getValues(String name)
+	{
+		Set<BsjExecutableElement> ret = new HashSet<BsjExecutableElement>();
+		for (ErasedMethodSignature signature : this.getKeys())
+		{
+			if (signature.getName().equals(name))
+			{
+				ret.addAll(getValues(signature));
+			}
+		}
+		return ret;
+	}
+	
+	
 }
