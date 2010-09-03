@@ -158,70 +158,70 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AlternateConstructorInvocationNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationAnnotationValueNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationArrayValueNode(AnnotationArrayValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationArrayValueNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationBodyNode(AnnotationBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationBodyNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationDeclarationNode(AnnotationDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationElementListNode(AnnotationElementListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationElementListNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationElementNode(AnnotationElementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationElementNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationExpressionValueNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationListNode(AnnotationListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationListNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationMemberListNode(AnnotationMemberListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationMemberListNode.");
 	}
 
 	@Override
@@ -229,7 +229,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationMemberMetaprogramAnchorNode.");
 	}
 
 	@Override
@@ -237,42 +237,42 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationMethodDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationMethodModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationModifiersNode(AnnotationModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeAnnotationValueListNode(AnnotationValueListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnnotationValueListNode.");
 	}
 
 	@Override
 	public BsjType executeAnonymousClassBodyNode(AnonymousClassBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnonymousClassBodyNode.");
 	}
 
 	@Override
 	public BsjType executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnonymousClassMemberListNode.");
 	}
 
 	@Override
@@ -280,7 +280,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AnonymousClassMemberMetaprogramAnchorNode.");
 	}
 
 	@Override
@@ -433,7 +433,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeAssertStatementNode(AssertStatementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled AssertStatementNode.");
 	}
 
 	@Override
@@ -496,7 +496,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled BlockStatementMetaprogramAnchorNode.");
 	}
 
 	@Override
@@ -515,28 +515,28 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeCaseListNode(CaseListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled CaseListNode.");
 	}
 
 	@Override
 	public BsjType executeCaseNode(CaseNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled CaseNode.");
 	}
 
 	@Override
 	public BsjType executeCatchListNode(CatchListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled CatchListNode.");
 	}
 
 	@Override
 	public BsjType executeCatchNode(CatchNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled CatchNode.");
 	}
 
 	@Override
@@ -549,14 +549,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeClassBodyNode(ClassBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ClassBodyNode.");
 	}
 
 	@Override
 	public BsjType executeClassDeclarationNode(ClassDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ClassDeclarationNode.");
 	}
 
 	@Override
@@ -578,7 +578,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeClassMemberListNode(ClassMemberListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ClassMemberListNode.");
 	}
 
 	@Override
@@ -586,91 +586,91 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ClassMemberMetaprogramAnchorNode.");
 	}
 
 	@Override
 	public BsjType executeClassModifiersNode(ClassModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ClassModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeCodeLiteralNode(CodeLiteralNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled CodeLiteralNode.");
 	}
 
 	@Override
 	public BsjType executeCompilationUnitNode(CompilationUnitNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled CompilationUnitNode.");
 	}
 
 	@Override
 	public BsjType executeConditionalExpressionNode(ConditionalExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ConditionalExpressionNode.");
 	}
 
 	@Override
 	public BsjType executeConstantDeclarationNode(ConstantDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ConstantDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeConstantModifiersNode(ConstantModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ConstantModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeConstructorBodyNode(ConstructorBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ConstructorBodyNode.");
 	}
 
 	@Override
 	public BsjType executeConstructorDeclarationNode(ConstructorDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ConstructorDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeConstructorModifiersNode(ConstructorModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ConstructorModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeContinueNode(ContinueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ContinueNode.");
 	}
 
 	@Override
 	public BsjType executeDeclaredTypeListNode(DeclaredTypeListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled DeclaredTypeListNode.");
 	}
 
 	@Override
 	public BsjType executeDoWhileLoopNode(DoWhileLoopNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled DoWhileLoopNode.");
 	}
 
 	@Override
@@ -683,14 +683,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeEnhancedForLoopNode(EnhancedForLoopNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled EnhancedForLoopNode.");
 	}
 
 	@Override
 	public BsjType executeEnumBodyNode(EnumBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled EnumBodyNode.");
 	}
 
 	@Override
@@ -698,63 +698,63 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled EnumConstantDeclarationListNode.");
 	}
 
 	@Override
 	public BsjType executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled EnumConstantDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeEnumConstantModifiersNode(EnumConstantModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled EnumConstantModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeEnumDeclarationNode(EnumDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled EnumDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeEnumModifiersNode(EnumModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled EnumModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeExpressionListNode(ExpressionListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ExpressionListNode.");
 	}
 
 	@Override
 	public BsjType executeExpressionStatementNode(ExpressionStatementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ExpressionStatementNode.");
 	}
 
 	@Override
 	public BsjType executeFieldDeclarationNode(FieldDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled FieldDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeFieldModifiersNode(FieldModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled FieldModifiersNode.");
 	}
 
 	@Override
@@ -767,70 +767,70 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ForInitializerDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeForInitializerExpressionNode(ForInitializerExpressionNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ForInitializerExpressionNode.");
 	}
 
 	@Override
 	public BsjType executeForLoopNode(ForLoopNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ForLoopNode.");
 	}
 
 	@Override
 	public BsjType executeIdentifierListNode(IdentifierListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled IdentifierListNode.");
 	}
 
 	@Override
 	public BsjType executeIdentifierNode(IdentifierNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled IdentifierNode.");
 	}
 
 	@Override
 	public BsjType executeIfNode(IfNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled IfNode.");
 	}
 
 	@Override
 	public BsjType executeImportListNode(ImportListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ImportListNode.");
 	}
 
 	@Override
 	public BsjType executeImportOnDemandNode(ImportOnDemandNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ImportOnDemandNode.");
 	}
 
 	@Override
 	public BsjType executeImportSingleTypeNode(ImportSingleTypeNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ImportSingleTypeNode.");
 	}
 
 	@Override
 	public BsjType executeInitializerDeclarationNode(InitializerDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled InitializerDeclarationNode.");
 	}
 
 	@Override
@@ -875,21 +875,21 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeInterfaceBodyNode(InterfaceBodyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled InterfaceBodyNode.");
 	}
 
 	@Override
 	public BsjType executeInterfaceDeclarationNode(InterfaceDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled InterfaceDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeInterfaceMemberListNode(InterfaceMemberListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled InterfaceMemberListNode.");
 	}
 
 	@Override
@@ -897,49 +897,49 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled InterfaceMemberMetaprogramAnchorNode.");
 	}
 
 	@Override
 	public BsjType executeInterfaceModifiersNode(InterfaceModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled InterfaceModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeJavadocNode(JavadocNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled JavadocNode.");
 	}
 
 	@Override
 	public BsjType executeLabeledStatementNode(LabeledStatementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled LabeledStatementNode.");
 	}
 
 	@Override
 	public BsjType executeLocalClassDeclarationNode(LocalClassDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled LocalClassDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeLocalClassModifiersNode(LocalClassModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled LocalClassModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled LocalVariableDeclarationNode.");
 	}
 
 	@Override
@@ -952,21 +952,21 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaAnnotationArrayValueNode.");
 	}
 
 	@Override
 	public BsjType executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaAnnotationElementListNode.");
 	}
 
 	@Override
 	public BsjType executeMetaAnnotationElementNode(MetaAnnotationElementNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaAnnotationElementNode.");
 	}
 
 	@Override
@@ -974,14 +974,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaAnnotationExpressionValueNode.");
 	}
 
 	@Override
 	public BsjType executeMetaAnnotationListNode(MetaAnnotationListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaAnnotationListNode.");
 	}
 
 	@Override
@@ -989,7 +989,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaAnnotationMetaAnnotationValueNode.");
 	}
 
 	@Override
@@ -997,14 +997,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaAnnotationMetaprogramAnchorNode.");
 	}
 
 	@Override
 	public BsjType executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaAnnotationValueListNode.");
 	}
 
 	@Override
@@ -1012,7 +1012,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramDependencyDeclarationListNode.");
 	}
 
 	@Override
@@ -1020,70 +1020,70 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramDependencyDeclarationNode.");
 	}
 
 	@Override
 	public BsjType executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramDependencyListNode.");
 	}
 
 	@Override
 	public BsjType executeMetaprogramDependencyNode(MetaprogramDependencyNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramDependencyNode.");
 	}
 
 	@Override
 	public BsjType executeMetaprogramImportListNode(MetaprogramImportListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramImportListNode.");
 	}
 
 	@Override
 	public BsjType executeMetaprogramImportNode(MetaprogramImportNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramImportNode.");
 	}
 
 	@Override
 	public BsjType executeMetaprogramNode(MetaprogramNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramNode.");
 	}
 
 	@Override
 	public BsjType executeMetaprogramPreambleNode(MetaprogramPreambleNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramPreambleNode.");
 	}
 
 	@Override
 	public BsjType executeMetaprogramTargetListNode(MetaprogramTargetListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramTargetListNode.");
 	}
 
 	@Override
 	public BsjType executeMetaprogramTargetNode(MetaprogramTargetNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MetaprogramTargetNode.");
 	}
 
 	@Override
 	public BsjType executeMethodDeclarationNode(MethodDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MethodDeclarationNode.");
 	}
 
 	@Override
@@ -1108,14 +1108,11 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 
 		// §15.12.1: determine class or interface to search
 		BsjExplicitlyDeclaredType searchType;
-		boolean staticContext; // TODO: actually determine static context correctly by retrieving it from environment
 		if (node.getExpression() == null)
 		{
 			// Just an identifier; use the enclosing type.
 			searchType = this.manager.getToolkit().makeElement(
 					node.getNearestAncestorOfType(NamedTypeDeclarationNode.class)).asType();
-			// TODO: actually determine if we're in a static context (preferrably by use of the environment)
-			staticContext = false;
 		} else
 		{
 			// Establish the type of the qualifying expression and use that class.
@@ -1127,12 +1124,10 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			if (qualifyingType instanceof BsjExplicitlyDeclaredType)
 			{
 				searchType = (BsjExplicitlyDeclaredType) qualifyingType;
-				staticContext = false;
 			} else if (qualifyingType instanceof BsjTypePseudoType)
 			{
 				searchType = this.manager.getToolkit().makeElement(
 						((BsjTypePseudoType) qualifyingType).getDeclaration()).asType();
-				staticContext = true;
 			} else if (qualifyingType instanceof BsjPackagePseudoType)
 			{
 				// TODO: diagnostic
@@ -1278,28 +1273,28 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeMethodModifiersNode(MethodModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled MethodModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeNoOperationNode(NoOperationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled NoOperationNode.");
 	}
 
 	@Override
 	public BsjType executeNormalAnnotationNode(NormalAnnotationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled NormalAnnotationNode.");
 	}
 
 	@Override
 	public BsjType executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled NormalMetaAnnotationNode.");
 	}
 
 	@Override
@@ -1312,7 +1307,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executePackageDeclarationNode(PackageDeclarationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled PackageDeclarationNode.");
 	}
 
 	@Override
@@ -1331,7 +1326,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ParameterizedTypeSelectNode.");
 	}
 
 	@Override
@@ -1351,49 +1346,49 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled QualifiedClassInstantiationNode.");
 	}
 
 	@Override
 	public BsjType executeQualifiedNameNode(QualifiedNameNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled QualifiedNameNode.");
 	}
 
 	@Override
 	public BsjType executeRawCodeLiteralNode(RawCodeLiteralNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled RawCodeLiteralNode.");
 	}
 
 	@Override
 	public BsjType executeReferenceTypeListNode(ReferenceTypeListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ReferenceTypeListNode.");
 	}
 
 	@Override
 	public BsjType executeReturnNode(ReturnNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ReturnNode.");
 	}
 
 	@Override
 	public BsjType executeSimpleNameNode(SimpleNameNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SimpleNameNode.");
 	}
 
 	@Override
 	public BsjType executeSingleElementAnnotationNode(SingleElementAnnotationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SingleElementAnnotationNode.");
 	}
 
 	@Override
@@ -1401,28 +1396,28 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SingleElementMetaAnnotationNode.");
 	}
 
 	@Override
 	public BsjType executeSingleStaticImportNode(SingleStaticImportNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SingleStaticImportNode.");
 	}
 
 	@Override
 	public BsjType executeStatementExpressionListNode(StatementExpressionListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled StatementExpressionListNode.");
 	}
 
 	@Override
 	public BsjType executeStaticImportOnDemandNode(StaticImportOnDemandNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled StaticImportOnDemandNode.");
 	}
 
 	@Override
@@ -1435,14 +1430,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeSuperFieldAccessNode(SuperFieldAccessNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SuperFieldAccessNode.");
 	}
 
 	@Override
 	public BsjType executeSuperMethodInvocationNode(SuperMethodInvocationNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SuperMethodInvocationNode.");
 	}
 
 	@Override
@@ -1450,21 +1445,21 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SuperclassConstructorInvocationNode.");
 	}
 
 	@Override
 	public BsjType executeSwitchNode(SwitchNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SwitchNode.");
 	}
 
 	@Override
 	public BsjType executeSynchronizedNode(SynchronizedNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled SynchronizedNode.");
 	}
 
 	@Override
@@ -1568,21 +1563,21 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeThrowNode(ThrowNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled ThrowNode.");
 	}
 
 	@Override
 	public BsjType executeTryNode(TryNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled TryNode.");
 	}
 
 	@Override
 	public BsjType executeTypeArgumentListNode(TypeArgumentListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled TypeArgumentListNode.");
 	}
 
 	@Override
@@ -1611,7 +1606,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeTypeDeclarationListNode(TypeDeclarationListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled TypeDeclarationListNode.");
 	}
 
 	@Override
@@ -1619,21 +1614,21 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled TypeDeclarationMetaprogramAnchorNode.");
 	}
 
 	@Override
 	public BsjType executeTypeParameterListNode(TypeParameterListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled TypeParameterListNode.");
 	}
 
 	@Override
 	public BsjType executeTypeParameterNode(TypeParameterNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled TypeParameterNode.");
 	}
 
 	@Override
@@ -1705,7 +1700,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled UnparameterizedTypeListNode.");
 	}
 
 	@Override
@@ -1973,42 +1968,42 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeVariableDeclaratorListNode(VariableDeclaratorListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled VariableDeclaratorListNode.");
 	}
 
 	@Override
 	public BsjType executeVariableDeclaratorNode(VariableDeclaratorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled VariableDeclaratorNode.");
 	}
 
 	@Override
 	public BsjType executeVariableInitializerListNode(VariableInitializerListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled VariableInitializerListNode.");
 	}
 
 	@Override
 	public BsjType executeVariableListNode(VariableListNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled VariableListNode.");
 	}
 
 	@Override
 	public BsjType executeVariableModifiersNode(VariableModifiersNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled VariableModifiersNode.");
 	}
 
 	@Override
 	public BsjType executeVariableNode(VariableNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled VariableNode.");
 	}
 
 	@Override
@@ -2021,7 +2016,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeWhileLoopNode(WhileLoopNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet handled WhileLoopNode.");
 	}
 
 	@Override
@@ -2345,7 +2340,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		if (candidateMethod.equals(competitorMethod))
 			return true;
 
-		throw new NotImplementedYetException();
+        throw new NotImplementedYetException("Have not yet implemented isMoreSpecific for methods");
 	}
 
 	private Map<BsjExecutableType, GenericMethodData> extractGenericMethodData(MethodInvocationNode node,
