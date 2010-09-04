@@ -213,8 +213,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeAnnotationListNode(AnnotationListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled AnnotationListNode.");
+		return expectNoError(env, node.getChildren());
 	}
 
 	@Override
@@ -968,8 +967,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeMetaAnnotationListNode(MetaAnnotationListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled MetaAnnotationListNode.");
+		return expectNoError(env, node.getChildren());
 	}
 
 	@Override
