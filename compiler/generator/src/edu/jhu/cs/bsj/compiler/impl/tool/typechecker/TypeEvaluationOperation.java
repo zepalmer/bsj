@@ -155,6 +155,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	// implementation would be capable of handling accessibility considerations, but no such implementation has yet been
 	// completed due to time and resource constraints.
 
+	// TODO: currently, type nodes always typecheck to the BsjNoneType. We could overload this such that they type to
+	// the type that they name. Is this appropriate? If so, it would allow us to capture type nodes which name
+	// non-existent types.
+
+	// TODO: this typechecker does not currently check the correctness of exception handling or statement labeling. An
+	// appropriate implementation would observe the types of exceptions which may be thrown by an expression and ensure
+	// that no disallowed checked exceptions are thrown. Those which are allowed would be stored in the typechecker
+	// environment. Additionally, such an implementation would use a similar technique to ensure that all labeled
+	// break and continue statements are breaking or continuing to valid labels.
+
 	@Override
 	public BsjType executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node,
 			TypecheckerEnvironment env)
@@ -194,8 +204,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeAnnotationElementListNode(AnnotationElementListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled AnnotationElementListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -215,14 +224,13 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeAnnotationListNode(AnnotationListNode node, TypecheckerEnvironment env)
 	{
-		return expectNoError(env, node.getChildren());
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
 	public BsjType executeAnnotationMemberListNode(AnnotationMemberListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled AnnotationMemberListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -270,8 +278,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled AnonymousClassMemberListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -527,8 +534,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeCatchListNode(CatchListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled CatchListNode.");
+		return expectNoError(env, node.getChildren());
 	}
 
 	@Override
@@ -576,8 +582,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeClassMemberListNode(ClassMemberListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled ClassMemberListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -663,23 +668,23 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		{
 			PrimitiveType primitiveThenType = ((BsjPrimitiveType) numericThenType).getPrimitiveType();
 			PrimitiveType primitiveElseType = ((BsjPrimitiveType) numericElseType).getPrimitiveType();
-			
+
 			// If one type is byte and the other is short, the result type is short
-			if ((primitiveThenType == PrimitiveType.BYTE && primitiveElseType == PrimitiveType.SHORT) ||
-					(primitiveThenType == PrimitiveType.SHORT && primitiveElseType == PrimitiveType.BYTE))
+			if ((primitiveThenType == PrimitiveType.BYTE && primitiveElseType == PrimitiveType.SHORT)
+					|| (primitiveThenType == PrimitiveType.SHORT && primitiveElseType == PrimitiveType.BYTE))
 			{
 				return this.manager.getToolkit().getShortType();
 			}
-			
+
 			// TODO: if one type is byte, short, or char and the other type is an int which is representable as the
 			// other type, then the result type is the smaller primitive type
-		
+
 			// Otherwise, the type is the result of binary numeric promotion.
 			return binaryNumericTypePromotion(thenType, elseType);
 		}
-		
+
 		// Otherwise, the type is the result of applying capture conversion to the least upper bound of the boxed
-		// version of both types.  Calculation of the least upper bound is defined as part of type argument inference
+		// version of both types. Calculation of the least upper bound is defined as part of type argument inference
 		// in JLSv3 §15.12.2.7.
 		throw new NotImplementedYetException();
 	}
@@ -720,15 +725,13 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeContinueNode(ContinueNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled ContinueNode.");
+		return new VoidPseudoTypeImpl(this.manager);
 	}
 
 	@Override
 	public BsjType executeDeclaredTypeListNode(DeclaredTypeListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled DeclaredTypeListNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -762,8 +765,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node,
 			TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled EnumConstantDeclarationListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -849,8 +851,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeIdentifierListNode(IdentifierListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled IdentifierListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -870,8 +871,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeImportListNode(ImportListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled ImportListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -950,8 +950,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeInterfaceMemberListNode(InterfaceMemberListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled InterfaceMemberListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -1016,8 +1015,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled MetaAnnotationElementListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -1038,7 +1036,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeMetaAnnotationListNode(MetaAnnotationListNode node, TypecheckerEnvironment env)
 	{
-		return expectNoError(env, node.getChildren());
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -1068,8 +1066,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	public BsjType executeMetaprogramDependencyDeclarationListNode(MetaprogramDependencyDeclarationListNode node,
 			TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled MetaprogramDependencyDeclarationListNode.");
+		return expectNoError(env, node.getChildren());
 	}
 
 	@Override
@@ -1083,8 +1080,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeMetaprogramDependencyListNode(MetaprogramDependencyListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled MetaprogramDependencyListNode.");
+		return expectNoError(env, node.getChildren());
 	}
 
 	@Override
@@ -1097,8 +1093,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeMetaprogramImportListNode(MetaprogramImportListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled MetaprogramImportListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -1125,8 +1120,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeMetaprogramTargetListNode(MetaprogramTargetListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled MetaprogramTargetListNode.");
+		return expectNoError(env, node.getChildren());
 	}
 
 	@Override
@@ -1419,8 +1413,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeReferenceTypeListNode(ReferenceTypeListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled ReferenceTypeListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -1657,8 +1650,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeTypeDeclarationListNode(TypeDeclarationListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled TypeDeclarationListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -1672,8 +1664,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeTypeParameterListNode(TypeParameterListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled TypeParameterListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
@@ -1751,8 +1742,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled UnparameterizedTypeListNode.");
+		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
