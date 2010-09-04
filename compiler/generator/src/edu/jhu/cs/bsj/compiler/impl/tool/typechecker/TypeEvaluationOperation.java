@@ -14,6 +14,7 @@ import java.util.Set;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
+import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
@@ -610,8 +611,77 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeConditionalExpressionNode(ConditionalExpressionNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled ConditionalExpressionNode.");
+		BsjType conditionType = node.getCondition().executeOperation(thisOperation, env);
+		BsjType thenType = node.getCondition().executeOperation(thisOperation, env);
+		BsjType elseType = node.getCondition().executeOperation(thisOperation, env);
+
+		if (conditionType instanceof BsjErrorType)
+		{
+			return conditionType;
+		} else if (thenType instanceof BsjErrorType)
+		{
+			return thenType;
+		} else if (elseType instanceof BsjErrorType)
+		{
+			return elseType;
+		}
+
+		// Condition must be a boolean
+		if (!conditionType.equals(this.manager.getToolkit().getBooleanType())
+				&& !conditionType.equals(this.manager.getToolkit().getBooleanWrapperType()))
+		{
+			// TODO: diagnostic
+			return new ErrorTypeImpl(this.manager);
+		}
+
+		// If the then type matches the else type, return that type
+		if (thenType.equals(elseType))
+		{
+			return thenType;
+		}
+
+		// If both types are convertable to boolean, the type is boolean
+		if (thenType.unboxConvert().equals(this.manager.getToolkit().getBooleanType())
+				&& elseType.unboxConvert().equals(this.manager.getToolkit().getBooleanType()))
+		{
+			return this.manager.getToolkit().getBooleanType();
+		}
+
+		// If one type is the null type and another type is the reference type, use the reference type.
+		if (thenType instanceof BsjNullType && elseType instanceof BsjReferenceType)
+		{
+			return elseType;
+		} else if (elseType instanceof BsjNullType && thenType instanceof BsjReferenceType)
+		{
+			return thenType;
+		}
+
+		// If both types are convertible to numeric types...
+		BsjType numericThenType = thenType.unboxConvert();
+		BsjType numericElseType = elseType.unboxConvert();
+		if (numericThenType.isNumericPrimitive() && numericElseType.isNumericPrimitive())
+		{
+			PrimitiveType primitiveThenType = ((BsjPrimitiveType) numericThenType).getPrimitiveType();
+			PrimitiveType primitiveElseType = ((BsjPrimitiveType) numericElseType).getPrimitiveType();
+			
+			// If one type is byte and the other is short, the result type is short
+			if ((primitiveThenType == PrimitiveType.BYTE && primitiveElseType == PrimitiveType.SHORT) ||
+					(primitiveThenType == PrimitiveType.SHORT && primitiveElseType == PrimitiveType.BYTE))
+			{
+				return this.manager.getToolkit().getShortType();
+			}
+			
+			// TODO: if one type is byte, short, or char and the other type is an int which is representable as the
+			// other type, then the result type is the smaller primitive type
+		
+			// Otherwise, the type is the result of binary numeric promotion.
+			return binaryNumericTypePromotion(thenType, elseType);
+		}
+		
+		// Otherwise, the type is the result of applying capture conversion to the least upper bound of the boxed
+		// version of both types.  Calculation of the least upper bound is defined as part of type argument inference
+		// in JLSv3 §15.12.2.7.
+		throw new NotImplementedYetException();
 	}
 
 	@Override
@@ -1949,8 +2019,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeVariableDeclaratorListNode(VariableDeclaratorListNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException("Have not yet handled VariableDeclaratorListNode.");
+		return expectNoError(env, node.getChildren());
 	}
 
 	@Override
