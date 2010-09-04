@@ -901,15 +901,13 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeJavadocNode(JavadocNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled JavadocNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
 	public BsjType executeLabeledStatementNode(LabeledStatementNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled LabeledStatementNode.");
+		return node.getStatement().executeOperation(thisOperation, env);
 	}
 
 	@Override
@@ -1340,8 +1338,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeQualifiedNameNode(QualifiedNameNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled QualifiedNameNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
@@ -1368,8 +1365,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public BsjType executeSimpleNameNode(SimpleNameNode node, TypecheckerEnvironment env)
 	{
-		// TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled SimpleNameNode.");
+		return new NonePseudoTypeImpl(this.manager);
 	}
 
 	@Override
