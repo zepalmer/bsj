@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
+import java.util.Collections;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
@@ -22,7 +23,22 @@ public class TypecheckerEnvironment
 	 * instance, this value would be <tt>int[]</tt> in the initializer context of <tt>int[] x = {1,2};</tt>.
 	 */
 	private BsjType arrayInitializerComponentType;
-
+	
+	/**
+	 * Creates a new, empty typechecker environment.
+	 */
+	public TypecheckerEnvironment()
+	{
+		super();
+		this.parseMap = Collections.emptyMap();
+		this.arrayInitializerComponentType = null;
+	}
+	
+	/**
+	 * Creates a new typechecker environment configured with the provided parameters.
+	 * @param parseMap The mapping from raw code literals to their parse map entries.
+	 * @param arrayInitializerComponentType The expected type for an array initializer.
+	 */
 	public TypecheckerEnvironment(Map<RawCodeLiteralNode, ParseMapEntry<?>> parseMap,
 			BsjType arrayInitializerComponentType)
 	{

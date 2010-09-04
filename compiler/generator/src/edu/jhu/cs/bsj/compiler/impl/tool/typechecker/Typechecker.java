@@ -35,7 +35,11 @@ public class Typechecker
 	 */
 	public BsjType getType(Node node)
 	{
-		// TODO: this is the wrong environment - which is the correct starting one?
-		return node.executeOperation(this.typeEvaluationOperation, null);
+		return getType(node, new TypecheckerEnvironment());
+	}
+
+	public BsjType getType(Node node, TypecheckerEnvironment env)
+	{
+		return node.executeOperation(this.typeEvaluationOperation, env);
 	}
 }

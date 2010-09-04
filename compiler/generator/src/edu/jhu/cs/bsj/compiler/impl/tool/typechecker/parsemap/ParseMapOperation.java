@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.WeakHashMap;
 
+import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
@@ -63,7 +65,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerEnvironment;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
@@ -123,7 +127,7 @@ public class ParseMapOperation extends
 		Iterator<? extends Node> childIterator = nodes.iterator();
 		if (childIterator.hasNext())
 		{
-			Map<RawCodeLiteralNode, ParseMapEntry<?>> map = new HashMap<RawCodeLiteralNode, ParseMapEntry<?>>();
+			Map<RawCodeLiteralNode, ParseMapEntry<?>> map = new WeakHashMap<RawCodeLiteralNode, ParseMapEntry<?>>();
 			while (childIterator.hasNext())
 			{
 				Node child = childIterator.next();
@@ -271,8 +275,21 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeAssignmentNode(AssignmentNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		if (node.getOperator() != AssignmentOperator.ASSIGNMENT)
+		{
+			// Compound assignment operations do not provide any usable context.
+			return executeDefault(node, env.deriveForExpectedType(this.nodeType));
+		}
+
+		// Otherwise, we treat the assignment expression as having an expected type of that matching the type of the
+		// variable to which it is being assigned.
+		BsjType variableType = this.manager.getTypechecker().getType(node, new TypecheckerEnvironment());
+		if (variableType instanceof BsjErrorType || !variableType.isSubtypeOf(this.nodeType))
+		{
+			variableType = this.nodeType;
+		}
+
+		return calculateNodeUnionWithEnvironment(node.getChildIterable(), env.deriveForExpectedType(variableType));
 	}
 
 	@Override
@@ -433,14 +450,14 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeMethodInvocationNode(
-			MethodInvocationNode node, ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry<?>> executeMethodInvocationNode(MethodInvocationNode node,
+			ParseMapperEnvironment env)
 	{
-		// *** NOTE: The initial draft of this rule is not going to work correctly!  Overloading is not as simple as the
-		// BLS makes it out to be.  In order for this routine to function well, the BLS should actually state that the
-		// candidate methods are dependent upon the process described in §15.12.2 of the JLSv3.  If this is not the
+		// *** NOTE: The initial draft of this rule is not going to work correctly! Overloading is not as simple as the
+		// BLS makes it out to be. In order for this routine to function well, the BLS should actually state that the
+		// candidate methods are dependent upon the process described in §15.12.2 of the JLSv3. If this is not the
 		// case, then the description of how this is implemented is not sound.
-		
+
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
 	}
