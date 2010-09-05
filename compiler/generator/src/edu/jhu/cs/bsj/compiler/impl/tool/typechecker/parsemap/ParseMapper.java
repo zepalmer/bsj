@@ -38,7 +38,6 @@ public class ParseMapper
 
 	public Map<RawCodeLiteralNode, ParseMapEntry> getParseMap(Node node)
 	{
-		// TODO: what is the correct default environment?
-		return node.executeOperation(this.parseMapOperation, null);
+		return node.executeOperation(this.parseMapOperation, new ParseMapperEnvironment(this.manager));
 	}
 }

@@ -259,8 +259,11 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			{
 				// If we reach this point, then the only hope for the subtyping relation is that the same thing holds
 				// true for this type and one of our ancestor types.
-				LOGGER.trace("Determining "
-						+ new Formatter().format("%50s <?: %s", this.toString(), type.toString()).out());
+				if (LOGGER.isTraceEnabled())
+				{
+					LOGGER.trace("Determining "
+							+ new Formatter().format("%50s <?: %s", this.toString(), type.toString()).out());
+				}
 				Collection<BsjType> supertypes = new ArrayList<BsjType>();
 				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.asElement().getDeclarationNode();
 

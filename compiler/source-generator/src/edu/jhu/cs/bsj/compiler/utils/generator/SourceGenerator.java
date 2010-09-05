@@ -3500,7 +3500,8 @@ public class SourceGenerator
 			{
 				protoEnumPs.println(" = ");
 				protoEnumPs.incPrependCount();
-				protoEnumPs.println("new " + ruleType + "(" + leastUpperBound.getBaseName() + ".class,");
+				protoEnumPs.println("new " + ruleType + "(\"" + def.getName() + "\", " + leastUpperBound.getBaseName()
+						+ ".class,");
 				protoEnumPs.incPrependCount();
 				protoEnumPs.println("Collections.<Class<? extends " + leastUpperBound.getBaseName() + ">>singleton("
 						+ leastUpperBound.getBaseName() + ".class));");
@@ -3518,8 +3519,8 @@ public class SourceGenerator
 				{
 					protoEnumPs.println("list.add(" + outputTypeDefinition.getType().getBaseName() + ".class);");
 				}
-				protoEnumPs.println(elementName + " = new " + ruleType + "(" + leastUpperBound.getBaseName()
-						+ ".class, list);");
+				protoEnumPs.println(elementName + " = new " + ruleType + "(\"" + def.getName() + "\", "
+						+ leastUpperBound.getBaseName() + ".class, list);");
 				protoEnumPs.decPrependCount();
 				protoEnumPs.println("}");
 			}

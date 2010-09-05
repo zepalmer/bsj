@@ -3,7 +3,9 @@ package edu.jhu.cs.bsj.compiler.impl.metaprogram;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject.Kind;
@@ -44,6 +46,56 @@ public class CompilationUnitLoaderImpl implements CompilationUnitLoader
 		this.diagnosticListener = diagnosticListener;
 	}
 
+	private static class LoadCacheKey
+	{
+		private PackageNode packageNode;
+		private String name;
+
+		public LoadCacheKey(PackageNode packageNode, String name)
+		{
+			super();
+			this.packageNode = packageNode;
+			this.name = name;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			result = prime * result + ((packageNode == null) ? 0 : packageNode.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			LoadCacheKey other = (LoadCacheKey) obj;
+			if (name == null)
+			{
+				if (other.name != null)
+					return false;
+			} else if (!name.equals(other.name))
+				return false;
+			if (packageNode == null)
+			{
+				if (other.packageNode != null)
+					return false;
+			} else if (!packageNode.equals(other.packageNode))
+				return false;
+			return true;
+		}
+	}
+
+	private Set<LoadCacheKey> alreadyFailedToLoad = new HashSet<LoadCacheKey>();
+
 	@Override
 	public CompilationUnitNode load(PackageNode packageNode, String name)
 	{
@@ -53,27 +105,59 @@ public class CompilationUnitLoaderImpl implements CompilationUnitLoader
 					+ packageNode.getFullyQualifiedName() + "\"");
 		}
 
-		String pname = packageNode.getFullyQualifiedName();
-		if (pname == null)
+		// First, record this access
+		// TODO: clean this up - it's sloppy. It's based on a true invariant - that the package is compatible - but
+		// it's still quite sloppy.
+		PackageNodeImpl packageNodeImpl = (PackageNodeImpl) packageNode;
+		packageNodeImpl.getPackageCompilationUnitAttribute(name).recordAccess(
+				PackageCompilationUnitAttribute.AccessType.LOAD);
+		packageNodeImpl.getIteratorAttribute().recordAccess(NonConflictingReadWriteAttribute.AccessType.WRITE);
+
+		// If we already have such a compilation unit, just use that one
+		CompilationUnitNode compilationUnitNode = packageNode.getCompilationUnit(name);
+		if (compilationUnitNode != null)
 		{
-			return null;
+			// Then this has already been loaded or otherwise overridden
+			return compilationUnitNode;
 		}
 
-		for (BsjFileObject file : PackageNodeUtilities.findCompilationUnits(this.toolkit.getFileManager(), pname, false))
+		LoadCacheKey key = new LoadCacheKey(packageNode, name);
+		if (!this.alreadyFailedToLoad.contains(key))
 		{
-			if (PackageNodeUtilities.getCompilationUnitName(file).equals(name))
+			// Otherwise, we have to go searching
+			String pname = packageNode.getFullyQualifiedName();
+			if (pname != null)
 			{
-				return load(packageNode, name, this.diagnosticListener, file);
+				for (BsjFileObject file : PackageNodeUtilities.findCompilationUnits(this.toolkit.getFileManager(),
+						pname, false))
+				{
+					if (PackageNodeUtilities.getCompilationUnitName(file).equals(name))
+					{
+						compilationUnitNode = actualLoad(packageNode, name, this.diagnosticListener, file);
+						break;
+					}
+				}
 			}
 		}
 
-		if (LOGGER.isTraceEnabled())
+		if (compilationUnitNode == null)
 		{
-			LOGGER.trace("No such compilation unit " + name + " exists in package node \""
-					+ packageNode.getFullyQualifiedName() + "\"");
+			this.alreadyFailedToLoad.add(key);
+			if (LOGGER.isTraceEnabled())
+			{
+				LOGGER.trace("No such compilation unit " + name + " exists in package node \""
+						+ packageNode.getFullyQualifiedName() + "\"");
+			}
+		} else
+		{
+			if (LOGGER.isTraceEnabled())
+			{
+				LOGGER.trace("Completed load of compilation unit " + name + " in package node "
+						+ packageNode.getFullyQualifiedName());
+			}
 		}
 
-		return null;
+		return compilationUnitNode;
 	}
 
 	@Override
@@ -94,26 +178,10 @@ public class CompilationUnitLoaderImpl implements CompilationUnitLoader
 	 * @param file The file from which to load the compilation unit.
 	 * @return The compilation unit if it was loaded; <code>null</code> if it could not be loaded.
 	 */
-	public CompilationUnitNode load(PackageNode packageNode, String name,
+	private CompilationUnitNode actualLoad(PackageNode packageNode, String name,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener, BsjFileObject file)
 	{
-		// First, see if we already have this compilation unit.
-		// TODO-SOON: doesn't this prevent an indirect injector from getting recognized?
-		this.nodeManager.pushNull();
-		try
-		{
-			CompilationUnitNode compilationUnitNode = packageNode.getCompilationUnit(name);
-			if (compilationUnitNode != null)
-			{
-				// Then this has already been loaded or otherwise overridden
-				return compilationUnitNode;
-			}
-		} finally
-		{
-			this.nodeManager.popAll();
-		}
-
-		// Go try to load the compilation unit.
+		// Try to load the compilation unit.
 		try
 		{
 			this.nodeManager.pushNull();
@@ -139,12 +207,7 @@ public class CompilationUnitLoaderImpl implements CompilationUnitLoader
 			// 1. add the compilation unit
 			packageNodeImpl.addCompilationUnit(compilationUnitNode, false);
 
-			// 2. record the access
-			packageNodeImpl.getPackageCompilationUnitAttribute(name).recordAccess(
-					PackageCompilationUnitAttribute.AccessType.LOAD);
-			packageNodeImpl.getIteratorAttribute().recordAccess(NonConflictingReadWriteAttribute.AccessType.WRITE);
-
-			// 3. fire the injector report
+			// 2. fire the injector report
 			this.nodeManager.getPackageNodeManager().fireRegisterAsInjector(compilationUnitNode);
 
 			return compilationUnitNode;

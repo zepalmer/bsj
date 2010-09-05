@@ -3,7 +3,9 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.lang.model.element.NestingKind;
 
@@ -319,6 +321,11 @@ public class TypeBuilder
 	}
 
 	/**
+	 * A cache for the {@link #makeMetaprogramClasspathType(Class)} method.
+	 */
+	private Map<Class<?>, BsjType> makeMetaprogramClasspathTypeCache = new HashMap<Class<?>, BsjType>();
+
+	/**
 	 * Creates a {@link BsjExplicitlyDeclaredType} representation of a class currently on the runtime's classpath.
 	 * 
 	 * @param clazz The class to use.
@@ -326,75 +333,85 @@ public class TypeBuilder
 	 */
 	public BsjType makeMetaprogramClasspathType(Class<?> clazz)
 	{
-		if (clazz.isPrimitive())
+		BsjType ret = makeMetaprogramClasspathTypeCache.get(clazz);
+		if (ret == null)
 		{
-			if (clazz.equals(Byte.TYPE))
+			if (clazz.isPrimitive())
 			{
-				return this.manager.getToolkit().getByteType();
-			} else if (clazz.equals(Short.TYPE))
+				if (clazz.equals(Byte.TYPE))
+				{
+					ret = this.manager.getToolkit().getByteType();
+				} else if (clazz.equals(Short.TYPE))
+				{
+					ret = this.manager.getToolkit().getShortType();
+				} else if (clazz.equals(Character.TYPE))
+				{
+					ret = this.manager.getToolkit().getCharType();
+				} else if (clazz.equals(Integer.TYPE))
+				{
+					ret = this.manager.getToolkit().getIntType();
+				} else if (clazz.equals(Long.TYPE))
+				{
+					ret = this.manager.getToolkit().getLongType();
+				} else if (clazz.equals(Float.TYPE))
+				{
+					ret = this.manager.getToolkit().getFloatType();
+				} else if (clazz.equals(Double.TYPE))
+				{
+					ret = this.manager.getToolkit().getDoubleType();
+				} else if (clazz.equals(Boolean.TYPE))
+				{
+					ret = this.manager.getToolkit().getBooleanType();
+				} else
+				{
+					throw new IllegalStateException("Unrecognized primitive type " + clazz);
+				}
+			} else if (clazz.getComponentType() != null)
 			{
-				return this.manager.getToolkit().getShortType();
-			} else if (clazz.equals(Character.TYPE))
-			{
-				return this.manager.getToolkit().getCharType();
-			} else if (clazz.equals(Integer.TYPE))
-			{
-				return this.manager.getToolkit().getIntType();
-			} else if (clazz.equals(Long.TYPE))
-			{
-				return this.manager.getToolkit().getLongType();
-			} else if (clazz.equals(Float.TYPE))
-			{
-				return this.manager.getToolkit().getFloatType();
-			} else if (clazz.equals(Double.TYPE))
-			{
-				return this.manager.getToolkit().getDoubleType();
-			} else if (clazz.equals(Boolean.TYPE))
-			{
-				return this.manager.getToolkit().getBooleanType();
+				ret = new ArrayTypeImpl(this.manager, makeMetaprogramClasspathType(clazz.getComponentType()));
 			} else
 			{
-				throw new IllegalStateException("Unrecognized primitive type " + clazz);
-			}
-		} else if (clazz.getComponentType() != null)
-		{
-			return new ArrayTypeImpl(this.manager, makeMetaprogramClasspathType(clazz.getComponentType()));
-		} else
-		{
-			String name = clazz.getCanonicalName();
-			String[] nameParts = name.split("\\.");
-			PackageNode packageNode = this.manager.getRootPackage();
-			int index = 0;
-			NamedTypeDeclarationNode<?> decl = null;
-			while (index < nameParts.length)
-			{
-				decl = packageNode.getTopLevelTypeDeclaration(nameParts[index], this.manager.getLoader());
-				if (decl != null)
+				String name = clazz.getCanonicalName();
+				String[] nameParts = name.split("\\.");
+				PackageNode packageNode = this.manager.getRootPackage();
+				int index = 0;
+				NamedTypeDeclarationNode<?> decl = null;
+				while (index < nameParts.length)
 				{
-					break;
+					decl = packageNode.getTopLevelTypeDeclaration(nameParts[index], this.manager.getLoader());
+					if (decl != null)
+					{
+						index++;
+						break;
+					}
+					packageNode = packageNode.getSubpackage(nameParts[index]);
+					index++;
 				}
-				packageNode = packageNode.getSubpackage(nameParts[index]);
-				index++;
+
+				do
+				{
+					if (decl == null)
+					{
+						// TODO: this should be a handleable error, right? what if the user somehow triggers this method
+						// with a bad metaprogram classpath such as by using raw code literals without the compiler API
+						// available?
+						throw new IllegalStateException("Could not find declaration for type "
+								+ clazz.getCanonicalName());
+					}
+					if (index < nameParts.length)
+					{
+						decl = decl.getTypeDeclaration(nameParts[index]);
+					}
+					index++;
+				} while (index <= nameParts.length);
+
+				ret = this.manager.getToolkit().makeElement(decl).asType().calculateErasure();
 			}
 
-			do
-			{
-				if (decl == null)
-				{
-					// TODO: this should be a handleable error, right? what if the user somehow triggers this method
-					// with a bad metaprogram classpath such as by using raw code literals without the compiler API
-					// available?
-					throw new IllegalStateException("Could not find declaration for type " + clazz.getCanonicalName());
-				}
-				if (index < nameParts.length)
-				{
-					decl = decl.getTypeDeclaration(nameParts[index]);
-				}
-				index++;
-			} while (index <= nameParts.length);
-
-			return this.manager.getToolkit().makeElement(decl).asType().calculateErasure();
+			makeMetaprogramClasspathTypeCache.put(clazz, ret);
 		}
+
+		return ret;
 	}
 
 	private BsjExplicitlyDeclaredType makeDeclarationTypeFromDeclaration(NamedTypeDeclarationNode<?> typeDeclaration,

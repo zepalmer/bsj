@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.BsjAntlrLexer;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.BsjAntlrParser;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
@@ -92,8 +93,7 @@ public class BsjParserImpl implements BsjParser
 			diagnosticListener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
 		}
 		
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedYetException();
 	}
 	
 }

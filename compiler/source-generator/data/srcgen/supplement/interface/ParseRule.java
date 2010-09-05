@@ -15,13 +15,24 @@ import java.util.Collections;
 public abstract class ParseRule<T extends Node>
 {
 	/* GEN:start */
+	private String name;
 	private Class<T> nodeClass;
 	private Collection<Class<? extends T>> bottomMostClasses;
 
-	private ParseRule(Class<T> nodeClass, Collection<Class<? extends T>> bottomMostClasses)
+	private ParseRule(String name, Class<T> nodeClass, Collection<Class<? extends T>> bottomMostClasses)
 	{
+		this.name = name;
 		this.nodeClass = nodeClass;
 		this.bottomMostClasses = Collections.unmodifiableCollection(bottomMostClasses);
+	}
+	
+	/**
+	 * Retrieves a string naming this parse rule.
+	 * @return The name of this parse rule.
+	 */
+	public String getName()
+	{
+		return this.name;
 	}
 
 	/**
@@ -42,6 +53,12 @@ public abstract class ParseRule<T extends Node>
 	public Collection<Class<? extends T>> getBottomMostClasses()
 	{
 		return this.bottomMostClasses;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.name + " rule";
 	}
 	/* GEN:stop */
 }

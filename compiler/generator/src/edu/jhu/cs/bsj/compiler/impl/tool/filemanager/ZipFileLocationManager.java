@@ -27,7 +27,7 @@ public class ZipFileLocationManager extends AbstractLocationManager
 	/** The file which backs this location manager. */
 	private File file;
 	/** The zip file which backs this location manager. */
-	private ZipMetaCache zip;	
+	private ZipMetaCache zip;
 	/** The separator used in zip file paths. */
 	public static final char ZIP_FILE_SEPARATOR = '/';
 
@@ -91,37 +91,101 @@ public class ZipFileLocationManager extends AbstractLocationManager
 		}
 		return new ZipFileObject(getEncodingName(), entry, this.zip.getZipFile());
 	}
-	
+
 	@Override
-	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse) throws IOException
+	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse)
+			throws IOException
 	{
-		String prefix = packageName.replace('.', ZIP_FILE_SEPARATOR);
-		List<BsjFileObject> ret = new ArrayList<BsjFileObject>();
-		for (ZipEntry entry : this.zip.getEntryMap().values())
+		ListFilesCacheKey key = new ListFilesCacheKey(packageName, kinds, recurse);
+		Iterable<? extends BsjFileObject> value = this.listFilesCache.get(key);
+		if (value == null)
 		{
-			if (entry.isDirectory())
+
+			String prefix = packageName.replace('.', ZIP_FILE_SEPARATOR);
+			List<BsjFileObject> ret = new ArrayList<BsjFileObject>();
+			for (ZipEntry entry : this.zip.getEntryMap().values())
 			{
-				continue;
-			}
-			if (entry.getName().startsWith(prefix))
-			{
-				// If we're not recursing, make sure we skip subdirectory entries
-				if (!recurse && entry.getName().substring(prefix.length() + 1).indexOf(ZIP_FILE_SEPARATOR) != -1)
+				if (entry.isDirectory())
 				{
 					continue;
 				}
-				for (Kind k : kinds)
+				if (entry.getName().startsWith(prefix))
 				{
-					if (entry.getName().endsWith(k.extension))
+					// If we're not recursing, make sure we skip subdirectory entries
+					if (!recurse && entry.getName().substring(prefix.length() + 1).indexOf(ZIP_FILE_SEPARATOR) != -1)
 					{
-						ret.add(getFileFromEntryName(entry.getName()));
-						break;
+						continue;
+					}
+					for (Kind k : kinds)
+					{
+						if (entry.getName().endsWith(k.extension))
+						{
+							ret.add(getFileFromEntryName(entry.getName()));
+							break;
+						}
 					}
 				}
 			}
+			value = ret;
+			this.listFilesCache.put(key, value);
 		}
 
-		return ret;
+		return value;
+	}
+
+	private Map<ListFilesCacheKey, Iterable<? extends BsjFileObject>> listFilesCache = new HashMap<ZipFileLocationManager.ListFilesCacheKey, Iterable<? extends BsjFileObject>>();
+
+	private static class ListFilesCacheKey
+	{
+		private String packageName;
+		private Collection<Kind> kinds;
+		private boolean recurse;
+
+		public ListFilesCacheKey(String packageName, Collection<Kind> kinds, boolean recurse)
+		{
+			super();
+			this.packageName = packageName;
+			this.kinds = kinds;
+			this.recurse = recurse;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((kinds == null) ? 0 : kinds.hashCode());
+			result = prime * result + ((packageName == null) ? 0 : packageName.hashCode());
+			result = prime * result + (recurse ? 1231 : 1237);
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ListFilesCacheKey other = (ListFilesCacheKey) obj;
+			if (kinds == null)
+			{
+				if (other.kinds != null)
+					return false;
+			} else if (!kinds.equals(other.kinds))
+				return false;
+			if (packageName == null)
+			{
+				if (other.packageName != null)
+					return false;
+			} else if (!packageName.equals(other.packageName))
+				return false;
+			if (recurse != other.recurse)
+				return false;
+			return true;
+		}
 	}
 
 	/**

@@ -267,7 +267,6 @@ public class MetacompilationManager implements MetacompilationContext
 					}
 				};
 
-				// TODO-SOON: how do we know if this is purely injected? argument probably won't work out...
 				queue.offer(new InstantiateMetaAnnotationObjectTask(compilationUnitNode, new InjectionInfo(
 						MetacompilationManager.this.getNodeManager().getCurrentMetaprogram(), purelyInjected)));
 

@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap;
 
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
@@ -16,6 +17,13 @@ public class ParseMapperEnvironment
 	private BsjType codeLiteralExpectedType;
 	/** The current expected type of a code literal in a return expression. */
 	private BsjType codeLiteralExpectedReturnType;
+	
+	public ParseMapperEnvironment(TypecheckerManager manager)
+	{
+		super();
+		this.codeLiteralExpectedType = manager.getToolkit().getNodeElement().asType();
+		this.codeLiteralExpectedReturnType = manager.getToolkit().getNodeElement().asType();
+	}
 
 	public ParseMapperEnvironment(BsjType codeLiteralExpectedType,
 			BsjType codeLiteralExpectedReturnType)
