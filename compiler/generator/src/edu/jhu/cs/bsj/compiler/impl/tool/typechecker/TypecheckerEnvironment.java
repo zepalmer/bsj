@@ -16,7 +16,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 public class TypecheckerEnvironment
 {
 	/** The parse map to use. */
-	private Map<RawCodeLiteralNode, ParseMapEntry<?>> parseMap;
+	private Map<RawCodeLiteralNode, ParseMapEntry> parseMap;
 	/**
 	 * The type expected from an array initializer. This value is set by nodes entering contexts in which a
 	 * variable initializer is legal and is used to discern the expected type of the initializer expressions.  For
@@ -39,7 +39,7 @@ public class TypecheckerEnvironment
 	 * @param parseMap The mapping from raw code literals to their parse map entries.
 	 * @param arrayInitializerComponentType The expected type for an array initializer.
 	 */
-	public TypecheckerEnvironment(Map<RawCodeLiteralNode, ParseMapEntry<?>> parseMap,
+	public TypecheckerEnvironment(Map<RawCodeLiteralNode, ParseMapEntry> parseMap,
 			BsjType arrayInitializerComponentType)
 	{
 		super();
@@ -47,7 +47,7 @@ public class TypecheckerEnvironment
 		this.arrayInitializerComponentType = arrayInitializerComponentType;
 	}
 
-	public Map<RawCodeLiteralNode, ParseMapEntry<?>> getParseMap()
+	public Map<RawCodeLiteralNode, ParseMapEntry> getParseMap()
 	{
 		return parseMap;
 	}

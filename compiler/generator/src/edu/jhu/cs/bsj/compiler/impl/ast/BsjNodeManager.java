@@ -512,7 +512,7 @@ public class BsjNodeManager
 			throw new NotImplementedYetException("Root package must be non-null");
 		}
 		DiagnosticListener<BsjSourceLocation> listener = new NoOperationDiagnosticListener<BsjSourceLocation>();
-		return new TypecheckerManager(rootPackage, this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener),
+		return new TypecheckerManager(rootPackage, toolkit.getParser(), this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener),
 				listener);
 	}
 }

@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
@@ -47,7 +48,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 public class TypeBuilder
 {
 	// TODO: the methods in this class do not react well to the requested type being unbound
-	
+
 	private TypecheckerManager manager;
 
 	public TypeBuilder(TypecheckerManager manager)
@@ -236,7 +237,7 @@ public class TypeBuilder
 	{
 		return new PrimitiveTypeImpl(this.manager, node.getPrimitiveType());
 	}
-	
+
 	public BsjTypeVariable makeTypeVariable(TypeParameterNode node)
 	{
 		BsjTypeArgument upperBound;
@@ -290,7 +291,7 @@ public class TypeBuilder
 	{
 		BsjTypeLikeElement element = this.manager.getToolkit().getAccessibleTypeFromName(node.getName(),
 				getTypeNamespaceMap(node));
-		
+
 		if (element instanceof BsjTypeElement)
 		{
 			NamedTypeDeclarationNode<?> typeDeclaration = ((BsjTypeElement) element).getDeclarationNode();
@@ -315,6 +316,85 @@ public class TypeBuilder
 	public BsjWildcardType makeWildcardType(WildcardTypeNode node)
 	{
 		return new WildcardTypeImpl(this.manager, node);
+	}
+
+	/**
+	 * Creates a {@link BsjExplicitlyDeclaredType} representation of a class currently on the runtime's classpath.
+	 * 
+	 * @param clazz The class to use.
+	 * @return The type representing that class. If the class has type parameters, the returned type is raw.
+	 */
+	public BsjType makeMetaprogramClasspathType(Class<?> clazz)
+	{
+		if (clazz.isPrimitive())
+		{
+			if (clazz.equals(Byte.TYPE))
+			{
+				return this.manager.getToolkit().getByteType();
+			} else if (clazz.equals(Short.TYPE))
+			{
+				return this.manager.getToolkit().getShortType();
+			} else if (clazz.equals(Character.TYPE))
+			{
+				return this.manager.getToolkit().getCharType();
+			} else if (clazz.equals(Integer.TYPE))
+			{
+				return this.manager.getToolkit().getIntType();
+			} else if (clazz.equals(Long.TYPE))
+			{
+				return this.manager.getToolkit().getLongType();
+			} else if (clazz.equals(Float.TYPE))
+			{
+				return this.manager.getToolkit().getFloatType();
+			} else if (clazz.equals(Double.TYPE))
+			{
+				return this.manager.getToolkit().getDoubleType();
+			} else if (clazz.equals(Boolean.TYPE))
+			{
+				return this.manager.getToolkit().getBooleanType();
+			} else
+			{
+				throw new IllegalStateException("Unrecognized primitive type " + clazz);
+			}
+		} else if (clazz.getComponentType() != null)
+		{
+			return new ArrayTypeImpl(this.manager, makeMetaprogramClasspathType(clazz.getComponentType()));
+		} else
+		{
+			String name = clazz.getCanonicalName();
+			String[] nameParts = name.split("\\.");
+			PackageNode packageNode = this.manager.getRootPackage();
+			int index = 0;
+			NamedTypeDeclarationNode<?> decl = null;
+			while (index < nameParts.length)
+			{
+				decl = packageNode.getTopLevelTypeDeclaration(nameParts[index], this.manager.getLoader());
+				if (decl != null)
+				{
+					break;
+				}
+				packageNode = packageNode.getSubpackage(nameParts[index]);
+				index++;
+			}
+
+			do
+			{
+				if (decl == null)
+				{
+					// TODO: this should be a handleable error, right? what if the user somehow triggers this method
+					// with a bad metaprogram classpath such as by using raw code literals without the compiler API
+					// available?
+					throw new IllegalStateException("Could not find declaration for type " + clazz.getCanonicalName());
+				}
+				if (index < nameParts.length)
+				{
+					decl = decl.getTypeDeclaration(nameParts[index]);
+				}
+				index++;
+			} while (index <= nameParts.length);
+
+			return this.manager.getToolkit().makeElement(decl).asType().calculateErasure();
+		}
 	}
 
 	private BsjExplicitlyDeclaredType makeDeclarationTypeFromDeclaration(NamedTypeDeclarationNode<?> typeDeclaration,

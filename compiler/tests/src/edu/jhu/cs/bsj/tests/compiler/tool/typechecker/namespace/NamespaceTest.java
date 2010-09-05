@@ -105,7 +105,7 @@ public class NamespaceTest extends AbstractTest
 		}
 		exampleNamespaceClassNode = (ClassDeclarationNode) compilationUnitNode.getTypeDecls().getFirst();
 
-		final TypecheckerManager typecheckerManager = new TypecheckerManager(rootPackage, loader, diagnosticListener);
+		final TypecheckerManager typecheckerManager = new TypecheckerManager(rootPackage, toolkit.getParser(), loader, diagnosticListener);
 		final NamespaceBuilder namespaceBuilder = new NamespaceBuilder(rootPackage, diagnosticListener, loader,
 				new TypecheckerToolkit(typecheckerManager, loader));
 

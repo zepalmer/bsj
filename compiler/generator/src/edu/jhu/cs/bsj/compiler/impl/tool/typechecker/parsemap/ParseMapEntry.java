@@ -2,34 +2,34 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap;
 
 import java.util.Set;
 
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.rule.ParseRuleExecution;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 
 /**
  * Represents a single entry in a parse map.
  * @author Zachary Palmer
  * @param <T> The least upper bound on the type of the node produced by this parse map entry.
  */
-public class ParseMapEntry<T extends Node>
+public class ParseMapEntry
 {
 	/** The set of rules which correspond to this parse map entry. */
-	private Set<? extends ParseRuleExecution<T>> rules;
+	private Set<? extends ParseRuleExecution<?>> rules;
 	/** The in-context type for this parse map entry. */
-	private Class<T> inContextType;
+	private BsjType inContextType;
 	
-	public ParseMapEntry(Set<? extends ParseRuleExecution<T>> rules, Class<T> inContextType)
+	public ParseMapEntry(Set<? extends ParseRuleExecution<?>> rules, BsjType inContextType)
 	{
 		super();
 		this.rules = rules;
 		this.inContextType = inContextType;
 	}
 
-	public Set<? extends ParseRuleExecution<T>> getRules()
+	public Set<? extends ParseRuleExecution<?>> getRules()
 	{
 		return rules;
 	}
 
-	public Class<T> getInContextType()
+	public BsjType getInContextType()
 	{
 		return inContextType;
 	}

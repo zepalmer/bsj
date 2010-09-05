@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceBuilder;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.ParseMapper;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 
 /**
  * This class represents the set of tools and logic which is necessary to perform BSJ typechecking.  Some operations
@@ -34,7 +35,7 @@ public class TypecheckerManager
 	 * @param rootPackage The root package over which type checking will be performed.
 	 * @param diagnosticListener The diagnostic listener to which to report errors.
 	 */
-	public TypecheckerManager(PackageNode rootPackage, CompilationUnitLoader loader, DiagnosticListener<BsjSourceLocation> diagnosticListener)
+	public TypecheckerManager(PackageNode rootPackage, BsjParser parser, CompilationUnitLoader loader, DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		super();
 		this.rootPackage = rootPackage;
@@ -42,7 +43,7 @@ public class TypecheckerManager
 		
 		this.toolkit = new TypecheckerToolkit(this, loader);
 		this.namespaceBuilder = new NamespaceBuilder(this.rootPackage, diagnosticListener, this.loader, this.toolkit);
-		this.parseMapper = new ParseMapper(this);
+		this.parseMapper = new ParseMapper(this, parser);
 		this.typechecker = new Typechecker(this);
 	}
 
