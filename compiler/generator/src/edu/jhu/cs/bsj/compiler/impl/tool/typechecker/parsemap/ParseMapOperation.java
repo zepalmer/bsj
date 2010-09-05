@@ -743,12 +743,11 @@ public class ParseMapOperation extends
 			// somewhere on the stack. This means our weak reference is good.
 			RawCodeLiteralNode codeLiteralNode = this.node.get();
 
-			@SuppressWarnings("unchecked")
-			T node = (T) results.get(rule);
-			if (node == null)
+			if (!results.containsKey(rule))
 			{
 				CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
 						new NoOperationDiagnosticListener<BsjSourceLocation>());
+				T node;
 
 				// TODO: somehow fix this so we actually start from the right column!
 				try
@@ -772,9 +771,14 @@ public class ParseMapOperation extends
 				}
 
 				this.results.put(rule, node);
+				return node;
+			} else
+			{
+				// Known to be safe because we only ever add nodes which match the generic types of their keys.
+				@SuppressWarnings("unchecked")
+				T node = (T) this.results.get(rule);
+				return node;
 			}
-
-			return node;
 		}
 	}
 }

@@ -42,4 +42,10 @@ public class ParseRuleExecution<T extends Node>
 	{
 		return result;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "parse of " + this.parseRule;
+	}
 }

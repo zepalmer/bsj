@@ -220,6 +220,19 @@ scope Rule {
     }
     
     // *** SOURCE LOCATION TRACKING *******************************************
+    /** An optional value which permits the starting line number to be overridden. */
+    private Integer startingLine = null;
+    /** An optional value which permits the starting column number on the starting line to be overridden. */
+    private Integer startingColumn = null;
+    /**
+     * Sets the starting position of the parser's input.  This call will affect the {@link BsjSourceLocation}s produced
+     * for all nodes.
+     */
+    public void setStartLocation(int startingLine, int startingColumn)
+    {
+        this.startingLine = startingLine;
+        this.startingColumn = startingColumn;
+    }
     /** The resource which is being parsed. */
     private String resourceName;
     /**
@@ -242,7 +255,16 @@ scope Rule {
     protected int getLineNumber(int rel)
     {
         Token token = input.LT(rel);
-        return token == null ? BsjSourceLocation.NOPOS : token.getLine();
+        if (token == null)
+        {
+            return BsjSourceLocation.NOPOS;
+        } else if (this.startingLine == null)
+        {
+            return token.getLine();
+        } else
+        {
+            return token.getLine() + this.startingLine - 1;
+        }
     }
     /**
      * Retrieves the line number for the specified relative token index (as per input.LT).
@@ -250,18 +272,23 @@ scope Rule {
     protected int getColumnNumber(int rel)
     {
         Token token = input.LT(rel);
-        return token == null ? BsjSourceLocation.NOPOS : token.getCharPositionInLine() + 1;
+        if (token == null)
+        {
+            return BsjSourceLocation.NOPOS;
+        } else if (this.startingColumn == null || token.getLine() != 1)
+        {
+            return token.getCharPositionInLine() + 1;
+        } else
+        {
+            return token.getCharPositionInLine() + this.startingColumn;
+        }
     }
     /**
      * Retrieves a source location object describing the start of the specified relative token index (as per input.LT).
      */
     protected BsjSourceLocation getSourceLocation(int rel)
     {
-        Token token = input.LT(rel);
-        return new BsjSourceLocation(
-                getResourceName(),
-                token==null ? BsjSourceLocation.NOPOS : token.getLine(),
-                token==null ? BsjSourceLocation.NOPOS : token.getCharPositionInLine() + 1);
+        return new BsjSourceLocation(getResourceName(), getLineNumber(rel), getColumnNumber(rel));
     }
 
     // *** FACTORY NODE PROPERTY **********************************************
@@ -696,6 +723,7 @@ preamble returns [MetaprogramPreambleNode ret]
             MetaprogramDependencyDeclarationListNode depends = factory.makeMetaprogramDependencyDeclarationListNode();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeMetaprogramPreambleNode(factory.makeMetaprogramImportListNode(list),
                     localMode, packageMode, target, depends);
             ruleStop();
@@ -783,6 +811,7 @@ metaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationLi
             List<MetaprogramDependencyDeclarationNode> list = new ArrayList<MetaprogramDependencyDeclarationNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeMetaprogramDependencyDeclarationListNode(list);
             ruleStop();
         }
@@ -819,6 +848,7 @@ metaprogramDependencyList returns [MetaprogramDependencyListNode ret]
             List<MetaprogramDependencyNode> names = new ArrayList<MetaprogramDependencyNode>();
         }
         @after {
+            while (names.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeMetaprogramDependencyListNode(names);
             ruleStop();
         }
@@ -866,6 +896,7 @@ metaprogramTargetList returns [MetaprogramTargetListNode ret]
             List<MetaprogramTargetNode> list = new ArrayList<MetaprogramTargetNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeMetaprogramTargetListNode(list);
             ruleStop();
         }
@@ -917,6 +948,7 @@ identifierList returns [IdentifierListNode ret]
             List<IdentifierNode> ids = new ArrayList<IdentifierNode>();
         }
         @after {
+            while (ids.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeIdentifierListNode(ids);
             ruleStop();
         }
@@ -1055,6 +1087,7 @@ metaAnnotationList returns [MetaAnnotationListNode ret]
             List<MetaAnnotationNode> list = new ArrayList<MetaAnnotationNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeMetaAnnotationListNode(list);
             ruleStop();
         }
@@ -1077,6 +1110,8 @@ anyAnnotations returns [MetaAnnotationListNode metaAnnotations, AnnotationListNo
             List<AnnotationNode> annotationList = new ArrayList<AnnotationNode>();
         }
         @after {
+            while (metaAnnotationList.remove(null)) ; // remove all nulls from the list
+            while (annotationList.remove(null)) ; // remove all nulls from the list
             $metaAnnotations = factory.makeMetaAnnotationListNode(metaAnnotationList);
             $annotations = factory.makeAnnotationListNode(annotationList);
             ruleStop();
@@ -1115,7 +1150,7 @@ metaAnnotation returns [MetaAnnotationNode ret]
 	        '@' '@' name
 	        {
 	            $ret = factory.makeNormalMetaAnnotationNode(
-	                    factory.makeMetaAnnotationElementListNode(new ArrayList<MetaAnnotationElementNode>()),
+	                    factory.makeMetaAnnotationElementListNode(),
 	                    factory.makeUnparameterizedTypeNode($name.ret));
 	        }
 	        (
@@ -1152,6 +1187,7 @@ metaAnnotationElementValuePairs returns [MetaAnnotationElementListNode ret]
             List<MetaAnnotationElementNode> list = new ArrayList<MetaAnnotationElementNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeMetaAnnotationElementListNode(list);
             ruleStop();
         }
@@ -1241,6 +1277,7 @@ metaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
             List<MetaAnnotationValueNode> list = new ArrayList<MetaAnnotationValueNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeMetaAnnotationValueListNode(list);
             ruleStop();
         }
@@ -1433,6 +1470,7 @@ metaImportDeclarations returns  [MetaprogramImportListNode ret]
             List<MetaprogramImportNode> metaprogramImportList = new ArrayList<MetaprogramImportNode>();
         }
         @after {
+            while (metaprogramImportList.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeMetaprogramImportListNode(metaprogramImportList);
             ruleStop();
         }
@@ -1452,6 +1490,7 @@ importDeclarations returns [ImportListNode ret]
             List<ImportNode> importList = new ArrayList<ImportNode>();
         }
         @after {
+            while (importList.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeImportListNode(importList);
             ruleStop();
         }
@@ -1560,6 +1599,7 @@ typeDeclarations returns [TypeDeclarationListNode ret]
             List<TypeDeclarationNode> list = new ArrayList<TypeDeclarationNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeTypeDeclarationListNode(list);
             ruleStop();
         }
@@ -1650,6 +1690,8 @@ modifiers[boolean accessAllowed, Modifier... mods]
             Modifier accessAsModifier = null;
         }
         @after {
+            while (annotationList.remove(null)) ; // remove all nulls from the list
+            while (metaAnnotationList.remove(null)) ; // remove all nulls from the list
             $annotations = factory.makeAnnotationListNode(annotationList);
             $metaAnnotations = factory.makeMetaAnnotationListNode(metaAnnotationList);
             ruleStop();
@@ -2092,6 +2134,7 @@ typeParameters returns [TypeParameterListNode ret]
             List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeTypeParameterListNode(list);
             ruleStop();
         }
@@ -2114,7 +2157,7 @@ typeParameter returns [TypeParameterNode ret]
         scope Rule;
         @init {
             ruleStart("typeParameter");
-            DeclaredTypeListNode typeBoundNode = factory.makeDeclaredTypeListNode(Collections.<DeclaredTypeNode>emptyList());
+            DeclaredTypeListNode typeBoundNode = factory.makeDeclaredTypeListNode();
         }
         @after {
             ruleStop();
@@ -2142,6 +2185,7 @@ typeBound returns [DeclaredTypeListNode ret]
             List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeDeclaredTypeListNode(list);
             ruleStop();
         }
@@ -2194,10 +2238,8 @@ enumBody returns [EnumBodyNode ret]
         scope Rule;
         @init {
             ruleStart("enumBody");
-            EnumConstantDeclarationListNode enumConstantsNode = factory.makeEnumConstantDeclarationListNode(
-                    Collections.<EnumConstantDeclarationNode>emptyList());
-            ClassMemberListNode enumBodyDeclarationsNode =
-                    factory.makeClassMemberListNode(Collections.<ClassMemberNode>emptyList());
+            EnumConstantDeclarationListNode enumConstantsNode = factory.makeEnumConstantDeclarationListNode();
+            ClassMemberListNode enumBodyDeclarationsNode = factory.makeClassMemberListNode();
         }
         @after {
             ruleStop();
@@ -2232,6 +2274,7 @@ enumConstants returns [EnumConstantDeclarationListNode ret]
             List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeEnumConstantDeclarationListNode(list);
             ruleStop();
         }
@@ -2255,7 +2298,7 @@ enumConstant returns [EnumConstantDeclarationNode ret]
             ruleStart("enumConstant");
             AnnotationListNode annotationsNode = factory.makeAnnotationListNode();
             MetaAnnotationListNode metaAnnotationsNode = factory.makeMetaAnnotationListNode();
-            ExpressionListNode argumentsNode = factory.makeExpressionListNode(Collections.<ExpressionNode>emptyList());
+            ExpressionListNode argumentsNode = factory.makeExpressionListNode();
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
         @after {
@@ -2293,6 +2336,7 @@ enumBodyDeclarations returns [ClassMemberListNode ret]
             List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeClassMemberListNode(list);
             ruleStop();
         }
@@ -2371,6 +2415,7 @@ declaredTypeList returns [DeclaredTypeListNode ret]
             List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeDeclaredTypeListNode(list);
             ruleStop();
         }
@@ -2394,6 +2439,7 @@ referenceTypeList returns [ReferenceTypeListNode ret]
             List<ReferenceTypeNode> list = new ArrayList<ReferenceTypeNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeReferenceTypeListNode(list);
             ruleStop();
         }
@@ -2500,6 +2546,7 @@ classBodyDeclarations returns [ClassMemberListNode ret]
             List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeClassMemberListNode(list);
             ruleStop();
         }
@@ -2557,6 +2604,7 @@ anonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
             List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeAnonymousClassMemberListNode(list);
             ruleStop();
         }
@@ -2653,9 +2701,8 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("constructorDeclaration");
-            TypeParameterListNode typeParametersNode =
-                    factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
-            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+            TypeParameterListNode typeParametersNode = factory.makeTypeParameterListNode();
+            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
         }
         @after {
             ruleStop();
@@ -2721,9 +2768,8 @@ methodDeclaration returns [MethodDeclarationNode ret]
         @init {
             ruleStart("methodDeclaration");
             BlockStatementListNode body = null;
-            TypeParameterListNode typeParametersNode =
-                    factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
-            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+            TypeParameterListNode typeParametersNode = factory.makeTypeParameterListNode();
+            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
             TypeNode returnTypeNode = null;
         }
         @after {
@@ -2806,6 +2852,7 @@ interfaceBodyDeclarations returns [InterfaceMemberListNode ret]
             List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeInterfaceMemberListNode(list);
             ruleStop();
         }
@@ -2863,9 +2910,9 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         @init {
             ruleStart("interfaceMethodDeclaration");
             TypeParameterListNode typeParametersNode =
-                    factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
+                    factory.makeTypeParameterListNode();
             TypeNode returnTypeNode = null;
-            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
         }
         @after {
             ruleStop();
@@ -2942,6 +2989,7 @@ variableDeclarators returns [VariableDeclaratorListNode ret]
             List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeVariableDeclaratorListNode(list);
             ruleStop();
         }
@@ -3002,6 +3050,7 @@ unparameterizedTypeList returns [UnparameterizedTypeListNode ret]
             List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeUnparameterizedTypeListNode(list);
             ruleStop();
         }
@@ -3216,6 +3265,7 @@ typeArguments returns [TypeArgumentListNode ret]
             List<TypeArgumentNode> list = new ArrayList<TypeArgumentNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeTypeArgumentListNode(list);
             ruleStop();
         }
@@ -3296,7 +3346,7 @@ formalParameters returns [VariableListNode parameters, VariableNode varargParame
         scope Rule;
         @init {
             ruleStart("formalParameters");
-            $parameters = factory.makeVariableListNode(Collections.<VariableNode>emptyList());
+            $parameters = factory.makeVariableListNode();
             $varargParameter = null;
         }
         @after {
@@ -3322,6 +3372,7 @@ formalParameterDecls returns [VariableListNode parameters, VariableNode varargPa
             List<VariableNode> list = new ArrayList<VariableNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $parameters = factory.makeVariableListNode(list);
             ruleStop();
         }
@@ -3476,6 +3527,7 @@ annotations returns [AnnotationListNode ret]
             List<AnnotationNode> annotationsList = new ArrayList<AnnotationNode>();
         }
         @after {
+            while (annotationsList.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeAnnotationListNode(annotationsList);
             ruleStop();
         }
@@ -3506,7 +3558,7 @@ annotation returns [AnnotationNode ret]
         '@' name
         {
             $ret = factory.makeNormalAnnotationNode(
-                    factory.makeAnnotationElementListNode(new ArrayList<AnnotationElementNode>()),
+                    factory.makeAnnotationElementListNode(),
                     factory.makeUnparameterizedTypeNode($name.ret));
         }
         (
@@ -3542,6 +3594,7 @@ elementValuePairs returns [AnnotationElementListNode ret]
             List<AnnotationElementNode> list = new ArrayList<AnnotationElementNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeAnnotationElementListNode(list);
             ruleStop();
         }
@@ -3623,6 +3676,7 @@ elementValues returns [AnnotationValueListNode ret]
             List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeAnnotationValueListNode(list);
             ruleStop();
         }
@@ -3722,6 +3776,7 @@ annotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
             List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeAnnotationMemberListNode(list);
             ruleStop();
         }
@@ -3861,6 +3916,7 @@ blockStatementList returns [BlockStatementListNode ret]
             List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeBlockStatementListNode(list);
             ruleStop();
         }
@@ -3948,6 +4004,7 @@ localVariableDeclaration returns [LocalVariableDeclarationNode ret]
             }
         )*
         {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeLocalVariableDeclarationNode(
                     $variableModifiers.ret,
                     $type.ret,
@@ -4156,6 +4213,7 @@ switchBlockStatementGroups returns [CaseListNode ret]
             List<CaseNode> list = new ArrayList<CaseNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeCaseListNode(list);
             ruleStop();
         }
@@ -4215,7 +4273,7 @@ trystatement[MetaAnnotationListNode metaAnnotations] returns [TryNode ret]
         scope Rule;
         @init {
             ruleStart("trystatement");
-            CatchListNode catchList = factory.makeCatchListNode(new ArrayList<CatchNode>());
+            CatchListNode catchList = factory.makeCatchListNode();
             BlockStatementListNode finallyBlock = null;
         }    
         @after {
@@ -4256,6 +4314,7 @@ catches returns [CatchListNode ret]
             List<CatchNode> list = new ArrayList<CatchNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeCatchListNode(list);
             ruleStop();
         }
@@ -4328,7 +4387,7 @@ forstatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret]
             ForInitializerNode forInitNode = null;
             ExpressionNode expNode = null;
             StatementExpressionListNode expListNode =
-                    factory.makeStatementExpressionListNode(Collections.<StatementExpressionNode>emptyList());
+                    factory.makeStatementExpressionListNode();
         }
         @after {
             ruleStop();
@@ -4424,6 +4483,7 @@ statementExpressionList returns [StatementExpressionListNode ret]
             List<StatementExpressionNode> list = new ArrayList<StatementExpressionNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeStatementExpressionListNode(list);
             ruleStop();
         }
@@ -4447,6 +4507,7 @@ expressionList returns [ExpressionListNode ret]
             List<ExpressionNode> list = new ArrayList<ExpressionNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeExpressionListNode(list);
             ruleStop();
         }
@@ -5694,6 +5755,7 @@ arrayCreator returns [ArrayCreationNode ret]
             }            
         )*
         {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeArrayInstantiatorCreationNode(
                 factory.makeExpressionListNode(list),
                 $createdName.ret,
@@ -5728,6 +5790,7 @@ variableInitializers returns [VariableInitializerListNode ret]
             List<VariableInitializerNode> list = new ArrayList<VariableInitializerNode>();
         }
         @after {
+            while (list.remove(null)) ; // remove all nulls from the list
             $ret = factory.makeVariableInitializerListNode(list);
             ruleStop();
         }
