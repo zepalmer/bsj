@@ -13,18 +13,18 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 public class ParseMapEntry
 {
 	/** The set of rules which correspond to this parse map entry. */
-	private Set<? extends ParseRuleExecution<?>> rules;
+	private Set<ParseRuleExecution<?>> rules;
 	/** The in-context type for this parse map entry. */
 	private BsjType inContextType;
 	
-	public ParseMapEntry(Set<? extends ParseRuleExecution<?>> rules, BsjType inContextType)
+	public ParseMapEntry(Set<ParseRuleExecution<?>> rules, BsjType inContextType)
 	{
 		super();
 		this.rules = rules;
 		this.inContextType = inContextType;
 	}
 
-	public Set<? extends ParseRuleExecution<?>> getRules()
+	public Set<ParseRuleExecution<?>> getRules()
 	{
 		return rules;
 	}

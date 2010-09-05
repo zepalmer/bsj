@@ -57,6 +57,11 @@ public class TypecheckerEnvironment
 		return arrayInitializerComponentType;
 	}
 	
+	public TypecheckerEnvironment deriveWithParseMap(Map<RawCodeLiteralNode, ParseMapEntry> parseMap)
+	{
+		return new TypecheckerEnvironment(parseMap, this.arrayInitializerComponentType);
+	}
+	
 	public TypecheckerEnvironment deriveWithArrayInitializerType(BsjType type)
 	{
 		return new TypecheckerEnvironment(this.parseMap, type);
