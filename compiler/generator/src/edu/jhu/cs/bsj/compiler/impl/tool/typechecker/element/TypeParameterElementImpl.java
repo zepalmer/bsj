@@ -18,11 +18,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitTypeVariableImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.thunk.BsjTypeArgumentThunk;
 import edu.jhu.cs.bsj.compiler.impl.utils.Converter;
-import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.UnmodifiableLazyList;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
 
 public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterNode> implements BsjTypeParameterElement
 {
@@ -51,9 +53,16 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 				getBackingNode().getBounds(), new Converter<DeclaredTypeNode, BsjTypeArgument>()
 				{
 					@Override
-					public BsjTypeArgument convert(DeclaredTypeNode t)
+					public BsjTypeArgument convert(final DeclaredTypeNode t)
 					{
-						return getTypeBuilder().makeArgumentType(t);
+						return new BsjTypeArgumentThunk(new Function<Void, BsjTypeArgument>()
+						{
+							@Override
+							public BsjTypeArgument execute(Void argument)
+							{
+								return getTypeBuilder().makeArgumentType(t);
+							}
+						});
 					}
 				});
 		return list;
@@ -76,17 +85,19 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 	public BsjTypeVariable asType()
 	{
 		List<? extends BsjTypeArgument> bounds = getBounds();
+		BsjTypeArgument upperBound;
 		if (bounds.size() == 0)
 		{
-			return new ExplicitTypeVariableImpl(getManager(), this.getBackingNode(), null, null);
+			upperBound = null;
 		} else if (bounds.size() == 1)
 		{
-			return new ExplicitTypeVariableImpl(getManager(), this.getBackingNode(), null, bounds.get(0));
+			upperBound = bounds.get(0);
 		} else
 		{
-			// TODO: create an implicit declared type representing the type parameter's bounds
-			throw new NotImplementedYetException();
+			upperBound = new IntersectionTypeImpl(getManager(), bounds);
 		}
+
+		return new ExplicitTypeVariableImpl(getManager(), getBackingNode(), null, upperBound);
 	}
 
 	@Override

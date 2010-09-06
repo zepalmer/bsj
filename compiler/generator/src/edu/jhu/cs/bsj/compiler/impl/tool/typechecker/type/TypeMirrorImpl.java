@@ -8,7 +8,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentIm
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl implements BsjType
 {
@@ -109,8 +108,7 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 		// short x = 5; because 5 is representable in the type short.
 		// TODO
 		
-		//return false;
-		throw new NotImplementedYetException();
+		return false;
 	}
 
 	@Override
@@ -139,8 +137,7 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 		// Note that this method is distinct from the isAssignmentCompatibleWith method because method conversion does
 		// not allow primitive narrowing of constant expressions.
 		
-		//return false;
-		throw new NotImplementedYetException();
+		return false;
 	}
 	
 	

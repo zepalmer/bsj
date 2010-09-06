@@ -378,6 +378,15 @@ public class BsjNodeManager
 	{
 		this.modificationCount++;
 	}
+	
+	/**
+	 * Retrieves the modification count for this manager.
+	 * @return The current modification count.
+	 */
+	public long getModificationCount()
+	{
+		return this.modificationCount;
+	}
 
 	// *** NOTE: the following node methods are written as callbacks to use caching and to make life generally easier
 	// due to the awkwardness of code generation.

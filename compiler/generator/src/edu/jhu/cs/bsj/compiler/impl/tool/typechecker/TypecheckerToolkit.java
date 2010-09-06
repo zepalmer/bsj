@@ -542,7 +542,7 @@ public class TypecheckerToolkit
 		{
 			// The type does not exist
 			// TODO: raise an appropriate diagnostic
-			throw new NotImplementedYetException();
+			throw new NotImplementedYetException("The type " + name.getNameString() + " could not be resolved; this case is not yet handled.");
 		}
 		for (int index = 1; index < typeNames.size(); index++)
 		{

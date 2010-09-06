@@ -66,4 +66,11 @@ public class TypecheckerEnvironment
 	{
 		return new TypecheckerEnvironment(this.parseMap, type);
 	}
+
+	@Override
+	public String toString()
+	{
+		return "TypecheckerEnvironment [parseMap=" + parseMap + ", arrayInitializerComponentType="
+				+ arrayInitializerComponentType + "]";
+	}
 }
