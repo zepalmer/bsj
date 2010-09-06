@@ -121,13 +121,13 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 {
 	private TypecheckerManager manager;
 	private DirectTypeCalculatingOperation innerOperation;
-	
+
 	public TypeEvaluationOperation(TypecheckerManager manager)
 	{
 		this.manager = manager;
 		this.innerOperation = new DirectTypeCalculatingOperation(manager, this);
 	}
-	
+
 	@Override
 	public BsjType executeDefault(Node node, TypecheckerEnvironment env)
 	{
@@ -140,11 +140,11 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 			if (ret instanceof BsjAmbiguousCodeLiteralErrorType)
 			{
 				@SuppressWarnings("unused")
-				BsjAmbiguousCodeLiteralErrorType errorType = (BsjAmbiguousCodeLiteralErrorType)ret;
+				BsjAmbiguousCodeLiteralErrorType errorType = (BsjAmbiguousCodeLiteralErrorType) ret;
 				// TODO: report diagnostic
 			}
 		}
-		
+
 		return ret;
 	}
 
@@ -1478,26 +1478,26 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		public BsjType executeRawCodeLiteralNode(RawCodeLiteralNode node, TypecheckerEnvironment env)
 		{
 			ParseMapEntry entry = env.getParseMap().get(node);
-			
+
 			if (entry == null)
 			{
 				// In this case, we don't have any parse map information at all - indicate to the outer operation that
 				// we need some.
-				return new AbstractCodeLiteralErrorTypeImpl(this.manager, Collections.<ParseRule<?>>emptySet());
+				return new AbstractCodeLiteralErrorTypeImpl(this.manager, Collections.<ParseRule<?>> emptySet());
 			}
-			
+
 			if (entry.getRules().size() == 0)
 			{
-				// In this case, every parse rule has been eliminated by context.  Because the context is purely
+				// In this case, every parse rule has been eliminated by context. Because the context is purely
 				// additive in constraints as we move up the tree, asking for more parse map information will not help.
 				// This means that it will be impossible to typecheck this code literal.
 				// TODO: diagnostic (needs to be quite descriptive)
 				return new ErrorTypeImpl(this.manager);
 			}
-			
+
 			if (entry.getRules().size() > 1)
 			{
-				// In this case, we have parse map information but it is too vague.  Try to get a more specific set of
+				// In this case, we have parse map information but it is too vague. Try to get a more specific set of
 				// information.
 				Set<ParseRule<?>> rules = new HashSet<ParseRule<?>>();
 				for (ParseRuleExecution<?> execution : entry.getRules())
@@ -1506,8 +1506,8 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 				}
 				return new AbstractCodeLiteralErrorTypeImpl(this.manager, rules);
 			}
-			
-			// In this case, we have exactly one candidate rule that parses.  As per the rule in the BLS, return the
+
+			// In this case, we have exactly one candidate rule that parses. As per the rule in the BLS, return the
 			// in-context type here (and not the actual type of the AST node, since that will be too specific and could
 			// introduce implementation dependence).
 			return entry.getInContextType();

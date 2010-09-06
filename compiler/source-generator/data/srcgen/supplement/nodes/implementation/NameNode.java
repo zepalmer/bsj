@@ -7,9 +7,16 @@ import static edu.jhu.cs.bsj.compiler.ast.NameCategory.*;
 public abstract class NameNodeImpl
 {
 	/* GEN:start */
+	private NameCategory nameCategoryCacheValue = null;
+	private long nameCategoryCacheModificationCount = 0;
 	public NameCategory getCategory(CompilationUnitLoader loader)
 	{
-		return NameCategorizer.SINGLETON.categorize(this, loader);
+		if (nameCategoryCacheModificationCount != getManager().getModificationCount() || nameCategoryCacheValue == null)
+		{
+			nameCategoryCacheValue = NameCategorizer.SINGLETON.categorize(this, loader);
+			nameCategoryCacheModificationCount = getManager().getModificationCount();
+		}
+		return nameCategoryCacheValue;
 	}
 	/* GEN:stop */
 }

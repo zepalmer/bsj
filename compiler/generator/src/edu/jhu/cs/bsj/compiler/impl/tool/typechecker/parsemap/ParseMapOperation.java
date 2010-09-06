@@ -50,7 +50,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
@@ -312,7 +311,7 @@ public class ParseMapOperation extends
 
 		// Otherwise, we treat the assignment expression as having an expected type of that matching the type of the
 		// variable to which it is being assigned.
-		BsjType variableType = this.manager.getTypechecker().getType(node, new TypecheckerEnvironment());
+		BsjType variableType = this.manager.getTypechecker().getType(node.getVariable(), new TypecheckerEnvironment());
 		if (variableType instanceof BsjErrorType)
 		{
 			variableType = this.nodeType;
@@ -621,14 +620,6 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeUnqualifiedClassInstantiationNode(
 			UnqualifiedClassInstantiationNode node, ParseMapperEnvironment env)
-	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableAccessNode(VariableAccessNode node,
-			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
