@@ -1,8 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,7 +26,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
@@ -85,6 +81,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
+import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjRawCodeLiteralPayloadAntlrImpl;
 
 /**
  * This operation is intended to evaluate the parse map relation as specified in the BSJ Language Specification. The
@@ -300,8 +297,7 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAssignmentNode(AssignmentNode node,
-			ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry> executeAssignmentNode(AssignmentNode node, ParseMapperEnvironment env)
 	{
 		if (node.getOperator() != AssignmentOperator.ASSIGNMENT)
 		{
@@ -356,8 +352,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumConstantDeclarationNode(
-			EnumConstantDeclarationNode node, ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node,
+			ParseMapperEnvironment env)
 	{
 		// TODO: Complete this method. Observe that an enum constant declaration is much like a constructor invocation.
 		// As a result, there may be an overloaded invocation here and we can't simply dismiss this as a default case.
@@ -381,8 +377,7 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeInstanceOfNode(InstanceOfNode node,
-			ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry> executeInstanceOfNode(InstanceOfNode node, ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -453,8 +448,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationValueListNode(
-			MetaAnnotationValueListNode node, ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node,
+			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -515,8 +510,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeParenthesizedExpressionNode(
-			ParenthesizedExpressionNode node, ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry> executeParenthesizedExpressionNode(ParenthesizedExpressionNode node,
+			ParseMapperEnvironment env)
 	{
 		return node.getExpression().executeOperation(this, env);
 	}
@@ -543,10 +538,10 @@ public class ParseMapOperation extends
 				validParses.add(execution);
 			}
 		}
-		
+
 		ParseMapEntry entry = new ParseMapEntry(validParses, env.getCodeLiteralExpectedType());
-		
-		return Collections.<RawCodeLiteralNode, ParseMapEntry>singletonMap(node, entry);
+
+		return Collections.<RawCodeLiteralNode, ParseMapEntry> singletonMap(node, entry);
 	}
 
 	@Override
@@ -563,8 +558,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeSingleElementAnnotationNode(
-			SingleElementAnnotationNode node, ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry> executeSingleElementAnnotationNode(SingleElementAnnotationNode node,
+			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -642,8 +637,8 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableInitializerListNode(
-			VariableInitializerListNode node, ParseMapperEnvironment env)
+	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableInitializerListNode(VariableInitializerListNode node,
+			ParseMapperEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException();
@@ -707,16 +702,18 @@ public class ParseMapOperation extends
 	private class ParseResultCache
 	{
 		private Map<ParseRule<?>, Node> results;
-		private WeakReference<RawCodeLiteralNode> node;
-
-		private String compilationUnitName;
+		private BsjRawCodeLiteralPayloadAntlrImpl payload;
 
 		public ParseResultCache(RawCodeLiteralNode node)
 		{
 			this.results = new HashMap<ParseRule<?>, Node>();
-			this.node = new WeakReference<RawCodeLiteralNode>(node);
-
-			this.compilationUnitName = node.getNearestAncestorOfType(CompilationUnitNode.class).getName();
+			if (node.getValue() instanceof BsjRawCodeLiteralPayloadAntlrImpl)
+			{
+				this.payload = (BsjRawCodeLiteralPayloadAntlrImpl) node.getValue();
+			} else
+			{
+				throw new IllegalStateException("Invalid raw code literal payload type: " + node.getValue().getClass());
+			}
 		}
 
 		/**
@@ -729,29 +726,11 @@ public class ParseMapOperation extends
 		 */
 		public <T extends Node> T parse(ParseRule<T> rule)
 		{
-			// If we've gotten here, it can only be because this object was fetched from the result cache (because of
-			// how this object is used throughout this class). As a result, we know that a reference to the node lives
-			// somewhere on the stack. This means our weak reference is good.
-			RawCodeLiteralNode codeLiteralNode = this.node.get();
-
 			if (!results.containsKey(rule))
 			{
 				CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
 						new NoOperationDiagnosticListener<BsjSourceLocation>());
-				T node;
-
-				// TODO: somehow fix this so we actually start from the right column!
-				try
-				{
-					node = ParseMapOperation.this.parser.parse(this.compilationUnitName,
-							codeLiteralNode.getStartLocation().getLine(),
-							codeLiteralNode.getStartLocation().getColumn() + 3,
-							new StringReader(codeLiteralNode.getValue()), rule, listener);
-				} catch (IOException e)
-				{
-					// This should never happen since we're pulling from a StringReader.
-					throw new IllegalStateException("Got IOException from StringReader!", e);
-				}
+				T node = ParseMapOperation.this.parser.parse(this.payload, rule, listener);
 
 				// TODO: should we maybe actually report these parse errors under certain circumstances? Should they be
 				// recorded in the cache so that they can be retrieved later if desired? If this is the only valid

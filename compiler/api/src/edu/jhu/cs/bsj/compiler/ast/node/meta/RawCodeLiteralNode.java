@@ -3,15 +3,18 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjRawCodeLiteralPayload;
 import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 
 /**
  * A node representing an unprocessed code literal.  This literal is not guaranteed to contain parseable
- * Java code and has not yet been assigned a type.
+ * Java code and has not yet been assigned a type.  Metaprogrammers should never need to create a node of
+ * this type; use {@link CodeLiteralNode} instead.  This node is meant exclusively for handling
+ * syntactically ambiguous code literals.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface RawCodeLiteralNode extends LiteralNode<String>, BsjSpecificNode
+public interface RawCodeLiteralNode extends LiteralNode<BsjRawCodeLiteralPayload>, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

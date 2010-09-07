@@ -922,8 +922,7 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		@Override
 		public BsjType executeIdentifierNode(IdentifierNode node, TypecheckerEnvironment env)
 		{
-			// TODO Auto-generated method stub
-			throw new NotImplementedYetException("Have not yet handled IdentifierNode.");
+			return new NonePseudoTypeImpl(this.manager);
 		}
 
 		@Override

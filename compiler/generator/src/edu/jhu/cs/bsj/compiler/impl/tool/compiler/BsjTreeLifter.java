@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
+import edu.jhu.cs.bsj.compiler.ast.BsjRawCodeLiteralPayload;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
@@ -72,6 +73,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjRawCodeLiteralPayloadAntlrImpl;
+import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjTokenImpl;
 
 /**
  * This class is designed to "lift" a BSJ AST, transitioning it into a higher, more abstract stage of programming. The
@@ -136,13 +139,54 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
 		} else
 		{
 			return factory.makeUnqualifiedClassInstantiationNode(
-					factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-							factory.makeIdentifierNode("BsjSourceLocation"))),
+					factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("BsjSourceLocation"))),
 					factory.makeTypeArgumentListNode(),
-					factory.makeExpressionListNode(
-							factory.makeStringLiteralNode(location.getResourceName()),
+					factory.makeExpressionListNode(factory.makeStringLiteralNode(location.getResourceName()),
 							factory.makeIntLiteralNode(location.getLine()),
 							factory.makeIntLiteralNode(location.getColumn())), null);
+		}
+	}
+
+	protected ExpressionNode expressionizeBsjRawCodeLiteralPayload(BsjRawCodeLiteralPayload payload)
+	{
+		if (payload == null)
+		{
+			return factory.makeNullLiteralNode();
+		} else if (!(payload instanceof BsjRawCodeLiteralPayloadAntlrImpl))
+		{
+			throw new IllegalArgumentException("Invalid raw code literal payload type " + payload.getClass());
+		} else
+		{
+			BsjRawCodeLiteralPayloadAntlrImpl payloadImpl = (BsjRawCodeLiteralPayloadAntlrImpl) payload;
+			List<BsjTokenImpl> tokens = payloadImpl.getTokens();
+
+			ExpressionListNode tokenInstantiationExpressionList;
+			List<ExpressionNode> tokenInstantiationExpressions = new ArrayList<ExpressionNode>();
+
+			for (BsjTokenImpl token : tokens)
+			{
+				tokenInstantiationExpressions.add(factory.makeUnqualifiedClassInstantiationNode(
+						factory.makeUnparameterizedTypeNode(factory.parseNameNode("edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjTokenImpl")),
+						factory.makeExpressionListNode(factory.makeIntLiteralNode(token.getChannel()),
+								factory.makeIntLiteralNode(token.getCharPositionInLine()),
+								factory.makeIntLiteralNode(token.getLine()),
+								factory.makeStringLiteralNode(token.getText()),
+								factory.makeIntLiteralNode(token.getTokenIndex()),
+								factory.makeIntLiteralNode(token.getType()))));
+			}
+			tokenInstantiationExpressionList = factory.makeExpressionListNode(tokenInstantiationExpressions);
+
+			return factory.makeUnqualifiedClassInstantiationNode(
+					factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("BsjRawCodeLiteralPayload"))),
+					factory.makeExpressionListNode(
+							factory.makeStringLiteralNode(payloadImpl.getResourceName()),
+							factory.makeMethodInvocationNode(
+									factory.makeVariableAccessNode(factory.makeVariableAccessNode(
+											factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
+											factory.makeIdentifierNode("util")), factory.makeIdentifierNode("Arrays")),
+									factory.makeIdentifierNode("asList"),
+									tokenInstantiationExpressionList,
+									factory.makeReferenceTypeListNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode("edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjTokenImpl"))))));
 		}
 	}
 
@@ -4446,7 +4490,7 @@ public ExpressionNode executeMetaprogramTargetListNode(MetaprogramTargetListNode
         @Override
         public ExpressionNode executeRawCodeLiteralNode(RawCodeLiteralNode node, ExpressionNode factoryNode)
         {
-            String liftValueValue = 
+            BsjRawCodeLiteralPayload liftValueValue = 
                     node.getValue();
             BsjSourceLocation liftStartLocationValue = 
                     node.getStartLocation();
@@ -4458,7 +4502,7 @@ public ExpressionNode executeMetaprogramTargetListNode(MetaprogramTargetListNode
                             factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                             factory.makeIdentifierNode("makeRawCodeLiteralNode"),
                             factory.makeExpressionListNode(
-                                    expressionizeString(liftValueValue),
+                                    expressionizeBsjRawCodeLiteralPayload(liftValueValue),
                                     expressionizeBsjSourceLocation(liftStartLocationValue),
                                     expressionizeBsjSourceLocation(liftStopLocationValue)),
                             factory.makeReferenceTypeListNode());

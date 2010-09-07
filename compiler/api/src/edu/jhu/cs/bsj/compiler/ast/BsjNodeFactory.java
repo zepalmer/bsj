@@ -3487,14 +3487,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public RawCodeLiteralNode makeRawCodeLiteralNode(
-            String value);
+            BsjRawCodeLiteralPayload value);
     
     /**
      * Creates a RawCodeLiteralNode.
      * The specified start and stop locations are used.
      */
     public RawCodeLiteralNode makeRawCodeLiteralNode(
-            String value,
+            BsjRawCodeLiteralPayload value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     

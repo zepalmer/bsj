@@ -5,6 +5,7 @@ import java.io.Reader;
 
 import javax.tools.DiagnosticListener;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjRawCodeLiteralPayload;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -19,7 +20,7 @@ public interface BsjParser
 	/**
 	 * This method generates a heterogeneous BSJ AST represeenting a compilation unit from the provided source stream.
 	 * 
-	 * @param name The name of the compilation unit being parsed.
+	 * @param name The name of the resource being parsed.
 	 * @param reader The {@link Reader} to use to read the input file.
 	 * @param diagnosticListener The listener to which diagnostics are reported. If <code>null</code>, a default
 	 *            listener is used which reports messages to standard error.
@@ -31,15 +32,12 @@ public interface BsjParser
 	/**
 	 * This method generates a heterogeneous BSJ AST representing a code fragment from the provided source stream.
 	 * 
-	 * @param name The name of the compilation unit to use when creating source locations for this code fragment.
-	 * @param lineNumber The one-based line number for the first character in the source stream.
-	 * @param columnNumber The one-based column number for the first character in the source stream.
-	 * @param reader The {@link Reader} to use to read the input file.
-	 * @param rule The parse rule to use when parsing the source stream.
+	 * @param payload The payload to parse.
+	 * @param rule The parse rule to use when parsing the payload.
 	 * @param diagnosticListener The listener to which diagnostics are reported. If <code>null</code>, a default
 	 *            listener is used which reports messages to standard error.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IllegalArgumentException If the provided list of tokens is empty.
 	 */
-	public <T extends Node> T parse(String name, int lineNumber, int columnNumber, Reader reader, ParseRule<T> rule,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException;
+	public <T extends Node> T parse(BsjRawCodeLiteralPayload payload, ParseRule<T> rule,
+			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IllegalArgumentException;
 }

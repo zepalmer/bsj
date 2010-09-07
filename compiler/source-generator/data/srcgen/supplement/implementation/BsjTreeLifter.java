@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
@@ -6,6 +7,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 /* GEN:headerstart */
+import edu.jhu.cs.bsj.compiler.tool.parser.antlr.*;
+
 /**
  * This class is designed to "lift" a BSJ AST, transitioning it into a higher, more abstract stage of programming. The
  * parameters for all methods are the AST to process and a pairing. The pairing contains an expression describing how
@@ -70,13 +73,54 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode, List
 		} else
 		{
 			return factory.makeUnqualifiedClassInstantiationNode(
-					factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
-							factory.makeIdentifierNode("BsjSourceLocation"))),
+					factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("BsjSourceLocation"))),
 					factory.makeTypeArgumentListNode(),
-					factory.makeExpressionListNode(
-							factory.makeStringLiteralNode(location.getResourceName()),
+					factory.makeExpressionListNode(factory.makeStringLiteralNode(location.getResourceName()),
 							factory.makeIntLiteralNode(location.getLine()),
 							factory.makeIntLiteralNode(location.getColumn())), null);
+		}
+	}
+
+	protected ExpressionNode expressionizeBsjRawCodeLiteralPayload(BsjRawCodeLiteralPayload payload)
+	{
+		if (payload == null)
+		{
+			return factory.makeNullLiteralNode();
+		} else if (!(payload instanceof BsjRawCodeLiteralPayloadAntlrImpl))
+		{
+			throw new IllegalArgumentException("Invalid raw code literal payload type " + payload.getClass());
+		} else
+		{
+			BsjRawCodeLiteralPayloadAntlrImpl payloadImpl = (BsjRawCodeLiteralPayloadAntlrImpl) payload;
+			List<BsjTokenImpl> tokens = payloadImpl.getTokens();
+
+			ExpressionListNode tokenInstantiationExpressionList;
+			List<ExpressionNode> tokenInstantiationExpressions = new ArrayList<ExpressionNode>();
+
+			for (BsjTokenImpl token : tokens)
+			{
+				tokenInstantiationExpressions.add(factory.makeUnqualifiedClassInstantiationNode(
+						factory.makeUnparameterizedTypeNode(factory.parseNameNode("edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjTokenImpl")),
+						factory.makeExpressionListNode(factory.makeIntLiteralNode(token.getChannel()),
+								factory.makeIntLiteralNode(token.getCharPositionInLine()),
+								factory.makeIntLiteralNode(token.getLine()),
+								factory.makeStringLiteralNode(token.getText()),
+								factory.makeIntLiteralNode(token.getTokenIndex()),
+								factory.makeIntLiteralNode(token.getType()))));
+			}
+			tokenInstantiationExpressionList = factory.makeExpressionListNode(tokenInstantiationExpressions);
+
+			return factory.makeUnqualifiedClassInstantiationNode(
+					factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("BsjRawCodeLiteralPayload"))),
+					factory.makeExpressionListNode(
+							factory.makeStringLiteralNode(payloadImpl.getResourceName()),
+							factory.makeMethodInvocationNode(
+									factory.makeVariableAccessNode(factory.makeVariableAccessNode(
+											factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
+											factory.makeIdentifierNode("util")), factory.makeIdentifierNode("Arrays")),
+									factory.makeIdentifierNode("asList"),
+									tokenInstantiationExpressionList,
+									factory.makeReferenceTypeListNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode("edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjTokenImpl"))))));
 		}
 	}
 

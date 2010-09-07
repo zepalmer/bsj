@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjRawCodeLiteralPayload;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
@@ -5452,7 +5453,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public RawCodeLiteralNode makeRawCodeLiteralNode(
-            String value)
+            BsjRawCodeLiteralPayload value)
     {
         RawCodeLiteralNode ret = new RawCodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5464,7 +5465,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public RawCodeLiteralNode makeRawCodeLiteralNode(
-            String value,
+            BsjRawCodeLiteralPayload value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

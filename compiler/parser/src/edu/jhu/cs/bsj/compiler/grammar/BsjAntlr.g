@@ -200,6 +200,7 @@ scope Rule {
     import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;
     import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.*;
     
+    import edu.jhu.cs.bsj.compiler.tool.parser.antlr.*;
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjParserConfiguration;
 }
@@ -220,19 +221,6 @@ scope Rule {
     }
     
     // *** SOURCE LOCATION TRACKING *******************************************
-    /** An optional value which permits the starting line number to be overridden. */
-    private Integer startingLine = null;
-    /** An optional value which permits the starting column number on the starting line to be overridden. */
-    private Integer startingColumn = null;
-    /**
-     * Sets the starting position of the parser's input.  This call will affect the {@link BsjSourceLocation}s produced
-     * for all nodes.
-     */
-    public void setStartLocation(int startingLine, int startingColumn)
-    {
-        this.startingLine = startingLine;
-        this.startingColumn = startingColumn;
-    }
     /** The resource which is being parsed. */
     private String resourceName;
     /**
@@ -258,12 +246,9 @@ scope Rule {
         if (token == null)
         {
             return BsjSourceLocation.NOPOS;
-        } else if (this.startingLine == null)
-        {
-            return token.getLine();
         } else
         {
-            return token.getLine() + this.startingLine - 1;
+            return token.getLine();
         }
     }
     /**
@@ -275,12 +260,9 @@ scope Rule {
         if (token == null)
         {
             return BsjSourceLocation.NOPOS;
-        } else if (this.startingColumn == null || token.getLine() != 1)
-        {
-            return token.getCharPositionInLine() + 1;
         } else
         {
-            return token.getCharPositionInLine() + this.startingColumn;
+            return token.getCharPositionInLine() + 1;
         }
     }
     /**
@@ -1330,54 +1312,56 @@ codeLiteral returns [RawCodeLiteralNode ret]
         scope Rule;
         @init {
             ruleStart("codeLiteral");
-            int startIndex = 0;
-            int endIndex = 0;
         }
         @after {
-            Token token = input.get(startIndex);
-            BsjSourceLocation startSourceLocation = new BsjSourceLocation(
-                    getResourceName(), token.getLine(), token.getCharPositionInLine() + 1);
-            token = input.get(endIndex-1);
-            BsjSourceLocation stopSourceLocation = new BsjSourceLocation(
-                    getResourceName(), token.getLine(),
-                    token.getCharPositionInLine() + token.getText().length() + 1);
-                    
-            StringBuilder sb = new StringBuilder();
-            for (int i=startIndex;i<endIndex;i++)
-            {
-                sb.append(input.get(i).getText());
-            }
-            String code = sb.toString();
-            
-            factory.setStartSourceLocation(startSourceLocation);
-            factory.setStopSourceLocation(stopSourceLocation);
-            factorySourceLocationOverride = true;
-            $ret = factory.makeRawCodeLiteralNode(code);
-            factorySourceLocationOverride = false;
-            
             ruleStop();
         }
     :
-        CODELITERAL_START
+        '<:'
+        codeLiteralBody
+        ':>'
         {
-            // Set startIndex to the index of the next token
-            startIndex = input.index();
+            $ret = factory.makeRawCodeLiteralNode(new BsjRawCodeLiteralPayloadAntlrImpl(
+                getResourceName(),
+                $codeLiteralBody.ret
+            ));
         }
+    ;
+
+// Parses the body of a raw code literal
+codeLiteralBody returns [List<BsjTokenImpl> ret]
+        scope Rule;
+        @init {
+            ruleStart("codeLiteralBody");
+            $ret = new ArrayList<BsjTokenImpl>();
+        }
+        @after {
+            ruleStop();
+        }
+    :
         (
-            (
-                anyNonCodeLiteralToken
-            |
-                codeLiteral
-            )
+            anyNonCodeLiteralToken
             {
-                endIndex = input.index();
+                $ret.add($anyNonCodeLiteralToken.ret);
+            }
+        |
+            '<:'
+            {
+                $ret.add(new BsjTokenImpl(input.get(input.index()-1)));
+            }
+            inner=codeLiteralBody
+            {
+                $ret.addAll($inner.ret);
+            }
+            ':>'
+            {
+                $ret.add(new BsjTokenImpl(input.get(input.index()-1)));
             }
         )+
-        CODELITERAL_STOP
     ;
 
 // This rule matches exactly one token which is not a code literal delimiter
-anyNonCodeLiteralToken
+anyNonCodeLiteralToken returns [BsjTokenImpl ret]
         scope Rule;
         @init {
             ruleStart("anyNonCodeLiteralToken");
@@ -1387,6 +1371,9 @@ anyNonCodeLiteralToken
         }
     :
         ~(CODELITERAL_START | CODELITERAL_STOP)
+        {
+            $ret = new BsjTokenImpl(input.get(input.index()-1));
+        }
     ;
 
 /* ===========================================================================

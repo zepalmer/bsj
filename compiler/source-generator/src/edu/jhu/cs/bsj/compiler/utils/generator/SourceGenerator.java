@@ -53,7 +53,8 @@ public class SourceGenerator
 	/** Types which can be "deep copied" by reference copy because the instance is global to a compilation operation. */
 	private static final Set<String> COMPILE_GLOBAL_TYPES = new HashSet<String>(Arrays.asList("PackageNodeCallback"));
 	/** Immutable types which may be shared. */
-	private static final Set<String> IMMUTABLE_TYPES = new HashSet<String>(Arrays.asList("BsjSourceLocation"));
+	private static final Set<String> IMMUTABLE_TYPES = new HashSet<String>(Arrays.asList("BsjSourceLocation",
+			"BsjRawCodeLiteralPayload"));
 
 	/** Names the types of objects which are "deep copied" by simply copying the reference. */
 	private static final Set<String> DIRECT_COPY_NAMES;
