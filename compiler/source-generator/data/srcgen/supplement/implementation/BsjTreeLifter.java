@@ -26,6 +26,8 @@ import edu.jhu.cs.bsj.compiler.tool.parser.antlr.*;
  * Now suppose one wanted to generate an AST which would represent the above code; that is, produce an AST representing
  * the code that makes an AST. In that case, this lifter is very convenient. The following code would be sufficient:
  * 
+ * TODO: rework example code
+ * 
  * <pre>
  * List&lt;BlockStatementNode&gt; list = new ArrayList&lt;BlockStatementNode&gt;();
  * IntLiteralNode input = factory.makeIntLiteralNode(5);

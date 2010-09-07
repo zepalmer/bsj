@@ -8,6 +8,7 @@ import java.util.List;
 import javax.tools.DiagnosticListener;
 
 import org.antlr.runtime.ANTLRReaderStream;
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
@@ -126,7 +127,7 @@ public class BsjParserImpl implements BsjParser
 			{
 				if (it.hasNext())
 				{
-					return it.next();
+					return new CommonToken(it.next());
 				} else
 				{
 					return Token.EOF_TOKEN;

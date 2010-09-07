@@ -75,6 +75,7 @@ import edu.jhu.cs.bsj.compiler.impl.diagnostic.NoOperationDiagnosticListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerEnvironment;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.rule.ParseRuleExecution;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
@@ -395,8 +396,8 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeLocalVariableDeclarationNode(
 			LocalVariableDeclarationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		BsjType variableType = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
+		return node.getDeclarators().executeOperation(this, env.deriveForExpectedType(variableType));
 	}
 
 	@Override
@@ -624,16 +625,27 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableDeclaratorListNode(VariableDeclaratorListNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		return calculateNodeUnionWithEnvironment(node.getChildren(), env);
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableDeclaratorNode(VariableDeclaratorNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		if (node.getInitializer() == null)
+		{
+			return Collections.emptyMap();
+		}
+		if (node.getArrayLevels() > 0)
+		{
+			BsjType type = env.getCodeLiteralExpectedType();
+			for (int i = 0; i < node.getArrayLevels(); i++)
+			{
+				type = new ArrayTypeImpl(this.manager, type);
+			}
+			env = env.deriveForExpectedType(type);
+		}
+		return node.getInitializer().executeOperation(this, env);
 	}
 
 	@Override

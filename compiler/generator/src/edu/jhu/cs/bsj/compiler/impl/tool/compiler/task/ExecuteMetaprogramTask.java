@@ -87,7 +87,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	{
 		if (LOGGER.isTraceEnabled())
 		{
-			LOGGER.trace("No metaprograms left to run.  Adding tasks to strip meta-annotations from sources.");
+			LOGGER.trace("No metaprograms left to run.  Adding cleanup tasks.");
 		}
 		Iterator<CompilationUnitNode> it = context.getRootPackage().getRecursiveCompilationUnitIterator();
 		while (it.hasNext())
@@ -95,6 +95,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			CompilationUnitNode node = it.next();
 			if (!node.isBinary())
 			{
+				context.registerTask(new ReplaceCodeLiteralsTask(node));
 				context.registerTask(new StripBsjNodesTask(node));
 			}
 		}
