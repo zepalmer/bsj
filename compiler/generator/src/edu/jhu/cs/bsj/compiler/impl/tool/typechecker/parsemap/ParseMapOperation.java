@@ -42,6 +42,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
@@ -272,8 +273,7 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeConstantDeclarationNode(ConstantDeclarationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
+		return handleVariableDeclaratorOwnerNode(node, env);
 	}
 
 	@Override
@@ -297,8 +297,7 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeFieldDeclarationNode(FieldDeclarationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
+		return handleVariableDeclaratorOwnerNode(node, env);
 	}
 
 	@Override
@@ -312,8 +311,7 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeLocalVariableDeclarationNode(
 			LocalVariableDeclarationNode node, ParseMapperEnvironment env)
 	{
-		BsjType variableType = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
-		return node.getDeclarators().executeOperation(this, env.deriveForExpectedType(variableType));
+		return handleVariableDeclaratorOwnerNode(node, env);
 	}
 
 	@Override
@@ -531,6 +529,13 @@ public class ParseMapOperation extends
 	{
 		// TODO: Not implemented yet.
 		return Collections.emptyMap();
+	}
+
+	private Map<RawCodeLiteralNode, ParseMapEntry> handleVariableDeclaratorOwnerNode(VariableDeclaratorOwnerNode node,
+			ParseMapperEnvironment env)
+	{
+		BsjType variableType = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
+		return node.getDeclarators().executeOperation(this, env.deriveForExpectedType(variableType));
 	}
 
 	private <T extends Node> ParseRuleExecution<T> createParseRuleExecution(RawCodeLiteralNode node, ParseRule<T> rule)
