@@ -1,4 +1,4 @@
-package bsj_eclipse_plugin;
+package edu.jhu.cs.bsj.plugin.eclipse;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
