@@ -173,128 +173,128 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAlternateConstructorInvocationNode(
 			AlternateConstructorInvocationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationAnnotationValueNode(
 			AnnotationAnnotationValueNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationArrayValueNode(AnnotationArrayValueNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationBodyNode(AnnotationBodyNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationDeclarationNode(AnnotationDeclarationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationElementListNode(AnnotationElementListNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationElementNode(AnnotationElementNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationExpressionValueNode(
 			AnnotationExpressionValueNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationMemberMetaprogramAnchorNode(
 			AnnotationMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationMethodDeclarationNode(
 			AnnotationMethodDeclarationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationValueListNode(AnnotationValueListNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnonymousClassBodyNode(AnonymousClassBodyNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnonymousClassMemberMetaprogramAnchorNode(
 			AnonymousClassMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeArrayInitializerCreationNode(
 			ArrayInitializerCreationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeArrayInitializerNode(ArrayInitializerNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeArrayInstantiatorCreationNode(
 			ArrayInstantiatorCreationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -321,16 +321,16 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeBlockStatementMetaprogramAnchorNode(
 			BlockStatementMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeClassMemberMetaprogramAnchorNode(
 			ClassMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -348,8 +348,8 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeConstantDeclarationNode(ConstantDeclarationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -365,31 +365,31 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeExpressionListNode(ExpressionListNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeFieldDeclarationNode(FieldDeclarationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeInstanceOfNode(InstanceOfNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeInterfaceMemberMetaprogramAnchorNode(
 			InterfaceMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -404,64 +404,64 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationArrayValueNode(
 			MetaAnnotationArrayValueNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationElementListNode(
 			MetaAnnotationElementListNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationElementNode(MetaAnnotationElementNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationExpressionValueNode(
 			MetaAnnotationExpressionValueNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationMetaAnnotationValueNode(
 			MetaAnnotationMetaAnnotationValueNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationMetaprogramAnchorNode(
 			MetaAnnotationMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramNode(MetaprogramNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -482,24 +482,24 @@ public class ParseMapOperation extends
 		// candidate methods are dependent upon the process described in §15.12.2 of the JLSv3. If this is not the
 		// case, then the description of how this is implemented is not sound.
 
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeNormalAnnotationNode(NormalAnnotationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -521,8 +521,8 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeQualifiedClassInstantiationNode(
 			QualifiedClassInstantiationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -562,40 +562,40 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeSingleElementAnnotationNode(SingleElementAnnotationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeSingleElementMetaAnnotationNode(
 			SingleElementMetaAnnotationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeSuperFieldAccessNode(SuperFieldAccessNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeSuperMethodInvocationNode(SuperMethodInvocationNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeSuperclassConstructorInvocationNode(
 			SuperclassConstructorInvocationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -609,16 +609,16 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeDeclarationMetaprogramAnchorNode(
 			TypeDeclarationMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeUnqualifiedClassInstantiationNode(
 			UnqualifiedClassInstantiationNode node, ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -652,8 +652,8 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableInitializerListNode(VariableInitializerListNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedYetException();
+		// TODO: Not implemented yet.
+		return Collections.emptyMap();
 	}
 
 	private <T extends Node> ParseRuleExecution<T> createParseRuleExecution(RawCodeLiteralNode node, ParseRule<T> rule)

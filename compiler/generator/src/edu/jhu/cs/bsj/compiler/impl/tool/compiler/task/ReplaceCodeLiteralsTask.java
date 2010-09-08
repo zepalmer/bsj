@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
@@ -50,6 +51,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 	public void execute(final MetacompilationContext context) throws IOException
 	{
 		this.parseMap = null;
+		final Map<Node,Node> nodeReplacementMap = new HashMap<Node, Node>();
 		this.root.receiveTyped(new BsjTypedNodeNoOpVisitor()
 		{
 			private int levels = 0;
@@ -72,7 +74,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 				levels--;
 				if (levels == 0 && node.getParent() == null)
 				{
-					node.getParent().replace(node, liftNode(context, node.getValue()));
+					nodeReplacementMap.put(node, liftNode(context, node.getValue()));
 				}
 			}
 
@@ -82,10 +84,14 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 				levels--;
 				if (levels == 0 && node.getParent() != null)
 				{
-					node.getParent().replace(node, liftNode(context, interpretRawCodeLiteral(context, node)));
+					nodeReplacementMap.put(node, liftNode(context, interpretRawCodeLiteral(context, node)));
 				}
 			}
 		});
+		for (Map.Entry<Node,Node> entry : nodeReplacementMap.entrySet())
+		{
+			entry.getKey().getParent().replace(entry.getKey(), entry.getValue());
+		}
 	}
 
 	private Node interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node)

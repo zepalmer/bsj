@@ -31,10 +31,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
@@ -72,13 +69,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 public class ParseRule<T extends Node>
 {
 	private String name;
-	private Class<T> nodeClass;
 	private Collection<Class<? extends T>> bottomMostClasses;
 
-	private ParseRule(String name, Class<T> nodeClass, Collection<Class<? extends T>> bottomMostClasses)
+	private ParseRule(String name, Collection<Class<? extends T>> bottomMostClasses)
 	{
 		this.name = name;
-		this.nodeClass = nodeClass;
 		this.bottomMostClasses = Collections.unmodifiableCollection(bottomMostClasses);
 	}
 	
@@ -89,16 +84,6 @@ public class ParseRule<T extends Node>
 	public String getName()
 	{
 		return this.name;
-	}
-
-	/**
-	 * Retrieves the type of node which is produced by this parse rule.
-	 * 
-	 * @return The type of node produced by this parse rule.
-	 */
-	public Class<T> getNodeClass()
-	{
-		return this.nodeClass;
 	}
 
 	/**
@@ -117,7 +102,7 @@ public class ParseRule<T extends Node>
 		return this.name + " rule";
 	}
     public static final ParseRule<AnnotationMethodModifiersNode> ABSTRACT_METHOD_MODIFIERS = 
-        new ParseRule<AnnotationMethodModifiersNode>("AbstractMethodModifiers", AnnotationMethodModifiersNode.class,
+        new ParseRule<AnnotationMethodModifiersNode>("AbstractMethodModifiers",
             Collections.<Class<? extends AnnotationMethodModifiersNode>>singleton(AnnotationMethodModifiersNode.class));
     
     public static final ParseRule<AnnotationNode> ANNOTATION;
@@ -126,66 +111,39 @@ public class ParseRule<T extends Node>
         List<Class<? extends AnnotationNode>> list = new ArrayList<Class<? extends AnnotationNode>>(2);
         list.add(NormalAnnotationNode.class);
         list.add(SingleElementAnnotationNode.class);
-        ANNOTATION = new ParseRule<AnnotationNode>("Annotation", AnnotationNode.class, list);
+        ANNOTATION = new ParseRule<AnnotationNode>("Annotation", list);
     }
     
     public static final ParseRule<AnnotationListNode> ANNOTATIONS = 
-        new ParseRule<AnnotationListNode>("Annotations", AnnotationListNode.class,
+        new ParseRule<AnnotationListNode>("Annotations",
             Collections.<Class<? extends AnnotationListNode>>singleton(AnnotationListNode.class));
     
+    public static final ParseRule<AnnotationMethodDeclarationNode> ANNOTATION_METHOD = 
+        new ParseRule<AnnotationMethodDeclarationNode>("AnnotationMethod",
+            Collections.<Class<? extends AnnotationMethodDeclarationNode>>singleton(AnnotationMethodDeclarationNode.class));
+    
     public static final ParseRule<AnnotationModifiersNode> ANNOTATION_MODIFIERS = 
-        new ParseRule<AnnotationModifiersNode>("AnnotationModifiers", AnnotationModifiersNode.class,
+        new ParseRule<AnnotationModifiersNode>("AnnotationModifiers",
             Collections.<Class<? extends AnnotationModifiersNode>>singleton(AnnotationModifiersNode.class));
     
     public static final ParseRule<AnnotationBodyNode> ANNOTATION_TYPE_BODY = 
-        new ParseRule<AnnotationBodyNode>("AnnotationTypeBody", AnnotationBodyNode.class,
+        new ParseRule<AnnotationBodyNode>("AnnotationTypeBody",
             Collections.<Class<? extends AnnotationBodyNode>>singleton(AnnotationBodyNode.class));
     
     public static final ParseRule<AnnotationMemberListNode> ANNOTATION_TYPE_ELEMENT_DECLARATIONS = 
-        new ParseRule<AnnotationMemberListNode>("AnnotationTypeElementDeclarations", AnnotationMemberListNode.class,
+        new ParseRule<AnnotationMemberListNode>("AnnotationTypeElementDeclarations",
             Collections.<Class<? extends AnnotationMemberListNode>>singleton(AnnotationMemberListNode.class));
     
-    public static final ParseRule<AnnotationMemberNode> ANNOTATION_TYPE_ELEMENT_DECLARATION;
-    static
-    {
-        List<Class<? extends AnnotationMemberNode>> list = new ArrayList<Class<? extends AnnotationMemberNode>>(8);
-        list.add(AnnotationDeclarationNode.class);
-        list.add(AnnotationMemberMetaprogramAnchorNode.class);
-        list.add(AnnotationMethodDeclarationNode.class);
-        list.add(ClassDeclarationNode.class);
-        list.add(ConstantDeclarationNode.class);
-        list.add(EnumDeclarationNode.class);
-        list.add(InterfaceDeclarationNode.class);
-        list.add(NoOperationNode.class);
-        ANNOTATION_TYPE_ELEMENT_DECLARATION = new ParseRule<AnnotationMemberNode>("AnnotationTypeElementDeclaration", AnnotationMemberNode.class, list);
-    }
-    
     public static final ParseRule<AnonymousClassBodyNode> ANONYMOUS_CLASS_BODY = 
-        new ParseRule<AnonymousClassBodyNode>("AnonymousClassBody", AnonymousClassBodyNode.class,
+        new ParseRule<AnonymousClassBodyNode>("AnonymousClassBody",
             Collections.<Class<? extends AnonymousClassBodyNode>>singleton(AnonymousClassBodyNode.class));
     
     public static final ParseRule<AnonymousClassMemberListNode> ANONYMOUS_CLASS_BODY_DECLARATIONS = 
-        new ParseRule<AnonymousClassMemberListNode>("AnonymousClassBodyDeclarations", AnonymousClassMemberListNode.class,
+        new ParseRule<AnonymousClassMemberListNode>("AnonymousClassBodyDeclarations",
             Collections.<Class<? extends AnonymousClassMemberListNode>>singleton(AnonymousClassMemberListNode.class));
     
-    public static final ParseRule<ClassMemberNode> ANONYMOUS_CLASS_BODY_DECLARATION;
-    static
-    {
-        List<Class<? extends ClassMemberNode>> list = new ArrayList<Class<? extends ClassMemberNode>>(9);
-        list.add(AnnotationDeclarationNode.class);
-        list.add(ClassDeclarationNode.class);
-        list.add(ClassMemberMetaprogramAnchorNode.class);
-        list.add(EnumDeclarationNode.class);
-        list.add(FieldDeclarationNode.class);
-        list.add(InitializerDeclarationNode.class);
-        list.add(InterfaceDeclarationNode.class);
-        list.add(MethodDeclarationNode.class);
-        list.add(NoOperationNode.class);
-        ANONYMOUS_CLASS_BODY_DECLARATION = new ParseRule<ClassMemberNode>("AnonymousClassBodyDeclaration", ClassMemberNode.class, list);
-    }
-    
     public static final ParseRule<ExpressionListNode> ARGUMENT_LIST = 
-        new ParseRule<ExpressionListNode>("ArgumentList", ExpressionListNode.class,
+        new ParseRule<ExpressionListNode>("ArgumentList",
             Collections.<Class<? extends ExpressionListNode>>singleton(ExpressionListNode.class));
     
     public static final ParseRule<BlockStatementNode> BLOCK_STATEMENT;
@@ -212,72 +170,59 @@ public class ParseRule<T extends Node>
         list.add(ThrowNode.class);
         list.add(TryNode.class);
         list.add(WhileLoopNode.class);
-        BLOCK_STATEMENT = new ParseRule<BlockStatementNode>("BlockStatement", BlockStatementNode.class, list);
+        BLOCK_STATEMENT = new ParseRule<BlockStatementNode>("BlockStatement", list);
     }
     
     public static final ParseRule<BlockStatementListNode> BLOCK_STATEMENTS = 
-        new ParseRule<BlockStatementListNode>("BlockStatements", BlockStatementListNode.class,
+        new ParseRule<BlockStatementListNode>("BlockStatements",
             Collections.<Class<? extends BlockStatementListNode>>singleton(BlockStatementListNode.class));
     
     public static final ParseRule<CatchNode> CATCH_CLAUSE = 
-        new ParseRule<CatchNode>("CatchClause", CatchNode.class,
+        new ParseRule<CatchNode>("CatchClause",
             Collections.<Class<? extends CatchNode>>singleton(CatchNode.class));
     
     public static final ParseRule<CatchListNode> CATCHES = 
-        new ParseRule<CatchListNode>("Catches", CatchListNode.class,
+        new ParseRule<CatchListNode>("Catches",
             Collections.<Class<? extends CatchListNode>>singleton(CatchListNode.class));
     
     public static final ParseRule<ClassBodyNode> CLASS_BODY = 
-        new ParseRule<ClassBodyNode>("ClassBody", ClassBodyNode.class,
+        new ParseRule<ClassBodyNode>("ClassBody",
             Collections.<Class<? extends ClassBodyNode>>singleton(ClassBodyNode.class));
     
-    public static final ParseRule<ClassMemberNode> CLASS_BODY_DECLARATION;
-    static
-    {
-        List<Class<? extends ClassMemberNode>> list = new ArrayList<Class<? extends ClassMemberNode>>(10);
-        list.add(AnnotationDeclarationNode.class);
-        list.add(ClassDeclarationNode.class);
-        list.add(ClassMemberMetaprogramAnchorNode.class);
-        list.add(ConstructorDeclarationNode.class);
-        list.add(EnumDeclarationNode.class);
-        list.add(FieldDeclarationNode.class);
-        list.add(InitializerDeclarationNode.class);
-        list.add(InterfaceDeclarationNode.class);
-        list.add(MethodDeclarationNode.class);
-        list.add(NoOperationNode.class);
-        CLASS_BODY_DECLARATION = new ParseRule<ClassMemberNode>("ClassBodyDeclaration", ClassMemberNode.class, list);
-    }
-    
     public static final ParseRule<ClassMemberListNode> CLASS_BODY_DECLARATIONS = 
-        new ParseRule<ClassMemberListNode>("ClassBodyDeclarations", ClassMemberListNode.class,
+        new ParseRule<ClassMemberListNode>("ClassBodyDeclarations",
             Collections.<Class<? extends ClassMemberListNode>>singleton(ClassMemberListNode.class));
     
     public static final ParseRule<ClassModifiersNode> CLASS_MODIFIERS = 
-        new ParseRule<ClassModifiersNode>("ClassModifiers", ClassModifiersNode.class,
+        new ParseRule<ClassModifiersNode>("ClassModifiers",
             Collections.<Class<? extends ClassModifiersNode>>singleton(ClassModifiersNode.class));
     
     public static final ParseRule<DeclaredTypeListNode> CLASS_OR_INTERFACE_TYPE_LIST = 
-        new ParseRule<DeclaredTypeListNode>("ClassOrInterfaceTypeList", DeclaredTypeListNode.class,
+        new ParseRule<DeclaredTypeListNode>("ClassOrInterfaceTypeList",
             Collections.<Class<? extends DeclaredTypeListNode>>singleton(DeclaredTypeListNode.class));
     
     public static final ParseRule<CompilationUnitNode> COMPILATION_UNIT = 
-        new ParseRule<CompilationUnitNode>("CompilationUnit", CompilationUnitNode.class,
+        new ParseRule<CompilationUnitNode>("CompilationUnit",
             Collections.<Class<? extends CompilationUnitNode>>singleton(CompilationUnitNode.class));
     
     public static final ParseRule<ConstantDeclarationNode> CONSTANT_DECLARATION = 
-        new ParseRule<ConstantDeclarationNode>("ConstantDeclaration", ConstantDeclarationNode.class,
+        new ParseRule<ConstantDeclarationNode>("ConstantDeclaration",
             Collections.<Class<? extends ConstantDeclarationNode>>singleton(ConstantDeclarationNode.class));
     
     public static final ParseRule<ConstantModifiersNode> CONSTANT_MODIFIERS = 
-        new ParseRule<ConstantModifiersNode>("ConstantModifiers", ConstantModifiersNode.class,
+        new ParseRule<ConstantModifiersNode>("ConstantModifiers",
             Collections.<Class<? extends ConstantModifiersNode>>singleton(ConstantModifiersNode.class));
     
     public static final ParseRule<ConstructorBodyNode> CONSTRUCTOR_BODY = 
-        new ParseRule<ConstructorBodyNode>("ConstructorBody", ConstructorBodyNode.class,
+        new ParseRule<ConstructorBodyNode>("ConstructorBody",
             Collections.<Class<? extends ConstructorBodyNode>>singleton(ConstructorBodyNode.class));
     
+    public static final ParseRule<ConstructorDeclarationNode> CONSTRUCTOR_DECLARATION = 
+        new ParseRule<ConstructorDeclarationNode>("ConstructorDeclaration",
+            Collections.<Class<? extends ConstructorDeclarationNode>>singleton(ConstructorDeclarationNode.class));
+    
     public static final ParseRule<ConstructorModifiersNode> CONSTRUCTOR_MODIFIERS = 
-        new ParseRule<ConstructorModifiersNode>("ConstructorModifiers", ConstructorModifiersNode.class,
+        new ParseRule<ConstructorModifiersNode>("ConstructorModifiers",
             Collections.<Class<? extends ConstructorModifiersNode>>singleton(ConstructorModifiersNode.class));
     
     public static final ParseRule<AnnotationValueNode> ELEMENT_VALUE;
@@ -287,39 +232,39 @@ public class ParseRule<T extends Node>
         list.add(AnnotationAnnotationValueNode.class);
         list.add(AnnotationArrayValueNode.class);
         list.add(AnnotationExpressionValueNode.class);
-        ELEMENT_VALUE = new ParseRule<AnnotationValueNode>("ElementValue", AnnotationValueNode.class, list);
+        ELEMENT_VALUE = new ParseRule<AnnotationValueNode>("ElementValue", list);
     }
     
     public static final ParseRule<AnnotationValueListNode> ELEMENT_VALUES = 
-        new ParseRule<AnnotationValueListNode>("ElementValues", AnnotationValueListNode.class,
+        new ParseRule<AnnotationValueListNode>("ElementValues",
             Collections.<Class<? extends AnnotationValueListNode>>singleton(AnnotationValueListNode.class));
     
     public static final ParseRule<AnnotationElementNode> ELEMENT_VALUE_PAIR = 
-        new ParseRule<AnnotationElementNode>("ElementValuePair", AnnotationElementNode.class,
+        new ParseRule<AnnotationElementNode>("ElementValuePair",
             Collections.<Class<? extends AnnotationElementNode>>singleton(AnnotationElementNode.class));
     
     public static final ParseRule<AnnotationElementListNode> ELEMENT_VALUE_PAIRS = 
-        new ParseRule<AnnotationElementListNode>("ElementValuePairs", AnnotationElementListNode.class,
+        new ParseRule<AnnotationElementListNode>("ElementValuePairs",
             Collections.<Class<? extends AnnotationElementListNode>>singleton(AnnotationElementListNode.class));
     
     public static final ParseRule<EnumBodyNode> ENUM_BODY = 
-        new ParseRule<EnumBodyNode>("EnumBody", EnumBodyNode.class,
+        new ParseRule<EnumBodyNode>("EnumBody",
             Collections.<Class<? extends EnumBodyNode>>singleton(EnumBodyNode.class));
     
     public static final ParseRule<EnumConstantDeclarationNode> ENUM_CONSTANT = 
-        new ParseRule<EnumConstantDeclarationNode>("EnumConstant", EnumConstantDeclarationNode.class,
+        new ParseRule<EnumConstantDeclarationNode>("EnumConstant",
             Collections.<Class<? extends EnumConstantDeclarationNode>>singleton(EnumConstantDeclarationNode.class));
     
     public static final ParseRule<EnumConstantDeclarationListNode> ENUM_CONSTANTS = 
-        new ParseRule<EnumConstantDeclarationListNode>("EnumConstants", EnumConstantDeclarationListNode.class,
+        new ParseRule<EnumConstantDeclarationListNode>("EnumConstants",
             Collections.<Class<? extends EnumConstantDeclarationListNode>>singleton(EnumConstantDeclarationListNode.class));
     
     public static final ParseRule<EnumModifiersNode> ENUM_MODIFIERS = 
-        new ParseRule<EnumModifiersNode>("EnumModifiers", EnumModifiersNode.class,
+        new ParseRule<EnumModifiersNode>("EnumModifiers",
             Collections.<Class<? extends EnumModifiersNode>>singleton(EnumModifiersNode.class));
     
     public static final ParseRule<UnparameterizedTypeListNode> EXCEPTION_TYPE_LIST = 
-        new ParseRule<UnparameterizedTypeListNode>("ExceptionTypeList", UnparameterizedTypeListNode.class,
+        new ParseRule<UnparameterizedTypeListNode>("ExceptionTypeList",
             Collections.<Class<? extends UnparameterizedTypeListNode>>singleton(UnparameterizedTypeListNode.class));
     
     public static final ParseRule<ConstructorInvocationNode> EXPLICIT_CONSTRUCTOR_INVOCATION;
@@ -328,11 +273,15 @@ public class ParseRule<T extends Node>
         List<Class<? extends ConstructorInvocationNode>> list = new ArrayList<Class<? extends ConstructorInvocationNode>>(2);
         list.add(AlternateConstructorInvocationNode.class);
         list.add(SuperclassConstructorInvocationNode.class);
-        EXPLICIT_CONSTRUCTOR_INVOCATION = new ParseRule<ConstructorInvocationNode>("ExplicitConstructorInvocation", ConstructorInvocationNode.class, list);
+        EXPLICIT_CONSTRUCTOR_INVOCATION = new ParseRule<ConstructorInvocationNode>("ExplicitConstructorInvocation", list);
     }
     
+    public static final ParseRule<FieldDeclarationNode> FIELD_DECLARATION = 
+        new ParseRule<FieldDeclarationNode>("FieldDeclaration",
+            Collections.<Class<? extends FieldDeclarationNode>>singleton(FieldDeclarationNode.class));
+    
     public static final ParseRule<FieldModifiersNode> FIELD_MODIFIERS = 
-        new ParseRule<FieldModifiersNode>("FieldModifiers", FieldModifiersNode.class,
+        new ParseRule<FieldModifiersNode>("FieldModifiers",
             Collections.<Class<? extends FieldModifiersNode>>singleton(FieldModifiersNode.class));
     
     public static final ParseRule<ForInitializerNode> FOR_INIT;
@@ -341,19 +290,19 @@ public class ParseRule<T extends Node>
         List<Class<? extends ForInitializerNode>> list = new ArrayList<Class<? extends ForInitializerNode>>(2);
         list.add(ForInitializerDeclarationNode.class);
         list.add(ForInitializerExpressionNode.class);
-        FOR_INIT = new ParseRule<ForInitializerNode>("ForInit", ForInitializerNode.class, list);
+        FOR_INIT = new ParseRule<ForInitializerNode>("ForInit", list);
     }
     
     public static final ParseRule<VariableNode> FORMAL_PARAMETER = 
-        new ParseRule<VariableNode>("FormalParameter", VariableNode.class,
+        new ParseRule<VariableNode>("FormalParameter",
             Collections.<Class<? extends VariableNode>>singleton(VariableNode.class));
     
     public static final ParseRule<IdentifierNode> IDENTIFIER = 
-        new ParseRule<IdentifierNode>("Identifier", IdentifierNode.class,
+        new ParseRule<IdentifierNode>("Identifier",
             Collections.<Class<? extends IdentifierNode>>singleton(IdentifierNode.class));
     
     public static final ParseRule<IdentifierListNode> IDENTIFIER_LIST = 
-        new ParseRule<IdentifierListNode>("IdentifierList", IdentifierListNode.class,
+        new ParseRule<IdentifierListNode>("IdentifierList",
             Collections.<Class<? extends IdentifierListNode>>singleton(IdentifierListNode.class));
     
     public static final ParseRule<ImportNode> IMPORT_DECLARATION;
@@ -364,50 +313,35 @@ public class ParseRule<T extends Node>
         list.add(ImportSingleTypeNode.class);
         list.add(SingleStaticImportNode.class);
         list.add(StaticImportOnDemandNode.class);
-        IMPORT_DECLARATION = new ParseRule<ImportNode>("ImportDeclaration", ImportNode.class, list);
+        IMPORT_DECLARATION = new ParseRule<ImportNode>("ImportDeclaration", list);
     }
     
     public static final ParseRule<ImportListNode> IMPORT_DECLARATIONS = 
-        new ParseRule<ImportListNode>("ImportDeclarations", ImportListNode.class,
+        new ParseRule<ImportListNode>("ImportDeclarations",
             Collections.<Class<? extends ImportListNode>>singleton(ImportListNode.class));
     
+    public static final ParseRule<InitializerDeclarationNode> INITIALIZER = 
+        new ParseRule<InitializerDeclarationNode>("Initializer",
+            Collections.<Class<? extends InitializerDeclarationNode>>singleton(InitializerDeclarationNode.class));
+    
     public static final ParseRule<InterfaceBodyNode> INTERFACE_BODY = 
-        new ParseRule<InterfaceBodyNode>("InterfaceBody", InterfaceBodyNode.class,
+        new ParseRule<InterfaceBodyNode>("InterfaceBody",
             Collections.<Class<? extends InterfaceBodyNode>>singleton(InterfaceBodyNode.class));
     
-    public static final ParseRule<InterfaceMemberNode> INTERFACE_MEMBER_DECLARATION;
-    static
-    {
-        List<Class<? extends InterfaceMemberNode>> list = new ArrayList<Class<? extends InterfaceMemberNode>>(8);
-        list.add(AnnotationDeclarationNode.class);
-        list.add(ClassDeclarationNode.class);
-        list.add(ConstantDeclarationNode.class);
-        list.add(EnumDeclarationNode.class);
-        list.add(InterfaceDeclarationNode.class);
-        list.add(InterfaceMemberMetaprogramAnchorNode.class);
-        list.add(MethodDeclarationNode.class);
-        list.add(NoOperationNode.class);
-        INTERFACE_MEMBER_DECLARATION = new ParseRule<InterfaceMemberNode>("InterfaceMemberDeclaration", InterfaceMemberNode.class, list);
-    }
-    
     public static final ParseRule<InterfaceMemberListNode> INTERFACE_MEMBER_DECLARATIONS = 
-        new ParseRule<InterfaceMemberListNode>("InterfaceMemberDeclarations", InterfaceMemberListNode.class,
+        new ParseRule<InterfaceMemberListNode>("InterfaceMemberDeclarations",
             Collections.<Class<? extends InterfaceMemberListNode>>singleton(InterfaceMemberListNode.class));
     
     public static final ParseRule<InterfaceModifiersNode> INTERFACE_MODIFIERS = 
-        new ParseRule<InterfaceModifiersNode>("InterfaceModifiers", InterfaceModifiersNode.class,
+        new ParseRule<InterfaceModifiersNode>("InterfaceModifiers",
             Collections.<Class<? extends InterfaceModifiersNode>>singleton(InterfaceModifiersNode.class));
     
     public static final ParseRule<JavadocNode> JAVADOC_COMMENT = 
-        new ParseRule<JavadocNode>("JavadocComment", JavadocNode.class,
+        new ParseRule<JavadocNode>("JavadocComment",
             Collections.<Class<? extends JavadocNode>>singleton(JavadocNode.class));
     
-    public static final ParseRule<LocalClassDeclarationNode> LOCAL_CLASS_DECLARATION = 
-        new ParseRule<LocalClassDeclarationNode>("LocalClassDeclaration", LocalClassDeclarationNode.class,
-            Collections.<Class<? extends LocalClassDeclarationNode>>singleton(LocalClassDeclarationNode.class));
-    
     public static final ParseRule<LocalClassModifiersNode> LOCAL_CLASS_MODIFIERS = 
-        new ParseRule<LocalClassModifiersNode>("LocalClassModifiers", LocalClassModifiersNode.class,
+        new ParseRule<LocalClassModifiersNode>("LocalClassModifiers",
             Collections.<Class<? extends LocalClassModifiersNode>>singleton(LocalClassModifiersNode.class));
     
     public static final ParseRule<MetaAnnotationNode> META_ANNOTATION;
@@ -416,19 +350,19 @@ public class ParseRule<T extends Node>
         List<Class<? extends MetaAnnotationNode>> list = new ArrayList<Class<? extends MetaAnnotationNode>>(2);
         list.add(NormalMetaAnnotationNode.class);
         list.add(SingleElementMetaAnnotationNode.class);
-        META_ANNOTATION = new ParseRule<MetaAnnotationNode>("MetaAnnotation", MetaAnnotationNode.class, list);
+        META_ANNOTATION = new ParseRule<MetaAnnotationNode>("MetaAnnotation", list);
     }
     
     public static final ParseRule<MetaAnnotationListNode> META_ANNOTATION_LIST = 
-        new ParseRule<MetaAnnotationListNode>("MetaAnnotationList", MetaAnnotationListNode.class,
+        new ParseRule<MetaAnnotationListNode>("MetaAnnotationList",
             Collections.<Class<? extends MetaAnnotationListNode>>singleton(MetaAnnotationListNode.class));
     
     public static final ParseRule<MetaAnnotationElementNode> META_ANNOTATION_ELEMENT = 
-        new ParseRule<MetaAnnotationElementNode>("MetaAnnotationElement", MetaAnnotationElementNode.class,
+        new ParseRule<MetaAnnotationElementNode>("MetaAnnotationElement",
             Collections.<Class<? extends MetaAnnotationElementNode>>singleton(MetaAnnotationElementNode.class));
     
     public static final ParseRule<MetaAnnotationElementListNode> META_ANNOTATION_ELEMENTS = 
-        new ParseRule<MetaAnnotationElementListNode>("MetaAnnotationElements", MetaAnnotationElementListNode.class,
+        new ParseRule<MetaAnnotationElementListNode>("MetaAnnotationElements",
             Collections.<Class<? extends MetaAnnotationElementListNode>>singleton(MetaAnnotationElementListNode.class));
     
     public static final ParseRule<MetaAnnotationValueNode> META_ANNOTATION_ELEMENT_VALUE;
@@ -438,51 +372,51 @@ public class ParseRule<T extends Node>
         list.add(MetaAnnotationArrayValueNode.class);
         list.add(MetaAnnotationExpressionValueNode.class);
         list.add(MetaAnnotationMetaAnnotationValueNode.class);
-        META_ANNOTATION_ELEMENT_VALUE = new ParseRule<MetaAnnotationValueNode>("MetaAnnotationElementValue", MetaAnnotationValueNode.class, list);
+        META_ANNOTATION_ELEMENT_VALUE = new ParseRule<MetaAnnotationValueNode>("MetaAnnotationElementValue", list);
     }
     
     public static final ParseRule<MetaAnnotationValueListNode> META_ANNOTATION_ELEMENT_VALUES = 
-        new ParseRule<MetaAnnotationValueListNode>("MetaAnnotationElementValues", MetaAnnotationValueListNode.class,
+        new ParseRule<MetaAnnotationValueListNode>("MetaAnnotationElementValues",
             Collections.<Class<? extends MetaAnnotationValueListNode>>singleton(MetaAnnotationValueListNode.class));
     
     public static final ParseRule<MetaprogramNode> METAPROGRAM = 
-        new ParseRule<MetaprogramNode>("Metaprogram", MetaprogramNode.class,
+        new ParseRule<MetaprogramNode>("Metaprogram",
             Collections.<Class<? extends MetaprogramNode>>singleton(MetaprogramNode.class));
     
     public static final ParseRule<MetaprogramDependencyNode> METAPROGRAM_DEPENDENCY = 
-        new ParseRule<MetaprogramDependencyNode>("MetaprogramDependency", MetaprogramDependencyNode.class,
+        new ParseRule<MetaprogramDependencyNode>("MetaprogramDependency",
             Collections.<Class<? extends MetaprogramDependencyNode>>singleton(MetaprogramDependencyNode.class));
     
     public static final ParseRule<MetaprogramDependencyDeclarationNode> METAPROGRAM_DEPENDENCY_DECLARATION = 
-        new ParseRule<MetaprogramDependencyDeclarationNode>("MetaprogramDependencyDeclaration", MetaprogramDependencyDeclarationNode.class,
+        new ParseRule<MetaprogramDependencyDeclarationNode>("MetaprogramDependencyDeclaration",
             Collections.<Class<? extends MetaprogramDependencyDeclarationNode>>singleton(MetaprogramDependencyDeclarationNode.class));
     
     public static final ParseRule<MetaprogramDependencyDeclarationListNode> METAPROGRAM_DEPENDENCY_DECLARATION_LIST = 
-        new ParseRule<MetaprogramDependencyDeclarationListNode>("MetaprogramDependencyDeclarationList", MetaprogramDependencyDeclarationListNode.class,
+        new ParseRule<MetaprogramDependencyDeclarationListNode>("MetaprogramDependencyDeclarationList",
             Collections.<Class<? extends MetaprogramDependencyDeclarationListNode>>singleton(MetaprogramDependencyDeclarationListNode.class));
     
     public static final ParseRule<MetaprogramDependencyListNode> METAPROGRAM_DEPENDENCY_LIST = 
-        new ParseRule<MetaprogramDependencyListNode>("MetaprogramDependencyList", MetaprogramDependencyListNode.class,
+        new ParseRule<MetaprogramDependencyListNode>("MetaprogramDependencyList",
             Collections.<Class<? extends MetaprogramDependencyListNode>>singleton(MetaprogramDependencyListNode.class));
     
     public static final ParseRule<MetaprogramImportNode> METAPROGRAM_IMPORT_DECLARATION = 
-        new ParseRule<MetaprogramImportNode>("MetaprogramImportDeclaration", MetaprogramImportNode.class,
+        new ParseRule<MetaprogramImportNode>("MetaprogramImportDeclaration",
             Collections.<Class<? extends MetaprogramImportNode>>singleton(MetaprogramImportNode.class));
     
     public static final ParseRule<MetaprogramImportListNode> METAPROGRAM_IMPORT_DECLARATION_LIST = 
-        new ParseRule<MetaprogramImportListNode>("MetaprogramImportDeclarationList", MetaprogramImportListNode.class,
+        new ParseRule<MetaprogramImportListNode>("MetaprogramImportDeclarationList",
             Collections.<Class<? extends MetaprogramImportListNode>>singleton(MetaprogramImportListNode.class));
     
     public static final ParseRule<MetaprogramTargetNode> METAPROGRAM_TARGET_DECLARATION = 
-        new ParseRule<MetaprogramTargetNode>("MetaprogramTargetDeclaration", MetaprogramTargetNode.class,
+        new ParseRule<MetaprogramTargetNode>("MetaprogramTargetDeclaration",
             Collections.<Class<? extends MetaprogramTargetNode>>singleton(MetaprogramTargetNode.class));
     
     public static final ParseRule<MetaprogramTargetListNode> METAPROGRAM_TARGET_DECLARATION_LIST = 
-        new ParseRule<MetaprogramTargetListNode>("MetaprogramTargetDeclarationList", MetaprogramTargetListNode.class,
+        new ParseRule<MetaprogramTargetListNode>("MetaprogramTargetDeclarationList",
             Collections.<Class<? extends MetaprogramTargetListNode>>singleton(MetaprogramTargetListNode.class));
     
     public static final ParseRule<MethodModifiersNode> METHOD_MODIFIERS = 
-        new ParseRule<MethodModifiersNode>("MethodModifiers", MethodModifiersNode.class,
+        new ParseRule<MethodModifiersNode>("MethodModifiers",
             Collections.<Class<? extends MethodModifiersNode>>singleton(MethodModifiersNode.class));
     
     public static final ParseRule<NameNode> NAME;
@@ -491,31 +425,31 @@ public class ParseRule<T extends Node>
         List<Class<? extends NameNode>> list = new ArrayList<Class<? extends NameNode>>(2);
         list.add(QualifiedNameNode.class);
         list.add(SimpleNameNode.class);
-        NAME = new ParseRule<NameNode>("Name", NameNode.class, list);
+        NAME = new ParseRule<NameNode>("Name", list);
     }
     
     public static final ParseRule<PackageDeclarationNode> PACKAGE_DECLARATION = 
-        new ParseRule<PackageDeclarationNode>("PackageDeclaration", PackageDeclarationNode.class,
+        new ParseRule<PackageDeclarationNode>("PackageDeclaration",
             Collections.<Class<? extends PackageDeclarationNode>>singleton(PackageDeclarationNode.class));
     
     public static final ParseRule<MetaprogramPreambleNode> PREAMBLE = 
-        new ParseRule<MetaprogramPreambleNode>("Preamble", MetaprogramPreambleNode.class,
+        new ParseRule<MetaprogramPreambleNode>("Preamble",
             Collections.<Class<? extends MetaprogramPreambleNode>>singleton(MetaprogramPreambleNode.class));
     
     public static final ParseRule<ReferenceTypeListNode> REFERENCE_TYPE_LIST = 
-        new ParseRule<ReferenceTypeListNode>("ReferenceTypeList", ReferenceTypeListNode.class,
+        new ParseRule<ReferenceTypeListNode>("ReferenceTypeList",
             Collections.<Class<? extends ReferenceTypeListNode>>singleton(ReferenceTypeListNode.class));
     
     public static final ParseRule<StatementExpressionListNode> STATEMENT_EXPRESSION_LIST = 
-        new ParseRule<StatementExpressionListNode>("StatementExpressionList", StatementExpressionListNode.class,
+        new ParseRule<StatementExpressionListNode>("StatementExpressionList",
             Collections.<Class<? extends StatementExpressionListNode>>singleton(StatementExpressionListNode.class));
     
     public static final ParseRule<CaseNode> SWITCH_BLOCK_STATEMENT_GROUP = 
-        new ParseRule<CaseNode>("SwitchBlockStatementGroup", CaseNode.class,
+        new ParseRule<CaseNode>("SwitchBlockStatementGroup",
             Collections.<Class<? extends CaseNode>>singleton(CaseNode.class));
     
     public static final ParseRule<CaseListNode> SWITCH_BLOCK_STATEMENT_GROUPS = 
-        new ParseRule<CaseListNode>("SwitchBlockStatementGroups", CaseListNode.class,
+        new ParseRule<CaseListNode>("SwitchBlockStatementGroups",
             Collections.<Class<? extends CaseListNode>>singleton(CaseListNode.class));
     
     public static final ParseRule<TypeNode> TYPE;
@@ -528,11 +462,11 @@ public class ParseRule<T extends Node>
         list.add(PrimitiveTypeNode.class);
         list.add(UnparameterizedTypeNode.class);
         list.add(VoidTypeNode.class);
-        TYPE = new ParseRule<TypeNode>("Type", TypeNode.class, list);
+        TYPE = new ParseRule<TypeNode>("Type", list);
     }
     
     public static final ParseRule<TypeArgumentListNode> TYPE_ARGUMENTS = 
-        new ParseRule<TypeArgumentListNode>("TypeArguments", TypeArgumentListNode.class,
+        new ParseRule<TypeArgumentListNode>("TypeArguments",
             Collections.<Class<? extends TypeArgumentListNode>>singleton(TypeArgumentListNode.class));
     
     public static final ParseRule<TypeDeclarationNode> TYPE_DECLARATION;
@@ -544,27 +478,27 @@ public class ParseRule<T extends Node>
         list.add(EnumDeclarationNode.class);
         list.add(InterfaceDeclarationNode.class);
         list.add(NoOperationNode.class);
-        TYPE_DECLARATION = new ParseRule<TypeDeclarationNode>("TypeDeclaration", TypeDeclarationNode.class, list);
+        TYPE_DECLARATION = new ParseRule<TypeDeclarationNode>("TypeDeclaration", list);
     }
     
     public static final ParseRule<TypeDeclarationListNode> TYPE_DECLARATIONS = 
-        new ParseRule<TypeDeclarationListNode>("TypeDeclarations", TypeDeclarationListNode.class,
+        new ParseRule<TypeDeclarationListNode>("TypeDeclarations",
             Collections.<Class<? extends TypeDeclarationListNode>>singleton(TypeDeclarationListNode.class));
     
     public static final ParseRule<TypeParameterNode> TYPE_PARAMETER = 
-        new ParseRule<TypeParameterNode>("TypeParameter", TypeParameterNode.class,
+        new ParseRule<TypeParameterNode>("TypeParameter",
             Collections.<Class<? extends TypeParameterNode>>singleton(TypeParameterNode.class));
     
     public static final ParseRule<TypeParameterListNode> TYPE_PARAMETERS = 
-        new ParseRule<TypeParameterListNode>("TypeParameters", TypeParameterListNode.class,
+        new ParseRule<TypeParameterListNode>("TypeParameters",
             Collections.<Class<? extends TypeParameterListNode>>singleton(TypeParameterListNode.class));
     
     public static final ParseRule<VariableDeclaratorNode> VARIABLE_DECLARATOR = 
-        new ParseRule<VariableDeclaratorNode>("VariableDeclarator", VariableDeclaratorNode.class,
+        new ParseRule<VariableDeclaratorNode>("VariableDeclarator",
             Collections.<Class<? extends VariableDeclaratorNode>>singleton(VariableDeclaratorNode.class));
     
     public static final ParseRule<VariableDeclaratorListNode> VARIABLE_DECLARATORS = 
-        new ParseRule<VariableDeclaratorListNode>("VariableDeclarators", VariableDeclaratorListNode.class,
+        new ParseRule<VariableDeclaratorListNode>("VariableDeclarators",
             Collections.<Class<? extends VariableDeclaratorListNode>>singleton(VariableDeclaratorListNode.class));
     
     public static final ParseRule<VariableInitializerNode> VARIABLE_INITIALIZER;
@@ -601,19 +535,19 @@ public class ParseRule<T extends Node>
         list.add(UnaryStatementExpressionNode.class);
         list.add(UnqualifiedClassInstantiationNode.class);
         list.add(VariableAccessNode.class);
-        VARIABLE_INITIALIZER = new ParseRule<VariableInitializerNode>("VariableInitializer", VariableInitializerNode.class, list);
+        VARIABLE_INITIALIZER = new ParseRule<VariableInitializerNode>("VariableInitializer", list);
     }
     
     public static final ParseRule<VariableInitializerListNode> VARIABLE_INITIALIZERS = 
-        new ParseRule<VariableInitializerListNode>("VariableInitializers", VariableInitializerListNode.class,
+        new ParseRule<VariableInitializerListNode>("VariableInitializers",
             Collections.<Class<? extends VariableInitializerListNode>>singleton(VariableInitializerListNode.class));
     
     public static final ParseRule<VariableModifiersNode> VARIABLE_MODIFIERS = 
-        new ParseRule<VariableModifiersNode>("VariableModifiers", VariableModifiersNode.class,
+        new ParseRule<VariableModifiersNode>("VariableModifiers",
             Collections.<Class<? extends VariableModifiersNode>>singleton(VariableModifiersNode.class));
     
     public static final ParseRule<WildcardTypeNode> WILDCARD = 
-        new ParseRule<WildcardTypeNode>("Wildcard", WildcardTypeNode.class,
+        new ParseRule<WildcardTypeNode>("Wildcard",
             Collections.<Class<? extends WildcardTypeNode>>singleton(WildcardTypeNode.class));
     
     private static Iterable<? extends ParseRule<?>> valuesIterable = null;
@@ -621,24 +555,22 @@ public class ParseRule<T extends Node>
     {
         if (valuesIterable == null)
         {
-            List<ParseRule<?>> list = new ArrayList<ParseRule<?>>(84);
+            List<ParseRule<?>> list = new ArrayList<ParseRule<?>>(83);
             list.add(ABSTRACT_METHOD_MODIFIERS);
             list.add(ANNOTATION);
             list.add(ANNOTATIONS);
+            list.add(ANNOTATION_METHOD);
             list.add(ANNOTATION_MODIFIERS);
             list.add(ANNOTATION_TYPE_BODY);
             list.add(ANNOTATION_TYPE_ELEMENT_DECLARATIONS);
-            list.add(ANNOTATION_TYPE_ELEMENT_DECLARATION);
             list.add(ANONYMOUS_CLASS_BODY);
             list.add(ANONYMOUS_CLASS_BODY_DECLARATIONS);
-            list.add(ANONYMOUS_CLASS_BODY_DECLARATION);
             list.add(ARGUMENT_LIST);
             list.add(BLOCK_STATEMENT);
             list.add(BLOCK_STATEMENTS);
             list.add(CATCH_CLAUSE);
             list.add(CATCHES);
             list.add(CLASS_BODY);
-            list.add(CLASS_BODY_DECLARATION);
             list.add(CLASS_BODY_DECLARATIONS);
             list.add(CLASS_MODIFIERS);
             list.add(CLASS_OR_INTERFACE_TYPE_LIST);
@@ -646,6 +578,7 @@ public class ParseRule<T extends Node>
             list.add(CONSTANT_DECLARATION);
             list.add(CONSTANT_MODIFIERS);
             list.add(CONSTRUCTOR_BODY);
+            list.add(CONSTRUCTOR_DECLARATION);
             list.add(CONSTRUCTOR_MODIFIERS);
             list.add(ELEMENT_VALUE);
             list.add(ELEMENT_VALUES);
@@ -657,6 +590,7 @@ public class ParseRule<T extends Node>
             list.add(ENUM_MODIFIERS);
             list.add(EXCEPTION_TYPE_LIST);
             list.add(EXPLICIT_CONSTRUCTOR_INVOCATION);
+            list.add(FIELD_DECLARATION);
             list.add(FIELD_MODIFIERS);
             list.add(FOR_INIT);
             list.add(FORMAL_PARAMETER);
@@ -664,12 +598,11 @@ public class ParseRule<T extends Node>
             list.add(IDENTIFIER_LIST);
             list.add(IMPORT_DECLARATION);
             list.add(IMPORT_DECLARATIONS);
+            list.add(INITIALIZER);
             list.add(INTERFACE_BODY);
-            list.add(INTERFACE_MEMBER_DECLARATION);
             list.add(INTERFACE_MEMBER_DECLARATIONS);
             list.add(INTERFACE_MODIFIERS);
             list.add(JAVADOC_COMMENT);
-            list.add(LOCAL_CLASS_DECLARATION);
             list.add(LOCAL_CLASS_MODIFIERS);
             list.add(META_ANNOTATION);
             list.add(META_ANNOTATION_LIST);

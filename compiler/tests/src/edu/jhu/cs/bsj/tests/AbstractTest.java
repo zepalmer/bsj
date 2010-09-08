@@ -41,7 +41,8 @@ public abstract class AbstractTest
 			log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
 					"edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug",
 					"edu.jhu.cs.bsj.compiler.impl.tool.compiler.names/debug",
-					"edu.jhu.cs.bsj.compiler.impl.ast.NodeListImpl/debug");
+					"edu.jhu.cs.bsj.compiler.impl.ast.NodeListImpl/debug",
+					"edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl/debug");
 		} else
 		{
 			String[] values = s.split("&");

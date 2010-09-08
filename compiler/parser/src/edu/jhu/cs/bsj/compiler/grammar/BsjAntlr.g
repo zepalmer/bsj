@@ -6145,6 +6145,22 @@ parseRule_Annotations returns [AnnotationListNode ret]
         }
     ;
 
+parseRule_AnnotationMethod returns [AnnotationMethodDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_AnnotationMethod");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        annotationMethodDeclaration
+        EOF
+        {
+            $ret = $annotationMethodDeclaration.ret;
+        }
+    ;
+
 parseRule_AnnotationModifiers returns [AnnotationModifiersNode ret]
         scope Rule;
         @init {
@@ -6481,6 +6497,22 @@ parseRule_ConstructorBody returns [ConstructorBodyNode ret]
         }
     ;
 
+parseRule_ConstructorDeclaration returns [ConstructorDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_ConstructorDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        constructorDeclaration
+        EOF
+        {
+            $ret = $constructorDeclaration.ret;
+        }
+    ;
+
 parseRule_ConstructorModifiers returns [ConstructorModifiersNode ret]
         scope Rule;
         @init {
@@ -6657,6 +6689,22 @@ parseRule_ExplicitConstructorInvocation returns [ConstructorInvocationNode ret]
         }
     ;
 
+parseRule_FieldDeclaration returns [FieldDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_FieldDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        fieldDeclaration
+        EOF
+        {
+            $ret = $fieldDeclaration.ret;
+        }
+    ;
+
 parseRule_FieldModifiers returns [FieldModifiersNode ret]
         scope Rule;
         @init {
@@ -6766,6 +6814,22 @@ parseRule_ImportDeclarations returns [ImportListNode ret]
         EOF
         {
             $ret = $importDeclarations.ret;
+        }
+    ;
+
+parseRule_Initializer returns [InitializerDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_Initializer");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        initializerBlock
+        EOF
+        {
+            $ret = $initializerBlock.ret;
         }
     ;
 

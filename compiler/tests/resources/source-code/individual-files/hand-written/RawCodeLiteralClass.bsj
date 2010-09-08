@@ -1,0 +1,12 @@
+public class RawCodeLiteralClass
+{
+	[:
+		EnumDeclarationNode enumDecl = <: private static enum E { A, B } :> ;
+		context.getAnchor().getNearestAncestorOfType(ClassMemberListNode.class).addFirst(enumDecl);
+	:]
+	
+	public static void main(String[] arg)
+	{
+		
+	}
+}

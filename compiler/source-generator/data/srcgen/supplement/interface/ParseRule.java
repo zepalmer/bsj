@@ -16,13 +16,11 @@ public abstract class ParseRule<T extends Node>
 {
 	/* GEN:start */
 	private String name;
-	private Class<T> nodeClass;
 	private Collection<Class<? extends T>> bottomMostClasses;
 
-	private ParseRule(String name, Class<T> nodeClass, Collection<Class<? extends T>> bottomMostClasses)
+	private ParseRule(String name, Collection<Class<? extends T>> bottomMostClasses)
 	{
 		this.name = name;
-		this.nodeClass = nodeClass;
 		this.bottomMostClasses = Collections.unmodifiableCollection(bottomMostClasses);
 	}
 	
@@ -33,16 +31,6 @@ public abstract class ParseRule<T extends Node>
 	public String getName()
 	{
 		return this.name;
-	}
-
-	/**
-	 * Retrieves the type of node which is produced by this parse rule.
-	 * 
-	 * @return The type of node produced by this parse rule.
-	 */
-	public Class<T> getNodeClass()
-	{
-		return this.nodeClass;
 	}
 
 	/**

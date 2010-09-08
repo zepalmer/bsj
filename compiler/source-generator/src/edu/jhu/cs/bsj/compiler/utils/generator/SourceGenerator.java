@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
+import static edu.jhu.cs.bsj.compiler.utils.generator.SourceGeneratorUtilities.CONTENTS_FILE;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +41,6 @@ public class SourceGenerator
 	 */
 	private static final int NUMBER_OF_OPERATION_VARIATIONS = 2;
 
-	private static final File CONTENTS_FILE = new File("data/srcgen/srcgen.xml");
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
 	private static final File TARGET_DIR = new File("out/");
 
@@ -3501,8 +3502,7 @@ public class SourceGenerator
 			{
 				protoEnumPs.println(" = ");
 				protoEnumPs.incPrependCount();
-				protoEnumPs.println("new " + ruleType + "(\"" + def.getName() + "\", " + leastUpperBound.getBaseName()
-						+ ".class,");
+				protoEnumPs.println("new " + ruleType + "(\"" + def.getName() + "\",");
 				protoEnumPs.incPrependCount();
 				protoEnumPs.println("Collections.<Class<? extends " + leastUpperBound.getBaseName() + ">>singleton("
 						+ leastUpperBound.getBaseName() + ".class));");
@@ -3513,15 +3513,14 @@ public class SourceGenerator
 				protoEnumPs.println("static");
 				protoEnumPs.println("{");
 				protoEnumPs.incPrependCount();
-				String genListArg = "<Class<? extends " + leastUpperBound.getBaseName() + ">>";
+				String genListArg = "<Class<? extends " + nodeType + ">>";
 				protoEnumPs.println("List" + genListArg + " list = new ArrayList" + genListArg + "("
 						+ def.getOutputTypes().size() + ");");
 				for (OutputTypeDefinition outputTypeDefinition : def.getOutputTypes())
 				{
 					protoEnumPs.println("list.add(" + outputTypeDefinition.getType().getBaseName() + ".class);");
 				}
-				protoEnumPs.println(elementName + " = new " + ruleType + "(\"" + def.getName() + "\", "
-						+ leastUpperBound.getBaseName() + ".class, list);");
+				protoEnumPs.println(elementName + " = new " + ruleType + "(\"" + def.getName() + "\", list);");
 				protoEnumPs.decPrependCount();
 				protoEnumPs.println("}");
 			}
@@ -3540,7 +3539,8 @@ public class SourceGenerator
 				args = "";
 			}
 			parseFunctionUtility.println(nodeType + " node = parser.parseRule_" + def.getName() + "(" + args + ");");
-			parseFunctionUtility.println("return rule.getNodeClass().cast(node);");
+			parseFunctionUtility.println("@SuppressWarnings(\"unchecked\") T ret = (T)node;");
+			parseFunctionUtility.println("return ret;");
 			parseFunctionUtility.decPrependCount();
 			parseFunctionUtility.println("}");
 

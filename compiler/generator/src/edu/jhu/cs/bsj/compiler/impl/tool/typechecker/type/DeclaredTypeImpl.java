@@ -188,8 +188,21 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		return map;
 	}
 
+	private Map<BsjType, Boolean> subtypingCache = new HashMap<BsjType, Boolean>();
+
 	@Override
 	public boolean isSubtypeOf(BsjType type)
+	{
+		Boolean ret = subtypingCache.get(type);
+		if (ret == null)
+		{
+			ret = evaluateSubtypeOf(type);
+			subtypingCache.put(type, ret);
+		}
+		return ret;
+	}
+
+	private boolean evaluateSubtypeOf(BsjType type)
 	{
 		if (type instanceof BsjTypeVariable || type instanceof BsjIntersectionType)
 		{
@@ -218,7 +231,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				// * This type is a raw type of the given type (which means it is not a subtype),
 				// * It is a raw type of our type (which is legal),
 				// * Both types are the same raw or unparameterized type (which is also legal), or
-				// * Both types are parameterized, in which case the subtype relation is decided by ensuring that each
+				// * Both types are parameterized, in which case the subtype relation is decided by ensuring that
+				// each
 				// of the other type's parameters contain each of this type's corresponding parameters.
 				if (this.getTypeArguments().size() == 0)
 				{
@@ -239,7 +253,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 						return true;
 					} else
 					{
-						// Check to see if each argument of this type is contained by each argument of the other type.
+						// Check to see if each argument of this type is contained by each argument of the other
+						// type.
 						Iterator<? extends BsjTypeArgument> thisArgs = this.getTypeArguments().iterator();
 						Iterator<? extends BsjTypeArgument> otherArgs = other.getTypeArguments().iterator();
 						do
@@ -257,7 +272,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				}
 			} else
 			{
-				// If we reach this point, then the only hope for the subtyping relation is that the same thing holds
+				// If we reach this point, then the only hope for the subtyping relation is that the same thing
+				// holds
 				// true for this type and one of our ancestor types.
 				if (LOGGER.isTraceEnabled())
 				{
@@ -325,7 +341,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			}
 		} else
 		{
-			// If we reach this point, the type is not a type parameter, intersection type, or declared type. Nothing
+			// If we reach this point, the type is not a type parameter, intersection type, or declared type.
+			// Nothing
 			// else is a supertype of a declared type.
 			return false;
 		}
@@ -592,10 +609,10 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 	@Override
 	public Collection<? extends BsjExecutableType> getExecutableTypesOfName(String name)
 	{
-		// TODO: this approach is going to bring in statically imported methods too.  This is desirable sometimes
-		// (such as when the method being investigated is unqualified) but not always.  Handle this; a new parameter
+		// TODO: this approach is going to bring in statically imported methods too. This is desirable sometimes
+		// (such as when the method being investigated is unqualified) but not always. Handle this; a new parameter
 		// will definitely be necessary.
-		
+
 		MethodNamespaceMap methodNamespaceMap = getManager().getNamespaceBuilder().getMethodNamespace(
 				asElement().getDeclarationNode().getBody().getMembers());
 		Collection<? extends BsjExecutableElement> executables = methodNamespaceMap.getValues(name);

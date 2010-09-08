@@ -10,6 +10,9 @@
         <parserule name="Annotations">
             <outputType name="AnnotationListNode" />
         </parserule>
+        <parserule name="AnnotationMethod">
+            <outputType name="AnnotationMethodDeclarationNode" />
+        </parserule>
         <parserule name="AnnotationModifiers">
             <outputType name="AnnotationModifiersNode" />
         </parserule>
@@ -19,32 +22,11 @@
         <parserule name="AnnotationTypeElementDeclarations">
             <outputType name="AnnotationMemberListNode" />
         </parserule>
-        <parserule name="AnnotationTypeElementDeclaration">
-            <outputType name="AnnotationDeclarationNode" />
-            <outputType name="AnnotationMemberMetaprogramAnchorNode" />
-            <outputType name="AnnotationMethodDeclarationNode" />
-            <outputType name="ClassDeclarationNode" />
-            <outputType name="ConstantDeclarationNode" />
-            <outputType name="EnumDeclarationNode" />
-            <outputType name="InterfaceDeclarationNode" />
-            <outputType name="NoOperationNode" />
-        </parserule>
         <parserule name="AnonymousClassBody">
             <outputType name="AnonymousClassBodyNode" />
         </parserule>
         <parserule name="AnonymousClassBodyDeclarations">
             <outputType name="AnonymousClassMemberListNode" />
-        </parserule>
-        <parserule name="AnonymousClassBodyDeclaration">
-            <outputType name="AnnotationDeclarationNode" />
-            <outputType name="ClassDeclarationNode" />
-            <outputType name="ClassMemberMetaprogramAnchorNode" />
-            <outputType name="EnumDeclarationNode" />
-            <outputType name="FieldDeclarationNode" />
-            <outputType name="InitializerDeclarationNode" />
-            <outputType name="InterfaceDeclarationNode" />
-            <outputType name="MethodDeclarationNode" />
-            <outputType name="NoOperationNode" />
         </parserule>
         <parserule name="ArgumentList">
             <outputType name="ExpressionListNode" />
@@ -83,18 +65,6 @@
         <parserule name="ClassBody">
             <outputType name="ClassBodyNode" />
         </parserule>
-        <parserule name="ClassBodyDeclaration">
-            <outputType name="AnnotationDeclarationNode" />
-            <outputType name="ClassDeclarationNode" />
-            <outputType name="ClassMemberMetaprogramAnchorNode" />
-            <outputType name="ConstructorDeclarationNode" />
-            <outputType name="EnumDeclarationNode" />
-            <outputType name="FieldDeclarationNode" />
-            <outputType name="InitializerDeclarationNode" />
-            <outputType name="InterfaceDeclarationNode" />
-            <outputType name="MethodDeclarationNode" />
-            <outputType name="NoOperationNode" />
-        </parserule>
         <parserule name="ClassBodyDeclarations">
             <outputType name="ClassMemberListNode" />
         </parserule>
@@ -115,6 +85,9 @@
         </parserule>
         <parserule name="ConstructorBody">
             <outputType name="ConstructorBodyNode" />
+        </parserule>
+        <parserule name="ConstructorDeclaration">
+            <outputType name="ConstructorDeclarationNode"/>
         </parserule>
         <parserule name="ConstructorModifiers">
             <outputType name="ConstructorModifiersNode" />
@@ -152,6 +125,9 @@
             <outputType name="AlternateConstructorInvocationNode" />
             <outputType name="SuperclassConstructorInvocationNode" />
         </parserule>
+        <parserule name="FieldDeclaration">
+            <outputType name="FieldDeclarationNode"/>
+        </parserule>
         <parserule name="FieldModifiers">
             <outputType name="FieldModifiersNode" />
         </parserule>
@@ -186,18 +162,11 @@
         <parserule name="ImportDeclarations">
             <outputType name="ImportListNode" />
         </parserule>
+        <parserule name="Initializer">
+            <outputType name="InitializerDeclarationNode"/>
+        </parserule>
         <parserule name="InterfaceBody">
             <outputType name="InterfaceBodyNode" />
-        </parserule>
-        <parserule name="InterfaceMemberDeclaration">
-            <outputType name="AnnotationDeclarationNode" />
-            <outputType name="ClassDeclarationNode" />
-            <outputType name="ConstantDeclarationNode" />
-            <outputType name="EnumDeclarationNode" />
-            <outputType name="InterfaceDeclarationNode" />
-            <outputType name="InterfaceMemberMetaprogramAnchorNode" />
-            <outputType name="MethodDeclarationNode" />
-            <outputType name="NoOperationNode" />
         </parserule>
         <parserule name="InterfaceMemberDeclarations">
             <outputType name="InterfaceMemberListNode" />
@@ -207,9 +176,6 @@
         </parserule>
         <parserule name="JavadocComment">
             <outputType name="JavadocNode" />
-        </parserule>
-        <parserule name="LocalClassDeclaration">
-            <outputType name="LocalClassDeclarationNode" />
         </parserule>
         <parserule name="LocalClassModifiers">
             <outputType name="LocalClassModifiersNode" />

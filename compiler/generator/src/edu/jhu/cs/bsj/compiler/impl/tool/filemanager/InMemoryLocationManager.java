@@ -90,7 +90,7 @@ public class InMemoryLocationManager extends AbstractLocationManager
 	{
 		// construct the filename
 		String filename = className.replace('.', '/') + kind.extension;
-		
+
 		// retrieve the object
 		InMemoryFileObject fileObject = this.fileObjectMap.get(filename);
 		if (fileObject == null)
@@ -99,7 +99,7 @@ public class InMemoryLocationManager extends AbstractLocationManager
 			fileObject = new InMemoryFileObject(this, null, filename, kind);
 			this.fileObjectMap.put(filename, fileObject);
 		}
-		
+
 		// return
 		return fileObject;
 	}
@@ -120,7 +120,7 @@ public class InMemoryLocationManager extends AbstractLocationManager
 		List<BsjFileObject> list = new ArrayList<BsjFileObject>();
 		String path = packageName.replace('.', '/');
 
-		for (Map.Entry<String,InMemoryFileObject> entry : this.fileObjectMap.entrySet())
+		for (Map.Entry<String, InMemoryFileObject> entry : this.fileObjectMap.entrySet())
 		{
 			// examine file objects of the proper kind
 			for (Kind kind : kinds)
@@ -129,9 +129,9 @@ public class InMemoryLocationManager extends AbstractLocationManager
 				{
 					// If recursing, we add this if it starts with our path
 					// If not recursing, it must be exactly in our path
-					if ((recurse && entry.getKey().startsWith(path)) ||
-							((!recurse &&
-									(path.length()==0 || StringUtilities.removeSuffix(entry.getKey(), '/').equals(path)))))
+					String filePath = entry.getKey().contains("/") ? StringUtilities.removeSuffix(entry.getKey(), '/')
+							: "";
+					if ((recurse && filePath.startsWith(path)) || (!recurse && filePath.equals(path)))
 					{
 						list.add(entry.getValue());
 					}

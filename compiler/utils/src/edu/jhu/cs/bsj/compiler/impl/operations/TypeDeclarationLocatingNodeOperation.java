@@ -42,6 +42,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
  * 
  * @author Zachary Palmer
  */
+@Deprecated
 public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperation<Void, NamedTypeDeclarationNode<?>>
 {
 	/** The logger for this object. */

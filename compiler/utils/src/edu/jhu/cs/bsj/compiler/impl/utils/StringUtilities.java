@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.utils;
 
-import java.util.List;
 
 /**
  * Contains utilities related to string manipulation.
@@ -78,13 +77,13 @@ public class StringUtilities
 	 * @param delimiter The delimiter in question.
 	 * @return The resulting string.
 	 */
-	public static String join(List<?> list, String delimiter)
+	public static String join(Iterable<?> list, String delimiter)
 	{
 		StringBuilder sb = new StringBuilder();
 		boolean first = true;
 		for (Object o : list)
 		{
-			if (first)
+			if (!first)
 			{
 				sb.append(delimiter);
 			}
