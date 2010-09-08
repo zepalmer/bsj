@@ -16,12 +16,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
@@ -35,13 +32,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SuperFieldAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
@@ -52,23 +47,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.NoOperationDiagnosticListener;
@@ -120,13 +107,6 @@ public class ParseMapOperation extends
 
 		this.nodeType = this.manager.getToolkit().getNodeElement().asType();
 	}
-
-	/*
-	 * TODO: rules not yet implemented
-	 * 
-	 * * Code Literal Rule (p49) * Assignment Rule (p49) * Return Rule (p49) * Method Declaration Rule (p50) *
-	 * Meta-Annotation Rule (p50) * Array Value Rule (p50) * Method Invocation Rule (p51)
-	 */
 
 	/**
 	 * Provides a simple default operation most AST nodes: derive a new environment using {@link Node} as the expected
@@ -194,22 +174,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationBodyNode(AnnotationBodyNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationDeclarationNode(AnnotationDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationElementListNode(AnnotationElementListNode node,
 			ParseMapperEnvironment env)
 	{
@@ -234,14 +198,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationMemberMetaprogramAnchorNode(
-			AnnotationMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationMethodDeclarationNode(
 			AnnotationMethodDeclarationNode node, ParseMapperEnvironment env)
 	{
@@ -252,22 +208,6 @@ public class ParseMapOperation extends
 	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationValueListNode(AnnotationValueListNode node,
 			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnonymousClassBodyNode(AnonymousClassBodyNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnonymousClassMemberMetaprogramAnchorNode(
-			AnonymousClassMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
 	{
 		// TODO: Not implemented yet.
 		return Collections.emptyMap();
@@ -315,22 +255,6 @@ public class ParseMapOperation extends
 		}
 
 		return calculateNodeUnionWithEnvironment(node.getChildIterable(), env.deriveForExpectedType(variableType));
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeBlockStatementMetaprogramAnchorNode(
-			BlockStatementMetaprogramAnchorNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeClassMemberMetaprogramAnchorNode(
-			ClassMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
 	}
 
 	@Override
@@ -385,14 +309,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeInterfaceMemberMetaprogramAnchorNode(
-			InterfaceMemberMetaprogramAnchorNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeLocalVariableDeclarationNode(
 			LocalVariableDeclarationNode node, ParseMapperEnvironment env)
 	{
@@ -441,14 +357,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationMetaprogramAnchorNode(
-			MetaAnnotationMetaprogramAnchorNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node,
 			ParseMapperEnvironment env)
 	{
@@ -460,7 +368,8 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeMetaprogramNode(MetaprogramNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO: Not implemented yet.
+		// We do not descend into metaprograms because their code literals are handled through a different type space.
+		// Instead, the metaprograms' code literals will be handled when they are recursively compiled.
 		return Collections.emptyMap();
 	}
 
@@ -482,22 +391,6 @@ public class ParseMapOperation extends
 		// candidate methods are dependent upon the process described in §15.12.2 of the JLSv3. If this is not the
 		// case, then the description of how this is implemented is not sound.
 
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeNormalAnnotationNode(NormalAnnotationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node,
-			ParseMapperEnvironment env)
-	{
 		// TODO: Not implemented yet.
 		return Collections.emptyMap();
 	}
@@ -575,14 +468,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeSuperFieldAccessNode(SuperFieldAccessNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeSuperMethodInvocationNode(SuperMethodInvocationNode node,
 			ParseMapperEnvironment env)
 	{
@@ -603,14 +488,6 @@ public class ParseMapOperation extends
 	{
 		BsjType type = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
 		return node.getExpression().executeOperation(this, env.deriveForExpectedType(type));
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeTypeDeclarationMetaprogramAnchorNode(
-			TypeDeclarationMetaprogramAnchorNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
 	}
 
 	@Override
