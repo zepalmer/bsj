@@ -201,6 +201,9 @@
         <parserule name="MetaAnnotationElementValues">
             <outputType name="MetaAnnotationValueListNode" />
         </parserule>
+        <parserule name="MethodDeclaration">
+            <outputType name="MethodDeclarationNode" />
+        </parserule>
         <parserule name="Metaprogram">
             <outputType name="MetaprogramNode" />
         </parserule>

@@ -37,6 +37,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalClassModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -426,6 +427,12 @@ public class ParserGeneratedUtilities
         if (rule.equals(ParseRule.META_ANNOTATION_ELEMENT_VALUES))
         {
             MetaAnnotationValueListNode node = parser.parseRule_MetaAnnotationElementValues();
+            @SuppressWarnings("unchecked") T ret = (T)node;
+            return ret;
+        }
+        if (rule.equals(ParseRule.METHOD_DECLARATION))
+        {
+            MethodDeclarationNode node = parser.parseRule_MethodDeclaration();
             @SuppressWarnings("unchecked") T ret = (T)node;
             return ret;
         }

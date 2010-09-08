@@ -1,12 +1,22 @@
 public class RawCodeLiteralClass
 {
 	[:
+		ClassMemberListNode members = context.getAnchor().getNearestAncestorOfType(ClassMemberListNode.class); 
 		EnumDeclarationNode enumDecl = <: private static enum E { A, B } :> ;
-		context.getAnchor().getNearestAncestorOfType(ClassMemberListNode.class).addFirst(enumDecl);
+		members.addFirst(enumDecl);
+		FieldDeclarationNode fieldDecl = <: private int x = 0; :> ;
+		members.addLast(fieldDecl);
+		MethodDeclarationNode methodDecl = <:
+				public static void foo()
+				{
+					System.out.println("hello!");
+				}
+			:>;
+		members.addFirst(methodDecl);
 	:]
 	
 	public static void main(String[] arg)
 	{
-		
+		foo();
 	}
 }

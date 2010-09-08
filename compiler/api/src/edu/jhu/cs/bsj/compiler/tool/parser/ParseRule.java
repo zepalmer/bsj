@@ -379,6 +379,10 @@ public class ParseRule<T extends Node>
         new ParseRule<MetaAnnotationValueListNode>("MetaAnnotationElementValues",
             Collections.<Class<? extends MetaAnnotationValueListNode>>singleton(MetaAnnotationValueListNode.class));
     
+    public static final ParseRule<MethodDeclarationNode> METHOD_DECLARATION = 
+        new ParseRule<MethodDeclarationNode>("MethodDeclaration",
+            Collections.<Class<? extends MethodDeclarationNode>>singleton(MethodDeclarationNode.class));
+    
     public static final ParseRule<MetaprogramNode> METAPROGRAM = 
         new ParseRule<MetaprogramNode>("Metaprogram",
             Collections.<Class<? extends MetaprogramNode>>singleton(MetaprogramNode.class));
@@ -555,7 +559,7 @@ public class ParseRule<T extends Node>
     {
         if (valuesIterable == null)
         {
-            List<ParseRule<?>> list = new ArrayList<ParseRule<?>>(83);
+            List<ParseRule<?>> list = new ArrayList<ParseRule<?>>(84);
             list.add(ABSTRACT_METHOD_MODIFIERS);
             list.add(ANNOTATION);
             list.add(ANNOTATIONS);
@@ -610,6 +614,7 @@ public class ParseRule<T extends Node>
             list.add(META_ANNOTATION_ELEMENTS);
             list.add(META_ANNOTATION_ELEMENT_VALUE);
             list.add(META_ANNOTATION_ELEMENT_VALUES);
+            list.add(METHOD_DECLARATION);
             list.add(METAPROGRAM);
             list.add(METAPROGRAM_DEPENDENCY);
             list.add(METAPROGRAM_DEPENDENCY_DECLARATION);

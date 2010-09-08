@@ -7182,6 +7182,22 @@ parseRule_MetaprogramTargetDeclarationList returns [MetaprogramTargetListNode re
         }
     ;
 
+parseRule_MethodDeclaration returns [MethodDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parseRule_MethodDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        methodDeclaration
+        EOF
+        {
+            $ret = $methodDeclaration.ret;
+        }
+    ;
+
 parseRule_MethodModifiers returns [MethodModifiersNode ret]
         scope Rule;
         @init {
