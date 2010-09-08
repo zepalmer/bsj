@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -44,7 +46,6 @@ import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramDependencyTyp
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingListener;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
-import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilerUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
@@ -53,6 +54,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.NodeMappingSerializationOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.SerializedNodeMap;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
@@ -151,9 +153,16 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 					{
 						// Then the base name is the fully qualified form of the specified base name
 						QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) dependsName;
-						NamedTypeDeclarationNode<?> namedTypeDeclarationNode = dependsName.executeOperation(
-								new TypeDeclarationLocatingNodeOperation(qualifiedNameNode.getBase(), loader), null);
-						if (namedTypeDeclarationNode == null)
+						NameNode base = qualifiedNameNode.getBase();
+						if (base.getCategory(loader) != NameCategory.TYPE)
+						{
+							// Not allowed!
+							// TODO: diagnostic
+							throw new NotImplementedYetException();
+						}
+						Collection<? extends Node> declarations = qualifiedNameNode.getBase().getDeclarationsInScope(
+								qualifiedNameNode.getBase());
+						if (declarations.size() == 0)
 						{
 							// We could not find the type name contained in the dependency. This is an error; the
 							// metaprogram is referring to a type which does not exist in the object program namespace.
@@ -161,11 +170,23 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 									new MetaprogramDependencyTypeNameResolutionDiagnosticImpl(
 											this.anchor.getStartLocation(), qualifiedNameNode.getBase().getNameString()));
 							return null;
-						} else
+						} else if (declarations.size() > 1)
 						{
-							qualifiedDependsName = namedTypeDeclarationNode.getFullyQualifiedName() + "."
-									+ dependsName.getIdentifier().getIdentifier();
+							// The type which is named is ambiguous
+							// TODO: diagnostic
+							throw new NotImplementedYetException();
 						}
+						Node declaration = declarations.iterator().next();
+						if (!(declaration instanceof NamedTypeDeclarationNode<?>))
+						{
+							// How did this happen? The name refers to a type, so the declaration should name a type.
+							throw new IllegalStateException("Type declaration was not a NamedTypeDeclarationNode: "
+									+ declaration.getClass());
+						}
+
+						NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) declaration;
+						qualifiedDependsName = namedTypeDeclarationNode.getFullyQualifiedName() + "."
+								+ dependsName.getIdentifier().getIdentifier();
 					} else
 					{
 						throw new IllegalStateException("Unrecognized name node type "
