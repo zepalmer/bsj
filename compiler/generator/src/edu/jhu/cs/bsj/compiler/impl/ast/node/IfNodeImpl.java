@@ -105,7 +105,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(condition, false);
+        setAsChild(this.condition, false);
         this.condition = condition;
         setAsChild(condition, true);
     }
@@ -137,7 +137,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.THEN_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(thenStatement, false);
+        setAsChild(this.thenStatement, false);
         this.thenStatement = thenStatement;
         setAsChild(thenStatement, true);
     }
@@ -169,7 +169,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ELSE_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(elseStatement, false);
+        setAsChild(this.elseStatement, false);
         this.elseStatement = elseStatement;
         setAsChild(elseStatement, true);
     }
@@ -201,7 +201,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

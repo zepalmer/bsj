@@ -80,7 +80,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }

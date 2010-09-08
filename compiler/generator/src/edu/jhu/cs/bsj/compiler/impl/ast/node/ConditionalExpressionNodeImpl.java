@@ -96,7 +96,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(condition, false);
+        setAsChild(this.condition, false);
         this.condition = condition;
         setAsChild(condition, true);
     }
@@ -128,7 +128,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TRUE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(trueExpression, false);
+        setAsChild(this.trueExpression, false);
         this.trueExpression = trueExpression;
         setAsChild(trueExpression, true);
     }
@@ -160,7 +160,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.FALSE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(falseExpression, false);
+        setAsChild(this.falseExpression, false);
         this.falseExpression = falseExpression;
         setAsChild(falseExpression, true);
     }

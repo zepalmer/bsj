@@ -82,7 +82,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.INITIALIZERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(initializers, false);
+        setAsChild(this.initializers, false);
         this.initializers = initializers;
         setAsChild(initializers, true);
     }

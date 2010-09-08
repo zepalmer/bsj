@@ -82,7 +82,7 @@ public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

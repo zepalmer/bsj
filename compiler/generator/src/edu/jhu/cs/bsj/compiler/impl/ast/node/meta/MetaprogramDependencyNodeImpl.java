@@ -90,7 +90,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TARGET_NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(targetName, false);
+        setAsChild(this.targetName, false);
         this.targetName = targetName;
         setAsChild(targetName, true);
     }

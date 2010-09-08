@@ -97,7 +97,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(variable, false);
+        setAsChild(this.variable, false);
         this.variable = variable;
         setAsChild(variable, true);
     }
@@ -159,7 +159,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }

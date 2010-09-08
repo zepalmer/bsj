@@ -86,7 +86,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(arguments, false);
+        setAsChild(this.arguments, false);
         this.arguments = arguments;
         setAsChild(arguments, true);
     }

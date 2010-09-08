@@ -106,7 +106,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(variable, false);
+        setAsChild(this.variable, false);
         this.variable = variable;
         setAsChild(variable, true);
     }
@@ -138,7 +138,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }
@@ -170,7 +170,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(statement, false);
+        setAsChild(this.statement, false);
         this.statement = statement;
         setAsChild(statement, true);
     }
@@ -202,7 +202,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

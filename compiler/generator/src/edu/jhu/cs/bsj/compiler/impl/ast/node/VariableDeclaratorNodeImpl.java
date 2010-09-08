@@ -98,7 +98,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }
@@ -160,7 +160,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(initializer, false);
+        setAsChild(this.initializer, false);
         this.initializer = initializer;
         setAsChild(initializer, true);
     }

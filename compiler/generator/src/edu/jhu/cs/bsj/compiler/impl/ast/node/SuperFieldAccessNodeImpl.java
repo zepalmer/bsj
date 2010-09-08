@@ -90,7 +90,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(type, false);
+        setAsChild(this.type, false);
         this.type = type;
         setAsChild(type, true);
     }
@@ -122,7 +122,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }

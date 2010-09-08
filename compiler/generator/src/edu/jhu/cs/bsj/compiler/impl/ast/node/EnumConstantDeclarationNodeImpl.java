@@ -114,7 +114,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(modifiers, false);
+        setAsChild(this.modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
     }
@@ -146,7 +146,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }
@@ -178,7 +178,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(arguments, false);
+        setAsChild(this.arguments, false);
         this.arguments = arguments;
         setAsChild(arguments, true);
     }
@@ -210,7 +210,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(body, false);
+        setAsChild(this.body, false);
         this.body = body;
         setAsChild(body, true);
     }
@@ -242,7 +242,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(javadoc, false);
+        setAsChild(this.javadoc, false);
         this.javadoc = javadoc;
         setAsChild(javadoc, true);
     }

@@ -83,7 +83,7 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(targets, false);
+        setAsChild(this.targets, false);
         this.targets = targets;
         setAsChild(targets, true);
     }

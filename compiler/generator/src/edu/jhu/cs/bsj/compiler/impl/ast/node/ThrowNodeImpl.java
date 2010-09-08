@@ -90,7 +90,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }
@@ -122,7 +122,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

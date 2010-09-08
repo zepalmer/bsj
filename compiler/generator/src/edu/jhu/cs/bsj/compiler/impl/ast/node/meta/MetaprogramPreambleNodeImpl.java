@@ -115,7 +115,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(imports, false);
+        setAsChild(this.imports, false);
         this.imports = imports;
         setAsChild(imports, true);
     }
@@ -207,7 +207,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(targets, false);
+        setAsChild(this.targets, false);
         this.targets = targets;
         setAsChild(targets, true);
     }
@@ -239,7 +239,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DEPENDENCIES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(dependencies, false);
+        setAsChild(this.dependencies, false);
         this.dependencies = dependencies;
         setAsChild(dependencies, true);
     }

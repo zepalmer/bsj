@@ -146,7 +146,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(body, false);
+        setAsChild(this.body, false);
         this.body = body;
         setAsChild(body, true);
     }
@@ -178,7 +178,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(modifiers, false);
+        setAsChild(this.modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
     }
@@ -210,7 +210,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }
@@ -242,7 +242,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(parameters, false);
+        setAsChild(this.parameters, false);
         this.parameters = parameters;
         setAsChild(parameters, true);
     }
@@ -274,7 +274,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(varargParameter, false);
+        setAsChild(this.varargParameter, false);
         this.varargParameter = varargParameter;
         setAsChild(varargParameter, true);
     }
@@ -306,7 +306,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.RETURN_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(returnType, false);
+        setAsChild(this.returnType, false);
         this.returnType = returnType;
         setAsChild(returnType, true);
     }
@@ -338,7 +338,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(throwTypes, false);
+        setAsChild(this.throwTypes, false);
         this.throwTypes = throwTypes;
         setAsChild(throwTypes, true);
     }
@@ -370,7 +370,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(typeParameters, false);
+        setAsChild(this.typeParameters, false);
         this.typeParameters = typeParameters;
         setAsChild(typeParameters, true);
     }
@@ -402,7 +402,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(javadoc, false);
+        setAsChild(this.javadoc, false);
         this.javadoc = javadoc;
         setAsChild(javadoc, true);
     }

@@ -90,7 +90,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(statements, false);
+        setAsChild(this.statements, false);
         this.statements = statements;
         setAsChild(statements, true);
     }
@@ -122,7 +122,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

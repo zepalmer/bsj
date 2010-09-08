@@ -90,7 +90,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }

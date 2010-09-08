@@ -90,7 +90,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }
@@ -122,7 +122,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(statements, false);
+        setAsChild(this.statements, false);
         this.statements = statements;
         setAsChild(statements, true);
     }

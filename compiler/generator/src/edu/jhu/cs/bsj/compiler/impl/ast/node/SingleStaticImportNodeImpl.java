@@ -90,7 +90,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(name, false);
+        setAsChild(this.name, false);
         this.name = name;
         setAsChild(name, true);
     }
@@ -122,7 +122,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }

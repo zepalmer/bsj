@@ -90,7 +90,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONSTANTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(constants, false);
+        setAsChild(this.constants, false);
         this.constants = constants;
         setAsChild(constants, true);
     }
@@ -122,7 +122,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(members, false);
+        setAsChild(this.members, false);
         this.members = members;
         setAsChild(members, true);
     }

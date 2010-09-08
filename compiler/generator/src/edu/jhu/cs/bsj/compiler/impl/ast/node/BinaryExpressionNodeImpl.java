@@ -97,7 +97,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.LEFT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(leftOperand, false);
+        setAsChild(this.leftOperand, false);
         this.leftOperand = leftOperand;
         setAsChild(leftOperand, true);
     }
@@ -129,7 +129,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.RIGHT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(rightOperand, false);
+        setAsChild(this.rightOperand, false);
         this.rightOperand = rightOperand;
         setAsChild(rightOperand, true);
     }

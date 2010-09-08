@@ -83,7 +83,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VALUES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(values, false);
+        setAsChild(this.values, false);
         this.values = values;
         setAsChild(values, true);
     }

@@ -82,7 +82,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expressions, false);
+        setAsChild(this.expressions, false);
         this.expressions = expressions;
         setAsChild(expressions, true);
     }

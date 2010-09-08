@@ -90,7 +90,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(label, false);
+        setAsChild(this.label, false);
         this.label = label;
         setAsChild(label, true);
     }
@@ -122,7 +122,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

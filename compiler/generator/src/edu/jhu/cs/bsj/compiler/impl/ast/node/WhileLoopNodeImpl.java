@@ -98,7 +98,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(condition, false);
+        setAsChild(this.condition, false);
         this.condition = condition;
         setAsChild(condition, true);
     }
@@ -130,7 +130,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(statement, false);
+        setAsChild(this.statement, false);
         this.statement = statement;
         setAsChild(statement, true);
     }
@@ -162,7 +162,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

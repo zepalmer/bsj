@@ -88,7 +88,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(type, false);
+        setAsChild(this.type, false);
         this.type = type;
         setAsChild(type, true);
     }

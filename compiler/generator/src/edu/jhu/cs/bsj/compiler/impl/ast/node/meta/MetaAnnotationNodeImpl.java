@@ -90,7 +90,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(annotationType, false);
+        setAsChild(this.annotationType, false);
         this.annotationType = annotationType;
         setAsChild(annotationType, true);
     }

@@ -91,7 +91,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }
@@ -123,7 +123,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(value, false);
+        setAsChild(this.value, false);
         this.value = value;
         setAsChild(value, true);
     }

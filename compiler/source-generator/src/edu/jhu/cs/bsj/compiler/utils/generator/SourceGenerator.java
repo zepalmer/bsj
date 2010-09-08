@@ -1120,7 +1120,7 @@ public class SourceGenerator
 						ps.println("}");
 						if (propInstanceOf(p.getBaseType(), "Node", def))
 						{
-							ps.println("setAsChild(" + p.getName() + ", false);");
+							ps.println("setAsChild(this." + p.getName() + ", false);");
 						}
 						ps.println("this." + p.getName() + " = " + p.getName() + ";");
 						if (propInstanceOf(p.getBaseType(), "Node", def))

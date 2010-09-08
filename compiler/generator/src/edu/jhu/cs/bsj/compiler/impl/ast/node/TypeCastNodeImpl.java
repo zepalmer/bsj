@@ -90,7 +90,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }
@@ -122,7 +122,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(type, false);
+        setAsChild(this.type, false);
         this.type = type;
         setAsChild(type, true);
     }

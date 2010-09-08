@@ -98,7 +98,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }
@@ -130,7 +130,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(body, false);
+        setAsChild(this.body, false);
         this.body = body;
         setAsChild(body, true);
     }
@@ -162,7 +162,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

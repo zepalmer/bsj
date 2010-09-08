@@ -86,7 +86,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }
@@ -118,7 +118,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(annotations, false);
+        setAsChild(this.annotations, false);
         this.annotations = annotations;
         setAsChild(annotations, true);
     }

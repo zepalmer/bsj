@@ -98,7 +98,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(name, false);
+        setAsChild(this.name, false);
         this.name = name;
         setAsChild(name, true);
     }
@@ -130,7 +130,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }
@@ -162,7 +162,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(annotations, false);
+        setAsChild(this.annotations, false);
         this.annotations = annotations;
         setAsChild(annotations, true);
     }

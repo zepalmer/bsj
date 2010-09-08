@@ -97,7 +97,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TEST_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(testExpression, false);
+        setAsChild(this.testExpression, false);
         this.testExpression = testExpression;
         setAsChild(testExpression, true);
     }
@@ -129,7 +129,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MESSAGE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(messageExpression, false);
+        setAsChild(this.messageExpression, false);
         this.messageExpression = messageExpression;
         setAsChild(messageExpression, true);
     }
@@ -161,7 +161,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

@@ -98,7 +98,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(label, false);
+        setAsChild(this.label, false);
         this.label = label;
         setAsChild(label, true);
     }
@@ -130,7 +130,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(statement, false);
+        setAsChild(this.statement, false);
         this.statement = statement;
         setAsChild(statement, true);
     }
@@ -162,7 +162,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

@@ -114,7 +114,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(initializer, false);
+        setAsChild(this.initializer, false);
         this.initializer = initializer;
         setAsChild(initializer, true);
     }
@@ -146,7 +146,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(condition, false);
+        setAsChild(this.condition, false);
         this.condition = condition;
         setAsChild(condition, true);
     }
@@ -178,7 +178,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.UPDATE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(update, false);
+        setAsChild(this.update, false);
         this.update = update;
         setAsChild(update, true);
     }
@@ -210,7 +210,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(statement, false);
+        setAsChild(this.statement, false);
         this.statement = statement;
         setAsChild(statement, true);
     }
@@ -242,7 +242,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

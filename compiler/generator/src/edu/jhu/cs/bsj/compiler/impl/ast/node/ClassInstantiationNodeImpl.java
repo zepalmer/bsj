@@ -94,7 +94,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(constructorTypeArguments, false);
+        setAsChild(this.constructorTypeArguments, false);
         this.constructorTypeArguments = constructorTypeArguments;
         setAsChild(constructorTypeArguments, true);
     }
@@ -126,7 +126,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(arguments, false);
+        setAsChild(this.arguments, false);
         this.arguments = arguments;
         setAsChild(arguments, true);
     }
@@ -158,7 +158,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(body, false);
+        setAsChild(this.body, false);
         this.body = body;
         setAsChild(body, true);
     }

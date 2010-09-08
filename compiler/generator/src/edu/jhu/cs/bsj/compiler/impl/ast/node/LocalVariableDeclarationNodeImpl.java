@@ -98,7 +98,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(modifiers, false);
+        setAsChild(this.modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
     }
@@ -130,7 +130,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(type, false);
+        setAsChild(this.type, false);
         this.type = type;
         setAsChild(type, true);
     }
@@ -162,7 +162,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(declarators, false);
+        setAsChild(this.declarators, false);
         this.declarators = declarators;
         setAsChild(declarators, true);
     }

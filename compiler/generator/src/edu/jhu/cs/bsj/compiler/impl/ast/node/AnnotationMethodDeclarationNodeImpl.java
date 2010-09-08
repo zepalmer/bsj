@@ -114,7 +114,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(modifiers, false);
+        setAsChild(this.modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
     }
@@ -146,7 +146,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(type, false);
+        setAsChild(this.type, false);
         this.type = type;
         setAsChild(type, true);
     }
@@ -178,7 +178,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }
@@ -210,7 +210,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DEFAULT_VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(defaultValue, false);
+        setAsChild(this.defaultValue, false);
         this.defaultValue = defaultValue;
         setAsChild(defaultValue, true);
     }
@@ -242,7 +242,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(javadoc, false);
+        setAsChild(this.javadoc, false);
         this.javadoc = javadoc;
         setAsChild(javadoc, true);
     }

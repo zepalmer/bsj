@@ -82,7 +82,7 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(name, false);
+        setAsChild(this.name, false);
         this.name = name;
         setAsChild(name, true);
     }

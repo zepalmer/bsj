@@ -116,7 +116,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(modifiers, false);
+        setAsChild(this.modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
     }
@@ -148,7 +148,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(implementsClause, false);
+        setAsChild(this.implementsClause, false);
         this.implementsClause = implementsClause;
         setAsChild(implementsClause, true);
     }
@@ -180,7 +180,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(body, false);
+        setAsChild(this.body, false);
         this.body = body;
         setAsChild(body, true);
     }
@@ -212,7 +212,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }
@@ -244,7 +244,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(javadoc, false);
+        setAsChild(this.javadoc, false);
         this.javadoc = javadoc;
         setAsChild(javadoc, true);
     }

@@ -90,7 +90,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(body, false);
+        setAsChild(this.body, false);
         this.body = body;
         setAsChild(body, true);
     }
@@ -122,7 +122,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(parameter, false);
+        setAsChild(this.parameter, false);
         this.parameter = parameter;
         setAsChild(parameter, true);
     }

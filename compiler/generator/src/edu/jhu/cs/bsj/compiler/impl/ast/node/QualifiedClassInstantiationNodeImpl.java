@@ -103,7 +103,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(enclosingExpression, false);
+        setAsChild(this.enclosingExpression, false);
         this.enclosingExpression = enclosingExpression;
         setAsChild(enclosingExpression, true);
     }
@@ -135,7 +135,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }
@@ -167,7 +167,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(typeArguments, false);
+        setAsChild(this.typeArguments, false);
         this.typeArguments = typeArguments;
         setAsChild(typeArguments, true);
     }

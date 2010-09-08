@@ -86,7 +86,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(arguments, false);
+        setAsChild(this.arguments, false);
         this.arguments = arguments;
         setAsChild(arguments, true);
     }
@@ -118,7 +118,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(typeArguments, false);
+        setAsChild(this.typeArguments, false);
         this.typeArguments = typeArguments;
         setAsChild(typeArguments, true);
     }

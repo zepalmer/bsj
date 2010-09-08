@@ -105,7 +105,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(body, false);
+        setAsChild(this.body, false);
         this.body = body;
         setAsChild(body, true);
     }
@@ -137,7 +137,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CATCHES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(catches, false);
+        setAsChild(this.catches, false);
         this.catches = catches;
         setAsChild(catches, true);
     }
@@ -169,7 +169,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.FINALLY_BLOCK).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(finallyBlock, false);
+        setAsChild(this.finallyBlock, false);
         this.finallyBlock = finallyBlock;
         setAsChild(finallyBlock, true);
     }
@@ -201,7 +201,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

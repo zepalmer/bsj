@@ -90,7 +90,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(baseType, false);
+        setAsChild(this.baseType, false);
         this.baseType = baseType;
         setAsChild(baseType, true);
     }
@@ -122,7 +122,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(typeArguments, false);
+        setAsChild(this.typeArguments, false);
         this.typeArguments = typeArguments;
         setAsChild(typeArguments, true);
     }

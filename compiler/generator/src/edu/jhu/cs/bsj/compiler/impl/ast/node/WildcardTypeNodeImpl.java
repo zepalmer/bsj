@@ -89,7 +89,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(bound, false);
+        setAsChild(this.bound, false);
         this.bound = bound;
         setAsChild(bound, true);
     }

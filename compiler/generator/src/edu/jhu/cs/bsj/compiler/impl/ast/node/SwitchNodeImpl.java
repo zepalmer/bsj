@@ -98,7 +98,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }
@@ -130,7 +130,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CASES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(cases, false);
+        setAsChild(this.cases, false);
         this.cases = cases;
         setAsChild(cases, true);
     }
@@ -162,7 +162,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaAnnotations, false);
+        setAsChild(this.metaAnnotations, false);
         this.metaAnnotations = metaAnnotations;
         setAsChild(metaAnnotations, true);
     }

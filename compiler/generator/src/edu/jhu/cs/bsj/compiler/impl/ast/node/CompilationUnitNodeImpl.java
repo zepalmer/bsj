@@ -123,7 +123,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.PACKAGE_DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(packageDeclaration, false);
+        setAsChild(this.packageDeclaration, false);
         this.packageDeclaration = packageDeclaration;
         setAsChild(packageDeclaration, true);
     }
@@ -155,7 +155,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.METAIMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(metaimports, false);
+        setAsChild(this.metaimports, false);
         this.metaimports = metaimports;
         setAsChild(metaimports, true);
     }
@@ -187,7 +187,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(imports, false);
+        setAsChild(this.imports, false);
         this.imports = imports;
         setAsChild(imports, true);
     }
@@ -219,7 +219,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_DECLS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(typeDecls, false);
+        setAsChild(this.typeDecls, false);
         this.typeDecls = typeDecls;
         setAsChild(typeDecls, true);
     }

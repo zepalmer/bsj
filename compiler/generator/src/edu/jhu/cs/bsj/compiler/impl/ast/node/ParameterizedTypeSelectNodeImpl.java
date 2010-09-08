@@ -90,7 +90,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(base, false);
+        setAsChild(this.base, false);
         this.base = base;
         setAsChild(base, true);
     }
@@ -122,7 +122,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(select, false);
+        setAsChild(this.select, false);
         this.select = select;
         setAsChild(select, true);
     }

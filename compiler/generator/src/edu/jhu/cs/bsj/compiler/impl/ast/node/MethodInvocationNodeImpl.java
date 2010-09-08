@@ -106,7 +106,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(expression, false);
+        setAsChild(this.expression, false);
         this.expression = expression;
         setAsChild(expression, true);
     }
@@ -138,7 +138,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(identifier, false);
+        setAsChild(this.identifier, false);
         this.identifier = identifier;
         setAsChild(identifier, true);
     }
@@ -170,7 +170,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(arguments, false);
+        setAsChild(this.arguments, false);
         this.arguments = arguments;
         setAsChild(arguments, true);
     }
@@ -202,7 +202,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(typeArguments, false);
+        setAsChild(this.typeArguments, false);
         this.typeArguments = typeArguments;
         setAsChild(typeArguments, true);
     }

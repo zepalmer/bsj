@@ -102,7 +102,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(modifiers, false);
+        setAsChild(this.modifiers, false);
         this.modifiers = modifiers;
         setAsChild(modifiers, true);
     }
@@ -134,7 +134,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(type, false);
+        setAsChild(this.type, false);
         this.type = type;
         setAsChild(type, true);
     }
@@ -166,7 +166,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(declarators, false);
+        setAsChild(this.declarators, false);
         this.declarators = declarators;
         setAsChild(declarators, true);
     }
@@ -198,7 +198,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(javadoc, false);
+        setAsChild(this.javadoc, false);
         this.javadoc = javadoc;
         setAsChild(javadoc, true);
     }

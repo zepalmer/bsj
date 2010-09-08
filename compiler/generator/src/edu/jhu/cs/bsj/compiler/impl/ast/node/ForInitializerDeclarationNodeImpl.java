@@ -82,7 +82,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(declaration, false);
+        setAsChild(this.declaration, false);
         this.declaration = declaration;
         setAsChild(declaration, true);
     }
