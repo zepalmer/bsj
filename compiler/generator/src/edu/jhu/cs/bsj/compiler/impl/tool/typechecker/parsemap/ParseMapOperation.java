@@ -14,11 +14,6 @@ import javax.tools.Diagnostic.Kind;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
@@ -27,7 +22,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
@@ -36,15 +30,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
@@ -159,62 +150,6 @@ public class ParseMapOperation extends
 	}
 
 	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationAnnotationValueNode(
-			AnnotationAnnotationValueNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationArrayValueNode(AnnotationArrayValueNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationElementListNode(AnnotationElementListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationElementNode(AnnotationElementNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationExpressionValueNode(
-			AnnotationExpressionValueNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationMethodDeclarationNode(
-			AnnotationMethodDeclarationNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeAnnotationValueListNode(AnnotationValueListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeArrayInitializerCreationNode(
 			ArrayInitializerCreationNode node, ParseMapperEnvironment env)
 	{
@@ -298,13 +233,6 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		return handleVariableDeclaratorOwnerNode(node, env);
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeInstanceOfNode(InstanceOfNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
 	}
 
 	@Override
@@ -447,14 +375,6 @@ public class ParseMapOperation extends
 		{
 			return Collections.emptyMap();
 		}
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeSingleElementAnnotationNode(SingleElementAnnotationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
 	}
 
 	@Override
