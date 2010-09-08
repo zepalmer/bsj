@@ -527,7 +527,7 @@ public class BsjBinaryNodeLoader
 			}
 			ArrayTypeNode arrayType = (ArrayTypeNode) type;
 			type = arrayType.getType();
-			vararg = factory.makeVariableNode(type, vararg.getIdentifier().deepCopy(factory));
+			vararg = factory.makeVariableNode(type.deepCopy(factory), vararg.getIdentifier().deepCopy(factory));
 		}
 
 		return new GatheredExecutableData(factory.makeVariableListNode(variables), vararg, returnType, throwsClause,
