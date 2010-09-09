@@ -18,11 +18,10 @@ public class TypecheckerEnvironment
 	/** The parse map to use. */
 	private Map<RawCodeLiteralNode, ParseMapEntry> parseMap;
 	/**
-	 * The type expected from an array initializer. This value is set by nodes entering contexts in which a
-	 * variable initializer is legal and is used to discern the expected type of the initializer expressions.  For
-	 * instance, this value would be <tt>int[]</tt> in the initializer context of <tt>int[] x = {1,2};</tt>.
+	 * The type expected in context from the surrounding nodes.  This is used to check the type of values which are
+	 * stored in variable declaration initializers and other such structures.
 	 */
-	private BsjType arrayInitializerComponentType;
+	private BsjType expectedType;
 	
 	/**
 	 * Creates a new, empty typechecker environment.
@@ -31,20 +30,20 @@ public class TypecheckerEnvironment
 	{
 		super();
 		this.parseMap = Collections.emptyMap();
-		this.arrayInitializerComponentType = null;
+		this.expectedType = null;
 	}
 	
 	/**
 	 * Creates a new typechecker environment configured with the provided parameters.
 	 * @param parseMap The mapping from raw code literals to their parse map entries.
-	 * @param arrayInitializerComponentType The expected type for an array initializer.
+	 * @param expectedType The expected type defined by context.
 	 */
 	public TypecheckerEnvironment(Map<RawCodeLiteralNode, ParseMapEntry> parseMap,
-			BsjType arrayInitializerComponentType)
+			BsjType expectedType)
 	{
 		super();
 		this.parseMap = parseMap;
-		this.arrayInitializerComponentType = arrayInitializerComponentType;
+		this.expectedType = expectedType;
 	}
 
 	public Map<RawCodeLiteralNode, ParseMapEntry> getParseMap()
@@ -52,17 +51,17 @@ public class TypecheckerEnvironment
 		return parseMap;
 	}
 
-	public BsjType getArrayInitializerType()
+	public BsjType getExpectedType()
 	{
-		return arrayInitializerComponentType;
+		return expectedType;
 	}
 	
 	public TypecheckerEnvironment deriveWithParseMap(Map<RawCodeLiteralNode, ParseMapEntry> parseMap)
 	{
-		return new TypecheckerEnvironment(parseMap, this.arrayInitializerComponentType);
+		return new TypecheckerEnvironment(parseMap, this.expectedType);
 	}
 	
-	public TypecheckerEnvironment deriveWithArrayInitializerType(BsjType type)
+	public TypecheckerEnvironment deriveWithExpectedType(BsjType type)
 	{
 		return new TypecheckerEnvironment(this.parseMap, type);
 	}
@@ -70,7 +69,6 @@ public class TypecheckerEnvironment
 	@Override
 	public String toString()
 	{
-		return "TypecheckerEnvironment [parseMap=" + parseMap + ", arrayInitializerComponentType="
-				+ arrayInitializerComponentType + "]";
+		return "TypecheckerEnvironment [parseMap=" + parseMap + ", expectedType=" + expectedType + "]";
 	}
 }

@@ -214,7 +214,8 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		/*
 		 * TODO: currently, type nodes always typecheck to the BsjNoneType. We could overload this such that they type
 		 * to the type that they name. Is this appropriate? If so, it would allow us to capture type nodes which name
-		 * non-existent types.
+		 * non-existent types. A similar concept could be applied to variable nodes and variable declaration nodes to
+		 * ensure that they name existent types.
 		 */
 
 		/*
@@ -401,14 +402,14 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 				return new ErrorTypeImpl(this.manager);
 			}
 
-			TypecheckerEnvironment subEnv = env.deriveWithArrayInitializerType(arrayType);
+			TypecheckerEnvironment subEnv = env.deriveWithExpectedType(arrayType);
 			return node.getInitializer().executeOperation(thisOperation, subEnv);
 		}
 
 		@Override
 		public BsjType executeArrayInitializerNode(ArrayInitializerNode node, TypecheckerEnvironment env)
 		{
-			BsjType arrayType = env.getArrayInitializerType();
+			BsjType arrayType = env.getExpectedType();
 			if (arrayType == null)
 			{
 				// Array initializer not expected here. This might happen in the following case:
@@ -427,7 +428,7 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 			{
 				componentType = null;
 			}
-			TypecheckerEnvironment subEnv = env.deriveWithArrayInitializerType(componentType);
+			TypecheckerEnvironment subEnv = env.deriveWithExpectedType(componentType);
 			// Keep going even if we see an error
 			BsjErrorType errorType = null;
 			for (VariableInitializerNode initializer : node.getInitializers())
@@ -756,8 +757,9 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		@Override
 		public BsjType executeConstantDeclarationNode(ConstantDeclarationNode node, TypecheckerEnvironment env)
 		{
-			// TODO Auto-generated method stub
-			throw new NotImplementedYetException("Have not yet handled ConstantDeclarationNode.");
+			// TODO: this is not actually this simple; there are interesting rules defining when constants may or
+			// may not be used and in what order in the intializers of other constants (JLSv3 §9.3.1).
+			return handleVariableDeclaratorOwnerNode(node, new NonePseudoTypeImpl(this.manager), env);
 		}
 
 		@Override
@@ -875,8 +877,9 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		@Override
 		public BsjType executeFieldDeclarationNode(FieldDeclarationNode node, TypecheckerEnvironment env)
 		{
-			// TODO Auto-generated method stub
-			throw new NotImplementedYetException("Have not yet handled FieldDeclarationNode.");
+			// TODO: this is not actually this simple; there are interesting rules defining when static fields may or
+			// may not be used and in what order in the intializers of other static fields (JLSv3 §8.3.2.3).
+			return handleVariableDeclaratorOwnerNode(node, new NonePseudoTypeImpl(this.manager), env);
 		}
 
 		@Override
@@ -1060,8 +1063,7 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		@Override
 		public BsjType executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, TypecheckerEnvironment env)
 		{
-			// TODO Auto-generated method stub
-			throw new NotImplementedYetException("Have not yet handled LocalVariableDeclarationNode.");
+			return handleVariableDeclaratorOwnerNode(node, new VoidPseudoTypeImpl(this.manager), env);
 		}
 
 		@Override
@@ -2125,8 +2127,35 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		@Override
 		public BsjType executeVariableDeclaratorNode(VariableDeclaratorNode node, TypecheckerEnvironment env)
 		{
-			// TODO Auto-generated method stub
-			throw new NotImplementedYetException("Have not yet handled VariableDeclaratorNode.");
+			if (node.getInitializer() != null)
+			{
+				BsjType initializerType = node.getInitializer().executeOperation(thisOperation, env);
+				if (initializerType instanceof BsjErrorType)
+				{
+					return initializerType;
+				}
+
+				BsjType expectedType = env.getExpectedType();
+				// If the expected type is null, this means that we don't have an expected type in context - nothing we
+				// can really validate except that the initializer types to something.
+				if (expectedType != null)
+				{
+					if (node.getArrayLevels() > 0)
+					{
+						for (int i = 0; i < node.getArrayLevels(); i++)
+						{
+							expectedType = new ArrayTypeImpl(this.manager, expectedType);
+						}
+					}
+
+					if (!initializerType.isAssignmentCompatibleWith(expectedType))
+					{
+						// TODO: diagnostic
+						return new ErrorTypeImpl(this.manager);
+					}
+				}
+			}
+			return new NonePseudoTypeImpl(this.manager);
 		}
 
 		@Override
@@ -2139,8 +2168,7 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		@Override
 		public BsjType executeVariableListNode(VariableListNode node, TypecheckerEnvironment env)
 		{
-			// TODO Auto-generated method stub
-			throw new NotImplementedYetException("Have not yet handled VariableListNode.");
+			return expectNoError(env, node.getChildren());
 		}
 
 		@Override
@@ -2152,8 +2180,7 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		@Override
 		public BsjType executeVariableNode(VariableNode node, TypecheckerEnvironment env)
 		{
-			// TODO Auto-generated method stub
-			throw new NotImplementedYetException("Have not yet handled VariableNode.");
+			return expectNoError(env, node.getChildIterable());
 		}
 
 		@Override
@@ -2173,6 +2200,18 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 		public BsjType executeWildcardTypeNode(WildcardTypeNode node, TypecheckerEnvironment env)
 		{
 			return new NonePseudoTypeImpl(this.manager);
+		}
+
+		private BsjType handleVariableDeclaratorOwnerNode(VariableDeclaratorOwnerNode node, BsjType successType,
+				TypecheckerEnvironment env)
+		{
+			BsjType variableType = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
+			if (variableType instanceof BsjErrorType)
+			{
+				return variableType;
+			}
+			return expectNoError(env.deriveWithExpectedType(variableType), successType,
+					node.getDeclarators().getChildren());
 		}
 
 		/**
