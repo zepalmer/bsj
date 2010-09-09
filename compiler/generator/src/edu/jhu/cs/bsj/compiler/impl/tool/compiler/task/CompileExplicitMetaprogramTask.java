@@ -160,8 +160,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 							// TODO: diagnostic
 							throw new NotImplementedYetException();
 						}
-						Collection<? extends Node> declarations = qualifiedNameNode.getBase().getDeclarationsInScope(
-								qualifiedNameNode.getBase());
+						Collection<? extends Node> declarations = this.anchor.getDeclarationsInScope(qualifiedNameNode.getBase());
 						if (declarations.size() == 0)
 						{
 							// We could not find the type name contained in the dependency. This is an error; the
