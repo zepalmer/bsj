@@ -16,7 +16,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
@@ -37,7 +36,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
@@ -54,6 +52,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerEnvironment;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.rule.ParseRuleExecution;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
@@ -159,16 +158,13 @@ public class ParseMapOperation extends
 	public Map<RawCodeLiteralNode, ParseMapEntry> executeArrayInitializerNode(ArrayInitializerNode node,
 			ParseMapperEnvironment env)
 	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeArrayInstantiatorCreationNode(
-			ArrayInstantiatorCreationNode node, ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
+		BsjType type = this.nodeType;
+		if (env.getCodeLiteralExpectedType() instanceof BsjArrayType)
+		{
+			BsjArrayType arrayType = (BsjArrayType) env.getCodeLiteralExpectedType();
+			type = arrayType.getComponentType();
+		}
+		return calculateNodeUnionWithEnvironment(node.getInitializers().getChildren(), env.deriveForExpectedType(type));
 	}
 
 	@Override
@@ -430,14 +426,6 @@ public class ParseMapOperation extends
 			env = env.deriveForExpectedType(type);
 		}
 		return node.getInitializer().executeOperation(this, env);
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeVariableInitializerListNode(VariableInitializerListNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Not implemented yet.
-		return Collections.emptyMap();
 	}
 
 	private Map<RawCodeLiteralNode, ParseMapEntry> handleVariableDeclaratorOwnerNode(VariableDeclaratorOwnerNode node,
