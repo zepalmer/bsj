@@ -78,7 +78,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.ParseMapEntry;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.rule.ParseRuleExecution;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.AbstractCodeLiteralErrorTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
@@ -640,8 +639,8 @@ public class TypeEvaluationOperation extends BsjDefaultNodeOperation<Typechecker
 				// TODO: diagnostic
 				return new ErrorTypeImpl(this.manager);
 			}
-			return new DeclaredTypeImpl(this.manager, this.manager.getToolkit().getClassElement(),
-					Collections.singletonList(boxedType), null);
+			return this.manager.getTypeFactory().makeExplicitlyDeclaredType(
+					this.manager.getToolkit().getClassElement(), Collections.singletonList(boxedType), null);
 		}
 
 		@Override

@@ -24,7 +24,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
@@ -120,7 +119,8 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 		}
 		BsjExplicitlyDeclaredType enclosingType = enclosingElement == null ? null
 				: ((BsjDeclaredTypeElement) enclosingElement).asType();
-		return new DeclaredTypeImpl(getManager(), this, getPrototypicalTypeArgumentList(), enclosingType);
+		return getManager().getTypeFactory().makeExplicitlyDeclaredType(this, getPrototypicalTypeArgumentList(),
+				enclosingType);
 	}
 
 	protected abstract List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList();

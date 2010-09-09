@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceBuilder;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.ParseMapper;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeFactory;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 
@@ -29,6 +30,8 @@ public class TypecheckerManager
 	private ParseMapper parseMapper;
 	/** The type checker for this typechecker manager. */
 	private Typechecker typechecker;
+	/** The type factory used by this manager's components. */
+	private TypeFactory typeFactory;
 	
 	/**
 	 * Creates a new manager.
@@ -41,6 +44,7 @@ public class TypecheckerManager
 		this.rootPackage = rootPackage;
 		this.loader = loader;
 		
+		this.typeFactory = new TypeFactory(this);
 		this.toolkit = new TypecheckerToolkit(this, loader);
 		this.namespaceBuilder = new NamespaceBuilder(this.rootPackage, diagnosticListener, this.loader, this.toolkit);
 		this.parseMapper = new ParseMapper(this, parser);
@@ -75,5 +79,10 @@ public class TypecheckerManager
 	public Typechecker getTypechecker()
 	{
 		return typechecker;
+	}
+
+	public TypeFactory getTypeFactory()
+	{
+		return typeFactory;
 	}
 }

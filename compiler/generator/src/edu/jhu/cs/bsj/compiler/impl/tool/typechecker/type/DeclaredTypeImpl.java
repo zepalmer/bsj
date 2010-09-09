@@ -100,8 +100,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 	public BsjExplicitlyDeclaredType calculateErasure()
 	{
 		BsjExplicitlyDeclaredType erasedEnclosingType = enclosingType == null ? null : enclosingType.calculateErasure();
-		return new DeclaredTypeImpl(getManager(), this.typeElement, Collections.<BsjTypeArgument> emptyList(),
-				erasedEnclosingType);
+		return getManager().getTypeFactory().makeExplicitlyDeclaredType(this.typeElement,
+				Collections.<BsjTypeArgument> emptyList(), erasedEnclosingType);
 	}
 
 	@Override
@@ -189,6 +189,9 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 	}
 
 	private Map<BsjType, Boolean> subtypingCache = new HashMap<BsjType, Boolean>();
+	// TODO: remove the following accounting junk
+	private static int subtypingCacheHits = 0;
+	private static int subtypingCacheMisses = 0;
 
 	@Override
 	public boolean isSubtypeOf(BsjType type)
@@ -198,7 +201,14 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		{
 			ret = evaluateSubtypeOf(type);
 			subtypingCache.put(type, ret);
+			subtypingCacheMisses++;
+		} else
+		{
+			subtypingCacheHits++;
 		}
+		System.out.printf("Current subtyping cache hit ratio: %d/%d (%5.2f%%)\n", subtypingCacheHits,
+				subtypingCacheHits + subtypingCacheMisses, ((double) subtypingCacheHits * 100)
+						/ (subtypingCacheHits + subtypingCacheMisses));
 		return ret;
 	}
 
@@ -320,8 +330,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 					}
 				} else if (namedTypeDeclarationNode instanceof EnumDeclarationNode)
 				{
-					supertypes.add(new DeclaredTypeImpl(getManager(), getManager().getToolkit().getEnumElement(),
-							Collections.singletonList(this), null));
+					supertypes.add(getManager().getTypeFactory().makeExplicitlyDeclaredType(
+							getManager().getToolkit().getEnumElement(), Collections.singletonList(this), null));
 				} else if (namedTypeDeclarationNode instanceof AnnotationDeclarationNode)
 				{
 					supertypes.add(getManager().getToolkit().getAnnotationElement().asType());
@@ -411,7 +421,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				captureConversionArguments.add(typeArgument);
 			}
 		}
-		return new DeclaredTypeImpl(getManager(), asElement(), captureConversionArguments, getEnclosingType());
+		return getManager().getTypeFactory().makeExplicitlyDeclaredType(asElement(), captureConversionArguments,
+				getEnclosingType());
 	}
 
 	/**
@@ -493,7 +504,8 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			substitutedEnclosingType = null;
 		}
 
-		return new DeclaredTypeImpl(getManager(), asElement(), typeArguments, substitutedEnclosingType);
+		return getManager().getTypeFactory().makeExplicitlyDeclaredType(asElement(), typeArguments,
+				substitutedEnclosingType);
 	}
 
 	@Override

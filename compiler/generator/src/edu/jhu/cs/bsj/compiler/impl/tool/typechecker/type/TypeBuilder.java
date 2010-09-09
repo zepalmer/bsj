@@ -80,22 +80,24 @@ public class TypeBuilder
 
 	public BsjType makeType(TypeNode node)
 	{
+		BsjType ret;
 		if (node instanceof PrimitiveTypeNode)
 		{
-			return makePrimitiveType((PrimitiveTypeNode) node);
+			ret = makePrimitiveType((PrimitiveTypeNode) node);
 		} else if (node instanceof VoidTypeNode)
 		{
-			return makeVoidType((VoidTypeNode) node);
+			ret = makeVoidType((VoidTypeNode) node);
 		} else if (node instanceof WildcardTypeNode)
 		{
-			return makeWildcardType((WildcardTypeNode) node);
+			ret = makeWildcardType((WildcardTypeNode) node);
 		} else if (node instanceof ReferenceTypeNode)
 		{
-			return makeReferenceType((ReferenceTypeNode) node);
+			ret = makeReferenceType((ReferenceTypeNode) node);
 		} else
 		{
 			throw new IllegalStateException("Can't create a type for node of type " + node.getClass());
 		}
+		return ret;
 	}
 
 	public BsjReferenceType makeReferenceType(ReferenceTypeNode node)
@@ -294,20 +296,24 @@ public class TypeBuilder
 		BsjTypeLikeElement element = this.manager.getToolkit().getAccessibleTypeFromName(node.getName(),
 				getTypeNamespaceMap(node));
 
+		BsjNamedReferenceType ret;
+
 		if (element instanceof BsjTypeElement)
 		{
 			NamedTypeDeclarationNode<?> typeDeclaration = ((BsjTypeElement) element).getDeclarationNode();
-			return makeDeclarationTypeFromDeclaration(typeDeclaration, Collections.<TypeArgumentNode> emptySet(), null);
+			ret = makeDeclarationTypeFromDeclaration(typeDeclaration, Collections.<TypeArgumentNode> emptySet(), null);
 		} else if (element instanceof BsjTypeParameterElement)
 		{
 			BsjTypeParameterElement typeParameterElement = (BsjTypeParameterElement) element;
-			return typeParameterElement.asType();
+			ret = typeParameterElement.asType();
 		} else
 		{
 			// what is it, then?
 			throw new IllegalStateException("Don't know what to do with BsjTypeLikeElement of type "
 					+ element.getClass());
 		}
+		
+		return ret;
 	}
 
 	public BsjNoType makeVoidType(VoidTypeNode node)
@@ -443,8 +449,7 @@ public class TypeBuilder
 		{
 			typeArguments = Collections.<BsjTypeArgument> emptyList();
 		}
-
-		return new DeclaredTypeImpl(this.manager, typeElement, typeArguments, enclosingType);
+		
+		return this.manager.getTypeFactory().makeExplicitlyDeclaredType(typeElement, typeArguments, enclosingType);
 	}
-
 }
