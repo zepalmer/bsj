@@ -47,6 +47,7 @@ public class PackageOrTypeNameCategorizer
 		{
 			// If a type is in scope which has the same name as this node, the node refers to a type. Otherwise, this
 			// node refers to a package.
+			// TODO: retrieve from toolkit?
 			TypeDeclarationNode typeDeclarationNode = name.executeOperation(new TypeDeclarationLocatingNodeOperation(
 					(SimpleNameNode) name, NameCategory.TYPE, loader), null);
 			if (typeDeclarationNode == null)

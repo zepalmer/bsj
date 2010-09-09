@@ -20,7 +20,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -58,7 +57,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjRawCodeLiteralPayloadAntlrImpl;
@@ -209,15 +207,6 @@ public class ParseMapOperation extends
 			ParseMapperEnvironment env)
 	{
 		return handleVariableDeclaratorOwnerNode(node, env);
-	}
-
-	@Override
-	public Map<RawCodeLiteralNode, ParseMapEntry> executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node,
-			ParseMapperEnvironment env)
-	{
-		// TODO: Complete this method. Observe that an enum constant declaration is much like a constructor invocation.
-		// As a result, there may be an overloaded invocation here and we can't simply dismiss this as a default case.
-		throw new NotImplementedYetException();
 	}
 
 	@Override
