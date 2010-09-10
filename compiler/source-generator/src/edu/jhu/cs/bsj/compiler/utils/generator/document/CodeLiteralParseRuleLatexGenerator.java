@@ -49,7 +49,7 @@ public class CodeLiteralParseRuleLatexGenerator
 					System.out.printf("%-75s\\erow\n", out.getName());
 				} else
 				{
-					System.out.printf("%s\\sep\n%-40s & ", out.getName(), "");
+					System.out.printf("%s\\sep\n%-40s   ", out.getName(), "");
 				}
 			}
 		}
