@@ -160,5 +160,12 @@ public interface BsjType extends TypeMirror
 	 * @return <code>true</code> if a widening reference conversion exists; <code>false</code> if not.
 	 */
 	public boolean isWideningReferenceConversionTo(BsjType type);
+	
+	/**
+	 * Determines whether or not there exists a selection conversion from this type to another type.
+	 * @param type The target type.
+	 * @return <code>true</code> if a selection conversion exists; <code>false</code> if not.
+	 */
+	public boolean isSelectionConversionTo(BsjType type);
 
 }

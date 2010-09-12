@@ -39,6 +39,9 @@ public abstract class ActualTypeImpl extends TypeMirrorImpl
 		if (this.isNarrowingReferenceConversionTo(type.calculateErasure()))
 			return CastCompatibility.COMPATIBLE_WITH_WARNING;
 		
+		if (this.isSelectionConversionTo(type))
+			return CastCompatibility.COMPATIBLE;
+		
 		if (this.equals(type.boxConvert()))
 			return CastCompatibility.COMPATIBLE;
 		

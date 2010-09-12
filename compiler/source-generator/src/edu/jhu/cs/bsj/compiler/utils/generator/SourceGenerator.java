@@ -1017,8 +1017,11 @@ public class SourceGenerator
 			ps.println("{");
 			ps.incPrependCount();
 			ps.print("super");
-			List<PropertyDefinition> superProps = new ArrayList<PropertyDefinition>(recProps);
-			superProps.removeAll(def.getResponsibleProperties(false));
+			Map<String, TypeDefinition> namespaceMap = def.getNamespaceMap() == null ? Collections.<String, TypeDefinition> emptyMap()
+					: def.getNamespaceMap();
+			TypeDefinition superDef = namespaceMap.get(def.getBaseSuperName());
+			List<PropertyDefinition> superProps = superDef == null ? Collections.<PropertyDefinition> emptyList()
+					: superDef.getRecursiveProperties();
 			printArgumentList(ps, superProps, def.getConstructorOverrideMap());
 			ps.println(";");
 			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))

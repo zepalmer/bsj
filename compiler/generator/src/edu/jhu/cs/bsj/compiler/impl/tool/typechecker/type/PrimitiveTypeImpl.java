@@ -273,4 +273,10 @@ public class PrimitiveTypeImpl extends ActualTypeImpl implements BsjPrimitiveTyp
 	{
 		return false;
 	}
+
+	@Override
+	public boolean isSelectionConversionTo(BsjType type)
+	{
+		return false;
+	}
 }

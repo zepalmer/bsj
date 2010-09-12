@@ -170,4 +170,10 @@ public class BsjTypeArgumentThunk implements BsjTypeArgument
 	{
 		return think().performTypeSubstitution(substitutionMap);
 	}
+
+	@Override
+	public boolean isSelectionConversionTo(BsjType type)
+	{
+		return think().isSelectionConversionTo(type);
+	}
 }

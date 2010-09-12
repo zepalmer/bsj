@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentIm
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
 
 public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl implements BsjType
 {
@@ -92,10 +93,14 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 		if (this.isWideningReferenceConversionTo(type))
 			return true;
 		
-		if (this.boxConvert().isWideningReferenceConversionTo(type))
+		BsjTypeArgument boxed = this.boxConvert();
+		if (boxed != null && boxed.isWideningReferenceConversionTo(type))
 			return true;
 		
 		if (this.unboxConvert().isWideningPrimitiveConversionTo(type))
+			return true;
+		
+		if (this.isSelectionConversionTo(type))
 			return true;
 		
 		// If a widening conversion would get us from the original type T to a raw type R, we can use an unchecked
@@ -123,10 +128,14 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 		if (this.isWideningReferenceConversionTo(type))
 			return true;
 		
-		if (this.boxConvert().isWideningReferenceConversionTo(type))
+		BsjTypeArgument boxed = this.boxConvert();
+		if (boxed != null && boxed.isWideningReferenceConversionTo(type))
+			return true;
+
+		if (this.unboxConvert().isWideningPrimitiveConversionTo(type))
 			return true;
 		
-		if (this.unboxConvert().isWideningPrimitiveConversionTo(type))
+		if (this.isSelectionConversionTo(type))
 			return true;
 		
 		// If a widening conversion would get us from the original type T to a raw type R, we can use an unchecked

@@ -12,7 +12,9 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.parsemap.ParseMapEntry;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.RawCodeLiteralRecord;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckerResult;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckingMetadata;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
@@ -25,8 +27,6 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 {
 	/** The AST node which acts as the root for this replacement task. */
 	private Node root;
-	/** A lazily calculated value representing the parse map of the root AST node. */
-	private Map<RawCodeLiteralNode, ParseMapEntry> parseMap;
 
 	public ReplaceCodeLiteralsTask(Node root)
 	{
@@ -34,88 +34,70 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 		this.root = root;
 	}
 
-	private Map<RawCodeLiteralNode, ParseMapEntry> getParseMap(MetacompilationContext context)
-	{
-		if (this.parseMap == null)
-		{
-			TypecheckerManager typecheckerManager = new TypecheckerManager(this.root.getRootPackage(),
-					context.getToolkit().getParser(),
-					context.getToolkit().getCompilationUnitLoaderFactory().makeLoader(context.getDiagnosticListener()),
-					context.getDiagnosticListener());
-			this.parseMap = typecheckerManager.getParseMapper().getParseMap(this.root);
-		}
-		return this.parseMap;
-	}
-
 	@Override
 	public void execute(final MetacompilationContext context) throws IOException
 	{
-		this.parseMap = null;
-		final Map<Node,Node> nodeReplacementMap = new HashMap<Node, Node>();
+		// TODO: remove this check one the typechecker is finished
+		// It exists to allow programs which do not use code literals to continue to operate until the typechecker is
+		// complete. Once the typechecker is complete, this check is purely redundant; until then, it prevents
+		// erroneous NotImplementedYetExceptions from affecting programs which do not need that code to function.
+		final int[] count = new int[] { 0 };
 		this.root.receiveTyped(new BsjTypedNodeNoOpVisitor()
 		{
-			private int levels = 0;
-
 			@Override
 			public void visitCodeLiteralNodeStart(CodeLiteralNode node, boolean mostSpecific)
 			{
-				levels++;
+				count[0]++;
 			}
 
 			@Override
 			public void visitRawCodeLiteralNodeStart(RawCodeLiteralNode node, boolean mostSpecific)
 			{
-				levels++;
-			}
-
-			@Override
-			public void visitCodeLiteralNodeStop(CodeLiteralNode node, boolean mostSpecific)
-			{
-				levels--;
-				if (levels == 0 && node.getParent() == null)
-				{
-					nodeReplacementMap.put(node, liftNode(context, node.getValue()));
-				}
-			}
-
-			@Override
-			public void visitRawCodeLiteralNodeStop(RawCodeLiteralNode node, boolean mostSpecific)
-			{
-				levels--;
-				if (levels == 0 && node.getParent() != null)
-				{
-					nodeReplacementMap.put(node, liftNode(context, interpretRawCodeLiteral(context, node)));
-				}
+				count[0]++;
 			}
 		});
-		for (Map.Entry<Node,Node> entry : nodeReplacementMap.entrySet())
+		if (count[0] == 0)
+		{
+			// Then there aren't any code literals in the AST. Skip this step.
+			return;
+		}
+
+		// Typecheck the AST and then use the typechecking metadata to perform code literal replacement.
+		TypecheckerManager typecheckerManager = new TypecheckerManager(this.root.getRootPackage(),
+				context.getToolkit().getParser(), context.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
+						context.getDiagnosticListener()), context.getDiagnosticListener());
+		TypecheckerResult result = typecheckerManager.getTypechecker().typecheck(this.root);
+		TypecheckingMetadata metadata = result.getMetadata();
+
+		final Map<Node, Node> nodeReplacementMap = new HashMap<Node, Node>();
+		this.root.receiveTyped(new CodeLiteralReplacementVisitor(nodeReplacementMap, context, metadata));
+		for (Map.Entry<Node, Node> entry : nodeReplacementMap.entrySet())
 		{
 			entry.getKey().getParent().replace(entry.getKey(), entry.getValue());
 		}
 	}
 
-	private Node interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node)
+	private Node interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node, TypecheckingMetadata metadata)
 	{
-		Map<RawCodeLiteralNode, ParseMapEntry> map = getParseMap(context);
-		ParseMapEntry entry = map.get(node);
-		if (entry == null)
+		RawCodeLiteralRecord record = metadata.getRawCodeLiteralRecordMap().get(node);
+		if (record == null)
 		{
-			throw new IllegalStateException("Parse mapper did not consider node " + node);
+			throw new IllegalStateException("Typechecker did not record metadata for node " + node);
 		}
-		if (entry.getRules().size() == 0)
+		if (record.getInContextValues().size() == 0)
 		{
 			// Then this code literal is unparseable.
 			// TODO: report an appropriate diagnostic
 			throw new NotImplementedYetException("code literal at " + node.getStartLocation() + " has no parses");
-		} else if (entry.getRules().size() > 1)
+		} else if (record.getInContextValues().size() > 1)
 		{
 			// Then this code literal is ambiguous.
 			// TODO: report an appropriate diagnostic
 			throw new NotImplementedYetException("code literal at " + node.getStartLocation() + " has "
-					+ entry.getRules().size() + " parses");
+					+ record.getInContextValues().size() + " parses");
 		} else
 		{
-			return entry.getRules().iterator().next().getResult();
+			return record.getInContextValues().iterator().next();
 		}
 	}
 
@@ -160,4 +142,53 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 										factory.makeIdentifierNode("Element")),
 								factory.makeIdentifierNode("NODE_FACTORY")))));
 	}
+
+	private final class CodeLiteralReplacementVisitor extends BsjTypedNodeNoOpVisitor
+	{
+		private final Map<Node, Node> nodeReplacementMap;
+		private final MetacompilationContext context;
+		private final TypecheckingMetadata metadata;
+		private int levels = 0;
+
+		private CodeLiteralReplacementVisitor(Map<Node, Node> nodeReplacementMap, MetacompilationContext context,
+				TypecheckingMetadata metadata)
+		{
+			this.nodeReplacementMap = nodeReplacementMap;
+			this.context = context;
+			this.metadata = metadata;
+		}
+
+		@Override
+		public void visitCodeLiteralNodeStart(CodeLiteralNode node, boolean mostSpecific)
+		{
+			levels++;
+		}
+
+		@Override
+		public void visitRawCodeLiteralNodeStart(RawCodeLiteralNode node, boolean mostSpecific)
+		{
+			levels++;
+		}
+
+		@Override
+		public void visitCodeLiteralNodeStop(CodeLiteralNode node, boolean mostSpecific)
+		{
+			levels--;
+			if (levels == 0 && node.getParent() == null)
+			{
+				nodeReplacementMap.put(node, liftNode(context, node.getValue()));
+			}
+		}
+
+		@Override
+		public void visitRawCodeLiteralNodeStop(RawCodeLiteralNode node, boolean mostSpecific)
+		{
+			levels--;
+			if (levels == 0 && node.getParent() != null)
+			{
+				nodeReplacementMap.put(node, liftNode(context, interpretRawCodeLiteral(context, node, metadata)));
+			}
+		}
+	}
+
 }

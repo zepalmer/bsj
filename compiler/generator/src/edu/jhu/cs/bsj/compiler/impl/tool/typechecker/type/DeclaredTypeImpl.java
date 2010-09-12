@@ -189,9 +189,6 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 	}
 
 	private Map<BsjType, Boolean> subtypingCache = new HashMap<BsjType, Boolean>();
-	// TODO: remove the following accounting junk
-	private static int subtypingCacheHits = 0;
-	private static int subtypingCacheMisses = 0;
 
 	@Override
 	public boolean isSubtypeOf(BsjType type)
@@ -201,14 +198,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		{
 			ret = evaluateSubtypeOf(type);
 			subtypingCache.put(type, ret);
-			subtypingCacheMisses++;
-		} else
-		{
-			subtypingCacheHits++;
 		}
-		System.out.printf("Current subtyping cache hit ratio: %d/%d (%5.2f%%)\n", subtypingCacheHits,
-				subtypingCacheHits + subtypingCacheMisses, ((double) subtypingCacheHits * 100)
-						/ (subtypingCacheHits + subtypingCacheMisses));
 		return ret;
 	}
 

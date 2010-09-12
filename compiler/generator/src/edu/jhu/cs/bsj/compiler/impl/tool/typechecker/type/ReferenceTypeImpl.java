@@ -34,5 +34,10 @@ public abstract class ReferenceTypeImpl extends TypeArgumentImpl implements BsjR
 	{
 		return false;
 	}
-	
+
+	@Override
+	public boolean isSelectionConversionTo(BsjType type)
+	{
+		return false;
+	}
 }

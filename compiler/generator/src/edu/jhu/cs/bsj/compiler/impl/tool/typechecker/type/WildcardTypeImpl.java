@@ -214,4 +214,10 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
 	{
 		return false;
 	}
+
+	@Override
+	public boolean isSelectionConversionTo(BsjType type)
+	{
+		return false;
+	}
 }

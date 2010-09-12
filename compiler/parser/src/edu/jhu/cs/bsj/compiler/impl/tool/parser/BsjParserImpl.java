@@ -97,12 +97,9 @@ public class BsjParserImpl implements BsjParser
 			throw new IllegalArgumentException("Cannot parse empty token stream");
 		}
 		
-		if (LOGGER.isDebugEnabled())
-		{
-			LOGGER.debug("Parsing code fragment using rule " + rule.getName());
-		}
 		if (LOGGER.isTraceEnabled())
 		{
+			LOGGER.debug("Parsing code fragment using rule " + rule.getName());
 			StringBuilder sb = new StringBuilder("    ");
 			for (Token token : tokens)
 			{

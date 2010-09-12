@@ -1366,6 +1366,12 @@
         </type>
 
         <type name="ClassLiteralNode" super="LiteralNode" superTypeArg="LiteralizableTypeNode">
+            <!--
+                Overriding property so source generator realizes that it must reimplement the method.
+                This is necessary because LiteralizableTypeNode is a node type and appropriate management of its
+                parent reference must be done.
+            -->
+            <prop name="value" type="LiteralizableTypeNode" desc="the type for this literal" />
             <doc><![CDATA[
                 A note representing a class literal, such as <tt>String.class</tt>.  Note that the BSJ compiler API includes a
                 {@link VoidTypeNode}.  This is technically a violation (as Java does not treat <tt>void</tt> as a type) but

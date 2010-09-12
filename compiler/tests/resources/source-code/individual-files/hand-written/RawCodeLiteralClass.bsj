@@ -1,7 +1,7 @@
 public class RawCodeLiteralClass
 {
 	[:
-		ClassMemberListNode members = context.getAnchor().getNearestAncestorOfType(ClassMemberListNode.class); 
+		ClassMemberListNode members = context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class); 
 		EnumDeclarationNode enumDecl = <: private static enum E { A, B } :> ;
 		members.addFirst(enumDecl);
 		FieldDeclarationNode fieldDecl = <: private int x = 0; :> ;

@@ -1,8 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckerResult;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 
 /**
  * This module performs type checking as per the Java Language Specification v3. It also includes the modifications
@@ -16,16 +18,19 @@ public class Typechecker
 {
 	/** The manager which is overseeing this typechecker. */
 	private TypecheckerManager manager;
+	/** The parser which should be used when typechecking code literals. */
+	private BsjParser parser;
 
 	/** The operation used to calculate type results. */
 	private TypeEvaluationOperation typeEvaluationOperation;
 
-	public Typechecker(TypecheckerManager manager)
+	public Typechecker(TypecheckerManager manager, BsjParser parser)
 	{
 		super();
 		this.manager = manager;
+		this.parser = parser;
 
-		this.typeEvaluationOperation = new TypeEvaluationOperation(this.manager);
+		this.typeEvaluationOperation = new TypeEvaluationOperation(this.manager, this.parser);
 	}
 
 	/**
@@ -35,10 +40,15 @@ public class Typechecker
 	 */
 	public BsjType getType(Node node)
 	{
-		return getType(node, new TypecheckerEnvironment());
+		return typecheck(node, new TypecheckerEnvironment()).getType();
+	}
+	
+	public TypecheckerResult typecheck(Node node)
+	{
+		return typecheck(node, new TypecheckerEnvironment());
 	}
 
-	public BsjType getType(Node node, TypecheckerEnvironment env)
+	public TypecheckerResult typecheck(Node node, TypecheckerEnvironment env)
 	{
 		return node.executeOperation(this.typeEvaluationOperation, env);
 	}

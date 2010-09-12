@@ -1,8 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -16,10 +18,31 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralizableTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode> implements ClassLiteralNode
 {
+    /** The type for this literal. */
+    private LiteralizableTypeNode value;
+    
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
+    {
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(ClassLiteralNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the value property. */
+        VALUE,
+    }
+    
     /** General constructor. */
     public ClassLiteralNodeImpl(
             LiteralizableTypeNode value,
@@ -29,6 +52,39 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
             boolean binary)
     {
         super(value, startLocation, stopLocation, manager, binary);
+        setValue(value, false);
+    }
+    
+    /**
+     * Gets the type for this literal.
+     * @return The type for this literal.
+     */
+    public LiteralizableTypeNode getValue()
+    {
+        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        return this.value;
+    }
+    
+    /**
+     * Changes the type for this literal.
+     * @param value The type for this literal.
+     */
+    public void setValue(LiteralizableTypeNode value)
+    {
+            setValue(value, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setValue(LiteralizableTypeNode value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        setAsChild(this.value, false);
+        this.value = value;
+        setAsChild(value, true);
     }
     
     /**
@@ -42,6 +98,10 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.value != null)
+        {
+            this.value.receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -63,6 +123,10 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.value != null)
+        {
+            this.value.receiveTyped(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -98,6 +162,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

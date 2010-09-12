@@ -24,6 +24,7 @@ public interface BsjParser
 	 * @param reader The {@link Reader} to use to read the input file.
 	 * @param diagnosticListener The listener to which diagnostics are reported. If <code>null</code>, a default
 	 *            listener is used which reports messages to standard error.
+	 * @return The AST node representing the parse.
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public CompilationUnitNode parse(String name, Reader reader,
@@ -36,6 +37,7 @@ public interface BsjParser
 	 * @param rule The parse rule to use when parsing the payload.
 	 * @param diagnosticListener The listener to which diagnostics are reported. If <code>null</code>, a default
 	 *            listener is used which reports messages to standard error.
+	 * @return The AST node representing the parse.
 	 * @throws IllegalArgumentException If the provided list of tokens is empty.
 	 */
 	public <T extends Node> T parse(BsjRawCodeLiteralPayload payload, ParseRule<T> rule,

@@ -144,4 +144,10 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
 	{
 		return false;
 	}
+
+	@Override
+	public boolean isSelectionConversionTo(BsjType type)
+	{
+		return false;
+	}
 }
