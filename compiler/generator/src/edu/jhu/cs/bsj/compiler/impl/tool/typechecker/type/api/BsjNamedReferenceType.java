@@ -8,4 +8,5 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api;
  */
 public interface BsjNamedReferenceType extends BsjReferenceType
 {
+	public BsjTypeArgument calculateErasure();
 }

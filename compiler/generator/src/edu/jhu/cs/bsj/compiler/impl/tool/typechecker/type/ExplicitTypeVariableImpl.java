@@ -26,7 +26,7 @@ public class ExplicitTypeVariableImpl extends AbstractTypeVariableImpl<TypeParam
 	@Override
 	public String toString()
 	{
-		return getId().getIdentifier().getIdentifier();
+		return getId().toSourceCode();
 	}
 
 	@Override

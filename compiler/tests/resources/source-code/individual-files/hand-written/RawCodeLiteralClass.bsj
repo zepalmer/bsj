@@ -13,6 +13,8 @@ public class RawCodeLiteralClass
 				}
 			:>;
 		members.addFirst(methodDecl);
+		
+		members.addFirst(<:private int y = 0;:>);
 	:]
 	
 	public static void main(String[] arg)

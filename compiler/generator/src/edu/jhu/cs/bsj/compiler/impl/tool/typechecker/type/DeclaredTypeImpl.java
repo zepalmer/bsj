@@ -148,44 +148,87 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		}
 	}
 
+	private Map<BsjTypeVariable, BsjTypeArgument> localSubstitutionMapCache = null;
+
+	private Map<BsjTypeVariable, BsjTypeArgument> calculateLocalSubstitutionMap()
+	{
+		if (localSubstitutionMapCache == null)
+		{
+			Map<BsjTypeVariable, BsjTypeArgument> map = new HashMap<BsjTypeVariable, BsjTypeArgument>();
+			List<TypeParameterNode> parameters;
+			NamedTypeDeclarationNode<?> decl = this.asElement().getDeclarationNode();
+			if (decl instanceof ClassDeclarationNode)
+			{
+				ClassDeclarationNode classDeclarationNode = (ClassDeclarationNode) decl;
+				parameters = classDeclarationNode.getTypeParameters();
+			} else if (decl instanceof InterfaceDeclarationNode)
+			{
+				InterfaceDeclarationNode interfaceDeclarationNode = (InterfaceDeclarationNode) decl;
+				parameters = interfaceDeclarationNode.getTypeParameters();
+			} else
+			{
+				parameters = Collections.emptyList();
+			}
+
+			Iterator<TypeParameterNode> parametersIt = parameters.iterator();
+			Iterator<? extends BsjTypeArgument> argumentsIt = this.getTypeArguments().iterator();
+			while (parametersIt.hasNext() && argumentsIt.hasNext())
+			{
+				TypeParameterNode parameter = parametersIt.next();
+				BsjTypeArgument argument = argumentsIt.next();
+
+				map.put(getManager().getToolkit().getTypeBuilder().makeTypeVariable(parameter), argument);
+			}
+
+			// Calculate enclosing type substitution map and merge it in
+			if (getEnclosingType() != null && !getEnclosingType().isRaw())
+			{
+				map.putAll(getEnclosingType().calculateSubstitutionMap());
+			}
+			localSubstitutionMapCache = map;
+		}
+
+		return localSubstitutionMapCache;
+	}
+
+	private Map<BsjTypeVariable, BsjTypeArgument> substitutionMapCache = null;
+
 	@Override
 	public Map<BsjTypeVariable, BsjTypeArgument> calculateSubstitutionMap()
 	{
 		if (isRaw())
-			throw new IllegalStateException("Attempted to find substitution map of a raw type.");
-
-		Map<BsjTypeVariable, BsjTypeArgument> map = new HashMap<BsjTypeVariable, BsjTypeArgument>();
-		List<TypeParameterNode> parameters;
-		NamedTypeDeclarationNode<?> decl = this.asElement().getDeclarationNode();
-		if (decl instanceof ClassDeclarationNode)
 		{
-			ClassDeclarationNode classDeclarationNode = (ClassDeclarationNode) decl;
-			parameters = classDeclarationNode.getTypeParameters();
-		} else if (decl instanceof InterfaceDeclarationNode)
-		{
-			InterfaceDeclarationNode interfaceDeclarationNode = (InterfaceDeclarationNode) decl;
-			parameters = interfaceDeclarationNode.getTypeParameters();
-		} else
-		{
-			parameters = Collections.emptyList();
+			throw new IllegalStateException("Attempted to find substitution map of a raw type: " + this);
 		}
 
-		Iterator<TypeParameterNode> parametersIt = parameters.iterator();
-		Iterator<? extends BsjTypeArgument> argumentsIt = this.getTypeArguments().iterator();
-		while (parametersIt.hasNext() && argumentsIt.hasNext())
+		if (substitutionMapCache == null)
 		{
-			TypeParameterNode parameter = parametersIt.next();
-			BsjTypeArgument argument = argumentsIt.next();
+			if (LOGGER.isTraceEnabled())
+			{
+				LOGGER.trace("Calculating substitution map for type " + this);
+			}
 
-			map.put(getManager().getToolkit().getTypeBuilder().makeTypeVariable(parameter), argument);
+			// Calculate a local substitution map
+			Map<BsjTypeVariable, BsjTypeArgument> map = calculateLocalSubstitutionMap();
+
+			// Calculate parent type substitution maps and merge them in
+			for (BsjExplicitlyDeclaredType supertype : getSupertypes())
+			{
+				if (!supertype.isRaw())
+				{
+					Map<BsjTypeVariable, BsjTypeArgument> parentMap = supertype.calculateSubstitutionMap();
+					for (Map.Entry<BsjTypeVariable, BsjTypeArgument> entry : parentMap.entrySet())
+					{
+						BsjTypeArgument value = entry.getValue().performTypeSubstitution(map);
+						map.put(entry.getKey(), value);
+					}
+				}
+			}
+
+			substitutionMapCache = map;
 		}
 
-		if (getEnclosingType() != null && !getEnclosingType().isRaw())
-		{
-			map.putAll(getEnclosingType().calculateSubstitutionMap());
-		}
-
-		return map;
+		return substitutionMapCache;
 	}
 
 	private Map<BsjType, Boolean> subtypingCache = new HashMap<BsjType, Boolean>();
@@ -273,65 +316,15 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			} else
 			{
 				// If we reach this point, then the only hope for the subtyping relation is that the same thing
-				// holds
-				// true for this type and one of our ancestor types.
+				// holds true for this type and one of our ancestor types.
 				if (LOGGER.isTraceEnabled())
 				{
 					LOGGER.trace("Determining "
 							+ new Formatter().format("%50s <?: %s", this.toString(), type.toString()).out());
 				}
-				Collection<BsjType> supertypes = new ArrayList<BsjType>();
-				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.asElement().getDeclarationNode();
+				Collection<? extends BsjExplicitlyDeclaredType> supertypes = getSupertypes();
 
-				if (namedTypeDeclarationNode instanceof ClassDeclarationNode)
-				{
-					ClassDeclarationNode decl = (ClassDeclarationNode) namedTypeDeclarationNode;
-					if (decl.getExtendsClause() != null)
-					{
-						supertypes.add(calculateSubstitutedSupertype(decl.getExtendsClause()));
-					} else if (this.equals(this.getManager().getToolkit().getObjectElement()))
-					{
-						supertypes.add(getManager().getToolkit().getObjectElement().asType());
-					}
-					for (DeclaredTypeNode typeNode : decl.getImplementsClause())
-					{
-						supertypes.add(calculateSubstitutedSupertype(typeNode));
-					}
-					if (decl.getTypeParameters().size() != 0 && !this.isRaw())
-					{
-						supertypes.add(this.calculateErasure());
-					}
-				} else if (namedTypeDeclarationNode instanceof InterfaceDeclarationNode)
-				{
-					InterfaceDeclarationNode decl = (InterfaceDeclarationNode) namedTypeDeclarationNode;
-					if (decl.getExtendsClause().size() == 0)
-					{
-						supertypes.add(getManager().getToolkit().getObjectElement().asType());
-					} else
-					{
-						for (DeclaredTypeNode typeNode : decl.getExtendsClause())
-						{
-							supertypes.add(calculateSubstitutedSupertype(typeNode));
-						}
-					}
-					if (decl.getTypeParameters().size() != 0 && !this.isRaw())
-					{
-						supertypes.add(this.calculateErasure());
-					}
-				} else if (namedTypeDeclarationNode instanceof EnumDeclarationNode)
-				{
-					supertypes.add(getManager().getTypeFactory().makeExplicitlyDeclaredType(
-							getManager().getToolkit().getEnumElement(), Collections.singletonList(this), null));
-				} else if (namedTypeDeclarationNode instanceof AnnotationDeclarationNode)
-				{
-					supertypes.add(getManager().getToolkit().getAnnotationElement().asType());
-				} else
-				{
-					throw new IllegalStateException("Unknown named type declaration node type: "
-							+ namedTypeDeclarationNode.getClass());
-				}
-
-				for (BsjType supertype : supertypes)
+				for (BsjExplicitlyDeclaredType supertype : supertypes)
 				{
 					if (supertype.isSubtypeOf(type))
 						return true;
@@ -348,15 +341,88 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 		}
 	}
 
+	private Collection<BsjExplicitlyDeclaredType> cachedSupertypes = null;
+
+	private Collection<? extends BsjExplicitlyDeclaredType> getSupertypes()
+	{
+		if (cachedSupertypes == null)
+		{
+			Collection<BsjType> supertypes = new ArrayList<BsjType>();
+			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.asElement().getDeclarationNode();
+
+			if (namedTypeDeclarationNode instanceof ClassDeclarationNode)
+			{
+				ClassDeclarationNode decl = (ClassDeclarationNode) namedTypeDeclarationNode;
+				if (decl.getExtendsClause() != null)
+				{
+					supertypes.add(calculateSubstitutedSupertype(decl.getExtendsClause()));
+				} else if (this.equals(this.getManager().getToolkit().getObjectElement()))
+				{
+					supertypes.add(getManager().getToolkit().getObjectElement().asType());
+				}
+				for (DeclaredTypeNode typeNode : decl.getImplementsClause())
+				{
+					supertypes.add(calculateSubstitutedSupertype(typeNode));
+				}
+				if (decl.getTypeParameters().size() != 0 && !this.isRaw())
+				{
+					supertypes.add(this.calculateErasure());
+				}
+			} else if (namedTypeDeclarationNode instanceof InterfaceDeclarationNode)
+			{
+				InterfaceDeclarationNode decl = (InterfaceDeclarationNode) namedTypeDeclarationNode;
+				if (decl.getExtendsClause().size() == 0)
+				{
+					supertypes.add(getManager().getToolkit().getObjectElement().asType());
+				} else
+				{
+					for (DeclaredTypeNode typeNode : decl.getExtendsClause())
+					{
+						supertypes.add(calculateSubstitutedSupertype(typeNode));
+					}
+				}
+				if (decl.getTypeParameters().size() != 0 && !this.isRaw())
+				{
+					supertypes.add(this.calculateErasure());
+				}
+			} else if (namedTypeDeclarationNode instanceof EnumDeclarationNode)
+			{
+				supertypes.add(getManager().getTypeFactory().makeExplicitlyDeclaredType(
+						getManager().getToolkit().getEnumElement(), Collections.singletonList(this), null));
+			} else if (namedTypeDeclarationNode instanceof AnnotationDeclarationNode)
+			{
+				supertypes.add(getManager().getToolkit().getAnnotationElement().asType());
+			} else
+			{
+				throw new IllegalStateException("Unknown named type declaration node type: "
+						+ namedTypeDeclarationNode.getClass());
+			}
+
+			this.cachedSupertypes = new ArrayList<BsjExplicitlyDeclaredType>(supertypes.size());
+			for (BsjType supertype : supertypes)
+			{
+				if (supertype instanceof BsjExplicitlyDeclaredType)
+				{
+					this.cachedSupertypes.add((BsjExplicitlyDeclaredType) supertype);
+				} else
+				{
+					throw new IllegalStateException("Declared type " + this
+							+ " supertype is not an explicitly declared type: " + supertype);
+				}
+			}
+		}
+		return cachedSupertypes;
+	}
+
 	private BsjType calculateSubstitutedSupertype(DeclaredTypeNode typeNode)
 	{
-		BsjType type = getManager().getToolkit().getTypeBuilder().makeType(typeNode);
+		BsjType type = getManager().getToolkit().getTypeBuilder().makeDeclaredType(typeNode);
 		if (this.isRaw())
 		{
 			type = type.calculateErasure();
 		} else
 		{
-			type = type.performTypeSubstitution(calculateSubstitutionMap());
+			type = type.performTypeSubstitution(calculateLocalSubstitutionMap());
 			type = type.captureConvert();
 		}
 		return type;

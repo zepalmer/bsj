@@ -74,7 +74,7 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 	}
 
 	@Override
-	public BsjType calculateErasure()
+	public BsjArrayType calculateErasure()
 	{
 		return new ArrayTypeImpl(getManager(), getComponentType().calculateErasure());
 	}

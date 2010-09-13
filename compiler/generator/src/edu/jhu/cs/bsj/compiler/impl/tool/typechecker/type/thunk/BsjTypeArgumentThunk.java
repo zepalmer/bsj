@@ -39,10 +39,9 @@ public class BsjTypeArgumentThunk implements BsjTypeArgument
 	}
 
 	@Override
-	public BsjType calculateErasure()
+	public BsjTypeArgument calculateErasure()
 	{
 		return think().calculateErasure();
-
 	}
 
 	@Override

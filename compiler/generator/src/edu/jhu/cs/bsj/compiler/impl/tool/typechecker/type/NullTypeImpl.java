@@ -50,7 +50,7 @@ public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 	}
 
 	@Override
-	public BsjType calculateErasure()
+	public BsjNullType calculateErasure()
 	{
 		return this;
 	}

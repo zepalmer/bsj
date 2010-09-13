@@ -17,4 +17,6 @@ public interface BsjTypeArgument extends BsjActualType
 	public boolean contains(BsjTypeArgument argument);
 	
 	public BsjTypeArgument performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
+	
+	public BsjTypeArgument calculateErasure();
 }

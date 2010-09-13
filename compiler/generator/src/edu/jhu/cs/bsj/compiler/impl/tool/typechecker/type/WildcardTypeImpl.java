@@ -109,7 +109,7 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
 	}
 
 	@Override
-	public BsjType calculateErasure()
+	public BsjWildcardType calculateErasure()
 	{
 		return this;
 	}

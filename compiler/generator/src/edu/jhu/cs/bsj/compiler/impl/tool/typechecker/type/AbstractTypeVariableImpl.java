@@ -95,7 +95,7 @@ public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl impl
 	}
 
 	@Override
-	public BsjType calculateErasure()
+	public BsjTypeArgument calculateErasure()
 	{
 		return getUpperBound().calculateErasure();
 	}
