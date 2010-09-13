@@ -84,7 +84,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PackagePseudoTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.RawCodeLiteralRecord;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.RawCodeLiteralParseResult;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.SelectionTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckerResult;
@@ -108,9 +108,12 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjVoidPseudoType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.value.CodeLiteralSelectionBagImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.value.api.SelectionBag;
 import edu.jhu.cs.bsj.compiler.impl.utils.Bag;
 import edu.jhu.cs.bsj.compiler.impl.utils.HashBag;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.impl.utils.TwoElementImmutableSet;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
@@ -1205,7 +1208,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public TypecheckerResult executeMethodDeclarationNode(MethodDeclarationNode node, TypecheckerEnvironment env)
 	{
-		// TODO: validate return type, throws types, etc. 
+		// TODO: validate return type, throws types, etc.
 		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildIterable());
 	}
 
@@ -1215,10 +1218,13 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		TypecheckingMetadata metadata = new TypecheckingMetadata();
 		// Evaluate the type of each of the arguments in the call
 		List<BsjType> argumentTypes = new ArrayList<BsjType>();
+		List<Set<RawCodeLiteralNode>> responsibleCodeLiterals = new ArrayList<Set<RawCodeLiteralNode>>();
 		BsjErrorType errorType = null;
 		for (ExpressionNode expr : node.getArguments())
 		{
-			BsjType argumentType = executeComposingMetadata(expr, env, metadata);
+			TypecheckerResult result = expr.executeOperation(this, env.deriveWithExpectedType(null));
+			metadata.add(result.getMetadata());
+			BsjType argumentType = result.getType();
 			if (argumentType instanceof BsjErrorType)
 			{
 				// TODO: raise a diagnostic
@@ -1228,6 +1234,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				}
 			}
 			argumentTypes.add(argumentType);
+			responsibleCodeLiterals.add(result.getMetadata().getRawCodeLiteralsLackingContext());
 		}
 
 		// §15.12.1: determine class or interface to search
@@ -1348,9 +1355,9 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			throw new NotImplementedYetException();
 		}
 
+		// If we still haven't found at least one applicable method, there is no such method. Report an error.
 		if (applicableMethods.size() == 0)
 		{
-			// No methods are applicable for these arguments
 			// TODO: raise diagnostic
 			return new TypecheckerResult(new ErrorTypeImpl(this.manager), metadata);
 		}
@@ -1376,7 +1383,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			// TODO: raise diagnostic
 			return new TypecheckerResult(new ErrorTypeImpl(this.manager), metadata);
 		}
-
+		
 		// §15.12.2.6: Determine method return and throws types
 		BsjType returnType = mostSpecificMethod.getReturnType();
 		// TODO: if an unchecked conversion was necessary for applicability, then the return type should be erased
@@ -1389,8 +1396,21 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		// * If the invocation was made using a type name, it must be static.
 		// * If the invocation was made using the keyword super, the method must not be abstract.
 		// * If the invocation was made using a qualified keyword super, the method invocation must be enclosed by
-		// the
-		// specified class.
+		// the specified class.
+
+		// Once a method has been selected, impose the appropriate context on each of the code literals
+		Iterator<Set<RawCodeLiteralNode>> lackingContextIterator = responsibleCodeLiterals.iterator();
+		Iterator<? extends BsjType> parameterTypeIterator = mostSpecificMethod.getParameterTypes().iterator();
+		while (lackingContextIterator.hasNext())
+		{
+			// TODO: handle varargs
+			Set<RawCodeLiteralNode> lackingContext = lackingContextIterator.next();
+			BsjType parameterType = parameterTypeIterator.next();
+			for (RawCodeLiteralNode literal : lackingContext)
+			{
+				metadata.addRawCodeLiteralInContextType(literal, parameterType);
+			}
+		}
 
 		// Finished!
 		return new TypecheckerResult(returnType, metadata);
@@ -1489,10 +1509,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		// TODO: perform these parsing operations lazily; create a specialized type which will only evaluate these
 		// parse values on demand
 
-		Map<BsjType, Node> typeToValueMap = new HashMap<BsjType, Node>();
-		Set<Node> inContextValues = new HashSet<Node>();
-
-		Bag<BsjActualType> componentTypes = new HashBag<BsjActualType>();
+		Bag<Pair<Node, BsjActualType>> parseResultBag = new HashBag<Pair<Node, BsjActualType>>();
 		for (ParseRule<?> rule : ParseRule.values())
 		{
 			CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
@@ -1521,20 +1538,22 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			BsjTypeArgument resultType = codeLiteralTypeReduction(
 					this.manager.getToolkit().getTypeBuilder().makeMetaprogramClasspathType(result.getClass()),
 					baseTypes);
-			componentTypes.add(resultType);
 
 			// Aggregate data for the raw code literal record
-			typeToValueMap.put(resultType, result);
-			if (env.getExpectedType() == null || env.getExpectedType().isSupertypeOf(resultType))
-			{
-				inContextValues.add(result);
-			}
+			parseResultBag.add(new Pair<Node, BsjActualType>(result, resultType));
 		}
 
-		metadata.addRawCodeLiteralRecord(node,
-				new RawCodeLiteralRecord(typeToValueMap, inContextValues, env.getExpectedType()));
+		SelectionBag<Node> codeLiteralValueBag = new CodeLiteralSelectionBagImpl<Node>(this.manager, parseResultBag);
+		metadata.addRawCodeLiteralParseResult(node, new RawCodeLiteralParseResult(codeLiteralValueBag));
+		if (env.getExpectedType() != null)
+		{
+			metadata.addRawCodeLiteralInContextType(node, env.getExpectedType());
+		} else
+		{
+			metadata.addRawCodeLiteralLackingContext(node);
+		}
 
-		return new TypecheckerResult(new SelectionTypeImpl(this.manager, componentTypes), metadata);
+		return new TypecheckerResult(codeLiteralValueBag.getType(), metadata);
 	}
 
 	@Override

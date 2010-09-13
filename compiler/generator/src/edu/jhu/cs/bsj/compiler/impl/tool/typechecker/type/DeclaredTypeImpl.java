@@ -209,7 +209,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			}
 
 			// Calculate a local substitution map
-			Map<BsjTypeVariable, BsjTypeArgument> map = calculateLocalSubstitutionMap();
+			Map<BsjTypeVariable, BsjTypeArgument> map = new HashMap<BsjTypeVariable, BsjTypeArgument>(calculateLocalSubstitutionMap());
 
 			// Calculate parent type substitution maps and merge them in
 			for (BsjExplicitlyDeclaredType supertype : getSupertypes())

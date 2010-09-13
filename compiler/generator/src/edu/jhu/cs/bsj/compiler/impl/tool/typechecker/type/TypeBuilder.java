@@ -30,6 +30,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjActualType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
@@ -329,7 +330,7 @@ public class TypeBuilder
 	/**
 	 * A cache for the {@link #makeMetaprogramClasspathType(Class)} method.
 	 */
-	private Map<Class<?>, BsjType> makeMetaprogramClasspathTypeCache = new HashMap<Class<?>, BsjType>();
+	private Map<Class<?>, BsjActualType> makeMetaprogramClasspathTypeCache = new HashMap<Class<?>, BsjActualType>();
 
 	/**
 	 * Creates a {@link BsjExplicitlyDeclaredType} representation of a class currently on the runtime's classpath.
@@ -337,9 +338,9 @@ public class TypeBuilder
 	 * @param clazz The class to use.
 	 * @return The type representing that class. If the class has type parameters, the returned type is raw.
 	 */
-	public BsjType makeMetaprogramClasspathType(Class<?> clazz)
+	public BsjActualType makeMetaprogramClasspathType(Class<?> clazz)
 	{
-		BsjType ret = makeMetaprogramClasspathTypeCache.get(clazz);
+		BsjActualType ret = makeMetaprogramClasspathTypeCache.get(clazz);
 		if (ret == null)
 		{
 			if (clazz.isPrimitive())

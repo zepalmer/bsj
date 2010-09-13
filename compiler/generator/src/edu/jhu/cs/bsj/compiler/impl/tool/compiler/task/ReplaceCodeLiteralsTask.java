@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,9 +13,9 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.RawCodeLiteralRecord;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckerResult;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckingMetadata;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 /**
@@ -77,30 +78,47 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 		}
 	}
 
+	/**
+	 * Obtains an AST node representing the body of the specified code literal.
+	 * @param context The metacompilation context to use.
+	 * @param node The raw code literal to use.
+	 * @param metadata The metadata from typechecking.
+	 * @return The code literal to use.
+	 */
 	private Node interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node, TypecheckingMetadata metadata)
 	{
-		RawCodeLiteralRecord record = metadata.getRawCodeLiteralRecordMap().get(node);
-		if (record == null)
+		BsjType inContextType;
+		if (metadata.getInContextType(node) == null)
 		{
-			throw new IllegalStateException("Typechecker did not record metadata for node " + node);
+			throw new IllegalStateException("No in-context type established for code literal at " + node.getStartLocation());
+		} else
+		{
+			inContextType = metadata.getInContextType(node);
 		}
-		if (record.getInContextValues().size() == 0)
+		Collection<? extends Node> results = metadata.getParseResult(node).getSelectionBag().selectAll(inContextType);
+		if (results.size() == 0)
 		{
 			// Then this code literal is unparseable.
 			// TODO: report an appropriate diagnostic
 			throw new NotImplementedYetException("code literal at " + node.getStartLocation() + " has no parses");
-		} else if (record.getInContextValues().size() > 1)
+		} else if (results.size() > 1)
 		{
 			// Then this code literal is ambiguous.
 			// TODO: report an appropriate diagnostic
 			throw new NotImplementedYetException("code literal at " + node.getStartLocation() + " has "
-					+ record.getInContextValues().size() + " parses");
+					+ results.size() + " parses");
 		} else
 		{
-			return record.getInContextValues().iterator().next();
+			return results.iterator().next();
 		}
 	}
 
+	/**
+	 * Performs the lifting of an AST node for this task.
+	 * @param context The context to use.
+	 * @param value The AST node to lift.
+	 * @return The lifted AST.
+	 */
 	private static Node liftNode(MetacompilationContext context, Node value)
 	{
 		BsjNodeFactory factory = context.getToolkit().getNodeFactory();

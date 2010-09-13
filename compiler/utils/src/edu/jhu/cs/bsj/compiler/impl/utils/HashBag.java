@@ -38,7 +38,7 @@ public class HashBag<T> extends AbstractCollection<T> implements Bag<T>
 		this.size = 0;
 	}
 
-	public HashBag(Collection<T> elements)
+	public HashBag(Collection<? extends T> elements)
 	{
 		this();
 		this.addAll(elements);
