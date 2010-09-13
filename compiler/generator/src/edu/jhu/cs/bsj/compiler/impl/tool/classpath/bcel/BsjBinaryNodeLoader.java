@@ -386,12 +386,15 @@ public class BsjBinaryNodeLoader
 
 		for (Method method : clazz.getMethods())
 		{
-			if (method.getName().equals("<init>"))
+			if (!method.isSynthetic())
 			{
-				list.add(buildConstructorDeclarationNode(method, getUnqualifiedName(clazz.getClassName())));
-			} else
-			{
-				list.add(buildMethodDeclarationNode(method));
+				if (method.getName().equals("<init>"))
+				{
+					list.add(buildConstructorDeclarationNode(method, getUnqualifiedName(clazz.getClassName())));
+				} else
+				{
+					list.add(buildMethodDeclarationNode(method));
+				}
 			}
 		}
 

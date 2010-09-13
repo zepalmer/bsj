@@ -2203,7 +2203,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				}
 			}
 		}
-		return new TypecheckerResult(new NonePseudoTypeImpl(this.manager), new TypecheckingMetadata());
+		return new TypecheckerResult(new NonePseudoTypeImpl(this.manager), metadata);
 	}
 
 	@Override
@@ -2667,6 +2667,10 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		TypecheckingMetadata metadata = new TypecheckingMetadata();
 		for (Node node : nodes)
 		{
+			if (node == null)
+			{
+				continue;
+			}
 			TypecheckerResult result = node.executeOperation(this, env);
 			if (result.getType() instanceof BsjErrorType)
 			{

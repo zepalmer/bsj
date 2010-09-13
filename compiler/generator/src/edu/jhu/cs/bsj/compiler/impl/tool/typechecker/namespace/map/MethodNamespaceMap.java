@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,6 +8,12 @@ import java.util.Set;
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeBodyNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.SymbolType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
 
@@ -96,9 +103,10 @@ public class MethodNamespaceMap extends NamespaceMap<ErasedMethodSignature, BsjE
 	private OverlapMode overlapMode;
 
 	public MethodNamespaceMap(Collection<MethodNamespaceMap> deferenceMaps,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager, OverlapMode overlapMode)
+			DiagnosticListener<BsjSourceLocation> diagnosticListener, boolean eager,
+			boolean prohibitsOverlap, OverlapMode overlapMode)
 	{
-		super(SymbolType.METHOD, deferenceMaps, diagnosticListener, eager, false);
+		super(SymbolType.METHOD, deferenceMaps, diagnosticListener, eager, prohibitsOverlap);
 		this.overlapMode = overlapMode;
 	}
 
@@ -120,16 +128,66 @@ public class MethodNamespaceMap extends NamespaceMap<ErasedMethodSignature, BsjE
 	}
 
 	@Override
-	protected void considerAmbiguity(ErasedMethodSignature name, BsjSourceLocation sourceLocation)
+	protected boolean isAmbiguous(ErasedMethodSignature key, Collection<? extends BsjExecutableElement> values)
 	{
-		// TODO: override to provide methods with their own notion of ambiguity
 		// A method is only ambiguous if there is more than one method with that signature which *has a body*.
 		// This should only be possible if, for example, multiple static imports bring in a method with the same
 		// signature. It is also possible if two methods with the same signature are simply declared in the same place.
 		// It is not possible through standard use of inheritance or nesting.
-		super.considerAmbiguity(name, sourceLocation);
+		return values.size() > 1 && hasBody(values.iterator().next().getDeclarationNode());
+	}
+	
+	private boolean hasBody(Node decl)
+	{
+		if (decl instanceof InitializerDeclarationNode)
+		{
+			return true;
+		} else if (decl instanceof ConstructorDeclarationNode)
+		{
+			return true;
+		} else if (decl instanceof MethodDeclarationNode)
+		{
+			MethodDeclarationNode methodDeclarationNode = (MethodDeclarationNode)decl;
+			if (methodDeclarationNode.getNearestAncestorOfType(TypeBodyNode.class) instanceof ClassBodyNode &&
+					!methodDeclarationNode.getModifiers().getAbstractFlag())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Retrieves all elements of a given signature.  This method overrides the default implementation in order to
+	 * provide disambiguating behavior.  If multiple elements exist in the namespace and at least one of those elements
+	 * has a body, only those elements with a body are considered to be in the namespace.
+	 */
+	@Override
+	public Collection<BsjExecutableElement> getValues(ErasedMethodSignature key)
+	{
+		Collection<BsjExecutableElement> result = super.getValues(key);
+		Collection<BsjExecutableElement> resultWithBodies = new ArrayList<BsjExecutableElement>();
+		for (BsjExecutableElement element : result)
+		{
+			if (hasBody(element.getDeclarationNode()))
+			{
+				resultWithBodies.add(element);
+			}
+		}
+		if (resultWithBodies.size() > 0)
+		{
+			return resultWithBodies;
+		} else
+		{
+			return result;
+		}
 	}
 
+	/**
+	 * Retrieves all elements of a given name.
+	 * @param name The name of the elements to retrieve.
+	 * @return The resulting elements.
+	 */
 	public Collection<BsjExecutableElement> getValues(String name)
 	{
 		Set<BsjExecutableElement> ret = new HashSet<BsjExecutableElement>();

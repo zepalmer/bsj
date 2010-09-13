@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -110,7 +111,7 @@ public class NamespaceMap<K, V extends BsjElement>
 				return Collections.unmodifiableSet(this.backingMap.get(key).getValues());
 			} else
 			{
-				Set<V> ret = new HashSet<V>();
+				Set<V> ret = new LinkedHashSet<V>();
 				ret.addAll(this.backingMap.get(key).getValues());
 				for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
 				{
@@ -132,7 +133,7 @@ public class NamespaceMap<K, V extends BsjElement>
 			return this.deferenceMaps.iterator().next().getValues(key);
 		} else
 		{
-			Set<V> ret = new HashSet<V>();
+			Set<V> ret = new LinkedHashSet<V>();
 			for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
 			{
 				ret.addAll(deferenceMap.getValues(key));
@@ -281,44 +282,43 @@ public class NamespaceMap<K, V extends BsjElement>
 	 */
 	protected V doLookup(K key)
 	{
-		if (this.backingMap.containsKey(key))
-		{
-			Entry<V> entry = this.backingMap.get(key);
-			return entry.getFirstValue();
-		} else if (this.blockedKeySet.contains(key))
+		Collection<V> collection = getValues(key);
+		if (collection.size() == 0)
 		{
 			return null;
 		} else
 		{
-			for (NamespaceMap<K, V> deferenceMap : this.deferenceMaps)
-			{
-				V ret = deferenceMap.doLookup(key);
-				if (ret != null)
-				{
-					return ret;
-				}
-			}
+			return collection.iterator().next();
 		}
-
-		return null;
 	}
 
 	/**
 	 * Considers ambiguity for the provided name entry. If ambiguity exists, an appropriate diagnostic should be
-	 * produced. The default implementation considers any entry with more than one value to be ambiguous.
+	 * produced.
 	 * 
 	 * @param key The name of the entry.
 	 * @param sourceLocation The location to use in diagnostics. This is typically the location where the name was used.
 	 */
-	protected void considerAmbiguity(K key, BsjSourceLocation sourceLocation)
+	private void considerAmbiguity(K key, BsjSourceLocation sourceLocation)
 	{
 		Collection<? extends V> all = getValues(key);
-		if (all.size() > 1)
+		if (isAmbiguous(key, all))
 		{
 			Collection<? extends Node> nodes = getIndicatorMapFor(key).keySet();
 			this.diagnosticListener.report(new AmbiguousSymbolNameDiagnosticImpl(sourceLocation, key.toString(),
 					this.symbolType, nodes));
 		}
+	}
+	
+	/**
+	 * Considers ambiguity for an entry's contents.
+	 * @param key The name of the entry.
+	 * @param values The values in this entry.
+	 * @return <code>true</code> if this entry is ambiguous; <code>false</code> if it is not.
+	 */
+	protected boolean isAmbiguous(K key, Collection<? extends V> values)
+	{
+		return values.size() > 1;
 	}
 
 	/**
@@ -446,10 +446,6 @@ public class NamespaceMap<K, V extends BsjElement>
 	 */
 	protected static class Entry<V extends BsjElement>
 	{
-		/** The first type which was provided to this entry. */
-		private V firstValue;
-		/** The first indicator which was provied to this entry. */
-		private Node firstIndicator;
 		/** The types which are mapped to the specified name. */
 		private Set<V> values;
 		/** A mapping from nodes which brought types into scope to the type declarations that they indicated. */
@@ -457,7 +453,7 @@ public class NamespaceMap<K, V extends BsjElement>
 
 		public Entry()
 		{
-			this.values = new HashSet<V>();
+			this.values = new LinkedHashSet<V>();
 			this.indicatorNodeMap = new HashMap<Node, V>();
 		}
 
@@ -469,19 +465,12 @@ public class NamespaceMap<K, V extends BsjElement>
 
 		public Entry(Entry<V> entry)
 		{
-			this.values = new HashSet<V>(entry.values);
+			this.values = new LinkedHashSet<V>(entry.values);
 			this.indicatorNodeMap = new HashMap<Node, V>(entry.indicatorNodeMap);
-			this.firstIndicator = entry.firstIndicator;
-			this.firstValue = entry.firstValue;
 		}
 
 		public void add(V value, Node indicator)
 		{
-			if (this.values.size() == 0)
-			{
-				firstValue = value;
-				firstIndicator = indicator;
-			}
 			this.values.add(value);
 			this.indicatorNodeMap.put(indicator, value);
 		}
@@ -495,15 +484,18 @@ public class NamespaceMap<K, V extends BsjElement>
 		{
 			return indicatorNodeMap;
 		}
-
-		public V getFirstValue()
-		{
-			return firstValue;
-		}
-
+		
 		public Node getFirstIndicator()
 		{
-			return firstIndicator;
+			V value = getValues().iterator().next();
+			for (Map.Entry<Node,V> entry : this.indicatorNodeMap.entrySet())
+			{
+				if (entry.getValue().equals(value))
+				{
+					return entry.getKey();
+				}
+			}
+			return null;
 		}
 
 		public Entry<V> duplicate()

@@ -171,7 +171,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAnnotationMemberListNode(AnnotationMemberListNode node, PrependablePrintStream p)
 	{
-		executeListNode(node, p);
+		handleListNode(node, "", "\n", "", p, true);
 		return null;
 	}
 
@@ -224,7 +224,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, PrependablePrintStream p)
 	{
-		executeListNode(node, p);
+		handleListNode(node, "", "\n", "", p, true);
 		return null;
 	}
 
@@ -476,7 +476,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeClassMemberListNode(ClassMemberListNode node, PrependablePrintStream p)
 	{
-		executeListNode(node, p);
+		handleListNode(node, "", "\n", "", p, true);
 		return null;
 	}
 
@@ -1023,7 +1023,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeInterfaceMemberListNode(InterfaceMemberListNode node, PrependablePrintStream p)
 	{
-		executeListNode(node, p);
+		handleListNode(node, "", "\n", "", p, true);
 		return null;
 	}
 

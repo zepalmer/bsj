@@ -216,7 +216,7 @@ public class MethodNamespaceModifyingOperation extends
 		 * tedious at best. For now, we're just clearing out the environment to make clear the fact that none of the
 		 * object program logic applies.
 		 */
-		map = new MethodNamespaceMap(Collections.<MethodNamespaceMap> emptySet(), getListener(), true,
+		map = new MethodNamespaceMap(Collections.<MethodNamespaceMap> emptySet(), getListener(), true, false,
 				OverlapMode.BY_SIGNATURE);
 		return new ConsistentChildNamespaceProducer<ErasedMethodSignature, BsjExecutableElement, MethodNamespaceMap>(
 				map);
@@ -286,14 +286,14 @@ public class MethodNamespaceModifyingOperation extends
 	protected MethodNamespaceMap makeInheritanceMapFromSubmaps(Collection<MethodNamespaceMap> submaps)
 	{
 		return new MethodNamespaceMap(submaps, getListener(), EnvType.INHERITED.isEager(),
-				EnvType.INHERITED.getOverlapMode());
+				EnvType.INHERITED.isProhibitsOverlap(), EnvType.INHERITED.getOverlapMode());
 	}
 
 	@Override
 	protected MethodNamespaceMap makeMap(MethodNamespaceMap deferenceMap, EnvType envType)
 	{
 		return new MethodNamespaceMap(Collections.singletonList(deferenceMap), getListener(), envType.isEager(),
-				envType.getOverlapMode());
+				envType.isProhibitsOverlap(), envType.getOverlapMode());
 	}
 
 	@Override

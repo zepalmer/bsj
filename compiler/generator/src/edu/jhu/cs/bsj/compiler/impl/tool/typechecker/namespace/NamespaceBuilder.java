@@ -62,7 +62,7 @@ public class NamespaceBuilder
 			@Override
 			protected MethodNamespaceMap createEmpty()
 			{
-				return new MethodNamespaceMap(Collections.<MethodNamespaceMap> emptySet(), listener, true,
+				return new MethodNamespaceMap(Collections.<MethodNamespaceMap> emptySet(), listener, true, false,
 						OverlapMode.BY_SIGNATURE);
 			}
 		};
