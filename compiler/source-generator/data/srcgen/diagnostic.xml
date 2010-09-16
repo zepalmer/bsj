@@ -2,7 +2,7 @@
     <!-- Diagnostics -->
     <srcgen>
         <srcgen ipkg="edu.jhu.cs.bsj.compiler.diagnostic.lexer" cpkg="edu.jhu.cs.bsj.compiler.impl.diagnostic.lexer"
-            ctgt="pre-parser">
+            ctgt="parser">
             <diagnostic name="BsjLexerDiagnostic" super="BsjDiagnostic">
                 <prop name="character" type="int" desc="the character which caused this diagnostic" />
                 <doc><![CDATA[
@@ -19,7 +19,7 @@
         </srcgen>
 
         <srcgen ipkg="edu.jhu.cs.bsj.compiler.diagnostic.parser" cpkg="edu.jhu.cs.bsj.compiler.impl.diagnostic.parser"
-            ctgt="pre-parser">
+            ctgt="parser">
             <diagnostic name="BsjParserDiagnostic" super="BsjDiagnostic">
                 <prop name="ruleName" type="String" desc="the rule which caused this diagnostic" />
                 <doc><![CDATA[

@@ -85,7 +85,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PackagePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.RawCodeLiteralParseResult;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.SelectionTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckerResult;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckingMetadata;

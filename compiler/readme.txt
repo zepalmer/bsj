@@ -13,3 +13,6 @@ stdlib              api, utils                 BSJ user utilities
 tests               api, generator, parser,
                       stdlib, utils            JUnit testing
 utils               api                        Utils common to BSJ projects
+
+In order to build the projects in Eclipse, you will need to have the ANTLR IDE
+plugin installed (http://antlrv3ide.sourceforge.net/).

@@ -261,9 +261,6 @@ public class SourceGeneratorParser
 		} else if (project.equals("parser"))
 		{
 			return Project.PARSER;
-		} else if (project.equals("pre-parser"))
-		{
-			return Project.PRE_PARSER;
 		} else if (project.equals("bsjutils"))
 		{
 			return Project.BSJ_UTILS;

@@ -69,17 +69,13 @@ scope Rule {
 @lexer::header{
     package edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr;
 
-    import javax.tools.Diagnostic;
     import javax.tools.DiagnosticListener;
-    import javax.tools.JavaFileObject;
     
     import org.apache.log4j.Logger;
     
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.diagnostic.*;
     import edu.jhu.cs.bsj.compiler.diagnostic.lexer.*;
-    import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;
-    import edu.jhu.cs.bsj.compiler.impl.diagnostic.lexer.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }

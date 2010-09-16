@@ -49,7 +49,7 @@ statsforlist()
 
 getstats()
 {
-    files="$(find $* -type f | egrep '\.(g|java)$' | grep -v '.gen' | grep -v 'resources' | grep -v '.svn')"
+    files="$(find $* -type f | egrep '\.(g|java)$' | grep -v 'resources/source-code' | grep -v '.svn')"
     genfiles="$(echo "$files" | while read line; do infile "$line" "@Generated" && echo "$line"; done)"
     ngenfiles="$(echo "$files" | while read line; do infile "$line" "@Generated" || echo "$line"; done)"
     echo "    Overall:"

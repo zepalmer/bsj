@@ -203,7 +203,6 @@
     <xs:simpleType name="project_T">
         <xs:restriction base="xs:string">
             <xs:enumeration value="api" />
-            <xs:enumeration value="pre-parser" />
             <xs:enumeration value="parser" />
             <xs:enumeration value="generator" />
             <xs:enumeration value="bsjutils" />
