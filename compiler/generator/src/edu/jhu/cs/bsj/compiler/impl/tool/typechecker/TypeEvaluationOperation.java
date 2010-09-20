@@ -1242,8 +1242,10 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		if (node.getExpression() == null)
 		{
 			// Just an identifier; use the enclosing type.
-			searchType = this.manager.getToolkit().makeElement(
-					node.getNearestAncestorOfType(NamedTypeDeclarationNode.class)).asType();
+			Node namespaceNode = env.getNamespaceNode() == null ? node : env.getNamespaceNode();
+			NamedTypeDeclarationNode<?> searchTypeDeclaration = namespaceNode.getNearestAncestorOfType(NamedTypeDeclarationNode.class);
+			// TODO: what if searchTypeDeclaration is null?
+			searchType = this.manager.getToolkit().makeElement(searchTypeDeclaration).asType();
 		} else
 		{
 			// Establish the type of the qualifying expression and use that class.
@@ -1383,7 +1385,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 			// TODO: raise diagnostic
 			return new TypecheckerResult(new ErrorTypeImpl(this.manager), metadata);
 		}
-		
+
 		// §15.12.2.6: Determine method return and throws types
 		BsjType returnType = mostSpecificMethod.getReturnType();
 		// TODO: if an unchecked conversion was necessary for applicability, then the return type should be erased
@@ -1601,8 +1603,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public TypecheckerResult executeSpliceNode(SpliceNode node, TypecheckerEnvironment p)
 	{
-		// It's not possible to typecheck a splice.  Nodes which are being typechecked must be directly attached to the
-		// root package, meaning that they are not in a code literal.  Splices are only legal inside of code literals.
+		// It's not possible to typecheck a splice. Nodes which are being typechecked must be directly attached to the
+		// root package, meaning that they are not in a code literal. Splices are only legal inside of code literals.
 		// TODO: report diagnostic
 		return new TypecheckerResult(new ErrorTypeImpl(this.manager), new TypecheckingMetadata());
 	}
@@ -2044,8 +2046,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				// If there is a member field with this simple name, then that member field is selected and its
 				// type is used.
 				// TODO: this approach would also include statically imported fields in the target type's
-				// declaration
-				// as if they were members. Fix that.
+				// declaration as if they were members. Fix that.
 				VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
 						typePseudoType.getDeclaration().getBody().getMembers());
 				BsjVariableElement variableElement = variableNamespaceMap.lookup(id, node.getStartLocation());
@@ -2065,8 +2066,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 				} else
 				{
 					// If there is a member type with this simple name, then that member type is selected and used
-					// as
-					// a pseudo-type.
+					// as a pseudo-type.
 					// TODO: this approach would also include imported types (static and otherwise) in the target
 					// type's declaration as if they were members. Fix that.
 					TypeNamespaceMap typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(
@@ -2156,13 +2156,15 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		} else
 		{
 			// This variable access is qualified by the existing context.
-			VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(node);
+			Node namespaceNode = env.getNamespaceNode() == null ? node : env.getNamespaceNode();
+			VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
+					namespaceNode);
 			BsjVariableElement variableElement = variableNamespaceMap.lookup(id,
 					node.getIdentifier().getStartLocation());
 			if (variableElement == null)
 			{
 				// Then there is no variable with that name in scope. Is there a type?
-				TypeNamespaceMap typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(node);
+				TypeNamespaceMap typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(namespaceNode);
 				BsjTypeLikeElement typeLikeElement = typeNamespaceMap.lookup(id,
 						node.getIdentifier().getStartLocation());
 				if (typeLikeElement != null)
