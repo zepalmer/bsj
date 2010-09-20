@@ -18,6 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -40,8 +42,13 @@ public class SourceGenerator
 	 * Defines the number of node operation variations that exist. Each variation takes a different number of arguments.
 	 */
 	private static final int NUMBER_OF_OPERATION_VARIATIONS = 2;
+	/**
+	 * Defines which special nodes exist.
+	 */
+	private static final String[] SPECIAL_NODES = { "SpliceNode" };
 
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
+	private static final File SNIPPETS_DIR = new File("data/srcgen/snippet/");
 	private static final File TARGET_DIR = new File("out/");
 
 	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList("int", "long", "boolean",
@@ -222,8 +229,23 @@ public class SourceGenerator
 	 */
 	private static void includeFileParts(File f, PrintStream ps, String start, String stop) throws IOException
 	{
+		String parts = readIncludedFileParts(f, start, stop);
+		ps.print(parts);
+	}
+
+	/**
+	 * Retrieves the parts of a source file to include.
+	 * 
+	 * @param f The {@link File} to include.
+	 * @param start The start string.
+	 * @param stop The stop string.
+	 * @return The resulting content to include.
+	 */
+	private static String readIncludedFileParts(File f, String start, String stop) throws IOException
+	{
 		boolean copying = false;
 		String[] lines = getFileAsString(f).split("\n");
+		StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < lines.length; i++)
 		{
@@ -247,8 +269,12 @@ public class SourceGenerator
 				}
 			}
 			if (copying)
-				ps.println(s);
+			{
+				sb.append(s);
+				sb.append('\n');
+			}
 		}
+		return sb.toString();
 	}
 
 	/**
@@ -694,7 +720,15 @@ public class SourceGenerator
 				ret.print(" extends " + extendsName);
 			if (implementsNames != null && implementsNames.length > 0)
 			{
-				ret.print(" implements " + implementsNames[0]);
+				ret.print(" ");
+				if (mode == TypeDefinition.Mode.INTERFACE)
+				{
+					ret.print("extends ");
+				} else
+				{
+					ret.print("implements ");
+				}
+				ret.print(implementsNames[0]);
 				for (int i = 1; i < implementsNames.length; i++)
 				{
 					ret.print(", ");
@@ -779,6 +813,40 @@ public class SourceGenerator
 			{
 				useDefinition(def);
 			}
+		}
+
+		protected TypeDefinition deriveTypeDefinitionWithName(TypeDefinition specialDef, String name)
+		{
+			return new TypeDefinition(name, specialDef.getTypeParameter(), specialDef.getSuperName(),
+					specialDef.getSuperTypeArg(), specialDef.getConstructorFooter(), specialDef.getProfile(),
+					specialDef.getInterfaces(), specialDef.getTags(), specialDef.getConstants(),
+					specialDef.getProperties(), specialDef.getIncludes(), specialDef.getDocString(),
+					specialDef.getToStringLines(), specialDef.getFactoryOverrideMap(),
+					specialDef.getConstructorOverrideMap(), specialDef.isGenConstructor(), specialDef.isGenChildren(),
+					specialDef.isGenReplace(), specialDef.getFactoryMethods(), specialDef.getMode(),
+					specialDef.isBsjSpecific());
+		}
+
+		protected boolean typeExistsAsProperty(String typeBaseName)
+		{
+			boolean found = false;
+			outer: for (TypeDefinition itdef : map.values())
+			{
+				for (ModalPropertyDefinition<?> p : itdef.getProperties())
+				{
+					if (p.getBaseType().equals(typeBaseName))
+					{
+						found = true;
+						break outer;
+					}
+				}
+				if (typeBaseName.equals(itdef.getSuperTypeArg()))
+				{
+					found = true;
+					break outer;
+				}
+			}
+			return found;
 		}
 
 		protected Set<TypeDefinition> getDefTypes(TypeDefinition def)
@@ -899,9 +967,133 @@ public class SourceGenerator
 	}
 
 	/**
+	 * A module which contains common utilities for writing backing classes.
+	 */
+	static abstract class AbstractBackingClassWriter extends ClassHierarchyBuildingHandler
+	{
+		protected void writeDeepCopy(TypeDefinition def, PrependablePrintStream ps, List<PropertyDefinition> recProps)
+		{
+			// TODO: this doesn't properly deep copy hidden properties, for which the factory takes no arguments
+			// how do we deal with that?
+			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
+			{
+				ps.println("/**");
+				ps.println(" * Generates a deep copy of this node.");
+				ps.println(" * @param factory The node factory to use to create the deep copy.");
+				ps.println(" * @return The resulting deep copy node.");
+				ps.println(" */");
+				if (def.getBaseSuperName() != null)
+					ps.println("@Override");
+				ps.println("public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory)");
+				ps.println("{");
+				ps.incPrependCount();
+				writeDeepCopyBody(def, ps, recProps);
+				ps.decPrependCount();
+				ps.println("}");
+			}
+		}
+
+		protected void writeDeepCopyBody(TypeDefinition def, PrependablePrintStream ps,
+				List<PropertyDefinition> recProps)
+		{
+			for (ModalPropertyDefinition<?> p : recProps)
+			{
+				if (p.isHide())
+					continue;
+				if (def.getRecursiveFactoryOverrideMap().containsKey(p.getName()))
+					continue;
+				propAbstract(new PropertyTypeAbstractor()
+				{
+					@Override
+					public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+					}
+
+					@Override
+					public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+					}
+
+					@Override
+					public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+						ps.println(p.getFullType() + " " + p.getName() + "Copy = new Array" + p.getFullType() + "(get"
+								+ capFirst(p.getName()) + "().size());");
+						ps.println("for (" + p.getTypeArg() + " element : get" + capFirst(p.getName()) + "())");
+						ps.println("{");
+						ps.incPrependCount();
+						ps.println(p.getName() + "Copy.add(element.deepCopy(factory));");
+						ps.decPrependCount();
+						ps.println("}");
+						ps.println();
+					}
+
+					@Override
+					public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+					}
+
+					@Override
+					public void voidType(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+					}
+				}, p, ps, def);
+			}
+			ps.println("return factory.make" + def.getBaseName() + "(");
+			ps.incPrependCount(2);
+			boolean first = true;
+			for (ModalPropertyDefinition<?> p : recProps)
+			{
+				if (p.isHide())
+					continue;
+				if (def.getRecursiveFactoryOverrideMap().containsKey(p.getName()))
+					continue;
+				if (first)
+				{
+					first = false;
+				} else
+				{
+					ps.println(",");
+				}
+				propAbstract(new PropertyTypeAbstractor()
+				{
+					public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+						ps.print("get" + capFirst(p.getName()) + "()");
+					}
+
+					public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+						ps.print("get" + capFirst(p.getName()) + "()==null?null:get" + capFirst(p.getName())
+								+ "().deepCopy(factory)");
+					}
+
+					public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+						ps.print("get" + capFirst(p.getName()) + "() == null ? null : (" + p.getFullType() + ")(get"
+								+ capFirst(p.getName()) + "().clone())");
+					}
+
+					public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+						ps.print(p.getName() + "Copy");
+					}
+
+					public void voidType(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+					{
+						ps.print("null");
+					}
+				}, p, ps, def);
+			}
+			ps.println(");");
+			ps.decPrependCount(2);
+		}
+	}
+
+	/**
 	 * A module which creates AST backing classes.
 	 */
-	static class BackingClassWriter extends ClassHierarchyBuildingHandler
+	static class BackingClassWriter extends AbstractBackingClassWriter
 	{
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
@@ -1505,113 +1697,7 @@ public class SourceGenerator
 			}
 
 			// add deep copy implementation
-			// TODO: this doesn't properly deep copy hidden properties, for which the factory takes no arguments
-			// how do we deal with that?
-			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
-			{
-				ps.println("/**");
-				ps.println(" * Generates a deep copy of this node.");
-				ps.println(" * @param factory The node factory to use to create the deep copy.");
-				ps.println(" * @return The resulting deep copy node.");
-				ps.println(" */");
-				if (def.getBaseSuperName() != null)
-					ps.println("@Override");
-				ps.println("public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory)");
-				ps.println("{");
-				ps.incPrependCount();
-				for (ModalPropertyDefinition<?> p : recProps)
-				{
-					if (p.isHide())
-						continue;
-					if (def.getRecursiveFactoryOverrideMap().containsKey(p.getName()))
-						continue;
-					propAbstract(new PropertyTypeAbstractor()
-					{
-						@Override
-						public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-						}
-
-						@Override
-						public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-						}
-
-						@Override
-						public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-							ps.println(p.getFullType() + " " + p.getName() + "Copy = new Array" + p.getFullType()
-									+ "(get" + capFirst(p.getName()) + "().size());");
-							ps.println("for (" + p.getTypeArg() + " element : get" + capFirst(p.getName()) + "())");
-							ps.println("{");
-							ps.incPrependCount();
-							ps.println(p.getName() + "Copy.add(element.deepCopy(factory));");
-							ps.decPrependCount();
-							ps.println("}");
-							ps.println();
-						}
-
-						@Override
-						public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-						}
-
-						@Override
-						public void voidType(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-						}
-					}, p, ps, def);
-				}
-				ps.println("return factory.make" + def.getBaseName() + "(");
-				ps.incPrependCount(2);
-				boolean first = true;
-				for (ModalPropertyDefinition<?> p : recProps)
-				{
-					if (p.isHide())
-						continue;
-					if (def.getRecursiveFactoryOverrideMap().containsKey(p.getName()))
-						continue;
-					if (first)
-					{
-						first = false;
-					} else
-					{
-						ps.println(",");
-					}
-					propAbstract(new PropertyTypeAbstractor()
-					{
-						public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-							ps.print("get" + capFirst(p.getName()) + "()");
-						}
-
-						public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-							ps.print("get" + capFirst(p.getName()) + "()==null?null:get" + capFirst(p.getName())
-									+ "().deepCopy(factory)");
-						}
-
-						public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-							ps.print("get" + capFirst(p.getName()) + "() == null ? null : (" + p.getFullType()
-									+ ")(get" + capFirst(p.getName()) + "().clone())");
-						}
-
-						public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-							ps.print(p.getName() + "Copy");
-						}
-
-						public void voidType(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
-						{
-							ps.print("null");
-						}
-					}, p, ps, def);
-				}
-				ps.println(");");
-				ps.decPrependCount(3);
-				ps.println("}");
-			}
+			writeDeepCopy(def, ps, recProps);
 
 			// add logic for node replacement
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
@@ -1942,6 +2028,36 @@ public class SourceGenerator
 					{
 						writeFactoryMethod(ips, cps, dps, def, methodDefinition, skipMake);
 					}
+				}
+			}
+
+			// Write special factory methods
+			for (String special : SPECIAL_NODES)
+			{
+				// We write the special factory method if and only if some other node has this type as a property.
+				if (!typeExistsAsProperty(def.getBaseName()))
+					continue;
+
+				if (def.getTypeParameter() != null)
+					continue;
+
+				if (def.getBaseName().equals("Node"))
+					continue;
+
+				TypeDefinition specialDef = def.getNamespaceMap().get(special);
+				TypeDefinition specialSubDef = deriveTypeDefinitionWithName(specialDef,
+						def.getBaseName().replaceAll("Node", specialDef.getBaseName()));
+				specialSubDef.setParent(specialDef);
+				List<FactoryMethodPropertyDefinition> specialFactoryMethodProperties = new ArrayList<FactoryMethodPropertyDefinition>();
+				for (ModalPropertyDefinition<?> p : specialSubDef.getRecursiveProperties())
+				{
+					specialFactoryMethodProperties.add(new FactoryMethodPropertyDefinition(p.getName(), !p.isHide()));
+				}
+				FactoryMethodDefinition specialFactoryMethodDefinition = new EnumeratedFactoryMethodDefinition(
+						specialFactoryMethodProperties);
+				for (boolean skipMake : new boolean[] { true, false })
+				{
+					writeFactoryMethod(ips, cps, dps, specialSubDef, specialFactoryMethodDefinition, skipMake);
 				}
 			}
 		}
@@ -3610,6 +3726,279 @@ public class SourceGenerator
 			parserUtilities.decPrependCount();
 			parserUtilities.println("}");
 			parserUtilities.close();
+		}
+	}
+
+	/**
+	 * A module which creates special nodes.
+	 */
+	public static class SpecialNodeWriter extends AbstractBackingClassWriter
+	{
+		private static final Pattern METHOD_HEADER_PATTERN;
+		static
+		{
+			final String modifiersPart = "((?:(?:public|private|protected|abstract|final) )*)";
+			final String typeParamsPart = "(<[^>]> )?";
+			final String returnTypePart = "([]A-Za-z0-9<>\\[]+ )";
+			final String signaturePart = "([A-Za-z0-9_]+\\([^\\)]*\\))";
+			METHOD_HEADER_PATTERN = Pattern.compile(modifiersPart + typeParamsPart + returnTypePart + signaturePart);
+		}
+		private static final int METHOD_HEADER_MODIFIERS_GROUP = 1;
+		private static final int METHOD_HEADER_TYPE_PARAMS_GROUP = 2;
+		private static final int METHOD_HEADER_RETURN_TYPE_GROUP = 3;
+		private static final int METHOD_HEADER_SIGNATURE_GROUP = 4;
+
+		@Override
+		public void useDefinition(TypeDefinition def) throws IOException
+		{
+			if (!typeExistsAsProperty(def.getBaseName()))
+			{
+				return;
+			}
+
+			if (def.getTypeParameter() != null)
+			{
+				return;
+			}
+
+			if (def.getBaseName().equals("Node"))
+			{
+				return;
+			}
+
+			for (final String specialNodeName : SPECIAL_NODES)
+			{
+				Writer writer = new Writer(specialNodeName, def);
+				writer.writeInterface();
+				writer.writeBackingClass();
+			}
+		}
+
+		private class Writer
+		{
+			private final String specialNodeName;
+			private final String rawinterfacename;
+			private final String interfacename;
+			private final TypeDefinition def;
+			private final TypeDefinition specialDef;
+			private final TypeDefinition specialSubDef;
+			private final String rawclassname;
+			private final String classname;
+			private final String superclassname;
+			private final String exceptionName;
+
+			public Writer(String specialNodeName, TypeDefinition def)
+			{
+				this.specialNodeName = specialNodeName;
+				this.def = def;
+				this.rawinterfacename = def.getBaseName().replaceAll("Node", specialNodeName);
+				this.interfacename = this.rawinterfacename + this.def.getTypeParameterWithDelimiters();
+				this.specialDef = def.getNamespaceMap().get(specialNodeName);
+				this.specialSubDef = deriveTypeDefinitionWithName(this.specialDef, this.rawinterfacename);
+				this.rawclassname = rawinterfacename + "Impl";
+				this.classname = this.rawclassname + def.getTypeParameterWithDelimiters();
+				this.superclassname = this.specialNodeName + "Impl";
+				this.exceptionName = this.specialNodeName + "AccessException";
+			}
+
+			private void writeInterface() throws IOException
+			{
+				String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
+
+				// Write interface
+				PrependablePrintStream ps = createOutputFile(pkg, Mode.INTERFACE,
+						def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT), SupplementCategory.NODE,
+						interfacename, false, null, null, def.getName(), specialDef.getName());
+				ps.incPrependCount();
+
+				ps.println("/**");
+				ps.println(" * Generates a deep copy of this node.");
+				ps.println(" * @param factory The node factory to use to create the deep copy.");
+				ps.println(" * @return The resulting deep copy node.");
+				ps.println(" */");
+				ps.println("public " + rawinterfacename + " deepCopy(BsjNodeFactory factory);");
+				ps.println();
+
+				ps.decPrependCount();
+				ps.println("}");
+			}
+
+			private void writeBackingClass() throws IOException
+			{
+				Set<String> implementedMethodSignatures = new HashSet<String>();
+
+				String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME).replaceAll(
+						"\\.node", "." + specialNodeName.toLowerCase());
+
+				// Write backing class
+				PrependablePrintStream ps = createOutputFile(pkg, Mode.CONCRETE, Project.GENERATOR,
+						SupplementCategory.NODE, classname, false, null, superclassname, interfacename);
+				ps.incPrependCount();
+
+				// Inherited wrapper constructor
+				ps.println("/** General constructor. */");
+				if (!specialDef.isGenConstructor())
+					ps.println("/* (not generating constructor)"); // nogen logic
+				ps.print("public " + rawclassname);
+				List<PropertyDefinition> recProps = specialDef.getRecursiveProperties();
+				printParameterList(ps, recProps);
+				ps.println();
+				ps.println("{");
+				ps.incPrependCount();
+				ps.print("super");
+				printArgumentList(ps, recProps, specialDef.getConstructorOverrideMap());
+				ps.println(";");
+				ps.decPrependCount();
+				ps.println("}");
+				if (!def.isGenConstructor())
+					ps.print("*/"); // nogen logic
+				ps.println();
+
+				// Property exception methods
+				Set<AbstractPropertyDefinition<?>> props = new HashSet<AbstractPropertyDefinition<?>>(
+						def.getRecursiveProperties());
+				props.addAll(def.getConstants());
+				props.removeAll(specialDef.getRecursiveProperties());
+				props.removeAll(specialDef.getConstants());
+
+				for (AbstractPropertyDefinition<?> p : props)
+				{
+					ps.println("/**");
+					ps.println(" * Implements the underlying property getter method by raising an exception.");
+					ps.println(" * @returns Nothing; an exception is always raised.");
+					ps.println(" * @throws " + exceptionName + " Always.");
+					ps.println(" */");
+					final String getterSignature = "get" + capFirst(p.getName()) + "()";
+					ps.println("public " + p.getFullType() + " " + getterSignature);
+					ps.println("{");
+					ps.println("    "
+							+ getExceptionRaisingStatementString("Attempted to get property \"" + p.getName()
+									+ "\" from a splice node."));
+					ps.println("}");
+					ps.println();
+
+					implementedMethodSignatures.add(getterSignature);
+
+					if (p instanceof ModalPropertyDefinition && !((ModalPropertyDefinition<?>) p).isReadOnly())
+					{
+						ps.println("/**");
+						ps.println(" * Implements the underlying property settter method by raising an exception.");
+						ps.println(" * @param arg Ignored.");
+						ps.println(" * @throws " + exceptionName + " Always.");
+						ps.println(" */");
+						final String setterSignature = "set" + capFirst(p.getName()) + "(" + p.getFullType() + " arg)";
+						ps.println("public void " + setterSignature);
+						ps.println("{");
+						ps.println("    "
+								+ getExceptionRaisingStatementString("Attempted to set property \"" + p.getName()
+										+ "\" from a splice node."));
+						ps.println("}");
+						ps.println();
+
+						implementedMethodSignatures.add(setterSignature);
+					}
+				}
+
+				// Write a deep copy implementation
+				ps.println("/**");
+				ps.println(" * Generates a deep copy of this node.");
+				ps.println(" * @param factory The node factory to use to create the deep copy.");
+				ps.println(" * @return The resulting deep copy node.");
+				ps.println(" */");
+				if (def.getBaseSuperName() != null)
+					ps.println("@Override");
+				ps.println("public " + rawinterfacename + " deepCopy(BsjNodeFactory factory)");
+				ps.println("{");
+				ps.incPrependCount();
+				writeDeepCopyBody(specialSubDef, ps, recProps);
+				ps.decPrependCount();
+				ps.println("}");
+				ps.println();
+
+				// Add implementation of list interface if necessary
+				if (defInstanceOf(def, "ListNode"))
+				{
+					String include = readIncludedFileParts(new File(SNIPPETS_DIR.getPath() + File.separator
+							+ "ListNodeImpl.java"), "start", "stop");
+					include = include.replace("${METHOD_BODY}",
+							getExceptionRaisingStatementString("Attempting to invoke List method on a splice node."));
+
+					Map<String, String> typeArgMap = def.getTypeArgMap();
+					if (typeArgMap.containsKey("T"))
+					{
+						include = include.replaceAll("T([^A-Za-z0-9])", typeArgMap.get("T") + "$1");
+					}
+
+					ps.println(include);
+				}
+
+				// Add any applicable included methods
+				Set<TypeDefinition> types = SpecialNodeWriter.super.getDefTypes(def);
+				types.removeAll(SpecialNodeWriter.super.getDefTypes(specialDef));
+				for (TypeDefinition def : types)
+				{
+					for (String include : def.getIncludes())
+					{
+						File f = new File(getSupplementDir(Project.API, SupplementCategory.NODE).getPath()
+								+ File.separator + include);
+						String includeString = readIncludedFileParts(f, "start", "stop");
+						processIncludeString(ps, implementedMethodSignatures, includeString);
+					}
+				}
+
+				ps.decPrependCount();
+				ps.println("}");
+			}
+
+			private void processIncludeString(PrependablePrintStream ps, Set<String> methodSignatures,
+					String includeString)
+			{
+				includeString = includeString.replaceAll("\\s+", " ");
+
+				Matcher methodMatcher = METHOD_HEADER_PATTERN.matcher(includeString);
+				int searchIndex = 0;
+				while (methodMatcher.find(searchIndex))
+				{
+					searchIndex = methodMatcher.end();
+					String methodSignature = methodMatcher.group(METHOD_HEADER_SIGNATURE_GROUP);
+					if (methodSignatures.add(methodSignature))
+					{
+						// then we've never seen this signature before
+						String methodModifiers = methodMatcher.group(METHOD_HEADER_MODIFIERS_GROUP);
+						if (methodModifiers == null)
+							methodModifiers = "";
+						String methodTypeParams = methodMatcher.group(METHOD_HEADER_TYPE_PARAMS_GROUP);
+						if (methodTypeParams == null)
+							methodTypeParams = "";
+						String methodReturnType = methodMatcher.group(METHOD_HEADER_RETURN_TYPE_GROUP);
+
+						methodModifiers = methodModifiers.replaceAll("abstract ", "");
+						for (Map.Entry<String, String> entry : this.def.getTypeArgMap().entrySet())
+						{
+							final String typeParam = entry.getKey();
+							final String typeArg = entry.getValue();
+							methodReturnType = methodReturnType.replaceAll(typeParam + "([^A-Za-z0-9_])", typeArg
+									+ "$1");
+							methodSignature = methodSignature.replaceAll(typeParam + "([^A-Za-z0-9_])", typeArg + "$1");
+						}
+						String method = "/** Raises an exception. */\n"
+								+ methodModifiers
+								+ methodTypeParams
+								+ methodReturnType
+								+ methodSignature
+								+ "\n{\n    "
+								+ getExceptionRaisingStatementString("Attempting to invoke node method on a splice node.")
+								+ "\n}\n";
+						ps.println(method);
+					}
+				}
+			}
+
+			private String getExceptionRaisingStatementString(String message)
+			{
+				String escapedMessage = message.replace("\\", "\\\\").replace("\"", "\\\"");
+				return "throw new " + this.exceptionName + "(\"" + escapedMessage + "\");";
+			}
 		}
 	}
 }

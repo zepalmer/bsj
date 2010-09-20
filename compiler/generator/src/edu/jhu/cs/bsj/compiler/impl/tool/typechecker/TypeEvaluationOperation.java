@@ -70,6 +70,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.NoOperationDiagnosticListener;
@@ -1595,6 +1596,15 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	{
 		// TODO: Validate that the named type exists.
 		return new TypecheckerResult(new NonePseudoTypeImpl(this.manager), new TypecheckingMetadata());
+	}
+
+	@Override
+	public TypecheckerResult executeSpliceNode(SpliceNode node, TypecheckerEnvironment p)
+	{
+		// It's not possible to typecheck a splice.  Nodes which are being typechecked must be directly attached to the
+		// root package, meaning that they are not in a code literal.  Splices are only legal inside of code literals.
+		// TODO: report diagnostic
+		return new TypecheckerResult(new ErrorTypeImpl(this.manager), new TypecheckingMetadata());
 	}
 
 	@Override

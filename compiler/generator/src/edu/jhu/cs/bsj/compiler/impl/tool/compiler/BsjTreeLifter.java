@@ -72,6 +72,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjRawCodeLiteralPayloadAntlrImpl;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjTokenImpl;
@@ -4692,6 +4693,31 @@ public ExpressionNode executeSingleStaticImportNode(SingleStaticImportNode node,
                     factory.makeExpressionListNode(
                             liftName,
                             liftIdentifier,
+                            expressionizeBsjSourceLocation(liftStartLocationValue),
+                            expressionizeBsjSourceLocation(liftStopLocationValue)),
+                    factory.makeReferenceTypeListNode());
+    
+    return ret;
+}
+
+@Override
+public ExpressionNode executeSpliceNode(SpliceNode node, ExpressionNode factoryNode)
+{
+    ExpressionNode liftSpliceExpression = 
+            node.getSpliceExpression() != null ?
+                    node.getSpliceExpression().executeOperation(this,factoryNode) :
+                    factory.makeNullLiteralNode();
+    BsjSourceLocation liftStartLocationValue = 
+            node.getStartLocation();
+    BsjSourceLocation liftStopLocationValue = 
+            node.getStopLocation();
+    
+    ExpressionNode ret =
+            factory.makeMethodInvocationNode(
+                    factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                    factory.makeIdentifierNode("makeSpliceNode"),
+                    factory.makeExpressionListNode(
+                            liftSpliceExpression,
                             expressionizeBsjSourceLocation(liftStartLocationValue),
                             expressionizeBsjSourceLocation(liftStopLocationValue)),
                     factory.makeReferenceTypeListNode());

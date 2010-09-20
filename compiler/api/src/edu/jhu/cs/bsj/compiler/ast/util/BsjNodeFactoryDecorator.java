@@ -17,29 +17,53 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
@@ -48,27 +72,45 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencySpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleSpliceNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -359,6 +401,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a AnnotationBodySpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationBodySpliceNode makeAnnotationBodySpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationBodySpliceNode node = factory.makeAnnotationBodySpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationBodySpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationBodySpliceNode makeAnnotationBodySpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationBodySpliceNode node = factory.makeAnnotationBodySpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a AnnotationDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -455,6 +527,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a AnnotationElementListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationElementListSpliceNode makeAnnotationElementListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationElementListSpliceNode node = factory.makeAnnotationElementListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationElementListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationElementListSpliceNode makeAnnotationElementListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationElementListSpliceNode node = factory.makeAnnotationElementListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a AnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -482,6 +584,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnnotationElementNode node = factory.makeAnnotationElementNode(identifier, value, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationElementSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationElementSpliceNode makeAnnotationElementSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationElementSpliceNode node = factory.makeAnnotationElementSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationElementSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationElementSpliceNode makeAnnotationElementSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationElementSpliceNode node = factory.makeAnnotationElementSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -577,6 +709,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a AnnotationListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationListSpliceNode makeAnnotationListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationListSpliceNode node = factory.makeAnnotationListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationListSpliceNode makeAnnotationListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationListSpliceNode node = factory.makeAnnotationListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a AnnotationMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -637,6 +799,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a AnnotationMemberListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationMemberListSpliceNode makeAnnotationMemberListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationMemberListSpliceNode node = factory.makeAnnotationMemberListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationMemberListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMemberListSpliceNode makeAnnotationMemberListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationMemberListSpliceNode node = factory.makeAnnotationMemberListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a AnnotationMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -662,6 +854,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnnotationMemberMetaprogramAnchorNode node = factory.makeAnnotationMemberMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationMemberSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationMemberSpliceNode makeAnnotationMemberSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationMemberSpliceNode node = factory.makeAnnotationMemberSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationMemberSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMemberSpliceNode makeAnnotationMemberSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationMemberSpliceNode node = factory.makeAnnotationMemberSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -737,6 +959,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a AnnotationMethodModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationMethodModifiersSpliceNode makeAnnotationMethodModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationMethodModifiersSpliceNode node = factory.makeAnnotationMethodModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationMethodModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMethodModifiersSpliceNode makeAnnotationMethodModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationMethodModifiersSpliceNode node = factory.makeAnnotationMethodModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a AnnotationModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -805,6 +1057,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a AnnotationModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationModifiersSpliceNode makeAnnotationModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationModifiersSpliceNode node = factory.makeAnnotationModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationModifiersSpliceNode makeAnnotationModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationModifiersSpliceNode node = factory.makeAnnotationModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationSpliceNode makeAnnotationSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationSpliceNode node = factory.makeAnnotationSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationSpliceNode makeAnnotationSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationSpliceNode node = factory.makeAnnotationSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a AnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -865,6 +1177,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a AnnotationValueListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationValueListSpliceNode makeAnnotationValueListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationValueListSpliceNode node = factory.makeAnnotationValueListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationValueListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationValueListSpliceNode makeAnnotationValueListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationValueListSpliceNode node = factory.makeAnnotationValueListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationValueSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationValueSpliceNode makeAnnotationValueSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnnotationValueSpliceNode node = factory.makeAnnotationValueSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnnotationValueSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationValueSpliceNode makeAnnotationValueSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationValueSpliceNode node = factory.makeAnnotationValueSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a AnonymousClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -890,6 +1262,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnonymousClassBodyNode node = factory.makeAnonymousClassBodyNode(members, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnonymousClassBodySpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnonymousClassBodySpliceNode makeAnonymousClassBodySpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnonymousClassBodySpliceNode node = factory.makeAnonymousClassBodySpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnonymousClassBodySpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassBodySpliceNode makeAnonymousClassBodySpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnonymousClassBodySpliceNode node = factory.makeAnonymousClassBodySpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -955,6 +1357,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a AnonymousClassMemberListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnonymousClassMemberListSpliceNode makeAnonymousClassMemberListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnonymousClassMemberListSpliceNode node = factory.makeAnonymousClassMemberListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnonymousClassMemberListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassMemberListSpliceNode makeAnonymousClassMemberListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnonymousClassMemberListSpliceNode node = factory.makeAnonymousClassMemberListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a AnonymousClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -980,6 +1412,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnonymousClassMemberMetaprogramAnchorNode node = factory.makeAnonymousClassMemberMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnonymousClassMemberSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnonymousClassMemberSpliceNode makeAnonymousClassMemberSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        AnonymousClassMemberSpliceNode node = factory.makeAnonymousClassMemberSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a AnonymousClassMemberSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassMemberSpliceNode makeAnonymousClassMemberSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnonymousClassMemberSpliceNode node = factory.makeAnonymousClassMemberSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1076,6 +1538,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ArrayInitializerNode node = factory.makeArrayInitializerNode(initializers, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ArrayInitializerSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ArrayInitializerSpliceNode makeArrayInitializerSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ArrayInitializerSpliceNode node = factory.makeArrayInitializerSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ArrayInitializerSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ArrayInitializerSpliceNode makeArrayInitializerSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ArrayInitializerSpliceNode node = factory.makeArrayInitializerSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1275,6 +1767,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a BaseTypeSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public BaseTypeSpliceNode makeBaseTypeSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        BaseTypeSpliceNode node = factory.makeBaseTypeSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a BaseTypeSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BaseTypeSpliceNode makeBaseTypeSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        BaseTypeSpliceNode node = factory.makeBaseTypeSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a BinaryExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1431,6 +1953,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a BlockStatementListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public BlockStatementListSpliceNode makeBlockStatementListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        BlockStatementListSpliceNode node = factory.makeBlockStatementListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a BlockStatementListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BlockStatementListSpliceNode makeBlockStatementListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        BlockStatementListSpliceNode node = factory.makeBlockStatementListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a BlockStatementMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1456,6 +2008,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         BlockStatementMetaprogramAnchorNode node = factory.makeBlockStatementMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a BlockStatementSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public BlockStatementSpliceNode makeBlockStatementSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        BlockStatementSpliceNode node = factory.makeBlockStatementSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a BlockStatementSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BlockStatementSpliceNode makeBlockStatementSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        BlockStatementSpliceNode node = factory.makeBlockStatementSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1641,6 +2223,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a CaseListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CaseListSpliceNode makeCaseListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        CaseListSpliceNode node = factory.makeCaseListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a CaseListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CaseListSpliceNode makeCaseListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        CaseListSpliceNode node = factory.makeCaseListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a CaseNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1668,6 +2280,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         CaseNode node = factory.makeCaseNode(expression, statements, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a CaseSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CaseSpliceNode makeCaseSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        CaseSpliceNode node = factory.makeCaseSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a CaseSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CaseSpliceNode makeCaseSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        CaseSpliceNode node = factory.makeCaseSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1733,6 +2375,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a CatchListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CatchListSpliceNode makeCatchListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        CatchListSpliceNode node = factory.makeCatchListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a CatchListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CatchListSpliceNode makeCatchListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        CatchListSpliceNode node = factory.makeCatchListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a CatchNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1760,6 +2432,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         CatchNode node = factory.makeCatchNode(body, parameter, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a CatchSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CatchSpliceNode makeCatchSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        CatchSpliceNode node = factory.makeCatchSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a CatchSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CatchSpliceNode makeCatchSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        CatchSpliceNode node = factory.makeCatchSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1820,6 +2522,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ClassBodyNode node = factory.makeClassBodyNode(members, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ClassBodySpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassBodySpliceNode makeClassBodySpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ClassBodySpliceNode node = factory.makeClassBodySpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ClassBodySpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassBodySpliceNode makeClassBodySpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ClassBodySpliceNode node = factory.makeClassBodySpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1957,6 +2689,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a ClassMemberListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassMemberListSpliceNode makeClassMemberListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ClassMemberListSpliceNode node = factory.makeClassMemberListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ClassMemberListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassMemberListSpliceNode makeClassMemberListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ClassMemberListSpliceNode node = factory.makeClassMemberListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a ClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1982,6 +2744,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ClassMemberMetaprogramAnchorNode node = factory.makeClassMemberMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ClassMemberSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassMemberSpliceNode makeClassMemberSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ClassMemberSpliceNode node = factory.makeClassMemberSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ClassMemberSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassMemberSpliceNode makeClassMemberSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ClassMemberSpliceNode node = factory.makeClassMemberSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2054,6 +2846,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ClassModifiersNode node = factory.makeClassModifiersNode(access, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ClassModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassModifiersSpliceNode makeClassModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ClassModifiersSpliceNode node = factory.makeClassModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ClassModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassModifiersSpliceNode makeClassModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ClassModifiersSpliceNode node = factory.makeClassModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2294,6 +3116,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a ConstantModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantModifiersSpliceNode makeConstantModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ConstantModifiersSpliceNode node = factory.makeConstantModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstantModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantModifiersSpliceNode makeConstantModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ConstantModifiersSpliceNode node = factory.makeConstantModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a ConstructorBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2321,6 +3173,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ConstructorBodyNode node = factory.makeConstructorBodyNode(constructorInvocation, statements, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstructorBodySpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstructorBodySpliceNode makeConstructorBodySpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ConstructorBodySpliceNode node = factory.makeConstructorBodySpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstructorBodySpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorBodySpliceNode makeConstructorBodySpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ConstructorBodySpliceNode node = factory.makeConstructorBodySpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2408,6 +3290,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a ConstructorInvocationSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstructorInvocationSpliceNode makeConstructorInvocationSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ConstructorInvocationSpliceNode node = factory.makeConstructorInvocationSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstructorInvocationSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorInvocationSpliceNode makeConstructorInvocationSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ConstructorInvocationSpliceNode node = factory.makeConstructorInvocationSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a ConstructorModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2467,6 +3379,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstructorModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstructorModifiersSpliceNode makeConstructorModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ConstructorModifiersSpliceNode node = factory.makeConstructorModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ConstructorModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorModifiersSpliceNode makeConstructorModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ConstructorModifiersSpliceNode node = factory.makeConstructorModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2617,6 +3559,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         DeclaredTypeListNode node = factory.makeDeclaredTypeListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a DeclaredTypeListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public DeclaredTypeListSpliceNode makeDeclaredTypeListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        DeclaredTypeListSpliceNode node = factory.makeDeclaredTypeListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a DeclaredTypeListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public DeclaredTypeListSpliceNode makeDeclaredTypeListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        DeclaredTypeListSpliceNode node = factory.makeDeclaredTypeListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a DeclaredTypeSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public DeclaredTypeSpliceNode makeDeclaredTypeSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        DeclaredTypeSpliceNode node = factory.makeDeclaredTypeSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a DeclaredTypeSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public DeclaredTypeSpliceNode makeDeclaredTypeSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        DeclaredTypeSpliceNode node = factory.makeDeclaredTypeSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2820,6 +3822,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a EnumBodySpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumBodySpliceNode makeEnumBodySpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        EnumBodySpliceNode node = factory.makeEnumBodySpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumBodySpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumBodySpliceNode makeEnumBodySpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        EnumBodySpliceNode node = factory.makeEnumBodySpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a EnumConstantDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2875,6 +3907,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         EnumConstantDeclarationListNode node = factory.makeEnumConstantDeclarationListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantDeclarationListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantDeclarationListSpliceNode makeEnumConstantDeclarationListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        EnumConstantDeclarationListSpliceNode node = factory.makeEnumConstantDeclarationListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantDeclarationListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantDeclarationListSpliceNode makeEnumConstantDeclarationListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        EnumConstantDeclarationListSpliceNode node = factory.makeEnumConstantDeclarationListSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2954,6 +4016,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a EnumConstantDeclarationSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantDeclarationSpliceNode makeEnumConstantDeclarationSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        EnumConstantDeclarationSpliceNode node = factory.makeEnumConstantDeclarationSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantDeclarationSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantDeclarationSpliceNode makeEnumConstantDeclarationSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        EnumConstantDeclarationSpliceNode node = factory.makeEnumConstantDeclarationSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a EnumConstantModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3010,6 +4102,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         EnumConstantModifiersNode node = factory.makeEnumConstantModifiersNode(startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantModifiersSpliceNode makeEnumConstantModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        EnumConstantModifiersSpliceNode node = factory.makeEnumConstantModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantModifiersSpliceNode makeEnumConstantModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        EnumConstantModifiersSpliceNode node = factory.makeEnumConstantModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3119,6 +4241,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a EnumModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumModifiersSpliceNode makeEnumModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        EnumModifiersSpliceNode node = factory.makeEnumModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a EnumModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumModifiersSpliceNode makeEnumModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        EnumModifiersSpliceNode node = factory.makeEnumModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a ExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3174,6 +4326,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ExpressionListNode node = factory.makeExpressionListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ExpressionListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ExpressionListSpliceNode makeExpressionListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ExpressionListSpliceNode node = factory.makeExpressionListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ExpressionListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ExpressionListSpliceNode makeExpressionListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ExpressionListSpliceNode node = factory.makeExpressionListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ExpressionSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ExpressionSpliceNode makeExpressionSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ExpressionSpliceNode node = factory.makeExpressionSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ExpressionSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ExpressionSpliceNode makeExpressionSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ExpressionSpliceNode node = factory.makeExpressionSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3349,6 +4561,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a FieldModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public FieldModifiersSpliceNode makeFieldModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        FieldModifiersSpliceNode node = factory.makeFieldModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a FieldModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public FieldModifiersSpliceNode makeFieldModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        FieldModifiersSpliceNode node = factory.makeFieldModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a FloatLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3434,6 +4676,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ForInitializerExpressionNode node = factory.makeForInitializerExpressionNode(expressions, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ForInitializerSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ForInitializerSpliceNode makeForInitializerSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ForInitializerSpliceNode node = factory.makeForInitializerSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ForInitializerSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ForInitializerSpliceNode makeForInitializerSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ForInitializerSpliceNode node = factory.makeForInitializerSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3573,6 +4845,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a IdentifierListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public IdentifierListSpliceNode makeIdentifierListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        IdentifierListSpliceNode node = factory.makeIdentifierListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a IdentifierListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public IdentifierListSpliceNode makeIdentifierListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        IdentifierListSpliceNode node = factory.makeIdentifierListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a IdentifierNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3598,6 +4900,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         IdentifierNode node = factory.makeIdentifierNode(identifier, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a IdentifierSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public IdentifierSpliceNode makeIdentifierSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        IdentifierSpliceNode node = factory.makeIdentifierSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a IdentifierSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public IdentifierSpliceNode makeIdentifierSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        IdentifierSpliceNode node = factory.makeIdentifierSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3760,6 +5092,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ImportListNode node = factory.makeImportListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ImportListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ImportListSpliceNode makeImportListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ImportListSpliceNode node = factory.makeImportListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ImportListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ImportListSpliceNode makeImportListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ImportListSpliceNode node = factory.makeImportListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ImportSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ImportSpliceNode makeImportSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ImportSpliceNode node = factory.makeImportSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ImportSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ImportSpliceNode makeImportSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ImportSpliceNode node = factory.makeImportSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3983,6 +5375,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a InterfaceBodySpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceBodySpliceNode makeInterfaceBodySpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        InterfaceBodySpliceNode node = factory.makeInterfaceBodySpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a InterfaceBodySpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceBodySpliceNode makeInterfaceBodySpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        InterfaceBodySpliceNode node = factory.makeInterfaceBodySpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a InterfaceDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4083,6 +5505,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a InterfaceMemberListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceMemberListSpliceNode makeInterfaceMemberListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        InterfaceMemberListSpliceNode node = factory.makeInterfaceMemberListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a InterfaceMemberListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceMemberListSpliceNode makeInterfaceMemberListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        InterfaceMemberListSpliceNode node = factory.makeInterfaceMemberListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a InterfaceMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4108,6 +5560,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         InterfaceMemberMetaprogramAnchorNode node = factory.makeInterfaceMemberMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a InterfaceMemberSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceMemberSpliceNode makeInterfaceMemberSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        InterfaceMemberSpliceNode node = factory.makeInterfaceMemberSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a InterfaceMemberSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceMemberSpliceNode makeInterfaceMemberSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        InterfaceMemberSpliceNode node = factory.makeInterfaceMemberSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4181,6 +5663,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a InterfaceModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceModifiersSpliceNode makeInterfaceModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        InterfaceModifiersSpliceNode node = factory.makeInterfaceModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a InterfaceModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceModifiersSpliceNode makeInterfaceModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        InterfaceModifiersSpliceNode node = factory.makeInterfaceModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a JavadocNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4206,6 +5718,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         JavadocNode node = factory.makeJavadocNode(text, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a JavadocSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public JavadocSpliceNode makeJavadocSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        JavadocSpliceNode node = factory.makeJavadocSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a JavadocSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public JavadocSpliceNode makeJavadocSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        JavadocSpliceNode node = factory.makeJavadocSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4272,6 +5814,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         LabeledStatementNode node = factory.makeLabeledStatementNode(label, statement, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LiteralizableTypeSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LiteralizableTypeSpliceNode makeLiteralizableTypeSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        LiteralizableTypeSpliceNode node = factory.makeLiteralizableTypeSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LiteralizableTypeSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LiteralizableTypeSpliceNode makeLiteralizableTypeSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        LiteralizableTypeSpliceNode node = factory.makeLiteralizableTypeSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4386,6 +5958,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a LocalClassModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalClassModifiersSpliceNode makeLocalClassModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        LocalClassModifiersSpliceNode node = factory.makeLocalClassModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LocalClassModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalClassModifiersSpliceNode makeLocalClassModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        LocalClassModifiersSpliceNode node = factory.makeLocalClassModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a LocalVariableDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4447,6 +6049,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         LocalVariableDeclarationNode node = factory.makeLocalVariableDeclarationNode(type, declarators, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalVariableDeclarationSpliceNode makeLocalVariableDeclarationSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        LocalVariableDeclarationSpliceNode node = factory.makeLocalVariableDeclarationSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalVariableDeclarationSpliceNode makeLocalVariableDeclarationSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        LocalVariableDeclarationSpliceNode node = factory.makeLocalVariableDeclarationSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4572,6 +6204,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaAnnotationElementListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationElementListSpliceNode makeMetaAnnotationElementListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaAnnotationElementListSpliceNode node = factory.makeMetaAnnotationElementListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementListSpliceNode makeMetaAnnotationElementListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationElementListSpliceNode node = factory.makeMetaAnnotationElementListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaAnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4599,6 +6261,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaAnnotationElementNode node = factory.makeMetaAnnotationElementNode(identifier, value, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationElementSpliceNode makeMetaAnnotationElementSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaAnnotationElementSpliceNode node = factory.makeMetaAnnotationElementSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementSpliceNode makeMetaAnnotationElementSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationElementSpliceNode node = factory.makeMetaAnnotationElementSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4694,6 +6386,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaAnnotationListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationListSpliceNode makeMetaAnnotationListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaAnnotationListSpliceNode node = factory.makeMetaAnnotationListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationListSpliceNode makeMetaAnnotationListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationListSpliceNode node = factory.makeMetaAnnotationListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaAnnotationMetaAnnotationValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4748,6 +6470,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaAnnotationMetaprogramAnchorNode node = factory.makeMetaAnnotationMetaprogramAnchorNode(startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaprogramAnchorSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationMetaprogramAnchorSpliceNode makeMetaAnnotationMetaprogramAnchorSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaAnnotationMetaprogramAnchorSpliceNode node = factory.makeMetaAnnotationMetaprogramAnchorSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaprogramAnchorSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationMetaprogramAnchorSpliceNode makeMetaAnnotationMetaprogramAnchorSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationMetaprogramAnchorSpliceNode node = factory.makeMetaAnnotationMetaprogramAnchorSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationSpliceNode makeMetaAnnotationSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaAnnotationSpliceNode node = factory.makeMetaAnnotationSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationSpliceNode makeMetaAnnotationSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationSpliceNode node = factory.makeMetaAnnotationSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4813,6 +6595,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaAnnotationValueListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationValueListSpliceNode makeMetaAnnotationValueListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaAnnotationValueListSpliceNode node = factory.makeMetaAnnotationValueListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationValueListSpliceNode makeMetaAnnotationValueListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationValueListSpliceNode node = factory.makeMetaAnnotationValueListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationValueSpliceNode makeMetaAnnotationValueSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaAnnotationValueSpliceNode node = factory.makeMetaAnnotationValueSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationValueSpliceNode makeMetaAnnotationValueSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationValueSpliceNode node = factory.makeMetaAnnotationValueSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4873,6 +6715,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaprogramDependencyDeclarationListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyDeclarationListSpliceNode makeMetaprogramDependencyDeclarationListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramDependencyDeclarationListSpliceNode node = factory.makeMetaprogramDependencyDeclarationListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyDeclarationListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyDeclarationListSpliceNode makeMetaprogramDependencyDeclarationListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramDependencyDeclarationListSpliceNode node = factory.makeMetaprogramDependencyDeclarationListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaprogramDependencyDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4898,6 +6770,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaprogramDependencyDeclarationNode node = factory.makeMetaprogramDependencyDeclarationNode(targets, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyDeclarationSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyDeclarationSpliceNode makeMetaprogramDependencyDeclarationSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramDependencyDeclarationSpliceNode node = factory.makeMetaprogramDependencyDeclarationSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyDeclarationSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyDeclarationSpliceNode makeMetaprogramDependencyDeclarationSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramDependencyDeclarationSpliceNode node = factory.makeMetaprogramDependencyDeclarationSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4958,6 +6860,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaprogramDependencyListNode node = factory.makeMetaprogramDependencyListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencyListSpliceNode makeMetaprogramDependencyListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramDependencyListSpliceNode node = factory.makeMetaprogramDependencyListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyListSpliceNode makeMetaprogramDependencyListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramDependencyListSpliceNode node = factory.makeMetaprogramDependencyListSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -5025,6 +6957,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaprogramDependencySpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependencySpliceNode makeMetaprogramDependencySpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramDependencySpliceNode node = factory.makeMetaprogramDependencySpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencySpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencySpliceNode makeMetaprogramDependencySpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramDependencySpliceNode node = factory.makeMetaprogramDependencySpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaprogramImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5085,6 +7047,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaprogramImportListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramImportListSpliceNode makeMetaprogramImportListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramImportListSpliceNode node = factory.makeMetaprogramImportListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramImportListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramImportListSpliceNode makeMetaprogramImportListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramImportListSpliceNode node = factory.makeMetaprogramImportListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaprogramImportNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5110,6 +7102,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaprogramImportNode node = factory.makeMetaprogramImportNode(importNode, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramImportSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramImportSpliceNode makeMetaprogramImportSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramImportSpliceNode node = factory.makeMetaprogramImportSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramImportSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramImportSpliceNode makeMetaprogramImportSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramImportSpliceNode node = factory.makeMetaprogramImportSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -5142,6 +7164,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaprogramNode node = factory.makeMetaprogramNode(preamble, body, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramSpliceNode makeMetaprogramSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramSpliceNode node = factory.makeMetaprogramSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramSpliceNode makeMetaprogramSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramSpliceNode node = factory.makeMetaprogramSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -5219,6 +7271,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaprogramPreambleSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramPreambleSpliceNode makeMetaprogramPreambleSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramPreambleSpliceNode node = factory.makeMetaprogramPreambleSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramPreambleSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramPreambleSpliceNode makeMetaprogramPreambleSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramPreambleSpliceNode node = factory.makeMetaprogramPreambleSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaprogramTargetListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5279,6 +7361,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaprogramTargetListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramTargetListSpliceNode makeMetaprogramTargetListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramTargetListSpliceNode node = factory.makeMetaprogramTargetListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramTargetListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramTargetListSpliceNode makeMetaprogramTargetListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramTargetListSpliceNode node = factory.makeMetaprogramTargetListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaprogramTargetNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5304,6 +7416,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaprogramTargetNode node = factory.makeMetaprogramTargetNode(targets, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramTargetSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramTargetSpliceNode makeMetaprogramTargetSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MetaprogramTargetSpliceNode node = factory.makeMetaprogramTargetSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramTargetSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramTargetSpliceNode makeMetaprogramTargetSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramTargetSpliceNode node = factory.makeMetaprogramTargetSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -5635,6 +7777,96 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MethodModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodModifiersSpliceNode makeMethodModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        MethodModifiersSpliceNode node = factory.makeMethodModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodModifiersSpliceNode makeMethodModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MethodModifiersSpliceNode node = factory.makeMethodModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ModifiersSpliceNode makeModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ModifiersSpliceNode node = factory.makeModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ModifiersSpliceNode makeModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ModifiersSpliceNode node = factory.makeModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a NameSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NameSpliceNode makeNameSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        NameSpliceNode node = factory.makeNameSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a NameSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NameSpliceNode makeNameSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        NameSpliceNode node = factory.makeNameSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a NoOperationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5689,6 +7921,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         NoOperationNode node = factory.makeNoOperationNode(startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a NonAssignmentExpressionSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NonAssignmentExpressionSpliceNode makeNonAssignmentExpressionSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        NonAssignmentExpressionSpliceNode node = factory.makeNonAssignmentExpressionSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a NonAssignmentExpressionSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NonAssignmentExpressionSpliceNode makeNonAssignmentExpressionSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        NonAssignmentExpressionSpliceNode node = factory.makeNonAssignmentExpressionSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -5851,6 +8113,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a PackageDeclarationSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageDeclarationSpliceNode makePackageDeclarationSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        PackageDeclarationSpliceNode node = factory.makePackageDeclarationSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a PackageDeclarationSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageDeclarationSpliceNode makePackageDeclarationSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        PackageDeclarationSpliceNode node = factory.makePackageDeclarationSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a PackageNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5913,6 +8205,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a ParameterizedTypeSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ParameterizedTypeSpliceNode makeParameterizedTypeSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ParameterizedTypeSpliceNode node = factory.makeParameterizedTypeSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ParameterizedTypeSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ParameterizedTypeSpliceNode makeParameterizedTypeSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ParameterizedTypeSpliceNode node = factory.makeParameterizedTypeSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a ParameterizedTypeSelectNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5970,6 +8292,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ParenthesizedExpressionNode node = factory.makeParenthesizedExpressionNode(expression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a PrimaryExpressionSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PrimaryExpressionSpliceNode makePrimaryExpressionSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        PrimaryExpressionSpliceNode node = factory.makePrimaryExpressionSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a PrimaryExpressionSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PrimaryExpressionSpliceNode makePrimaryExpressionSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        PrimaryExpressionSpliceNode node = factory.makePrimaryExpressionSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -6201,6 +8553,96 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a ReferenceTypeListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ReferenceTypeListSpliceNode makeReferenceTypeListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ReferenceTypeListSpliceNode node = factory.makeReferenceTypeListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ReferenceTypeListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ReferenceTypeListSpliceNode makeReferenceTypeListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ReferenceTypeListSpliceNode node = factory.makeReferenceTypeListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ReferenceTypeSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ReferenceTypeSpliceNode makeReferenceTypeSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        ReferenceTypeSpliceNode node = factory.makeReferenceTypeSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a ReferenceTypeSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ReferenceTypeSpliceNode makeReferenceTypeSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ReferenceTypeSpliceNode node = factory.makeReferenceTypeSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a RestrictedPrimaryExpressionSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public RestrictedPrimaryExpressionSpliceNode makeRestrictedPrimaryExpressionSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        RestrictedPrimaryExpressionSpliceNode node = factory.makeRestrictedPrimaryExpressionSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a RestrictedPrimaryExpressionSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public RestrictedPrimaryExpressionSpliceNode makeRestrictedPrimaryExpressionSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        RestrictedPrimaryExpressionSpliceNode node = factory.makeRestrictedPrimaryExpressionSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a ReturnNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -6389,6 +8831,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a SpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SpliceNode makeSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        SpliceNode node = factory.makeSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a SpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SpliceNode makeSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        SpliceNode node = factory.makeSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a StatementExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -6444,6 +8916,96 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         StatementExpressionListNode node = factory.makeStatementExpressionListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a StatementExpressionListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public StatementExpressionListSpliceNode makeStatementExpressionListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        StatementExpressionListSpliceNode node = factory.makeStatementExpressionListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a StatementExpressionListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public StatementExpressionListSpliceNode makeStatementExpressionListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        StatementExpressionListSpliceNode node = factory.makeStatementExpressionListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a StatementExpressionSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public StatementExpressionSpliceNode makeStatementExpressionSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        StatementExpressionSpliceNode node = factory.makeStatementExpressionSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a StatementExpressionSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public StatementExpressionSpliceNode makeStatementExpressionSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        StatementExpressionSpliceNode node = factory.makeStatementExpressionSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a StatementSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public StatementSpliceNode makeStatementSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        StatementSpliceNode node = factory.makeStatementSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a StatementSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public StatementSpliceNode makeStatementSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        StatementSpliceNode node = factory.makeStatementSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7183,6 +9745,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a TypeArgumentListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeArgumentListSpliceNode makeTypeArgumentListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        TypeArgumentListSpliceNode node = factory.makeTypeArgumentListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeArgumentListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeArgumentListSpliceNode makeTypeArgumentListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        TypeArgumentListSpliceNode node = factory.makeTypeArgumentListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeArgumentSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeArgumentSpliceNode makeTypeArgumentSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        TypeArgumentSpliceNode node = factory.makeTypeArgumentSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeArgumentSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeArgumentSpliceNode makeTypeArgumentSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        TypeArgumentSpliceNode node = factory.makeTypeArgumentSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a TypeCastNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -7275,6 +9897,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a TypeDeclarationListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeDeclarationListSpliceNode makeTypeDeclarationListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        TypeDeclarationListSpliceNode node = factory.makeTypeDeclarationListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeDeclarationListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeDeclarationListSpliceNode makeTypeDeclarationListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        TypeDeclarationListSpliceNode node = factory.makeTypeDeclarationListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -7300,6 +9952,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         TypeDeclarationMetaprogramAnchorNode node = factory.makeTypeDeclarationMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeDeclarationSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeDeclarationSpliceNode makeTypeDeclarationSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        TypeDeclarationSpliceNode node = factory.makeTypeDeclarationSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeDeclarationSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeDeclarationSpliceNode makeTypeDeclarationSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        TypeDeclarationSpliceNode node = factory.makeTypeDeclarationSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeSpliceNode makeTypeSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        TypeSpliceNode node = factory.makeTypeSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeSpliceNode makeTypeSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        TypeSpliceNode node = factory.makeTypeSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7365,6 +10077,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a TypeParameterListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeParameterListSpliceNode makeTypeParameterListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        TypeParameterListSpliceNode node = factory.makeTypeParameterListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeParameterListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeParameterListSpliceNode makeTypeParameterListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        TypeParameterListSpliceNode node = factory.makeTypeParameterListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a TypeParameterNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -7392,6 +10134,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         TypeParameterNode node = factory.makeTypeParameterNode(identifier, bounds, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeParameterSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeParameterSpliceNode makeTypeParameterSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        TypeParameterSpliceNode node = factory.makeTypeParameterSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a TypeParameterSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeParameterSpliceNode makeTypeParameterSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        TypeParameterSpliceNode node = factory.makeTypeParameterSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7521,6 +10293,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a UnparameterizedTypeListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnparameterizedTypeListSpliceNode makeUnparameterizedTypeListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        UnparameterizedTypeListSpliceNode node = factory.makeUnparameterizedTypeListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a UnparameterizedTypeListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnparameterizedTypeListSpliceNode makeUnparameterizedTypeListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        UnparameterizedTypeListSpliceNode node = factory.makeUnparameterizedTypeListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a UnparameterizedTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -7546,6 +10348,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         UnparameterizedTypeNode node = factory.makeUnparameterizedTypeNode(name, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a UnparameterizedTypeSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnparameterizedTypeSpliceNode makeUnparameterizedTypeSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        UnparameterizedTypeSpliceNode node = factory.makeUnparameterizedTypeSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a UnparameterizedTypeSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnparameterizedTypeSpliceNode makeUnparameterizedTypeSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        UnparameterizedTypeSpliceNode node = factory.makeUnparameterizedTypeSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -7771,6 +10603,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a VariableDeclaratorListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableDeclaratorListSpliceNode makeVariableDeclaratorListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        VariableDeclaratorListSpliceNode node = factory.makeVariableDeclaratorListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableDeclaratorListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableDeclaratorListSpliceNode makeVariableDeclaratorListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableDeclaratorListSpliceNode node = factory.makeVariableDeclaratorListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a VariableDeclaratorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -7837,6 +10699,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a VariableDeclaratorSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableDeclaratorSpliceNode makeVariableDeclaratorSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        VariableDeclaratorSpliceNode node = factory.makeVariableDeclaratorSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableDeclaratorSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableDeclaratorSpliceNode makeVariableDeclaratorSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableDeclaratorSpliceNode node = factory.makeVariableDeclaratorSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a VariableInitializerListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -7897,6 +10789,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a VariableInitializerListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableInitializerListSpliceNode makeVariableInitializerListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        VariableInitializerListSpliceNode node = factory.makeVariableInitializerListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableInitializerListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableInitializerListSpliceNode makeVariableInitializerListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableInitializerListSpliceNode node = factory.makeVariableInitializerListSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableInitializerSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableInitializerSpliceNode makeVariableInitializerSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        VariableInitializerSpliceNode node = factory.makeVariableInitializerSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableInitializerSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableInitializerSpliceNode makeVariableInitializerSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableInitializerSpliceNode node = factory.makeVariableInitializerSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a VariableListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -7952,6 +10904,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableListNode node = factory.makeVariableListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableListSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableListSpliceNode makeVariableListSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        VariableListSpliceNode node = factory.makeVariableListSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableListSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableListSpliceNode makeVariableListSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableListSpliceNode node = factory.makeVariableListSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -8019,6 +11001,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a VariableModifiersSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableModifiersSpliceNode makeVariableModifiersSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        VariableModifiersSpliceNode node = factory.makeVariableModifiersSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableModifiersSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableModifiersSpliceNode makeVariableModifiersSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableModifiersSpliceNode node = factory.makeVariableModifiersSpliceNode(spliceExpression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a VariableNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -8080,6 +11092,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableNode node = factory.makeVariableNode(type, identifier, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableSpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableSpliceNode makeVariableSpliceNode(
+            ExpressionNode spliceExpression)
+    {
+        this.before();
+        VariableSpliceNode node = factory.makeVariableSpliceNode(spliceExpression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableSpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableSpliceNode makeVariableSpliceNode(
+            ExpressionNode spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableSpliceNode node = factory.makeVariableSpliceNode(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }

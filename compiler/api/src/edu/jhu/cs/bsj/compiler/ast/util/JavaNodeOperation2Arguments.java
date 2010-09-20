@@ -31,6 +31,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -320,6 +321,16 @@ public abstract class JavaNodeOperation2Arguments<P1,P2,R> implements BsjNodeOpe
      * @param p The parameter to this node operation.
      */
     public R executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, P1 p1, P2 p2)
+    {
+        return handleBsjSpecificNode(node, p1, p2);
+    }
+    
+    /**
+     * Executes the BSJ-specific operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeSpliceNode(SpliceNode node, P1 p1, P2 p2)
     {
         return handleBsjSpecificNode(node, p1, p2);
     }

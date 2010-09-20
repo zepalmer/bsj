@@ -4,11 +4,10 @@ basedir=../out
 
 apisrc=../../api/src
 astsrc=../../generator/src
-pprsrc=../../parser/src-pre
 parsrc=../../parser/src
 utlsrc=../../stdlib/src
 
-srcs="$apisrc $astsrc $pprsrc $parsrc $utlsrc"
+srcs="$apisrc $astsrc $parsrc $utlsrc"
 
 if [ ! -d "../out" ]; then
 	echo "Must be run from within the tools directory after sources are generated"
@@ -41,7 +40,6 @@ filecount="$(\
         (\
             doCopy interface      $apisrc; \
             doCopy implementation $astsrc; \
-            doCopy pre-parser     $pprsrc; \
             doCopy parser         $parsrc; \
             doCopy utils          $utlsrc; \
         ) | (n=0; while read line; do n="$(($n+$line))"; echo $n; done | tail -n 1) \

@@ -161,6 +161,27 @@ public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends Pr
 	public List<U> getRecursiveProperties(boolean parentFirst)
 	{
 		List<U> props = super.getRecursiveProperties(parentFirst);
+		Map<String, String> typeArgMap = getTypeArgMap();
+
+		for (int i = 0; i < props.size(); i++)
+		{
+			U propdef = props.get(i);
+			if (typeArgMap.containsKey(propdef.getBaseType()))
+			{
+				propdef = propdef.deriveWithBaseType(typeArgMap.get(propdef.getBaseType()));
+			}
+			if (typeArgMap.containsKey(propdef.getTypeArg()))
+			{
+				propdef = propdef.deriveWithTypeArg(typeArgMap.get(propdef.getTypeArg()));
+			}
+			props.set(i, propdef);
+		}
+
+		return props;
+	}
+
+	public Map<String, String> getTypeArgMap()
+	{
 		Map<String, String> typeArgMap = new HashMap<String, String>();
 		IParameterizedPropertyBasedHierarchyDefinition<T, U> def = this;
 		while (def != null && def.getParent() != null)
@@ -185,21 +206,6 @@ public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends Pr
 			}
 			def = def.getParent();
 		}
-
-		for (int i = 0; i < props.size(); i++)
-		{
-			U propdef = props.get(i);
-			if (typeArgMap.containsKey(propdef.getBaseType()))
-			{
-				propdef = propdef.deriveWithBaseType(typeArgMap.get(propdef.getBaseType()));
-			}
-			if (typeArgMap.containsKey(propdef.getTypeArg()))
-			{
-				propdef = propdef.deriveWithTypeArg(typeArgMap.get(propdef.getTypeArg()));
-			}
-			props.set(i, propdef);
-		}
-
-		return props;
+		return typeArgMap;
 	}
 }

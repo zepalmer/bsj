@@ -9,7 +9,6 @@ import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
-import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
 import edu.jhu.cs.bsj.compiler.utils.grammar.antlr.ANTLRv3Lexer;
 import edu.jhu.cs.bsj.compiler.utils.grammar.antlr.ANTLRv3Parser;
 

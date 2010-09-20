@@ -59,6 +59,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
@@ -513,7 +514,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeCodeLiteralNode(CodeLiteralNode node, PrependablePrintStream p)
 	{
-		// TODO Auto-generated method stub
+		p.print("<:");
+		node.getValue().executeOperation(this, p);
+		p.print(":>");
 		return null;
 	}
 
@@ -1990,6 +1993,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print("(");
 		node.getValue().executeOperation(this, p);
 		p.print(")");
+		return null;
+	}
+
+	@Override
+	public Void executeSpliceNode(SpliceNode node, PrependablePrintStream p)
+	{
+		p.print("~:");
+		node.getSpliceExpression().executeOperation(this, p);
+		p.print(":~");
 		return null;
 	}
 

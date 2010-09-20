@@ -11,7 +11,8 @@ public enum SupplementCategory
 	/** The general category (no subdirectory). */
 	GENERAL(null),
 	/** The node category. */
-	NODE("nodes");
+	NODE("nodes"),
+	;
 	
 	/** The name of the subdirectory in which this supplement is found. */
 	private String subdir;

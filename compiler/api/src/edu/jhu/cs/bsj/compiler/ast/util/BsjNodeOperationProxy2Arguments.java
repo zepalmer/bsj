@@ -55,6 +55,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -1912,6 +1913,20 @@ public abstract class BsjNodeOperationProxy2Arguments<P1Orig,P2Orig,ROrig,P1New,
         P1Orig p1orig = before1(p1);
         P2Orig p2orig = before2(p2);
         ROrig rorig = this.backingOp.executeSingleStaticImportNode(node, p1orig, p2orig);
+        return after(rorig);
+    }
+    
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeSpliceNode(SpliceNode node, P1New p1, P2New p2)
+    {
+        P1Orig p1orig = before1(p1);
+        P2Orig p2orig = before2(p2);
+        ROrig rorig = this.backingOp.executeSpliceNode(node, p1orig, p2orig);
         return after(rorig);
     }
     

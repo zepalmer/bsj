@@ -16,14 +16,15 @@ public enum Project
 			"edu.jhu.cs.bsj.compiler.ast.node.list.*", "edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.source.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*",
 			"edu.jhu.cs.bsj.compiler.ast.exception.*", "edu.jhu.cs.bsj.compiler.metaprogram.*", "java.util.*",
-			"java.io.*", "javax.annotation.Generated"), Arrays.<Project> asList()),
+			"java.io.*", "javax.annotation.Generated", "javax.tools.*", "edu.jhu.cs.bsj.compiler.metaannotation.*"), Arrays.<Project> asList()),
 	PARSER("parser", Arrays.<String> asList("edu.jhu.cs.bsj.compiler.tool.parser.*",
 			"edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.*"), Arrays.asList(API)),
 	GENERATOR("implementation", Arrays.asList("edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.attribute.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.list.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
-			"edu.jhu.cs.bsj.compiler.impl.utils.*", "javax.annotation.Generated",
-			"edu.jhu.cs.bsj.compiler.impl.tool.filemanager.*"), Arrays.asList(API)),
+			"edu.jhu.cs.bsj.compiler.impl.ast.splicenode.*", "edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.*",
+			"edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.*", "edu.jhu.cs.bsj.compiler.impl.utils.*",
+			"javax.annotation.Generated", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager.*"), Arrays.asList(API)),
 	BSJ_UTILS("utils", Arrays.<String> asList(), Arrays.asList(API));
 
 	/** The name of the resource directory for this project. */

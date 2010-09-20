@@ -1366,11 +1366,9 @@
         </type>
 
         <type name="ClassLiteralNode" super="LiteralNode" superTypeArg="LiteralizableTypeNode">
-            <!--
-                Overriding property so source generator realizes that it must reimplement the method.
-                This is necessary because LiteralizableTypeNode is a node type and appropriate management of its
-                parent reference must be done.
-            -->
+            <!-- Overriding property so source generator realizes that it must reimplement the method. This is 
+                necessary because LiteralizableTypeNode is a node type and appropriate management of its parent reference must 
+                be done. -->
             <prop name="value" type="LiteralizableTypeNode" desc="the type for this literal" />
             <doc><![CDATA[
                 A note representing a class literal, such as <tt>String.class</tt>.  Note that the BSJ compiler API includes a
@@ -2712,6 +2710,19 @@
         <type name="CodeLiteralNode" super="LiteralNode" superTypeArg="Node">
             <doc><![CDATA[
                 A node representing a processed code literal.
+            ]]></doc>
+        </type>
+
+        <type name="SpliceNode" super="Node" mode="concrete">
+            <prop name="spliceExpression" type="ExpressionNode"
+                desc="the expression which will replace this splice upon lifting" />
+            <doc><![CDATA[
+                This AST node interface is meant to tag nodes which represent BSJ AST splices.  Code splices are used
+                within code literals to permit the construction of templated ASTs.
+                <p/>
+                Due to the awkwardness of correctly typing this behavior in Java's type system, the BSJ API specifies
+                that any AST node may actually be a splice node.  If it is, accessing any of its normal getters or
+                setters will result in the raising of a {@link SpliceNodeAccessException}.            
             ]]></doc>
         </type>
     </srcgen>

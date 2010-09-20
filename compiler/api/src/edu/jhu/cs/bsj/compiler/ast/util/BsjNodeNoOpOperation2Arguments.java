@@ -55,6 +55,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -1481,6 +1482,17 @@ public class BsjNodeNoOpOperation2Arguments<P1,P2,R> implements BsjNodeOperation
      * @return <code>null</code>, always.
      */
     public R executeSingleStaticImportNode(SingleStaticImportNode node, P1 p1, P2 p2)
+    {
+        return null;
+    }
+    
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
+    public R executeSpliceNode(SpliceNode node, P1 p1, P2 p2)
     {
         return null;
     }
