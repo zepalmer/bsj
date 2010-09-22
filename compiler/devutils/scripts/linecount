@@ -50,8 +50,10 @@ statsforlist()
 getstats()
 {
     files="$(find $* -type f | egrep '\.(g|java)$' | grep -v 'resources/source-code' | grep -v '.svn')"
-    genfiles="$(echo "$files" | while read line; do infile "$line" "@Generated" && echo "$line"; done)"
-    ngenfiles="$(echo "$files" | while read line; do infile "$line" "@Generated" || echo "$line"; done)"
+    genfiles="$(echo "$files" | while read line; do (infile "$line" "@Generated" || infile "$line" "@javax.annotation.Generated") && echo "$line"; done)"
+    ngenfiles="$(echo "$files" | while read line; do (infile "$line" "@Generated" || infile "$line" "@javax.annotation.Generated") || echo "$line"; done)"
+    #echo "Generated: $genfiles"
+    #echo "Nongen:    $ngenfiles"
     echo "    Overall:"
     statsforlist "$files"
     echo "    Generated:"

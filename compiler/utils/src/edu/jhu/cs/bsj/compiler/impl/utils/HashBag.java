@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import edu.jhu.cs.bsj.compiler.utils.Bag;
+
 /**
  * An implementation of the {@link Bag} interface which relies on the hashing behavior of the provided objects to
  * provide improved performance.

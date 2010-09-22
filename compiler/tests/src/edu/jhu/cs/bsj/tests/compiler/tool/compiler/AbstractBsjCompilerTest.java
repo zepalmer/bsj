@@ -113,6 +113,7 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 				packageString = "";
 				filename = path;
 			}
+			// TODO: condition on whether or not the file already has an extension?
 			filename = filename + ".bsj";
 			BsjFileObject bfo = fileManager.getFileForInput(BsjCompilerLocation.SOURCE_PATH, packageString, filename);
 			files.add(bfo);

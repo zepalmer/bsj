@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.impl.utils;
 import java.util.Collection;
 import java.util.Iterator;
 
+import edu.jhu.cs.bsj.compiler.utils.Bag;
+
 /**
  * A proxy bag which prevents mutation access to the underlying bag.
  */
