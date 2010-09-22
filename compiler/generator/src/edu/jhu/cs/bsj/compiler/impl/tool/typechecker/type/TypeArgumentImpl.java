@@ -1,7 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 
 public abstract class TypeArgumentImpl extends ActualTypeImpl implements BsjTypeArgument
 {

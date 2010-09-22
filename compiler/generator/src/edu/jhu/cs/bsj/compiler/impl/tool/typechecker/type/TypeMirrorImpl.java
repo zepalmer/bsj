@@ -6,9 +6,9 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerModelComponentImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 
 public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl implements BsjType
 {

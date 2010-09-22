@@ -6,11 +6,13 @@ import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.BsjTypecheckerFactoryImpl;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoaderFactory;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypecheckerFactory;
 
 /**
  * A standard implementation of the BSJ toolkit.
@@ -30,6 +32,8 @@ public class BsjToolkitImpl implements BsjToolkit
 	private BsjSourceSerializer serializer;
 	/** This toolkit's compilation unit loader factory. */
 	private CompilationUnitLoaderFactory loaderFactory;
+	/** This toolkit's typechecker factory. */
+	private BsjTypecheckerFactory typecheckerFactory;
 	
 	/** The node manager used in each of the toolkit components. */
 	private BsjNodeManager nodeManager;
@@ -46,6 +50,7 @@ public class BsjToolkitImpl implements BsjToolkit
 		this.compiler = new StandardBsjCompiler(this, nodeManager);
 		this.serializer = new BsjSourceSerializerImpl();
 		this.loaderFactory = new CompilationUnitLoaderFactoryImpl(this, this.nodeManager);
+		this.typecheckerFactory = new BsjTypecheckerFactoryImpl(this);
 	}
 
 	@Override
@@ -82,5 +87,11 @@ public class BsjToolkitImpl implements BsjToolkit
 	public CompilationUnitLoaderFactory getCompilationUnitLoaderFactory()
 	{
 		return this.loaderFactory;
+	}
+
+	@Override
+	public BsjTypecheckerFactory getTypecheckerFactory()
+	{
+		return this.typecheckerFactory;
 	}
 }

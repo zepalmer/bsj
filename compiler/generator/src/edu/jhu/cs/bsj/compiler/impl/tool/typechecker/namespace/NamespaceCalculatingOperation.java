@@ -6,8 +6,8 @@ import java.util.WeakHashMap;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 /**
  * Calculates a particular type of namespace for a specified AST node. This operation caches its results; as a result,

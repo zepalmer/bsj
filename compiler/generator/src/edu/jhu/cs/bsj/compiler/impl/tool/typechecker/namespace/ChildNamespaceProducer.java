@@ -1,8 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 /**
  * This interface is used to generalize the concept of producing a namespace for each environment child of a given node.

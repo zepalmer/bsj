@@ -15,16 +15,16 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitTypeVariableImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.thunk.BsjTypeArgumentThunk;
 import edu.jhu.cs.bsj.compiler.impl.utils.Converter;
 import edu.jhu.cs.bsj.compiler.impl.utils.UnmodifiableLazyList;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
 
 public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterNode> implements BsjTypeParameterElement
 {

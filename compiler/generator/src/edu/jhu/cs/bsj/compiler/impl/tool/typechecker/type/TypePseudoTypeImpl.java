@@ -4,8 +4,8 @@ import javax.lang.model.type.TypeKind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypePseudoType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypePseudoType;
 
 public class TypePseudoTypeImpl extends PseudoTypeImpl implements BsjTypePseudoType
 {

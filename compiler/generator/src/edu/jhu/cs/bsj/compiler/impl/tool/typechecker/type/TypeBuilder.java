@@ -3,9 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.lang.model.element.NestingKind;
 
@@ -13,7 +11,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
@@ -25,23 +22,22 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjActualType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNamedReferenceType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNoType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjNamedReferenceType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjNoType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjWildcardType;
 
 /**
  * This class is a utility which is used in the construction of type objects.
@@ -327,100 +323,6 @@ public class TypeBuilder
 		return new WildcardTypeImpl(this.manager, node);
 	}
 
-	/**
-	 * A cache for the {@link #makeMetaprogramClasspathType(Class)} method.
-	 */
-	private Map<Class<?>, BsjActualType> makeMetaprogramClasspathTypeCache = new HashMap<Class<?>, BsjActualType>();
-
-	/**
-	 * Creates a {@link BsjExplicitlyDeclaredType} representation of a class currently on the runtime's classpath.
-	 * 
-	 * @param clazz The class to use.
-	 * @return The type representing that class. If the class has type parameters, the returned type is raw.
-	 */
-	public BsjActualType makeMetaprogramClasspathType(Class<?> clazz)
-	{
-		BsjActualType ret = makeMetaprogramClasspathTypeCache.get(clazz);
-		if (ret == null)
-		{
-			if (clazz.isPrimitive())
-			{
-				if (clazz.equals(Byte.TYPE))
-				{
-					ret = this.manager.getToolkit().getByteType();
-				} else if (clazz.equals(Short.TYPE))
-				{
-					ret = this.manager.getToolkit().getShortType();
-				} else if (clazz.equals(Character.TYPE))
-				{
-					ret = this.manager.getToolkit().getCharType();
-				} else if (clazz.equals(Integer.TYPE))
-				{
-					ret = this.manager.getToolkit().getIntType();
-				} else if (clazz.equals(Long.TYPE))
-				{
-					ret = this.manager.getToolkit().getLongType();
-				} else if (clazz.equals(Float.TYPE))
-				{
-					ret = this.manager.getToolkit().getFloatType();
-				} else if (clazz.equals(Double.TYPE))
-				{
-					ret = this.manager.getToolkit().getDoubleType();
-				} else if (clazz.equals(Boolean.TYPE))
-				{
-					ret = this.manager.getToolkit().getBooleanType();
-				} else
-				{
-					throw new IllegalStateException("Unrecognized primitive type " + clazz);
-				}
-			} else if (clazz.getComponentType() != null)
-			{
-				ret = new ArrayTypeImpl(this.manager, makeMetaprogramClasspathType(clazz.getComponentType()));
-			} else
-			{
-				String name = clazz.getCanonicalName();
-				String[] nameParts = name.split("\\.");
-				PackageNode packageNode = this.manager.getRootPackage();
-				int index = 0;
-				NamedTypeDeclarationNode<?> decl = null;
-				while (index < nameParts.length)
-				{
-					decl = packageNode.getTopLevelTypeDeclaration(nameParts[index], this.manager.getLoader());
-					if (decl != null)
-					{
-						index++;
-						break;
-					}
-					packageNode = packageNode.getSubpackage(nameParts[index]);
-					index++;
-				}
-
-				do
-				{
-					if (decl == null)
-					{
-						// TODO: this should be a handleable error, right? what if the user somehow triggers this method
-						// with a bad metaprogram classpath such as by using raw code literals without the compiler API
-						// available?
-						throw new IllegalStateException("Could not find declaration for type "
-								+ clazz.getCanonicalName());
-					}
-					if (index < nameParts.length)
-					{
-						decl = decl.getTypeDeclaration(nameParts[index]);
-					}
-					index++;
-				} while (index <= nameParts.length);
-
-				ret = this.manager.getToolkit().makeElement(decl).asType().calculateErasure();
-			}
-
-			makeMetaprogramClasspathTypeCache.put(clazz, ret);
-		}
-
-		return ret;
-	}
-
 	private BsjExplicitlyDeclaredType makeDeclarationTypeFromDeclaration(NamedTypeDeclarationNode<?> typeDeclaration,
 			Collection<? extends TypeArgumentNode> typeArgumentNodes, BsjExplicitlyDeclaredType providedEnclosingType)
 	{
@@ -451,6 +353,6 @@ public class TypeBuilder
 			typeArguments = Collections.<BsjTypeArgument> emptyList();
 		}
 		
-		return this.manager.getTypeFactory().makeExplicitlyDeclaredType(typeElement, typeArguments, enclosingType);
+		return this.manager.getModelingFactory().makeExplicitlyDeclaredType(typeElement, typeArguments, enclosingType);
 	}
 }

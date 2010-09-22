@@ -12,8 +12,8 @@ import javax.lang.model.element.Name;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 
 public class EnumConstantVariableElementImpl extends AbstractVariableElementImpl<EnumConstantDeclarationNode>
 {

@@ -5,9 +5,10 @@ import javax.tools.DiagnosticListener;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceBuilder;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeFactory;
+import edu.jhu.cs.bsj.compiler.lang.BsjModelingFactory;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
 
 /**
  * This class represents the set of tools and logic which is necessary to perform BSJ typechecking.  Some operations
@@ -26,9 +27,9 @@ public class TypecheckerManager
 	/** The environment manager for this typechecker manager. */
 	private NamespaceBuilder namespaceBuilder;
 	/** The type checker for this typechecker manager. */
-	private Typechecker typechecker;
+	private BsjTypechecker typechecker;
 	/** The type factory used by this manager's components. */
-	private TypeFactory typeFactory;
+	private BsjModelingFactory modelingFactory;
 	
 	/**
 	 * Creates a new manager.
@@ -41,10 +42,10 @@ public class TypecheckerManager
 		this.rootPackage = rootPackage;
 		this.loader = loader;
 		
-		this.typeFactory = new TypeFactory(this);
+		this.modelingFactory = new ModelingFactoryImpl(this);
 		this.toolkit = new TypecheckerToolkit(this, loader);
 		this.namespaceBuilder = new NamespaceBuilder(this.rootPackage, diagnosticListener, this.loader, this.toolkit);
-		this.typechecker = new Typechecker(this, parser);
+		this.typechecker = new TypecheckerImpl(this, parser);
 	}
 
 	public CompilationUnitLoader getLoader()
@@ -67,13 +68,13 @@ public class TypecheckerManager
 		return namespaceBuilder;
 	}
 
-	public Typechecker getTypechecker()
+	public BsjTypechecker getTypechecker()
 	{
 		return typechecker;
 	}
 
-	public TypeFactory getTypeFactory()
+	public BsjModelingFactory getModelingFactory()
 	{
-		return typeFactory;
+		return modelingFactory;
 	}
 }

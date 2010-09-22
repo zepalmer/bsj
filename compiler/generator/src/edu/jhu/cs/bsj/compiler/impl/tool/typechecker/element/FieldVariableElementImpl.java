@@ -7,7 +7,7 @@ import javax.lang.model.element.Modifier;
 
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 public class FieldVariableElementImpl extends AbstractMemberVariableElementImpl<FieldDeclarationNode>
 {

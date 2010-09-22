@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 /**
  * This child namespace producer returns a namespace from a given mapping.  If the child node is not in the mapping, a

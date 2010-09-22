@@ -7,8 +7,8 @@ import javax.lang.model.element.ElementKind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractMemberVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 public abstract class AbstractMemberVariableElementImpl<T extends AbstractMemberVariableDeclarationNode<?>> extends
 		VariableDeclaratorOwnerElementImpl<T>

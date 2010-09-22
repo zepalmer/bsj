@@ -6,7 +6,7 @@ import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.SymbolType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
 
 /**
  * The type of namespace map used in the BSJ typechecker which stores the mappings for the type namespace.

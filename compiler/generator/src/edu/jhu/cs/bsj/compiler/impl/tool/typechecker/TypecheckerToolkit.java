@@ -19,15 +19,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PrimitiveTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuilder;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 public class TypecheckerToolkit

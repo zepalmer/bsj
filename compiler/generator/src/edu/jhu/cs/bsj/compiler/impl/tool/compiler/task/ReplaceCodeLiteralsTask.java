@@ -13,10 +13,10 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckerResult;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypecheckingMetadata;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckerMetadata;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckerResult;
 
 /**
  * This task replaces the code literals which appear in a given AST with equivalent factory method calls which will
@@ -68,7 +68,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 				context.getToolkit().getParser(), context.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
 						context.getDiagnosticListener()), context.getDiagnosticListener());
 		TypecheckerResult result = typecheckerManager.getTypechecker().typecheck(this.root);
-		TypecheckingMetadata metadata = result.getMetadata();
+		TypecheckerMetadata metadata = result.getMetadata();
 
 		final Map<Node, Node> nodeReplacementMap = new HashMap<Node, Node>();
 		this.root.receiveTyped(new CodeLiteralReplacementVisitor(nodeReplacementMap, context, metadata));
@@ -85,7 +85,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 	 * @param metadata The metadata from typechecking.
 	 * @return The code literal to use.
 	 */
-	private Node interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node, TypecheckingMetadata metadata)
+	private Node interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node, TypecheckerMetadata metadata)
 	{
 		BsjType inContextType;
 		if (metadata.getInContextType(node) == null)
@@ -165,11 +165,11 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 	{
 		private final Map<Node, Node> nodeReplacementMap;
 		private final MetacompilationContext context;
-		private final TypecheckingMetadata metadata;
+		private final TypecheckerMetadata metadata;
 		private int levels = 0;
 
 		private CodeLiteralReplacementVisitor(Map<Node, Node> nodeReplacementMap, MetacompilationContext context,
-				TypecheckingMetadata metadata)
+				TypecheckerMetadata metadata)
 		{
 			this.nodeReplacementMap = nodeReplacementMap;
 			this.context = context;

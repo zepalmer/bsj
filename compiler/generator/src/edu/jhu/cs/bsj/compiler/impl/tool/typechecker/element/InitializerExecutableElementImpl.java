@@ -14,12 +14,12 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.InitializerExecutableTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
 
 public class InitializerExecutableElementImpl extends AbstractExecutableElementImpl<InitializerDeclarationNode>
 {

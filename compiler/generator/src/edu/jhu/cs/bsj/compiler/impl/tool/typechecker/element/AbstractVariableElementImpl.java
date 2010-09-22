@@ -8,9 +8,9 @@ import javax.lang.model.element.ElementVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNameBindingNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 
 public abstract class AbstractVariableElementImpl<T extends VariableNameBindingNode> extends AbstractElementImpl<T> implements
 		BsjVariableElement

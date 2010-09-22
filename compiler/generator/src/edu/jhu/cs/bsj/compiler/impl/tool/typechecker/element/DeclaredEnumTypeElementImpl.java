@@ -16,12 +16,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 
 public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDeclarationNode>
 {
@@ -61,9 +61,9 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 				NamedTypeDeclarationNode.class);
 		BsjTypeElement enclosingTypeElement = makeElement(enclosingTypeDeclaration);
 		BsjExplicitlyDeclaredType enclosingTypeMirror = (BsjExplicitlyDeclaredType) enclosingTypeElement.asType();
-		BsjTypeArgument selfType = getManager().getTypeFactory().makeExplicitlyDeclaredType(this,
+		BsjTypeArgument selfType = getManager().getModelingFactory().makeExplicitlyDeclaredType(this,
 				Collections.<BsjTypeArgument> emptyList(), enclosingTypeMirror);
-		BsjType enumType = getManager().getTypeFactory().makeExplicitlyDeclaredType(enumElement,
+		BsjType enumType = getManager().getModelingFactory().makeExplicitlyDeclaredType(enumElement,
 				Collections.singletonList(selfType), null);
 		return enumType;
 	}

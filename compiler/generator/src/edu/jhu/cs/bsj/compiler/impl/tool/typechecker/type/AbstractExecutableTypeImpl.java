@@ -7,11 +7,11 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
 
 public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMirrorImpl implements
 		BsjExecutableType

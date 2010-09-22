@@ -8,7 +8,7 @@ import javax.lang.model.element.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 public class DeclaredClassTypeElementImpl extends AbstractlyUnmodifiedClassTypeElementImpl<ClassDeclarationNode>
 {

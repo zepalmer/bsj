@@ -22,10 +22,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjDeclaredTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 
 /**
  * A supertype for implementations of the {@link TypeElement} modeling interface for use in the BSJ type checker. This
@@ -119,7 +119,7 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 		}
 		BsjExplicitlyDeclaredType enclosingType = enclosingElement == null ? null
 				: ((BsjDeclaredTypeElement) enclosingElement).asType();
-		return getManager().getTypeFactory().makeExplicitlyDeclaredType(this, getPrototypicalTypeArgumentList(),
+		return getManager().getModelingFactory().makeExplicitlyDeclaredType(this, getPrototypicalTypeArgumentList(),
 				enclosingType);
 	}
 

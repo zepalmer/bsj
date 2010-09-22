@@ -5,12 +5,12 @@ import java.util.Map;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPrimitiveType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
 
 /**
  * A lazily-managed type implementation. This class accepts a function which will produce a {@link BsjTypeArgument}. It

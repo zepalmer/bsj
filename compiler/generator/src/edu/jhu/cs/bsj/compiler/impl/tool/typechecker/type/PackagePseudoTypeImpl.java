@@ -4,8 +4,8 @@ import javax.lang.model.type.TypeKind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjPackagePseudoType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjPackagePseudoType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 
 public class PackagePseudoTypeImpl extends PseudoTypeImpl implements BsjPackagePseudoType
 {

@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeBodyNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.typechecker.SymbolType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
 
 /**
  * This class defines a namespace map for method elements. TODO

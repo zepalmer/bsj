@@ -8,8 +8,8 @@ import javax.lang.model.element.ElementVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
 
 public abstract class AbstractExecutableElementImpl<T extends Node> extends AbstractElementImpl<T> implements
 		BsjExecutableElement

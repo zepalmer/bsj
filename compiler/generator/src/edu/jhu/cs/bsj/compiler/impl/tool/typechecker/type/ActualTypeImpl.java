@@ -1,8 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.CastCompatibility;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
 
 public abstract class ActualTypeImpl extends TypeMirrorImpl
 {

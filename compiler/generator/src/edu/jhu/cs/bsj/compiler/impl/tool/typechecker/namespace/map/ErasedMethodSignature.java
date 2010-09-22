@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjVariableElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 
 /**
  * A class representing the erased method signature of a method. This is used as the key value in the method namespace

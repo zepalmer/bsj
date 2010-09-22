@@ -1,14 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 
-/**
- * Objects of this class act as an environment for the BSJ type checker. They contain information which is not available
- * to the typechecking operation through the {@link TypecheckerManager}.
- * 
- * @author Zachary Palmer
- */
 public class TypecheckerEnvironment
 {
 	/**

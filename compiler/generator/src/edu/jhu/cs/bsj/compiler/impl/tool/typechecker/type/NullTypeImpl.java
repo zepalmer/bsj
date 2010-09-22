@@ -6,11 +6,11 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNullType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjNullType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
 
 public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 {

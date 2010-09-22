@@ -6,14 +6,14 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjActualType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjSelectionType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
-import edu.jhu.cs.bsj.compiler.impl.utils.Bag;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.UnmodifiableBag;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjSelectionType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.utils.Bag;
 
 /**
  * Implements a selection type for the BSJ typechecker.

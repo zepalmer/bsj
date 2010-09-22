@@ -1,8 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 /**
  * This child namespace producer always returns the same namespace regardless of which child is provided.

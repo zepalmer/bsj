@@ -6,6 +6,8 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoaderFactory;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypecheckerFactory;
 
 /**
  * This interface represents a collection of BSJ tools which are meant to be used together. As a general rule, a tool in
@@ -48,4 +50,9 @@ public interface BsjToolkit
 	 * @param listener The listener to use to report diagnostics.
 	 */
 	public CompilationUnitLoaderFactory getCompilationUnitLoaderFactory();
+	
+	/**
+	 * Retrieves a {@link BsjTypechecker} which can be used to typecheck ASTs produced by this toolkit's node factory.
+	 */
+	public BsjTypecheckerFactory getTypecheckerFactory();
 }

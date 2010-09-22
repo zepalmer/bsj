@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import javax.lang.model.type.TypeKind;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjNonePseudoType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjNonePseudoType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 
 public class NonePseudoTypeImpl extends PseudoTypeImpl implements BsjNonePseudoType
 {

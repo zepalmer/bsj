@@ -8,7 +8,7 @@ import javax.lang.model.element.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 public class DeclaredLocalClassTypeElementImpl extends
 		AbstractlyUnmodifiedClassTypeElementImpl<LocalClassDeclarationNode>

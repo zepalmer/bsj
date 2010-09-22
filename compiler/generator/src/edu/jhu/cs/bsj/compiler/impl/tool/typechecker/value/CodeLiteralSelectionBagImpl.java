@@ -6,13 +6,13 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.SelectionTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjActualType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjSelectionType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.value.api.SelectionBag;
-import edu.jhu.cs.bsj.compiler.impl.utils.Bag;
 import edu.jhu.cs.bsj.compiler.impl.utils.HashBag;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjSelectionType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
+import edu.jhu.cs.bsj.compiler.utils.Bag;
 
 /**
  * Implements the {@link SelectionBag} interface using functionality specifically intended to implement the code literal

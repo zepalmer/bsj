@@ -27,19 +27,19 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjExecutableElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeElement;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.api.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.MethodNamespaceMap;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjArrayType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExecutableType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjExplicitlyDeclaredType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjIntersectionType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjReferenceType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjType;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeArgument;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjTypeVariable;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.api.BsjWildcardType;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjWildcardType;
 
 /**
  * TODO: fix
@@ -100,7 +100,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 	public BsjExplicitlyDeclaredType calculateErasure()
 	{
 		BsjExplicitlyDeclaredType erasedEnclosingType = enclosingType == null ? null : enclosingType.calculateErasure();
-		return getManager().getTypeFactory().makeExplicitlyDeclaredType(this.typeElement,
+		return getManager().getModelingFactory().makeExplicitlyDeclaredType(this.typeElement,
 				Collections.<BsjTypeArgument> emptyList(), erasedEnclosingType);
 	}
 
@@ -387,7 +387,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				}
 			} else if (namedTypeDeclarationNode instanceof EnumDeclarationNode)
 			{
-				supertypes.add(getManager().getTypeFactory().makeExplicitlyDeclaredType(
+				supertypes.add(getManager().getModelingFactory().makeExplicitlyDeclaredType(
 						getManager().getToolkit().getEnumElement(), Collections.singletonList(this), null));
 			} else if (namedTypeDeclarationNode instanceof AnnotationDeclarationNode)
 			{
@@ -477,7 +477,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 				captureConversionArguments.add(typeArgument);
 			}
 		}
-		return getManager().getTypeFactory().makeExplicitlyDeclaredType(asElement(), captureConversionArguments,
+		return getManager().getModelingFactory().makeExplicitlyDeclaredType(asElement(), captureConversionArguments,
 				getEnclosingType());
 	}
 
@@ -560,7 +560,7 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
 			substitutedEnclosingType = null;
 		}
 
-		return getManager().getTypeFactory().makeExplicitlyDeclaredType(asElement(), typeArguments,
+		return getManager().getModelingFactory().makeExplicitlyDeclaredType(asElement(), typeArguments,
 				substitutedEnclosingType);
 	}
 
