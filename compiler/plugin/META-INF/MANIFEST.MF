@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BSJ Plugin
-Bundle-SymbolicName: edu.jhu.cs.bsj.plugin;singleton:=true
+Bundle-SymbolicName: edu.jhu.cs.bsj.eclipse.plugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: edu.jhu.cs.bsj.plugin.eclipse.Activator
 Require-Bundle: org.eclipse.ui,
