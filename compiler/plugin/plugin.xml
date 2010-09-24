@@ -7,9 +7,24 @@
             class="edu.jhu.cs.bsj.plugin.eclipse.editor.BSJEditor"
             default="true"
             extensions="bsj"
-            id="edu.jhu.bsj.plugin.eclipse.bsjeditor"
+            id="edu.jhu.bsj.plugin.eclipse.editor.bsjeditor"
             name="BSJ Editor">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.documentProviders">
+      <provider
+            class="org.eclipse.ui.editors.text.TextFileDocumentProvider"
+            extensions="bsj"
+            id="edu.jhu.bsj.plugin.eclipse.editor.documentprovider">
+      </provider>
+   </extension>
+   <extension
+         point="org.eclipse.core.filebuffers.documentSetup">
+      <participant
+            class="edu.jhu.cs.bsj.plugin.eclipse.editor.BSJDocumentSetupParticipant"
+            extensions="bsj">
+      </participant>
    </extension>
 
 </plugin>
