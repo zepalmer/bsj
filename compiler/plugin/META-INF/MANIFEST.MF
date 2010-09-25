@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: BSJ Plugin
 Bundle-SymbolicName: edu.jhu.cs.bsj.eclipse.plugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: edu.jhu.cs.bsj.plugin.eclipse.Activator
+Bundle-Activator: edu.jhu.cs.bsj.plugin.eclipse.BSJPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface.text;bundle-version="3.6.0",

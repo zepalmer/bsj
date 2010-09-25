@@ -11,7 +11,9 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;;
+import org.eclipse.swt.widgets.Display;
+
+import edu.jhu.cs.bsj.plugin.eclipse.codepartition.BSJPartitionScanner;
 
 public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	

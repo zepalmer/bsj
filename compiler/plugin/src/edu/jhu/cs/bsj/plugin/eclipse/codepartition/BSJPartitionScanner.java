@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.editor;
+package edu.jhu.cs.bsj.plugin.eclipse.codepartition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +11,11 @@ import org.eclipse.jface.text.rules.Token;
 
 public class BSJPartitionScanner extends RuleBasedPartitionScanner {
 	
-	public final static String BSJ_SINGLELINE_COMMENT = "__bsj__singleline_comment";
-	public final static String BSJ_MULTILINE_COMMENT = "__java_multiline_comment";
+	public final static String BSJ_SINGLELINE_COMMENT = "__bsj_singleline_comment";
+	public final static String BSJ_MULTILINE_COMMENT =  "__java_multiline_comment";
 	public final static String BSJ_JAVADOC = "__bsj_javadoc";
 	public final static String BSJ_METAPROGRAM = "__bsj_metaprogram";
 	public static final String[] BSJ_PARTITION_TYPES = new String[] {
-		BSJ_SINGLELINE_COMMENT,
 		BSJ_MULTILINE_COMMENT,
 		BSJ_JAVADOC,
 		BSJ_METAPROGRAM

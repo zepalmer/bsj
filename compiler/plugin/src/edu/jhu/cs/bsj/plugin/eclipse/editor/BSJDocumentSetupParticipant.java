@@ -6,7 +6,10 @@ import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 
+import edu.jhu.cs.bsj.plugin.eclipse.codepartition.BSJPartitionScanner;
+
 /**
+ * Set up the code partitioner
  * This doesn't work
  * @author luwei
  */

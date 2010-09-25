@@ -6,18 +6,18 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class BSJPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "BSJ_Eclipse_Plugin"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Activator plugin;
+	private static BSJPlugin plugin;
 	
 	/**
 	 * The constructor
 	 */
-	public Activator() {
+	public BSJPlugin() {
 	}
 
 	/*
@@ -43,7 +43,7 @@ public class Activator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static BSJPlugin getDefault() {
 		return plugin;
 	}
 
