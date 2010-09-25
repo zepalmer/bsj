@@ -6,7 +6,7 @@ import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 
-import edu.jhu.cs.bsj.plugin.eclipse.codepartition.BSJPartitionScanner;
+import edu.jhu.cs.bsj.plugin.eclipse.text.BSJPartitionScanner;
 
 /**
  * Set up the code partitioner

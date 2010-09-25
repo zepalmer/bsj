@@ -1,6 +1,9 @@
-package edu.jhu.cs.bsj.plugin.eclipse.codepartition;
+package edu.jhu.cs.bsj.plugin.eclipse.text;
 
-public interface IBSJPartitions {
+/**
+ * All the bsj partition constants
+ */
+public interface BSJPartitionConstants {
 	public static final String JAVA_CHARACTER = "__java_character";
 	public static final String JAVA_STRING = "__java_string";
 	public static final String JAVA_SINGLELINE_COMMENT = "__java_singleline_comment";

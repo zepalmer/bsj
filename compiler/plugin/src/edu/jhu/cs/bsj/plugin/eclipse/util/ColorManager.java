@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.editor;
+package edu.jhu.cs.bsj.plugin.eclipse.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,18 +11,18 @@ import org.eclipse.swt.widgets.Display;
  * Maintains a table of rgb-color pairs for reuse
  */
 public class ColorManager {
-	protected Map<RGB,Color> fColorTable = new HashMap<RGB,Color>(10);
+	protected Map<RGB,Color> colorTable = new HashMap<RGB,Color>(10);
 
 	public void dispose() {
-		for(Color color : fColorTable.values())
+		for(Color color : colorTable.values())
 			color.dispose();
 	}
 	
 	public Color getColor(RGB rgb) {
-		Color color = fColorTable.get(rgb);
+		Color color = colorTable.get(rgb);
 		if (color == null) {
 			color = new Color(Display.getCurrent(), rgb);
-			fColorTable.put(rgb, color);
+			colorTable.put(rgb, color);
 		}
 		return color;
 	}

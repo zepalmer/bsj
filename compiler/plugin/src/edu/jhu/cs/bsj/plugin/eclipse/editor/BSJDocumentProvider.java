@@ -6,7 +6,7 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
-import edu.jhu.cs.bsj.plugin.eclipse.codepartition.BSJPartitionScanner;
+import edu.jhu.cs.bsj.plugin.eclipse.text.BSJPartitionScanner;
 
 /**
  * Creates the BSJ Document Model
