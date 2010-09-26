@@ -1,6 +1,9 @@
 package edu.jhu.cs.bsj.plugin.eclipse.editor;
 
+import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
@@ -48,7 +51,13 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 		reconciler.setDamager(dr, BSJPartitionConstants.JAVA_JAVADOC);
 		reconciler.setRepairer(dr, BSJPartitionConstants.JAVA_JAVADOC);
 		
-		dr = new DefaultDamagerRepairer(new BSJMetaprogramScanner(new ColorManager()));
+		dr = new DefaultDamagerRepairer(new BSJMetaprogramScanner(new ColorManager())) {
+			@Override
+			public IRegion getDamageRegion(ITypedRegion partition,
+					DocumentEvent e, boolean documentPartitioningChanged) {
+				return super.getDamageRegion(partition, e, true);
+			}
+		};
 		reconciler.setDamager(dr, BSJPartitionConstants.BSJ_METAPROGRAM);
 		reconciler.setRepairer(dr, BSJPartitionConstants.BSJ_METAPROGRAM);
 		
