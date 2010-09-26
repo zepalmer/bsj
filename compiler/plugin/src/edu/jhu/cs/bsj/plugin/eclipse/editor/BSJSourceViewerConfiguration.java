@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import edu.jhu.cs.bsj.plugin.eclipse.text.BSJMetaprogramScanner;
 import edu.jhu.cs.bsj.plugin.eclipse.text.BSJPartitionConstants;
 import edu.jhu.cs.bsj.plugin.eclipse.text.JavaCodeScanner;
 import edu.jhu.cs.bsj.plugin.eclipse.util.ColorManager;
@@ -38,11 +39,6 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		
 		dr = new DefaultDamagerRepairer(new SingleTokenScanner(
-				new TextAttribute(new Color(Display.getCurrent(), new RGB(100,0,0)))));
-		reconciler.setDamager(dr, BSJPartitionConstants.JAVA_SINGLELINE_COMMENT);
-		reconciler.setRepairer(dr, BSJPartitionConstants.JAVA_SINGLELINE_COMMENT);
-
-		dr = new DefaultDamagerRepairer(new SingleTokenScanner(
 				new TextAttribute(new Color(Display.getCurrent(), new RGB(0,100,0)))));
 		reconciler.setDamager(dr, BSJPartitionConstants.JAVA_MULTILINE_COMMENT);
 		reconciler.setRepairer(dr, BSJPartitionConstants.JAVA_MULTILINE_COMMENT);
@@ -52,8 +48,7 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 		reconciler.setDamager(dr, BSJPartitionConstants.JAVA_JAVADOC);
 		reconciler.setRepairer(dr, BSJPartitionConstants.JAVA_JAVADOC);
 		
-		dr = new DefaultDamagerRepairer(new SingleTokenScanner(
-				new TextAttribute(new Color(Display.getCurrent(), new RGB(100,100,0)))));
+		dr = new DefaultDamagerRepairer(new BSJMetaprogramScanner(new ColorManager()));
 		reconciler.setDamager(dr, BSJPartitionConstants.BSJ_METAPROGRAM);
 		reconciler.setRepairer(dr, BSJPartitionConstants.BSJ_METAPROGRAM);
 		
