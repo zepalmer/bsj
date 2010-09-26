@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.plugin.eclipse.util.ColorManager;
 
 public class BSJMetaprogramScanner extends RuleBasedScanner {
 	
-	private static final String[] bsjKeywords = {"#depends", "#import", "#mode", "#target", "#weak"};
+	private static final String[] bsjKeywords = {"depends", "import", "mode", "target", "weak"};
 	
 	public BSJMetaprogramScanner(ColorManager colorManager) {
 		
@@ -22,11 +22,15 @@ public class BSJMetaprogramScanner extends RuleBasedScanner {
 		
 		List<IRule> rules = new ArrayList<IRule>();
 		
-		BSJKeywordRule keywordRule = new BSJKeywordRule(new BSJKeywordDetector());
+		BSJKeywordRule keywordRule = new BSJKeywordRule(new JavaWordDetector());
 		for(int i=0; i<bsjKeywords.length; i++)
 			keywordRule.addWord(bsjKeywords[i], keyword);
 		rules.add(keywordRule);
 		
+		/*
+		for(int i=0; i<bsjKeywords.length; i++)
+			rules.add(new BSJKeywordRule(bsjKeywords[i], keyword));
+		*/
 		IRule[] rulesArray = new IRule[rules.size()];
 		rules.toArray(rulesArray);
 		setRules(rulesArray);
