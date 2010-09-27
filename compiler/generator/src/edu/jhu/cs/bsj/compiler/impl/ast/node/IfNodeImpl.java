@@ -14,28 +14,30 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class IfNodeImpl extends NodeImpl implements IfNode
 {
     /** The condition. */
-    private ExpressionNode condition;
+    private NodeUnion<? extends ExpressionNode> condition;
     
     /** The then branch's statement. */
-    private StatementNode thenStatement;
+    private NodeUnion<? extends StatementNode> thenStatement;
     
     /** The else branch's statement. */
-    private StatementNode elseStatement;
+    private NodeUnion<? extends StatementNode> elseStatement;
     
     /** The meta-annotations associated with this node. */
-    private MetaAnnotationListNode metaAnnotations;
+    private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -62,29 +64,50 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     
     /** General constructor. */
     public IfNodeImpl(
-            ExpressionNode condition,
-            StatementNode thenStatement,
-            StatementNode elseStatement,
-            MetaAnnotationListNode metaAnnotations,
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> thenStatement,
+            NodeUnion<? extends StatementNode> elseStatement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setCondition(condition, false);
-        setThenStatement(thenStatement, false);
-        setElseStatement(elseStatement, false);
-        setMetaAnnotations(metaAnnotations, false);
+        setUnionForCondition(condition, false);
+        setUnionForThenStatement(thenStatement, false);
+        setUnionForElseStatement(elseStatement, false);
+        setUnionForMetaAnnotations(metaAnnotations, false);
+    }
+    
+    /**
+     * Gets the condition.  This property's value is assumed to be a normal node.
+     * @return The condition.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getCondition()
+    {
+        getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.condition == null)
+        {
+            return null;
+        } else
+        {
+            return this.condition.getNormalNode();
+        }
     }
     
     /**
      * Gets the condition.
      * @return The condition.
      */
-    public ExpressionNode getCondition()
+    public NodeUnion<? extends ExpressionNode> getUnionForCondition()
     {
         getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.condition == null)
+        {
+            this.condition = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.condition;
     }
     
@@ -105,18 +128,73 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.condition, false);
-        this.condition = condition;
+        
+        if (this.condition != null)
+        {
+            setAsChild(this.condition.getNodeValue(), false);
+        }
+        this.condition = new NormalNodeUnion<ExpressionNode>(condition);
         setAsChild(condition, true);
+    }
+    
+    /**
+     * Changes the condition.
+     * @param condition The condition.
+     */
+    public void setUnionForCondition(NodeUnion<? extends ExpressionNode> condition)
+    {
+            setUnionForCondition(condition, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForCondition(NodeUnion<? extends ExpressionNode> condition, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (condition == null)
+        {
+            throw new NullPointerException("Node union for property condition cannot be null.");
+        }
+        if (this.condition != null)
+        {
+            setAsChild(this.condition.getNodeValue(), false);
+        }
+        this.condition = condition;
+        setAsChild(condition.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the then branch's statement.  This property's value is assumed to be a normal node.
+     * @return The then branch's statement.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public StatementNode getThenStatement()
+    {
+        getAttribute(LocalAttribute.THEN_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.thenStatement == null)
+        {
+            return null;
+        } else
+        {
+            return this.thenStatement.getNormalNode();
+        }
     }
     
     /**
      * Gets the then branch's statement.
      * @return The then branch's statement.
      */
-    public StatementNode getThenStatement()
+    public NodeUnion<? extends StatementNode> getUnionForThenStatement()
     {
         getAttribute(LocalAttribute.THEN_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.thenStatement == null)
+        {
+            this.thenStatement = new NormalNodeUnion<StatementNode>(null);
+        }
         return this.thenStatement;
     }
     
@@ -137,18 +215,73 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.THEN_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.thenStatement, false);
-        this.thenStatement = thenStatement;
+        
+        if (this.thenStatement != null)
+        {
+            setAsChild(this.thenStatement.getNodeValue(), false);
+        }
+        this.thenStatement = new NormalNodeUnion<StatementNode>(thenStatement);
         setAsChild(thenStatement, true);
+    }
+    
+    /**
+     * Changes the then branch's statement.
+     * @param thenStatement The then branch's statement.
+     */
+    public void setUnionForThenStatement(NodeUnion<? extends StatementNode> thenStatement)
+    {
+            setUnionForThenStatement(thenStatement, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForThenStatement(NodeUnion<? extends StatementNode> thenStatement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.THEN_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (thenStatement == null)
+        {
+            throw new NullPointerException("Node union for property thenStatement cannot be null.");
+        }
+        if (this.thenStatement != null)
+        {
+            setAsChild(this.thenStatement.getNodeValue(), false);
+        }
+        this.thenStatement = thenStatement;
+        setAsChild(thenStatement.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the else branch's statement.  This property's value is assumed to be a normal node.
+     * @return The else branch's statement.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public StatementNode getElseStatement()
+    {
+        getAttribute(LocalAttribute.ELSE_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.elseStatement == null)
+        {
+            return null;
+        } else
+        {
+            return this.elseStatement.getNormalNode();
+        }
     }
     
     /**
      * Gets the else branch's statement.
      * @return The else branch's statement.
      */
-    public StatementNode getElseStatement()
+    public NodeUnion<? extends StatementNode> getUnionForElseStatement()
     {
         getAttribute(LocalAttribute.ELSE_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.elseStatement == null)
+        {
+            this.elseStatement = new NormalNodeUnion<StatementNode>(null);
+        }
         return this.elseStatement;
     }
     
@@ -169,18 +302,73 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ELSE_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.elseStatement, false);
-        this.elseStatement = elseStatement;
+        
+        if (this.elseStatement != null)
+        {
+            setAsChild(this.elseStatement.getNodeValue(), false);
+        }
+        this.elseStatement = new NormalNodeUnion<StatementNode>(elseStatement);
         setAsChild(elseStatement, true);
+    }
+    
+    /**
+     * Changes the else branch's statement.
+     * @param elseStatement The else branch's statement.
+     */
+    public void setUnionForElseStatement(NodeUnion<? extends StatementNode> elseStatement)
+    {
+            setUnionForElseStatement(elseStatement, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForElseStatement(NodeUnion<? extends StatementNode> elseStatement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ELSE_STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (elseStatement == null)
+        {
+            throw new NullPointerException("Node union for property elseStatement cannot be null.");
+        }
+        if (this.elseStatement != null)
+        {
+            setAsChild(this.elseStatement.getNodeValue(), false);
+        }
+        this.elseStatement = elseStatement;
+        setAsChild(elseStatement.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.  This property's value is assumed to be a normal node.
+     * @return The meta-annotations associated with this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            return null;
+        } else
+        {
+            return this.metaAnnotations.getNormalNode();
+        }
     }
     
     /**
      * Gets the meta-annotations associated with this node.
      * @return The meta-annotations associated with this node.
      */
-    public MetaAnnotationListNode getMetaAnnotations()
+    public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
         getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
+        }
         return this.metaAnnotations;
     }
     
@@ -201,9 +389,43 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
+        
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
         setAsChild(metaAnnotations, true);
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+            setUnionForMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (metaAnnotations == null)
+        {
+            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+        }
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations.getNodeValue(), true);
     }
     
     /**
@@ -217,21 +439,21 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.condition != null)
+        if (this.condition.getNodeValue() != null)
         {
-            this.condition.receive(visitor);
+            this.condition.getNodeValue().receive(visitor);
         }
-        if (this.thenStatement != null)
+        if (this.thenStatement.getNodeValue() != null)
         {
-            this.thenStatement.receive(visitor);
+            this.thenStatement.getNodeValue().receive(visitor);
         }
-        if (this.elseStatement != null)
+        if (this.elseStatement.getNodeValue() != null)
         {
-            this.elseStatement.receive(visitor);
+            this.elseStatement.getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receive(visitor);
+            this.metaAnnotations.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -254,21 +476,21 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.condition != null)
+        if (this.condition.getNodeValue() != null)
         {
-            this.condition.receiveTyped(visitor);
+            this.condition.getNodeValue().receiveTyped(visitor);
         }
-        if (this.thenStatement != null)
+        if (this.thenStatement.getNodeValue() != null)
         {
-            this.thenStatement.receiveTyped(visitor);
+            this.thenStatement.getNodeValue().receiveTyped(visitor);
         }
-        if (this.elseStatement != null)
+        if (this.elseStatement.getNodeValue() != null)
         {
-            this.elseStatement.receiveTyped(visitor);
+            this.elseStatement.getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receiveTyped(visitor);
+            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -318,7 +540,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getCondition(), getThenStatement(), getElseStatement(), getMetaAnnotations()});
+        return Arrays.asList(new Node[]{getUnionForCondition().getNodeValue(), getUnionForThenStatement().getNodeValue(), getUnionForElseStatement().getNodeValue(), getUnionForMetaAnnotations().getNodeValue()});
     }
     
     /**
@@ -331,16 +553,16 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("condition=");
-        sb.append(this.getCondition() == null? "null" : this.getCondition().getClass().getSimpleName());
+        sb.append(this.getUnionForCondition().getNodeValue() == null? "null" : this.getUnionForCondition().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("thenStatement=");
-        sb.append(this.getThenStatement() == null? "null" : this.getThenStatement().getClass().getSimpleName());
+        sb.append(this.getUnionForThenStatement().getNodeValue() == null? "null" : this.getUnionForThenStatement().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("elseStatement=");
-        sb.append(this.getElseStatement() == null? "null" : this.getElseStatement().getClass().getSimpleName());
+        sb.append(this.getUnionForElseStatement().getNodeValue() == null? "null" : this.getUnionForElseStatement().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -384,11 +606,107 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     @Override
     public IfNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionNode> conditionCopy;
+        switch (getUnionForCondition().getType())
+        {
+            case NORMAL:
+                if (getUnionForCondition().getNormalNode() == null)
+                {
+                    conditionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    conditionCopy = factory.makeNormalNodeUnion(getUnionForCondition().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForCondition().getSpliceNode() == null)
+                {
+                    conditionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    conditionCopy = factory.makeSpliceNodeUnion(getUnionForCondition().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForCondition().getType());
+        }
+        NodeUnion<? extends StatementNode> thenStatementCopy;
+        switch (getUnionForThenStatement().getType())
+        {
+            case NORMAL:
+                if (getUnionForThenStatement().getNormalNode() == null)
+                {
+                    thenStatementCopy = factory.<StatementNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    thenStatementCopy = factory.makeNormalNodeUnion(getUnionForThenStatement().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForThenStatement().getSpliceNode() == null)
+                {
+                    thenStatementCopy = factory.<StatementNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    thenStatementCopy = factory.makeSpliceNodeUnion(getUnionForThenStatement().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForThenStatement().getType());
+        }
+        NodeUnion<? extends StatementNode> elseStatementCopy;
+        switch (getUnionForElseStatement().getType())
+        {
+            case NORMAL:
+                if (getUnionForElseStatement().getNormalNode() == null)
+                {
+                    elseStatementCopy = factory.<StatementNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    elseStatementCopy = factory.makeNormalNodeUnion(getUnionForElseStatement().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForElseStatement().getSpliceNode() == null)
+                {
+                    elseStatementCopy = factory.<StatementNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    elseStatementCopy = factory.makeSpliceNodeUnion(getUnionForElseStatement().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForElseStatement().getType());
+        }
+        NodeUnion<? extends MetaAnnotationListNode> metaAnnotationsCopy;
+        switch (getUnionForMetaAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaAnnotations().getNormalNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeNormalNodeUnion(getUnionForMetaAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaAnnotations().getSpliceNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeSpliceNodeUnion(getUnionForMetaAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
+        }
         return factory.makeIfNode(
-                getCondition()==null?null:getCondition().deepCopy(factory),
-                getThenStatement()==null?null:getThenStatement().deepCopy(factory),
-                getElseStatement()==null?null:getElseStatement().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                conditionCopy,
+                thenStatementCopy,
+                elseStatementCopy,
+                metaAnnotationsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

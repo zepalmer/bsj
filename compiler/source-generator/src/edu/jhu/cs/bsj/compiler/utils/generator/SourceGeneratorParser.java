@@ -52,6 +52,10 @@ public class SourceGeneratorParser
 	{
 		SourceGenerationData data = parseOnly(file);
 
+		connectTypeDefinitionProperties(data.getTypes());
+		connectParameterizedPropertyBasedHierarchyDefinitionProperties(data.getDiagnostics());
+		connectParameterizedPropertyBasedHierarchyDefinitionProperties(data.getUserDiagnostics());
+
 		establishHierarchy(data.getTypes(), true);
 		establishHierarchy(data.getDiagnostics(), false);
 		establishHierarchy(data.getUserDiagnostics(), false);
@@ -60,7 +64,7 @@ public class SourceGeneratorParser
 
 		return data;
 	}
-	
+
 	private SourceGenerationData parseOnly(File file) throws IOException, ParserConfigurationException, SAXException
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -83,6 +87,30 @@ public class SourceGeneratorParser
 		SourceGenerationData data = handler.handle(topElement);
 
 		return data;
+	}
+
+	private void connectTypeDefinitionProperties(Collection<TypeDefinition> types)
+	{
+		connectParameterizedPropertyBasedHierarchyDefinitionProperties(types);
+		for (TypeDefinition def : types)
+		{
+			for (ConstantDefinition constant : def.getConstants())
+			{
+				constant.setParentDef(def);
+			}
+		}
+	}
+
+	private <T extends ParameterizedPropertyBasedHierarchyDefinition<T, U>, U extends AbstractPropertyDefinition<U>> void connectParameterizedPropertyBasedHierarchyDefinitionProperties(
+			Collection<T> definitions)
+	{
+		for (T def : definitions)
+		{
+			for (U prop : def.getProperties())
+			{
+				prop.setParentDef(def);
+			}
+		}
 	}
 
 	private <T extends HierarchyDefinition<T>> void establishHierarchy(Collection<T> definitions,
@@ -549,7 +577,7 @@ public class SourceGeneratorParser
 		}
 
 		protected abstract T create(Element e, String name, String baseType, String typeArg, String description,
-				String defaultExpression);
+				String defaultExpression, boolean allowUnion);
 
 		@Override
 		public T handle(Element e)
@@ -559,8 +587,20 @@ public class SourceGeneratorParser
 			String typeArg = getAttributeValue(e, "typeArg");
 			String description = getAttributeValue(e, "desc");
 			String defaultExpression = getAttributeValue(e, "default");
+			String allowUnionString = getAttributeValue(e, "allowUnion");
+			boolean allowUnion;
+			if (allowUnionString == null || allowUnionString.equalsIgnoreCase("true"))
+			{
+				allowUnion = true;
+			} else if (allowUnionString.equalsIgnoreCase("false"))
+			{
+				allowUnion = false;
+			} else
+			{
+				throw new IllegalStateException("Unrecognized allowUnion string: " + allowUnionString);
+			}
 
-			return create(e, name, baseType, typeArg, description, defaultExpression);
+			return create(e, name, baseType, typeArg, description, defaultExpression, allowUnion);
 		}
 	}
 
@@ -573,10 +613,10 @@ public class SourceGeneratorParser
 
 		@Override
 		protected PropertyDefinition create(Element e, String name, String baseType, String typeArg,
-				String description, String defaultExpression)
+				String description, String defaultExpression, boolean allowUnion)
 		{
 			ModalPropertyDefinition.Mode mode = getPropertyModeFromString(this.profile, getAttributeValue(e, "mode"));
-			return new PropertyDefinition(name, baseType, typeArg, mode, description, defaultExpression);
+			return new PropertyDefinition(name, baseType, typeArg, mode, description, defaultExpression, allowUnion);
 		}
 	}
 
@@ -589,9 +629,9 @@ public class SourceGeneratorParser
 
 		@Override
 		protected ConstantDefinition create(Element e, String name, String baseType, String typeArg,
-				String description, String defaultExpression)
+				String description, String defaultExpression, boolean allowUnion)
 		{
-			return new ConstantDefinition(name, baseType, typeArg, description, defaultExpression);
+			return new ConstantDefinition(name, baseType, typeArg, description, defaultExpression, allowUnion);
 		}
 	}
 
@@ -604,7 +644,7 @@ public class SourceGeneratorParser
 
 		@Override
 		protected DiagnosticPropertyDefinition create(Element e, String name, String baseType, String typeArg,
-				String description, String defaultExpression)
+				String description, String defaultExpression, boolean allowUnion)
 		{
 			ModalPropertyDefinition.Mode mode = getPropertyModeFromString(this.profile, getAttributeValue(e, "mode"));
 

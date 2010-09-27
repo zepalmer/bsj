@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableAccessNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNode
 {
     /** The expression from which the variable is being selected. */
-    private PrimaryExpressionNode expression;
+    private NodeUnion<? extends PrimaryExpressionNode> expression;
     
     /** The name of the variable. */
-    private IdentifierNode identifier;
+    private NodeUnion<? extends IdentifierNode> identifier;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
     
     /** General constructor. */
     public VariableAccessNodeImpl(
-            PrimaryExpressionNode expression,
-            IdentifierNode identifier,
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setExpression(expression, false);
-        setIdentifier(identifier, false);
+        setUnionForExpression(expression, false);
+        setUnionForIdentifier(identifier, false);
+    }
+    
+    /**
+     * Gets the expression from which the variable is being selected.  This property's value is assumed to be a normal node.
+     * @return The expression from which the variable is being selected.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public PrimaryExpressionNode getExpression()
+    {
+        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            return null;
+        } else
+        {
+            return this.expression.getNormalNode();
+        }
     }
     
     /**
      * Gets the expression from which the variable is being selected.
      * @return The expression from which the variable is being selected.
      */
-    public PrimaryExpressionNode getExpression()
+    public NodeUnion<? extends PrimaryExpressionNode> getUnionForExpression()
     {
         getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            this.expression = new NormalNodeUnion<PrimaryExpressionNode>(null);
+        }
         return this.expression;
     }
     
@@ -90,18 +113,73 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.expression, false);
-        this.expression = expression;
+        
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = new NormalNodeUnion<PrimaryExpressionNode>(expression);
         setAsChild(expression, true);
+    }
+    
+    /**
+     * Changes the expression from which the variable is being selected.
+     * @param expression The expression from which the variable is being selected.
+     */
+    public void setUnionForExpression(NodeUnion<? extends PrimaryExpressionNode> expression)
+    {
+            setUnionForExpression(expression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForExpression(NodeUnion<? extends PrimaryExpressionNode> expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (expression == null)
+        {
+            throw new NullPointerException("Node union for property expression cannot be null.");
+        }
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = expression;
+        setAsChild(expression.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the name of the variable.  This property's value is assumed to be a normal node.
+     * @return The name of the variable.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            return null;
+        } else
+        {
+            return this.identifier.getNormalNode();
+        }
     }
     
     /**
      * Gets the name of the variable.
      * @return The name of the variable.
      */
-    public IdentifierNode getIdentifier()
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
         getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            this.identifier = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.identifier;
     }
     
@@ -122,9 +200,43 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.identifier, false);
-        this.identifier = identifier;
+        
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
         setAsChild(identifier, true);
+    }
+    
+    /**
+     * Changes the name of the variable.
+     * @param identifier The name of the variable.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
+    {
+            setUnionForIdentifier(identifier, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (identifier == null)
+        {
+            throw new NullPointerException("Node union for property identifier cannot be null.");
+        }
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = identifier;
+        setAsChild(identifier.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receive(visitor);
+            this.expression.getNodeValue().receive(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receive(visitor);
+            this.identifier.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receiveTyped(visitor);
+            this.expression.getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receiveTyped(visitor);
+            this.identifier.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -222,7 +334,7 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getExpression(), getIdentifier()});
+        return Arrays.asList(new Node[]{getUnionForExpression().getNodeValue(), getUnionForIdentifier().getNodeValue()});
     }
     
     /**
@@ -235,10 +347,10 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("expression=");
-        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -282,9 +394,57 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
     @Override
     public VariableAccessNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends PrimaryExpressionNode> expressionCopy;
+        switch (getUnionForExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForExpression().getNormalNode() == null)
+                {
+                    expressionCopy = factory.<PrimaryExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeNormalNodeUnion(getUnionForExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForExpression().getSpliceNode() == null)
+                {
+                    expressionCopy = factory.<PrimaryExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeSpliceNodeUnion(getUnionForExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
+        }
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
         return factory.makeVariableAccessNode(
-                getExpression()==null?null:getExpression().deepCopy(factory),
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                expressionCopy,
+                identifierCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -160,12 +160,22 @@ public abstract class ParameterizedPropertyBasedHierarchyDefinition<T extends Pr
 	@Override
 	public List<U> getRecursiveProperties(boolean parentFirst)
 	{
-		List<U> props = super.getRecursiveProperties(parentFirst);
+		return typeArgFilter(super.getRecursiveProperties(parentFirst));
+	}
+	
+	@Override
+	public List<U> getResponsibleProperties(boolean parentFirst)
+	{
+		return typeArgFilter(super.getResponsibleProperties(parentFirst));
+	}
+
+	private <V extends AbstractPropertyDefinition<V>> List<V> typeArgFilter(List<V> props)
+	{
 		Map<String, String> typeArgMap = getTypeArgMap();
 
 		for (int i = 0; i < props.size(); i++)
 		{
-			U propdef = props.get(i);
+			V propdef = props.get(i);
 			if (typeArgMap.containsKey(propdef.getBaseType()))
 			{
 				propdef = propdef.deriveWithBaseType(typeArgMap.get(propdef.getBaseType()));

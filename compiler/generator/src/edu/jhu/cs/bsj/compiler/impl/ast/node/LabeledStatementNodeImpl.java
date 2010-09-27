@@ -14,25 +14,27 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStatementNode
 {
     /** The statement's label. */
-    private IdentifierNode label;
+    private NodeUnion<? extends IdentifierNode> label;
     
     /** The statement being labeled. */
-    private StatementNode statement;
+    private NodeUnion<? extends StatementNode> statement;
     
     /** The meta-annotations associated with this node. */
-    private MetaAnnotationListNode metaAnnotations;
+    private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -57,27 +59,48 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     
     /** General constructor. */
     public LabeledStatementNodeImpl(
-            IdentifierNode label,
-            StatementNode statement,
-            MetaAnnotationListNode metaAnnotations,
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setLabel(label, false);
-        setStatement(statement, false);
-        setMetaAnnotations(metaAnnotations, false);
+        setUnionForLabel(label, false);
+        setUnionForStatement(statement, false);
+        setUnionForMetaAnnotations(metaAnnotations, false);
+    }
+    
+    /**
+     * Gets the statement's label.  This property's value is assumed to be a normal node.
+     * @return The statement's label.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierNode getLabel()
+    {
+        getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.label == null)
+        {
+            return null;
+        } else
+        {
+            return this.label.getNormalNode();
+        }
     }
     
     /**
      * Gets the statement's label.
      * @return The statement's label.
      */
-    public IdentifierNode getLabel()
+    public NodeUnion<? extends IdentifierNode> getUnionForLabel()
     {
         getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.label == null)
+        {
+            this.label = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.label;
     }
     
@@ -98,18 +121,73 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.label, false);
-        this.label = label;
+        
+        if (this.label != null)
+        {
+            setAsChild(this.label.getNodeValue(), false);
+        }
+        this.label = new NormalNodeUnion<IdentifierNode>(label);
         setAsChild(label, true);
+    }
+    
+    /**
+     * Changes the statement's label.
+     * @param label The statement's label.
+     */
+    public void setUnionForLabel(NodeUnion<? extends IdentifierNode> label)
+    {
+            setUnionForLabel(label, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForLabel(NodeUnion<? extends IdentifierNode> label, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (label == null)
+        {
+            throw new NullPointerException("Node union for property label cannot be null.");
+        }
+        if (this.label != null)
+        {
+            setAsChild(this.label.getNodeValue(), false);
+        }
+        this.label = label;
+        setAsChild(label.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the statement being labeled.  This property's value is assumed to be a normal node.
+     * @return The statement being labeled.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public StatementNode getStatement()
+    {
+        getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.statement == null)
+        {
+            return null;
+        } else
+        {
+            return this.statement.getNormalNode();
+        }
     }
     
     /**
      * Gets the statement being labeled.
      * @return The statement being labeled.
      */
-    public StatementNode getStatement()
+    public NodeUnion<? extends StatementNode> getUnionForStatement()
     {
         getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.statement == null)
+        {
+            this.statement = new NormalNodeUnion<StatementNode>(null);
+        }
         return this.statement;
     }
     
@@ -130,18 +208,73 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.statement, false);
-        this.statement = statement;
+        
+        if (this.statement != null)
+        {
+            setAsChild(this.statement.getNodeValue(), false);
+        }
+        this.statement = new NormalNodeUnion<StatementNode>(statement);
         setAsChild(statement, true);
+    }
+    
+    /**
+     * Changes the statement being labeled.
+     * @param statement The statement being labeled.
+     */
+    public void setUnionForStatement(NodeUnion<? extends StatementNode> statement)
+    {
+            setUnionForStatement(statement, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForStatement(NodeUnion<? extends StatementNode> statement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (statement == null)
+        {
+            throw new NullPointerException("Node union for property statement cannot be null.");
+        }
+        if (this.statement != null)
+        {
+            setAsChild(this.statement.getNodeValue(), false);
+        }
+        this.statement = statement;
+        setAsChild(statement.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.  This property's value is assumed to be a normal node.
+     * @return The meta-annotations associated with this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            return null;
+        } else
+        {
+            return this.metaAnnotations.getNormalNode();
+        }
     }
     
     /**
      * Gets the meta-annotations associated with this node.
      * @return The meta-annotations associated with this node.
      */
-    public MetaAnnotationListNode getMetaAnnotations()
+    public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
         getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
+        }
         return this.metaAnnotations;
     }
     
@@ -162,9 +295,43 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
+        
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
         setAsChild(metaAnnotations, true);
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+            setUnionForMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (metaAnnotations == null)
+        {
+            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+        }
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations.getNodeValue(), true);
     }
     
     /**
@@ -178,17 +345,17 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.label != null)
+        if (this.label.getNodeValue() != null)
         {
-            this.label.receive(visitor);
+            this.label.getNodeValue().receive(visitor);
         }
-        if (this.statement != null)
+        if (this.statement.getNodeValue() != null)
         {
-            this.statement.receive(visitor);
+            this.statement.getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receive(visitor);
+            this.metaAnnotations.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -211,17 +378,17 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.label != null)
+        if (this.label.getNodeValue() != null)
         {
-            this.label.receiveTyped(visitor);
+            this.label.getNodeValue().receiveTyped(visitor);
         }
-        if (this.statement != null)
+        if (this.statement.getNodeValue() != null)
         {
-            this.statement.receiveTyped(visitor);
+            this.statement.getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receiveTyped(visitor);
+            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -270,7 +437,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getLabel(), getStatement(), getMetaAnnotations()});
+        return Arrays.asList(new Node[]{getUnionForLabel().getNodeValue(), getUnionForStatement().getNodeValue(), getUnionForMetaAnnotations().getNodeValue()});
     }
     
     /**
@@ -283,13 +450,13 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("label=");
-        sb.append(this.getLabel() == null? "null" : this.getLabel().getClass().getSimpleName());
+        sb.append(this.getUnionForLabel().getNodeValue() == null? "null" : this.getUnionForLabel().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("statement=");
-        sb.append(this.getStatement() == null? "null" : this.getStatement().getClass().getSimpleName());
+        sb.append(this.getUnionForStatement().getNodeValue() == null? "null" : this.getUnionForStatement().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -333,10 +500,82 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     @Override
     public LabeledStatementNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends IdentifierNode> labelCopy;
+        switch (getUnionForLabel().getType())
+        {
+            case NORMAL:
+                if (getUnionForLabel().getNormalNode() == null)
+                {
+                    labelCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    labelCopy = factory.makeNormalNodeUnion(getUnionForLabel().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForLabel().getSpliceNode() == null)
+                {
+                    labelCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    labelCopy = factory.makeSpliceNodeUnion(getUnionForLabel().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForLabel().getType());
+        }
+        NodeUnion<? extends StatementNode> statementCopy;
+        switch (getUnionForStatement().getType())
+        {
+            case NORMAL:
+                if (getUnionForStatement().getNormalNode() == null)
+                {
+                    statementCopy = factory.<StatementNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    statementCopy = factory.makeNormalNodeUnion(getUnionForStatement().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForStatement().getSpliceNode() == null)
+                {
+                    statementCopy = factory.<StatementNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    statementCopy = factory.makeSpliceNodeUnion(getUnionForStatement().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForStatement().getType());
+        }
+        NodeUnion<? extends MetaAnnotationListNode> metaAnnotationsCopy;
+        switch (getUnionForMetaAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaAnnotations().getNormalNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeNormalNodeUnion(getUnionForMetaAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaAnnotations().getSpliceNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeSpliceNodeUnion(getUnionForMetaAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
+        }
         return factory.makeLabeledStatementNode(
-                getLabel()==null?null:getLabel().deepCopy(factory),
-                getStatement()==null?null:getStatement().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                labelCopy,
+                statementCopy,
+                metaAnnotationsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

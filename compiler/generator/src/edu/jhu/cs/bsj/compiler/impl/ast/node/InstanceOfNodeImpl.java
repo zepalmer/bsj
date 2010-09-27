@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
 {
     /** The expression being evaluated. */
-    private ExpressionNode expression;
+    private NodeUnion<? extends ExpressionNode> expression;
     
     /** The type being checked. */
-    private TypeNode type;
+    private NodeUnion<? extends TypeNode> type;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     
     /** General constructor. */
     public InstanceOfNodeImpl(
-            ExpressionNode expression,
-            TypeNode type,
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setExpression(expression, false);
-        setType(type, false);
+        setUnionForExpression(expression, false);
+        setUnionForType(type, false);
+    }
+    
+    /**
+     * Gets the expression being evaluated.  This property's value is assumed to be a normal node.
+     * @return The expression being evaluated.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getExpression()
+    {
+        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            return null;
+        } else
+        {
+            return this.expression.getNormalNode();
+        }
     }
     
     /**
      * Gets the expression being evaluated.
      * @return The expression being evaluated.
      */
-    public ExpressionNode getExpression()
+    public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
         getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            this.expression = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.expression;
     }
     
@@ -90,18 +113,73 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.expression, false);
-        this.expression = expression;
+        
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
         setAsChild(expression, true);
+    }
+    
+    /**
+     * Changes the expression being evaluated.
+     * @param expression The expression being evaluated.
+     */
+    public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
+    {
+            setUnionForExpression(expression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (expression == null)
+        {
+            throw new NullPointerException("Node union for property expression cannot be null.");
+        }
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = expression;
+        setAsChild(expression.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the type being checked.  This property's value is assumed to be a normal node.
+     * @return The type being checked.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public TypeNode getType()
+    {
+        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            return null;
+        } else
+        {
+            return this.type.getNormalNode();
+        }
     }
     
     /**
      * Gets the type being checked.
      * @return The type being checked.
      */
-    public TypeNode getType()
+    public NodeUnion<? extends TypeNode> getUnionForType()
     {
         getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            this.type = new NormalNodeUnion<TypeNode>(null);
+        }
         return this.type;
     }
     
@@ -122,9 +200,43 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.type, false);
-        this.type = type;
+        
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = new NormalNodeUnion<TypeNode>(type);
         setAsChild(type, true);
+    }
+    
+    /**
+     * Changes the type being checked.
+     * @param type The type being checked.
+     */
+    public void setUnionForType(NodeUnion<? extends TypeNode> type)
+    {
+            setUnionForType(type, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForType(NodeUnion<? extends TypeNode> type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (type == null)
+        {
+            throw new NullPointerException("Node union for property type cannot be null.");
+        }
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = type;
+        setAsChild(type.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receive(visitor);
+            this.expression.getNodeValue().receive(visitor);
         }
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receive(visitor);
+            this.type.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receiveTyped(visitor);
+            this.expression.getNodeValue().receiveTyped(visitor);
         }
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receiveTyped(visitor);
+            this.type.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -222,7 +334,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getExpression(), getType()});
+        return Arrays.asList(new Node[]{getUnionForExpression().getNodeValue(), getUnionForType().getNodeValue()});
     }
     
     /**
@@ -235,10 +347,10 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("expression=");
-        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("type=");
-        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
+        sb.append(this.getUnionForType().getNodeValue() == null? "null" : this.getUnionForType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -282,9 +394,57 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     @Override
     public InstanceOfNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionNode> expressionCopy;
+        switch (getUnionForExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForExpression().getNormalNode() == null)
+                {
+                    expressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeNormalNodeUnion(getUnionForExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForExpression().getSpliceNode() == null)
+                {
+                    expressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeSpliceNodeUnion(getUnionForExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
+        }
+        NodeUnion<? extends TypeNode> typeCopy;
+        switch (getUnionForType().getType())
+        {
+            case NORMAL:
+                if (getUnionForType().getNormalNode() == null)
+                {
+                    typeCopy = factory.<TypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeCopy = factory.makeNormalNodeUnion(getUnionForType().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForType().getSpliceNode() == null)
+                {
+                    typeCopy = factory.<TypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeCopy = factory.makeSpliceNodeUnion(getUnionForType().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForType().getType());
+        }
         return factory.makeInstanceOfNode(
-                getExpression()==null?null:getExpression().deepCopy(factory),
-                getType()==null?null:getType().deepCopy(factory),
+                expressionCopy,
+                typeCopy,
                 getStartLocation(),
                 getStopLocation());
     }

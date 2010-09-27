@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CatchNodeImpl extends NodeImpl implements CatchNode
 {
     /** The block statements to try. */
-    private BlockStatementListNode body;
+    private NodeUnion<? extends BlockStatementListNode> body;
     
     /** This catch block's exception variable. */
-    private VariableNode parameter;
+    private NodeUnion<? extends VariableNode> parameter;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     
     /** General constructor. */
     public CatchNodeImpl(
-            BlockStatementListNode body,
-            VariableNode parameter,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends VariableNode> parameter,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setBody(body, false);
-        setParameter(parameter, false);
+        setUnionForBody(body, false);
+        setUnionForParameter(parameter, false);
+    }
+    
+    /**
+     * Gets the block statements to try.  This property's value is assumed to be a normal node.
+     * @return The block statements to try.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public BlockStatementListNode getBody()
+    {
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            return null;
+        } else
+        {
+            return this.body.getNormalNode();
+        }
     }
     
     /**
      * Gets the block statements to try.
      * @return The block statements to try.
      */
-    public BlockStatementListNode getBody()
+    public NodeUnion<? extends BlockStatementListNode> getUnionForBody()
     {
         getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            this.body = new NormalNodeUnion<BlockStatementListNode>(null);
+        }
         return this.body;
     }
     
@@ -90,18 +113,73 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.body, false);
-        this.body = body;
+        
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = new NormalNodeUnion<BlockStatementListNode>(body);
         setAsChild(body, true);
+    }
+    
+    /**
+     * Changes the block statements to try.
+     * @param body The block statements to try.
+     */
+    public void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body)
+    {
+            setUnionForBody(body, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (body == null)
+        {
+            throw new NullPointerException("Node union for property body cannot be null.");
+        }
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = body;
+        setAsChild(body.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets this catch block's exception variable.  This property's value is assumed to be a normal node.
+     * @return This catch block's exception variable.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public VariableNode getParameter()
+    {
+        getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.parameter == null)
+        {
+            return null;
+        } else
+        {
+            return this.parameter.getNormalNode();
+        }
     }
     
     /**
      * Gets this catch block's exception variable.
      * @return This catch block's exception variable.
      */
-    public VariableNode getParameter()
+    public NodeUnion<? extends VariableNode> getUnionForParameter()
     {
         getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.parameter == null)
+        {
+            this.parameter = new NormalNodeUnion<VariableNode>(null);
+        }
         return this.parameter;
     }
     
@@ -122,9 +200,43 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.parameter, false);
-        this.parameter = parameter;
+        
+        if (this.parameter != null)
+        {
+            setAsChild(this.parameter.getNodeValue(), false);
+        }
+        this.parameter = new NormalNodeUnion<VariableNode>(parameter);
         setAsChild(parameter, true);
+    }
+    
+    /**
+     * Changes this catch block's exception variable.
+     * @param parameter This catch block's exception variable.
+     */
+    public void setUnionForParameter(NodeUnion<? extends VariableNode> parameter)
+    {
+            setUnionForParameter(parameter, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForParameter(NodeUnion<? extends VariableNode> parameter, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (parameter == null)
+        {
+            throw new NullPointerException("Node union for property parameter cannot be null.");
+        }
+        if (this.parameter != null)
+        {
+            setAsChild(this.parameter.getNodeValue(), false);
+        }
+        this.parameter = parameter;
+        setAsChild(parameter.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receive(visitor);
+            this.body.getNodeValue().receive(visitor);
         }
-        if (this.parameter != null)
+        if (this.parameter.getNodeValue() != null)
         {
-            this.parameter.receive(visitor);
+            this.parameter.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receiveTyped(visitor);
+            this.body.getNodeValue().receiveTyped(visitor);
         }
-        if (this.parameter != null)
+        if (this.parameter.getNodeValue() != null)
         {
-            this.parameter.receiveTyped(visitor);
+            this.parameter.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -220,7 +332,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getBody(), getParameter()});
+        return Arrays.asList(new Node[]{getUnionForBody().getNodeValue(), getUnionForParameter().getNodeValue()});
     }
     
     /**
@@ -233,10 +345,10 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("parameter=");
-        sb.append(this.getParameter() == null? "null" : this.getParameter().getClass().getSimpleName());
+        sb.append(this.getUnionForParameter().getNodeValue() == null? "null" : this.getUnionForParameter().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -280,9 +392,57 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     @Override
     public CatchNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends BlockStatementListNode> bodyCopy;
+        switch (getUnionForBody().getType())
+        {
+            case NORMAL:
+                if (getUnionForBody().getNormalNode() == null)
+                {
+                    bodyCopy = factory.<BlockStatementListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeNormalNodeUnion(getUnionForBody().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBody().getSpliceNode() == null)
+                {
+                    bodyCopy = factory.<BlockStatementListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeSpliceNodeUnion(getUnionForBody().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
+        }
+        NodeUnion<? extends VariableNode> parameterCopy;
+        switch (getUnionForParameter().getType())
+        {
+            case NORMAL:
+                if (getUnionForParameter().getNormalNode() == null)
+                {
+                    parameterCopy = factory.<VariableNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    parameterCopy = factory.makeNormalNodeUnion(getUnionForParameter().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForParameter().getSpliceNode() == null)
+                {
+                    parameterCopy = factory.<VariableNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    parameterCopy = factory.makeSpliceNodeUnion(getUnionForParameter().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForParameter().getType());
+        }
         return factory.makeCatchNode(
-                getBody()==null?null:getBody().deepCopy(factory),
-                getParameter()==null?null:getParameter().deepCopy(factory),
+                bodyCopy,
+                parameterCopy,
                 getStartLocation(),
                 getStopLocation());
     }

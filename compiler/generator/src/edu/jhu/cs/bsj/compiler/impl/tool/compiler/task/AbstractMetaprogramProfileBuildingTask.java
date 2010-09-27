@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.impl.operations.EnclosingNameNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 
-public abstract class AbstractMetaprogramProfileBuildingTask<A extends MetaprogramAnchorNode<?>> extends
+public abstract class AbstractMetaprogramProfileBuildingTask<A extends MetaprogramAnchorNode<B>, B extends Node> extends
 		AbstractBsjCompilerTask
 {
 	/** A field containing the factory which should be used as this task is executing. */
@@ -38,7 +38,7 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 		this.metacompilationContext = context;
 
 		// Build a metaprogram profile for this anchor
-		MetaprogramProfile<?> profile = buildProfile(context);
+		MetaprogramProfile<?,?> profile = buildProfile(context);
 		if (profile == null)
 		{
 			return;
@@ -93,5 +93,5 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 	 *         profile's construction.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	protected abstract MetaprogramProfile<A> buildProfile(MetacompilationContext context) throws IOException;
+	protected abstract MetaprogramProfile<A,B> buildProfile(MetacompilationContext context) throws IOException;
 }

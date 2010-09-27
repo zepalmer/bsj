@@ -130,7 +130,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	@Override
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context) {
+	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context) {
 		// Prelude/preparation
 		// get anchor and such
 		// This is the factory that allows us to build new AST parts.
@@ -321,7 +321,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		List<MethodDeclarationNode> returnValue = new ArrayList<MethodDeclarationNode>();
 
 		NameNode name = getNameFromType(callerType);
-		Context<?> context = BsjServiceRegistry.getThreadLocalData().get(BsjThreadLocalData.Element.CONTEXT);
+		Context<?,?> context = BsjServiceRegistry.getThreadLocalData().get(BsjThreadLocalData.Element.CONTEXT);
 //		NamedTypeDeclarationNode<?> type = new TypeDeclarationLocatingNodeOperation(
 //				name, context.getCompilationUnitLoader()).executeDefault(anchor, null);
 		Collection<? extends Node> declarations = typeScopeNode.getDeclarationsInScope(name);

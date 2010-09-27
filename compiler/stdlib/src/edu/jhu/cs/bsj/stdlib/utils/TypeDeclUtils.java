@@ -42,7 +42,7 @@ public class TypeDeclUtils
      * @return an IdentifierNode corresponding to the enclosing class for the context.
      */
     public static IdentifierNode getEnclosingTypeName(
-            Context<MetaAnnotationMetaprogramAnchorNode> context,
+            Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
             AbstractBsjMetaAnnotationMetaprogram caller)
     {
         // Find our enclosing type declaration. It must be an enum, class, or interface for this to work.
@@ -80,7 +80,7 @@ public class TypeDeclUtils
      * @return a list of class members of the enclosing class.
      */
     public static ClassMemberListNode getClassMembers(
-            Context<MetaAnnotationMetaprogramAnchorNode> context,
+            Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
             AbstractBsjMetaAnnotationMetaprogram caller)
     {
         // Find our enclosing type declaration. It must be an enum or a class for this to work.

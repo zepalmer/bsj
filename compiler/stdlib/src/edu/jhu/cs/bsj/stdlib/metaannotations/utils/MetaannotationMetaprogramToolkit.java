@@ -29,10 +29,10 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 public class MetaannotationMetaprogramToolkit {
 	private AbstractBsjMetaAnnotationMetaprogram program;
-	private Context<MetaAnnotationMetaprogramAnchorNode> context;
+	private Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context;
 	public MetaannotationMetaprogramToolkit(
 			AbstractBsjMetaAnnotationMetaprogram program,
-			Context<MetaAnnotationMetaprogramAnchorNode> context) {
+			Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context) {
 		super();
 		this.program = program;
 		this.context = context;

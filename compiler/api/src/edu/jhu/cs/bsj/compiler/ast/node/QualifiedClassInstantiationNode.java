@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 
 /**
@@ -35,8 +36,15 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
     /**
      * Gets the expression enclosing the non-static inner class.
      * @return The expression enclosing the non-static inner class.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getEnclosingExpression();
+    public ExpressionNode getEnclosingExpression() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the expression enclosing the non-static inner class.
+     * @return A union object representing The expression enclosing the non-static inner class.
+     */
+    public NodeUnion<? extends ExpressionNode> getUnionForEnclosingExpression();
     
     /**
      * Changes the expression enclosing the non-static inner class.
@@ -45,10 +53,27 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
     public void setEnclosingExpression(ExpressionNode enclosingExpression);
     
     /**
+     * Changes the expression enclosing the non-static inner class.
+     * @param enclosingExpression The expression enclosing the non-static inner class.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForEnclosingExpression(NodeUnion<? extends ExpressionNode> enclosingExpression) throws NullPointerException;
+    
+    /**
      * Gets the name of the class being instantiated.
      * @return The name of the class being instantiated.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier();
+    public IdentifierNode getIdentifier() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the name of the class being instantiated.
+     * @return A union object representing The name of the class being instantiated.
+     */
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier();
     
     /**
      * Changes the name of the class being instantiated.
@@ -57,16 +82,43 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
     public void setIdentifier(IdentifierNode identifier);
     
     /**
+     * Changes the name of the class being instantiated.
+     * @param identifier The name of the class being instantiated.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier) throws NullPointerException;
+    
+    /**
      * Gets the type arguments to apply to the class being instantiated.
      * @return The type arguments to apply to the class being instantiated.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeArgumentListNode getTypeArguments();
+    public TypeArgumentListNode getTypeArguments() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the type arguments to apply to the class being instantiated.
+     * @return A union object representing The type arguments to apply to the class being instantiated.
+     */
+    public NodeUnion<? extends TypeArgumentListNode> getUnionForTypeArguments();
     
     /**
      * Changes the type arguments to apply to the class being instantiated.
      * @param typeArguments The type arguments to apply to the class being instantiated.
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments);
+    
+    /**
+     * Changes the type arguments to apply to the class being instantiated.
+     * @param typeArguments The type arguments to apply to the class being instantiated.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

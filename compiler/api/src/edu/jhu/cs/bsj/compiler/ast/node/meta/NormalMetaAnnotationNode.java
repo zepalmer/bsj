@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 
 /**
@@ -19,14 +20,31 @@ public interface NormalMetaAnnotationNode extends MetaAnnotationNode, BsjSpecifi
     /**
      * Gets the arguments.
      * @return The arguments.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaAnnotationElementListNode getArguments();
+    public MetaAnnotationElementListNode getArguments() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the arguments.
+     * @return A union object representing The arguments.
+     */
+    public NodeUnion<? extends MetaAnnotationElementListNode> getUnionForArguments();
     
     /**
      * Changes the arguments.
      * @param arguments The arguments.
      */
     public void setArguments(MetaAnnotationElementListNode arguments);
+    
+    /**
+     * Changes the arguments.
+     * @param arguments The arguments.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForArguments(NodeUnion<? extends MetaAnnotationElementListNode> arguments) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

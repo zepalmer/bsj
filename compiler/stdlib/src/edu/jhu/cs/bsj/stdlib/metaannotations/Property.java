@@ -42,7 +42,7 @@ public class Property extends AbstractDeclarationMetaannotationMetaprogram<Field
 
 	// TODO: boolean properties for "getter" and "setter" for read-only or write-only properties
 
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context, FieldDeclarationNode fieldNode)
+	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context, FieldDeclarationNode fieldNode)
 	{
 		BsjNodeFactory factory = context.getFactory();
 

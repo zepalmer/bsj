@@ -46,7 +46,7 @@ public abstract class AbstractPropertyListMetaannotationMetaprogram extends
 	}
 
 	@Override
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context) {
+	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context) {
 		// TODO Auto-generated method stub
 
 		ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
@@ -64,7 +64,7 @@ public abstract class AbstractPropertyListMetaannotationMetaprogram extends
         execute(context, getterDescriptions);
 	}
 	
-	public abstract void execute(Context<MetaAnnotationMetaprogramAnchorNode> context, List<Pair<String, TypeNode>> getterDescriptions);
+	public abstract void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context, List<Pair<String, TypeNode>> getterDescriptions);
 	
 
 	@Override

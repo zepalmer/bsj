@@ -1,16 +1,11 @@
-public interface MetaprogramAnchorNode
+public interface MetaprogramAnchorNode<T extends Node>
 {
 	/* GEN:start */
 	/**
-	 * Retrieves the node with which this anchor will be replaced once its metaprogram executes.
-	 * @return The replacement node to use.
+	 * Creates a node which is suitable as a default replacement for this node.
+	 * @param factory The node factory to use.
+	 * @return A suitable default replacement for this node.
 	 */
-	public T getReplacement();
-	
-	/**
-	 * Changes the node with which this anchor will be replaced once its metaprogram executes.
-	 * @param replacement The replacement node to use.
-	 */
-	public void setReplacement(T replacement);
+	public T getDefaultReplacement(BsjNodeFactory factory);
 	/* GEN:stop */
 }

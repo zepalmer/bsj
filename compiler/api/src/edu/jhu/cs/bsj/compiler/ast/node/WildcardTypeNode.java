@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 
 /**
  * A node for wildcard type parameters, as in:
@@ -25,14 +26,31 @@ public interface WildcardTypeNode extends Node, TypeArgumentNode
     /**
      * Gets the wildcard's bound.
      * @return The wildcard's bound.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public ReferenceTypeNode getBound();
+    public ReferenceTypeNode getBound() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the wildcard's bound.
+     * @return A union object representing The wildcard's bound.
+     */
+    public NodeUnion<? extends ReferenceTypeNode> getUnionForBound();
     
     /**
      * Changes the wildcard's bound.
      * @param bound The wildcard's bound.
      */
     public void setBound(ReferenceTypeNode bound);
+    
+    /**
+     * Changes the wildcard's bound.
+     * @param bound The wildcard's bound.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForBound(NodeUnion<? extends ReferenceTypeNode> bound) throws NullPointerException;
     
     /**
      * Gets whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.

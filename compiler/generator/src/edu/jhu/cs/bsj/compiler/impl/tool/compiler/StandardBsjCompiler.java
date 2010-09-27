@@ -17,6 +17,7 @@ import javax.tools.ToolProvider;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
@@ -243,7 +244,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		{
 			LOGGER.trace("Initializing compiler data structures.");
 		}
-		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
+		this.rootPackage = toolkit.getNodeFactory().makePackageNode((IdentifierNode)null);
 		;
 		this.metacompilationManager = new MetacompilationManager(this.toolkit, this.manager, this.rootPackage,
 				listener, random);

@@ -10,17 +10,19 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationNode
 {
     /** The annotation type. */
-    private UnparameterizedTypeNode annotationType;
+    private NodeUnion<? extends UnparameterizedTypeNode> annotationType;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -41,23 +43,44 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     
     /** General constructor. */
     protected AnnotationNodeImpl(
-            UnparameterizedTypeNode annotationType,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setAnnotationType(annotationType, false);
+        setUnionForAnnotationType(annotationType, false);
+    }
+    
+    /**
+     * Gets the annotation type.  This property's value is assumed to be a normal node.
+     * @return The annotation type.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public UnparameterizedTypeNode getAnnotationType()
+    {
+        getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.annotationType == null)
+        {
+            return null;
+        } else
+        {
+            return this.annotationType.getNormalNode();
+        }
     }
     
     /**
      * Gets the annotation type.
      * @return The annotation type.
      */
-    public UnparameterizedTypeNode getAnnotationType()
+    public NodeUnion<? extends UnparameterizedTypeNode> getUnionForAnnotationType()
     {
         getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.annotationType == null)
+        {
+            this.annotationType = new NormalNodeUnion<UnparameterizedTypeNode>(null);
+        }
         return this.annotationType;
     }
     
@@ -78,9 +101,43 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.annotationType, false);
-        this.annotationType = annotationType;
+        
+        if (this.annotationType != null)
+        {
+            setAsChild(this.annotationType.getNodeValue(), false);
+        }
+        this.annotationType = new NormalNodeUnion<UnparameterizedTypeNode>(annotationType);
         setAsChild(annotationType, true);
+    }
+    
+    /**
+     * Changes the annotation type.
+     * @param annotationType The annotation type.
+     */
+    public void setUnionForAnnotationType(NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+    {
+            setUnionForAnnotationType(annotationType, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForAnnotationType(NodeUnion<? extends UnparameterizedTypeNode> annotationType, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (annotationType == null)
+        {
+            throw new NullPointerException("Node union for property annotationType cannot be null.");
+        }
+        if (this.annotationType != null)
+        {
+            setAsChild(this.annotationType.getNodeValue(), false);
+        }
+        this.annotationType = annotationType;
+        setAsChild(annotationType.getNodeValue(), true);
     }
     
     /**
@@ -94,9 +151,9 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.annotationType != null)
+        if (this.annotationType.getNodeValue() != null)
         {
-            this.annotationType.receive(visitor);
+            this.annotationType.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -119,9 +176,9 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.annotationType != null)
+        if (this.annotationType.getNodeValue() != null)
         {
-            this.annotationType.receiveTyped(visitor);
+            this.annotationType.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -170,7 +227,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("annotationType=");
-        sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
+        sb.append(this.getUnionForAnnotationType().getNodeValue() == null? "null" : this.getUnionForAnnotationType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing a long literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface LongLiteralNode extends LiteralNode<Long>
+public interface LongLiteralNode extends Node, LiteralNode<Long>
 {
     /**
      * Generates a deep copy of this node.

@@ -14,10 +14,12 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -25,7 +27,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramImportNode
 {
     /** The import for the metaprogram. */
-    private ImportNode importNode;
+    private NodeUnion<? extends ImportNode> importNode;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -46,23 +48,44 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     
     /** General constructor. */
     public MetaprogramImportNodeImpl(
-            ImportNode importNode,
+            NodeUnion<? extends ImportNode> importNode,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setImportNode(importNode, false);
+        setUnionForImportNode(importNode, false);
+    }
+    
+    /**
+     * Gets the import for the metaprogram.  This property's value is assumed to be a normal node.
+     * @return The import for the metaprogram.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ImportNode getImportNode()
+    {
+        getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.importNode == null)
+        {
+            return null;
+        } else
+        {
+            return this.importNode.getNormalNode();
+        }
     }
     
     /**
      * Gets the import for the metaprogram.
      * @return The import for the metaprogram.
      */
-    public ImportNode getImportNode()
+    public NodeUnion<? extends ImportNode> getUnionForImportNode()
     {
         getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.importNode == null)
+        {
+            this.importNode = new NormalNodeUnion<ImportNode>(null);
+        }
         return this.importNode;
     }
     
@@ -83,9 +106,43 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.importNode, false);
-        this.importNode = importNode;
+        
+        if (this.importNode != null)
+        {
+            setAsChild(this.importNode.getNodeValue(), false);
+        }
+        this.importNode = new NormalNodeUnion<ImportNode>(importNode);
         setAsChild(importNode, true);
+    }
+    
+    /**
+     * Changes the import for the metaprogram.
+     * @param importNode The import for the metaprogram.
+     */
+    public void setUnionForImportNode(NodeUnion<? extends ImportNode> importNode)
+    {
+            setUnionForImportNode(importNode, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForImportNode(NodeUnion<? extends ImportNode> importNode, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (importNode == null)
+        {
+            throw new NullPointerException("Node union for property importNode cannot be null.");
+        }
+        if (this.importNode != null)
+        {
+            setAsChild(this.importNode.getNodeValue(), false);
+        }
+        this.importNode = importNode;
+        setAsChild(importNode.getNodeValue(), true);
     }
     
     /**
@@ -99,9 +156,9 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.importNode != null)
+        if (this.importNode.getNodeValue() != null)
         {
-            this.importNode.receive(visitor);
+            this.importNode.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -124,9 +181,9 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.importNode != null)
+        if (this.importNode.getNodeValue() != null)
         {
-            this.importNode.receiveTyped(visitor);
+            this.importNode.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -172,7 +229,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getImportNode()});
+        return Arrays.asList(new Node[]{getUnionForImportNode().getNodeValue()});
     }
     
     /**
@@ -185,7 +242,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("importNode=");
-        sb.append(this.getImportNode() == null? "null" : this.getImportNode().getClass().getSimpleName());
+        sb.append(this.getUnionForImportNode().getNodeValue() == null? "null" : this.getUnionForImportNode().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -229,8 +286,32 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     @Override
     public MetaprogramImportNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ImportNode> importNodeCopy;
+        switch (getUnionForImportNode().getType())
+        {
+            case NORMAL:
+                if (getUnionForImportNode().getNormalNode() == null)
+                {
+                    importNodeCopy = factory.<ImportNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    importNodeCopy = factory.makeNormalNodeUnion(getUnionForImportNode().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForImportNode().getSpliceNode() == null)
+                {
+                    importNodeCopy = factory.<ImportNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    importNodeCopy = factory.makeSpliceNodeUnion(getUnionForImportNode().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForImportNode().getType());
+        }
         return factory.makeMetaprogramImportNode(
-                getImportNode()==null?null:getImportNode().deepCopy(factory),
+                importNodeCopy,
                 getStartLocation(),
                 getStopLocation());
     }

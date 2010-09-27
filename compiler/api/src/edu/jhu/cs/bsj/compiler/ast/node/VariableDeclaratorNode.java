@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 
 /**
  * Represents a declarator for a variable declaration.  For example, in
@@ -22,14 +23,31 @@ public interface VariableDeclaratorNode extends Node, VariableNameBindingNode
     /**
      * Gets the name of this variable.
      * @return The name of this variable.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier();
+    public IdentifierNode getIdentifier() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the name of this variable.
+     * @return A union object representing The name of this variable.
+     */
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier();
     
     /**
      * Changes the name of this variable.
      * @param identifier The name of this variable.
      */
     public void setIdentifier(IdentifierNode identifier);
+    
+    /**
+     * Changes the name of this variable.
+     * @param identifier The name of this variable.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier) throws NullPointerException;
     
     /**
      * Gets the number of additional array levels added to the type of this variable.
@@ -46,14 +64,31 @@ public interface VariableDeclaratorNode extends Node, VariableNameBindingNode
     /**
      * Gets the initializer to use.
      * @return The initializer to use.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableInitializerNode getInitializer();
+    public VariableInitializerNode getInitializer() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the initializer to use.
+     * @return A union object representing The initializer to use.
+     */
+    public NodeUnion<? extends VariableInitializerNode> getUnionForInitializer();
     
     /**
      * Changes the initializer to use.
      * @param initializer The initializer to use.
      */
     public void setInitializer(VariableInitializerNode initializer);
+    
+    /**
+     * Changes the initializer to use.
+     * @param initializer The initializer to use.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForInitializer(NodeUnion<? extends VariableInitializerNode> initializer) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

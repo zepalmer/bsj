@@ -14,17 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousClassBodyNode
 {
     /** The members of this anonymous class body. */
-    private AnonymousClassMemberListNode members;
+    private NodeUnion<? extends AnonymousClassMemberListNode> members;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -45,23 +47,44 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     
     /** General constructor. */
     public AnonymousClassBodyNodeImpl(
-            AnonymousClassMemberListNode members,
+            NodeUnion<? extends AnonymousClassMemberListNode> members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setMembers(members, false);
+        setUnionForMembers(members, false);
+    }
+    
+    /**
+     * Gets the members of this anonymous class body.  This property's value is assumed to be a normal node.
+     * @return The members of this anonymous class body.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnonymousClassMemberListNode getMembers()
+    {
+        getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.members == null)
+        {
+            return null;
+        } else
+        {
+            return this.members.getNormalNode();
+        }
     }
     
     /**
      * Gets the members of this anonymous class body.
      * @return The members of this anonymous class body.
      */
-    public AnonymousClassMemberListNode getMembers()
+    public NodeUnion<? extends AnonymousClassMemberListNode> getUnionForMembers()
     {
         getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.members == null)
+        {
+            this.members = new NormalNodeUnion<AnonymousClassMemberListNode>(null);
+        }
         return this.members;
     }
     
@@ -82,9 +105,43 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.members, false);
-        this.members = members;
+        
+        if (this.members != null)
+        {
+            setAsChild(this.members.getNodeValue(), false);
+        }
+        this.members = new NormalNodeUnion<AnonymousClassMemberListNode>(members);
         setAsChild(members, true);
+    }
+    
+    /**
+     * Changes the members of this anonymous class body.
+     * @param members The members of this anonymous class body.
+     */
+    public void setUnionForMembers(NodeUnion<? extends AnonymousClassMemberListNode> members)
+    {
+            setUnionForMembers(members, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMembers(NodeUnion<? extends AnonymousClassMemberListNode> members, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (members == null)
+        {
+            throw new NullPointerException("Node union for property members cannot be null.");
+        }
+        if (this.members != null)
+        {
+            setAsChild(this.members.getNodeValue(), false);
+        }
+        this.members = members;
+        setAsChild(members.getNodeValue(), true);
     }
     
     /**
@@ -98,9 +155,9 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.members != null)
+        if (this.members.getNodeValue() != null)
         {
-            this.members.receive(visitor);
+            this.members.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -123,9 +180,9 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.members != null)
+        if (this.members.getNodeValue() != null)
         {
-            this.members.receiveTyped(visitor);
+            this.members.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -173,7 +230,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getMembers()});
+        return Arrays.asList(new Node[]{getUnionForMembers().getNodeValue()});
     }
     
     /**
@@ -186,7 +243,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("members=");
-        sb.append(this.getMembers() == null? "null" : this.getMembers().getClass().getSimpleName());
+        sb.append(this.getUnionForMembers().getNodeValue() == null? "null" : this.getUnionForMembers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -230,8 +287,32 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     @Override
     public AnonymousClassBodyNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends AnonymousClassMemberListNode> membersCopy;
+        switch (getUnionForMembers().getType())
+        {
+            case NORMAL:
+                if (getUnionForMembers().getNormalNode() == null)
+                {
+                    membersCopy = factory.<AnonymousClassMemberListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    membersCopy = factory.makeNormalNodeUnion(getUnionForMembers().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMembers().getSpliceNode() == null)
+                {
+                    membersCopy = factory.<AnonymousClassMemberListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    membersCopy = factory.makeSpliceNodeUnion(getUnionForMembers().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
+        }
         return factory.makeAnonymousClassBodyNode(
-                getMembers()==null?null:getMembers().deepCopy(factory),
+                membersCopy,
                 getStartLocation(),
                 getStopLocation());
     }

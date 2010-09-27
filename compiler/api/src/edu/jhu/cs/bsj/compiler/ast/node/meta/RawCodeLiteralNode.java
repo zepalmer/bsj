@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjRawCodeLiteralPayload;
 import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
  * A node representing an unprocessed code literal.  This literal is not guaranteed to contain parseable
@@ -14,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
  * syntactically ambiguous code literals.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface RawCodeLiteralNode extends LiteralNode<BsjRawCodeLiteralPayload>, BsjSpecificNode
+public interface RawCodeLiteralNode extends Node, LiteralNode<BsjRawCodeLiteralPayload>, BsjSpecificNode
 {
     /**
      * Generates a deep copy of this node.

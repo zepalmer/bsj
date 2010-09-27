@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationModifiersNode;
@@ -23,22 +24,23 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationDeclarationNodeImpl extends NodeImpl implements AnnotationDeclarationNode
 {
     /** The modifiers for this type. */
-    private AnnotationModifiersNode modifiers;
+    private NodeUnion<? extends AnnotationModifiersNode> modifiers;
     
     /** This annotation's body. */
-    private AnnotationBodyNode body;
+    private NodeUnion<? extends AnnotationBodyNode> body;
     
     /** The name of this declared type. */
-    private IdentifierNode identifier;
+    private NodeUnion<? extends IdentifierNode> identifier;
     
     /** The associated javadoc comment for this node. */
-    private JavadocNode javadoc;
+    private NodeUnion<? extends JavadocNode> javadoc;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -65,29 +67,50 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     
     /** General constructor. */
     public AnnotationDeclarationNodeImpl(
-            AnnotationModifiersNode modifiers,
-            AnnotationBodyNode body,
-            IdentifierNode identifier,
-            JavadocNode javadoc,
+            NodeUnion<? extends AnnotationModifiersNode> modifiers,
+            NodeUnion<? extends AnnotationBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setModifiers(modifiers, false);
-        setBody(body, false);
-        setIdentifier(identifier, false);
-        setJavadoc(javadoc, false);
+        setUnionForModifiers(modifiers, false);
+        setUnionForBody(body, false);
+        setUnionForIdentifier(identifier, false);
+        setUnionForJavadoc(javadoc, false);
+    }
+    
+    /**
+     * Gets the modifiers for this type.  This property's value is assumed to be a normal node.
+     * @return The modifiers for this type.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnnotationModifiersNode getModifiers()
+    {
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.modifiers == null)
+        {
+            return null;
+        } else
+        {
+            return this.modifiers.getNormalNode();
+        }
     }
     
     /**
      * Gets the modifiers for this type.
      * @return The modifiers for this type.
      */
-    public AnnotationModifiersNode getModifiers()
+    public NodeUnion<? extends AnnotationModifiersNode> getUnionForModifiers()
     {
         getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.modifiers == null)
+        {
+            this.modifiers = new NormalNodeUnion<AnnotationModifiersNode>(null);
+        }
         return this.modifiers;
     }
     
@@ -108,18 +131,73 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.modifiers, false);
-        this.modifiers = modifiers;
+        
+        if (this.modifiers != null)
+        {
+            setAsChild(this.modifiers.getNodeValue(), false);
+        }
+        this.modifiers = new NormalNodeUnion<AnnotationModifiersNode>(modifiers);
         setAsChild(modifiers, true);
+    }
+    
+    /**
+     * Changes the modifiers for this type.
+     * @param modifiers The modifiers for this type.
+     */
+    public void setUnionForModifiers(NodeUnion<? extends AnnotationModifiersNode> modifiers)
+    {
+            setUnionForModifiers(modifiers, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForModifiers(NodeUnion<? extends AnnotationModifiersNode> modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (modifiers == null)
+        {
+            throw new NullPointerException("Node union for property modifiers cannot be null.");
+        }
+        if (this.modifiers != null)
+        {
+            setAsChild(this.modifiers.getNodeValue(), false);
+        }
+        this.modifiers = modifiers;
+        setAsChild(modifiers.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets this annotation's body.  This property's value is assumed to be a normal node.
+     * @return This annotation's body.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnnotationBodyNode getBody()
+    {
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            return null;
+        } else
+        {
+            return this.body.getNormalNode();
+        }
     }
     
     /**
      * Gets this annotation's body.
      * @return This annotation's body.
      */
-    public AnnotationBodyNode getBody()
+    public NodeUnion<? extends AnnotationBodyNode> getUnionForBody()
     {
         getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            this.body = new NormalNodeUnion<AnnotationBodyNode>(null);
+        }
         return this.body;
     }
     
@@ -140,18 +218,73 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.body, false);
-        this.body = body;
+        
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = new NormalNodeUnion<AnnotationBodyNode>(body);
         setAsChild(body, true);
+    }
+    
+    /**
+     * Changes this annotation's body.
+     * @param body This annotation's body.
+     */
+    public void setUnionForBody(NodeUnion<? extends AnnotationBodyNode> body)
+    {
+            setUnionForBody(body, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBody(NodeUnion<? extends AnnotationBodyNode> body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (body == null)
+        {
+            throw new NullPointerException("Node union for property body cannot be null.");
+        }
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = body;
+        setAsChild(body.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the name of this declared type.  This property's value is assumed to be a normal node.
+     * @return The name of this declared type.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            return null;
+        } else
+        {
+            return this.identifier.getNormalNode();
+        }
     }
     
     /**
      * Gets the name of this declared type.
      * @return The name of this declared type.
      */
-    public IdentifierNode getIdentifier()
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
         getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            this.identifier = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.identifier;
     }
     
@@ -172,18 +305,73 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.identifier, false);
-        this.identifier = identifier;
+        
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
         setAsChild(identifier, true);
+    }
+    
+    /**
+     * Changes the name of this declared type.
+     * @param identifier The name of this declared type.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
+    {
+            setUnionForIdentifier(identifier, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (identifier == null)
+        {
+            throw new NullPointerException("Node union for property identifier cannot be null.");
+        }
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = identifier;
+        setAsChild(identifier.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the associated javadoc comment for this node.  This property's value is assumed to be a normal node.
+     * @return The associated javadoc comment for this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.javadoc == null)
+        {
+            return null;
+        } else
+        {
+            return this.javadoc.getNormalNode();
+        }
     }
     
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
      */
-    public JavadocNode getJavadoc()
+    public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
         getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.javadoc == null)
+        {
+            this.javadoc = new NormalNodeUnion<JavadocNode>(null);
+        }
         return this.javadoc;
     }
     
@@ -204,9 +392,43 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.javadoc, false);
-        this.javadoc = javadoc;
+        
+        if (this.javadoc != null)
+        {
+            setAsChild(this.javadoc.getNodeValue(), false);
+        }
+        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
         setAsChild(javadoc, true);
+    }
+    
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
+    {
+            setUnionForJavadoc(javadoc, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (javadoc == null)
+        {
+            throw new NullPointerException("Node union for property javadoc cannot be null.");
+        }
+        if (this.javadoc != null)
+        {
+            setAsChild(this.javadoc.getNodeValue(), false);
+        }
+        this.javadoc = javadoc;
+        setAsChild(javadoc.getNodeValue(), true);
     }
     
     /**
@@ -220,21 +442,21 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers != null)
+        if (this.modifiers.getNodeValue() != null)
         {
-            this.modifiers.receive(visitor);
+            this.modifiers.getNodeValue().receive(visitor);
         }
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receive(visitor);
+            this.body.getNodeValue().receive(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receive(visitor);
+            this.identifier.getNodeValue().receive(visitor);
         }
-        if (this.javadoc != null)
+        if (this.javadoc.getNodeValue() != null)
         {
-            this.javadoc.receive(visitor);
+            this.javadoc.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -257,21 +479,21 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers != null)
+        if (this.modifiers.getNodeValue() != null)
         {
-            this.modifiers.receiveTyped(visitor);
+            this.modifiers.getNodeValue().receiveTyped(visitor);
         }
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receiveTyped(visitor);
+            this.body.getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receiveTyped(visitor);
+            this.identifier.getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc != null)
+        if (this.javadoc.getNodeValue() != null)
         {
-            this.javadoc.receiveTyped(visitor);
+            this.javadoc.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -322,7 +544,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getModifiers(), getBody(), getIdentifier(), getJavadoc()});
+        return Arrays.asList(new Node[]{getUnionForModifiers().getNodeValue(), getUnionForBody().getNodeValue(), getUnionForIdentifier().getNodeValue(), getUnionForJavadoc().getNodeValue()});
     }
     
     /**
@@ -335,16 +557,16 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
+        sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
-        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(this.getUnionForJavadoc().getNodeValue() == null? "null" : this.getUnionForJavadoc().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -388,11 +610,107 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     @Override
     public AnnotationDeclarationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends AnnotationModifiersNode> modifiersCopy;
+        switch (getUnionForModifiers().getType())
+        {
+            case NORMAL:
+                if (getUnionForModifiers().getNormalNode() == null)
+                {
+                    modifiersCopy = factory.<AnnotationModifiersNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    modifiersCopy = factory.makeNormalNodeUnion(getUnionForModifiers().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForModifiers().getSpliceNode() == null)
+                {
+                    modifiersCopy = factory.<AnnotationModifiersNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    modifiersCopy = factory.makeSpliceNodeUnion(getUnionForModifiers().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForModifiers().getType());
+        }
+        NodeUnion<? extends AnnotationBodyNode> bodyCopy;
+        switch (getUnionForBody().getType())
+        {
+            case NORMAL:
+                if (getUnionForBody().getNormalNode() == null)
+                {
+                    bodyCopy = factory.<AnnotationBodyNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeNormalNodeUnion(getUnionForBody().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBody().getSpliceNode() == null)
+                {
+                    bodyCopy = factory.<AnnotationBodyNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeSpliceNodeUnion(getUnionForBody().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
+        }
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
+        NodeUnion<? extends JavadocNode> javadocCopy;
+        switch (getUnionForJavadoc().getType())
+        {
+            case NORMAL:
+                if (getUnionForJavadoc().getNormalNode() == null)
+                {
+                    javadocCopy = factory.<JavadocNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    javadocCopy = factory.makeNormalNodeUnion(getUnionForJavadoc().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForJavadoc().getSpliceNode() == null)
+                {
+                    javadocCopy = factory.<JavadocNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    javadocCopy = factory.makeSpliceNodeUnion(getUnionForJavadoc().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
+        }
         return factory.makeAnnotationDeclarationNode(
-                getModifiers()==null?null:getModifiers().deepCopy(factory),
-                getBody()==null?null:getBody().deepCopy(factory),
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
+                modifiersCopy,
+                bodyCopy,
+                identifierCopy,
+                javadocCopy,
                 getStartLocation(),
                 getStopLocation());
     }

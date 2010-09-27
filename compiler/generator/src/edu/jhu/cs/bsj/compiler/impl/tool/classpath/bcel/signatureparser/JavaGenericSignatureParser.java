@@ -396,7 +396,7 @@ public class JavaGenericSignatureParser
 		if (inputSource.peek() == '*')
 		{
 			inputSource.consume();
-			return factory.makeWildcardTypeNode(null, true);
+			return factory.makeWildcardTypeNode((ReferenceTypeNode)null, true);
 		} else
 		{
 			char c = inputSource.peek();

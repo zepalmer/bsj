@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBodyNode
 {
     /** The (nullable) constructor invocation. */
-    private ConstructorInvocationNode constructorInvocation;
+    private NodeUnion<? extends ConstructorInvocationNode> constructorInvocation;
     
     /** The statements contained in this constructor. */
-    private BlockStatementListNode statements;
+    private NodeUnion<? extends BlockStatementListNode> statements;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     
     /** General constructor. */
     public ConstructorBodyNodeImpl(
-            ConstructorInvocationNode constructorInvocation,
-            BlockStatementListNode statements,
+            NodeUnion<? extends ConstructorInvocationNode> constructorInvocation,
+            NodeUnion<? extends BlockStatementListNode> statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setConstructorInvocation(constructorInvocation, false);
-        setStatements(statements, false);
+        setUnionForConstructorInvocation(constructorInvocation, false);
+        setUnionForStatements(statements, false);
+    }
+    
+    /**
+     * Gets the (nullable) constructor invocation.  This property's value is assumed to be a normal node.
+     * @return The (nullable) constructor invocation.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ConstructorInvocationNode getConstructorInvocation()
+    {
+        getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.constructorInvocation == null)
+        {
+            return null;
+        } else
+        {
+            return this.constructorInvocation.getNormalNode();
+        }
     }
     
     /**
      * Gets the (nullable) constructor invocation.
      * @return The (nullable) constructor invocation.
      */
-    public ConstructorInvocationNode getConstructorInvocation()
+    public NodeUnion<? extends ConstructorInvocationNode> getUnionForConstructorInvocation()
     {
         getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.constructorInvocation == null)
+        {
+            this.constructorInvocation = new NormalNodeUnion<ConstructorInvocationNode>(null);
+        }
         return this.constructorInvocation;
     }
     
@@ -90,18 +113,73 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.constructorInvocation, false);
-        this.constructorInvocation = constructorInvocation;
+        
+        if (this.constructorInvocation != null)
+        {
+            setAsChild(this.constructorInvocation.getNodeValue(), false);
+        }
+        this.constructorInvocation = new NormalNodeUnion<ConstructorInvocationNode>(constructorInvocation);
         setAsChild(constructorInvocation, true);
+    }
+    
+    /**
+     * Changes the (nullable) constructor invocation.
+     * @param constructorInvocation The (nullable) constructor invocation.
+     */
+    public void setUnionForConstructorInvocation(NodeUnion<? extends ConstructorInvocationNode> constructorInvocation)
+    {
+            setUnionForConstructorInvocation(constructorInvocation, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForConstructorInvocation(NodeUnion<? extends ConstructorInvocationNode> constructorInvocation, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (constructorInvocation == null)
+        {
+            throw new NullPointerException("Node union for property constructorInvocation cannot be null.");
+        }
+        if (this.constructorInvocation != null)
+        {
+            setAsChild(this.constructorInvocation.getNodeValue(), false);
+        }
+        this.constructorInvocation = constructorInvocation;
+        setAsChild(constructorInvocation.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the statements contained in this constructor.  This property's value is assumed to be a normal node.
+     * @return The statements contained in this constructor.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public BlockStatementListNode getStatements()
+    {
+        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.statements == null)
+        {
+            return null;
+        } else
+        {
+            return this.statements.getNormalNode();
+        }
     }
     
     /**
      * Gets the statements contained in this constructor.
      * @return The statements contained in this constructor.
      */
-    public BlockStatementListNode getStatements()
+    public NodeUnion<? extends BlockStatementListNode> getUnionForStatements()
     {
         getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.statements == null)
+        {
+            this.statements = new NormalNodeUnion<BlockStatementListNode>(null);
+        }
         return this.statements;
     }
     
@@ -122,9 +200,43 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.statements, false);
-        this.statements = statements;
+        
+        if (this.statements != null)
+        {
+            setAsChild(this.statements.getNodeValue(), false);
+        }
+        this.statements = new NormalNodeUnion<BlockStatementListNode>(statements);
         setAsChild(statements, true);
+    }
+    
+    /**
+     * Changes the statements contained in this constructor.
+     * @param statements The statements contained in this constructor.
+     */
+    public void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements)
+    {
+            setUnionForStatements(statements, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (statements == null)
+        {
+            throw new NullPointerException("Node union for property statements cannot be null.");
+        }
+        if (this.statements != null)
+        {
+            setAsChild(this.statements.getNodeValue(), false);
+        }
+        this.statements = statements;
+        setAsChild(statements.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.constructorInvocation != null)
+        if (this.constructorInvocation.getNodeValue() != null)
         {
-            this.constructorInvocation.receive(visitor);
+            this.constructorInvocation.getNodeValue().receive(visitor);
         }
-        if (this.statements != null)
+        if (this.statements.getNodeValue() != null)
         {
-            this.statements.receive(visitor);
+            this.statements.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.constructorInvocation != null)
+        if (this.constructorInvocation.getNodeValue() != null)
         {
-            this.constructorInvocation.receiveTyped(visitor);
+            this.constructorInvocation.getNodeValue().receiveTyped(visitor);
         }
-        if (this.statements != null)
+        if (this.statements.getNodeValue() != null)
         {
-            this.statements.receiveTyped(visitor);
+            this.statements.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -220,7 +332,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getConstructorInvocation(), getStatements()});
+        return Arrays.asList(new Node[]{getUnionForConstructorInvocation().getNodeValue(), getUnionForStatements().getNodeValue()});
     }
     
     /**
@@ -233,10 +345,10 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("constructorInvocation=");
-        sb.append(this.getConstructorInvocation() == null? "null" : this.getConstructorInvocation().getClass().getSimpleName());
+        sb.append(this.getUnionForConstructorInvocation().getNodeValue() == null? "null" : this.getUnionForConstructorInvocation().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("statements=");
-        sb.append(this.getStatements() == null? "null" : this.getStatements().getClass().getSimpleName());
+        sb.append(this.getUnionForStatements().getNodeValue() == null? "null" : this.getUnionForStatements().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -280,9 +392,57 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     @Override
     public ConstructorBodyNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ConstructorInvocationNode> constructorInvocationCopy;
+        switch (getUnionForConstructorInvocation().getType())
+        {
+            case NORMAL:
+                if (getUnionForConstructorInvocation().getNormalNode() == null)
+                {
+                    constructorInvocationCopy = factory.<ConstructorInvocationNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    constructorInvocationCopy = factory.makeNormalNodeUnion(getUnionForConstructorInvocation().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForConstructorInvocation().getSpliceNode() == null)
+                {
+                    constructorInvocationCopy = factory.<ConstructorInvocationNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    constructorInvocationCopy = factory.makeSpliceNodeUnion(getUnionForConstructorInvocation().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForConstructorInvocation().getType());
+        }
+        NodeUnion<? extends BlockStatementListNode> statementsCopy;
+        switch (getUnionForStatements().getType())
+        {
+            case NORMAL:
+                if (getUnionForStatements().getNormalNode() == null)
+                {
+                    statementsCopy = factory.<BlockStatementListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    statementsCopy = factory.makeNormalNodeUnion(getUnionForStatements().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForStatements().getSpliceNode() == null)
+                {
+                    statementsCopy = factory.<BlockStatementListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    statementsCopy = factory.makeSpliceNodeUnion(getUnionForStatements().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForStatements().getType());
+        }
         return factory.makeConstructorBodyNode(
-                getConstructorInvocation()==null?null:getConstructorInvocation().deepCopy(factory),
-                getStatements()==null?null:getStatements().deepCopy(factory),
+                constructorInvocationCopy,
+                statementsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

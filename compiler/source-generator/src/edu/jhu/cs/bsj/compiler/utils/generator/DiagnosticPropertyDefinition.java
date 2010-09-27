@@ -17,7 +17,7 @@ public class DiagnosticPropertyDefinition extends ModalPropertyDefinition<Diagno
 	public DiagnosticPropertyDefinition(String name, String baseType, String typeArg, Mode mode, String description,
 			String defaultExpression, String messageExpression)
 	{
-		super(name, baseType, typeArg, mode, description, defaultExpression);
+		super(name, baseType, typeArg, mode, description, defaultExpression, false);
 		this.messageExpression = messageExpression;
 	}
 
@@ -29,14 +29,18 @@ public class DiagnosticPropertyDefinition extends ModalPropertyDefinition<Diagno
 	@Override
 	public DiagnosticPropertyDefinition deriveWithBaseType(String type)
 	{
-		return new DiagnosticPropertyDefinition(getName(), type, getTypeArg(), getMode(), getDescription(),
+		DiagnosticPropertyDefinition def = new DiagnosticPropertyDefinition(getName(), type, getTypeArg(), getMode(), getDescription(),
 				getDefaultExpression(), getMessageExpression());
+		def.setParentDef(getParentDef());
+		return def;
 	}
 
 	@Override
 	public DiagnosticPropertyDefinition deriveWithTypeArg(String arg)
 	{
-		return new DiagnosticPropertyDefinition(getName(), getBaseType(), arg, getMode(), getDescription(),
+		DiagnosticPropertyDefinition def = new DiagnosticPropertyDefinition(getName(), getBaseType(), arg, getMode(), getDescription(),
 				getDefaultExpression(), getMessageExpression());
+		def.setParentDef(getParentDef());
+		return def;
 	}
 }

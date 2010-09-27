@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.RestrictedPrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
 {
     /** The expression identifying the array. */
-    private RestrictedPrimaryExpressionNode arrayExpression;
+    private NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression;
     
     /** The index into the array. */
-    private ExpressionNode indexExpression;
+    private NodeUnion<? extends ExpressionNode> indexExpression;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     
     /** General constructor. */
     public ArrayAccessNodeImpl(
-            RestrictedPrimaryExpressionNode arrayExpression,
-            ExpressionNode indexExpression,
+            NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression,
+            NodeUnion<? extends ExpressionNode> indexExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setArrayExpression(arrayExpression, false);
-        setIndexExpression(indexExpression, false);
+        setUnionForArrayExpression(arrayExpression, false);
+        setUnionForIndexExpression(indexExpression, false);
+    }
+    
+    /**
+     * Gets the expression identifying the array.  This property's value is assumed to be a normal node.
+     * @return The expression identifying the array.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public RestrictedPrimaryExpressionNode getArrayExpression()
+    {
+        getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.arrayExpression == null)
+        {
+            return null;
+        } else
+        {
+            return this.arrayExpression.getNormalNode();
+        }
     }
     
     /**
      * Gets the expression identifying the array.
      * @return The expression identifying the array.
      */
-    public RestrictedPrimaryExpressionNode getArrayExpression()
+    public NodeUnion<? extends RestrictedPrimaryExpressionNode> getUnionForArrayExpression()
     {
         getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.arrayExpression == null)
+        {
+            this.arrayExpression = new NormalNodeUnion<RestrictedPrimaryExpressionNode>(null);
+        }
         return this.arrayExpression;
     }
     
@@ -90,18 +113,73 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.arrayExpression, false);
-        this.arrayExpression = arrayExpression;
+        
+        if (this.arrayExpression != null)
+        {
+            setAsChild(this.arrayExpression.getNodeValue(), false);
+        }
+        this.arrayExpression = new NormalNodeUnion<RestrictedPrimaryExpressionNode>(arrayExpression);
         setAsChild(arrayExpression, true);
+    }
+    
+    /**
+     * Changes the expression identifying the array.
+     * @param arrayExpression The expression identifying the array.
+     */
+    public void setUnionForArrayExpression(NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression)
+    {
+            setUnionForArrayExpression(arrayExpression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForArrayExpression(NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (arrayExpression == null)
+        {
+            throw new NullPointerException("Node union for property arrayExpression cannot be null.");
+        }
+        if (this.arrayExpression != null)
+        {
+            setAsChild(this.arrayExpression.getNodeValue(), false);
+        }
+        this.arrayExpression = arrayExpression;
+        setAsChild(arrayExpression.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the index into the array.  This property's value is assumed to be a normal node.
+     * @return The index into the array.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getIndexExpression()
+    {
+        getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.indexExpression == null)
+        {
+            return null;
+        } else
+        {
+            return this.indexExpression.getNormalNode();
+        }
     }
     
     /**
      * Gets the index into the array.
      * @return The index into the array.
      */
-    public ExpressionNode getIndexExpression()
+    public NodeUnion<? extends ExpressionNode> getUnionForIndexExpression()
     {
         getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.indexExpression == null)
+        {
+            this.indexExpression = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.indexExpression;
     }
     
@@ -122,9 +200,43 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.indexExpression, false);
-        this.indexExpression = indexExpression;
+        
+        if (this.indexExpression != null)
+        {
+            setAsChild(this.indexExpression.getNodeValue(), false);
+        }
+        this.indexExpression = new NormalNodeUnion<ExpressionNode>(indexExpression);
         setAsChild(indexExpression, true);
+    }
+    
+    /**
+     * Changes the index into the array.
+     * @param indexExpression The index into the array.
+     */
+    public void setUnionForIndexExpression(NodeUnion<? extends ExpressionNode> indexExpression)
+    {
+            setUnionForIndexExpression(indexExpression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForIndexExpression(NodeUnion<? extends ExpressionNode> indexExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (indexExpression == null)
+        {
+            throw new NullPointerException("Node union for property indexExpression cannot be null.");
+        }
+        if (this.indexExpression != null)
+        {
+            setAsChild(this.indexExpression.getNodeValue(), false);
+        }
+        this.indexExpression = indexExpression;
+        setAsChild(indexExpression.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.arrayExpression != null)
+        if (this.arrayExpression.getNodeValue() != null)
         {
-            this.arrayExpression.receive(visitor);
+            this.arrayExpression.getNodeValue().receive(visitor);
         }
-        if (this.indexExpression != null)
+        if (this.indexExpression.getNodeValue() != null)
         {
-            this.indexExpression.receive(visitor);
+            this.indexExpression.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.arrayExpression != null)
+        if (this.arrayExpression.getNodeValue() != null)
         {
-            this.arrayExpression.receiveTyped(visitor);
+            this.arrayExpression.getNodeValue().receiveTyped(visitor);
         }
-        if (this.indexExpression != null)
+        if (this.indexExpression.getNodeValue() != null)
         {
-            this.indexExpression.receiveTyped(visitor);
+            this.indexExpression.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -222,7 +334,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getArrayExpression(), getIndexExpression()});
+        return Arrays.asList(new Node[]{getUnionForArrayExpression().getNodeValue(), getUnionForIndexExpression().getNodeValue()});
     }
     
     /**
@@ -235,10 +347,10 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("arrayExpression=");
-        sb.append(this.getArrayExpression() == null? "null" : this.getArrayExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForArrayExpression().getNodeValue() == null? "null" : this.getUnionForArrayExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("indexExpression=");
-        sb.append(this.getIndexExpression() == null? "null" : this.getIndexExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForIndexExpression().getNodeValue() == null? "null" : this.getUnionForIndexExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -282,9 +394,57 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     @Override
     public ArrayAccessNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpressionCopy;
+        switch (getUnionForArrayExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForArrayExpression().getNormalNode() == null)
+                {
+                    arrayExpressionCopy = factory.<RestrictedPrimaryExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    arrayExpressionCopy = factory.makeNormalNodeUnion(getUnionForArrayExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForArrayExpression().getSpliceNode() == null)
+                {
+                    arrayExpressionCopy = factory.<RestrictedPrimaryExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    arrayExpressionCopy = factory.makeSpliceNodeUnion(getUnionForArrayExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForArrayExpression().getType());
+        }
+        NodeUnion<? extends ExpressionNode> indexExpressionCopy;
+        switch (getUnionForIndexExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForIndexExpression().getNormalNode() == null)
+                {
+                    indexExpressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    indexExpressionCopy = factory.makeNormalNodeUnion(getUnionForIndexExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIndexExpression().getSpliceNode() == null)
+                {
+                    indexExpressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    indexExpressionCopy = factory.makeSpliceNodeUnion(getUnionForIndexExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIndexExpression().getType());
+        }
         return factory.makeArrayAccessNode(
-                getArrayExpression()==null?null:getArrayExpression().deepCopy(factory),
-                getIndexExpression()==null?null:getIndexExpression().deepCopy(factory),
+                arrayExpressionCopy,
+                indexExpressionCopy,
                 getStartLocation(),
                 getStopLocation());
     }

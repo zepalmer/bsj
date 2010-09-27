@@ -14,17 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForInitializerExpressionNode
 {
     /** The expressions used in this initializer. */
-    private StatementExpressionListNode expressions;
+    private NodeUnion<? extends StatementExpressionListNode> expressions;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -45,23 +47,44 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     
     /** General constructor. */
     public ForInitializerExpressionNodeImpl(
-            StatementExpressionListNode expressions,
+            NodeUnion<? extends StatementExpressionListNode> expressions,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setExpressions(expressions, false);
+        setUnionForExpressions(expressions, false);
+    }
+    
+    /**
+     * Gets the expressions used in this initializer.  This property's value is assumed to be a normal node.
+     * @return The expressions used in this initializer.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public StatementExpressionListNode getExpressions()
+    {
+        getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expressions == null)
+        {
+            return null;
+        } else
+        {
+            return this.expressions.getNormalNode();
+        }
     }
     
     /**
      * Gets the expressions used in this initializer.
      * @return The expressions used in this initializer.
      */
-    public StatementExpressionListNode getExpressions()
+    public NodeUnion<? extends StatementExpressionListNode> getUnionForExpressions()
     {
         getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expressions == null)
+        {
+            this.expressions = new NormalNodeUnion<StatementExpressionListNode>(null);
+        }
         return this.expressions;
     }
     
@@ -82,9 +105,43 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.expressions, false);
-        this.expressions = expressions;
+        
+        if (this.expressions != null)
+        {
+            setAsChild(this.expressions.getNodeValue(), false);
+        }
+        this.expressions = new NormalNodeUnion<StatementExpressionListNode>(expressions);
         setAsChild(expressions, true);
+    }
+    
+    /**
+     * Changes the expressions used in this initializer.
+     * @param expressions The expressions used in this initializer.
+     */
+    public void setUnionForExpressions(NodeUnion<? extends StatementExpressionListNode> expressions)
+    {
+            setUnionForExpressions(expressions, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForExpressions(NodeUnion<? extends StatementExpressionListNode> expressions, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (expressions == null)
+        {
+            throw new NullPointerException("Node union for property expressions cannot be null.");
+        }
+        if (this.expressions != null)
+        {
+            setAsChild(this.expressions.getNodeValue(), false);
+        }
+        this.expressions = expressions;
+        setAsChild(expressions.getNodeValue(), true);
     }
     
     /**
@@ -98,9 +155,9 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expressions != null)
+        if (this.expressions.getNodeValue() != null)
         {
-            this.expressions.receive(visitor);
+            this.expressions.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -123,9 +180,9 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expressions != null)
+        if (this.expressions.getNodeValue() != null)
         {
-            this.expressions.receiveTyped(visitor);
+            this.expressions.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -173,7 +230,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getExpressions()});
+        return Arrays.asList(new Node[]{getUnionForExpressions().getNodeValue()});
     }
     
     /**
@@ -186,7 +243,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("expressions=");
-        sb.append(this.getExpressions() == null? "null" : this.getExpressions().getClass().getSimpleName());
+        sb.append(this.getUnionForExpressions().getNodeValue() == null? "null" : this.getUnionForExpressions().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -230,8 +287,32 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     @Override
     public ForInitializerExpressionNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends StatementExpressionListNode> expressionsCopy;
+        switch (getUnionForExpressions().getType())
+        {
+            case NORMAL:
+                if (getUnionForExpressions().getNormalNode() == null)
+                {
+                    expressionsCopy = factory.<StatementExpressionListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    expressionsCopy = factory.makeNormalNodeUnion(getUnionForExpressions().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForExpressions().getSpliceNode() == null)
+                {
+                    expressionsCopy = factory.<StatementExpressionListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    expressionsCopy = factory.makeSpliceNodeUnion(getUnionForExpressions().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpressions().getType());
+        }
         return factory.makeForInitializerExpressionNode(
-                getExpressions()==null?null:getExpressions().deepCopy(factory),
+                expressionsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

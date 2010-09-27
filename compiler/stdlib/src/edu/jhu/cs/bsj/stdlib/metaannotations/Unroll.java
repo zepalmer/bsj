@@ -46,7 +46,7 @@ public class Unroll extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	@Override
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context) {
+	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context) {
 		// TODO: what if we're not actually annotating the for loop?
 		// TODO: check all of the following assumptions
 

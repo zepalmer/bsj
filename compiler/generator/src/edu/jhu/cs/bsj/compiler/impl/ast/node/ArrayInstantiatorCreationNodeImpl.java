@@ -14,18 +14,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl implements ArrayInstantiatorCreationNode
 {
     /** The dimension expressions for this array. */
-    private ExpressionListNode dimExpressions;
+    private NodeUnion<? extends ExpressionListNode> dimExpressions;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -46,8 +48,8 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     
     /** General constructor. */
     public ArrayInstantiatorCreationNodeImpl(
-            ExpressionListNode dimExpressions,
-            BaseTypeNode baseType,
+            NodeUnion<? extends ExpressionListNode> dimExpressions,
+            NodeUnion<? extends BaseTypeNode> baseType,
             int arrayLevels,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -55,16 +57,37 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             boolean binary)
     {
         super(baseType, arrayLevels, startLocation, stopLocation, manager, binary);
-        setDimExpressions(dimExpressions, false);
+        setUnionForDimExpressions(dimExpressions, false);
+    }
+    
+    /**
+     * Gets the dimension expressions for this array.  This property's value is assumed to be a normal node.
+     * @return The dimension expressions for this array.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionListNode getDimExpressions()
+    {
+        getAttribute(LocalAttribute.DIM_EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.dimExpressions == null)
+        {
+            return null;
+        } else
+        {
+            return this.dimExpressions.getNormalNode();
+        }
     }
     
     /**
      * Gets the dimension expressions for this array.
      * @return The dimension expressions for this array.
      */
-    public ExpressionListNode getDimExpressions()
+    public NodeUnion<? extends ExpressionListNode> getUnionForDimExpressions()
     {
         getAttribute(LocalAttribute.DIM_EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.dimExpressions == null)
+        {
+            this.dimExpressions = new NormalNodeUnion<ExpressionListNode>(null);
+        }
         return this.dimExpressions;
     }
     
@@ -85,9 +108,43 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DIM_EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.dimExpressions, false);
-        this.dimExpressions = dimExpressions;
+        
+        if (this.dimExpressions != null)
+        {
+            setAsChild(this.dimExpressions.getNodeValue(), false);
+        }
+        this.dimExpressions = new NormalNodeUnion<ExpressionListNode>(dimExpressions);
         setAsChild(dimExpressions, true);
+    }
+    
+    /**
+     * Changes the dimension expressions for this array.
+     * @param dimExpressions The dimension expressions for this array.
+     */
+    public void setUnionForDimExpressions(NodeUnion<? extends ExpressionListNode> dimExpressions)
+    {
+            setUnionForDimExpressions(dimExpressions, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForDimExpressions(NodeUnion<? extends ExpressionListNode> dimExpressions, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.DIM_EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (dimExpressions == null)
+        {
+            throw new NullPointerException("Node union for property dimExpressions cannot be null.");
+        }
+        if (this.dimExpressions != null)
+        {
+            setAsChild(this.dimExpressions.getNodeValue(), false);
+        }
+        this.dimExpressions = dimExpressions;
+        setAsChild(dimExpressions.getNodeValue(), true);
     }
     
     /**
@@ -101,9 +158,9 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.dimExpressions != null)
+        if (this.dimExpressions.getNodeValue() != null)
         {
-            this.dimExpressions.receive(visitor);
+            this.dimExpressions.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -126,9 +183,9 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.dimExpressions != null)
+        if (this.dimExpressions.getNodeValue() != null)
         {
-            this.dimExpressions.receiveTyped(visitor);
+            this.dimExpressions.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -176,7 +233,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getDimExpressions(), getBaseType()});
+        return Arrays.asList(new Node[]{getUnionForDimExpressions().getNodeValue(), getUnionForBaseType().getNodeValue()});
     }
     
     /**
@@ -189,13 +246,12 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("dimExpressions=");
-        sb.append(this.getDimExpressions() == null? "null" : this.getDimExpressions().getClass().getSimpleName());
+        sb.append(this.getUnionForDimExpressions().getNodeValue() == null? "null" : this.getUnionForDimExpressions().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("baseType=");
-        sb.append(this.getBaseType() == null? "null" : this.getBaseType().getClass().getSimpleName());
+        sb.append(this.getUnionForBaseType().getNodeValue() == null? "null" : this.getUnionForBaseType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("arrayLevels=");
-        sb.append(String.valueOf(this.getArrayLevels()) + ":" + ("int"));
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -239,9 +295,57 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     @Override
     public ArrayInstantiatorCreationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionListNode> dimExpressionsCopy;
+        switch (getUnionForDimExpressions().getType())
+        {
+            case NORMAL:
+                if (getUnionForDimExpressions().getNormalNode() == null)
+                {
+                    dimExpressionsCopy = factory.<ExpressionListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    dimExpressionsCopy = factory.makeNormalNodeUnion(getUnionForDimExpressions().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForDimExpressions().getSpliceNode() == null)
+                {
+                    dimExpressionsCopy = factory.<ExpressionListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    dimExpressionsCopy = factory.makeSpliceNodeUnion(getUnionForDimExpressions().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForDimExpressions().getType());
+        }
+        NodeUnion<? extends BaseTypeNode> baseTypeCopy;
+        switch (getUnionForBaseType().getType())
+        {
+            case NORMAL:
+                if (getUnionForBaseType().getNormalNode() == null)
+                {
+                    baseTypeCopy = factory.<BaseTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    baseTypeCopy = factory.makeNormalNodeUnion(getUnionForBaseType().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBaseType().getSpliceNode() == null)
+                {
+                    baseTypeCopy = factory.<BaseTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    baseTypeCopy = factory.makeSpliceNodeUnion(getUnionForBaseType().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBaseType().getType());
+        }
         return factory.makeArrayInstantiatorCreationNode(
-                getDimExpressions()==null?null:getDimExpressions().deepCopy(factory),
-                getBaseType()==null?null:getBaseType().deepCopy(factory),
+                dimExpressionsCopy,
+                baseTypeCopy,
                 getArrayLevels(),
                 getStartLocation(),
                 getStopLocation());

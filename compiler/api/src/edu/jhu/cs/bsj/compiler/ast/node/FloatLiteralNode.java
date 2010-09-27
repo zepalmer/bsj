@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing a float literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface FloatLiteralNode extends LiteralNode<Float>
+public interface FloatLiteralNode extends Node, LiteralNode<Float>
 {
     /**
      * Generates a deep copy of this node.

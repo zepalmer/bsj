@@ -20,20 +20,20 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 public class PrepareMetaAnnotationMetaprorgamTask extends
-		AbstractMetaprogramProfileBuildingTask<MetaAnnotationMetaprogramAnchorNode>
+		AbstractMetaprogramProfileBuildingTask<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>
 {
 	/** The meta-annotation metaprogram for which a profile should be constructed and registered. */
-	private BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> metaprogramObject;
+	private BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> metaprogramObject;
 
 	public PrepareMetaAnnotationMetaprorgamTask(MetaAnnotationMetaprogramAnchorNode anchor,
-			InjectionInfo injectionInfo, BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> metaprogramObject)
+			InjectionInfo injectionInfo, BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> metaprogramObject)
 	{
 		super(TaskPriority.PREPARE_METAANNOTATION_METAPROGRAM, anchor, injectionInfo);
 		this.metaprogramObject = metaprogramObject;
 	}
 
 	@Override
-	protected MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode> buildProfile(
+	protected MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> buildProfile(
 			MetacompilationContext metacompilationContext) throws IOException
 	{
 		Collection<String> targetNames = new ArrayList<String>();
@@ -52,13 +52,13 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 		// TODO: validate that the target names and dependency names are not bogus
 		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
 				this.metacompilationContext.getDiagnosticListener());
-		Context<MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode>(
-				this.anchor, this.metacompilationContext.getToolkit().getNodeFactory(),
+		Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>(
+				this.anchor, null, this.metacompilationContext.getToolkit().getNodeFactory(),
 				new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
 						this.anchor.getStartLocation()), loader);
 
-		MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode>(
-				new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode>(this.metaprogramObject), this.anchor,
+		MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>(
+				new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>(this.metaprogramObject), this.anchor,
 				dependencies, targetNames, this.metaprogramObject.getLocalMode(),
 				this.metaprogramObject.getPackageMode(), context, injectionInfo.isPurelyInjected());
 		return profile;

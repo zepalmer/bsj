@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
 {
     /** The base type name for the parameter. */
-    private IdentifierNode identifier;
+    private NodeUnion<? extends IdentifierNode> identifier;
     
     /** The bounds over the base type. */
-    private DeclaredTypeListNode bounds;
+    private NodeUnion<? extends DeclaredTypeListNode> bounds;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     
     /** General constructor. */
     public TypeParameterNodeImpl(
-            IdentifierNode identifier,
-            DeclaredTypeListNode bounds,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends DeclaredTypeListNode> bounds,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setIdentifier(identifier, false);
-        setBounds(bounds, false);
+        setUnionForIdentifier(identifier, false);
+        setUnionForBounds(bounds, false);
+    }
+    
+    /**
+     * Gets the base type name for the parameter.  This property's value is assumed to be a normal node.
+     * @return The base type name for the parameter.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            return null;
+        } else
+        {
+            return this.identifier.getNormalNode();
+        }
     }
     
     /**
      * Gets the base type name for the parameter.
      * @return The base type name for the parameter.
      */
-    public IdentifierNode getIdentifier()
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
         getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            this.identifier = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.identifier;
     }
     
@@ -90,18 +113,73 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.identifier, false);
-        this.identifier = identifier;
+        
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
         setAsChild(identifier, true);
+    }
+    
+    /**
+     * Changes the base type name for the parameter.
+     * @param identifier The base type name for the parameter.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
+    {
+            setUnionForIdentifier(identifier, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (identifier == null)
+        {
+            throw new NullPointerException("Node union for property identifier cannot be null.");
+        }
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = identifier;
+        setAsChild(identifier.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the bounds over the base type.  This property's value is assumed to be a normal node.
+     * @return The bounds over the base type.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public DeclaredTypeListNode getBounds()
+    {
+        getAttribute(LocalAttribute.BOUNDS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.bounds == null)
+        {
+            return null;
+        } else
+        {
+            return this.bounds.getNormalNode();
+        }
     }
     
     /**
      * Gets the bounds over the base type.
      * @return The bounds over the base type.
      */
-    public DeclaredTypeListNode getBounds()
+    public NodeUnion<? extends DeclaredTypeListNode> getUnionForBounds()
     {
         getAttribute(LocalAttribute.BOUNDS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.bounds == null)
+        {
+            this.bounds = new NormalNodeUnion<DeclaredTypeListNode>(null);
+        }
         return this.bounds;
     }
     
@@ -122,9 +200,43 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BOUNDS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.bounds, false);
-        this.bounds = bounds;
+        
+        if (this.bounds != null)
+        {
+            setAsChild(this.bounds.getNodeValue(), false);
+        }
+        this.bounds = new NormalNodeUnion<DeclaredTypeListNode>(bounds);
         setAsChild(bounds, true);
+    }
+    
+    /**
+     * Changes the bounds over the base type.
+     * @param bounds The bounds over the base type.
+     */
+    public void setUnionForBounds(NodeUnion<? extends DeclaredTypeListNode> bounds)
+    {
+            setUnionForBounds(bounds, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBounds(NodeUnion<? extends DeclaredTypeListNode> bounds, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BOUNDS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (bounds == null)
+        {
+            throw new NullPointerException("Node union for property bounds cannot be null.");
+        }
+        if (this.bounds != null)
+        {
+            setAsChild(this.bounds.getNodeValue(), false);
+        }
+        this.bounds = bounds;
+        setAsChild(bounds.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receive(visitor);
+            this.identifier.getNodeValue().receive(visitor);
         }
-        if (this.bounds != null)
+        if (this.bounds.getNodeValue() != null)
         {
-            this.bounds.receive(visitor);
+            this.bounds.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receiveTyped(visitor);
+            this.identifier.getNodeValue().receiveTyped(visitor);
         }
-        if (this.bounds != null)
+        if (this.bounds.getNodeValue() != null)
         {
-            this.bounds.receiveTyped(visitor);
+            this.bounds.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -222,7 +334,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getIdentifier(), getBounds()});
+        return Arrays.asList(new Node[]{getUnionForIdentifier().getNodeValue(), getUnionForBounds().getNodeValue()});
     }
     
     /**
@@ -235,10 +347,10 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("identifier=");
-        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("bounds=");
-        sb.append(this.getBounds() == null? "null" : this.getBounds().getClass().getSimpleName());
+        sb.append(this.getUnionForBounds().getNodeValue() == null? "null" : this.getUnionForBounds().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -282,9 +394,57 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     @Override
     public TypeParameterNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
+        NodeUnion<? extends DeclaredTypeListNode> boundsCopy;
+        switch (getUnionForBounds().getType())
+        {
+            case NORMAL:
+                if (getUnionForBounds().getNormalNode() == null)
+                {
+                    boundsCopy = factory.<DeclaredTypeListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    boundsCopy = factory.makeNormalNodeUnion(getUnionForBounds().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBounds().getSpliceNode() == null)
+                {
+                    boundsCopy = factory.<DeclaredTypeListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    boundsCopy = factory.makeSpliceNodeUnion(getUnionForBounds().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBounds().getType());
+        }
         return factory.makeTypeParameterNode(
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getBounds()==null?null:getBounds().deepCopy(factory),
+                identifierCopy,
+                boundsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

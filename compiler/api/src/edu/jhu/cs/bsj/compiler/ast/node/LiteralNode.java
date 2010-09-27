@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * A superclass for all types of literal nodes.
+ * A supertype for all types of literal nodes.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface LiteralNode<T> extends Node, RestrictedPrimaryExpressionNode

@@ -24,7 +24,7 @@ public interface BsjThreadLocalData
 		/** The data element which represents the node factory to use when constructing code literals. */
 		public static final Element<BsjNodeFactory> NODE_FACTORY = new Element<BsjNodeFactory>("NODE_FACTORY");
 		/** The data element which represents the current context to use. */
-		public static final Element<Context<?>> CONTEXT = new Element<Context<?>>("CONTEXT");
+		public static final Element<Context<?,?>> CONTEXT = new Element<Context<?,?>>("CONTEXT");
 		
 		/** The description for this element. */
 		private String description;

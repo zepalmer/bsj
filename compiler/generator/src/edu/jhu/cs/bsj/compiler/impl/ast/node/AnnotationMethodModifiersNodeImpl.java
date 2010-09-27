@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
@@ -23,8 +24,8 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
 {
     /** General constructor. */
     public AnnotationMethodModifiersNodeImpl(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -110,7 +111,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getMetaAnnotations(), getAnnotations()});
+        return Arrays.asList(new Node[]{getUnionForMetaAnnotations().getNodeValue(), getUnionForAnnotations().getNodeValue()});
     }
     
     /**
@@ -123,10 +124,10 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("annotations=");
-        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForAnnotations().getNodeValue() == null? "null" : this.getUnionForAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -170,9 +171,57 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     @Override
     public AnnotationMethodModifiersNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends MetaAnnotationListNode> metaAnnotationsCopy;
+        switch (getUnionForMetaAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaAnnotations().getNormalNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeNormalNodeUnion(getUnionForMetaAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaAnnotations().getSpliceNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeSpliceNodeUnion(getUnionForMetaAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
+        }
+        NodeUnion<? extends AnnotationListNode> annotationsCopy;
+        switch (getUnionForAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForAnnotations().getNormalNode() == null)
+                {
+                    annotationsCopy = factory.<AnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    annotationsCopy = factory.makeNormalNodeUnion(getUnionForAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForAnnotations().getSpliceNode() == null)
+                {
+                    annotationsCopy = factory.<AnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    annotationsCopy = factory.makeSpliceNodeUnion(getUnionForAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotations().getType());
+        }
         return factory.makeAnnotationMethodModifiersNode(
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
-                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
+                metaAnnotationsCopy,
+                annotationsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
@@ -22,7 +23,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
 {
     /** General constructor. */
     public SimpleNameNodeImpl(
-            IdentifierNode identifier,
+            NodeUnion<? extends IdentifierNode> identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -108,7 +109,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getIdentifier()});
+        return Arrays.asList(new Node[]{getUnionForIdentifier().getNodeValue()});
     }
     
     /**
@@ -161,8 +162,32 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     @Override
     public SimpleNameNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
         return factory.makeSimpleNameNode(
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                identifierCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements ParameterizedTypeSelectNode
 {
     /** The parameterized type from which a type is selected. */
-    private ParameterizedTypeNode base;
+    private NodeUnion<? extends ParameterizedTypeNode> base;
     
     /** The type which is selected from the base. */
-    private DeclaredTypeNode select;
+    private NodeUnion<? extends DeclaredTypeNode> select;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     
     /** General constructor. */
     public ParameterizedTypeSelectNodeImpl(
-            ParameterizedTypeNode base,
-            DeclaredTypeNode select,
+            NodeUnion<? extends ParameterizedTypeNode> base,
+            NodeUnion<? extends DeclaredTypeNode> select,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setBase(base, false);
-        setSelect(select, false);
+        setUnionForBase(base, false);
+        setUnionForSelect(select, false);
+    }
+    
+    /**
+     * Gets the parameterized type from which a type is selected.  This property's value is assumed to be a normal node.
+     * @return The parameterized type from which a type is selected.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ParameterizedTypeNode getBase()
+    {
+        getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.base == null)
+        {
+            return null;
+        } else
+        {
+            return this.base.getNormalNode();
+        }
     }
     
     /**
      * Gets the parameterized type from which a type is selected.
      * @return The parameterized type from which a type is selected.
      */
-    public ParameterizedTypeNode getBase()
+    public NodeUnion<? extends ParameterizedTypeNode> getUnionForBase()
     {
         getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.base == null)
+        {
+            this.base = new NormalNodeUnion<ParameterizedTypeNode>(null);
+        }
         return this.base;
     }
     
@@ -90,18 +113,73 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.base, false);
-        this.base = base;
+        
+        if (this.base != null)
+        {
+            setAsChild(this.base.getNodeValue(), false);
+        }
+        this.base = new NormalNodeUnion<ParameterizedTypeNode>(base);
         setAsChild(base, true);
+    }
+    
+    /**
+     * Changes the parameterized type from which a type is selected.
+     * @param base The parameterized type from which a type is selected.
+     */
+    public void setUnionForBase(NodeUnion<? extends ParameterizedTypeNode> base)
+    {
+            setUnionForBase(base, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBase(NodeUnion<? extends ParameterizedTypeNode> base, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (base == null)
+        {
+            throw new NullPointerException("Node union for property base cannot be null.");
+        }
+        if (this.base != null)
+        {
+            setAsChild(this.base.getNodeValue(), false);
+        }
+        this.base = base;
+        setAsChild(base.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the type which is selected from the base.  This property's value is assumed to be a normal node.
+     * @return The type which is selected from the base.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public DeclaredTypeNode getSelect()
+    {
+        getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.select == null)
+        {
+            return null;
+        } else
+        {
+            return this.select.getNormalNode();
+        }
     }
     
     /**
      * Gets the type which is selected from the base.
      * @return The type which is selected from the base.
      */
-    public DeclaredTypeNode getSelect()
+    public NodeUnion<? extends DeclaredTypeNode> getUnionForSelect()
     {
         getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.select == null)
+        {
+            this.select = new NormalNodeUnion<DeclaredTypeNode>(null);
+        }
         return this.select;
     }
     
@@ -122,9 +200,43 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.select, false);
-        this.select = select;
+        
+        if (this.select != null)
+        {
+            setAsChild(this.select.getNodeValue(), false);
+        }
+        this.select = new NormalNodeUnion<DeclaredTypeNode>(select);
         setAsChild(select, true);
+    }
+    
+    /**
+     * Changes the type which is selected from the base.
+     * @param select The type which is selected from the base.
+     */
+    public void setUnionForSelect(NodeUnion<? extends DeclaredTypeNode> select)
+    {
+            setUnionForSelect(select, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForSelect(NodeUnion<? extends DeclaredTypeNode> select, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (select == null)
+        {
+            throw new NullPointerException("Node union for property select cannot be null.");
+        }
+        if (this.select != null)
+        {
+            setAsChild(this.select.getNodeValue(), false);
+        }
+        this.select = select;
+        setAsChild(select.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.base != null)
+        if (this.base.getNodeValue() != null)
         {
-            this.base.receive(visitor);
+            this.base.getNodeValue().receive(visitor);
         }
-        if (this.select != null)
+        if (this.select.getNodeValue() != null)
         {
-            this.select.receive(visitor);
+            this.select.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.base != null)
+        if (this.base.getNodeValue() != null)
         {
-            this.base.receiveTyped(visitor);
+            this.base.getNodeValue().receiveTyped(visitor);
         }
-        if (this.select != null)
+        if (this.select.getNodeValue() != null)
         {
-            this.select.receiveTyped(visitor);
+            this.select.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -222,7 +334,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getBase(), getSelect()});
+        return Arrays.asList(new Node[]{getUnionForBase().getNodeValue(), getUnionForSelect().getNodeValue()});
     }
     
     /**
@@ -235,10 +347,10 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("base=");
-        sb.append(this.getBase() == null? "null" : this.getBase().getClass().getSimpleName());
+        sb.append(this.getUnionForBase().getNodeValue() == null? "null" : this.getUnionForBase().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("select=");
-        sb.append(this.getSelect() == null? "null" : this.getSelect().getClass().getSimpleName());
+        sb.append(this.getUnionForSelect().getNodeValue() == null? "null" : this.getUnionForSelect().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -282,9 +394,57 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     @Override
     public ParameterizedTypeSelectNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ParameterizedTypeNode> baseCopy;
+        switch (getUnionForBase().getType())
+        {
+            case NORMAL:
+                if (getUnionForBase().getNormalNode() == null)
+                {
+                    baseCopy = factory.<ParameterizedTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    baseCopy = factory.makeNormalNodeUnion(getUnionForBase().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBase().getSpliceNode() == null)
+                {
+                    baseCopy = factory.<ParameterizedTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    baseCopy = factory.makeSpliceNodeUnion(getUnionForBase().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBase().getType());
+        }
+        NodeUnion<? extends DeclaredTypeNode> selectCopy;
+        switch (getUnionForSelect().getType())
+        {
+            case NORMAL:
+                if (getUnionForSelect().getNormalNode() == null)
+                {
+                    selectCopy = factory.<DeclaredTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    selectCopy = factory.makeNormalNodeUnion(getUnionForSelect().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForSelect().getSpliceNode() == null)
+                {
+                    selectCopy = factory.<DeclaredTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    selectCopy = factory.makeSpliceNodeUnion(getUnionForSelect().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForSelect().getType());
+        }
         return factory.makeParameterizedTypeSelectNode(
-                getBase()==null?null:getBase().deepCopy(factory),
-                getSelect()==null?null:getSelect().deepCopy(factory),
+                baseCopy,
+                selectCopy,
                 getStartLocation(),
                 getStopLocation());
     }

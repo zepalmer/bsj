@@ -10,25 +10,27 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ClassInstantiationNodeImpl extends NodeImpl implements ClassInstantiationNode
 {
     /** The type arguments for the constructor. */
-    private TypeArgumentListNode constructorTypeArguments;
+    private NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments;
     
     /** The arguments to the constructor. */
-    private ExpressionListNode arguments;
+    private NodeUnion<? extends ExpressionListNode> arguments;
     
     /** The body of the anonymous class. */
-    private AnonymousClassBodyNode body;
+    private NodeUnion<? extends AnonymousClassBodyNode> body;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -53,27 +55,48 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     
     /** General constructor. */
     protected ClassInstantiationNodeImpl(
-            TypeArgumentListNode constructorTypeArguments,
-            ExpressionListNode arguments,
-            AnonymousClassBodyNode body,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setConstructorTypeArguments(constructorTypeArguments, false);
-        setArguments(arguments, false);
-        setBody(body, false);
+        setUnionForConstructorTypeArguments(constructorTypeArguments, false);
+        setUnionForArguments(arguments, false);
+        setUnionForBody(body, false);
+    }
+    
+    /**
+     * Gets the type arguments for the constructor.  This property's value is assumed to be a normal node.
+     * @return The type arguments for the constructor.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public TypeArgumentListNode getConstructorTypeArguments()
+    {
+        getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.constructorTypeArguments == null)
+        {
+            return null;
+        } else
+        {
+            return this.constructorTypeArguments.getNormalNode();
+        }
     }
     
     /**
      * Gets the type arguments for the constructor.
      * @return The type arguments for the constructor.
      */
-    public TypeArgumentListNode getConstructorTypeArguments()
+    public NodeUnion<? extends TypeArgumentListNode> getUnionForConstructorTypeArguments()
     {
         getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.constructorTypeArguments == null)
+        {
+            this.constructorTypeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
+        }
         return this.constructorTypeArguments;
     }
     
@@ -94,18 +117,73 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.constructorTypeArguments, false);
-        this.constructorTypeArguments = constructorTypeArguments;
+        
+        if (this.constructorTypeArguments != null)
+        {
+            setAsChild(this.constructorTypeArguments.getNodeValue(), false);
+        }
+        this.constructorTypeArguments = new NormalNodeUnion<TypeArgumentListNode>(constructorTypeArguments);
         setAsChild(constructorTypeArguments, true);
+    }
+    
+    /**
+     * Changes the type arguments for the constructor.
+     * @param constructorTypeArguments The type arguments for the constructor.
+     */
+    public void setUnionForConstructorTypeArguments(NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments)
+    {
+            setUnionForConstructorTypeArguments(constructorTypeArguments, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForConstructorTypeArguments(NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (constructorTypeArguments == null)
+        {
+            throw new NullPointerException("Node union for property constructorTypeArguments cannot be null.");
+        }
+        if (this.constructorTypeArguments != null)
+        {
+            setAsChild(this.constructorTypeArguments.getNodeValue(), false);
+        }
+        this.constructorTypeArguments = constructorTypeArguments;
+        setAsChild(constructorTypeArguments.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the arguments to the constructor.  This property's value is assumed to be a normal node.
+     * @return The arguments to the constructor.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionListNode getArguments()
+    {
+        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.arguments == null)
+        {
+            return null;
+        } else
+        {
+            return this.arguments.getNormalNode();
+        }
     }
     
     /**
      * Gets the arguments to the constructor.
      * @return The arguments to the constructor.
      */
-    public ExpressionListNode getArguments()
+    public NodeUnion<? extends ExpressionListNode> getUnionForArguments()
     {
         getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.arguments == null)
+        {
+            this.arguments = new NormalNodeUnion<ExpressionListNode>(null);
+        }
         return this.arguments;
     }
     
@@ -126,18 +204,73 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.arguments, false);
-        this.arguments = arguments;
+        
+        if (this.arguments != null)
+        {
+            setAsChild(this.arguments.getNodeValue(), false);
+        }
+        this.arguments = new NormalNodeUnion<ExpressionListNode>(arguments);
         setAsChild(arguments, true);
+    }
+    
+    /**
+     * Changes the arguments to the constructor.
+     * @param arguments The arguments to the constructor.
+     */
+    public void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments)
+    {
+            setUnionForArguments(arguments, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (arguments == null)
+        {
+            throw new NullPointerException("Node union for property arguments cannot be null.");
+        }
+        if (this.arguments != null)
+        {
+            setAsChild(this.arguments.getNodeValue(), false);
+        }
+        this.arguments = arguments;
+        setAsChild(arguments.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the body of the anonymous class.  This property's value is assumed to be a normal node.
+     * @return The body of the anonymous class.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnonymousClassBodyNode getBody()
+    {
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            return null;
+        } else
+        {
+            return this.body.getNormalNode();
+        }
     }
     
     /**
      * Gets the body of the anonymous class.
      * @return The body of the anonymous class.
      */
-    public AnonymousClassBodyNode getBody()
+    public NodeUnion<? extends AnonymousClassBodyNode> getUnionForBody()
     {
         getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            this.body = new NormalNodeUnion<AnonymousClassBodyNode>(null);
+        }
         return this.body;
     }
     
@@ -158,9 +291,43 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.body, false);
-        this.body = body;
+        
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = new NormalNodeUnion<AnonymousClassBodyNode>(body);
         setAsChild(body, true);
+    }
+    
+    /**
+     * Changes the body of the anonymous class.
+     * @param body The body of the anonymous class.
+     */
+    public void setUnionForBody(NodeUnion<? extends AnonymousClassBodyNode> body)
+    {
+            setUnionForBody(body, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBody(NodeUnion<? extends AnonymousClassBodyNode> body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (body == null)
+        {
+            throw new NullPointerException("Node union for property body cannot be null.");
+        }
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = body;
+        setAsChild(body.getNodeValue(), true);
     }
     
     /**
@@ -174,17 +341,17 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.constructorTypeArguments != null)
+        if (this.constructorTypeArguments.getNodeValue() != null)
         {
-            this.constructorTypeArguments.receive(visitor);
+            this.constructorTypeArguments.getNodeValue().receive(visitor);
         }
-        if (this.arguments != null)
+        if (this.arguments.getNodeValue() != null)
         {
-            this.arguments.receive(visitor);
+            this.arguments.getNodeValue().receive(visitor);
         }
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receive(visitor);
+            this.body.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -207,17 +374,17 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.constructorTypeArguments != null)
+        if (this.constructorTypeArguments.getNodeValue() != null)
         {
-            this.constructorTypeArguments.receiveTyped(visitor);
+            this.constructorTypeArguments.getNodeValue().receiveTyped(visitor);
         }
-        if (this.arguments != null)
+        if (this.arguments.getNodeValue() != null)
         {
-            this.arguments.receiveTyped(visitor);
+            this.arguments.getNodeValue().receiveTyped(visitor);
         }
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receiveTyped(visitor);
+            this.body.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -272,13 +439,13 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("constructorTypeArguments=");
-        sb.append(this.getConstructorTypeArguments() == null? "null" : this.getConstructorTypeArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForConstructorTypeArguments().getNodeValue() == null? "null" : this.getUnionForConstructorTypeArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("arguments=");
-        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

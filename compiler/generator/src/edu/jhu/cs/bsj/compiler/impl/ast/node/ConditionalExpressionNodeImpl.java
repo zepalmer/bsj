@@ -14,23 +14,25 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConditionalExpressionNodeImpl extends NodeImpl implements ConditionalExpressionNode
 {
     /** The condition of the expression. */
-    private ExpressionNode condition;
+    private NodeUnion<? extends ExpressionNode> condition;
     
     /** The value of this expression when the condition is true. */
-    private ExpressionNode trueExpression;
+    private NodeUnion<? extends ExpressionNode> trueExpression;
     
     /** The value of this expression when the condition is false. */
-    private ExpressionNode falseExpression;
+    private NodeUnion<? extends ExpressionNode> falseExpression;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -55,27 +57,48 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     
     /** General constructor. */
     public ConditionalExpressionNodeImpl(
-            ExpressionNode condition,
-            ExpressionNode trueExpression,
-            ExpressionNode falseExpression,
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends ExpressionNode> trueExpression,
+            NodeUnion<? extends ExpressionNode> falseExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setCondition(condition, false);
-        setTrueExpression(trueExpression, false);
-        setFalseExpression(falseExpression, false);
+        setUnionForCondition(condition, false);
+        setUnionForTrueExpression(trueExpression, false);
+        setUnionForFalseExpression(falseExpression, false);
+    }
+    
+    /**
+     * Gets the condition of the expression.  This property's value is assumed to be a normal node.
+     * @return The condition of the expression.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getCondition()
+    {
+        getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.condition == null)
+        {
+            return null;
+        } else
+        {
+            return this.condition.getNormalNode();
+        }
     }
     
     /**
      * Gets the condition of the expression.
      * @return The condition of the expression.
      */
-    public ExpressionNode getCondition()
+    public NodeUnion<? extends ExpressionNode> getUnionForCondition()
     {
         getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.condition == null)
+        {
+            this.condition = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.condition;
     }
     
@@ -96,18 +119,73 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.condition, false);
-        this.condition = condition;
+        
+        if (this.condition != null)
+        {
+            setAsChild(this.condition.getNodeValue(), false);
+        }
+        this.condition = new NormalNodeUnion<ExpressionNode>(condition);
         setAsChild(condition, true);
+    }
+    
+    /**
+     * Changes the condition of the expression.
+     * @param condition The condition of the expression.
+     */
+    public void setUnionForCondition(NodeUnion<? extends ExpressionNode> condition)
+    {
+            setUnionForCondition(condition, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForCondition(NodeUnion<? extends ExpressionNode> condition, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (condition == null)
+        {
+            throw new NullPointerException("Node union for property condition cannot be null.");
+        }
+        if (this.condition != null)
+        {
+            setAsChild(this.condition.getNodeValue(), false);
+        }
+        this.condition = condition;
+        setAsChild(condition.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the value of this expression when the condition is true.  This property's value is assumed to be a normal node.
+     * @return The value of this expression when the condition is true.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getTrueExpression()
+    {
+        getAttribute(LocalAttribute.TRUE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.trueExpression == null)
+        {
+            return null;
+        } else
+        {
+            return this.trueExpression.getNormalNode();
+        }
     }
     
     /**
      * Gets the value of this expression when the condition is true.
      * @return The value of this expression when the condition is true.
      */
-    public ExpressionNode getTrueExpression()
+    public NodeUnion<? extends ExpressionNode> getUnionForTrueExpression()
     {
         getAttribute(LocalAttribute.TRUE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.trueExpression == null)
+        {
+            this.trueExpression = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.trueExpression;
     }
     
@@ -128,18 +206,73 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TRUE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.trueExpression, false);
-        this.trueExpression = trueExpression;
+        
+        if (this.trueExpression != null)
+        {
+            setAsChild(this.trueExpression.getNodeValue(), false);
+        }
+        this.trueExpression = new NormalNodeUnion<ExpressionNode>(trueExpression);
         setAsChild(trueExpression, true);
+    }
+    
+    /**
+     * Changes the value of this expression when the condition is true.
+     * @param trueExpression The value of this expression when the condition is true.
+     */
+    public void setUnionForTrueExpression(NodeUnion<? extends ExpressionNode> trueExpression)
+    {
+            setUnionForTrueExpression(trueExpression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForTrueExpression(NodeUnion<? extends ExpressionNode> trueExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TRUE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (trueExpression == null)
+        {
+            throw new NullPointerException("Node union for property trueExpression cannot be null.");
+        }
+        if (this.trueExpression != null)
+        {
+            setAsChild(this.trueExpression.getNodeValue(), false);
+        }
+        this.trueExpression = trueExpression;
+        setAsChild(trueExpression.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the value of this expression when the condition is false.  This property's value is assumed to be a normal node.
+     * @return The value of this expression when the condition is false.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getFalseExpression()
+    {
+        getAttribute(LocalAttribute.FALSE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.falseExpression == null)
+        {
+            return null;
+        } else
+        {
+            return this.falseExpression.getNormalNode();
+        }
     }
     
     /**
      * Gets the value of this expression when the condition is false.
      * @return The value of this expression when the condition is false.
      */
-    public ExpressionNode getFalseExpression()
+    public NodeUnion<? extends ExpressionNode> getUnionForFalseExpression()
     {
         getAttribute(LocalAttribute.FALSE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.falseExpression == null)
+        {
+            this.falseExpression = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.falseExpression;
     }
     
@@ -160,9 +293,43 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.FALSE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.falseExpression, false);
-        this.falseExpression = falseExpression;
+        
+        if (this.falseExpression != null)
+        {
+            setAsChild(this.falseExpression.getNodeValue(), false);
+        }
+        this.falseExpression = new NormalNodeUnion<ExpressionNode>(falseExpression);
         setAsChild(falseExpression, true);
+    }
+    
+    /**
+     * Changes the value of this expression when the condition is false.
+     * @param falseExpression The value of this expression when the condition is false.
+     */
+    public void setUnionForFalseExpression(NodeUnion<? extends ExpressionNode> falseExpression)
+    {
+            setUnionForFalseExpression(falseExpression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForFalseExpression(NodeUnion<? extends ExpressionNode> falseExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.FALSE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (falseExpression == null)
+        {
+            throw new NullPointerException("Node union for property falseExpression cannot be null.");
+        }
+        if (this.falseExpression != null)
+        {
+            setAsChild(this.falseExpression.getNodeValue(), false);
+        }
+        this.falseExpression = falseExpression;
+        setAsChild(falseExpression.getNodeValue(), true);
     }
     
     /**
@@ -176,17 +343,17 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.condition != null)
+        if (this.condition.getNodeValue() != null)
         {
-            this.condition.receive(visitor);
+            this.condition.getNodeValue().receive(visitor);
         }
-        if (this.trueExpression != null)
+        if (this.trueExpression.getNodeValue() != null)
         {
-            this.trueExpression.receive(visitor);
+            this.trueExpression.getNodeValue().receive(visitor);
         }
-        if (this.falseExpression != null)
+        if (this.falseExpression.getNodeValue() != null)
         {
-            this.falseExpression.receive(visitor);
+            this.falseExpression.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -209,17 +376,17 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.condition != null)
+        if (this.condition.getNodeValue() != null)
         {
-            this.condition.receiveTyped(visitor);
+            this.condition.getNodeValue().receiveTyped(visitor);
         }
-        if (this.trueExpression != null)
+        if (this.trueExpression.getNodeValue() != null)
         {
-            this.trueExpression.receiveTyped(visitor);
+            this.trueExpression.getNodeValue().receiveTyped(visitor);
         }
-        if (this.falseExpression != null)
+        if (this.falseExpression.getNodeValue() != null)
         {
-            this.falseExpression.receiveTyped(visitor);
+            this.falseExpression.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -269,7 +436,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getCondition(), getTrueExpression(), getFalseExpression()});
+        return Arrays.asList(new Node[]{getUnionForCondition().getNodeValue(), getUnionForTrueExpression().getNodeValue(), getUnionForFalseExpression().getNodeValue()});
     }
     
     /**
@@ -282,13 +449,13 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("condition=");
-        sb.append(this.getCondition() == null? "null" : this.getCondition().getClass().getSimpleName());
+        sb.append(this.getUnionForCondition().getNodeValue() == null? "null" : this.getUnionForCondition().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("trueExpression=");
-        sb.append(this.getTrueExpression() == null? "null" : this.getTrueExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForTrueExpression().getNodeValue() == null? "null" : this.getUnionForTrueExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("falseExpression=");
-        sb.append(this.getFalseExpression() == null? "null" : this.getFalseExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForFalseExpression().getNodeValue() == null? "null" : this.getUnionForFalseExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -332,10 +499,82 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     @Override
     public ConditionalExpressionNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionNode> conditionCopy;
+        switch (getUnionForCondition().getType())
+        {
+            case NORMAL:
+                if (getUnionForCondition().getNormalNode() == null)
+                {
+                    conditionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    conditionCopy = factory.makeNormalNodeUnion(getUnionForCondition().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForCondition().getSpliceNode() == null)
+                {
+                    conditionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    conditionCopy = factory.makeSpliceNodeUnion(getUnionForCondition().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForCondition().getType());
+        }
+        NodeUnion<? extends ExpressionNode> trueExpressionCopy;
+        switch (getUnionForTrueExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForTrueExpression().getNormalNode() == null)
+                {
+                    trueExpressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    trueExpressionCopy = factory.makeNormalNodeUnion(getUnionForTrueExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTrueExpression().getSpliceNode() == null)
+                {
+                    trueExpressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    trueExpressionCopy = factory.makeSpliceNodeUnion(getUnionForTrueExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTrueExpression().getType());
+        }
+        NodeUnion<? extends ExpressionNode> falseExpressionCopy;
+        switch (getUnionForFalseExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForFalseExpression().getNormalNode() == null)
+                {
+                    falseExpressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    falseExpressionCopy = factory.makeNormalNodeUnion(getUnionForFalseExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForFalseExpression().getSpliceNode() == null)
+                {
+                    falseExpressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    falseExpressionCopy = factory.makeSpliceNodeUnion(getUnionForFalseExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForFalseExpression().getType());
+        }
         return factory.makeConditionalExpressionNode(
-                getCondition()==null?null:getCondition().deepCopy(factory),
-                getTrueExpression()==null?null:getTrueExpression().deepCopy(factory),
-                getFalseExpression()==null?null:getFalseExpression().deepCopy(factory),
+                conditionCopy,
+                trueExpressionCopy,
+                falseExpressionCopy,
                 getStartLocation(),
                 getStopLocation());
     }

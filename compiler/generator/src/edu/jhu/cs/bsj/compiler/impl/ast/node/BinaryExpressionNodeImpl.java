@@ -15,20 +15,22 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressionNode
 {
     /** The left operand of the expression. */
-    private ExpressionNode leftOperand;
+    private NodeUnion<? extends ExpressionNode> leftOperand;
     
     /** The right operand of the expression. */
-    private ExpressionNode rightOperand;
+    private NodeUnion<? extends ExpressionNode> rightOperand;
     
     /** The binary operator to apply. */
     private BinaryOperator operator;
@@ -56,8 +58,8 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     
     /** General constructor. */
     public BinaryExpressionNodeImpl(
-            ExpressionNode leftOperand,
-            ExpressionNode rightOperand,
+            NodeUnion<? extends ExpressionNode> leftOperand,
+            NodeUnion<? extends ExpressionNode> rightOperand,
             BinaryOperator operator,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -65,18 +67,39 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setLeftOperand(leftOperand, false);
-        setRightOperand(rightOperand, false);
+        setUnionForLeftOperand(leftOperand, false);
+        setUnionForRightOperand(rightOperand, false);
         this.operator = operator;
+    }
+    
+    /**
+     * Gets the left operand of the expression.  This property's value is assumed to be a normal node.
+     * @return The left operand of the expression.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getLeftOperand()
+    {
+        getAttribute(LocalAttribute.LEFT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.leftOperand == null)
+        {
+            return null;
+        } else
+        {
+            return this.leftOperand.getNormalNode();
+        }
     }
     
     /**
      * Gets the left operand of the expression.
      * @return The left operand of the expression.
      */
-    public ExpressionNode getLeftOperand()
+    public NodeUnion<? extends ExpressionNode> getUnionForLeftOperand()
     {
         getAttribute(LocalAttribute.LEFT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.leftOperand == null)
+        {
+            this.leftOperand = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.leftOperand;
     }
     
@@ -97,18 +120,73 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.LEFT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.leftOperand, false);
-        this.leftOperand = leftOperand;
+        
+        if (this.leftOperand != null)
+        {
+            setAsChild(this.leftOperand.getNodeValue(), false);
+        }
+        this.leftOperand = new NormalNodeUnion<ExpressionNode>(leftOperand);
         setAsChild(leftOperand, true);
+    }
+    
+    /**
+     * Changes the left operand of the expression.
+     * @param leftOperand The left operand of the expression.
+     */
+    public void setUnionForLeftOperand(NodeUnion<? extends ExpressionNode> leftOperand)
+    {
+            setUnionForLeftOperand(leftOperand, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForLeftOperand(NodeUnion<? extends ExpressionNode> leftOperand, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.LEFT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (leftOperand == null)
+        {
+            throw new NullPointerException("Node union for property leftOperand cannot be null.");
+        }
+        if (this.leftOperand != null)
+        {
+            setAsChild(this.leftOperand.getNodeValue(), false);
+        }
+        this.leftOperand = leftOperand;
+        setAsChild(leftOperand.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the right operand of the expression.  This property's value is assumed to be a normal node.
+     * @return The right operand of the expression.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getRightOperand()
+    {
+        getAttribute(LocalAttribute.RIGHT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.rightOperand == null)
+        {
+            return null;
+        } else
+        {
+            return this.rightOperand.getNormalNode();
+        }
     }
     
     /**
      * Gets the right operand of the expression.
      * @return The right operand of the expression.
      */
-    public ExpressionNode getRightOperand()
+    public NodeUnion<? extends ExpressionNode> getUnionForRightOperand()
     {
         getAttribute(LocalAttribute.RIGHT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.rightOperand == null)
+        {
+            this.rightOperand = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.rightOperand;
     }
     
@@ -129,9 +207,43 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.RIGHT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.rightOperand, false);
-        this.rightOperand = rightOperand;
+        
+        if (this.rightOperand != null)
+        {
+            setAsChild(this.rightOperand.getNodeValue(), false);
+        }
+        this.rightOperand = new NormalNodeUnion<ExpressionNode>(rightOperand);
         setAsChild(rightOperand, true);
+    }
+    
+    /**
+     * Changes the right operand of the expression.
+     * @param rightOperand The right operand of the expression.
+     */
+    public void setUnionForRightOperand(NodeUnion<? extends ExpressionNode> rightOperand)
+    {
+            setUnionForRightOperand(rightOperand, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForRightOperand(NodeUnion<? extends ExpressionNode> rightOperand, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.RIGHT_OPERAND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (rightOperand == null)
+        {
+            throw new NullPointerException("Node union for property rightOperand cannot be null.");
+        }
+        if (this.rightOperand != null)
+        {
+            setAsChild(this.rightOperand.getNodeValue(), false);
+        }
+        this.rightOperand = rightOperand;
+        setAsChild(rightOperand.getNodeValue(), true);
     }
     
     /**
@@ -161,6 +273,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.OPERATOR).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
+        
         this.operator = operator;
     }
     
@@ -175,13 +288,13 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.leftOperand != null)
+        if (this.leftOperand.getNodeValue() != null)
         {
-            this.leftOperand.receive(visitor);
+            this.leftOperand.getNodeValue().receive(visitor);
         }
-        if (this.rightOperand != null)
+        if (this.rightOperand.getNodeValue() != null)
         {
-            this.rightOperand.receive(visitor);
+            this.rightOperand.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -204,13 +317,13 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.leftOperand != null)
+        if (this.leftOperand.getNodeValue() != null)
         {
-            this.leftOperand.receiveTyped(visitor);
+            this.leftOperand.getNodeValue().receiveTyped(visitor);
         }
-        if (this.rightOperand != null)
+        if (this.rightOperand.getNodeValue() != null)
         {
-            this.rightOperand.receiveTyped(visitor);
+            this.rightOperand.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -260,7 +373,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getLeftOperand(), getRightOperand()});
+        return Arrays.asList(new Node[]{getUnionForLeftOperand().getNodeValue(), getUnionForRightOperand().getNodeValue()});
     }
     
     /**
@@ -273,10 +386,10 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("leftOperand=");
-        sb.append(this.getLeftOperand() == null? "null" : this.getLeftOperand().getClass().getSimpleName());
+        sb.append(this.getUnionForLeftOperand().getNodeValue() == null? "null" : this.getUnionForLeftOperand().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("rightOperand=");
-        sb.append(this.getRightOperand() == null? "null" : this.getRightOperand().getClass().getSimpleName());
+        sb.append(this.getUnionForRightOperand().getNodeValue() == null? "null" : this.getUnionForRightOperand().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("operator=");
         sb.append(String.valueOf(this.getOperator()) + ":" + (this.getOperator() != null ? this.getOperator().getClass().getSimpleName() : "null"));
@@ -323,9 +436,57 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     @Override
     public BinaryExpressionNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionNode> leftOperandCopy;
+        switch (getUnionForLeftOperand().getType())
+        {
+            case NORMAL:
+                if (getUnionForLeftOperand().getNormalNode() == null)
+                {
+                    leftOperandCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    leftOperandCopy = factory.makeNormalNodeUnion(getUnionForLeftOperand().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForLeftOperand().getSpliceNode() == null)
+                {
+                    leftOperandCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    leftOperandCopy = factory.makeSpliceNodeUnion(getUnionForLeftOperand().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForLeftOperand().getType());
+        }
+        NodeUnion<? extends ExpressionNode> rightOperandCopy;
+        switch (getUnionForRightOperand().getType())
+        {
+            case NORMAL:
+                if (getUnionForRightOperand().getNormalNode() == null)
+                {
+                    rightOperandCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    rightOperandCopy = factory.makeNormalNodeUnion(getUnionForRightOperand().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForRightOperand().getSpliceNode() == null)
+                {
+                    rightOperandCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    rightOperandCopy = factory.makeSpliceNodeUnion(getUnionForRightOperand().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForRightOperand().getType());
+        }
         return factory.makeBinaryExpressionNode(
-                getLeftOperand()==null?null:getLeftOperand().deepCopy(factory),
-                getRightOperand()==null?null:getRightOperand().deepCopy(factory),
+                leftOperandCopy,
+                rightOperandCopy,
                 getOperator(),
                 getStartLocation(),
                 getStopLocation());

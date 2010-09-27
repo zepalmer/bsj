@@ -14,11 +14,13 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -28,10 +30,10 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     private boolean staticInitializer;
     
     /** The body of the initializer. */
-    private BlockStatementListNode body;
+    private NodeUnion<? extends BlockStatementListNode> body;
     
     /** The meta-annotations associated with this node. */
-    private MetaAnnotationListNode metaAnnotations;
+    private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -57,8 +59,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     /** General constructor. */
     public InitializerDeclarationNodeImpl(
             boolean staticInitializer,
-            BlockStatementListNode body,
-            MetaAnnotationListNode metaAnnotations,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -66,8 +68,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         super(startLocation, stopLocation, manager, binary);
         this.staticInitializer = staticInitializer;
-        setBody(body, false);
-        setMetaAnnotations(metaAnnotations, false);
+        setUnionForBody(body, false);
+        setUnionForMetaAnnotations(metaAnnotations, false);
     }
     
     /**
@@ -97,16 +99,38 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATIC_INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
+        
         this.staticInitializer = staticInitializer;
+    }
+    
+    /**
+     * Gets the body of the initializer.  This property's value is assumed to be a normal node.
+     * @return The body of the initializer.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public BlockStatementListNode getBody()
+    {
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            return null;
+        } else
+        {
+            return this.body.getNormalNode();
+        }
     }
     
     /**
      * Gets the body of the initializer.
      * @return The body of the initializer.
      */
-    public BlockStatementListNode getBody()
+    public NodeUnion<? extends BlockStatementListNode> getUnionForBody()
     {
         getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            this.body = new NormalNodeUnion<BlockStatementListNode>(null);
+        }
         return this.body;
     }
     
@@ -127,18 +151,73 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.body, false);
-        this.body = body;
+        
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = new NormalNodeUnion<BlockStatementListNode>(body);
         setAsChild(body, true);
+    }
+    
+    /**
+     * Changes the body of the initializer.
+     * @param body The body of the initializer.
+     */
+    public void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body)
+    {
+            setUnionForBody(body, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (body == null)
+        {
+            throw new NullPointerException("Node union for property body cannot be null.");
+        }
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = body;
+        setAsChild(body.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.  This property's value is assumed to be a normal node.
+     * @return The meta-annotations associated with this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            return null;
+        } else
+        {
+            return this.metaAnnotations.getNormalNode();
+        }
     }
     
     /**
      * Gets the meta-annotations associated with this node.
      * @return The meta-annotations associated with this node.
      */
-    public MetaAnnotationListNode getMetaAnnotations()
+    public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
         getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
+        }
         return this.metaAnnotations;
     }
     
@@ -159,9 +238,43 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
+        
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
         setAsChild(metaAnnotations, true);
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+            setUnionForMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (metaAnnotations == null)
+        {
+            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+        }
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations.getNodeValue(), true);
     }
     
     /**
@@ -175,13 +288,13 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receive(visitor);
+            this.body.getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receive(visitor);
+            this.metaAnnotations.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -204,13 +317,13 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receiveTyped(visitor);
+            this.body.getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receiveTyped(visitor);
+            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -265,7 +378,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getBody(), getMetaAnnotations()});
+        return Arrays.asList(new Node[]{getUnionForBody().getNodeValue(), getUnionForMetaAnnotations().getNodeValue()});
     }
     
     /**
@@ -278,13 +391,12 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("staticInitializer=");
-        sb.append(String.valueOf(this.getStaticInitializer()) + ":" + ("boolean"));
         sb.append(',');
         sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -328,10 +440,58 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     @Override
     public InitializerDeclarationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends BlockStatementListNode> bodyCopy;
+        switch (getUnionForBody().getType())
+        {
+            case NORMAL:
+                if (getUnionForBody().getNormalNode() == null)
+                {
+                    bodyCopy = factory.<BlockStatementListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeNormalNodeUnion(getUnionForBody().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBody().getSpliceNode() == null)
+                {
+                    bodyCopy = factory.<BlockStatementListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeSpliceNodeUnion(getUnionForBody().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
+        }
+        NodeUnion<? extends MetaAnnotationListNode> metaAnnotationsCopy;
+        switch (getUnionForMetaAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaAnnotations().getNormalNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeNormalNodeUnion(getUnionForMetaAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaAnnotations().getSpliceNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeSpliceNodeUnion(getUnionForMetaAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
+        }
         return factory.makeInitializerDeclarationNode(
                 getStaticInitializer(),
-                getBody()==null?null:getBody().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                bodyCopy,
+                metaAnnotationsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -23,14 +24,31 @@ public interface MetaprogramDependencyNode extends Node, BsjSpecificNode
     /**
      * Gets the name of the metaprogram target on which to depend.
      * @return The name of the metaprogram target on which to depend.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public NameNode getTargetName();
+    public NameNode getTargetName() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the name of the metaprogram target on which to depend.
+     * @return A union object representing The name of the metaprogram target on which to depend.
+     */
+    public NodeUnion<? extends NameNode> getUnionForTargetName();
     
     /**
      * Changes the name of the metaprogram target on which to depend.
      * @param targetName The name of the metaprogram target on which to depend.
      */
     public void setTargetName(NameNode targetName);
+    
+    /**
+     * Changes the name of the metaprogram target on which to depend.
+     * @param targetName The name of the metaprogram target on which to depend.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForTargetName(NodeUnion<? extends NameNode> targetName) throws NullPointerException;
     
     /**
      * Gets whether or not this dependency is weak.

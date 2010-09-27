@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ContinueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ContinueNodeImpl extends NodeImpl implements ContinueNode
 {
     /** The continue label. */
-    private IdentifierNode label;
+    private NodeUnion<? extends IdentifierNode> label;
     
     /** The meta-annotations associated with this node. */
-    private MetaAnnotationListNode metaAnnotations;
+    private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     
     /** General constructor. */
     public ContinueNodeImpl(
-            IdentifierNode label,
-            MetaAnnotationListNode metaAnnotations,
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setLabel(label, false);
-        setMetaAnnotations(metaAnnotations, false);
+        setUnionForLabel(label, false);
+        setUnionForMetaAnnotations(metaAnnotations, false);
+    }
+    
+    /**
+     * Gets the continue label.  This property's value is assumed to be a normal node.
+     * @return The continue label.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierNode getLabel()
+    {
+        getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.label == null)
+        {
+            return null;
+        } else
+        {
+            return this.label.getNormalNode();
+        }
     }
     
     /**
      * Gets the continue label.
      * @return The continue label.
      */
-    public IdentifierNode getLabel()
+    public NodeUnion<? extends IdentifierNode> getUnionForLabel()
     {
         getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.label == null)
+        {
+            this.label = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.label;
     }
     
@@ -90,18 +113,73 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.label, false);
-        this.label = label;
+        
+        if (this.label != null)
+        {
+            setAsChild(this.label.getNodeValue(), false);
+        }
+        this.label = new NormalNodeUnion<IdentifierNode>(label);
         setAsChild(label, true);
+    }
+    
+    /**
+     * Changes the continue label.
+     * @param label The continue label.
+     */
+    public void setUnionForLabel(NodeUnion<? extends IdentifierNode> label)
+    {
+            setUnionForLabel(label, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForLabel(NodeUnion<? extends IdentifierNode> label, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.LABEL).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (label == null)
+        {
+            throw new NullPointerException("Node union for property label cannot be null.");
+        }
+        if (this.label != null)
+        {
+            setAsChild(this.label.getNodeValue(), false);
+        }
+        this.label = label;
+        setAsChild(label.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.  This property's value is assumed to be a normal node.
+     * @return The meta-annotations associated with this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            return null;
+        } else
+        {
+            return this.metaAnnotations.getNormalNode();
+        }
     }
     
     /**
      * Gets the meta-annotations associated with this node.
      * @return The meta-annotations associated with this node.
      */
-    public MetaAnnotationListNode getMetaAnnotations()
+    public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
         getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
+        }
         return this.metaAnnotations;
     }
     
@@ -122,9 +200,43 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
+        
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
         setAsChild(metaAnnotations, true);
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+            setUnionForMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (metaAnnotations == null)
+        {
+            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+        }
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.label != null)
+        if (this.label.getNodeValue() != null)
         {
-            this.label.receive(visitor);
+            this.label.getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receive(visitor);
+            this.metaAnnotations.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.label != null)
+        if (this.label.getNodeValue() != null)
         {
-            this.label.receiveTyped(visitor);
+            this.label.getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receiveTyped(visitor);
+            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -221,7 +333,7 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getLabel(), getMetaAnnotations()});
+        return Arrays.asList(new Node[]{getUnionForLabel().getNodeValue(), getUnionForMetaAnnotations().getNodeValue()});
     }
     
     /**
@@ -234,10 +346,10 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("label=");
-        sb.append(this.getLabel() == null? "null" : this.getLabel().getClass().getSimpleName());
+        sb.append(this.getUnionForLabel().getNodeValue() == null? "null" : this.getUnionForLabel().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -281,9 +393,57 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     @Override
     public ContinueNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends IdentifierNode> labelCopy;
+        switch (getUnionForLabel().getType())
+        {
+            case NORMAL:
+                if (getUnionForLabel().getNormalNode() == null)
+                {
+                    labelCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    labelCopy = factory.makeNormalNodeUnion(getUnionForLabel().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForLabel().getSpliceNode() == null)
+                {
+                    labelCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    labelCopy = factory.makeSpliceNodeUnion(getUnionForLabel().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForLabel().getType());
+        }
+        NodeUnion<? extends MetaAnnotationListNode> metaAnnotationsCopy;
+        switch (getUnionForMetaAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaAnnotations().getNormalNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeNormalNodeUnion(getUnionForMetaAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaAnnotations().getSpliceNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeSpliceNodeUnion(getUnionForMetaAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
+        }
         return factory.makeContinueNode(
-                getLabel()==null?null:getLabel().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                labelCopy,
+                metaAnnotationsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

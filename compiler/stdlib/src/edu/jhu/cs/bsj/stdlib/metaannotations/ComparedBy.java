@@ -45,7 +45,7 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
         super(Arrays.asList("comparedBy"), Arrays.asList("property", "equalsAndHashCode"));
     }
 
-    public void execute(Context<MetaAnnotationMetaprogramAnchorNode> context,
+    public void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
     		List<Pair<String, TypeNode>> getterDescriptions)
     {
         // get all the members of our enclosing class
@@ -56,7 +56,7 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
     }
 
     private void addComparableInterface(
-            Context<MetaAnnotationMetaprogramAnchorNode> context, 
+            Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context, 
             IdentifierNode className)
     {
         BsjNodeFactory factory = context.getFactory();  
@@ -92,7 +92,7 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
                         factory.parseNameNode(className.getIdentifier())))));
     }
 
-    private ClassMemberNode generateCompareTo(Context<MetaAnnotationMetaprogramAnchorNode> context,
+    private ClassMemberNode generateCompareTo(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
             List<Pair<String, TypeNode>> getters, IdentifierNode className)
     {
         // TODO add support for Comparable non-primitive fields?

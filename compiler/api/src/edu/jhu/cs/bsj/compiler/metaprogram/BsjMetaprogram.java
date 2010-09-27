@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 
 /**
@@ -14,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
  * @param T The type of metaprogram anchor node used by this metaprogram.
  * @author Zachary Palmer
  */
-public interface BsjMetaprogram<T extends MetaprogramAnchorNode<?>>
+public interface BsjMetaprogram<T extends MetaprogramAnchorNode<U>, U extends Node>
 {
 	/**
 	 * Obtains a list of the targets in which this metaprogram participates. The metaprogram object is obligated to
@@ -64,5 +65,5 @@ public interface BsjMetaprogram<T extends MetaprogramAnchorNode<?>>
 	 * 
 	 * @param context The context in which to execute this metaprogram.
 	 */
-	public void execute(Context<T> context);
+	public void execute(Context<T,U> context);
 }

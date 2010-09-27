@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 
 /**
  * A node representing a field selection from <tt>super</tt>, such as in the expression
@@ -35,8 +36,15 @@ public interface SuperFieldAccessNode extends Node, RestrictedPrimaryExpressionN
     /**
      * Gets the qualifying type.
      * @return The qualifying type.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeNode getType();
+    public UnparameterizedTypeNode getType() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the qualifying type.
+     * @return A union object representing The qualifying type.
+     */
+    public NodeUnion<? extends UnparameterizedTypeNode> getUnionForType();
     
     /**
      * Changes the qualifying type.
@@ -45,16 +53,43 @@ public interface SuperFieldAccessNode extends Node, RestrictedPrimaryExpressionN
     public void setType(UnparameterizedTypeNode type);
     
     /**
+     * Changes the qualifying type.
+     * @param type The qualifying type.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForType(NodeUnion<? extends UnparameterizedTypeNode> type) throws NullPointerException;
+    
+    /**
      * Gets the identifier of the field being accessed.
      * @return The identifier of the field being accessed.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier();
+    public IdentifierNode getIdentifier() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the identifier of the field being accessed.
+     * @return A union object representing The identifier of the field being accessed.
+     */
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier();
     
     /**
      * Changes the identifier of the field being accessed.
      * @param identifier The identifier of the field being accessed.
      */
     public void setIdentifier(IdentifierNode identifier);
+    
+    /**
+     * Changes the identifier of the field being accessed.
+     * @param identifier The identifier of the field being accessed.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

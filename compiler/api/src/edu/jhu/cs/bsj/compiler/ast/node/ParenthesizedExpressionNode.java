@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 
 /**
  * A node representing a parenthesized expression, as in:
@@ -21,14 +22,31 @@ public interface ParenthesizedExpressionNode extends Node, RestrictedPrimaryExpr
     /**
      * Gets the expression contained in this node.
      * @return The expression contained in this node.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression();
+    public ExpressionNode getExpression() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the expression contained in this node.
+     * @return A union object representing The expression contained in this node.
+     */
+    public NodeUnion<? extends ExpressionNode> getUnionForExpression();
     
     /**
      * Changes the expression contained in this node.
      * @param expression The expression contained in this node.
      */
     public void setExpression(ExpressionNode expression);
+    
+    /**
+     * Changes the expression contained in this node.
+     * @param expression The expression contained in this node.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

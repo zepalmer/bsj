@@ -15,5 +15,5 @@ public interface BsjMetaAnnotationMetaprogram extends BsjMetaAnnotation
 	 * Retrieves the metaprogram represented by this meta-annotation.
 	 * @return The metaprorgam represented by this meta-annotation.
 	 */
-	public BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> getMetaprogram();
+	public BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> getMetaprogram();
 }

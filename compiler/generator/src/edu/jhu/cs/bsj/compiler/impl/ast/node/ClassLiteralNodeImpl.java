@@ -14,17 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralizableTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode> implements ClassLiteralNode
+public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
 {
     /** The type for this literal. */
-    private LiteralizableTypeNode value;
+    private NodeUnion<? extends LiteralizableTypeNode> value;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -45,23 +47,44 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     
     /** General constructor. */
     public ClassLiteralNodeImpl(
-            LiteralizableTypeNode value,
+            NodeUnion<? extends LiteralizableTypeNode> value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(value, startLocation, stopLocation, manager, binary);
-        setValue(value, false);
+        super(startLocation, stopLocation, manager, binary);
+        setUnionForValue(value, false);
+    }
+    
+    /**
+     * Gets the type for this literal.  This property's value is assumed to be a normal node.
+     * @return The type for this literal.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public LiteralizableTypeNode getValue()
+    {
+        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.value == null)
+        {
+            return null;
+        } else
+        {
+            return this.value.getNormalNode();
+        }
     }
     
     /**
      * Gets the type for this literal.
      * @return The type for this literal.
      */
-    public LiteralizableTypeNode getValue()
+    public NodeUnion<? extends LiteralizableTypeNode> getUnionForValue()
     {
         getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.value == null)
+        {
+            this.value = new NormalNodeUnion<LiteralizableTypeNode>(null);
+        }
         return this.value;
     }
     
@@ -82,9 +105,43 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.value, false);
-        this.value = value;
+        
+        if (this.value != null)
+        {
+            setAsChild(this.value.getNodeValue(), false);
+        }
+        this.value = new NormalNodeUnion<LiteralizableTypeNode>(value);
         setAsChild(value, true);
+    }
+    
+    /**
+     * Changes the type for this literal.
+     * @param value The type for this literal.
+     */
+    public void setUnionForValue(NodeUnion<? extends LiteralizableTypeNode> value)
+    {
+            setUnionForValue(value, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForValue(NodeUnion<? extends LiteralizableTypeNode> value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (value == null)
+        {
+            throw new NullPointerException("Node union for property value cannot be null.");
+        }
+        if (this.value != null)
+        {
+            setAsChild(this.value.getNodeValue(), false);
+        }
+        this.value = value;
+        setAsChild(value.getNodeValue(), true);
     }
     
     /**
@@ -98,9 +155,9 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.value != null)
+        if (this.value.getNodeValue() != null)
         {
-            this.value.receive(visitor);
+            this.value.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -123,9 +180,9 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.value != null)
+        if (this.value.getNodeValue() != null)
         {
-            this.value.receiveTyped(visitor);
+            this.value.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -142,13 +199,13 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     {
         visitor.visitStartBegin(this);
         visitor.visitClassLiteralNodeStart(this, true);
-        visitor.visitLiteralNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitLiteralNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStop(this);
         visitor.visitLiteralNodeStop(this);
+        visitor.visitNodeStop(this);
         visitor.visitClassLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
@@ -173,7 +230,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getValue()});
+        return Arrays.asList(new Node[]{getUnionForValue().getNodeValue()});
     }
     
     /**
@@ -186,7 +243,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("value=");
-        sb.append(this.getValue() == null? "null" : this.getValue().getClass().getSimpleName());
+        sb.append(this.getUnionForValue().getNodeValue() == null? "null" : this.getUnionForValue().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -230,8 +287,32 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     @Override
     public ClassLiteralNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends LiteralizableTypeNode> valueCopy;
+        switch (getUnionForValue().getType())
+        {
+            case NORMAL:
+                if (getUnionForValue().getNormalNode() == null)
+                {
+                    valueCopy = factory.<LiteralizableTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    valueCopy = factory.makeNormalNodeUnion(getUnionForValue().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForValue().getSpliceNode() == null)
+                {
+                    valueCopy = factory.<LiteralizableTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    valueCopy = factory.makeSpliceNodeUnion(getUnionForValue().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForValue().getType());
+        }
         return factory.makeClassLiteralNode(
-                getValue()==null?null:getValue().deepCopy(factory),
+                valueCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -14,10 +14,12 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -25,7 +27,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTargetNode
 {
     /** The names of the metaprogram targets in which to participate. */
-    private IdentifierListNode targets;
+    private NodeUnion<? extends IdentifierListNode> targets;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -46,23 +48,44 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     
     /** General constructor. */
     public MetaprogramTargetNodeImpl(
-            IdentifierListNode targets,
+            NodeUnion<? extends IdentifierListNode> targets,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setTargets(targets, false);
+        setUnionForTargets(targets, false);
+    }
+    
+    /**
+     * Gets the names of the metaprogram targets in which to participate.  This property's value is assumed to be a normal node.
+     * @return The names of the metaprogram targets in which to participate.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierListNode getTargets()
+    {
+        getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.targets == null)
+        {
+            return null;
+        } else
+        {
+            return this.targets.getNormalNode();
+        }
     }
     
     /**
      * Gets the names of the metaprogram targets in which to participate.
      * @return The names of the metaprogram targets in which to participate.
      */
-    public IdentifierListNode getTargets()
+    public NodeUnion<? extends IdentifierListNode> getUnionForTargets()
     {
         getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.targets == null)
+        {
+            this.targets = new NormalNodeUnion<IdentifierListNode>(null);
+        }
         return this.targets;
     }
     
@@ -83,9 +106,43 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.targets, false);
-        this.targets = targets;
+        
+        if (this.targets != null)
+        {
+            setAsChild(this.targets.getNodeValue(), false);
+        }
+        this.targets = new NormalNodeUnion<IdentifierListNode>(targets);
         setAsChild(targets, true);
+    }
+    
+    /**
+     * Changes the names of the metaprogram targets in which to participate.
+     * @param targets The names of the metaprogram targets in which to participate.
+     */
+    public void setUnionForTargets(NodeUnion<? extends IdentifierListNode> targets)
+    {
+            setUnionForTargets(targets, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForTargets(NodeUnion<? extends IdentifierListNode> targets, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (targets == null)
+        {
+            throw new NullPointerException("Node union for property targets cannot be null.");
+        }
+        if (this.targets != null)
+        {
+            setAsChild(this.targets.getNodeValue(), false);
+        }
+        this.targets = targets;
+        setAsChild(targets.getNodeValue(), true);
     }
     
     /**
@@ -99,9 +156,9 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.targets != null)
+        if (this.targets.getNodeValue() != null)
         {
-            this.targets.receive(visitor);
+            this.targets.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -124,9 +181,9 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.targets != null)
+        if (this.targets.getNodeValue() != null)
         {
-            this.targets.receiveTyped(visitor);
+            this.targets.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -172,7 +229,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getTargets()});
+        return Arrays.asList(new Node[]{getUnionForTargets().getNodeValue()});
     }
     
     /**
@@ -185,7 +242,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("targets=");
-        sb.append(this.getTargets() == null? "null" : this.getTargets().getClass().getSimpleName());
+        sb.append(this.getUnionForTargets().getNodeValue() == null? "null" : this.getUnionForTargets().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -229,8 +286,32 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     @Override
     public MetaprogramTargetNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends IdentifierListNode> targetsCopy;
+        switch (getUnionForTargets().getType())
+        {
+            case NORMAL:
+                if (getUnionForTargets().getNormalNode() == null)
+                {
+                    targetsCopy = factory.<IdentifierListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    targetsCopy = factory.makeNormalNodeUnion(getUnionForTargets().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTargets().getSpliceNode() == null)
+                {
+                    targetsCopy = factory.<IdentifierListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    targetsCopy = factory.makeSpliceNodeUnion(getUnionForTargets().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTargets().getType());
+        }
         return factory.makeMetaprogramTargetNode(
-                getTargets()==null?null:getTargets().deepCopy(factory),
+                targetsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

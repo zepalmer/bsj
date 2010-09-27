@@ -9,15 +9,15 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 public class MetaprogramNodeData
 {
 	/** The profile for this metaprogram. */
-	private MetaprogramProfile<?> profile;
+	private MetaprogramProfile<?,?> profile;
 
-	public MetaprogramNodeData(MetaprogramProfile<?> profile)
+	public MetaprogramNodeData(MetaprogramProfile<?,?> profile)
 	{
 		super();
 		this.profile = profile;
 	}
 
-	public MetaprogramProfile<?> getProfile()
+	public MetaprogramProfile<?,?> getProfile()
 	{
 		return profile;
 	}

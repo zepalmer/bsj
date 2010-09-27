@@ -40,6 +40,7 @@
         <xs:attribute name="typeArg" type="xs:string" use="optional" />
         <xs:attribute name="desc" type="xs:string" use="required" />
         <xs:attribute name="default" type="xs:string" use="optional" />
+        <xs:attribute name="allowUnion" type="xs:string" use="optional" default="true" />
     </xs:complexType>
 
     <xs:complexType name="constant_T">

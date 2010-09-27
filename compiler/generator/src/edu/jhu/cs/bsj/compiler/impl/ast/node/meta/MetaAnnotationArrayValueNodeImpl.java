@@ -14,10 +14,12 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -25,7 +27,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAnnotationArrayValueNode
 {
     /** The array values. */
-    private MetaAnnotationValueListNode values;
+    private NodeUnion<? extends MetaAnnotationValueListNode> values;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -46,23 +48,44 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     
     /** General constructor. */
     public MetaAnnotationArrayValueNodeImpl(
-            MetaAnnotationValueListNode values,
+            NodeUnion<? extends MetaAnnotationValueListNode> values,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setValues(values, false);
+        setUnionForValues(values, false);
+    }
+    
+    /**
+     * Gets the array values.  This property's value is assumed to be a normal node.
+     * @return The array values.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaAnnotationValueListNode getValues()
+    {
+        getAttribute(LocalAttribute.VALUES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.values == null)
+        {
+            return null;
+        } else
+        {
+            return this.values.getNormalNode();
+        }
     }
     
     /**
      * Gets the array values.
      * @return The array values.
      */
-    public MetaAnnotationValueListNode getValues()
+    public NodeUnion<? extends MetaAnnotationValueListNode> getUnionForValues()
     {
         getAttribute(LocalAttribute.VALUES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.values == null)
+        {
+            this.values = new NormalNodeUnion<MetaAnnotationValueListNode>(null);
+        }
         return this.values;
     }
     
@@ -83,9 +106,43 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VALUES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.values, false);
-        this.values = values;
+        
+        if (this.values != null)
+        {
+            setAsChild(this.values.getNodeValue(), false);
+        }
+        this.values = new NormalNodeUnion<MetaAnnotationValueListNode>(values);
         setAsChild(values, true);
+    }
+    
+    /**
+     * Changes the array values.
+     * @param values The array values.
+     */
+    public void setUnionForValues(NodeUnion<? extends MetaAnnotationValueListNode> values)
+    {
+            setUnionForValues(values, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForValues(NodeUnion<? extends MetaAnnotationValueListNode> values, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.VALUES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (values == null)
+        {
+            throw new NullPointerException("Node union for property values cannot be null.");
+        }
+        if (this.values != null)
+        {
+            setAsChild(this.values.getNodeValue(), false);
+        }
+        this.values = values;
+        setAsChild(values.getNodeValue(), true);
     }
     
     /**
@@ -99,9 +156,9 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.values != null)
+        if (this.values.getNodeValue() != null)
         {
-            this.values.receive(visitor);
+            this.values.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -124,9 +181,9 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.values != null)
+        if (this.values.getNodeValue() != null)
         {
-            this.values.receiveTyped(visitor);
+            this.values.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -174,7 +231,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getValues()});
+        return Arrays.asList(new Node[]{getUnionForValues().getNodeValue()});
     }
     
     /**
@@ -187,7 +244,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("values=");
-        sb.append(this.getValues() == null? "null" : this.getValues().getClass().getSimpleName());
+        sb.append(this.getUnionForValues().getNodeValue() == null? "null" : this.getUnionForValues().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -231,8 +288,32 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     @Override
     public MetaAnnotationArrayValueNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends MetaAnnotationValueListNode> valuesCopy;
+        switch (getUnionForValues().getType())
+        {
+            case NORMAL:
+                if (getUnionForValues().getNormalNode() == null)
+                {
+                    valuesCopy = factory.<MetaAnnotationValueListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    valuesCopy = factory.makeNormalNodeUnion(getUnionForValues().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForValues().getSpliceNode() == null)
+                {
+                    valuesCopy = factory.<MetaAnnotationValueListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    valuesCopy = factory.makeSpliceNodeUnion(getUnionForValues().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForValues().getType());
+        }
         return factory.makeMetaAnnotationArrayValueNode(
-                getValues()==null?null:getValues().deepCopy(factory),
+                valuesCopy,
                 getStartLocation(),
                 getStopLocation());
     }

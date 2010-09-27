@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.EnhancedForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -21,22 +22,23 @@ import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoopNode
 {
     /** The iterator variable. */
-    private VariableNode variable;
+    private NodeUnion<? extends VariableNode> variable;
     
     /** The loop's iterable expression. */
-    private ExpressionNode expression;
+    private NodeUnion<? extends ExpressionNode> expression;
     
     /** The loop's statement. */
-    private StatementNode statement;
+    private NodeUnion<? extends StatementNode> statement;
     
     /** The meta-annotations associated with this node. */
-    private MetaAnnotationListNode metaAnnotations;
+    private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -63,29 +65,50 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     
     /** General constructor. */
     public EnhancedForLoopNodeImpl(
-            VariableNode variable,
-            ExpressionNode expression,
-            StatementNode statement,
-            MetaAnnotationListNode metaAnnotations,
+            NodeUnion<? extends VariableNode> variable,
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setVariable(variable, false);
-        setExpression(expression, false);
-        setStatement(statement, false);
-        setMetaAnnotations(metaAnnotations, false);
+        setUnionForVariable(variable, false);
+        setUnionForExpression(expression, false);
+        setUnionForStatement(statement, false);
+        setUnionForMetaAnnotations(metaAnnotations, false);
+    }
+    
+    /**
+     * Gets the iterator variable.  This property's value is assumed to be a normal node.
+     * @return The iterator variable.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public VariableNode getVariable()
+    {
+        getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.variable == null)
+        {
+            return null;
+        } else
+        {
+            return this.variable.getNormalNode();
+        }
     }
     
     /**
      * Gets the iterator variable.
      * @return The iterator variable.
      */
-    public VariableNode getVariable()
+    public NodeUnion<? extends VariableNode> getUnionForVariable()
     {
         getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.variable == null)
+        {
+            this.variable = new NormalNodeUnion<VariableNode>(null);
+        }
         return this.variable;
     }
     
@@ -106,18 +129,73 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.variable, false);
-        this.variable = variable;
+        
+        if (this.variable != null)
+        {
+            setAsChild(this.variable.getNodeValue(), false);
+        }
+        this.variable = new NormalNodeUnion<VariableNode>(variable);
         setAsChild(variable, true);
+    }
+    
+    /**
+     * Changes the iterator variable.
+     * @param variable The iterator variable.
+     */
+    public void setUnionForVariable(NodeUnion<? extends VariableNode> variable)
+    {
+            setUnionForVariable(variable, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForVariable(NodeUnion<? extends VariableNode> variable, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (variable == null)
+        {
+            throw new NullPointerException("Node union for property variable cannot be null.");
+        }
+        if (this.variable != null)
+        {
+            setAsChild(this.variable.getNodeValue(), false);
+        }
+        this.variable = variable;
+        setAsChild(variable.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the loop's iterable expression.  This property's value is assumed to be a normal node.
+     * @return The loop's iterable expression.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getExpression()
+    {
+        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            return null;
+        } else
+        {
+            return this.expression.getNormalNode();
+        }
     }
     
     /**
      * Gets the loop's iterable expression.
      * @return The loop's iterable expression.
      */
-    public ExpressionNode getExpression()
+    public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
         getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            this.expression = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.expression;
     }
     
@@ -138,18 +216,73 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.expression, false);
-        this.expression = expression;
+        
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
         setAsChild(expression, true);
+    }
+    
+    /**
+     * Changes the loop's iterable expression.
+     * @param expression The loop's iterable expression.
+     */
+    public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
+    {
+            setUnionForExpression(expression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (expression == null)
+        {
+            throw new NullPointerException("Node union for property expression cannot be null.");
+        }
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = expression;
+        setAsChild(expression.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the loop's statement.  This property's value is assumed to be a normal node.
+     * @return The loop's statement.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public StatementNode getStatement()
+    {
+        getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.statement == null)
+        {
+            return null;
+        } else
+        {
+            return this.statement.getNormalNode();
+        }
     }
     
     /**
      * Gets the loop's statement.
      * @return The loop's statement.
      */
-    public StatementNode getStatement()
+    public NodeUnion<? extends StatementNode> getUnionForStatement()
     {
         getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.statement == null)
+        {
+            this.statement = new NormalNodeUnion<StatementNode>(null);
+        }
         return this.statement;
     }
     
@@ -170,18 +303,73 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.statement, false);
-        this.statement = statement;
+        
+        if (this.statement != null)
+        {
+            setAsChild(this.statement.getNodeValue(), false);
+        }
+        this.statement = new NormalNodeUnion<StatementNode>(statement);
         setAsChild(statement, true);
+    }
+    
+    /**
+     * Changes the loop's statement.
+     * @param statement The loop's statement.
+     */
+    public void setUnionForStatement(NodeUnion<? extends StatementNode> statement)
+    {
+            setUnionForStatement(statement, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForStatement(NodeUnion<? extends StatementNode> statement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (statement == null)
+        {
+            throw new NullPointerException("Node union for property statement cannot be null.");
+        }
+        if (this.statement != null)
+        {
+            setAsChild(this.statement.getNodeValue(), false);
+        }
+        this.statement = statement;
+        setAsChild(statement.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the meta-annotations associated with this node.  This property's value is assumed to be a normal node.
+     * @return The meta-annotations associated with this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            return null;
+        } else
+        {
+            return this.metaAnnotations.getNormalNode();
+        }
     }
     
     /**
      * Gets the meta-annotations associated with this node.
      * @return The meta-annotations associated with this node.
      */
-    public MetaAnnotationListNode getMetaAnnotations()
+    public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
         getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
+        }
         return this.metaAnnotations;
     }
     
@@ -202,9 +390,43 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
+        
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
         setAsChild(metaAnnotations, true);
+    }
+    
+    /**
+     * Changes the meta-annotations associated with this node.
+     * @param metaAnnotations The meta-annotations associated with this node.
+     */
+    public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+            setUnionForMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (metaAnnotations == null)
+        {
+            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+        }
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations.getNodeValue(), true);
     }
     
     /**
@@ -218,21 +440,21 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.variable != null)
+        if (this.variable.getNodeValue() != null)
         {
-            this.variable.receive(visitor);
+            this.variable.getNodeValue().receive(visitor);
         }
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receive(visitor);
+            this.expression.getNodeValue().receive(visitor);
         }
-        if (this.statement != null)
+        if (this.statement.getNodeValue() != null)
         {
-            this.statement.receive(visitor);
+            this.statement.getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receive(visitor);
+            this.metaAnnotations.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -255,21 +477,21 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.variable != null)
+        if (this.variable.getNodeValue() != null)
         {
-            this.variable.receiveTyped(visitor);
+            this.variable.getNodeValue().receiveTyped(visitor);
         }
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receiveTyped(visitor);
+            this.expression.getNodeValue().receiveTyped(visitor);
         }
-        if (this.statement != null)
+        if (this.statement.getNodeValue() != null)
         {
-            this.statement.receiveTyped(visitor);
+            this.statement.getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receiveTyped(visitor);
+            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -319,7 +541,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getVariable(), getExpression(), getStatement(), getMetaAnnotations()});
+        return Arrays.asList(new Node[]{getUnionForVariable().getNodeValue(), getUnionForExpression().getNodeValue(), getUnionForStatement().getNodeValue(), getUnionForMetaAnnotations().getNodeValue()});
     }
     
     /**
@@ -332,16 +554,16 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("variable=");
-        sb.append(this.getVariable() == null? "null" : this.getVariable().getClass().getSimpleName());
+        sb.append(this.getUnionForVariable().getNodeValue() == null? "null" : this.getUnionForVariable().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("expression=");
-        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("statement=");
-        sb.append(this.getStatement() == null? "null" : this.getStatement().getClass().getSimpleName());
+        sb.append(this.getUnionForStatement().getNodeValue() == null? "null" : this.getUnionForStatement().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -385,11 +607,107 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     @Override
     public EnhancedForLoopNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends VariableNode> variableCopy;
+        switch (getUnionForVariable().getType())
+        {
+            case NORMAL:
+                if (getUnionForVariable().getNormalNode() == null)
+                {
+                    variableCopy = factory.<VariableNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    variableCopy = factory.makeNormalNodeUnion(getUnionForVariable().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForVariable().getSpliceNode() == null)
+                {
+                    variableCopy = factory.<VariableNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    variableCopy = factory.makeSpliceNodeUnion(getUnionForVariable().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForVariable().getType());
+        }
+        NodeUnion<? extends ExpressionNode> expressionCopy;
+        switch (getUnionForExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForExpression().getNormalNode() == null)
+                {
+                    expressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeNormalNodeUnion(getUnionForExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForExpression().getSpliceNode() == null)
+                {
+                    expressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeSpliceNodeUnion(getUnionForExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
+        }
+        NodeUnion<? extends StatementNode> statementCopy;
+        switch (getUnionForStatement().getType())
+        {
+            case NORMAL:
+                if (getUnionForStatement().getNormalNode() == null)
+                {
+                    statementCopy = factory.<StatementNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    statementCopy = factory.makeNormalNodeUnion(getUnionForStatement().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForStatement().getSpliceNode() == null)
+                {
+                    statementCopy = factory.<StatementNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    statementCopy = factory.makeSpliceNodeUnion(getUnionForStatement().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForStatement().getType());
+        }
+        NodeUnion<? extends MetaAnnotationListNode> metaAnnotationsCopy;
+        switch (getUnionForMetaAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaAnnotations().getNormalNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeNormalNodeUnion(getUnionForMetaAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaAnnotations().getSpliceNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeSpliceNodeUnion(getUnionForMetaAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
+        }
         return factory.makeEnhancedForLoopNode(
-                getVariable()==null?null:getVariable().deepCopy(factory),
-                getExpression()==null?null:getExpression().deepCopy(factory),
-                getStatement()==null?null:getStatement().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                variableCopy,
+                expressionCopy,
+                statementCopy,
+                metaAnnotationsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

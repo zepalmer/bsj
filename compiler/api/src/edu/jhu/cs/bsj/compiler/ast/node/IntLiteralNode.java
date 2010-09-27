@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing an int literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface IntLiteralNode extends LiteralNode<Integer>
+public interface IntLiteralNode extends Node, LiteralNode<Integer>
 {
     /**
      * Generates a deep copy of this node.

@@ -56,7 +56,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 
 
 	@Override
-	public void execute(Context<MetaAnnotationMetaprogramAnchorNode> context,
+	public void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
 			List<Pair<String, TypeNode>> getterDescriptions)
 	{
 		
@@ -72,7 +72,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 		members.addLast(generateHashCode(context, getterDescriptions));
 	}
 
-	private MethodDeclarationNode generateEquals(Context<MetaAnnotationMetaprogramAnchorNode> context,
+	private MethodDeclarationNode generateEquals(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
 			List<Pair<String, TypeNode>> getters)
 	{
 		// Determine whether or not a call to super.equals is appropriate.
@@ -210,7 +210,7 @@ public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotatio
 						+ "@return true if equal to this object, false otherwise."));
 	}
 
-	private MethodDeclarationNode generateHashCode(Context<MetaAnnotationMetaprogramAnchorNode> context,
+	private MethodDeclarationNode generateHashCode(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
 			List<Pair<String, TypeNode>> getters)
 	{
 		BsjNodeFactory factory = context.getFactory();

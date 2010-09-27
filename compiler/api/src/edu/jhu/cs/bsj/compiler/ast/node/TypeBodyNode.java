@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 
 /**
@@ -14,8 +15,15 @@ public interface TypeBodyNode<T extends Node> extends Node
     /**
      * Gets the members of this type declaration body.
      * @return The members of this type declaration body.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public ListNode<? extends T> getMembers();
+    public ListNode<? extends T> getMembers() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the members of this type declaration body.
+     * @return A union object representing The members of this type declaration body.
+     */
+    public NodeUnion<? extends ListNode<? extends T>> getUnionForMembers();
     
     /**
      * Generates a deep copy of this node.

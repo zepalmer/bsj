@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
@@ -21,6 +22,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -30,16 +32,16 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     private String name;
     
     /** The package declaration for this unit. */
-    private PackageDeclarationNode packageDeclaration;
+    private NodeUnion<? extends PackageDeclarationNode> packageDeclaration;
     
     /** The global metaprogram imports used in this unit. */
-    private MetaprogramImportListNode metaimports;
+    private NodeUnion<? extends MetaprogramImportListNode> metaimports;
     
     /** The imports used in this unit. */
-    private ImportListNode imports;
+    private NodeUnion<? extends ImportListNode> imports;
     
     /** The type declarations of this unit. */
-    private TypeDeclarationListNode typeDecls;
+    private NodeUnion<? extends TypeDeclarationListNode> typeDecls;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -69,10 +71,10 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     /** General constructor. */
     public CompilationUnitNodeImpl(
             String name,
-            PackageDeclarationNode packageDeclaration,
-            MetaprogramImportListNode metaimports,
-            ImportListNode imports,
-            TypeDeclarationListNode typeDecls,
+            NodeUnion<? extends PackageDeclarationNode> packageDeclaration,
+            NodeUnion<? extends MetaprogramImportListNode> metaimports,
+            NodeUnion<? extends ImportListNode> imports,
+            NodeUnion<? extends TypeDeclarationListNode> typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -80,10 +82,10 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         super(startLocation, stopLocation, manager, binary);
         this.name = name;
-        setPackageDeclaration(packageDeclaration, false);
-        setMetaimports(metaimports, false);
-        setImports(imports, false);
-        setTypeDecls(typeDecls, false);
+        setUnionForPackageDeclaration(packageDeclaration, false);
+        setUnionForMetaimports(metaimports, false);
+        setUnionForImports(imports, false);
+        setUnionForTypeDecls(typeDecls, false);
     }
     
     /**
@@ -97,12 +99,33 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     }
     
     /**
-     * Gets the package declaration for this unit.
+     * Gets the package declaration for this unit.  This property's value is assumed to be a normal node.
      * @return The package declaration for this unit.
+     * @throws ClassCastException If this property's value is not a normal node.
      */
     public PackageDeclarationNode getPackageDeclaration()
     {
         getAttribute(LocalAttribute.PACKAGE_DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.packageDeclaration == null)
+        {
+            return null;
+        } else
+        {
+            return this.packageDeclaration.getNormalNode();
+        }
+    }
+    
+    /**
+     * Gets the package declaration for this unit.
+     * @return The package declaration for this unit.
+     */
+    public NodeUnion<? extends PackageDeclarationNode> getUnionForPackageDeclaration()
+    {
+        getAttribute(LocalAttribute.PACKAGE_DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.packageDeclaration == null)
+        {
+            this.packageDeclaration = new NormalNodeUnion<PackageDeclarationNode>(null);
+        }
         return this.packageDeclaration;
     }
     
@@ -123,18 +146,73 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.PACKAGE_DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.packageDeclaration, false);
-        this.packageDeclaration = packageDeclaration;
+        
+        if (this.packageDeclaration != null)
+        {
+            setAsChild(this.packageDeclaration.getNodeValue(), false);
+        }
+        this.packageDeclaration = new NormalNodeUnion<PackageDeclarationNode>(packageDeclaration);
         setAsChild(packageDeclaration, true);
+    }
+    
+    /**
+     * Changes the package declaration for this unit.
+     * @param packageDeclaration The package declaration for this unit.
+     */
+    public void setUnionForPackageDeclaration(NodeUnion<? extends PackageDeclarationNode> packageDeclaration)
+    {
+            setUnionForPackageDeclaration(packageDeclaration, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForPackageDeclaration(NodeUnion<? extends PackageDeclarationNode> packageDeclaration, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.PACKAGE_DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (packageDeclaration == null)
+        {
+            throw new NullPointerException("Node union for property packageDeclaration cannot be null.");
+        }
+        if (this.packageDeclaration != null)
+        {
+            setAsChild(this.packageDeclaration.getNodeValue(), false);
+        }
+        this.packageDeclaration = packageDeclaration;
+        setAsChild(packageDeclaration.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the global metaprogram imports used in this unit.  This property's value is assumed to be a normal node.
+     * @return The global metaprogram imports used in this unit.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaprogramImportListNode getMetaimports()
+    {
+        getAttribute(LocalAttribute.METAIMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaimports == null)
+        {
+            return null;
+        } else
+        {
+            return this.metaimports.getNormalNode();
+        }
     }
     
     /**
      * Gets the global metaprogram imports used in this unit.
      * @return The global metaprogram imports used in this unit.
      */
-    public MetaprogramImportListNode getMetaimports()
+    public NodeUnion<? extends MetaprogramImportListNode> getUnionForMetaimports()
     {
         getAttribute(LocalAttribute.METAIMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaimports == null)
+        {
+            this.metaimports = new NormalNodeUnion<MetaprogramImportListNode>(null);
+        }
         return this.metaimports;
     }
     
@@ -155,18 +233,73 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.METAIMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.metaimports, false);
-        this.metaimports = metaimports;
+        
+        if (this.metaimports != null)
+        {
+            setAsChild(this.metaimports.getNodeValue(), false);
+        }
+        this.metaimports = new NormalNodeUnion<MetaprogramImportListNode>(metaimports);
         setAsChild(metaimports, true);
+    }
+    
+    /**
+     * Changes the global metaprogram imports used in this unit.
+     * @param metaimports The global metaprogram imports used in this unit.
+     */
+    public void setUnionForMetaimports(NodeUnion<? extends MetaprogramImportListNode> metaimports)
+    {
+            setUnionForMetaimports(metaimports, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMetaimports(NodeUnion<? extends MetaprogramImportListNode> metaimports, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.METAIMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (metaimports == null)
+        {
+            throw new NullPointerException("Node union for property metaimports cannot be null.");
+        }
+        if (this.metaimports != null)
+        {
+            setAsChild(this.metaimports.getNodeValue(), false);
+        }
+        this.metaimports = metaimports;
+        setAsChild(metaimports.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the imports used in this unit.  This property's value is assumed to be a normal node.
+     * @return The imports used in this unit.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ImportListNode getImports()
+    {
+        getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.imports == null)
+        {
+            return null;
+        } else
+        {
+            return this.imports.getNormalNode();
+        }
     }
     
     /**
      * Gets the imports used in this unit.
      * @return The imports used in this unit.
      */
-    public ImportListNode getImports()
+    public NodeUnion<? extends ImportListNode> getUnionForImports()
     {
         getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.imports == null)
+        {
+            this.imports = new NormalNodeUnion<ImportListNode>(null);
+        }
         return this.imports;
     }
     
@@ -187,18 +320,73 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.imports, false);
-        this.imports = imports;
+        
+        if (this.imports != null)
+        {
+            setAsChild(this.imports.getNodeValue(), false);
+        }
+        this.imports = new NormalNodeUnion<ImportListNode>(imports);
         setAsChild(imports, true);
+    }
+    
+    /**
+     * Changes the imports used in this unit.
+     * @param imports The imports used in this unit.
+     */
+    public void setUnionForImports(NodeUnion<? extends ImportListNode> imports)
+    {
+            setUnionForImports(imports, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForImports(NodeUnion<? extends ImportListNode> imports, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (imports == null)
+        {
+            throw new NullPointerException("Node union for property imports cannot be null.");
+        }
+        if (this.imports != null)
+        {
+            setAsChild(this.imports.getNodeValue(), false);
+        }
+        this.imports = imports;
+        setAsChild(imports.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the type declarations of this unit.  This property's value is assumed to be a normal node.
+     * @return The type declarations of this unit.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public TypeDeclarationListNode getTypeDecls()
+    {
+        getAttribute(LocalAttribute.TYPE_DECLS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.typeDecls == null)
+        {
+            return null;
+        } else
+        {
+            return this.typeDecls.getNormalNode();
+        }
     }
     
     /**
      * Gets the type declarations of this unit.
      * @return The type declarations of this unit.
      */
-    public TypeDeclarationListNode getTypeDecls()
+    public NodeUnion<? extends TypeDeclarationListNode> getUnionForTypeDecls()
     {
         getAttribute(LocalAttribute.TYPE_DECLS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.typeDecls == null)
+        {
+            this.typeDecls = new NormalNodeUnion<TypeDeclarationListNode>(null);
+        }
         return this.typeDecls;
     }
     
@@ -219,9 +407,43 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_DECLS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.typeDecls, false);
-        this.typeDecls = typeDecls;
+        
+        if (this.typeDecls != null)
+        {
+            setAsChild(this.typeDecls.getNodeValue(), false);
+        }
+        this.typeDecls = new NormalNodeUnion<TypeDeclarationListNode>(typeDecls);
         setAsChild(typeDecls, true);
+    }
+    
+    /**
+     * Changes the type declarations of this unit.
+     * @param typeDecls The type declarations of this unit.
+     */
+    public void setUnionForTypeDecls(NodeUnion<? extends TypeDeclarationListNode> typeDecls)
+    {
+            setUnionForTypeDecls(typeDecls, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForTypeDecls(NodeUnion<? extends TypeDeclarationListNode> typeDecls, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE_DECLS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (typeDecls == null)
+        {
+            throw new NullPointerException("Node union for property typeDecls cannot be null.");
+        }
+        if (this.typeDecls != null)
+        {
+            setAsChild(this.typeDecls.getNodeValue(), false);
+        }
+        this.typeDecls = typeDecls;
+        setAsChild(typeDecls.getNodeValue(), true);
     }
     
     /**
@@ -235,21 +457,21 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.packageDeclaration != null)
+        if (this.packageDeclaration.getNodeValue() != null)
         {
-            this.packageDeclaration.receive(visitor);
+            this.packageDeclaration.getNodeValue().receive(visitor);
         }
-        if (this.metaimports != null)
+        if (this.metaimports.getNodeValue() != null)
         {
-            this.metaimports.receive(visitor);
+            this.metaimports.getNodeValue().receive(visitor);
         }
-        if (this.imports != null)
+        if (this.imports.getNodeValue() != null)
         {
-            this.imports.receive(visitor);
+            this.imports.getNodeValue().receive(visitor);
         }
-        if (this.typeDecls != null)
+        if (this.typeDecls.getNodeValue() != null)
         {
-            this.typeDecls.receive(visitor);
+            this.typeDecls.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -272,21 +494,21 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.packageDeclaration != null)
+        if (this.packageDeclaration.getNodeValue() != null)
         {
-            this.packageDeclaration.receiveTyped(visitor);
+            this.packageDeclaration.getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaimports != null)
+        if (this.metaimports.getNodeValue() != null)
         {
-            this.metaimports.receiveTyped(visitor);
+            this.metaimports.getNodeValue().receiveTyped(visitor);
         }
-        if (this.imports != null)
+        if (this.imports.getNodeValue() != null)
         {
-            this.imports.receiveTyped(visitor);
+            this.imports.getNodeValue().receiveTyped(visitor);
         }
-        if (this.typeDecls != null)
+        if (this.typeDecls.getNodeValue() != null)
         {
-            this.typeDecls.receiveTyped(visitor);
+            this.typeDecls.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -336,7 +558,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getPackageDeclaration(), getMetaimports(), getImports(), getTypeDecls()});
+        return Arrays.asList(new Node[]{getUnionForPackageDeclaration().getNodeValue(), getUnionForMetaimports().getNodeValue(), getUnionForImports().getNodeValue(), getUnionForTypeDecls().getNodeValue()});
     }
     
     /**
@@ -352,16 +574,16 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         sb.append(String.valueOf(this.getName()) + ":" + (this.getName() != null ? this.getName().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("packageDeclaration=");
-        sb.append(this.getPackageDeclaration() == null? "null" : this.getPackageDeclaration().getClass().getSimpleName());
+        sb.append(this.getUnionForPackageDeclaration().getNodeValue() == null? "null" : this.getUnionForPackageDeclaration().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("metaimports=");
-        sb.append(this.getMetaimports() == null? "null" : this.getMetaimports().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaimports().getNodeValue() == null? "null" : this.getUnionForMetaimports().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("imports=");
-        sb.append(this.getImports() == null? "null" : this.getImports().getClass().getSimpleName());
+        sb.append(this.getUnionForImports().getNodeValue() == null? "null" : this.getUnionForImports().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeDecls=");
-        sb.append(this.getTypeDecls() == null? "null" : this.getTypeDecls().getClass().getSimpleName());
+        sb.append(this.getUnionForTypeDecls().getNodeValue() == null? "null" : this.getUnionForTypeDecls().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -405,12 +627,108 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     @Override
     public CompilationUnitNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends PackageDeclarationNode> packageDeclarationCopy;
+        switch (getUnionForPackageDeclaration().getType())
+        {
+            case NORMAL:
+                if (getUnionForPackageDeclaration().getNormalNode() == null)
+                {
+                    packageDeclarationCopy = factory.<PackageDeclarationNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    packageDeclarationCopy = factory.makeNormalNodeUnion(getUnionForPackageDeclaration().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForPackageDeclaration().getSpliceNode() == null)
+                {
+                    packageDeclarationCopy = factory.<PackageDeclarationNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    packageDeclarationCopy = factory.makeSpliceNodeUnion(getUnionForPackageDeclaration().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForPackageDeclaration().getType());
+        }
+        NodeUnion<? extends MetaprogramImportListNode> metaimportsCopy;
+        switch (getUnionForMetaimports().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaimports().getNormalNode() == null)
+                {
+                    metaimportsCopy = factory.<MetaprogramImportListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaimportsCopy = factory.makeNormalNodeUnion(getUnionForMetaimports().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaimports().getSpliceNode() == null)
+                {
+                    metaimportsCopy = factory.<MetaprogramImportListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaimportsCopy = factory.makeSpliceNodeUnion(getUnionForMetaimports().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaimports().getType());
+        }
+        NodeUnion<? extends ImportListNode> importsCopy;
+        switch (getUnionForImports().getType())
+        {
+            case NORMAL:
+                if (getUnionForImports().getNormalNode() == null)
+                {
+                    importsCopy = factory.<ImportListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    importsCopy = factory.makeNormalNodeUnion(getUnionForImports().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForImports().getSpliceNode() == null)
+                {
+                    importsCopy = factory.<ImportListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    importsCopy = factory.makeSpliceNodeUnion(getUnionForImports().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForImports().getType());
+        }
+        NodeUnion<? extends TypeDeclarationListNode> typeDeclsCopy;
+        switch (getUnionForTypeDecls().getType())
+        {
+            case NORMAL:
+                if (getUnionForTypeDecls().getNormalNode() == null)
+                {
+                    typeDeclsCopy = factory.<TypeDeclarationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeDeclsCopy = factory.makeNormalNodeUnion(getUnionForTypeDecls().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTypeDecls().getSpliceNode() == null)
+                {
+                    typeDeclsCopy = factory.<TypeDeclarationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeDeclsCopy = factory.makeSpliceNodeUnion(getUnionForTypeDecls().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeDecls().getType());
+        }
         return factory.makeCompilationUnitNode(
                 getName(),
-                getPackageDeclaration()==null?null:getPackageDeclaration().deepCopy(factory),
-                getMetaimports()==null?null:getMetaimports().deepCopy(factory),
-                getImports()==null?null:getImports().deepCopy(factory),
-                getTypeDecls()==null?null:getTypeDecls().deepCopy(factory),
+                packageDeclarationCopy,
+                metaimportsCopy,
+                importsCopy,
+                typeDeclsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

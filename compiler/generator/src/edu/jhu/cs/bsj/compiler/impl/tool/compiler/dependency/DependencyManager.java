@@ -39,15 +39,15 @@ public class DependencyManager
 	private final Logger LOGGER = Logger.getLogger(getClass());
 
 	/** A mapping from metaprogram IDs to the profiles of those metaprograms. */
-	private Map<Integer, MetaprogramProfile<?>> idMap;
+	private Map<Integer, MetaprogramProfile<?,?>> idMap;
 	/** A mapping from metaprogram profiles to the nodes containing them. */
-	private Map<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> profileToNodeMap;
+	private Map<MetaprogramProfile<?,?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> profileToNodeMap;
 	/** A mapping from target names to the nodes representing them. */
 	private Map<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>> nameToTargetNodeMap;
 	/** A collection containing all of the metaprogram nodes representing metaprograms which have yet to be executed. */
 	private Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> waitingNodes;
 	/** A multimap from compilation units to the metaprograms which were registered in them. */
-	private MultiMap<CompilationUnitNode, MetaprogramProfile<?>> compilationUnitMap;
+	private MultiMap<CompilationUnitNode, MetaprogramProfile<?,?>> compilationUnitMap;
 
 	/** A cache of responses to cooperation queries. */
 	private Map<Pair<Integer, Integer>, Boolean> cooperationCache;
@@ -72,12 +72,12 @@ public class DependencyManager
 	 */
 	public DependencyManager(Random r)
 	{
-		this.idMap = new HashMap<Integer, MetaprogramProfile<?>>();
-		this.profileToNodeMap = new HashMap<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
+		this.idMap = new HashMap<Integer, MetaprogramProfile<?,?>>();
+		this.profileToNodeMap = new HashMap<MetaprogramProfile<?,?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
 		this.nameToTargetNodeMap = new HashMap<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>>();
 		this.waitingNodes = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
 		this.cooperationCache = new HashMap<Pair<Integer, Integer>, Boolean>();
-		this.compilationUnitMap = new HashMultiMap<CompilationUnitNode, MetaprogramProfile<?>>();
+		this.compilationUnitMap = new HashMultiMap<CompilationUnitNode, MetaprogramProfile<?,?>>();
 		this.random = r;
 	}
 
@@ -90,7 +90,7 @@ public class DependencyManager
 	 *            is not the case.
 	 * @param diagnosticListener The diagnostic listener to which to report problems if they occur.
 	 */
-	public void registerMetaprogramProfile(MetaprogramProfile<?> profile, MetaprogramProfile<?> parentProfile,
+	public void registerMetaprogramProfile(MetaprogramProfile<?,?> profile, MetaprogramProfile<?,?> parentProfile,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		// Create a node for the profile
@@ -179,9 +179,9 @@ public class DependencyManager
 	{
 		LOGGER.debug("Dependency graph currently appears as follows:");
 		Set<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>> targetsToVisit = new HashSet<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>>();
-		for (Map.Entry<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> entry : this.profileToNodeMap.entrySet())
+		for (Map.Entry<MetaprogramProfile<?,?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>> entry : this.profileToNodeMap.entrySet())
 		{
-			MetaprogramProfile<?> profile = entry.getKey();
+			MetaprogramProfile<?,?> profile = entry.getKey();
 			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> node = entry.getValue();
 			Set<BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>> targets = node.getChildren();
 			LOGGER.debug("Metaprogram " + profile.getMetaprogram().getID() + " at " + profile.getLocation() + " has "
@@ -257,10 +257,10 @@ public class DependencyManager
 	 * @param compilationUnitNode The compilation unit.
 	 * @param diagnosticListener The listener to which to report injection conflicts if they are found.
 	 */
-	public void registerAsInjectorOf(MetaprogramProfile<?> injector, CompilationUnitNode compilationUnitNode,
+	public void registerAsInjectorOf(MetaprogramProfile<?,?> injector, CompilationUnitNode compilationUnitNode,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
-		for (MetaprogramProfile<?> injectee : this.compilationUnitMap.getAll(compilationUnitNode))
+		for (MetaprogramProfile<?,?> injectee : this.compilationUnitMap.getAll(compilationUnitNode))
 		{
 			inferDependency(injectee, injector);
 			checkForInjectionConflict(this.profileToNodeMap.get(injectee), diagnosticListener);
@@ -273,7 +273,7 @@ public class DependencyManager
 	 * @param profile The dependent profile.
 	 * @param parentProfile The profile it depends upon.
 	 */
-	private void inferDependency(MetaprogramProfile<?> profile, MetaprogramProfile<?> parentProfile)
+	private void inferDependency(MetaprogramProfile<?,?> profile, MetaprogramProfile<?,?> parentProfile)
 	{
 		// Get parent profile's metaprogram node
 		BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> injector = this.profileToNodeMap.get(parentProfile);
@@ -312,7 +312,7 @@ public class DependencyManager
 	 * @param profile The profile of the metaprogram.
 	 * @return The name of the inferred target.
 	 */
-	private String getInferredTargetName(MetaprogramProfile<?> profile)
+	private String getInferredTargetName(MetaprogramProfile<?,?> profile)
 	{
 		return "#" + profile.getMetaprogram().getID();
 	}
@@ -342,7 +342,7 @@ public class DependencyManager
 	 * 
 	 * @param profile The profile of the metaprogram which was executed.
 	 */
-	public void notifyExecuted(MetaprogramProfile<?> profile)
+	public void notifyExecuted(MetaprogramProfile<?,?> profile)
 	{
 		this.waitingNodes.remove(this.profileToNodeMap.get(profile));
 	}
@@ -354,7 +354,7 @@ public class DependencyManager
 	 * @param diagnosticListener The diagnostic listener to which to report an error if an error occurs.
 	 * @return The next metaprogram to execute or <code>null</code> if no metaprograms remain.
 	 */
-	public MetaprogramProfile<?> getNextMetaprogram(DiagnosticListener<BsjSourceLocation> diagnosticListener)
+	public MetaprogramProfile<?,?> getNextMetaprogram(DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		if (this.waitingNodes.size() == 0)
 			return null;
@@ -418,7 +418,7 @@ public class DependencyManager
 	 * @param id The ID of the metaprogram to retrieve.
 	 * @return The profile of the metaprogram or <code>null</code> if that metaprogram does not exist.
 	 */
-	public MetaprogramProfile<?> getMetaprogramProfileByID(int id)
+	public MetaprogramProfile<?,?> getMetaprogramProfileByID(int id)
 	{
 		return this.idMap.get(id);
 	}
@@ -437,13 +437,13 @@ public class DependencyManager
 		Boolean value = this.cooperationCache.get(key);
 		if (value == null)
 		{
-			MetaprogramProfile<?> ma = this.idMap.get(a);
+			MetaprogramProfile<?,?> ma = this.idMap.get(a);
 			if (ma == null)
 			{
 				throw new IllegalArgumentException("Invalid metaprogram ID " + a
 						+ " given as first metaprogram in path check (" + a + "," + b + ")!");
 			}
-			MetaprogramProfile<?> mb = this.idMap.get(b);
+			MetaprogramProfile<?,?> mb = this.idMap.get(b);
 			if (mb == null)
 			{
 				throw new IllegalArgumentException("Invalid metaprogram ID " + b

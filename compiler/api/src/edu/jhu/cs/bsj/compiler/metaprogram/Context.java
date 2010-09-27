@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.metaprogram;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.user.BsjUserDiagnosticListener;
@@ -13,8 +14,9 @@ import edu.jhu.cs.bsj.compiler.diagnostic.user.BsjUserDiagnosticListener;
  * 
  * @author Zachary Palmer
  * @param <T> The type of metaprogram anchor node held by this context.
+ * @param <U> The type of node which can be used to replace the anchor node held by this context.
  */
-public interface Context<T extends MetaprogramAnchorNode<?>>
+public interface Context<T extends MetaprogramAnchorNode<U>, U extends Node>
 {
 	/**
 	 * Retrieves the anchor node for this metaprogram context. In a BSJ AST, all metaprograms exist within an anchor
@@ -49,4 +51,21 @@ public interface Context<T extends MetaprogramAnchorNode<?>>
 	 * {@link PackageNode#addCompilationUnit(CompilationUnitNode)} instead.
 	 */
 	public CompilationUnitLoader getCompilationUnitLoader();
+
+	/**
+	 * Retrieves the AST node which is currently slated to be used as a replacement for the anchor of this metaprogram
+	 * when the metaprogram completes.
+	 * 
+	 * @return The current replacement node or <code>null</code> if no replacement will take place.
+	 */
+	public U getReplacement();
+
+	/**
+	 * Changes the AST node which is currently slated to be used as a replacement for the anchor of this metaprogram
+	 * when the metaprogram completes. If the anchor should be left in its place, a <code>null</code> replacement should
+	 * be specified.
+	 * 
+	 * @param replacement The new replacement node or <code>null</code> to skip replacement.
+	 */
+	public void setReplacement(U replacement);
 }

@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing a boolean literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface BooleanLiteralNode extends LiteralNode<Boolean>
+public interface BooleanLiteralNode extends Node, LiteralNode<Boolean>
 {
     /**
      * Generates a deep copy of this node.

@@ -13,6 +13,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 public interface BlockStatementMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<BlockStatementNode>, BlockStatementNode, BsjSpecificNode
 {
     /**
+     * Gets the type of node which can replace this anchor.
+     * @return The type of node which can replace this anchor.
+     */
+    public Class<BlockStatementNode> getReplacementType();
+    
+    /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
      * @return The resulting deep copy node.

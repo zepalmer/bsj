@@ -60,6 +60,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjNodeOperationProxy;
 import edu.jhu.cs.bsj.compiler.impl.utils.LineAndColumnOutputStream;
@@ -315,7 +316,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -329,7 +329,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -343,7 +342,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationArrayValueNode(AnnotationArrayValueNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -357,7 +355,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationBodyNode(AnnotationBodyNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -371,7 +368,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationDeclarationNode(AnnotationDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -385,7 +381,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationElementListNode(AnnotationElementListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -399,7 +394,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationElementNode(AnnotationElementNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -413,7 +407,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -427,7 +420,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationListNode(AnnotationListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -441,7 +433,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationMemberListNode(AnnotationMemberListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -456,7 +447,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -471,7 +461,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -485,7 +474,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -499,7 +487,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationModifiersNode(AnnotationModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -513,7 +500,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnnotationValueListNode(AnnotationValueListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -527,7 +513,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnonymousClassBodyNode(AnonymousClassBodyNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -541,7 +526,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -556,7 +540,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -570,7 +553,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeArrayAccessNode(ArrayAccessNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -584,7 +566,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -598,7 +579,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeArrayInitializerNode(ArrayInitializerNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -612,7 +592,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -626,7 +605,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeArrayTypeNode(ArrayTypeNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -640,7 +618,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAssertStatementNode(AssertStatementNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -654,7 +631,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeAssignmentNode(AssignmentNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -668,7 +644,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeBinaryExpressionNode(BinaryExpressionNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -682,7 +657,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeBlockNode(BlockNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -696,7 +670,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeBlockStatementListNode(BlockStatementListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -711,7 +684,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -725,7 +697,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeBooleanLiteralNode(BooleanLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -739,7 +710,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeBreakNode(BreakNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -753,7 +723,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeCaseListNode(CaseListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -767,7 +736,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeCaseNode(CaseNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -781,7 +749,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeCatchListNode(CatchListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -795,7 +762,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeCatchNode(CatchNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -809,7 +775,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeCharLiteralNode(CharLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -823,7 +788,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeClassBodyNode(ClassBodyNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -837,7 +801,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeClassDeclarationNode(ClassDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -851,7 +814,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeClassLiteralNode(ClassLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -865,7 +827,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeClassMemberListNode(ClassMemberListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -880,7 +841,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -894,7 +854,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeClassModifiersNode(ClassModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -908,7 +867,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeCodeLiteralNode(CodeLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -922,7 +880,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeCompilationUnitNode(CompilationUnitNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -936,7 +893,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeConditionalExpressionNode(ConditionalExpressionNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -950,7 +906,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeConstantDeclarationNode(ConstantDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -964,7 +919,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeConstantModifiersNode(ConstantModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -978,7 +932,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeConstructorBodyNode(ConstructorBodyNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -992,7 +945,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeConstructorDeclarationNode(ConstructorDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1006,7 +958,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeConstructorModifiersNode(ConstructorModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1020,7 +971,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeContinueNode(ContinueNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1034,7 +984,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeDeclaredTypeListNode(DeclaredTypeListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1048,7 +997,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeDoubleLiteralNode(DoubleLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1062,7 +1010,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeDoWhileLoopNode(DoWhileLoopNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1076,7 +1023,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeEnhancedForLoopNode(EnhancedForLoopNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1090,7 +1036,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeEnumBodyNode(EnumBodyNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1105,7 +1050,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1119,7 +1063,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1133,7 +1076,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeEnumConstantModifiersNode(EnumConstantModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1147,7 +1089,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeEnumDeclarationNode(EnumDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1161,7 +1102,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeEnumModifiersNode(EnumModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1175,7 +1115,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeExpressionListNode(ExpressionListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1189,7 +1128,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeExpressionStatementNode(ExpressionStatementNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1203,7 +1141,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeFieldDeclarationNode(FieldDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1217,7 +1154,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeFieldModifiersNode(FieldModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1231,7 +1167,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeFloatLiteralNode(FloatLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1245,7 +1180,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1259,7 +1193,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeForInitializerExpressionNode(ForInitializerExpressionNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1273,7 +1206,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeForLoopNode(ForLoopNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1287,7 +1219,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeIdentifierListNode(IdentifierListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1301,7 +1232,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeIdentifierNode(IdentifierNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1315,7 +1245,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeIfNode(IfNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1329,7 +1258,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeImportListNode(ImportListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1343,7 +1271,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeImportOnDemandNode(ImportOnDemandNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1357,7 +1284,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeImportSingleTypeNode(ImportSingleTypeNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1371,7 +1297,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeInitializerDeclarationNode(InitializerDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1385,7 +1310,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeLocalClassDeclarationNode(LocalClassDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1399,7 +1323,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeLocalClassModifiersNode(LocalClassModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1413,7 +1336,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeInstanceOfNode(InstanceOfNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1427,7 +1349,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeInterfaceBodyNode(InterfaceBodyNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1441,7 +1362,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeInterfaceDeclarationNode(InterfaceDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1455,7 +1375,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeInterfaceMemberListNode(InterfaceMemberListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1470,7 +1389,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1484,7 +1402,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeInterfaceModifiersNode(InterfaceModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1498,7 +1415,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeIntLiteralNode(IntLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1512,7 +1428,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeJavadocNode(JavadocNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1526,7 +1441,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeLabeledStatementNode(LabeledStatementNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1540,7 +1454,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		protected <T extends Node> Void executeListNode(ListNode<T> node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1554,7 +1467,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1568,7 +1480,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeLongLiteralNode(LongLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1582,7 +1493,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1596,7 +1506,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1610,7 +1519,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaAnnotationElementNode(MetaAnnotationElementNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1625,7 +1533,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1639,7 +1546,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaAnnotationListNode(MetaAnnotationListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1654,7 +1560,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1669,7 +1574,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1683,7 +1587,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1751,7 +1654,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaprogramImportListNode(MetaprogramImportListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1765,7 +1667,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaprogramImportNode(MetaprogramImportNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1779,7 +1680,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaprogramNode(MetaprogramNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1793,7 +1693,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaprogramPreambleNode(MetaprogramPreambleNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1820,7 +1719,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMetaprogramTargetNode(MetaprogramTargetNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1834,7 +1732,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMethodDeclarationNode(MethodDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1846,10 +1743,8 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
-		public Void executeMethodInvocationNode(MethodInvocationNode node,
-				PrependablePrintStream p)
+		public Void executeMethodInvocationNode(MethodInvocationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1863,7 +1758,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeMethodModifiersNode(MethodModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1877,7 +1771,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeNoOperationNode(NoOperationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1891,7 +1784,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeNormalAnnotationNode(NormalAnnotationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1905,7 +1797,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1919,7 +1810,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeNullLiteralNode(NullLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1933,7 +1823,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executePackageDeclarationNode(PackageDeclarationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1947,7 +1836,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executePackageNode(PackageNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1961,7 +1849,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeParameterizedTypeNode(ParameterizedTypeNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1975,7 +1862,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -1989,7 +1875,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2003,7 +1888,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executePrimitiveTypeNode(PrimitiveTypeNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2018,7 +1902,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2032,7 +1915,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeQualifiedNameNode(QualifiedNameNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2059,7 +1941,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeReferenceTypeListNode(ReferenceTypeListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2073,7 +1954,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeReturnNode(ReturnNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2087,7 +1967,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeSimpleNameNode(SimpleNameNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2101,7 +1980,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeSingleElementAnnotationNode(SingleElementAnnotationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2116,7 +1994,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2130,7 +2007,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeSingleStaticImportNode(SingleStaticImportNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2142,9 +2018,21 @@ public class NodeMappingSerializationOperation extends
 		}
 
 		@Override
+		public Void executeSpliceNode(SpliceNode node, PrependablePrintStream p)
+		{
+			before(node);
+			try
+			{
+				return super.executeSpliceNode(node, p);
+			} finally
+			{
+				after(node);
+			}
+		}
+
+		@Override
 		public Void executeStatementExpressionListNode(StatementExpressionListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2158,7 +2046,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeStaticImportOnDemandNode(StaticImportOnDemandNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2172,7 +2059,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeStringLiteralNode(StringLiteralNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2187,7 +2073,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2201,7 +2086,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeSuperFieldAccessNode(SuperFieldAccessNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2215,7 +2099,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeSuperMethodInvocationNode(SuperMethodInvocationNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2229,7 +2112,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeSwitchNode(SwitchNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2243,7 +2125,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeSynchronizedNode(SynchronizedNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2257,7 +2138,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeThisNode(ThisNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2271,7 +2151,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeThrowNode(ThrowNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2285,7 +2164,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeTryNode(TryNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2299,7 +2177,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeTypeArgumentListNode(TypeArgumentListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2313,7 +2190,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeTypeCastNode(TypeCastNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2327,7 +2203,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeTypeDeclarationListNode(TypeDeclarationListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2342,7 +2217,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2356,7 +2230,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeTypeParameterListNode(TypeParameterListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2370,7 +2243,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeTypeParameterNode(TypeParameterNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2384,7 +2256,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeUnaryExpressionNode(UnaryExpressionNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2398,7 +2269,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2412,7 +2282,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2426,7 +2295,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeUnparameterizedTypeNode(UnparameterizedTypeNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2441,7 +2309,6 @@ public class NodeMappingSerializationOperation extends
 		public Void executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node,
 				PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2455,7 +2322,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeVariableAccessNode(VariableAccessNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2469,7 +2335,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeVariableDeclaratorListNode(VariableDeclaratorListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2483,7 +2348,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2497,7 +2361,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeVariableInitializerListNode(VariableInitializerListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2511,7 +2374,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeVariableListNode(VariableListNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2525,7 +2387,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeVariableModifiersNode(VariableModifiersNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2539,7 +2400,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeVariableNode(VariableNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2553,7 +2413,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeVoidTypeNode(VoidTypeNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2567,7 +2426,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeWhileLoopNode(WhileLoopNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{
@@ -2581,7 +2439,6 @@ public class NodeMappingSerializationOperation extends
 		@Override
 		public Void executeWildcardTypeNode(WildcardTypeNode node, PrependablePrintStream p)
 		{
-
 			before(node);
 			try
 			{

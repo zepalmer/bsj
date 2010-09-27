@@ -14,17 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
 {
     /** The members of this interface body. */
-    private InterfaceMemberListNode members;
+    private NodeUnion<? extends InterfaceMemberListNode> members;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -45,23 +47,44 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     
     /** General constructor. */
     public InterfaceBodyNodeImpl(
-            InterfaceMemberListNode members,
+            NodeUnion<? extends InterfaceMemberListNode> members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setMembers(members, false);
+        setUnionForMembers(members, false);
+    }
+    
+    /**
+     * Gets the members of this interface body.  This property's value is assumed to be a normal node.
+     * @return The members of this interface body.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public InterfaceMemberListNode getMembers()
+    {
+        getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.members == null)
+        {
+            return null;
+        } else
+        {
+            return this.members.getNormalNode();
+        }
     }
     
     /**
      * Gets the members of this interface body.
      * @return The members of this interface body.
      */
-    public InterfaceMemberListNode getMembers()
+    public NodeUnion<? extends InterfaceMemberListNode> getUnionForMembers()
     {
         getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.members == null)
+        {
+            this.members = new NormalNodeUnion<InterfaceMemberListNode>(null);
+        }
         return this.members;
     }
     
@@ -82,9 +105,43 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.members, false);
-        this.members = members;
+        
+        if (this.members != null)
+        {
+            setAsChild(this.members.getNodeValue(), false);
+        }
+        this.members = new NormalNodeUnion<InterfaceMemberListNode>(members);
         setAsChild(members, true);
+    }
+    
+    /**
+     * Changes the members of this interface body.
+     * @param members The members of this interface body.
+     */
+    public void setUnionForMembers(NodeUnion<? extends InterfaceMemberListNode> members)
+    {
+            setUnionForMembers(members, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMembers(NodeUnion<? extends InterfaceMemberListNode> members, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (members == null)
+        {
+            throw new NullPointerException("Node union for property members cannot be null.");
+        }
+        if (this.members != null)
+        {
+            setAsChild(this.members.getNodeValue(), false);
+        }
+        this.members = members;
+        setAsChild(members.getNodeValue(), true);
     }
     
     /**
@@ -98,9 +155,9 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.members != null)
+        if (this.members.getNodeValue() != null)
         {
-            this.members.receive(visitor);
+            this.members.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -123,9 +180,9 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.members != null)
+        if (this.members.getNodeValue() != null)
         {
-            this.members.receiveTyped(visitor);
+            this.members.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -173,7 +230,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getMembers()});
+        return Arrays.asList(new Node[]{getUnionForMembers().getNodeValue()});
     }
     
     /**
@@ -186,7 +243,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("members=");
-        sb.append(this.getMembers() == null? "null" : this.getMembers().getClass().getSimpleName());
+        sb.append(this.getUnionForMembers().getNodeValue() == null? "null" : this.getUnionForMembers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -230,8 +287,32 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     @Override
     public InterfaceBodyNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends InterfaceMemberListNode> membersCopy;
+        switch (getUnionForMembers().getType())
+        {
+            case NORMAL:
+                if (getUnionForMembers().getNormalNode() == null)
+                {
+                    membersCopy = factory.<InterfaceMemberListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    membersCopy = factory.makeNormalNodeUnion(getUnionForMembers().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMembers().getSpliceNode() == null)
+                {
+                    membersCopy = factory.<InterfaceMemberListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    membersCopy = factory.makeSpliceNodeUnion(getUnionForMembers().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
+        }
         return factory.makeInterfaceBodyNode(
-                getMembers()==null?null:getMembers().deepCopy(factory),
+                membersCopy,
                 getStartLocation(),
                 getStopLocation());
     }

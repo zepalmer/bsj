@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -21,13 +22,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeImpl implements UnqualifiedClassInstantiationNode
 {
     /** The type being instantiated. */
-    private DeclaredTypeNode type;
+    private NodeUnion<? extends DeclaredTypeNode> type;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -48,26 +50,47 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     
     /** General constructor. */
     public UnqualifiedClassInstantiationNodeImpl(
-            DeclaredTypeNode type,
-            TypeArgumentListNode constructorTypeArguments,
-            ExpressionListNode arguments,
-            AnonymousClassBodyNode body,
+            NodeUnion<? extends DeclaredTypeNode> type,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
-        setType(type, false);
+        setUnionForType(type, false);
+    }
+    
+    /**
+     * Gets the type being instantiated.  This property's value is assumed to be a normal node.
+     * @return The type being instantiated.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public DeclaredTypeNode getType()
+    {
+        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            return null;
+        } else
+        {
+            return this.type.getNormalNode();
+        }
     }
     
     /**
      * Gets the type being instantiated.
      * @return The type being instantiated.
      */
-    public DeclaredTypeNode getType()
+    public NodeUnion<? extends DeclaredTypeNode> getUnionForType()
     {
         getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            this.type = new NormalNodeUnion<DeclaredTypeNode>(null);
+        }
         return this.type;
     }
     
@@ -88,9 +111,43 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.type, false);
-        this.type = type;
+        
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = new NormalNodeUnion<DeclaredTypeNode>(type);
         setAsChild(type, true);
+    }
+    
+    /**
+     * Changes the type being instantiated.
+     * @param type The type being instantiated.
+     */
+    public void setUnionForType(NodeUnion<? extends DeclaredTypeNode> type)
+    {
+            setUnionForType(type, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForType(NodeUnion<? extends DeclaredTypeNode> type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (type == null)
+        {
+            throw new NullPointerException("Node union for property type cannot be null.");
+        }
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = type;
+        setAsChild(type.getNodeValue(), true);
     }
     
     /**
@@ -104,9 +161,9 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receive(visitor);
+            this.type.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -129,9 +186,9 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receiveTyped(visitor);
+            this.type.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -179,7 +236,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getType(), getConstructorTypeArguments(), getArguments(), getBody()});
+        return Arrays.asList(new Node[]{getUnionForType().getNodeValue(), getUnionForConstructorTypeArguments().getNodeValue(), getUnionForArguments().getNodeValue(), getUnionForBody().getNodeValue()});
     }
     
     /**
@@ -192,16 +249,16 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("type=");
-        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
+        sb.append(this.getUnionForType().getNodeValue() == null? "null" : this.getUnionForType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("constructorTypeArguments=");
-        sb.append(this.getConstructorTypeArguments() == null? "null" : this.getConstructorTypeArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForConstructorTypeArguments().getNodeValue() == null? "null" : this.getUnionForConstructorTypeArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("arguments=");
-        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -245,11 +302,107 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     @Override
     public UnqualifiedClassInstantiationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends DeclaredTypeNode> typeCopy;
+        switch (getUnionForType().getType())
+        {
+            case NORMAL:
+                if (getUnionForType().getNormalNode() == null)
+                {
+                    typeCopy = factory.<DeclaredTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeCopy = factory.makeNormalNodeUnion(getUnionForType().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForType().getSpliceNode() == null)
+                {
+                    typeCopy = factory.<DeclaredTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeCopy = factory.makeSpliceNodeUnion(getUnionForType().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForType().getType());
+        }
+        NodeUnion<? extends TypeArgumentListNode> constructorTypeArgumentsCopy;
+        switch (getUnionForConstructorTypeArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForConstructorTypeArguments().getNormalNode() == null)
+                {
+                    constructorTypeArgumentsCopy = factory.<TypeArgumentListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    constructorTypeArgumentsCopy = factory.makeNormalNodeUnion(getUnionForConstructorTypeArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForConstructorTypeArguments().getSpliceNode() == null)
+                {
+                    constructorTypeArgumentsCopy = factory.<TypeArgumentListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    constructorTypeArgumentsCopy = factory.makeSpliceNodeUnion(getUnionForConstructorTypeArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForConstructorTypeArguments().getType());
+        }
+        NodeUnion<? extends ExpressionListNode> argumentsCopy;
+        switch (getUnionForArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForArguments().getNormalNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeNormalNodeUnion(getUnionForArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForArguments().getSpliceNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeSpliceNodeUnion(getUnionForArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForArguments().getType());
+        }
+        NodeUnion<? extends AnonymousClassBodyNode> bodyCopy;
+        switch (getUnionForBody().getType())
+        {
+            case NORMAL:
+                if (getUnionForBody().getNormalNode() == null)
+                {
+                    bodyCopy = factory.<AnonymousClassBodyNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeNormalNodeUnion(getUnionForBody().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBody().getSpliceNode() == null)
+                {
+                    bodyCopy = factory.<AnonymousClassBodyNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeSpliceNodeUnion(getUnionForBody().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
+        }
         return factory.makeUnqualifiedClassInstantiationNode(
-                getType()==null?null:getType().deepCopy(factory),
-                getConstructorTypeArguments()==null?null:getConstructorTypeArguments().deepCopy(factory),
-                getArguments()==null?null:getArguments().deepCopy(factory),
-                getBody()==null?null:getBody().deepCopy(factory),
+                typeCopy,
+                constructorTypeArgumentsCopy,
+                argumentsCopy,
+                bodyCopy,
                 getStartLocation(),
                 getStopLocation());
     }

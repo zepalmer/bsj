@@ -3305,7 +3305,7 @@ wildcard returns [WildcardTypeNode ret]
     :
         '?'
         {
-            $ret = factory.makeWildcardTypeNode(null, false);
+            $ret = factory.makeWildcardTypeNode((ReferenceTypeNode)null, false);
         }
         (
 	        (

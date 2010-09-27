@@ -5,6 +5,7 @@ import java.util.Collection;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
@@ -17,11 +18,12 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
  * @author Zachary Palmer
  * 
  * @param <T> The type of the metaprogram's anchor node.
+ * @param <U> The type of replacement the anchor uses.
  */
-public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
+public class MetaprogramProfile<T extends MetaprogramAnchorNode<U>, U extends Node>
 {
 	/** The metaprogram object which will be executed. */
-	private Metaprogram<T> metaprogram;
+	private Metaprogram<T,U> metaprogram;
 	/** The anchor for this metaprogram. */
 	private T anchor;
 
@@ -34,7 +36,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	/** The package mode of this metaprogram. */
 	private MetaprogramPackageMode packageMode;
 	/** The context in which to execute the metaprogram. */
-	private Context<T> context;
+	private Context<T,U> context;
 	/**
 	 * Controls whether or not this metaprogram was purely injected. This is <code>true</code> if it was injected by
 	 * another metaprogram directly and <code>false</code> if it was loaded directly by the meta-compiler or by an
@@ -42,9 +44,9 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	 */
 	private boolean purelyInjected;
 
-	public MetaprogramProfile(Metaprogram<T> metaprogram, T anchor, Collection<Dependency> dependencies,
+	public MetaprogramProfile(Metaprogram<T,U> metaprogram, T anchor, Collection<Dependency> dependencies,
 			Collection<String> targetNames, MetaprogramLocalMode localMode, MetaprogramPackageMode packageMode,
-			Context<T> context, boolean purelyInjected)
+			Context<T,U> context, boolean purelyInjected)
 	{
 		super();
 		this.metaprogram = metaprogram;
@@ -57,7 +59,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 		this.purelyInjected = purelyInjected;
 	}
 
-	public Metaprogram<T> getMetaprogram()
+	public Metaprogram<T,U> getMetaprogram()
 	{
 		return metaprogram;
 	}
@@ -87,7 +89,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 		return packageMode;
 	}
 
-	public Context<T> getContext()
+	public Context<T,U> getContext()
 	{
 		return context;
 	}
@@ -108,9 +110,9 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (obj instanceof MetaprogramProfile<?>)
+		if (obj instanceof MetaprogramProfile<?,?>)
 		{
-			return getMetaprogram().getID() == ((MetaprogramProfile<?>) obj).getMetaprogram().getID();
+			return getMetaprogram().getID() == ((MetaprogramProfile<?,?>) obj).getMetaprogram().getID();
 		} else
 		{
 			return false;

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
@@ -28,13 +29,13 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
 {
     /** General constructor. */
     public ClassDeclarationNodeImpl(
-            ClassModifiersNode modifiers,
-            DeclaredTypeNode extendsClause,
-            DeclaredTypeListNode implementsClause,
-            ClassBodyNode body,
-            TypeParameterListNode typeParameters,
-            IdentifierNode identifier,
-            JavadocNode javadoc,
+            NodeUnion<? extends ClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -120,7 +121,7 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getModifiers(), getExtendsClause(), getImplementsClause(), getBody(), getTypeParameters(), getIdentifier(), getJavadoc()});
+        return Arrays.asList(new Node[]{getUnionForModifiers().getNodeValue(), getUnionForExtendsClause().getNodeValue(), getUnionForImplementsClause().getNodeValue(), getUnionForBody().getNodeValue(), getUnionForTypeParameters().getNodeValue(), getUnionForIdentifier().getNodeValue(), getUnionForJavadoc().getNodeValue()});
     }
     
     /**
@@ -133,25 +134,25 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
+        sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("extendsClause=");
-        sb.append(this.getExtendsClause() == null? "null" : this.getExtendsClause().getClass().getSimpleName());
+        sb.append(this.getUnionForExtendsClause().getNodeValue() == null? "null" : this.getUnionForExtendsClause().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("implementsClause=");
-        sb.append(this.getImplementsClause() == null? "null" : this.getImplementsClause().getClass().getSimpleName());
+        sb.append(this.getUnionForImplementsClause().getNodeValue() == null? "null" : this.getUnionForImplementsClause().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeParameters=");
-        sb.append(this.getTypeParameters() == null? "null" : this.getTypeParameters().getClass().getSimpleName());
+        sb.append(this.getUnionForTypeParameters().getNodeValue() == null? "null" : this.getUnionForTypeParameters().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
-        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(this.getUnionForJavadoc().getNodeValue() == null? "null" : this.getUnionForJavadoc().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -195,14 +196,182 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
     @Override
     public ClassDeclarationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ClassModifiersNode> modifiersCopy;
+        switch (getUnionForModifiers().getType())
+        {
+            case NORMAL:
+                if (getUnionForModifiers().getNormalNode() == null)
+                {
+                    modifiersCopy = factory.<ClassModifiersNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    modifiersCopy = factory.makeNormalNodeUnion(getUnionForModifiers().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForModifiers().getSpliceNode() == null)
+                {
+                    modifiersCopy = factory.<ClassModifiersNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    modifiersCopy = factory.makeSpliceNodeUnion(getUnionForModifiers().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForModifiers().getType());
+        }
+        NodeUnion<? extends DeclaredTypeNode> extendsClauseCopy;
+        switch (getUnionForExtendsClause().getType())
+        {
+            case NORMAL:
+                if (getUnionForExtendsClause().getNormalNode() == null)
+                {
+                    extendsClauseCopy = factory.<DeclaredTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    extendsClauseCopy = factory.makeNormalNodeUnion(getUnionForExtendsClause().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForExtendsClause().getSpliceNode() == null)
+                {
+                    extendsClauseCopy = factory.<DeclaredTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    extendsClauseCopy = factory.makeSpliceNodeUnion(getUnionForExtendsClause().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForExtendsClause().getType());
+        }
+        NodeUnion<? extends DeclaredTypeListNode> implementsClauseCopy;
+        switch (getUnionForImplementsClause().getType())
+        {
+            case NORMAL:
+                if (getUnionForImplementsClause().getNormalNode() == null)
+                {
+                    implementsClauseCopy = factory.<DeclaredTypeListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    implementsClauseCopy = factory.makeNormalNodeUnion(getUnionForImplementsClause().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForImplementsClause().getSpliceNode() == null)
+                {
+                    implementsClauseCopy = factory.<DeclaredTypeListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    implementsClauseCopy = factory.makeSpliceNodeUnion(getUnionForImplementsClause().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForImplementsClause().getType());
+        }
+        NodeUnion<? extends ClassBodyNode> bodyCopy;
+        switch (getUnionForBody().getType())
+        {
+            case NORMAL:
+                if (getUnionForBody().getNormalNode() == null)
+                {
+                    bodyCopy = factory.<ClassBodyNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeNormalNodeUnion(getUnionForBody().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBody().getSpliceNode() == null)
+                {
+                    bodyCopy = factory.<ClassBodyNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeSpliceNodeUnion(getUnionForBody().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
+        }
+        NodeUnion<? extends TypeParameterListNode> typeParametersCopy;
+        switch (getUnionForTypeParameters().getType())
+        {
+            case NORMAL:
+                if (getUnionForTypeParameters().getNormalNode() == null)
+                {
+                    typeParametersCopy = factory.<TypeParameterListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeParametersCopy = factory.makeNormalNodeUnion(getUnionForTypeParameters().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTypeParameters().getSpliceNode() == null)
+                {
+                    typeParametersCopy = factory.<TypeParameterListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeParametersCopy = factory.makeSpliceNodeUnion(getUnionForTypeParameters().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeParameters().getType());
+        }
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
+        NodeUnion<? extends JavadocNode> javadocCopy;
+        switch (getUnionForJavadoc().getType())
+        {
+            case NORMAL:
+                if (getUnionForJavadoc().getNormalNode() == null)
+                {
+                    javadocCopy = factory.<JavadocNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    javadocCopy = factory.makeNormalNodeUnion(getUnionForJavadoc().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForJavadoc().getSpliceNode() == null)
+                {
+                    javadocCopy = factory.<JavadocNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    javadocCopy = factory.makeSpliceNodeUnion(getUnionForJavadoc().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
+        }
         return factory.makeClassDeclarationNode(
-                getModifiers()==null?null:getModifiers().deepCopy(factory),
-                getExtendsClause()==null?null:getExtendsClause().deepCopy(factory),
-                getImplementsClause()==null?null:getImplementsClause().deepCopy(factory),
-                getBody()==null?null:getBody().deepCopy(factory),
-                getTypeParameters()==null?null:getTypeParameters().deepCopy(factory),
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
+                modifiersCopy,
+                extendsClauseCopy,
+                implementsClauseCopy,
+                bodyCopy,
+                typeParametersCopy,
+                identifierCopy,
+                javadocCopy,
                 getStartLocation(),
                 getStopLocation());
     }

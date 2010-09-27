@@ -108,6 +108,14 @@
             ]]></doc>
         </type>
 
+        <type name="LiteralNode" typeParam="T" super="Node" mode="tag">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <prop name="value" type="T" desc="the literal value for this node" />
+            <doc><![CDATA[
+                A supertype for all types of literal nodes.
+            ]]></doc>
+        </type>
+
         <type name="MetaAnnotatableNode" super="Node" mode="tag">
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations associated with this node"
                 default="makeMetaAnnotationListNode()" />
@@ -608,14 +616,6 @@
                 <pre>
                 <i>expression</i> instanceof <i>type</i>
                 </pre>
-            ]]></doc>
-        </type>
-
-        <type name="LiteralNode" typeParam="T" super="Node" mode="abstract">
-            <tag name="RestrictedPrimaryExpressionNode" />
-            <prop name="value" type="T" desc="the literal value for this node" />
-            <doc><![CDATA[
-                A superclass for all types of literal nodes.
             ]]></doc>
         </type>
 
@@ -1353,22 +1353,23 @@
 
         <!-- ======================= LITERAL NODES ====================== -->
 
-        <type name="BooleanLiteralNode" super="LiteralNode" superTypeArg="Boolean">
+        <type name="BooleanLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="Boolean" />
             <doc><![CDATA[
                 A node representing a boolean literal.
             ]]></doc>
         </type>
 
-        <type name="CharLiteralNode" super="LiteralNode" superTypeArg="Character">
+        <type name="CharLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="Character" />
             <doc><![CDATA[
                 A node representing a character literal.
             ]]></doc>
         </type>
 
-        <type name="ClassLiteralNode" super="LiteralNode" superTypeArg="LiteralizableTypeNode">
-            <!-- Overriding property so source generator realizes that it must reimplement the method. This is 
-                necessary because LiteralizableTypeNode is a node type and appropriate management of its parent reference must 
-                be done. -->
+        <type name="ClassLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="LiteralizableTypeNode" />            <!-- Overriding property so source generator realizes that it must reimplement the method. This is necessary because 
+                LiteralizableTypeNode is a node type and appropriate management of its parent reference must be done. -->
             <prop name="value" type="LiteralizableTypeNode" desc="the type for this literal" />
             <doc><![CDATA[
                 A note representing a class literal, such as <tt>String.class</tt>.  Note that the BSJ compiler API includes a
@@ -1377,38 +1378,44 @@
             ]]></doc>
         </type>
 
-        <type name="DoubleLiteralNode" super="LiteralNode" superTypeArg="Double">
+        <type name="DoubleLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="Double" />
             <doc><![CDATA[
                 A node representing a double literal.
             ]]></doc>
         </type>
 
-        <type name="FloatLiteralNode" super="LiteralNode" superTypeArg="Float">
+        <type name="FloatLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="Float" />
             <doc><![CDATA[
                 A node representing a float literal.
             ]]></doc>
         </type>
 
-        <type name="IntLiteralNode" super="LiteralNode" superTypeArg="Integer">
+        <type name="IntLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="Integer" />
             <doc><![CDATA[
                 A node representing an int literal.
             ]]></doc>
         </type>
 
-        <type name="LongLiteralNode" super="LiteralNode" superTypeArg="Long">
+        <type name="LongLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="Long" />
             <doc><![CDATA[
                 A node representing a long literal.
             ]]></doc>
         </type>
 
-        <type name="NullLiteralNode" super="LiteralNode" superTypeArg="Void">
+        <type name="NullLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="Void" />
             <doc><![CDATA[
                 A node representing a null literal.
             ]]></doc>
             <factory-override prop="value" expr="null" />
         </type>
 
-        <type name="StringLiteralNode" super="LiteralNode" superTypeArg="String">
+        <type name="StringLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="String" />
             <doc><![CDATA[
                 A node representing a String literal.
             ]]></doc>
@@ -2465,7 +2472,7 @@
         <!-- ==================== METAPROGRAM NODES ===================== -->
 
         <type name="MetaprogramAnchorNode" typeParam="T extends Node" super="Node" mode="abstract">
-            <prop name="replacement" type="T" mode="hide" desc="the replacement node for this metaprogram" />
+            <constant name="replacementType" type="Class&lt;T&gt;" desc="the type of node which can replace this anchor" />
             <include file="MetaprogramAnchorNode.java" />
             <doc><![CDATA[
                 Represents the anchor for a metaprogram during its execution.  The replacement field on this node is
@@ -2499,62 +2506,75 @@
         <type name="BlockStatementMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
             superTypeArg="BlockStatementNode">
             <tag name="BlockStatementNode" />
+            <constant name="replacementType" type="Class&lt;BlockStatementNode&gt;" desc="the type of node which can replace this anchor"
+                default="BlockStatementNode.class" />
+            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram as a block statement.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="AnnotationMemberMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
             superTypeArg="AnnotationMemberNode">
             <tag name="AnnotationMemberNode" />
+            <constant name="replacementType" type="Class&lt;AnnotationMemberNode&gt;" desc="the type of node which can replace this anchor"
+                default="AnnotationMemberNode.class" />
+            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an annotation declaration.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="AnonymousClassMemberMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
             superTypeArg="AnonymousClassMemberNode">
             <tag name="AnonymousClassMemberNode" />
+            <constant name="replacementType" type="Class&lt;AnonymousClassMemberNode&gt;" desc="the type of node which can replace this anchor"
+                default="AnonymousClassMemberNode.class" />
+            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an anonymous class body.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="ClassMemberMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode" superTypeArg="ClassMemberNode">
             <tag name="ClassMemberNode" />
+            <constant name="replacementType" type="Class&lt;ClassMemberNode&gt;" desc="the type of node which can replace this anchor"
+                default="ClassMemberNode.class" />
+            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found in a class body.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="InterfaceMemberMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
             superTypeArg="InterfaceMemberNode">
             <tag name="InterfaceMemberNode" />
+            <constant name="replacementType" type="Class&lt;InterfaceMemberNode&gt;" desc="the type of node which can replace this anchor"
+                default="InterfaceMemberNode.class" />
+            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an intereface body.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="MetaAnnotationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="MetaAnnotationMetaprogramAnchorNode">
+            <constant name="replacementType" type="Class&lt;MetaAnnotationMetaprogramAnchorNode&gt;" desc="the type of node which can replace this anchor"
+                default="MetaAnnotationMetaprogramAnchorNode.class" />
             <include file="MetaAnnotationMetaprogramAnchorNode.java" />
             <doc><![CDATA[
                 A node representing a metaprogram attached to a meta-annotation.
             ]]></doc>
-            <factory-override prop="replacement" expr="null" />
         </type>
 
         <type name="TypeDeclarationMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
             superTypeArg="TypeDeclarationNode">
             <tag name="TypeDeclarationNode" />
+            <constant name="replacementType" type="Class&lt;TypeDeclarationNode&gt;" desc="the type of node which can replace this anchor"
+                default="TypeDeclarationNode.class" />
+            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found at the top level of a source file.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <!-- ================== META-ANNOTATION NODES =================== -->
@@ -2604,7 +2624,7 @@
         <type name="MetaAnnotationNode" super="Node" mode="abstract">
             <prop name="annotationType" type="UnparameterizedTypeNode" desc="the annotation type" />
             <prop name="metaprogramAnchor" type="MetaAnnotationMetaprogramAnchorNode" default="null"
-                mode="readOnly" desc="the anchor of a metaprogram attached to this node" />
+                mode="readOnly" desc="the anchor of a metaprogram attached to this node" allowUnion="false" />
             <include file="MetaAnnotationNode.java" />
             <doc><![CDATA[
                 Acts as a base class for meta-annotation nodes.  Subclasses distinguish between the different types of
@@ -2698,7 +2718,8 @@
         <!-- TODO: insert some logic or some construct which performs defensive checks of the raw code literal 
             payload type to make sure it's valid -->
 
-        <type name="RawCodeLiteralNode" super="LiteralNode" superTypeArg="BsjRawCodeLiteralPayload">
+        <type name="RawCodeLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="BsjRawCodeLiteralPayload" />
             <doc><![CDATA[
                 A node representing an unprocessed code literal.  This literal is not guaranteed to contain parseable
                 Java code and has not yet been assigned a type.  Metaprogrammers should never need to create a node of
@@ -2707,7 +2728,9 @@
             ]]></doc>
         </type>
 
-        <type name="CodeLiteralNode" super="LiteralNode" superTypeArg="Node">
+        <type name="CodeLiteralNode" super="Node">
+            <tag name="LiteralNode" typeArg="Node" />
+            <prop name="value" type="Node" desc="the node represented by this code literal" />
             <doc><![CDATA[
                 A node representing a processed code literal.
             ]]></doc>

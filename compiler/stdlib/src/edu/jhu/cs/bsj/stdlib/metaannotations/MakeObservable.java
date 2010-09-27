@@ -73,7 +73,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     }
     
     @Override
-    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context)
     {
         // get all the members of our enclosing class
         ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
@@ -115,7 +115,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     }
 
     private void generateListenerInterface(
-            Context<MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
+            Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
     {
         // get the primary package node
         PackageNode enclosingPackage = context.getAnchor().getNearestAncestorOfType(
@@ -165,7 +165,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     }
 
     private ClassMemberNode generateAddListenerMethod(
-            Context<MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
+            Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
     {
         String paramName = "listener";
         
@@ -192,7 +192,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     }
     
     private ClassMemberNode generateRemoveListenerMethod(
-            Context<MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
+            Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
     {
         String paramName = "listener";
         
@@ -220,7 +220,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     }
 
     private ClassMemberNode generateFireEventMethod(
-            Context<MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
+            Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
     {
         String paramName = "event";
         String varName = "listener";

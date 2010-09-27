@@ -7,20 +7,27 @@ package edu.jhu.cs.bsj.compiler.utils.generator;
  */
 public class ConstantDefinition extends AbstractPropertyDefinition<ConstantDefinition>
 {
-	public ConstantDefinition(String name, String baseType, String typeArg, String description, String defaultExpression)
+	public ConstantDefinition(String name, String baseType, String typeArg, String description, String defaultExpression,
+			boolean allowUnion)
 	{
-		super(name, baseType, typeArg, description, defaultExpression);
+		super(name, baseType, typeArg, description, defaultExpression, allowUnion);
 	}
 
 	@Override
 	public ConstantDefinition deriveWithBaseType(String type)
 	{
-		return new ConstantDefinition(getName(), type, getTypeArg(), getDescription(), getDefaultExpression());
+		ConstantDefinition def = new ConstantDefinition(getName(), type, getTypeArg(), getDescription(),
+				getDefaultExpression(), isAllowUnion());
+		def.setParentDef(getParentDef());
+		return def;
 	}
 
 	@Override
 	public ConstantDefinition deriveWithTypeArg(String arg)
 	{
-		return new ConstantDefinition(getName(), getBaseType(), arg, getDescription(), getDefaultExpression());
+		ConstantDefinition def = new ConstantDefinition(getName(), getBaseType(), arg, getDescription(),
+				getDefaultExpression(), isAllowUnion());
+		def.setParentDef(getParentDef());
+		return def;
 	}
 }

@@ -14,17 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ThisNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ThisNodeImpl extends NodeImpl implements ThisNode
 {
     /** The qualifying type. */
-    private UnparameterizedTypeNode type;
+    private NodeUnion<? extends UnparameterizedTypeNode> type;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -45,23 +47,44 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     
     /** General constructor. */
     public ThisNodeImpl(
-            UnparameterizedTypeNode type,
+            NodeUnion<? extends UnparameterizedTypeNode> type,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setType(type, false);
+        setUnionForType(type, false);
+    }
+    
+    /**
+     * Gets the qualifying type.  This property's value is assumed to be a normal node.
+     * @return The qualifying type.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public UnparameterizedTypeNode getType()
+    {
+        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            return null;
+        } else
+        {
+            return this.type.getNormalNode();
+        }
     }
     
     /**
      * Gets the qualifying type.
      * @return The qualifying type.
      */
-    public UnparameterizedTypeNode getType()
+    public NodeUnion<? extends UnparameterizedTypeNode> getUnionForType()
     {
         getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            this.type = new NormalNodeUnion<UnparameterizedTypeNode>(null);
+        }
         return this.type;
     }
     
@@ -82,9 +105,43 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.type, false);
-        this.type = type;
+        
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = new NormalNodeUnion<UnparameterizedTypeNode>(type);
         setAsChild(type, true);
+    }
+    
+    /**
+     * Changes the qualifying type.
+     * @param type The qualifying type.
+     */
+    public void setUnionForType(NodeUnion<? extends UnparameterizedTypeNode> type)
+    {
+            setUnionForType(type, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForType(NodeUnion<? extends UnparameterizedTypeNode> type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (type == null)
+        {
+            throw new NullPointerException("Node union for property type cannot be null.");
+        }
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = type;
+        setAsChild(type.getNodeValue(), true);
     }
     
     /**
@@ -98,9 +155,9 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receive(visitor);
+            this.type.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -123,9 +180,9 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receiveTyped(visitor);
+            this.type.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -173,7 +230,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getType()});
+        return Arrays.asList(new Node[]{getUnionForType().getNodeValue()});
     }
     
     /**
@@ -186,7 +243,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("type=");
-        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
+        sb.append(this.getUnionForType().getNodeValue() == null? "null" : this.getUnionForType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -230,8 +287,32 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     @Override
     public ThisNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends UnparameterizedTypeNode> typeCopy;
+        switch (getUnionForType().getType())
+        {
+            case NORMAL:
+                if (getUnionForType().getNormalNode() == null)
+                {
+                    typeCopy = factory.<UnparameterizedTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeCopy = factory.makeNormalNodeUnion(getUnionForType().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForType().getSpliceNode() == null)
+                {
+                    typeCopy = factory.<UnparameterizedTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeCopy = factory.makeSpliceNodeUnion(getUnionForType().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForType().getType());
+        }
         return factory.makeThisNode(
-                getType()==null?null:getType().deepCopy(factory),
+                typeCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -16,12 +16,14 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -29,7 +31,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 public class MetaprogramPreambleNodeImpl extends NodeImpl implements MetaprogramPreambleNode
 {
     /** The imports for this metaprogram. */
-    private MetaprogramImportListNode imports;
+    private NodeUnion<? extends MetaprogramImportListNode> imports;
     
     /** The metaprogram local mode. */
     private MetaprogramLocalMode localMode;
@@ -38,10 +40,10 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     private MetaprogramPackageMode packageMode;
     
     /** The targets for this metaprogram. */
-    private MetaprogramTargetListNode targets;
+    private NodeUnion<? extends MetaprogramTargetListNode> targets;
     
     /** The dependencies for this metaprogram. */
-    private MetaprogramDependencyDeclarationListNode dependencies;
+    private NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -70,31 +72,52 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     
     /** General constructor. */
     public MetaprogramPreambleNodeImpl(
-            MetaprogramImportListNode imports,
+            NodeUnion<? extends MetaprogramImportListNode> imports,
             MetaprogramLocalMode localMode,
             MetaprogramPackageMode packageMode,
-            MetaprogramTargetListNode targets,
-            MetaprogramDependencyDeclarationListNode dependencies,
+            NodeUnion<? extends MetaprogramTargetListNode> targets,
+            NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setImports(imports, false);
+        setUnionForImports(imports, false);
         this.localMode = localMode;
         this.packageMode = packageMode;
-        setTargets(targets, false);
-        setDependencies(dependencies, false);
+        setUnionForTargets(targets, false);
+        setUnionForDependencies(dependencies, false);
+    }
+    
+    /**
+     * Gets the imports for this metaprogram.  This property's value is assumed to be a normal node.
+     * @return The imports for this metaprogram.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaprogramImportListNode getImports()
+    {
+        getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.imports == null)
+        {
+            return null;
+        } else
+        {
+            return this.imports.getNormalNode();
+        }
     }
     
     /**
      * Gets the imports for this metaprogram.
      * @return The imports for this metaprogram.
      */
-    public MetaprogramImportListNode getImports()
+    public NodeUnion<? extends MetaprogramImportListNode> getUnionForImports()
     {
         getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.imports == null)
+        {
+            this.imports = new NormalNodeUnion<MetaprogramImportListNode>(null);
+        }
         return this.imports;
     }
     
@@ -115,9 +138,43 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.imports, false);
-        this.imports = imports;
+        
+        if (this.imports != null)
+        {
+            setAsChild(this.imports.getNodeValue(), false);
+        }
+        this.imports = new NormalNodeUnion<MetaprogramImportListNode>(imports);
         setAsChild(imports, true);
+    }
+    
+    /**
+     * Changes the imports for this metaprogram.
+     * @param imports The imports for this metaprogram.
+     */
+    public void setUnionForImports(NodeUnion<? extends MetaprogramImportListNode> imports)
+    {
+            setUnionForImports(imports, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForImports(NodeUnion<? extends MetaprogramImportListNode> imports, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IMPORTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (imports == null)
+        {
+            throw new NullPointerException("Node union for property imports cannot be null.");
+        }
+        if (this.imports != null)
+        {
+            setAsChild(this.imports.getNodeValue(), false);
+        }
+        this.imports = imports;
+        setAsChild(imports.getNodeValue(), true);
     }
     
     /**
@@ -147,6 +204,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.LOCAL_MODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
+        
         this.localMode = localMode;
     }
     
@@ -177,16 +235,38 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.PACKAGE_MODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
+        
         this.packageMode = packageMode;
+    }
+    
+    /**
+     * Gets the targets for this metaprogram.  This property's value is assumed to be a normal node.
+     * @return The targets for this metaprogram.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaprogramTargetListNode getTargets()
+    {
+        getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.targets == null)
+        {
+            return null;
+        } else
+        {
+            return this.targets.getNormalNode();
+        }
     }
     
     /**
      * Gets the targets for this metaprogram.
      * @return The targets for this metaprogram.
      */
-    public MetaprogramTargetListNode getTargets()
+    public NodeUnion<? extends MetaprogramTargetListNode> getUnionForTargets()
     {
         getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.targets == null)
+        {
+            this.targets = new NormalNodeUnion<MetaprogramTargetListNode>(null);
+        }
         return this.targets;
     }
     
@@ -207,18 +287,73 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.targets, false);
-        this.targets = targets;
+        
+        if (this.targets != null)
+        {
+            setAsChild(this.targets.getNodeValue(), false);
+        }
+        this.targets = new NormalNodeUnion<MetaprogramTargetListNode>(targets);
         setAsChild(targets, true);
+    }
+    
+    /**
+     * Changes the targets for this metaprogram.
+     * @param targets The targets for this metaprogram.
+     */
+    public void setUnionForTargets(NodeUnion<? extends MetaprogramTargetListNode> targets)
+    {
+            setUnionForTargets(targets, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForTargets(NodeUnion<? extends MetaprogramTargetListNode> targets, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (targets == null)
+        {
+            throw new NullPointerException("Node union for property targets cannot be null.");
+        }
+        if (this.targets != null)
+        {
+            setAsChild(this.targets.getNodeValue(), false);
+        }
+        this.targets = targets;
+        setAsChild(targets.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the dependencies for this metaprogram.  This property's value is assumed to be a normal node.
+     * @return The dependencies for this metaprogram.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaprogramDependencyDeclarationListNode getDependencies()
+    {
+        getAttribute(LocalAttribute.DEPENDENCIES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.dependencies == null)
+        {
+            return null;
+        } else
+        {
+            return this.dependencies.getNormalNode();
+        }
     }
     
     /**
      * Gets the dependencies for this metaprogram.
      * @return The dependencies for this metaprogram.
      */
-    public MetaprogramDependencyDeclarationListNode getDependencies()
+    public NodeUnion<? extends MetaprogramDependencyDeclarationListNode> getUnionForDependencies()
     {
         getAttribute(LocalAttribute.DEPENDENCIES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.dependencies == null)
+        {
+            this.dependencies = new NormalNodeUnion<MetaprogramDependencyDeclarationListNode>(null);
+        }
         return this.dependencies;
     }
     
@@ -239,9 +374,43 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DEPENDENCIES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.dependencies, false);
-        this.dependencies = dependencies;
+        
+        if (this.dependencies != null)
+        {
+            setAsChild(this.dependencies.getNodeValue(), false);
+        }
+        this.dependencies = new NormalNodeUnion<MetaprogramDependencyDeclarationListNode>(dependencies);
         setAsChild(dependencies, true);
+    }
+    
+    /**
+     * Changes the dependencies for this metaprogram.
+     * @param dependencies The dependencies for this metaprogram.
+     */
+    public void setUnionForDependencies(NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies)
+    {
+            setUnionForDependencies(dependencies, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForDependencies(NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.DEPENDENCIES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (dependencies == null)
+        {
+            throw new NullPointerException("Node union for property dependencies cannot be null.");
+        }
+        if (this.dependencies != null)
+        {
+            setAsChild(this.dependencies.getNodeValue(), false);
+        }
+        this.dependencies = dependencies;
+        setAsChild(dependencies.getNodeValue(), true);
     }
     
     /**
@@ -255,17 +424,17 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.imports != null)
+        if (this.imports.getNodeValue() != null)
         {
-            this.imports.receive(visitor);
+            this.imports.getNodeValue().receive(visitor);
         }
-        if (this.targets != null)
+        if (this.targets.getNodeValue() != null)
         {
-            this.targets.receive(visitor);
+            this.targets.getNodeValue().receive(visitor);
         }
-        if (this.dependencies != null)
+        if (this.dependencies.getNodeValue() != null)
         {
-            this.dependencies.receive(visitor);
+            this.dependencies.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -288,17 +457,17 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.imports != null)
+        if (this.imports.getNodeValue() != null)
         {
-            this.imports.receiveTyped(visitor);
+            this.imports.getNodeValue().receiveTyped(visitor);
         }
-        if (this.targets != null)
+        if (this.targets.getNodeValue() != null)
         {
-            this.targets.receiveTyped(visitor);
+            this.targets.getNodeValue().receiveTyped(visitor);
         }
-        if (this.dependencies != null)
+        if (this.dependencies.getNodeValue() != null)
         {
-            this.dependencies.receiveTyped(visitor);
+            this.dependencies.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -348,7 +517,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getImports(), getTargets(), getDependencies()});
+        return Arrays.asList(new Node[]{getUnionForImports().getNodeValue(), getUnionForTargets().getNodeValue(), getUnionForDependencies().getNodeValue()});
     }
     
     /**
@@ -361,7 +530,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("imports=");
-        sb.append(this.getImports() == null? "null" : this.getImports().getClass().getSimpleName());
+        sb.append(this.getUnionForImports().getNodeValue() == null? "null" : this.getUnionForImports().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("localMode=");
         sb.append(String.valueOf(this.getLocalMode()) + ":" + (this.getLocalMode() != null ? this.getLocalMode().getClass().getSimpleName() : "null"));
@@ -370,10 +539,10 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         sb.append(String.valueOf(this.getPackageMode()) + ":" + (this.getPackageMode() != null ? this.getPackageMode().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("targets=");
-        sb.append(this.getTargets() == null? "null" : this.getTargets().getClass().getSimpleName());
+        sb.append(this.getUnionForTargets().getNodeValue() == null? "null" : this.getUnionForTargets().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("dependencies=");
-        sb.append(this.getDependencies() == null? "null" : this.getDependencies().getClass().getSimpleName());
+        sb.append(this.getUnionForDependencies().getNodeValue() == null? "null" : this.getUnionForDependencies().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -417,12 +586,84 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     @Override
     public MetaprogramPreambleNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends MetaprogramImportListNode> importsCopy;
+        switch (getUnionForImports().getType())
+        {
+            case NORMAL:
+                if (getUnionForImports().getNormalNode() == null)
+                {
+                    importsCopy = factory.<MetaprogramImportListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    importsCopy = factory.makeNormalNodeUnion(getUnionForImports().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForImports().getSpliceNode() == null)
+                {
+                    importsCopy = factory.<MetaprogramImportListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    importsCopy = factory.makeSpliceNodeUnion(getUnionForImports().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForImports().getType());
+        }
+        NodeUnion<? extends MetaprogramTargetListNode> targetsCopy;
+        switch (getUnionForTargets().getType())
+        {
+            case NORMAL:
+                if (getUnionForTargets().getNormalNode() == null)
+                {
+                    targetsCopy = factory.<MetaprogramTargetListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    targetsCopy = factory.makeNormalNodeUnion(getUnionForTargets().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTargets().getSpliceNode() == null)
+                {
+                    targetsCopy = factory.<MetaprogramTargetListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    targetsCopy = factory.makeSpliceNodeUnion(getUnionForTargets().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTargets().getType());
+        }
+        NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependenciesCopy;
+        switch (getUnionForDependencies().getType())
+        {
+            case NORMAL:
+                if (getUnionForDependencies().getNormalNode() == null)
+                {
+                    dependenciesCopy = factory.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    dependenciesCopy = factory.makeNormalNodeUnion(getUnionForDependencies().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForDependencies().getSpliceNode() == null)
+                {
+                    dependenciesCopy = factory.<MetaprogramDependencyDeclarationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    dependenciesCopy = factory.makeSpliceNodeUnion(getUnionForDependencies().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForDependencies().getType());
+        }
         return factory.makeMetaprogramPreambleNode(
-                getImports()==null?null:getImports().deepCopy(factory),
+                importsCopy,
                 getLocalMode(),
                 getPackageMode(),
-                getTargets()==null?null:getTargets().deepCopy(factory),
-                getDependencies()==null?null:getDependencies().deepCopy(factory),
+                targetsCopy,
+                dependenciesCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -14,18 +14,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implements SingleElementAnnotationNode
 {
     /** The value of the "value" element. */
-    private AnnotationValueNode value;
+    private NodeUnion<? extends AnnotationValueNode> value;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -46,24 +48,45 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     
     /** General constructor. */
     public SingleElementAnnotationNodeImpl(
-            AnnotationValueNode value,
-            UnparameterizedTypeNode annotationType,
+            NodeUnion<? extends AnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(annotationType, startLocation, stopLocation, manager, binary);
-        setValue(value, false);
+        setUnionForValue(value, false);
+    }
+    
+    /**
+     * Gets the value of the "value" element.  This property's value is assumed to be a normal node.
+     * @return The value of the "value" element.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnnotationValueNode getValue()
+    {
+        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.value == null)
+        {
+            return null;
+        } else
+        {
+            return this.value.getNormalNode();
+        }
     }
     
     /**
      * Gets the value of the "value" element.
      * @return The value of the "value" element.
      */
-    public AnnotationValueNode getValue()
+    public NodeUnion<? extends AnnotationValueNode> getUnionForValue()
     {
         getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.value == null)
+        {
+            this.value = new NormalNodeUnion<AnnotationValueNode>(null);
+        }
         return this.value;
     }
     
@@ -84,9 +107,43 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.value, false);
-        this.value = value;
+        
+        if (this.value != null)
+        {
+            setAsChild(this.value.getNodeValue(), false);
+        }
+        this.value = new NormalNodeUnion<AnnotationValueNode>(value);
         setAsChild(value, true);
+    }
+    
+    /**
+     * Changes the value of the "value" element.
+     * @param value The value of the "value" element.
+     */
+    public void setUnionForValue(NodeUnion<? extends AnnotationValueNode> value)
+    {
+            setUnionForValue(value, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForValue(NodeUnion<? extends AnnotationValueNode> value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (value == null)
+        {
+            throw new NullPointerException("Node union for property value cannot be null.");
+        }
+        if (this.value != null)
+        {
+            setAsChild(this.value.getNodeValue(), false);
+        }
+        this.value = value;
+        setAsChild(value.getNodeValue(), true);
     }
     
     /**
@@ -100,9 +157,9 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.value != null)
+        if (this.value.getNodeValue() != null)
         {
-            this.value.receive(visitor);
+            this.value.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -125,9 +182,9 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.value != null)
+        if (this.value.getNodeValue() != null)
         {
-            this.value.receiveTyped(visitor);
+            this.value.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -175,7 +232,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getValue(), getAnnotationType()});
+        return Arrays.asList(new Node[]{getUnionForValue().getNodeValue(), getUnionForAnnotationType().getNodeValue()});
     }
     
     /**
@@ -188,10 +245,10 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("value=");
-        sb.append(this.getValue() == null? "null" : this.getValue().getClass().getSimpleName());
+        sb.append(this.getUnionForValue().getNodeValue() == null? "null" : this.getUnionForValue().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("annotationType=");
-        sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
+        sb.append(this.getUnionForAnnotationType().getNodeValue() == null? "null" : this.getUnionForAnnotationType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -235,9 +292,57 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     @Override
     public SingleElementAnnotationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends AnnotationValueNode> valueCopy;
+        switch (getUnionForValue().getType())
+        {
+            case NORMAL:
+                if (getUnionForValue().getNormalNode() == null)
+                {
+                    valueCopy = factory.<AnnotationValueNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    valueCopy = factory.makeNormalNodeUnion(getUnionForValue().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForValue().getSpliceNode() == null)
+                {
+                    valueCopy = factory.<AnnotationValueNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    valueCopy = factory.makeSpliceNodeUnion(getUnionForValue().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForValue().getType());
+        }
+        NodeUnion<? extends UnparameterizedTypeNode> annotationTypeCopy;
+        switch (getUnionForAnnotationType().getType())
+        {
+            case NORMAL:
+                if (getUnionForAnnotationType().getNormalNode() == null)
+                {
+                    annotationTypeCopy = factory.<UnparameterizedTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    annotationTypeCopy = factory.makeNormalNodeUnion(getUnionForAnnotationType().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForAnnotationType().getSpliceNode() == null)
+                {
+                    annotationTypeCopy = factory.<UnparameterizedTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    annotationTypeCopy = factory.makeSpliceNodeUnion(getUnionForAnnotationType().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotationType().getType());
+        }
         return factory.makeSingleElementAnnotationNode(
-                getValue()==null?null:getValue().deepCopy(factory),
-                getAnnotationType()==null?null:getAnnotationType().deepCopy(factory),
+                valueCopy,
+                annotationTypeCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
 {
     /** The enumeration constants. */
-    private EnumConstantDeclarationListNode constants;
+    private NodeUnion<? extends EnumConstantDeclarationListNode> constants;
     
     /** The members of the class body part. */
-    private ClassMemberListNode members;
+    private NodeUnion<? extends ClassMemberListNode> members;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     
     /** General constructor. */
     public EnumBodyNodeImpl(
-            EnumConstantDeclarationListNode constants,
-            ClassMemberListNode members,
+            NodeUnion<? extends EnumConstantDeclarationListNode> constants,
+            NodeUnion<? extends ClassMemberListNode> members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setConstants(constants, false);
-        setMembers(members, false);
+        setUnionForConstants(constants, false);
+        setUnionForMembers(members, false);
+    }
+    
+    /**
+     * Gets the enumeration constants.  This property's value is assumed to be a normal node.
+     * @return The enumeration constants.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public EnumConstantDeclarationListNode getConstants()
+    {
+        getAttribute(LocalAttribute.CONSTANTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.constants == null)
+        {
+            return null;
+        } else
+        {
+            return this.constants.getNormalNode();
+        }
     }
     
     /**
      * Gets the enumeration constants.
      * @return The enumeration constants.
      */
-    public EnumConstantDeclarationListNode getConstants()
+    public NodeUnion<? extends EnumConstantDeclarationListNode> getUnionForConstants()
     {
         getAttribute(LocalAttribute.CONSTANTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.constants == null)
+        {
+            this.constants = new NormalNodeUnion<EnumConstantDeclarationListNode>(null);
+        }
         return this.constants;
     }
     
@@ -90,18 +113,73 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.CONSTANTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.constants, false);
-        this.constants = constants;
+        
+        if (this.constants != null)
+        {
+            setAsChild(this.constants.getNodeValue(), false);
+        }
+        this.constants = new NormalNodeUnion<EnumConstantDeclarationListNode>(constants);
         setAsChild(constants, true);
+    }
+    
+    /**
+     * Changes the enumeration constants.
+     * @param constants The enumeration constants.
+     */
+    public void setUnionForConstants(NodeUnion<? extends EnumConstantDeclarationListNode> constants)
+    {
+            setUnionForConstants(constants, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForConstants(NodeUnion<? extends EnumConstantDeclarationListNode> constants, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.CONSTANTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (constants == null)
+        {
+            throw new NullPointerException("Node union for property constants cannot be null.");
+        }
+        if (this.constants != null)
+        {
+            setAsChild(this.constants.getNodeValue(), false);
+        }
+        this.constants = constants;
+        setAsChild(constants.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the members of the class body part.  This property's value is assumed to be a normal node.
+     * @return The members of the class body part.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ClassMemberListNode getMembers()
+    {
+        getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.members == null)
+        {
+            return null;
+        } else
+        {
+            return this.members.getNormalNode();
+        }
     }
     
     /**
      * Gets the members of the class body part.
      * @return The members of the class body part.
      */
-    public ClassMemberListNode getMembers()
+    public NodeUnion<? extends ClassMemberListNode> getUnionForMembers()
     {
         getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.members == null)
+        {
+            this.members = new NormalNodeUnion<ClassMemberListNode>(null);
+        }
         return this.members;
     }
     
@@ -122,9 +200,43 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.members, false);
-        this.members = members;
+        
+        if (this.members != null)
+        {
+            setAsChild(this.members.getNodeValue(), false);
+        }
+        this.members = new NormalNodeUnion<ClassMemberListNode>(members);
         setAsChild(members, true);
+    }
+    
+    /**
+     * Changes the members of the class body part.
+     * @param members The members of the class body part.
+     */
+    public void setUnionForMembers(NodeUnion<? extends ClassMemberListNode> members)
+    {
+            setUnionForMembers(members, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMembers(NodeUnion<? extends ClassMemberListNode> members, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (members == null)
+        {
+            throw new NullPointerException("Node union for property members cannot be null.");
+        }
+        if (this.members != null)
+        {
+            setAsChild(this.members.getNodeValue(), false);
+        }
+        this.members = members;
+        setAsChild(members.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.constants != null)
+        if (this.constants.getNodeValue() != null)
         {
-            this.constants.receive(visitor);
+            this.constants.getNodeValue().receive(visitor);
         }
-        if (this.members != null)
+        if (this.members.getNodeValue() != null)
         {
-            this.members.receive(visitor);
+            this.members.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.constants != null)
+        if (this.constants.getNodeValue() != null)
         {
-            this.constants.receiveTyped(visitor);
+            this.constants.getNodeValue().receiveTyped(visitor);
         }
-        if (this.members != null)
+        if (this.members.getNodeValue() != null)
         {
-            this.members.receiveTyped(visitor);
+            this.members.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -222,7 +334,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getConstants(), getMembers()});
+        return Arrays.asList(new Node[]{getUnionForConstants().getNodeValue(), getUnionForMembers().getNodeValue()});
     }
     
     /**
@@ -235,10 +347,10 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("constants=");
-        sb.append(this.getConstants() == null? "null" : this.getConstants().getClass().getSimpleName());
+        sb.append(this.getUnionForConstants().getNodeValue() == null? "null" : this.getUnionForConstants().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("members=");
-        sb.append(this.getMembers() == null? "null" : this.getMembers().getClass().getSimpleName());
+        sb.append(this.getUnionForMembers().getNodeValue() == null? "null" : this.getUnionForMembers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -282,9 +394,57 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     @Override
     public EnumBodyNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends EnumConstantDeclarationListNode> constantsCopy;
+        switch (getUnionForConstants().getType())
+        {
+            case NORMAL:
+                if (getUnionForConstants().getNormalNode() == null)
+                {
+                    constantsCopy = factory.<EnumConstantDeclarationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    constantsCopy = factory.makeNormalNodeUnion(getUnionForConstants().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForConstants().getSpliceNode() == null)
+                {
+                    constantsCopy = factory.<EnumConstantDeclarationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    constantsCopy = factory.makeSpliceNodeUnion(getUnionForConstants().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForConstants().getType());
+        }
+        NodeUnion<? extends ClassMemberListNode> membersCopy;
+        switch (getUnionForMembers().getType())
+        {
+            case NORMAL:
+                if (getUnionForMembers().getNormalNode() == null)
+                {
+                    membersCopy = factory.<ClassMemberListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    membersCopy = factory.makeNormalNodeUnion(getUnionForMembers().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMembers().getSpliceNode() == null)
+                {
+                    membersCopy = factory.<ClassMemberListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    membersCopy = factory.makeSpliceNodeUnion(getUnionForMembers().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
+        }
         return factory.makeEnumBodyNode(
-                getConstants()==null?null:getConstants().deepCopy(factory),
-                getMembers()==null?null:getMembers().deepCopy(factory),
+                constantsCopy,
+                membersCopy,
                 getStartLocation(),
                 getStopLocation());
     }

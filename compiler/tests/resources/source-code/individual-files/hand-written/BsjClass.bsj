@@ -7,7 +7,7 @@
 	#target a;
 	System.out.println("ALPHA");
 	BsjNodeFactory factory = context.getFactory();
-	context.getAnchor().setReplacement(factory.makeEnumDeclarationNode(
+	context.setReplacement(factory.makeEnumDeclarationNode(
 			factory.makeEnumModifiersNode(
 					AccessModifier.PACKAGE,
 					false,

@@ -21,9 +21,9 @@ public abstract class ModalPropertyDefinition<T extends ModalPropertyDefinition<
 	private Mode mode;
 
 	public ModalPropertyDefinition(String name, String baseType, String typeArg, Mode mode, String description,
-			String defaultExpression)
+			String defaultExpression, boolean allowUnion)
 	{
-		super(name, baseType, typeArg, description, defaultExpression);
+		super(name, baseType, typeArg, description, defaultExpression, allowUnion);
 		this.mode = mode;
 	}
 
@@ -51,5 +51,4 @@ public abstract class ModalPropertyDefinition<T extends ModalPropertyDefinition<
 	{
 		return "PropDef:" + getName() + ":" + getFullType();
 	}
-
 }

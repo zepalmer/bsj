@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 
 /**
@@ -16,8 +17,15 @@ public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
     /**
      * Gets the base type being parameterized.
      * @return The base type being parameterized.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeNode getBaseType();
+    public UnparameterizedTypeNode getBaseType() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the base type being parameterized.
+     * @return A union object representing The base type being parameterized.
+     */
+    public NodeUnion<? extends UnparameterizedTypeNode> getUnionForBaseType();
     
     /**
      * Changes the base type being parameterized.
@@ -26,16 +34,43 @@ public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
     public void setBaseType(UnparameterizedTypeNode baseType);
     
     /**
+     * Changes the base type being parameterized.
+     * @param baseType The base type being parameterized.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForBaseType(NodeUnion<? extends UnparameterizedTypeNode> baseType) throws NullPointerException;
+    
+    /**
      * Gets the type arguments for this node.
      * @return The type arguments for this node.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeArgumentListNode getTypeArguments();
+    public TypeArgumentListNode getTypeArguments() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the type arguments for this node.
+     * @return A union object representing The type arguments for this node.
+     */
+    public NodeUnion<? extends TypeArgumentListNode> getUnionForTypeArguments();
     
     /**
      * Changes the type arguments for this node.
      * @param typeArguments The type arguments for this node.
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments);
+    
+    /**
+     * Changes the type arguments for this node.
+     * @param typeArguments The type arguments for this node.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

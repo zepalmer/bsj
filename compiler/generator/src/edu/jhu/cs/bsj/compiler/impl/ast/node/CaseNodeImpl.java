@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CaseNodeImpl extends NodeImpl implements CaseNode
 {
     /** The expression used in this case label. */
-    private ExpressionNode expression;
+    private NodeUnion<? extends ExpressionNode> expression;
     
     /** The statements to execute in this case node. */
-    private BlockStatementListNode statements;
+    private NodeUnion<? extends BlockStatementListNode> statements;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     
     /** General constructor. */
     public CaseNodeImpl(
-            ExpressionNode expression,
-            BlockStatementListNode statements,
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setExpression(expression, false);
-        setStatements(statements, false);
+        setUnionForExpression(expression, false);
+        setUnionForStatements(statements, false);
+    }
+    
+    /**
+     * Gets the expression used in this case label.  This property's value is assumed to be a normal node.
+     * @return The expression used in this case label.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getExpression()
+    {
+        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            return null;
+        } else
+        {
+            return this.expression.getNormalNode();
+        }
     }
     
     /**
      * Gets the expression used in this case label.
      * @return The expression used in this case label.
      */
-    public ExpressionNode getExpression()
+    public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
         getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            this.expression = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.expression;
     }
     
@@ -90,18 +113,73 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.expression, false);
-        this.expression = expression;
+        
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
         setAsChild(expression, true);
+    }
+    
+    /**
+     * Changes the expression used in this case label.
+     * @param expression The expression used in this case label.
+     */
+    public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
+    {
+            setUnionForExpression(expression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (expression == null)
+        {
+            throw new NullPointerException("Node union for property expression cannot be null.");
+        }
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = expression;
+        setAsChild(expression.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the statements to execute in this case node.  This property's value is assumed to be a normal node.
+     * @return The statements to execute in this case node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public BlockStatementListNode getStatements()
+    {
+        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.statements == null)
+        {
+            return null;
+        } else
+        {
+            return this.statements.getNormalNode();
+        }
     }
     
     /**
      * Gets the statements to execute in this case node.
      * @return The statements to execute in this case node.
      */
-    public BlockStatementListNode getStatements()
+    public NodeUnion<? extends BlockStatementListNode> getUnionForStatements()
     {
         getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.statements == null)
+        {
+            this.statements = new NormalNodeUnion<BlockStatementListNode>(null);
+        }
         return this.statements;
     }
     
@@ -122,9 +200,43 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.statements, false);
-        this.statements = statements;
+        
+        if (this.statements != null)
+        {
+            setAsChild(this.statements.getNodeValue(), false);
+        }
+        this.statements = new NormalNodeUnion<BlockStatementListNode>(statements);
         setAsChild(statements, true);
+    }
+    
+    /**
+     * Changes the statements to execute in this case node.
+     * @param statements The statements to execute in this case node.
+     */
+    public void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements)
+    {
+            setUnionForStatements(statements, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (statements == null)
+        {
+            throw new NullPointerException("Node union for property statements cannot be null.");
+        }
+        if (this.statements != null)
+        {
+            setAsChild(this.statements.getNodeValue(), false);
+        }
+        this.statements = statements;
+        setAsChild(statements.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receive(visitor);
+            this.expression.getNodeValue().receive(visitor);
         }
-        if (this.statements != null)
+        if (this.statements.getNodeValue() != null)
         {
-            this.statements.receive(visitor);
+            this.statements.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receiveTyped(visitor);
+            this.expression.getNodeValue().receiveTyped(visitor);
         }
-        if (this.statements != null)
+        if (this.statements.getNodeValue() != null)
         {
-            this.statements.receiveTyped(visitor);
+            this.statements.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -220,7 +332,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getExpression(), getStatements()});
+        return Arrays.asList(new Node[]{getUnionForExpression().getNodeValue(), getUnionForStatements().getNodeValue()});
     }
     
     /**
@@ -233,10 +345,10 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("expression=");
-        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("statements=");
-        sb.append(this.getStatements() == null? "null" : this.getStatements().getClass().getSimpleName());
+        sb.append(this.getUnionForStatements().getNodeValue() == null? "null" : this.getUnionForStatements().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -280,9 +392,57 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     @Override
     public CaseNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionNode> expressionCopy;
+        switch (getUnionForExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForExpression().getNormalNode() == null)
+                {
+                    expressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeNormalNodeUnion(getUnionForExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForExpression().getSpliceNode() == null)
+                {
+                    expressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeSpliceNodeUnion(getUnionForExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
+        }
+        NodeUnion<? extends BlockStatementListNode> statementsCopy;
+        switch (getUnionForStatements().getType())
+        {
+            case NORMAL:
+                if (getUnionForStatements().getNormalNode() == null)
+                {
+                    statementsCopy = factory.<BlockStatementListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    statementsCopy = factory.makeNormalNodeUnion(getUnionForStatements().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForStatements().getSpliceNode() == null)
+                {
+                    statementsCopy = factory.<BlockStatementListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    statementsCopy = factory.makeSpliceNodeUnion(getUnionForStatements().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForStatements().getType());
+        }
         return factory.makeCaseNode(
-                getExpression()==null?null:getExpression().deepCopy(factory),
-                getStatements()==null?null:getStatements().deepCopy(factory),
+                expressionCopy,
+                statementsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

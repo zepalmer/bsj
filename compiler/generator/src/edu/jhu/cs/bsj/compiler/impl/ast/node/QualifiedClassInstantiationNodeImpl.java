@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -22,19 +23,20 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeImpl implements QualifiedClassInstantiationNode
 {
     /** The expression enclosing the non-static inner class. */
-    private ExpressionNode enclosingExpression;
+    private NodeUnion<? extends ExpressionNode> enclosingExpression;
     
     /** The name of the class being instantiated. */
-    private IdentifierNode identifier;
+    private NodeUnion<? extends IdentifierNode> identifier;
     
     /** The type arguments to apply to the class being instantiated. */
-    private TypeArgumentListNode typeArguments;
+    private NodeUnion<? extends TypeArgumentListNode> typeArguments;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -59,30 +61,51 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     
     /** General constructor. */
     public QualifiedClassInstantiationNodeImpl(
-            ExpressionNode enclosingExpression,
-            IdentifierNode identifier,
-            TypeArgumentListNode typeArguments,
-            TypeArgumentListNode constructorTypeArguments,
-            ExpressionListNode arguments,
-            AnonymousClassBodyNode body,
+            NodeUnion<? extends ExpressionNode> enclosingExpression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
-        setEnclosingExpression(enclosingExpression, false);
-        setIdentifier(identifier, false);
-        setTypeArguments(typeArguments, false);
+        setUnionForEnclosingExpression(enclosingExpression, false);
+        setUnionForIdentifier(identifier, false);
+        setUnionForTypeArguments(typeArguments, false);
+    }
+    
+    /**
+     * Gets the expression enclosing the non-static inner class.  This property's value is assumed to be a normal node.
+     * @return The expression enclosing the non-static inner class.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getEnclosingExpression()
+    {
+        getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.enclosingExpression == null)
+        {
+            return null;
+        } else
+        {
+            return this.enclosingExpression.getNormalNode();
+        }
     }
     
     /**
      * Gets the expression enclosing the non-static inner class.
      * @return The expression enclosing the non-static inner class.
      */
-    public ExpressionNode getEnclosingExpression()
+    public NodeUnion<? extends ExpressionNode> getUnionForEnclosingExpression()
     {
         getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.enclosingExpression == null)
+        {
+            this.enclosingExpression = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.enclosingExpression;
     }
     
@@ -103,18 +126,73 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.enclosingExpression, false);
-        this.enclosingExpression = enclosingExpression;
+        
+        if (this.enclosingExpression != null)
+        {
+            setAsChild(this.enclosingExpression.getNodeValue(), false);
+        }
+        this.enclosingExpression = new NormalNodeUnion<ExpressionNode>(enclosingExpression);
         setAsChild(enclosingExpression, true);
+    }
+    
+    /**
+     * Changes the expression enclosing the non-static inner class.
+     * @param enclosingExpression The expression enclosing the non-static inner class.
+     */
+    public void setUnionForEnclosingExpression(NodeUnion<? extends ExpressionNode> enclosingExpression)
+    {
+            setUnionForEnclosingExpression(enclosingExpression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForEnclosingExpression(NodeUnion<? extends ExpressionNode> enclosingExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (enclosingExpression == null)
+        {
+            throw new NullPointerException("Node union for property enclosingExpression cannot be null.");
+        }
+        if (this.enclosingExpression != null)
+        {
+            setAsChild(this.enclosingExpression.getNodeValue(), false);
+        }
+        this.enclosingExpression = enclosingExpression;
+        setAsChild(enclosingExpression.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the name of the class being instantiated.  This property's value is assumed to be a normal node.
+     * @return The name of the class being instantiated.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            return null;
+        } else
+        {
+            return this.identifier.getNormalNode();
+        }
     }
     
     /**
      * Gets the name of the class being instantiated.
      * @return The name of the class being instantiated.
      */
-    public IdentifierNode getIdentifier()
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
         getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            this.identifier = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.identifier;
     }
     
@@ -135,18 +213,73 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.identifier, false);
-        this.identifier = identifier;
+        
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
         setAsChild(identifier, true);
+    }
+    
+    /**
+     * Changes the name of the class being instantiated.
+     * @param identifier The name of the class being instantiated.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
+    {
+            setUnionForIdentifier(identifier, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (identifier == null)
+        {
+            throw new NullPointerException("Node union for property identifier cannot be null.");
+        }
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = identifier;
+        setAsChild(identifier.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the type arguments to apply to the class being instantiated.  This property's value is assumed to be a normal node.
+     * @return The type arguments to apply to the class being instantiated.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public TypeArgumentListNode getTypeArguments()
+    {
+        getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.typeArguments == null)
+        {
+            return null;
+        } else
+        {
+            return this.typeArguments.getNormalNode();
+        }
     }
     
     /**
      * Gets the type arguments to apply to the class being instantiated.
      * @return The type arguments to apply to the class being instantiated.
      */
-    public TypeArgumentListNode getTypeArguments()
+    public NodeUnion<? extends TypeArgumentListNode> getUnionForTypeArguments()
     {
         getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.typeArguments == null)
+        {
+            this.typeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
+        }
         return this.typeArguments;
     }
     
@@ -167,9 +300,43 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.typeArguments, false);
-        this.typeArguments = typeArguments;
+        
+        if (this.typeArguments != null)
+        {
+            setAsChild(this.typeArguments.getNodeValue(), false);
+        }
+        this.typeArguments = new NormalNodeUnion<TypeArgumentListNode>(typeArguments);
         setAsChild(typeArguments, true);
+    }
+    
+    /**
+     * Changes the type arguments to apply to the class being instantiated.
+     * @param typeArguments The type arguments to apply to the class being instantiated.
+     */
+    public void setUnionForTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments)
+    {
+            setUnionForTypeArguments(typeArguments, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (typeArguments == null)
+        {
+            throw new NullPointerException("Node union for property typeArguments cannot be null.");
+        }
+        if (this.typeArguments != null)
+        {
+            setAsChild(this.typeArguments.getNodeValue(), false);
+        }
+        this.typeArguments = typeArguments;
+        setAsChild(typeArguments.getNodeValue(), true);
     }
     
     /**
@@ -183,17 +350,17 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.enclosingExpression != null)
+        if (this.enclosingExpression.getNodeValue() != null)
         {
-            this.enclosingExpression.receive(visitor);
+            this.enclosingExpression.getNodeValue().receive(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receive(visitor);
+            this.identifier.getNodeValue().receive(visitor);
         }
-        if (this.typeArguments != null)
+        if (this.typeArguments.getNodeValue() != null)
         {
-            this.typeArguments.receive(visitor);
+            this.typeArguments.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -216,17 +383,17 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.enclosingExpression != null)
+        if (this.enclosingExpression.getNodeValue() != null)
         {
-            this.enclosingExpression.receiveTyped(visitor);
+            this.enclosingExpression.getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receiveTyped(visitor);
+            this.identifier.getNodeValue().receiveTyped(visitor);
         }
-        if (this.typeArguments != null)
+        if (this.typeArguments.getNodeValue() != null)
         {
-            this.typeArguments.receiveTyped(visitor);
+            this.typeArguments.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -276,7 +443,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getEnclosingExpression(), getIdentifier(), getTypeArguments(), getConstructorTypeArguments(), getArguments(), getBody()});
+        return Arrays.asList(new Node[]{getUnionForEnclosingExpression().getNodeValue(), getUnionForIdentifier().getNodeValue(), getUnionForTypeArguments().getNodeValue(), getUnionForConstructorTypeArguments().getNodeValue(), getUnionForArguments().getNodeValue(), getUnionForBody().getNodeValue()});
     }
     
     /**
@@ -289,22 +456,22 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("enclosingExpression=");
-        sb.append(this.getEnclosingExpression() == null? "null" : this.getEnclosingExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForEnclosingExpression().getNodeValue() == null? "null" : this.getUnionForEnclosingExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeArguments=");
-        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForTypeArguments().getNodeValue() == null? "null" : this.getUnionForTypeArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("constructorTypeArguments=");
-        sb.append(this.getConstructorTypeArguments() == null? "null" : this.getConstructorTypeArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForConstructorTypeArguments().getNodeValue() == null? "null" : this.getUnionForConstructorTypeArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("arguments=");
-        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -348,13 +515,157 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     @Override
     public QualifiedClassInstantiationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionNode> enclosingExpressionCopy;
+        switch (getUnionForEnclosingExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForEnclosingExpression().getNormalNode() == null)
+                {
+                    enclosingExpressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    enclosingExpressionCopy = factory.makeNormalNodeUnion(getUnionForEnclosingExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForEnclosingExpression().getSpliceNode() == null)
+                {
+                    enclosingExpressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    enclosingExpressionCopy = factory.makeSpliceNodeUnion(getUnionForEnclosingExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForEnclosingExpression().getType());
+        }
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
+        NodeUnion<? extends TypeArgumentListNode> typeArgumentsCopy;
+        switch (getUnionForTypeArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForTypeArguments().getNormalNode() == null)
+                {
+                    typeArgumentsCopy = factory.<TypeArgumentListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeArgumentsCopy = factory.makeNormalNodeUnion(getUnionForTypeArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTypeArguments().getSpliceNode() == null)
+                {
+                    typeArgumentsCopy = factory.<TypeArgumentListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeArgumentsCopy = factory.makeSpliceNodeUnion(getUnionForTypeArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
+        }
+        NodeUnion<? extends TypeArgumentListNode> constructorTypeArgumentsCopy;
+        switch (getUnionForConstructorTypeArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForConstructorTypeArguments().getNormalNode() == null)
+                {
+                    constructorTypeArgumentsCopy = factory.<TypeArgumentListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    constructorTypeArgumentsCopy = factory.makeNormalNodeUnion(getUnionForConstructorTypeArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForConstructorTypeArguments().getSpliceNode() == null)
+                {
+                    constructorTypeArgumentsCopy = factory.<TypeArgumentListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    constructorTypeArgumentsCopy = factory.makeSpliceNodeUnion(getUnionForConstructorTypeArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForConstructorTypeArguments().getType());
+        }
+        NodeUnion<? extends ExpressionListNode> argumentsCopy;
+        switch (getUnionForArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForArguments().getNormalNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeNormalNodeUnion(getUnionForArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForArguments().getSpliceNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeSpliceNodeUnion(getUnionForArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForArguments().getType());
+        }
+        NodeUnion<? extends AnonymousClassBodyNode> bodyCopy;
+        switch (getUnionForBody().getType())
+        {
+            case NORMAL:
+                if (getUnionForBody().getNormalNode() == null)
+                {
+                    bodyCopy = factory.<AnonymousClassBodyNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeNormalNodeUnion(getUnionForBody().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBody().getSpliceNode() == null)
+                {
+                    bodyCopy = factory.<AnonymousClassBodyNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeSpliceNodeUnion(getUnionForBody().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
+        }
         return factory.makeQualifiedClassInstantiationNode(
-                getEnclosingExpression()==null?null:getEnclosingExpression().deepCopy(factory),
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
-                getConstructorTypeArguments()==null?null:getConstructorTypeArguments().deepCopy(factory),
-                getArguments()==null?null:getArguments().deepCopy(factory),
-                getBody()==null?null:getBody().deepCopy(factory),
+                enclosingExpressionCopy,
+                identifierCopy,
+                typeArgumentsCopy,
+                constructorTypeArgumentsCopy,
+                argumentsCopy,
+                bodyCopy,
                 getStartLocation(),
                 getStopLocation());
     }

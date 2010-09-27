@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.metaprogram;
 
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
@@ -9,19 +10,19 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
  * internal compiler representation of metaprograms ({@link Metaprogram}).
  * @author Zachary Palmer
  */
-public class UserMetaprogramWrapper<T extends MetaprogramAnchorNode<?>> extends AbstractMetaprogram<T>
+public class UserMetaprogramWrapper<T extends MetaprogramAnchorNode<U>, U extends Node> extends AbstractMetaprogram<T,U>
 {
 	/** The user metaprogram object. */
-	private BsjMetaprogram<T> metaprogram;
+	private BsjMetaprogram<T,U> metaprogram;
 
-	public UserMetaprogramWrapper(BsjMetaprogram<T> metaprogram)
+	public UserMetaprogramWrapper(BsjMetaprogram<T,U> metaprogram)
 	{
 		super();
 		this.metaprogram = metaprogram;
 	}
 
 	@Override
-	public void execute(Context<T> context)
+	public void execute(Context<T,U> context)
 	{
 		this.metaprogram.execute(context);
 	}

@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
@@ -16,14 +17,31 @@ public interface MetaAnnotationExpressionValueNode extends Node, MetaAnnotationV
     /**
      * Gets the expression.
      * @return The expression.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public NonAssignmentExpressionNode getExpression();
+    public NonAssignmentExpressionNode getExpression() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the expression.
+     * @return A union object representing The expression.
+     */
+    public NodeUnion<? extends NonAssignmentExpressionNode> getUnionForExpression();
     
     /**
      * Changes the expression.
      * @param expression The expression.
      */
     public void setExpression(NonAssignmentExpressionNode expression);
+    
+    /**
+     * Changes the expression.
+     * @param expression The expression.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForExpression(NodeUnion<? extends NonAssignmentExpressionNode> expression) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

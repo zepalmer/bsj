@@ -29,7 +29,7 @@ public class MethodDeclUtils
      * @return a MethodDeclarationNode for the nearest method declaration.
      */
     public static MethodDeclarationNode getNearestMethodDeclaration(
-            Context<MetaAnnotationMetaprogramAnchorNode> context,
+            Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
             AbstractBsjMetaAnnotationMetaprogram caller)
     {
         MethodDeclarationNode enclosingMethodDeclaration = context.getAnchor().getNearestAncestorOfType(

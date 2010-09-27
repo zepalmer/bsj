@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantModifiersNode;
@@ -22,25 +23,26 @@ import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumConstantDeclarationNode
 {
     /** The modifiers for this enum constant. */
-    private EnumConstantModifiersNode modifiers;
+    private NodeUnion<? extends EnumConstantModifiersNode> modifiers;
     
     /** The name of this constant. */
-    private IdentifierNode identifier;
+    private NodeUnion<? extends IdentifierNode> identifier;
     
     /** The arguments to the enum constructor. */
-    private ExpressionListNode arguments;
+    private NodeUnion<? extends ExpressionListNode> arguments;
     
     /** The body used to anonymously subclass the constant. */
-    private AnonymousClassBodyNode body;
+    private NodeUnion<? extends AnonymousClassBodyNode> body;
     
     /** The associated javadoc comment for this node. */
-    private JavadocNode javadoc;
+    private NodeUnion<? extends JavadocNode> javadoc;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -69,31 +71,52 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
-            EnumConstantModifiersNode modifiers,
-            IdentifierNode identifier,
-            ExpressionListNode arguments,
-            AnonymousClassBodyNode body,
-            JavadocNode javadoc,
+            NodeUnion<? extends EnumConstantModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            NodeUnion<? extends JavadocNode> javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setModifiers(modifiers, false);
-        setIdentifier(identifier, false);
-        setArguments(arguments, false);
-        setBody(body, false);
-        setJavadoc(javadoc, false);
+        setUnionForModifiers(modifiers, false);
+        setUnionForIdentifier(identifier, false);
+        setUnionForArguments(arguments, false);
+        setUnionForBody(body, false);
+        setUnionForJavadoc(javadoc, false);
+    }
+    
+    /**
+     * Gets the modifiers for this enum constant.  This property's value is assumed to be a normal node.
+     * @return The modifiers for this enum constant.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public EnumConstantModifiersNode getModifiers()
+    {
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.modifiers == null)
+        {
+            return null;
+        } else
+        {
+            return this.modifiers.getNormalNode();
+        }
     }
     
     /**
      * Gets the modifiers for this enum constant.
      * @return The modifiers for this enum constant.
      */
-    public EnumConstantModifiersNode getModifiers()
+    public NodeUnion<? extends EnumConstantModifiersNode> getUnionForModifiers()
     {
         getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.modifiers == null)
+        {
+            this.modifiers = new NormalNodeUnion<EnumConstantModifiersNode>(null);
+        }
         return this.modifiers;
     }
     
@@ -114,18 +137,73 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.modifiers, false);
-        this.modifiers = modifiers;
+        
+        if (this.modifiers != null)
+        {
+            setAsChild(this.modifiers.getNodeValue(), false);
+        }
+        this.modifiers = new NormalNodeUnion<EnumConstantModifiersNode>(modifiers);
         setAsChild(modifiers, true);
+    }
+    
+    /**
+     * Changes the modifiers for this enum constant.
+     * @param modifiers The modifiers for this enum constant.
+     */
+    public void setUnionForModifiers(NodeUnion<? extends EnumConstantModifiersNode> modifiers)
+    {
+            setUnionForModifiers(modifiers, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForModifiers(NodeUnion<? extends EnumConstantModifiersNode> modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (modifiers == null)
+        {
+            throw new NullPointerException("Node union for property modifiers cannot be null.");
+        }
+        if (this.modifiers != null)
+        {
+            setAsChild(this.modifiers.getNodeValue(), false);
+        }
+        this.modifiers = modifiers;
+        setAsChild(modifiers.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the name of this constant.  This property's value is assumed to be a normal node.
+     * @return The name of this constant.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            return null;
+        } else
+        {
+            return this.identifier.getNormalNode();
+        }
     }
     
     /**
      * Gets the name of this constant.
      * @return The name of this constant.
      */
-    public IdentifierNode getIdentifier()
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
         getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            this.identifier = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.identifier;
     }
     
@@ -146,18 +224,73 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.identifier, false);
-        this.identifier = identifier;
+        
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
         setAsChild(identifier, true);
+    }
+    
+    /**
+     * Changes the name of this constant.
+     * @param identifier The name of this constant.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
+    {
+            setUnionForIdentifier(identifier, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (identifier == null)
+        {
+            throw new NullPointerException("Node union for property identifier cannot be null.");
+        }
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = identifier;
+        setAsChild(identifier.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the arguments to the enum constructor.  This property's value is assumed to be a normal node.
+     * @return The arguments to the enum constructor.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionListNode getArguments()
+    {
+        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.arguments == null)
+        {
+            return null;
+        } else
+        {
+            return this.arguments.getNormalNode();
+        }
     }
     
     /**
      * Gets the arguments to the enum constructor.
      * @return The arguments to the enum constructor.
      */
-    public ExpressionListNode getArguments()
+    public NodeUnion<? extends ExpressionListNode> getUnionForArguments()
     {
         getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.arguments == null)
+        {
+            this.arguments = new NormalNodeUnion<ExpressionListNode>(null);
+        }
         return this.arguments;
     }
     
@@ -178,18 +311,73 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.arguments, false);
-        this.arguments = arguments;
+        
+        if (this.arguments != null)
+        {
+            setAsChild(this.arguments.getNodeValue(), false);
+        }
+        this.arguments = new NormalNodeUnion<ExpressionListNode>(arguments);
         setAsChild(arguments, true);
+    }
+    
+    /**
+     * Changes the arguments to the enum constructor.
+     * @param arguments The arguments to the enum constructor.
+     */
+    public void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments)
+    {
+            setUnionForArguments(arguments, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (arguments == null)
+        {
+            throw new NullPointerException("Node union for property arguments cannot be null.");
+        }
+        if (this.arguments != null)
+        {
+            setAsChild(this.arguments.getNodeValue(), false);
+        }
+        this.arguments = arguments;
+        setAsChild(arguments.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the body used to anonymously subclass the constant.  This property's value is assumed to be a normal node.
+     * @return The body used to anonymously subclass the constant.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnonymousClassBodyNode getBody()
+    {
+        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            return null;
+        } else
+        {
+            return this.body.getNormalNode();
+        }
     }
     
     /**
      * Gets the body used to anonymously subclass the constant.
      * @return The body used to anonymously subclass the constant.
      */
-    public AnonymousClassBodyNode getBody()
+    public NodeUnion<? extends AnonymousClassBodyNode> getUnionForBody()
     {
         getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.body == null)
+        {
+            this.body = new NormalNodeUnion<AnonymousClassBodyNode>(null);
+        }
         return this.body;
     }
     
@@ -210,18 +398,73 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.body, false);
-        this.body = body;
+        
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = new NormalNodeUnion<AnonymousClassBodyNode>(body);
         setAsChild(body, true);
+    }
+    
+    /**
+     * Changes the body used to anonymously subclass the constant.
+     * @param body The body used to anonymously subclass the constant.
+     */
+    public void setUnionForBody(NodeUnion<? extends AnonymousClassBodyNode> body)
+    {
+            setUnionForBody(body, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBody(NodeUnion<? extends AnonymousClassBodyNode> body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (body == null)
+        {
+            throw new NullPointerException("Node union for property body cannot be null.");
+        }
+        if (this.body != null)
+        {
+            setAsChild(this.body.getNodeValue(), false);
+        }
+        this.body = body;
+        setAsChild(body.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the associated javadoc comment for this node.  This property's value is assumed to be a normal node.
+     * @return The associated javadoc comment for this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.javadoc == null)
+        {
+            return null;
+        } else
+        {
+            return this.javadoc.getNormalNode();
+        }
     }
     
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
      */
-    public JavadocNode getJavadoc()
+    public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
         getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.javadoc == null)
+        {
+            this.javadoc = new NormalNodeUnion<JavadocNode>(null);
+        }
         return this.javadoc;
     }
     
@@ -242,9 +485,43 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.javadoc, false);
-        this.javadoc = javadoc;
+        
+        if (this.javadoc != null)
+        {
+            setAsChild(this.javadoc.getNodeValue(), false);
+        }
+        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
         setAsChild(javadoc, true);
+    }
+    
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
+    {
+            setUnionForJavadoc(javadoc, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (javadoc == null)
+        {
+            throw new NullPointerException("Node union for property javadoc cannot be null.");
+        }
+        if (this.javadoc != null)
+        {
+            setAsChild(this.javadoc.getNodeValue(), false);
+        }
+        this.javadoc = javadoc;
+        setAsChild(javadoc.getNodeValue(), true);
     }
     
     /**
@@ -258,25 +535,25 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers != null)
+        if (this.modifiers.getNodeValue() != null)
         {
-            this.modifiers.receive(visitor);
+            this.modifiers.getNodeValue().receive(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receive(visitor);
+            this.identifier.getNodeValue().receive(visitor);
         }
-        if (this.arguments != null)
+        if (this.arguments.getNodeValue() != null)
         {
-            this.arguments.receive(visitor);
+            this.arguments.getNodeValue().receive(visitor);
         }
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receive(visitor);
+            this.body.getNodeValue().receive(visitor);
         }
-        if (this.javadoc != null)
+        if (this.javadoc.getNodeValue() != null)
         {
-            this.javadoc.receive(visitor);
+            this.javadoc.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -299,25 +576,25 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers != null)
+        if (this.modifiers.getNodeValue() != null)
         {
-            this.modifiers.receiveTyped(visitor);
+            this.modifiers.getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receiveTyped(visitor);
+            this.identifier.getNodeValue().receiveTyped(visitor);
         }
-        if (this.arguments != null)
+        if (this.arguments.getNodeValue() != null)
         {
-            this.arguments.receiveTyped(visitor);
+            this.arguments.getNodeValue().receiveTyped(visitor);
         }
-        if (this.body != null)
+        if (this.body.getNodeValue() != null)
         {
-            this.body.receiveTyped(visitor);
+            this.body.getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc != null)
+        if (this.javadoc.getNodeValue() != null)
         {
-            this.javadoc.receiveTyped(visitor);
+            this.javadoc.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -373,7 +650,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getModifiers(), getIdentifier(), getArguments(), getBody(), getJavadoc()});
+        return Arrays.asList(new Node[]{getUnionForModifiers().getNodeValue(), getUnionForIdentifier().getNodeValue(), getUnionForArguments().getNodeValue(), getUnionForBody().getNodeValue(), getUnionForJavadoc().getNodeValue()});
     }
     
     /**
@@ -386,19 +663,19 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
+        sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("arguments=");
-        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
-        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(this.getUnionForJavadoc().getNodeValue() == null? "null" : this.getUnionForJavadoc().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -442,12 +719,132 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     @Override
     public EnumConstantDeclarationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends EnumConstantModifiersNode> modifiersCopy;
+        switch (getUnionForModifiers().getType())
+        {
+            case NORMAL:
+                if (getUnionForModifiers().getNormalNode() == null)
+                {
+                    modifiersCopy = factory.<EnumConstantModifiersNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    modifiersCopy = factory.makeNormalNodeUnion(getUnionForModifiers().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForModifiers().getSpliceNode() == null)
+                {
+                    modifiersCopy = factory.<EnumConstantModifiersNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    modifiersCopy = factory.makeSpliceNodeUnion(getUnionForModifiers().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForModifiers().getType());
+        }
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
+        NodeUnion<? extends ExpressionListNode> argumentsCopy;
+        switch (getUnionForArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForArguments().getNormalNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeNormalNodeUnion(getUnionForArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForArguments().getSpliceNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeSpliceNodeUnion(getUnionForArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForArguments().getType());
+        }
+        NodeUnion<? extends AnonymousClassBodyNode> bodyCopy;
+        switch (getUnionForBody().getType())
+        {
+            case NORMAL:
+                if (getUnionForBody().getNormalNode() == null)
+                {
+                    bodyCopy = factory.<AnonymousClassBodyNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeNormalNodeUnion(getUnionForBody().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBody().getSpliceNode() == null)
+                {
+                    bodyCopy = factory.<AnonymousClassBodyNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    bodyCopy = factory.makeSpliceNodeUnion(getUnionForBody().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
+        }
+        NodeUnion<? extends JavadocNode> javadocCopy;
+        switch (getUnionForJavadoc().getType())
+        {
+            case NORMAL:
+                if (getUnionForJavadoc().getNormalNode() == null)
+                {
+                    javadocCopy = factory.<JavadocNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    javadocCopy = factory.makeNormalNodeUnion(getUnionForJavadoc().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForJavadoc().getSpliceNode() == null)
+                {
+                    javadocCopy = factory.<JavadocNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    javadocCopy = factory.makeSpliceNodeUnion(getUnionForJavadoc().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
+        }
         return factory.makeEnumConstantDeclarationNode(
-                getModifiers()==null?null:getModifiers().deepCopy(factory),
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
-                getArguments()==null?null:getArguments().deepCopy(factory),
-                getBody()==null?null:getBody().deepCopy(factory),
-                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
+                modifiersCopy,
+                identifierCopy,
+                argumentsCopy,
+                bodyCopy,
+                javadocCopy,
                 getStartLocation(),
                 getStopLocation());
     }

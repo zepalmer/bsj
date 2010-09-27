@@ -13,58 +13,35 @@ import edu.jhu.cs.bsj.compiler.ast.BsjRawCodeLiteralPayload;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
@@ -73,41 +50,24 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencySpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleSpliceNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
@@ -167,105 +127,6 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.RawCodeLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.SingleElementMetaAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.SpliceNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TypeDeclarationMetaprogramAnchorNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnnotationBodySpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnnotationElementSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnnotationMemberSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnnotationMethodModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnnotationModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnnotationSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnnotationValueSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnonymousClassBodySpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.AnonymousClassMemberSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ArrayInitializerSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.BaseTypeSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.BlockStatementSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.CaseSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.CatchSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ClassBodySpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ClassMemberSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ClassModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ConstantModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ConstructorBodySpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ConstructorInvocationSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ConstructorModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.DeclaredTypeSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.EnumBodySpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.EnumConstantDeclarationSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.EnumConstantModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.EnumModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ExpressionSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.FieldModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ForInitializerSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.IdentifierSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ImportSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.InterfaceBodySpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.InterfaceMemberSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.InterfaceModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.JavadocSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.LiteralizableTypeSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.LocalClassModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.LocalVariableDeclarationSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.MethodModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.NameSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.NonAssignmentExpressionSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.PackageDeclarationSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ParameterizedTypeSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.PrimaryExpressionSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.ReferenceTypeSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.RestrictedPrimaryExpressionSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.StatementExpressionSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.StatementSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.TypeArgumentSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.TypeDeclarationSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.TypeParameterSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.TypeSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.UnparameterizedTypeSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.VariableDeclaratorSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.VariableInitializerSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.VariableModifiersSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.VariableSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.AnnotationElementListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.AnnotationListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.AnnotationMemberListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.AnnotationValueListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.AnonymousClassMemberListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.BlockStatementListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.CaseListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.CatchListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.ClassMemberListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.DeclaredTypeListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.EnumConstantDeclarationListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.ExpressionListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.IdentifierListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.ImportListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.InterfaceMemberListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.ReferenceTypeListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.StatementExpressionListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.TypeArgumentListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.TypeDeclarationListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.TypeParameterListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.UnparameterizedTypeListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.VariableDeclaratorListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.VariableInitializerListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.VariableListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaAnnotationElementListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaAnnotationElementSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaAnnotationListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaAnnotationMetaprogramAnchorSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaAnnotationSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaAnnotationValueListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaAnnotationValueSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramDependencyDeclarationListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramDependencyDeclarationSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramDependencyListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramDependencySpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramImportListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramImportSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramPreambleSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramTargetListSpliceNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.MetaprogramTargetSpliceNodeImpl;
 
 /**
  * This class acts as a BSJ node factory for the standard BSJ compiler.
@@ -421,6 +282,34 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		}
 		return ret;
 	}
+
+/**
+ * {@inheritDoc}
+ */
+public <T extends Node> NodeUnion<T> makeNormalNodeUnion(T node)
+{
+    return new NormalNodeUnion<T>(node);
+}
+/**
+ * {@inheritDoc}
+ */
+public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
+{
+    return new SpliceNodeUnion<T>(node);
+}
+    /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments)
+    {
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -429,6 +318,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
+    {
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
@@ -445,7 +349,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -457,7 +361,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -471,7 +375,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationAnnotationValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
+            NodeUnion<? extends AnnotationNode> annotation)
+    {
+        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -482,6 +398,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
             AnnotationNode annotation)
+    {
+        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(this.<AnnotationNode>makeNormalNodeUnion(annotation), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationAnnotationValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
+            NodeUnion<? extends AnnotationNode> annotation,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
         return ret;
@@ -497,7 +427,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(this.<AnnotationNode>makeNormalNodeUnion(annotation), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationArrayValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationArrayValueNode makeAnnotationArrayValueNode(
+            NodeUnion<? extends AnnotationValueListNode> values)
+    {
+        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -508,6 +450,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
             AnnotationValueListNode values)
+    {
+        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(this.<AnnotationValueListNode>makeNormalNodeUnion(values), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationArrayValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationArrayValueNode makeAnnotationArrayValueNode(
+            NodeUnion<? extends AnnotationValueListNode> values,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
         return ret;
@@ -523,7 +479,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(this.<AnnotationValueListNode>makeNormalNodeUnion(values), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationBodyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationBodyNode makeAnnotationBodyNode(
+            NodeUnion<? extends AnnotationMemberListNode> members)
+    {
+        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -534,6 +502,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public AnnotationBodyNode makeAnnotationBodyNode(
             AnnotationMemberListNode members)
+    {
+        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(this.<AnnotationMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationBodyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationBodyNode makeAnnotationBodyNode(
+            NodeUnion<? extends AnnotationMemberListNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
@@ -549,33 +531,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(this.<AnnotationMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a AnnotationBodySpliceNode.
+     * Creates a AnnotationDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnnotationBodySpliceNode makeAnnotationBodySpliceNode(
-            ExpressionNode spliceExpression)
+    public AnnotationDeclarationNode makeAnnotationDeclarationNode(
+            NodeUnion<? extends AnnotationModifiersNode> modifiers,
+            NodeUnion<? extends AnnotationBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        AnnotationBodySpliceNode ret = new AnnotationBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationBodySpliceNode makeAnnotationBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationBodySpliceNode ret = new AnnotationBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -589,6 +560,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AnnotationBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc)
+    {
+        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(this.<AnnotationModifiersNode>makeNormalNodeUnion(modifiers), this.<AnnotationBodyNode>makeNormalNodeUnion(body), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationDeclarationNode makeAnnotationDeclarationNode(
+            NodeUnion<? extends AnnotationModifiersNode> modifiers,
+            NodeUnion<? extends AnnotationBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -607,7 +595,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(this.<AnnotationModifiersNode>makeNormalNodeUnion(modifiers), this.<AnnotationBodyNode>makeNormalNodeUnion(body), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -664,28 +652,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a AnnotationElementListSpliceNode.
+     * Creates a AnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnnotationElementListSpliceNode makeAnnotationElementListSpliceNode(
-            ExpressionNode spliceExpression)
+    public AnnotationElementNode makeAnnotationElementNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends AnnotationValueNode> value)
     {
-        AnnotationElementListSpliceNode ret = new AnnotationElementListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationElementListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationElementListSpliceNode makeAnnotationElementListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationElementListSpliceNode ret = new AnnotationElementListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -697,6 +672,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationElementNode makeAnnotationElementNode(
             IdentifierNode identifier,
             AnnotationValueNode value)
+    {
+        AnnotationElementNode ret = new AnnotationElementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<AnnotationValueNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationElementNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationElementNode makeAnnotationElementNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends AnnotationValueNode> value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
         return ret;
@@ -713,33 +703,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
+        AnnotationElementNode ret = new AnnotationElementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<AnnotationValueNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a AnnotationElementSpliceNode.
+     * Creates a AnnotationExpressionValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnnotationElementSpliceNode makeAnnotationElementSpliceNode(
-            ExpressionNode spliceExpression)
+    public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
+            NodeUnion<? extends NonAssignmentExpressionNode> expression)
     {
-        AnnotationElementSpliceNode ret = new AnnotationElementSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationElementSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationElementSpliceNode makeAnnotationElementSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationElementSpliceNode ret = new AnnotationElementSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -750,6 +726,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
             NonAssignmentExpressionNode expression)
+    {
+        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(this.<NonAssignmentExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationExpressionValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
+            NodeUnion<? extends NonAssignmentExpressionNode> expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
@@ -765,7 +755,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(this.<NonAssignmentExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -822,32 +812,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a AnnotationListSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public AnnotationListSpliceNode makeAnnotationListSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        AnnotationListSpliceNode ret = new AnnotationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationListSpliceNode makeAnnotationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationListSpliceNode ret = new AnnotationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
      * Creates a AnnotationMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -900,28 +864,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a AnnotationMemberListSpliceNode.
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnnotationMemberListSpliceNode makeAnnotationMemberListSpliceNode(
-            ExpressionNode spliceExpression)
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram)
     {
-        AnnotationMemberListSpliceNode ret = new AnnotationMemberListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationMemberListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationMemberListSpliceNode makeAnnotationMemberListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationMemberListSpliceNode ret = new AnnotationMemberListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -933,7 +883,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -947,33 +911,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a AnnotationMemberSpliceNode.
+     * Creates a AnnotationMethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnnotationMemberSpliceNode makeAnnotationMemberSpliceNode(
-            ExpressionNode spliceExpression)
+    public AnnotationMethodDeclarationNode makeAnnotationMethodDeclarationNode(
+            NodeUnion<? extends AnnotationMethodModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends AnnotationValueNode> defaultValue,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        AnnotationMemberSpliceNode ret = new AnnotationMemberSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationMemberSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationMemberSpliceNode makeAnnotationMemberSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationMemberSpliceNode ret = new AnnotationMemberSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -988,6 +942,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             AnnotationValueNode defaultValue,
             JavadocNode javadoc)
+    {
+        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(this.<AnnotationMethodModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<AnnotationValueNode>makeNormalNodeUnion(defaultValue), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationMethodDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMethodDeclarationNode makeAnnotationMethodDeclarationNode(
+            NodeUnion<? extends AnnotationMethodModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends AnnotationValueNode> defaultValue,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1007,7 +979,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager, binary);
+        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(this.<AnnotationMethodModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<AnnotationValueNode>makeNormalNodeUnion(defaultValue), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationMethodModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
+    {
+        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1019,6 +1004,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationMethodModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1035,33 +1035,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a AnnotationMethodModifiersSpliceNode.
+     * Creates a AnnotationModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnnotationMethodModifiersSpliceNode makeAnnotationMethodModifiersSpliceNode(
-            ExpressionNode spliceExpression)
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
     {
-        AnnotationMethodModifiersSpliceNode ret = new AnnotationMethodModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationMethodModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationMethodModifiersSpliceNode makeAnnotationMethodModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationMethodModifiersSpliceNode ret = new AnnotationMethodModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1076,6 +1066,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnnotationModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1095,7 +1103,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1107,7 +1115,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationModifiersNode makeAnnotationModifiersNode(
             AccessModifier access)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1121,59 +1129,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public AnnotationModifiersSpliceNode makeAnnotationModifiersSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        AnnotationModifiersSpliceNode ret = new AnnotationModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationModifiersSpliceNode makeAnnotationModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationModifiersSpliceNode ret = new AnnotationModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public AnnotationSpliceNode makeAnnotationSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        AnnotationSpliceNode ret = new AnnotationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationSpliceNode makeAnnotationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationSpliceNode ret = new AnnotationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1230,54 +1186,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a AnnotationValueListSpliceNode.
+     * Creates a AnonymousClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnnotationValueListSpliceNode makeAnnotationValueListSpliceNode(
-            ExpressionNode spliceExpression)
+    public AnonymousClassBodyNode makeAnonymousClassBodyNode(
+            NodeUnion<? extends AnonymousClassMemberListNode> members)
     {
-        AnnotationValueListSpliceNode ret = new AnnotationValueListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationValueListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationValueListSpliceNode makeAnnotationValueListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationValueListSpliceNode ret = new AnnotationValueListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationValueSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public AnnotationValueSpliceNode makeAnnotationValueSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        AnnotationValueSpliceNode ret = new AnnotationValueSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnnotationValueSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnnotationValueSpliceNode makeAnnotationValueSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnnotationValueSpliceNode ret = new AnnotationValueSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1288,6 +1204,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
             AnonymousClassMemberListNode members)
+    {
+        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(this.<AnonymousClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnonymousClassBodyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassBodyNode makeAnonymousClassBodyNode(
+            NodeUnion<? extends AnonymousClassMemberListNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1303,33 +1233,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnonymousClassBodySpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public AnonymousClassBodySpliceNode makeAnonymousClassBodySpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        AnonymousClassBodySpliceNode ret = new AnonymousClassBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnonymousClassBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnonymousClassBodySpliceNode makeAnonymousClassBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnonymousClassBodySpliceNode ret = new AnonymousClassBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(this.<AnonymousClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1386,28 +1290,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a AnonymousClassMemberListSpliceNode.
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnonymousClassMemberListSpliceNode makeAnonymousClassMemberListSpliceNode(
-            ExpressionNode spliceExpression)
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram)
     {
-        AnonymousClassMemberListSpliceNode ret = new AnonymousClassMemberListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnonymousClassMemberListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnonymousClassMemberListSpliceNode makeAnonymousClassMemberListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnonymousClassMemberListSpliceNode ret = new AnonymousClassMemberListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1419,7 +1309,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1433,33 +1337,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a AnonymousClassMemberSpliceNode.
+     * Creates a ArrayAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public AnonymousClassMemberSpliceNode makeAnonymousClassMemberSpliceNode(
-            ExpressionNode spliceExpression)
+    public ArrayAccessNode makeArrayAccessNode(
+            NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression,
+            NodeUnion<? extends ExpressionNode> indexExpression)
     {
-        AnonymousClassMemberSpliceNode ret = new AnonymousClassMemberSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a AnonymousClassMemberSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public AnonymousClassMemberSpliceNode makeAnonymousClassMemberSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        AnonymousClassMemberSpliceNode ret = new AnonymousClassMemberSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1471,6 +1362,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ArrayAccessNode makeArrayAccessNode(
             RestrictedPrimaryExpressionNode arrayExpression,
             ExpressionNode indexExpression)
+    {
+        ArrayAccessNode ret = new ArrayAccessNodeImpl(this.<RestrictedPrimaryExpressionNode>makeNormalNodeUnion(arrayExpression), this.<ExpressionNode>makeNormalNodeUnion(indexExpression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ArrayAccessNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ArrayAccessNode makeArrayAccessNode(
+            NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression,
+            NodeUnion<? extends ExpressionNode> indexExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1487,7 +1393,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager, binary);
+        ArrayAccessNode ret = new ArrayAccessNodeImpl(this.<RestrictedPrimaryExpressionNode>makeNormalNodeUnion(arrayExpression), this.<ExpressionNode>makeNormalNodeUnion(indexExpression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ArrayInitializerCreationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
+            NodeUnion<? extends ArrayInitializerNode> initializer,
+            NodeUnion<? extends BaseTypeNode> baseType,
+            int arrayLevels)
+    {
+        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1500,6 +1420,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ArrayInitializerNode initializer,
             BaseTypeNode baseType,
             int arrayLevels)
+    {
+        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(this.<ArrayInitializerNode>makeNormalNodeUnion(initializer), this.<BaseTypeNode>makeNormalNodeUnion(baseType), arrayLevels, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ArrayInitializerCreationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
+            NodeUnion<? extends ArrayInitializerNode> initializer,
+            NodeUnion<? extends BaseTypeNode> baseType,
+            int arrayLevels,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1517,7 +1453,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
+        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(this.<ArrayInitializerNode>makeNormalNodeUnion(initializer), this.<BaseTypeNode>makeNormalNodeUnion(baseType), arrayLevels, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ArrayInitializerNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ArrayInitializerNode makeArrayInitializerNode(
+            NodeUnion<? extends VariableInitializerListNode> initializers)
+    {
+        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1528,6 +1476,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ArrayInitializerNode makeArrayInitializerNode(
             VariableInitializerListNode initializers)
+    {
+        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(this.<VariableInitializerListNode>makeNormalNodeUnion(initializers), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ArrayInitializerNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ArrayInitializerNode makeArrayInitializerNode(
+            NodeUnion<? extends VariableInitializerListNode> initializers,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1543,33 +1505,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager, binary);
+        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(this.<VariableInitializerListNode>makeNormalNodeUnion(initializers), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ArrayInitializerSpliceNode.
+     * Creates a ArrayInstantiatorCreationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ArrayInitializerSpliceNode makeArrayInitializerSpliceNode(
-            ExpressionNode spliceExpression)
+    public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
+            NodeUnion<? extends ExpressionListNode> dimExpressions,
+            NodeUnion<? extends BaseTypeNode> baseType,
+            int arrayLevels)
     {
-        ArrayInitializerSpliceNode ret = new ArrayInitializerSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ArrayInitializerSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ArrayInitializerSpliceNode makeArrayInitializerSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ArrayInitializerSpliceNode ret = new ArrayInitializerSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1582,6 +1532,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels)
+    {
+        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(dimExpressions), this.<BaseTypeNode>makeNormalNodeUnion(baseType), arrayLevels, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ArrayInstantiatorCreationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
+            NodeUnion<? extends ExpressionListNode> dimExpressions,
+            NodeUnion<? extends BaseTypeNode> baseType,
+            int arrayLevels,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1599,7 +1565,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
+        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(dimExpressions), this.<BaseTypeNode>makeNormalNodeUnion(baseType), arrayLevels, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ArrayTypeNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ArrayTypeNode makeArrayTypeNode(
+            NodeUnion<? extends TypeNode> type)
+    {
+        ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1610,6 +1588,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ArrayTypeNode makeArrayTypeNode(
             TypeNode type)
+    {
+        ArrayTypeNode ret = new ArrayTypeNodeImpl(this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ArrayTypeNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ArrayTypeNode makeArrayTypeNode(
+            NodeUnion<? extends TypeNode> type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1625,7 +1617,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager, binary);
+        ArrayTypeNode ret = new ArrayTypeNodeImpl(this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AssertStatementNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AssertStatementNode makeAssertStatementNode(
+            NodeUnion<? extends ExpressionNode> testExpression,
+            NodeUnion<? extends ExpressionNode> messageExpression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1638,6 +1644,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode testExpression,
             ExpressionNode messageExpression,
             MetaAnnotationListNode metaAnnotations)
+    {
+        AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(messageExpression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AssertStatementNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AssertStatementNode makeAssertStatementNode(
+            NodeUnion<? extends ExpressionNode> testExpression,
+            NodeUnion<? extends ExpressionNode> messageExpression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1655,7 +1677,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(messageExpression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1667,7 +1689,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AssertStatementNode makeAssertStatementNode(
             ExpressionNode testExpression)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1681,7 +1703,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1694,7 +1716,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode testExpression,
             ExpressionNode messageExpression)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(messageExpression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1709,7 +1731,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(messageExpression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AssignmentNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AssignmentNode makeAssignmentNode(
+            NodeUnion<? extends ExpressionNode> variable,
+            AssignmentOperator operator,
+            NodeUnion<? extends ExpressionNode> expression)
+    {
+        AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1722,6 +1758,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode variable,
             AssignmentOperator operator,
             ExpressionNode expression)
+    {
+        AssignmentNode ret = new AssignmentNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(variable), operator, this.<ExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a AssignmentNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AssignmentNode makeAssignmentNode(
+            NodeUnion<? extends ExpressionNode> variable,
+            AssignmentOperator operator,
+            NodeUnion<? extends ExpressionNode> expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1739,33 +1791,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager, binary);
+        AssignmentNode ret = new AssignmentNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(variable), operator, this.<ExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a BaseTypeSpliceNode.
+     * Creates a BinaryExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public BaseTypeSpliceNode makeBaseTypeSpliceNode(
-            ExpressionNode spliceExpression)
+    public BinaryExpressionNode makeBinaryExpressionNode(
+            NodeUnion<? extends ExpressionNode> leftOperand,
+            NodeUnion<? extends ExpressionNode> rightOperand,
+            BinaryOperator operator)
     {
-        BaseTypeSpliceNode ret = new BaseTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a BaseTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public BaseTypeSpliceNode makeBaseTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        BaseTypeSpliceNode ret = new BaseTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1778,6 +1818,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode leftOperand,
             ExpressionNode rightOperand,
             BinaryOperator operator)
+    {
+        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(leftOperand), this.<ExpressionNode>makeNormalNodeUnion(rightOperand), operator, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a BinaryExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BinaryExpressionNode makeBinaryExpressionNode(
+            NodeUnion<? extends ExpressionNode> leftOperand,
+            NodeUnion<? extends ExpressionNode> rightOperand,
+            BinaryOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1795,7 +1851,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager, binary);
+        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(leftOperand), this.<ExpressionNode>makeNormalNodeUnion(rightOperand), operator, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a BlockNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public BlockNode makeBlockNode(
+            NodeUnion<? extends BlockStatementListNode> statements,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        BlockNode ret = new BlockNodeImpl(statements, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1807,6 +1876,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockNode makeBlockNode(
             BlockStatementListNode statements,
             MetaAnnotationListNode metaAnnotations)
+    {
+        BlockNode ret = new BlockNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(statements), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a BlockNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BlockNode makeBlockNode(
+            NodeUnion<? extends BlockStatementListNode> statements,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         BlockNode ret = new BlockNodeImpl(statements, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -1823,7 +1907,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BlockNode ret = new BlockNodeImpl(statements, metaAnnotations, startLocation, stopLocation, manager, binary);
+        BlockNode ret = new BlockNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(statements), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1835,7 +1919,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockNode makeBlockNode(
             BlockStatementListNode statements)
     {
-        BlockNode ret = new BlockNodeImpl(statements, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        BlockNode ret = new BlockNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(statements), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1849,7 +1933,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BlockNode ret = new BlockNodeImpl(statements, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        BlockNode ret = new BlockNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(statements), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1906,28 +1990,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a BlockStatementListSpliceNode.
+     * Creates a BlockStatementMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public BlockStatementListSpliceNode makeBlockStatementListSpliceNode(
-            ExpressionNode spliceExpression)
+    public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram)
     {
-        BlockStatementListSpliceNode ret = new BlockStatementListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a BlockStatementListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public BlockStatementListSpliceNode makeBlockStatementListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        BlockStatementListSpliceNode ret = new BlockStatementListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1939,7 +2009,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a BlockStatementMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1953,33 +2037,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a BlockStatementSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public BlockStatementSpliceNode makeBlockStatementSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        BlockStatementSpliceNode ret = new BlockStatementSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a BlockStatementSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public BlockStatementSpliceNode makeBlockStatementSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        BlockStatementSpliceNode ret = new BlockStatementSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2015,8 +2073,36 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public BreakNode makeBreakNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        BreakNode ret = new BreakNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a BreakNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public BreakNode makeBreakNode(
             IdentifierNode label,
             MetaAnnotationListNode metaAnnotations)
+    {
+        BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a BreakNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BreakNode makeBreakNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         BreakNode ret = new BreakNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2033,7 +2119,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BreakNode ret = new BreakNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
+        BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2044,7 +2130,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public BreakNode makeBreakNode()
     {
-        BreakNode ret = new BreakNodeImpl(null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2057,7 +2143,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BreakNode ret = new BreakNodeImpl(null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2069,7 +2155,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BreakNode makeBreakNode(
             IdentifierNode label)
     {
-        BreakNode ret = new BreakNodeImpl(label, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2083,7 +2169,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BreakNode ret = new BreakNodeImpl(label, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2140,28 +2226,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a CaseListSpliceNode.
+     * Creates a CaseNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public CaseListSpliceNode makeCaseListSpliceNode(
-            ExpressionNode spliceExpression)
+    public CaseNode makeCaseNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> statements)
     {
-        CaseListSpliceNode ret = new CaseListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a CaseListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public CaseListSpliceNode makeCaseListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        CaseListSpliceNode ret = new CaseListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2173,6 +2246,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CaseNode makeCaseNode(
             ExpressionNode expression,
             BlockStatementListNode statements)
+    {
+        CaseNode ret = new CaseNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(statements), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a CaseNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CaseNode makeCaseNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> statements,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2189,33 +2277,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a CaseSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public CaseSpliceNode makeCaseSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        CaseSpliceNode ret = new CaseSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a CaseSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public CaseSpliceNode makeCaseSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        CaseSpliceNode ret = new CaseSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        CaseNode ret = new CaseNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(statements), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2272,28 +2334,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a CatchListSpliceNode.
+     * Creates a CatchNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public CatchListSpliceNode makeCatchListSpliceNode(
-            ExpressionNode spliceExpression)
+    public CatchNode makeCatchNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends VariableNode> parameter)
     {
-        CatchListSpliceNode ret = new CatchListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a CatchListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public CatchListSpliceNode makeCatchListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        CatchListSpliceNode ret = new CatchListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        CatchNode ret = new CatchNodeImpl(body, parameter, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2305,6 +2354,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CatchNode makeCatchNode(
             BlockStatementListNode body,
             VariableNode parameter)
+    {
+        CatchNode ret = new CatchNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<VariableNode>makeNormalNodeUnion(parameter), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a CatchNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CatchNode makeCatchNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends VariableNode> parameter,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         CatchNode ret = new CatchNodeImpl(body, parameter, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2321,33 +2385,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CatchNode ret = new CatchNodeImpl(body, parameter, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a CatchSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public CatchSpliceNode makeCatchSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        CatchSpliceNode ret = new CatchSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a CatchSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public CatchSpliceNode makeCatchSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        CatchSpliceNode ret = new CatchSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        CatchNode ret = new CatchNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<VariableNode>makeNormalNodeUnion(parameter), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2383,7 +2421,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ClassBodyNode makeClassBodyNode(
+            NodeUnion<? extends ClassMemberListNode> members)
+    {
+        ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ClassBodyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassBodyNode makeClassBodyNode(
             ClassMemberListNode members)
+    {
+        ClassBodyNode ret = new ClassBodyNodeImpl(this.<ClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ClassBodyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassBodyNode makeClassBodyNode(
+            NodeUnion<? extends ClassMemberListNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2399,33 +2463,25 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        ClassBodyNode ret = new ClassBodyNodeImpl(this.<ClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ClassBodySpliceNode.
+     * Creates a ClassDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ClassBodySpliceNode makeClassBodySpliceNode(
-            ExpressionNode spliceExpression)
+    public ClassDeclarationNode makeClassDeclarationNode(
+            NodeUnion<? extends ClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        ClassBodySpliceNode ret = new ClassBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ClassBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ClassBodySpliceNode makeClassBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ClassBodySpliceNode ret = new ClassBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2442,6 +2498,26 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc)
+    {
+        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(this.<ClassModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeNode>makeNormalNodeUnion(extendsClause), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<ClassBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ClassDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassDeclarationNode makeClassDeclarationNode(
+            NodeUnion<? extends ClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2463,7 +2539,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(this.<ClassModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeNode>makeNormalNodeUnion(extendsClause), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<ClassBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ClassLiteralNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassLiteralNode makeClassLiteralNode(
+            NodeUnion<? extends LiteralizableTypeNode> value)
+    {
+        ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2474,6 +2562,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ClassLiteralNode makeClassLiteralNode(
             LiteralizableTypeNode value)
+    {
+        ClassLiteralNode ret = new ClassLiteralNodeImpl(this.<LiteralizableTypeNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ClassLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassLiteralNode makeClassLiteralNode(
+            NodeUnion<? extends LiteralizableTypeNode> value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2489,7 +2591,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        ClassLiteralNode ret = new ClassLiteralNodeImpl(this.<LiteralizableTypeNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2546,28 +2648,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a ClassMemberListSpliceNode.
+     * Creates a ClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ClassMemberListSpliceNode makeClassMemberListSpliceNode(
-            ExpressionNode spliceExpression)
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram)
     {
-        ClassMemberListSpliceNode ret = new ClassMemberListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ClassMemberListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ClassMemberListSpliceNode makeClassMemberListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ClassMemberListSpliceNode ret = new ClassMemberListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2579,7 +2667,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ClassMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2593,33 +2695,25 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ClassMemberSpliceNode.
+     * Creates a ClassModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ClassMemberSpliceNode makeClassMemberSpliceNode(
-            ExpressionNode spliceExpression)
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
     {
-        ClassMemberSpliceNode ret = new ClassMemberSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ClassMemberSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ClassMemberSpliceNode makeClassMemberSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ClassMemberSpliceNode ret = new ClassMemberSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2636,6 +2730,26 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2657,7 +2771,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2669,7 +2783,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassModifiersNode makeClassModifiersNode(
             AccessModifier access)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2683,33 +2797,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ClassModifiersSpliceNode.
+     * Creates a CodeLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ClassModifiersSpliceNode makeClassModifiersSpliceNode(
-            ExpressionNode spliceExpression)
+    public CodeLiteralNode makeCodeLiteralNode(
+            NodeUnion<? extends Node> value)
     {
-        ClassModifiersSpliceNode ret = new ClassModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ClassModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ClassModifiersSpliceNode makeClassModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ClassModifiersSpliceNode ret = new ClassModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2720,6 +2820,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public CodeLiteralNode makeCodeLiteralNode(
             Node value)
+    {
+        CodeLiteralNode ret = new CodeLiteralNodeImpl(this.<Node>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a CodeLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CodeLiteralNode makeCodeLiteralNode(
+            NodeUnion<? extends Node> value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2735,7 +2849,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        CodeLiteralNode ret = new CodeLiteralNodeImpl(this.<Node>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a CompilationUnitNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CompilationUnitNode makeCompilationUnitNode(
+            String name,
+            NodeUnion<? extends PackageDeclarationNode> packageDeclaration,
+            NodeUnion<? extends MetaprogramImportListNode> metaimports,
+            NodeUnion<? extends ImportListNode> imports,
+            NodeUnion<? extends TypeDeclarationListNode> typeDecls)
+    {
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2750,6 +2880,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
+    {
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, this.<PackageDeclarationNode>makeNormalNodeUnion(packageDeclaration), this.<MetaprogramImportListNode>makeNormalNodeUnion(metaimports), this.<ImportListNode>makeNormalNodeUnion(imports), this.<TypeDeclarationListNode>makeNormalNodeUnion(typeDecls), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a CompilationUnitNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CompilationUnitNode makeCompilationUnitNode(
+            String name,
+            NodeUnion<? extends PackageDeclarationNode> packageDeclaration,
+            NodeUnion<? extends MetaprogramImportListNode> metaimports,
+            NodeUnion<? extends ImportListNode> imports,
+            NodeUnion<? extends TypeDeclarationListNode> typeDecls,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2769,7 +2917,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager, binary);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, this.<PackageDeclarationNode>makeNormalNodeUnion(packageDeclaration), this.<MetaprogramImportListNode>makeNormalNodeUnion(metaimports), this.<ImportListNode>makeNormalNodeUnion(imports), this.<TypeDeclarationListNode>makeNormalNodeUnion(typeDecls), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2784,7 +2932,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation, manager, binary);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, this.<PackageDeclarationNode>makeNormalNodeUnion(packageDeclaration), this.<MetaprogramImportListNode>makeNormalNodeUnion(makeMetaprogramImportListNode()), this.<ImportListNode>makeNormalNodeUnion(imports), this.<TypeDeclarationListNode>makeNormalNodeUnion(typeDecls), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2801,7 +2949,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation, manager, binary);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, this.<PackageDeclarationNode>makeNormalNodeUnion(packageDeclaration), this.<MetaprogramImportListNode>makeNormalNodeUnion(makeMetaprogramImportListNode()), this.<ImportListNode>makeNormalNodeUnion(imports), this.<TypeDeclarationListNode>makeNormalNodeUnion(typeDecls), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConditionalExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConditionalExpressionNode makeConditionalExpressionNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends ExpressionNode> trueExpression,
+            NodeUnion<? extends ExpressionNode> falseExpression)
+    {
+        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2814,6 +2976,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             ExpressionNode trueExpression,
             ExpressionNode falseExpression)
+    {
+        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<ExpressionNode>makeNormalNodeUnion(trueExpression), this.<ExpressionNode>makeNormalNodeUnion(falseExpression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConditionalExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConditionalExpressionNode makeConditionalExpressionNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends ExpressionNode> trueExpression,
+            NodeUnion<? extends ExpressionNode> falseExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2831,7 +3009,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager, binary);
+        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<ExpressionNode>makeNormalNodeUnion(trueExpression), this.<ExpressionNode>makeNormalNodeUnion(falseExpression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            NodeUnion<? extends ConstantModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc)
+    {
+        ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2845,6 +3038,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc)
+    {
+        ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(this.<ConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            NodeUnion<? extends ConstantModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2863,7 +3073,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(this.<ConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
+    {
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2875,6 +3098,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ConstantModifiersNode makeConstantModifiersNode(
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstantModifiersNode makeConstantModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ConstantModifiersNode ret = new ConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2891,7 +3129,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2903,7 +3141,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ConstantModifiersNode makeConstantModifiersNode(
     )
     {
-        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2916,33 +3154,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ConstantModifiersNode ret = new ConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ConstantModifiersSpliceNode.
+     * Creates a ConstructorBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ConstantModifiersSpliceNode makeConstantModifiersSpliceNode(
-            ExpressionNode spliceExpression)
+    public ConstructorBodyNode makeConstructorBodyNode(
+            NodeUnion<? extends ConstructorInvocationNode> constructorInvocation,
+            NodeUnion<? extends BlockStatementListNode> statements)
     {
-        ConstantModifiersSpliceNode ret = new ConstantModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ConstantModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ConstantModifiersSpliceNode makeConstantModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ConstantModifiersSpliceNode ret = new ConstantModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2954,6 +3179,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
             BlockStatementListNode statements)
+    {
+        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(this.<ConstructorInvocationNode>makeNormalNodeUnion(constructorInvocation), this.<BlockStatementListNode>makeNormalNodeUnion(statements), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstructorBodyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorBodyNode makeConstructorBodyNode(
+            NodeUnion<? extends ConstructorInvocationNode> constructorInvocation,
+            NodeUnion<? extends BlockStatementListNode> statements,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager, binary);
         return ret;
@@ -2970,33 +3210,26 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager, binary);
+        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(this.<ConstructorInvocationNode>makeNormalNodeUnion(constructorInvocation), this.<BlockStatementListNode>makeNormalNodeUnion(statements), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ConstructorBodySpliceNode.
+     * Creates a ConstructorDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ConstructorBodySpliceNode makeConstructorBodySpliceNode(
-            ExpressionNode spliceExpression)
+    public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ConstructorBodyNode> body,
+            NodeUnion<? extends ConstructorModifiersNode> modifiers,
+            NodeUnion<? extends VariableListNode> parameters,
+            NodeUnion<? extends VariableNode> varargParameter,
+            NodeUnion<? extends UnparameterizedTypeListNode> throwTypes,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        ConstructorBodySpliceNode ret = new ConstructorBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ConstructorBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ConstructorBodySpliceNode makeConstructorBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ConstructorBodySpliceNode ret = new ConstructorBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3014,6 +3247,27 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnparameterizedTypeListNode throwTypes,
             TypeParameterListNode typeParameters,
             JavadocNode javadoc)
+    {
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ConstructorBodyNode>makeNormalNodeUnion(body), this.<ConstructorModifiersNode>makeNormalNodeUnion(modifiers), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(varargParameter), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(throwTypes), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstructorDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ConstructorBodyNode> body,
+            NodeUnion<? extends ConstructorModifiersNode> modifiers,
+            NodeUnion<? extends VariableListNode> parameters,
+            NodeUnion<? extends VariableNode> varargParameter,
+            NodeUnion<? extends UnparameterizedTypeListNode> throwTypes,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3036,7 +3290,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ConstructorBodyNode>makeNormalNodeUnion(body), this.<ConstructorModifiersNode>makeNormalNodeUnion(modifiers), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(varargParameter), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(throwTypes), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3052,7 +3306,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableListNode parameters,
             JavadocNode javadoc)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager, binary);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ConstructorBodyNode>makeNormalNodeUnion(body), this.<ConstructorModifiersNode>makeNormalNodeUnion(modifiers), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(null), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(makeUnparameterizedTypeListNode()), this.<TypeParameterListNode>makeNormalNodeUnion(makeTypeParameterListNode()), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3070,33 +3324,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager, binary);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ConstructorBodyNode>makeNormalNodeUnion(body), this.<ConstructorModifiersNode>makeNormalNodeUnion(modifiers), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(null), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(makeUnparameterizedTypeListNode()), this.<TypeParameterListNode>makeNormalNodeUnion(makeTypeParameterListNode()), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ConstructorInvocationSpliceNode.
+     * Creates a ConstructorModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ConstructorInvocationSpliceNode makeConstructorInvocationSpliceNode(
-            ExpressionNode spliceExpression)
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
     {
-        ConstructorInvocationSpliceNode ret = new ConstructorInvocationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ConstructorInvocationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ConstructorInvocationSpliceNode makeConstructorInvocationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ConstructorInvocationSpliceNode ret = new ConstructorInvocationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3109,6 +3351,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3126,7 +3384,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3138,7 +3396,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3152,33 +3410,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ConstructorModifiersSpliceNode.
+     * Creates a ContinueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ConstructorModifiersSpliceNode makeConstructorModifiersSpliceNode(
-            ExpressionNode spliceExpression)
+    public ContinueNode makeContinueNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        ConstructorModifiersSpliceNode ret = new ConstructorModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ConstructorModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ConstructorModifiersSpliceNode makeConstructorModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ConstructorModifiersSpliceNode ret = new ConstructorModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ContinueNode ret = new ContinueNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3190,6 +3435,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ContinueNode makeContinueNode(
             IdentifierNode label,
             MetaAnnotationListNode metaAnnotations)
+    {
+        ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ContinueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ContinueNode makeContinueNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ContinueNode ret = new ContinueNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3206,7 +3466,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ContinueNode ret = new ContinueNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
+        ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3217,7 +3477,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ContinueNode makeContinueNode()
     {
-        ContinueNode ret = new ContinueNodeImpl(null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3230,7 +3490,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ContinueNode ret = new ContinueNodeImpl(null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3242,7 +3502,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ContinueNode makeContinueNode(
             IdentifierNode label)
     {
-        ContinueNode ret = new ContinueNodeImpl(label, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3256,7 +3516,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ContinueNode ret = new ContinueNodeImpl(label, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3313,54 +3573,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a DeclaredTypeListSpliceNode.
+     * Creates a DoWhileLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public DeclaredTypeListSpliceNode makeDeclaredTypeListSpliceNode(
-            ExpressionNode spliceExpression)
+    public DoWhileLoopNode makeDoWhileLoopNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        DeclaredTypeListSpliceNode ret = new DeclaredTypeListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a DeclaredTypeListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public DeclaredTypeListSpliceNode makeDeclaredTypeListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        DeclaredTypeListSpliceNode ret = new DeclaredTypeListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a DeclaredTypeSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public DeclaredTypeSpliceNode makeDeclaredTypeSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        DeclaredTypeSpliceNode ret = new DeclaredTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a DeclaredTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public DeclaredTypeSpliceNode makeDeclaredTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        DeclaredTypeSpliceNode ret = new DeclaredTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3373,6 +3595,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations)
+    {
+        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a DoWhileLoopNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public DoWhileLoopNode makeDoWhileLoopNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3390,7 +3628,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3403,7 +3641,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode statement)
     {
-        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3418,7 +3656,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3454,10 +3692,42 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnhancedForLoopNode makeEnhancedForLoopNode(
+            NodeUnion<? extends VariableNode> variable,
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnhancedForLoopNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
             VariableNode variable,
             ExpressionNode expression,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations)
+    {
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(this.<VariableNode>makeNormalNodeUnion(variable), this.<ExpressionNode>makeNormalNodeUnion(expression), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnhancedForLoopNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            NodeUnion<? extends VariableNode> variable,
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3476,7 +3746,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(this.<VariableNode>makeNormalNodeUnion(variable), this.<ExpressionNode>makeNormalNodeUnion(expression), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3490,7 +3760,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             StatementNode statement)
     {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(this.<VariableNode>makeNormalNodeUnion(variable), this.<ExpressionNode>makeNormalNodeUnion(expression), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3506,7 +3776,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(this.<VariableNode>makeNormalNodeUnion(variable), this.<ExpressionNode>makeNormalNodeUnion(expression), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumBodyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumBodyNode makeEnumBodyNode(
+            NodeUnion<? extends EnumConstantDeclarationListNode> constants,
+            NodeUnion<? extends ClassMemberListNode> members)
+    {
+        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3518,6 +3801,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumBodyNode makeEnumBodyNode(
             EnumConstantDeclarationListNode constants,
             ClassMemberListNode members)
+    {
+        EnumBodyNode ret = new EnumBodyNodeImpl(this.<EnumConstantDeclarationListNode>makeNormalNodeUnion(constants), this.<ClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumBodyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumBodyNode makeEnumBodyNode(
+            NodeUnion<? extends EnumConstantDeclarationListNode> constants,
+            NodeUnion<? extends ClassMemberListNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3534,33 +3832,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a EnumBodySpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public EnumBodySpliceNode makeEnumBodySpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        EnumBodySpliceNode ret = new EnumBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a EnumBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public EnumBodySpliceNode makeEnumBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        EnumBodySpliceNode ret = new EnumBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        EnumBodyNode ret = new EnumBodyNodeImpl(this.<EnumConstantDeclarationListNode>makeNormalNodeUnion(constants), this.<ClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3617,28 +3889,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a EnumConstantDeclarationListSpliceNode.
+     * Creates a EnumConstantDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public EnumConstantDeclarationListSpliceNode makeEnumConstantDeclarationListSpliceNode(
-            ExpressionNode spliceExpression)
+    public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            NodeUnion<? extends EnumConstantModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        EnumConstantDeclarationListSpliceNode ret = new EnumConstantDeclarationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a EnumConstantDeclarationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public EnumConstantDeclarationListSpliceNode makeEnumConstantDeclarationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        EnumConstantDeclarationListSpliceNode ret = new EnumConstantDeclarationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3653,6 +3915,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc)
+    {
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(this.<EnumConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            NodeUnion<? extends EnumConstantModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3672,7 +3952,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(this.<EnumConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3687,7 +3967,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(this.<EnumConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3704,33 +3984,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(this.<EnumConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a EnumConstantDeclarationSpliceNode.
+     * Creates a EnumConstantModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public EnumConstantDeclarationSpliceNode makeEnumConstantDeclarationSpliceNode(
-            ExpressionNode spliceExpression)
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
     {
-        EnumConstantDeclarationSpliceNode ret = new EnumConstantDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a EnumConstantDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public EnumConstantDeclarationSpliceNode makeEnumConstantDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        EnumConstantDeclarationSpliceNode ret = new EnumConstantDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3742,6 +4009,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumConstantModifiersNode makeEnumConstantModifiersNode(
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3758,7 +4040,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3770,7 +4052,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumConstantModifiersNode makeEnumConstantModifiersNode(
     )
     {
-        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3783,33 +4065,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a EnumConstantModifiersSpliceNode.
+     * Creates a EnumDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public EnumConstantModifiersSpliceNode makeEnumConstantModifiersSpliceNode(
-            ExpressionNode spliceExpression)
+    public EnumDeclarationNode makeEnumDeclarationNode(
+            NodeUnion<? extends EnumModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends EnumBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        EnumConstantModifiersSpliceNode ret = new EnumConstantModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a EnumConstantModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public EnumConstantModifiersSpliceNode makeEnumConstantModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        EnumConstantModifiersSpliceNode ret = new EnumConstantModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3824,6 +4096,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc)
+    {
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(this.<EnumModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<EnumBodyNode>makeNormalNodeUnion(body), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumDeclarationNode makeEnumDeclarationNode(
+            NodeUnion<? extends EnumModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends EnumBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3843,7 +4133,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(this.<EnumModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<EnumBodyNode>makeNormalNodeUnion(body), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
+    {
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3857,6 +4162,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a EnumModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -3875,7 +4197,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3887,7 +4209,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3901,33 +4223,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a EnumModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public EnumModifiersSpliceNode makeEnumModifiersSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        EnumModifiersSpliceNode ret = new EnumModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a EnumModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public EnumModifiersSpliceNode makeEnumModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        EnumModifiersSpliceNode ret = new EnumModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3984,54 +4280,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a ExpressionListSpliceNode.
+     * Creates a ExpressionStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ExpressionListSpliceNode makeExpressionListSpliceNode(
-            ExpressionNode spliceExpression)
+    public ExpressionStatementNode makeExpressionStatementNode(
+            NodeUnion<? extends StatementExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        ExpressionListSpliceNode ret = new ExpressionListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ExpressionListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ExpressionListSpliceNode makeExpressionListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ExpressionListSpliceNode ret = new ExpressionListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ExpressionSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public ExpressionSpliceNode makeExpressionSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        ExpressionSpliceNode ret = new ExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ExpressionSpliceNode makeExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ExpressionSpliceNode ret = new ExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4043,6 +4300,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ExpressionStatementNode makeExpressionStatementNode(
             StatementExpressionNode expression,
             MetaAnnotationListNode metaAnnotations)
+    {
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(this.<StatementExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ExpressionStatementNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ExpressionStatementNode makeExpressionStatementNode(
+            NodeUnion<? extends StatementExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4059,7 +4331,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(this.<StatementExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4071,7 +4343,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ExpressionStatementNode makeExpressionStatementNode(
             StatementExpressionNode expression)
     {
-        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(this.<StatementExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4085,7 +4357,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(this.<StatementExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a FieldDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public FieldDeclarationNode makeFieldDeclarationNode(
+            NodeUnion<? extends FieldModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc)
+    {
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4099,6 +4386,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc)
+    {
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(this.<FieldModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a FieldDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public FieldDeclarationNode makeFieldDeclarationNode(
+            NodeUnion<? extends FieldModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4117,7 +4421,25 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(this.<FieldModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a FieldModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean transientFlag,
+            boolean volatileFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
+    {
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4134,6 +4456,26 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean volatileFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a FieldModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean transientFlag,
+            boolean volatileFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4155,7 +4497,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4167,7 +4509,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public FieldModifiersNode makeFieldModifiersNode(
             AccessModifier access)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4181,33 +4523,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a FieldModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public FieldModifiersSpliceNode makeFieldModifiersSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        FieldModifiersSpliceNode ret = new FieldModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a FieldModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public FieldModifiersSpliceNode makeFieldModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        FieldModifiersSpliceNode ret = new FieldModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4243,7 +4559,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
+            NodeUnion<? extends LocalVariableDeclarationNode> declaration)
+    {
+        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ForInitializerDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
             LocalVariableDeclarationNode declaration)
+    {
+        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(this.<LocalVariableDeclarationNode>makeNormalNodeUnion(declaration), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ForInitializerDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
+            NodeUnion<? extends LocalVariableDeclarationNode> declaration,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4259,7 +4601,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
+        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(this.<LocalVariableDeclarationNode>makeNormalNodeUnion(declaration), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ForInitializerExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ForInitializerExpressionNode makeForInitializerExpressionNode(
+            NodeUnion<? extends StatementExpressionListNode> expressions)
+    {
+        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4270,6 +4624,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
             StatementExpressionListNode expressions)
+    {
+        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(this.<StatementExpressionListNode>makeNormalNodeUnion(expressions), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ForInitializerExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ForInitializerExpressionNode makeForInitializerExpressionNode(
+            NodeUnion<? extends StatementExpressionListNode> expressions,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4285,33 +4653,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager, binary);
+        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(this.<StatementExpressionListNode>makeNormalNodeUnion(expressions), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ForInitializerSpliceNode.
+     * Creates a ForLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ForInitializerSpliceNode makeForInitializerSpliceNode(
-            ExpressionNode spliceExpression)
+    public ForLoopNode makeForLoopNode(
+            NodeUnion<? extends ForInitializerNode> initializer,
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementExpressionListNode> update,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        ForInitializerSpliceNode ret = new ForInitializerSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ForInitializerSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ForInitializerSpliceNode makeForInitializerSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ForInitializerSpliceNode ret = new ForInitializerSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4326,6 +4684,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementExpressionListNode update,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations)
+    {
+        ForLoopNode ret = new ForLoopNodeImpl(this.<ForInitializerNode>makeNormalNodeUnion(initializer), this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementExpressionListNode>makeNormalNodeUnion(update), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ForLoopNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ForLoopNode makeForLoopNode(
+            NodeUnion<? extends ForInitializerNode> initializer,
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementExpressionListNode> update,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4345,7 +4721,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        ForLoopNode ret = new ForLoopNodeImpl(this.<ForInitializerNode>makeNormalNodeUnion(initializer), this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementExpressionListNode>makeNormalNodeUnion(update), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4360,7 +4736,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementExpressionListNode update,
             StatementNode statement)
     {
-        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ForLoopNode ret = new ForLoopNodeImpl(this.<ForInitializerNode>makeNormalNodeUnion(initializer), this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementExpressionListNode>makeNormalNodeUnion(update), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4377,7 +4753,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ForLoopNode ret = new ForLoopNodeImpl(this.<ForInitializerNode>makeNormalNodeUnion(initializer), this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementExpressionListNode>makeNormalNodeUnion(update), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4434,32 +4810,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a IdentifierListSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public IdentifierListSpliceNode makeIdentifierListSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        IdentifierListSpliceNode ret = new IdentifierListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a IdentifierListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public IdentifierListSpliceNode makeIdentifierListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        IdentifierListSpliceNode ret = new IdentifierListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
      * Creates a IdentifierNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4486,28 +4836,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a IdentifierSpliceNode.
+     * Creates a IfNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public IdentifierSpliceNode makeIdentifierSpliceNode(
-            ExpressionNode spliceExpression)
+    public IfNode makeIfNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> thenStatement,
+            NodeUnion<? extends StatementNode> elseStatement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        IdentifierSpliceNode ret = new IdentifierSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a IdentifierSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public IdentifierSpliceNode makeIdentifierSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        IdentifierSpliceNode ret = new IdentifierSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4521,6 +4860,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementNode thenStatement,
             StatementNode elseStatement,
             MetaAnnotationListNode metaAnnotations)
+    {
+        IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(elseStatement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a IfNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public IfNode makeIfNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> thenStatement,
+            NodeUnion<? extends StatementNode> elseStatement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4539,7 +4895,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(elseStatement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4553,7 +4909,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementNode thenStatement,
             StatementNode elseStatement)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(elseStatement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4569,7 +4925,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(elseStatement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4582,7 +4938,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode thenStatement)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4597,7 +4953,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, null, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4654,54 +5010,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a ImportListSpliceNode.
+     * Creates a ImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ImportListSpliceNode makeImportListSpliceNode(
-            ExpressionNode spliceExpression)
+    public ImportOnDemandNode makeImportOnDemandNode(
+            NodeUnion<? extends NameNode> name)
     {
-        ImportListSpliceNode ret = new ImportListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ImportListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ImportListSpliceNode makeImportListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ImportListSpliceNode ret = new ImportListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ImportSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public ImportSpliceNode makeImportSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        ImportSpliceNode ret = new ImportSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ImportSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ImportSpliceNode makeImportSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ImportSpliceNode ret = new ImportSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4712,6 +5028,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ImportOnDemandNode makeImportOnDemandNode(
             NameNode name)
+    {
+        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ImportOnDemandNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ImportOnDemandNode makeImportOnDemandNode(
+            NodeUnion<? extends NameNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4727,7 +5057,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
+        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ImportSingleTypeNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ImportSingleTypeNode makeImportSingleTypeNode(
+            NodeUnion<? extends NameNode> name)
+    {
+        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4738,6 +5080,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ImportSingleTypeNode makeImportSingleTypeNode(
             NameNode name)
+    {
+        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ImportSingleTypeNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ImportSingleTypeNode makeImportSingleTypeNode(
+            NodeUnion<? extends NameNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4753,7 +5109,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
+        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4766,6 +5136,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticInitializer,
             BlockStatementListNode body,
             MetaAnnotationListNode metaAnnotations)
+    {
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4783,7 +5169,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, metaAnnotations, startLocation, stopLocation, manager, binary);
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4796,7 +5182,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticInitializer,
             BlockStatementListNode body)
     {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4811,7 +5197,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InstanceOfNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InstanceOfNode makeInstanceOfNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type)
+    {
+        InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4823,6 +5222,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InstanceOfNode makeInstanceOfNode(
             ExpressionNode expression,
             TypeNode type)
+    {
+        InstanceOfNode ret = new InstanceOfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InstanceOfNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InstanceOfNode makeInstanceOfNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4839,7 +5253,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
+        InstanceOfNode ret = new InstanceOfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4875,7 +5289,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public InterfaceBodyNode makeInterfaceBodyNode(
+            NodeUnion<? extends InterfaceMemberListNode> members)
+    {
+        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InterfaceBodyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceBodyNode makeInterfaceBodyNode(
             InterfaceMemberListNode members)
+    {
+        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(this.<InterfaceMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InterfaceBodyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceBodyNode makeInterfaceBodyNode(
+            NodeUnion<? extends InterfaceMemberListNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4891,33 +5331,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(this.<InterfaceMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a InterfaceBodySpliceNode.
+     * Creates a InterfaceDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public InterfaceBodySpliceNode makeInterfaceBodySpliceNode(
-            ExpressionNode spliceExpression)
+    public InterfaceDeclarationNode makeInterfaceDeclarationNode(
+            NodeUnion<? extends InterfaceModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeListNode> extendsClause,
+            NodeUnion<? extends InterfaceBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        InterfaceBodySpliceNode ret = new InterfaceBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a InterfaceBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public InterfaceBodySpliceNode makeInterfaceBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        InterfaceBodySpliceNode ret = new InterfaceBodySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4933,6 +5364,25 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc)
+    {
+        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(this.<InterfaceModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeListNode>makeNormalNodeUnion(extendsClause), this.<InterfaceBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InterfaceDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceDeclarationNode makeInterfaceDeclarationNode(
+            NodeUnion<? extends InterfaceModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeListNode> extendsClause,
+            NodeUnion<? extends InterfaceBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4953,7 +5403,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(this.<InterfaceModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeListNode>makeNormalNodeUnion(extendsClause), this.<InterfaceBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5010,28 +5460,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a InterfaceMemberListSpliceNode.
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public InterfaceMemberListSpliceNode makeInterfaceMemberListSpliceNode(
-            ExpressionNode spliceExpression)
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram)
     {
-        InterfaceMemberListSpliceNode ret = new InterfaceMemberListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a InterfaceMemberListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public InterfaceMemberListSpliceNode makeInterfaceMemberListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        InterfaceMemberListSpliceNode ret = new InterfaceMemberListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5043,7 +5479,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5057,33 +5507,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a InterfaceMemberSpliceNode.
+     * Creates a InterfaceModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public InterfaceMemberSpliceNode makeInterfaceMemberSpliceNode(
-            ExpressionNode spliceExpression)
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
     {
-        InterfaceMemberSpliceNode ret = new InterfaceMemberSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a InterfaceMemberSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public InterfaceMemberSpliceNode makeInterfaceMemberSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        InterfaceMemberSpliceNode ret = new InterfaceMemberSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5098,6 +5538,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a InterfaceModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5117,7 +5575,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5129,7 +5587,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceModifiersNode makeInterfaceModifiersNode(
             AccessModifier access)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5143,33 +5601,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a InterfaceModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public InterfaceModifiersSpliceNode makeInterfaceModifiersSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        InterfaceModifiersSpliceNode ret = new InterfaceModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a InterfaceModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public InterfaceModifiersSpliceNode makeInterfaceModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        InterfaceModifiersSpliceNode ret = new InterfaceModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5200,28 +5632,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a JavadocSpliceNode.
+     * Creates a LabeledStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public JavadocSpliceNode makeJavadocSpliceNode(
-            ExpressionNode spliceExpression)
+    public LabeledStatementNode makeLabeledStatementNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        JavadocSpliceNode ret = new JavadocSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a JavadocSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public JavadocSpliceNode makeJavadocSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        JavadocSpliceNode ret = new JavadocSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5234,6 +5654,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode label,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations)
+    {
+        LabeledStatementNode ret = new LabeledStatementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LabeledStatementNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LabeledStatementNode makeLabeledStatementNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5251,7 +5687,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        LabeledStatementNode ret = new LabeledStatementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5264,7 +5700,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode label,
             StatementNode statement)
     {
-        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        LabeledStatementNode ret = new LabeledStatementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5279,33 +5715,25 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        LabeledStatementNode ret = new LabeledStatementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a LiteralizableTypeSpliceNode.
+     * Creates a LocalClassDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public LiteralizableTypeSpliceNode makeLiteralizableTypeSpliceNode(
-            ExpressionNode spliceExpression)
+    public LocalClassDeclarationNode makeLocalClassDeclarationNode(
+            NodeUnion<? extends LocalClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        LiteralizableTypeSpliceNode ret = new LiteralizableTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a LiteralizableTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public LiteralizableTypeSpliceNode makeLiteralizableTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        LiteralizableTypeSpliceNode ret = new LiteralizableTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5322,6 +5750,26 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc)
+    {
+        LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(this.<LocalClassModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeNode>makeNormalNodeUnion(extendsClause), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<ClassBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalClassDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalClassDeclarationNode makeLocalClassDeclarationNode(
+            NodeUnion<? extends LocalClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5343,7 +5791,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(this.<LocalClassModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeNode>makeNormalNodeUnion(extendsClause), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<ClassBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            boolean abstractFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
+    {
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5358,6 +5822,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            boolean abstractFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5377,7 +5859,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5389,7 +5871,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public LocalClassModifiersNode makeLocalClassModifiersNode(
     )
     {
-        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5402,33 +5884,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a LocalClassModifiersSpliceNode.
+     * Creates a LocalVariableDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public LocalClassModifiersSpliceNode makeLocalClassModifiersSpliceNode(
-            ExpressionNode spliceExpression)
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators)
     {
-        LocalClassModifiersSpliceNode ret = new LocalClassModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a LocalClassModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public LocalClassModifiersSpliceNode makeLocalClassModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        LocalClassModifiersSpliceNode ret = new LocalClassModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5441,6 +5911,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableModifiersNode modifiers,
             TypeNode type,
             VariableDeclaratorListNode declarators)
+    {
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5458,7 +5944,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5471,7 +5957,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode type,
             VariableDeclaratorListNode declarators)
     {
-        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(makeVariableModifiersNode(), type, declarators, startLocation, stopLocation, manager, binary);
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(makeVariableModifiersNode()), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5486,33 +5972,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(makeVariableModifiersNode(), type, declarators, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a LocalVariableDeclarationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public LocalVariableDeclarationSpliceNode makeLocalVariableDeclarationSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        LocalVariableDeclarationSpliceNode ret = new LocalVariableDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a LocalVariableDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public LocalVariableDeclarationSpliceNode makeLocalVariableDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        LocalVariableDeclarationSpliceNode ret = new LocalVariableDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(makeVariableModifiersNode()), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5548,7 +6008,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            NodeUnion<? extends MetaAnnotationValueListNode> values)
+    {
+        MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
             MetaAnnotationValueListNode values)
+    {
+        MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(this.<MetaAnnotationValueListNode>makeNormalNodeUnion(values), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            NodeUnion<? extends MetaAnnotationValueListNode> values,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5564,7 +6050,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(this.<MetaAnnotationValueListNode>makeNormalNodeUnion(values), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5621,28 +6107,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaAnnotationElementListSpliceNode.
+     * Creates a MetaAnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaAnnotationElementListSpliceNode makeMetaAnnotationElementListSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends MetaAnnotationValueNode> value)
     {
-        MetaAnnotationElementListSpliceNode ret = new MetaAnnotationElementListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationElementListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaAnnotationElementListSpliceNode makeMetaAnnotationElementListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaAnnotationElementListSpliceNode ret = new MetaAnnotationElementListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5654,6 +6127,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaAnnotationElementNode makeMetaAnnotationElementNode(
             IdentifierNode identifier,
             MetaAnnotationValueNode value)
+    {
+        MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends MetaAnnotationValueNode> value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5670,33 +6158,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
+        MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MetaAnnotationElementSpliceNode.
+     * Creates a MetaAnnotationExpressionValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaAnnotationElementSpliceNode makeMetaAnnotationElementSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NodeUnion<? extends NonAssignmentExpressionNode> expression)
     {
-        MetaAnnotationElementSpliceNode ret = new MetaAnnotationElementSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationElementSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaAnnotationElementSpliceNode makeMetaAnnotationElementSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaAnnotationElementSpliceNode ret = new MetaAnnotationElementSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5707,6 +6181,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
             NonAssignmentExpressionNode expression)
+    {
+        MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(this.<NonAssignmentExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NodeUnion<? extends NonAssignmentExpressionNode> expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5722,7 +6210,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(this.<NonAssignmentExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5779,28 +6267,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaAnnotationListSpliceNode.
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaAnnotationListSpliceNode makeMetaAnnotationListSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            NodeUnion<? extends MetaAnnotationNode> annotation)
     {
-        MetaAnnotationListSpliceNode ret = new MetaAnnotationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaAnnotationListSpliceNode makeMetaAnnotationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaAnnotationListSpliceNode ret = new MetaAnnotationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5811,6 +6285,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
             MetaAnnotationNode annotation)
+    {
+        MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(this.<MetaAnnotationNode>makeNormalNodeUnion(annotation), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            NodeUnion<? extends MetaAnnotationNode> annotation,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
         return ret;
@@ -5826,7 +6314,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(this.<MetaAnnotationNode>makeNormalNodeUnion(annotation), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5838,7 +6326,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaAnnotationMetaprogramAnchorNode makeMetaAnnotationMetaprogramAnchorNode(
     )
     {
-        MetaAnnotationMetaprogramAnchorNode ret = new MetaAnnotationMetaprogramAnchorNodeImpl(null, startLocation, stopLocation, manager, binary);
+        MetaAnnotationMetaprogramAnchorNode ret = new MetaAnnotationMetaprogramAnchorNodeImpl(startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5851,59 +6339,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaAnnotationMetaprogramAnchorNode ret = new MetaAnnotationMetaprogramAnchorNodeImpl(null, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationMetaprogramAnchorSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaAnnotationMetaprogramAnchorSpliceNode makeMetaAnnotationMetaprogramAnchorSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        MetaAnnotationMetaprogramAnchorSpliceNode ret = new MetaAnnotationMetaprogramAnchorSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationMetaprogramAnchorSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaAnnotationMetaprogramAnchorSpliceNode makeMetaAnnotationMetaprogramAnchorSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaAnnotationMetaprogramAnchorSpliceNode ret = new MetaAnnotationMetaprogramAnchorSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaAnnotationSpliceNode makeMetaAnnotationSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        MetaAnnotationSpliceNode ret = new MetaAnnotationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaAnnotationSpliceNode makeMetaAnnotationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaAnnotationSpliceNode ret = new MetaAnnotationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaAnnotationMetaprogramAnchorNode ret = new MetaAnnotationMetaprogramAnchorNodeImpl(startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5960,58 +6396,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaAnnotationValueListSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaAnnotationValueListSpliceNode makeMetaAnnotationValueListSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        MetaAnnotationValueListSpliceNode ret = new MetaAnnotationValueListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationValueListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaAnnotationValueListSpliceNode makeMetaAnnotationValueListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaAnnotationValueListSpliceNode ret = new MetaAnnotationValueListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationValueSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaAnnotationValueSpliceNode makeMetaAnnotationValueSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        MetaAnnotationValueSpliceNode ret = new MetaAnnotationValueSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaAnnotationValueSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaAnnotationValueSpliceNode makeMetaAnnotationValueSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaAnnotationValueSpliceNode ret = new MetaAnnotationValueSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
      * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -6064,28 +6448,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaprogramDependencyDeclarationListSpliceNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramDependencyDeclarationListSpliceNode makeMetaprogramDependencyDeclarationListSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            NodeUnion<? extends MetaprogramDependencyListNode> targets)
     {
-        MetaprogramDependencyDeclarationListSpliceNode ret = new MetaprogramDependencyDeclarationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramDependencyDeclarationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramDependencyDeclarationListSpliceNode makeMetaprogramDependencyDeclarationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramDependencyDeclarationListSpliceNode ret = new MetaprogramDependencyDeclarationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(targets, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6096,6 +6466,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
             MetaprogramDependencyListNode targets)
+    {
+        MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(this.<MetaprogramDependencyListNode>makeNormalNodeUnion(targets), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            NodeUnion<? extends MetaprogramDependencyListNode> targets,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(targets, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6111,33 +6495,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(targets, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramDependencyDeclarationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaprogramDependencyDeclarationSpliceNode makeMetaprogramDependencyDeclarationSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        MetaprogramDependencyDeclarationSpliceNode ret = new MetaprogramDependencyDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramDependencyDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramDependencyDeclarationSpliceNode makeMetaprogramDependencyDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramDependencyDeclarationSpliceNode ret = new MetaprogramDependencyDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(this.<MetaprogramDependencyListNode>makeNormalNodeUnion(targets), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6194,28 +6552,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaprogramDependencyListSpliceNode.
+     * Creates a MetaprogramDependencyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramDependencyListSpliceNode makeMetaprogramDependencyListSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NodeUnion<? extends NameNode> targetName,
+            boolean weak)
     {
-        MetaprogramDependencyListSpliceNode ret = new MetaprogramDependencyListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramDependencyListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramDependencyListSpliceNode makeMetaprogramDependencyListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramDependencyListSpliceNode ret = new MetaprogramDependencyListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, weak, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6227,6 +6572,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramDependencyNode makeMetaprogramDependencyNode(
             NameNode targetName,
             boolean weak)
+    {
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(this.<NameNode>makeNormalNodeUnion(targetName), weak, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NodeUnion<? extends NameNode> targetName,
+            boolean weak,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, weak, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6243,7 +6603,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, weak, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(this.<NameNode>makeNormalNodeUnion(targetName), weak, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6255,7 +6615,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramDependencyNode makeMetaprogramDependencyNode(
             NameNode targetName)
     {
-        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, false, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(this.<NameNode>makeNormalNodeUnion(targetName), false, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6269,33 +6629,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, false, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramDependencySpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaprogramDependencySpliceNode makeMetaprogramDependencySpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        MetaprogramDependencySpliceNode ret = new MetaprogramDependencySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramDependencySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramDependencySpliceNode makeMetaprogramDependencySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramDependencySpliceNode ret = new MetaprogramDependencySpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(this.<NameNode>makeNormalNodeUnion(targetName), false, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6352,28 +6686,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaprogramImportListSpliceNode.
+     * Creates a MetaprogramImportNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramImportListSpliceNode makeMetaprogramImportListSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaprogramImportNode makeMetaprogramImportNode(
+            NodeUnion<? extends ImportNode> importNode)
     {
-        MetaprogramImportListSpliceNode ret = new MetaprogramImportListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramImportListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramImportListSpliceNode makeMetaprogramImportListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramImportListSpliceNode ret = new MetaprogramImportListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6384,6 +6704,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public MetaprogramImportNode makeMetaprogramImportNode(
             ImportNode importNode)
+    {
+        MetaprogramImportNode ret = new MetaprogramImportNodeImpl(this.<ImportNode>makeNormalNodeUnion(importNode), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramImportNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramImportNode makeMetaprogramImportNode(
+            NodeUnion<? extends ImportNode> importNode,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6399,33 +6733,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager, binary);
+        MetaprogramImportNode ret = new MetaprogramImportNodeImpl(this.<ImportNode>makeNormalNodeUnion(importNode), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MetaprogramImportSpliceNode.
+     * Creates a MetaprogramNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramImportSpliceNode makeMetaprogramImportSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaprogramNode makeMetaprogramNode(
+            NodeUnion<? extends MetaprogramPreambleNode> preamble,
+            NodeUnion<? extends BlockStatementListNode> body)
     {
-        MetaprogramImportSpliceNode ret = new MetaprogramImportSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramImportSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramImportSpliceNode makeMetaprogramImportSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramImportSpliceNode ret = new MetaprogramImportSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6437,6 +6758,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramNode makeMetaprogramNode(
             MetaprogramPreambleNode preamble,
             BlockStatementListNode body)
+    {
+        MetaprogramNode ret = new MetaprogramNodeImpl(this.<MetaprogramPreambleNode>makeNormalNodeUnion(preamble), this.<BlockStatementListNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramNode makeMetaprogramNode(
+            NodeUnion<? extends MetaprogramPreambleNode> preamble,
+            NodeUnion<? extends BlockStatementListNode> body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6453,33 +6789,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager, binary);
+        MetaprogramNode ret = new MetaprogramNodeImpl(this.<MetaprogramPreambleNode>makeNormalNodeUnion(preamble), this.<BlockStatementListNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MetaprogramSpliceNode.
+     * Creates a MetaprogramPreambleNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramSpliceNode makeMetaprogramSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            NodeUnion<? extends MetaprogramImportListNode> imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
+            NodeUnion<? extends MetaprogramTargetListNode> targets,
+            NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies)
     {
-        MetaprogramSpliceNode ret = new MetaprogramSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramSpliceNode makeMetaprogramSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramSpliceNode ret = new MetaprogramSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, targets, dependencies, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6494,6 +6820,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
             MetaprogramDependencyDeclarationListNode dependencies)
+    {
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(this.<MetaprogramImportListNode>makeNormalNodeUnion(imports), localMode, packageMode, this.<MetaprogramTargetListNode>makeNormalNodeUnion(targets), this.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(dependencies), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramPreambleNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            NodeUnion<? extends MetaprogramImportListNode> imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
+            NodeUnion<? extends MetaprogramTargetListNode> targets,
+            NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, targets, dependencies, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6513,7 +6857,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, targets, dependencies, startLocation, stopLocation, manager, binary);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(this.<MetaprogramImportListNode>makeNormalNodeUnion(imports), localMode, packageMode, this.<MetaprogramTargetListNode>makeNormalNodeUnion(targets), this.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(dependencies), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6527,7 +6871,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaprogramTargetListNode targets,
             MetaprogramDependencyDeclarationListNode dependencies)
     {
-        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, targets, dependencies, startLocation, stopLocation, manager, binary);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(this.<MetaprogramImportListNode>makeNormalNodeUnion(imports), MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, this.<MetaprogramTargetListNode>makeNormalNodeUnion(targets), this.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(dependencies), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6543,33 +6887,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, targets, dependencies, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramPreambleSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaprogramPreambleSpliceNode makeMetaprogramPreambleSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        MetaprogramPreambleSpliceNode ret = new MetaprogramPreambleSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramPreambleSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramPreambleSpliceNode makeMetaprogramPreambleSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramPreambleSpliceNode ret = new MetaprogramPreambleSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(this.<MetaprogramImportListNode>makeNormalNodeUnion(imports), MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, this.<MetaprogramTargetListNode>makeNormalNodeUnion(targets), this.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(dependencies), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6626,28 +6944,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a MetaprogramTargetListSpliceNode.
+     * Creates a MetaprogramTargetNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramTargetListSpliceNode makeMetaprogramTargetListSpliceNode(
-            ExpressionNode spliceExpression)
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            NodeUnion<? extends IdentifierListNode> targets)
     {
-        MetaprogramTargetListSpliceNode ret = new MetaprogramTargetListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramTargetListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramTargetListSpliceNode makeMetaprogramTargetListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramTargetListSpliceNode ret = new MetaprogramTargetListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6658,6 +6962,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public MetaprogramTargetNode makeMetaprogramTargetNode(
             IdentifierListNode targets)
+    {
+        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(this.<IdentifierListNode>makeNormalNodeUnion(targets), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaprogramTargetNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            NodeUnion<? extends IdentifierListNode> targets,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6673,33 +6991,27 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager, binary);
+        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(this.<IdentifierListNode>makeNormalNodeUnion(targets), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MetaprogramTargetSpliceNode.
+     * Creates a MethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramTargetSpliceNode makeMetaprogramTargetSpliceNode(
-            ExpressionNode spliceExpression)
+    public MethodDeclarationNode makeMethodDeclarationNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MethodModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends VariableListNode> parameters,
+            NodeUnion<? extends VariableNode> varargParameter,
+            NodeUnion<? extends TypeNode> returnType,
+            NodeUnion<? extends UnparameterizedTypeListNode> throwTypes,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends JavadocNode> javadoc)
     {
-        MetaprogramTargetSpliceNode ret = new MetaprogramTargetSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MetaprogramTargetSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramTargetSpliceNode makeMetaprogramTargetSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MetaprogramTargetSpliceNode ret = new MetaprogramTargetSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6718,6 +7030,28 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnparameterizedTypeListNode throwTypes,
             TypeParameterListNode typeParameters,
             JavadocNode javadoc)
+    {
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MethodModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(varargParameter), this.<TypeNode>makeNormalNodeUnion(returnType), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(throwTypes), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodDeclarationNode makeMethodDeclarationNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MethodModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends VariableListNode> parameters,
+            NodeUnion<? extends VariableNode> varargParameter,
+            NodeUnion<? extends TypeNode> returnType,
+            NodeUnion<? extends UnparameterizedTypeListNode> throwTypes,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6741,7 +7075,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MethodModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(varargParameter), this.<TypeNode>makeNormalNodeUnion(returnType), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(throwTypes), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6758,7 +7092,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode returnType,
             JavadocNode javadoc)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager, binary);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MethodModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(null), this.<TypeNode>makeNormalNodeUnion(returnType), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(makeUnparameterizedTypeListNode()), this.<TypeParameterListNode>makeNormalNodeUnion(makeTypeParameterListNode()), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6777,7 +7111,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager, binary);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MethodModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(null), this.<TypeNode>makeNormalNodeUnion(returnType), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(makeUnparameterizedTypeListNode()), this.<TypeParameterListNode>makeNormalNodeUnion(makeTypeParameterListNode()), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments)
+    {
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6791,6 +7140,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
+    {
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationNode makeMethodInvocationNode(
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6809,7 +7175,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6821,7 +7187,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodInvocationNode makeMethodInvocationNode(
             IdentifierNode identifier)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(null, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6835,7 +7201,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(null, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6848,7 +7214,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6863,7 +7229,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, makeExpressionListNode(), makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6876,7 +7242,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6891,7 +7257,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6905,7 +7271,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6921,7 +7287,27 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean synchronizedFlag,
+            boolean nativeFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
+    {
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6940,6 +7326,28 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MethodModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean synchronizedFlag,
+            boolean nativeFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -6963,7 +7371,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6975,7 +7383,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodModifiersNode makeMethodModifiersNode(
             AccessModifier access)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -6989,85 +7397,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a MethodModifiersSpliceNode.
+     * Creates a NoOperationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MethodModifiersSpliceNode makeMethodModifiersSpliceNode(
-            ExpressionNode spliceExpression)
+    public NoOperationNode makeNoOperationNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        MethodModifiersSpliceNode ret = new MethodModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a MethodModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MethodModifiersSpliceNode makeMethodModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        MethodModifiersSpliceNode ret = new MethodModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public ModifiersSpliceNode makeModifiersSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        ModifiersSpliceNode ret = new ModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ModifiersSpliceNode makeModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ModifiersSpliceNode ret = new ModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a NameSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public NameSpliceNode makeNameSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        NameSpliceNode ret = new NameSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a NameSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NameSpliceNode makeNameSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        NameSpliceNode ret = new NameSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        NoOperationNode ret = new NoOperationNodeImpl(metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7078,6 +7420,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public NoOperationNode makeNoOperationNode(
             MetaAnnotationListNode metaAnnotations)
+    {
+        NoOperationNode ret = new NoOperationNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a NoOperationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NoOperationNode makeNoOperationNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         NoOperationNode ret = new NoOperationNodeImpl(metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7093,7 +7449,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NoOperationNode ret = new NoOperationNodeImpl(metaAnnotations, startLocation, stopLocation, manager, binary);
+        NoOperationNode ret = new NoOperationNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7105,7 +7461,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public NoOperationNode makeNoOperationNode(
     )
     {
-        NoOperationNode ret = new NoOperationNodeImpl(makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        NoOperationNode ret = new NoOperationNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7118,33 +7474,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NoOperationNode ret = new NoOperationNodeImpl(makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        NoOperationNode ret = new NoOperationNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a NonAssignmentExpressionSpliceNode.
+     * Creates a NormalAnnotationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public NonAssignmentExpressionSpliceNode makeNonAssignmentExpressionSpliceNode(
-            ExpressionNode spliceExpression)
+    public NormalAnnotationNode makeNormalAnnotationNode(
+            NodeUnion<? extends AnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType)
     {
-        NonAssignmentExpressionSpliceNode ret = new NonAssignmentExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a NonAssignmentExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NonAssignmentExpressionSpliceNode makeNonAssignmentExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        NonAssignmentExpressionSpliceNode ret = new NonAssignmentExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7156,6 +7499,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public NormalAnnotationNode makeNormalAnnotationNode(
             AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType)
+    {
+        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(this.<AnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a NormalAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NormalAnnotationNode makeNormalAnnotationNode(
+            NodeUnion<? extends AnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7172,7 +7530,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
+        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(this.<AnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            NodeUnion<? extends MetaAnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+    {
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7184,6 +7555,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType)
+    {
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(this.<MetaAnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), null, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            NodeUnion<? extends MetaAnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, null, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7200,7 +7586,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, null, startLocation, stopLocation, manager, binary);
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(this.<MetaAnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7235,9 +7621,39 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
+    {
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a PackageDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a PackageDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageDeclarationNode makePackageDeclarationNode(
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7255,7 +7671,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7267,7 +7683,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7281,33 +7697,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a PackageDeclarationSpliceNode.
+     * Creates a PackageNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public PackageDeclarationSpliceNode makePackageDeclarationSpliceNode(
-            ExpressionNode spliceExpression)
+    public PackageNode makePackageNode(
+            NodeUnion<? extends IdentifierNode> name)
     {
-        PackageDeclarationSpliceNode ret = new PackageDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a PackageDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public PackageDeclarationSpliceNode makePackageDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        PackageDeclarationSpliceNode ret = new PackageDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        PackageNode ret = new PackageNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7318,6 +7720,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public PackageNode makePackageNode(
             IdentifierNode name)
+    {
+        PackageNode ret = new PackageNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a PackageNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageNode makePackageNode(
+            NodeUnion<? extends IdentifierNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         PackageNode ret = new PackageNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7333,7 +7749,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageNode ret = new PackageNodeImpl(name, startLocation, stopLocation, manager, binary);
+        PackageNode ret = new PackageNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ParameterizedTypeNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ParameterizedTypeNode makeParameterizedTypeNode(
+            NodeUnion<? extends UnparameterizedTypeNode> baseType,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments)
+    {
+        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7345,6 +7774,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
             TypeArgumentListNode typeArguments)
+    {
+        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(baseType), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ParameterizedTypeNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ParameterizedTypeNode makeParameterizedTypeNode(
+            NodeUnion<? extends UnparameterizedTypeNode> baseType,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7361,33 +7805,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager, binary);
+        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(baseType), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a ParameterizedTypeSpliceNode.
+     * Creates a ParameterizedTypeSelectNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ParameterizedTypeSpliceNode makeParameterizedTypeSpliceNode(
-            ExpressionNode spliceExpression)
+    public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
+            NodeUnion<? extends ParameterizedTypeNode> base,
+            NodeUnion<? extends DeclaredTypeNode> select)
     {
-        ParameterizedTypeSpliceNode ret = new ParameterizedTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ParameterizedTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ParameterizedTypeSpliceNode makeParameterizedTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ParameterizedTypeSpliceNode ret = new ParameterizedTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7399,6 +7830,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
             ParameterizedTypeNode base,
             DeclaredTypeNode select)
+    {
+        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(this.<ParameterizedTypeNode>makeNormalNodeUnion(base), this.<DeclaredTypeNode>makeNormalNodeUnion(select), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ParameterizedTypeSelectNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
+            NodeUnion<? extends ParameterizedTypeNode> base,
+            NodeUnion<? extends DeclaredTypeNode> select,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7415,7 +7861,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager, binary);
+        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(this.<ParameterizedTypeNode>makeNormalNodeUnion(base), this.<DeclaredTypeNode>makeNormalNodeUnion(select), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ParenthesizedExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression)
+    {
+        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7426,6 +7884,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
             ExpressionNode expression)
+    {
+        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ParenthesizedExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7441,33 +7913,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a PrimaryExpressionSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public PrimaryExpressionSpliceNode makePrimaryExpressionSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        PrimaryExpressionSpliceNode ret = new PrimaryExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a PrimaryExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public PrimaryExpressionSpliceNode makePrimaryExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        PrimaryExpressionSpliceNode ret = new PrimaryExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7503,12 +7949,48 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            NodeUnion<? extends ExpressionNode> enclosingExpression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body)
+    {
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
             TypeArgumentListNode typeArguments,
             TypeArgumentListNode constructorTypeArguments,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body)
+    {
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(enclosingExpression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), this.<TypeArgumentListNode>makeNormalNodeUnion(constructorTypeArguments), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            NodeUnion<? extends ExpressionNode> enclosingExpression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7529,7 +8011,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(enclosingExpression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), this.<TypeArgumentListNode>makeNormalNodeUnion(constructorTypeArguments), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7543,7 +8025,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             TypeArgumentListNode typeArguments)
     {
-        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager, binary);
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(enclosingExpression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7559,7 +8041,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager, binary);
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(enclosingExpression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a QualifiedNameNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public QualifiedNameNode makeQualifiedNameNode(
+            NodeUnion<? extends NameNode> base,
+            NodeUnion<? extends IdentifierNode> identifier)
+    {
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7571,6 +8066,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
             IdentifierNode identifier)
+    {
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(this.<NameNode>makeNormalNodeUnion(base), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a QualifiedNameNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public QualifiedNameNode makeQualifiedNameNode(
+            NodeUnion<? extends NameNode> base,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7587,7 +8097,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, startLocation, stopLocation, manager, binary);
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(this.<NameNode>makeNormalNodeUnion(base), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7670,80 +8180,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a ReferenceTypeListSpliceNode.
+     * Creates a ReturnNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public ReferenceTypeListSpliceNode makeReferenceTypeListSpliceNode(
-            ExpressionNode spliceExpression)
+    public ReturnNode makeReturnNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        ReferenceTypeListSpliceNode ret = new ReferenceTypeListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ReferenceTypeListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ReferenceTypeListSpliceNode makeReferenceTypeListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ReferenceTypeListSpliceNode ret = new ReferenceTypeListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ReferenceTypeSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public ReferenceTypeSpliceNode makeReferenceTypeSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        ReferenceTypeSpliceNode ret = new ReferenceTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a ReferenceTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public ReferenceTypeSpliceNode makeReferenceTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ReferenceTypeSpliceNode ret = new ReferenceTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a RestrictedPrimaryExpressionSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public RestrictedPrimaryExpressionSpliceNode makeRestrictedPrimaryExpressionSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        RestrictedPrimaryExpressionSpliceNode ret = new RestrictedPrimaryExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a RestrictedPrimaryExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public RestrictedPrimaryExpressionSpliceNode makeRestrictedPrimaryExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        RestrictedPrimaryExpressionSpliceNode ret = new RestrictedPrimaryExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        ReturnNode ret = new ReturnNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7755,6 +8200,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ReturnNode makeReturnNode(
             ExpressionNode expression,
             MetaAnnotationListNode metaAnnotations)
+    {
+        ReturnNode ret = new ReturnNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ReturnNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ReturnNode makeReturnNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ReturnNode ret = new ReturnNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7771,7 +8231,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ReturnNode ret = new ReturnNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        ReturnNode ret = new ReturnNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7783,7 +8243,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ReturnNode makeReturnNode(
             ExpressionNode expression)
     {
-        ReturnNode ret = new ReturnNodeImpl(expression, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ReturnNode ret = new ReturnNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7797,7 +8257,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ReturnNode ret = new ReturnNodeImpl(expression, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ReturnNode ret = new ReturnNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SimpleNameNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SimpleNameNode makeSimpleNameNode(
+            NodeUnion<? extends IdentifierNode> identifier)
+    {
+        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7808,6 +8280,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SimpleNameNode makeSimpleNameNode(
             IdentifierNode identifier)
+    {
+        SimpleNameNode ret = new SimpleNameNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SimpleNameNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SimpleNameNode makeSimpleNameNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SimpleNameNode ret = new SimpleNameNodeImpl(identifier, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7823,7 +8309,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, startLocation, stopLocation, manager, binary);
+        SimpleNameNode ret = new SimpleNameNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleElementAnnotationNode makeSingleElementAnnotationNode(
+            NodeUnion<? extends AnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+    {
+        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7835,6 +8334,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
             UnparameterizedTypeNode annotationType)
+    {
+        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(this.<AnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleElementAnnotationNode makeSingleElementAnnotationNode(
+            NodeUnion<? extends AnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7851,7 +8365,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
+        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(this.<AnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            NodeUnion<? extends MetaAnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+    {
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7863,6 +8390,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
             UnparameterizedTypeNode annotationType)
+    {
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), null, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            NodeUnion<? extends MetaAnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, null, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7879,7 +8421,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, null, startLocation, stopLocation, manager, binary);
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), null, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleStaticImportNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends IdentifierNode> identifier)
+    {
+        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7891,6 +8446,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SingleStaticImportNode makeSingleStaticImportNode(
             NameNode name,
             IdentifierNode identifier)
+    {
+        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleStaticImportNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7907,7 +8477,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager, binary);
+        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SpliceNode makeSpliceNode(
+            NodeUnion<? extends ExpressionNode> spliceExpression)
+    {
+        SpliceNode ret = new SpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7918,6 +8500,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SpliceNode makeSpliceNode(
             ExpressionNode spliceExpression)
+    {
+        SpliceNode ret = new SpliceNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(spliceExpression), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SpliceNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SpliceNode makeSpliceNode(
+            NodeUnion<? extends ExpressionNode> spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SpliceNode ret = new SpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
         return ret;
@@ -7933,7 +8529,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SpliceNode ret = new SpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        SpliceNode ret = new SpliceNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(spliceExpression), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -7990,80 +8586,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a StatementExpressionListSpliceNode.
+     * Creates a StaticImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public StatementExpressionListSpliceNode makeStatementExpressionListSpliceNode(
-            ExpressionNode spliceExpression)
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NodeUnion<? extends NameNode> name)
     {
-        StatementExpressionListSpliceNode ret = new StatementExpressionListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a StatementExpressionListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public StatementExpressionListSpliceNode makeStatementExpressionListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        StatementExpressionListSpliceNode ret = new StatementExpressionListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a StatementExpressionSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public StatementExpressionSpliceNode makeStatementExpressionSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        StatementExpressionSpliceNode ret = new StatementExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a StatementExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public StatementExpressionSpliceNode makeStatementExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        StatementExpressionSpliceNode ret = new StatementExpressionSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a StatementSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public StatementSpliceNode makeStatementSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        StatementSpliceNode ret = new StatementSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a StatementSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public StatementSpliceNode makeStatementSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        StatementSpliceNode ret = new StatementSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8074,6 +8604,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public StaticImportOnDemandNode makeStaticImportOnDemandNode(
             NameNode name)
+    {
+        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a StaticImportOnDemandNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NodeUnion<? extends NameNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8089,7 +8633,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
+        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8125,23 +8669,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public SuperFieldAccessNode makeSuperFieldAccessNode(
-            UnparameterizedTypeNode type,
-            IdentifierNode identifier)
-    {
-        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a SuperFieldAccessNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public SuperFieldAccessNode makeSuperFieldAccessNode(
-            UnparameterizedTypeNode type,
-            IdentifierNode identifier,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier)
     {
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8153,9 +8682,52 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public SuperFieldAccessNode makeSuperFieldAccessNode(
+            UnparameterizedTypeNode type,
             IdentifierNode identifier)
     {
-        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation, manager, binary);
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperFieldAccessNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperFieldAccessNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            UnparameterizedTypeNode type,
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperFieldAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            IdentifierNode identifier)
+    {
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8169,7 +8741,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation, manager, binary);
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8183,6 +8770,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8201,7 +8805,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8214,7 +8818,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8229,7 +8833,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8243,7 +8847,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8259,7 +8863,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments)
+    {
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8272,6 +8890,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
+    {
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(qualifyingExpression), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8289,7 +8923,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(qualifyingExpression), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8301,7 +8935,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             ExpressionListNode arguments)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8315,7 +8949,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SwitchNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SwitchNode makeSwitchNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends CaseListNode> cases,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        SwitchNode ret = new SwitchNodeImpl(expression, cases, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8328,6 +8976,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             CaseListNode cases,
             MetaAnnotationListNode metaAnnotations)
+    {
+        SwitchNode ret = new SwitchNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<CaseListNode>makeNormalNodeUnion(cases), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SwitchNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SwitchNode makeSwitchNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends CaseListNode> cases,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SwitchNode ret = new SwitchNodeImpl(expression, cases, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8345,7 +9009,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SwitchNode ret = new SwitchNodeImpl(expression, cases, metaAnnotations, startLocation, stopLocation, manager, binary);
+        SwitchNode ret = new SwitchNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<CaseListNode>makeNormalNodeUnion(cases), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8358,7 +9022,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             CaseListNode cases)
     {
-        SwitchNode ret = new SwitchNodeImpl(expression, cases, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        SwitchNode ret = new SwitchNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<CaseListNode>makeNormalNodeUnion(cases), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8373,7 +9037,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SwitchNode ret = new SwitchNodeImpl(expression, cases, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        SwitchNode ret = new SwitchNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<CaseListNode>makeNormalNodeUnion(cases), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SynchronizedNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SynchronizedNode makeSynchronizedNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        SynchronizedNode ret = new SynchronizedNodeImpl(expression, body, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8386,6 +9064,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             BlockStatementListNode body,
             MetaAnnotationListNode metaAnnotations)
+    {
+        SynchronizedNode ret = new SynchronizedNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SynchronizedNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SynchronizedNode makeSynchronizedNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         SynchronizedNode ret = new SynchronizedNodeImpl(expression, body, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8403,7 +9097,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SynchronizedNode ret = new SynchronizedNodeImpl(expression, body, metaAnnotations, startLocation, stopLocation, manager, binary);
+        SynchronizedNode ret = new SynchronizedNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8416,7 +9110,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             BlockStatementListNode body)
     {
-        SynchronizedNode ret = new SynchronizedNodeImpl(expression, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        SynchronizedNode ret = new SynchronizedNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8431,7 +9125,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SynchronizedNode ret = new SynchronizedNodeImpl(expression, body, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        SynchronizedNode ret = new SynchronizedNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ThisNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ThisNode makeThisNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type)
+    {
+        ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8442,6 +9148,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ThisNode makeThisNode(
             UnparameterizedTypeNode type)
+    {
+        ThisNode ret = new ThisNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ThisNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ThisNode makeThisNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8457,7 +9177,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager, binary);
+        ThisNode ret = new ThisNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8468,7 +9188,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ThisNode makeThisNode()
     {
-        ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation, manager, binary);
+        ThisNode ret = new ThisNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8481,7 +9201,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation, manager, binary);
+        ThisNode ret = new ThisNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ThrowNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ThrowNode makeThrowNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        ThrowNode ret = new ThrowNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8493,6 +9226,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ThrowNode makeThrowNode(
             ExpressionNode expression,
             MetaAnnotationListNode metaAnnotations)
+    {
+        ThrowNode ret = new ThrowNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a ThrowNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ThrowNode makeThrowNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         ThrowNode ret = new ThrowNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8509,7 +9257,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ThrowNode ret = new ThrowNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        ThrowNode ret = new ThrowNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8521,7 +9269,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ThrowNode makeThrowNode(
             ExpressionNode expression)
     {
-        ThrowNode ret = new ThrowNodeImpl(expression, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ThrowNode ret = new ThrowNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8535,7 +9283,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ThrowNode ret = new ThrowNodeImpl(expression, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ThrowNode ret = new ThrowNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a TryNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TryNode makeTryNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends CatchListNode> catches,
+            NodeUnion<? extends BlockStatementListNode> finallyBlock,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        TryNode ret = new TryNodeImpl(body, catches, finallyBlock, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8549,6 +9312,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             CatchListNode catches,
             BlockStatementListNode finallyBlock,
             MetaAnnotationListNode metaAnnotations)
+    {
+        TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a TryNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TryNode makeTryNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends CatchListNode> catches,
+            NodeUnion<? extends BlockStatementListNode> finallyBlock,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         TryNode ret = new TryNodeImpl(body, catches, finallyBlock, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8567,7 +9347,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TryNode ret = new TryNodeImpl(body, catches, finallyBlock, metaAnnotations, startLocation, stopLocation, manager, binary);
+        TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8580,7 +9360,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockStatementListNode body,
             BlockStatementListNode finallyBlock)
     {
-        TryNode ret = new TryNodeImpl(body, makeCatchListNode(), finallyBlock, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(makeCatchListNode()), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8595,7 +9375,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TryNode ret = new TryNodeImpl(body, makeCatchListNode(), finallyBlock, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(makeCatchListNode()), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8608,7 +9388,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockStatementListNode body,
             CatchListNode catches)
     {
-        TryNode ret = new TryNodeImpl(body, catches, makeBlockStatementListNode(), makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(makeBlockStatementListNode()), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8623,7 +9403,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TryNode ret = new TryNodeImpl(body, catches, makeBlockStatementListNode(), makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(makeBlockStatementListNode()), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8637,7 +9417,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             CatchListNode catches,
             BlockStatementListNode finallyBlock)
     {
-        TryNode ret = new TryNodeImpl(body, catches, finallyBlock, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8653,7 +9433,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TryNode ret = new TryNodeImpl(body, catches, finallyBlock, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8710,54 +9490,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a TypeArgumentListSpliceNode.
+     * Creates a TypeCastNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public TypeArgumentListSpliceNode makeTypeArgumentListSpliceNode(
-            ExpressionNode spliceExpression)
+    public TypeCastNode makeTypeCastNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type)
     {
-        TypeArgumentListSpliceNode ret = new TypeArgumentListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeArgumentListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeArgumentListSpliceNode makeTypeArgumentListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        TypeArgumentListSpliceNode ret = new TypeArgumentListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeArgumentSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public TypeArgumentSpliceNode makeTypeArgumentSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        TypeArgumentSpliceNode ret = new TypeArgumentSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeArgumentSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeArgumentSpliceNode makeTypeArgumentSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        TypeArgumentSpliceNode ret = new TypeArgumentSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8769,6 +9510,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeCastNode makeTypeCastNode(
             ExpressionNode expression,
             TypeNode type)
+    {
+        TypeCastNode ret = new TypeCastNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a TypeCastNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeCastNode makeTypeCastNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
         return ret;
@@ -8785,7 +9541,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
+        TypeCastNode ret = new TypeCastNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8842,28 +9598,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a TypeDeclarationListSpliceNode.
+     * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public TypeDeclarationListSpliceNode makeTypeDeclarationListSpliceNode(
-            ExpressionNode spliceExpression)
+    public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram)
     {
-        TypeDeclarationListSpliceNode ret = new TypeDeclarationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeDeclarationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeDeclarationListSpliceNode makeTypeDeclarationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        TypeDeclarationListSpliceNode ret = new TypeDeclarationListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8875,7 +9617,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a TypeDeclarationMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8889,59 +9645,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeDeclarationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public TypeDeclarationSpliceNode makeTypeDeclarationSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        TypeDeclarationSpliceNode ret = new TypeDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeDeclarationSpliceNode makeTypeDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        TypeDeclarationSpliceNode ret = new TypeDeclarationSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public TypeSpliceNode makeTypeSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        TypeSpliceNode ret = new TypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeSpliceNode makeTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        TypeSpliceNode ret = new TypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -8998,28 +9702,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a TypeParameterListSpliceNode.
+     * Creates a TypeParameterNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public TypeParameterListSpliceNode makeTypeParameterListSpliceNode(
-            ExpressionNode spliceExpression)
+    public TypeParameterNode makeTypeParameterNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends DeclaredTypeListNode> bounds)
     {
-        TypeParameterListSpliceNode ret = new TypeParameterListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeParameterListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeParameterListSpliceNode makeTypeParameterListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        TypeParameterListSpliceNode ret = new TypeParameterListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9031,6 +9722,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
             DeclaredTypeListNode bounds)
+    {
+        TypeParameterNode ret = new TypeParameterNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<DeclaredTypeListNode>makeNormalNodeUnion(bounds), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a TypeParameterNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeParameterNode makeTypeParameterNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends DeclaredTypeListNode> bounds,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9047,33 +9753,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager, binary);
+        TypeParameterNode ret = new TypeParameterNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<DeclaredTypeListNode>makeNormalNodeUnion(bounds), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a TypeParameterSpliceNode.
+     * Creates a UnaryExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public TypeParameterSpliceNode makeTypeParameterSpliceNode(
-            ExpressionNode spliceExpression)
+    public UnaryExpressionNode makeUnaryExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            UnaryOperator operator)
     {
-        TypeParameterSpliceNode ret = new TypeParameterSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeParameterSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeParameterSpliceNode makeTypeParameterSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        TypeParameterSpliceNode ret = new TypeParameterSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9085,6 +9778,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public UnaryExpressionNode makeUnaryExpressionNode(
             ExpressionNode expression,
             UnaryOperator operator)
+    {
+        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), operator, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a UnaryExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnaryExpressionNode makeUnaryExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            UnaryOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9101,7 +9809,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
+        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), operator, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            UnaryStatementOperator operator)
+    {
+        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9113,6 +9834,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
             ExpressionNode expression,
             UnaryStatementOperator operator)
+    {
+        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), operator, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            UnaryStatementOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9129,7 +9865,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
+        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9186,28 +9922,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a UnparameterizedTypeListSpliceNode.
+     * Creates a UnparameterizedTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public UnparameterizedTypeListSpliceNode makeUnparameterizedTypeListSpliceNode(
-            ExpressionNode spliceExpression)
+    public UnparameterizedTypeNode makeUnparameterizedTypeNode(
+            NodeUnion<? extends NameNode> name)
     {
-        UnparameterizedTypeListSpliceNode ret = new UnparameterizedTypeListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a UnparameterizedTypeListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public UnparameterizedTypeListSpliceNode makeUnparameterizedTypeListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        UnparameterizedTypeListSpliceNode ret = new UnparameterizedTypeListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9218,6 +9940,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public UnparameterizedTypeNode makeUnparameterizedTypeNode(
             NameNode name)
+    {
+        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a UnparameterizedTypeNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnparameterizedTypeNode makeUnparameterizedTypeNode(
+            NodeUnion<? extends NameNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9233,33 +9969,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
+        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a UnparameterizedTypeSpliceNode.
+     * Creates a UnqualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public UnparameterizedTypeSpliceNode makeUnparameterizedTypeSpliceNode(
-            ExpressionNode spliceExpression)
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            NodeUnion<? extends DeclaredTypeNode> type,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body)
     {
-        UnparameterizedTypeSpliceNode ret = new UnparameterizedTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a UnparameterizedTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public UnparameterizedTypeSpliceNode makeUnparameterizedTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        UnparameterizedTypeSpliceNode ret = new UnparameterizedTypeSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9273,6 +9998,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeArgumentListNode constructorTypeArguments,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body)
+    {
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(constructorTypeArguments), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            NodeUnion<? extends DeclaredTypeNode> type,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9291,7 +10033,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(constructorTypeArguments), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9303,7 +10045,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager, binary);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9317,7 +10059,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager, binary);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9330,7 +10072,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             DeclaredTypeNode type,
             ExpressionListNode arguments)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation, manager, binary);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9345,7 +10087,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation, manager, binary);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableAccessNode makeVariableAccessNode(
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier)
+    {
+        VariableAccessNode ret = new VariableAccessNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9357,6 +10112,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
+    {
+        VariableAccessNode ret = new VariableAccessNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableAccessNode makeVariableAccessNode(
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         VariableAccessNode ret = new VariableAccessNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9373,7 +10143,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableAccessNode ret = new VariableAccessNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
+        VariableAccessNode ret = new VariableAccessNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9385,7 +10155,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public VariableAccessNode makeVariableAccessNode(
             IdentifierNode identifier)
     {
-        VariableAccessNode ret = new VariableAccessNodeImpl(null, identifier, startLocation, stopLocation, manager, binary);
+        VariableAccessNode ret = new VariableAccessNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9399,7 +10169,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableAccessNode ret = new VariableAccessNodeImpl(null, identifier, startLocation, stopLocation, manager, binary);
+        VariableAccessNode ret = new VariableAccessNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9456,28 +10226,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a VariableDeclaratorListSpliceNode.
+     * Creates a VariableDeclaratorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableDeclaratorListSpliceNode makeVariableDeclaratorListSpliceNode(
-            ExpressionNode spliceExpression)
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            int arrayLevels,
+            NodeUnion<? extends VariableInitializerNode> initializer)
     {
-        VariableDeclaratorListSpliceNode ret = new VariableDeclaratorListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableDeclaratorListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableDeclaratorListSpliceNode makeVariableDeclaratorListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableDeclaratorListSpliceNode ret = new VariableDeclaratorListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9490,6 +10248,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             int arrayLevels,
             VariableInitializerNode initializer)
+    {
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), arrayLevels, this.<VariableInitializerNode>makeNormalNodeUnion(initializer), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableDeclaratorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            int arrayLevels,
+            NodeUnion<? extends VariableInitializerNode> initializer,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9507,7 +10281,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), arrayLevels, this.<VariableInitializerNode>makeNormalNodeUnion(initializer), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9520,7 +10294,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             VariableInitializerNode initializer)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, 0, initializer, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), 0, this.<VariableInitializerNode>makeNormalNodeUnion(initializer), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9535,33 +10309,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, 0, initializer, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableDeclaratorSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VariableDeclaratorSpliceNode makeVariableDeclaratorSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        VariableDeclaratorSpliceNode ret = new VariableDeclaratorSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableDeclaratorSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableDeclaratorSpliceNode makeVariableDeclaratorSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableDeclaratorSpliceNode ret = new VariableDeclaratorSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), 0, this.<VariableInitializerNode>makeNormalNodeUnion(initializer), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9618,58 +10366,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a VariableInitializerListSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VariableInitializerListSpliceNode makeVariableInitializerListSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        VariableInitializerListSpliceNode ret = new VariableInitializerListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableInitializerListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableInitializerListSpliceNode makeVariableInitializerListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableInitializerListSpliceNode ret = new VariableInitializerListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableInitializerSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VariableInitializerSpliceNode makeVariableInitializerSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        VariableInitializerSpliceNode ret = new VariableInitializerSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableInitializerSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableInitializerSpliceNode makeVariableInitializerSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableInitializerSpliceNode ret = new VariableInitializerSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
      * Creates a VariableListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -9722,28 +10418,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a VariableListSpliceNode.
+     * Creates a VariableModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableListSpliceNode makeVariableListSpliceNode(
-            ExpressionNode spliceExpression)
+    public VariableModifiersNode makeVariableModifiersNode(
+            boolean finalFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations)
     {
-        VariableListSpliceNode ret = new VariableListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableListSpliceNode makeVariableListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableListSpliceNode ret = new VariableListSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9756,6 +10440,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean finalFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
+    {
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableModifiersNode makeVariableModifiersNode(
+            boolean finalFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9773,7 +10473,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9784,7 +10484,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode()
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9797,33 +10497,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
     /**
-     * Creates a VariableModifiersSpliceNode.
+     * Creates a VariableNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public VariableModifiersSpliceNode makeVariableModifiersSpliceNode(
-            ExpressionNode spliceExpression)
+    public VariableNode makeVariableNode(
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier)
     {
-        VariableModifiersSpliceNode ret = new VariableModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableModifiersSpliceNode makeVariableModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableModifiersSpliceNode ret = new VariableModifiersSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9836,6 +10524,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier)
+    {
+        VariableNode ret = new VariableNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a VariableNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableNode makeVariableNode(
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9853,7 +10557,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager, binary);
+        VariableNode ret = new VariableNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9866,7 +10570,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode type,
             IdentifierNode identifier)
     {
-        VariableNode ret = new VariableNodeImpl(makeVariableModifiersNode(), type, identifier, startLocation, stopLocation, manager, binary);
+        VariableNode ret = new VariableNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(makeVariableModifiersNode()), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9881,33 +10585,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableNode ret = new VariableNodeImpl(makeVariableModifiersNode(), type, identifier, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VariableSpliceNode makeVariableSpliceNode(
-            ExpressionNode spliceExpression)
-    {
-        VariableSpliceNode ret = new VariableSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a VariableSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VariableSpliceNode makeVariableSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VariableSpliceNode ret = new VariableSpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        VariableNode ret = new VariableNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(makeVariableModifiersNode()), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9942,9 +10620,39 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public WhileLoopNode makeWhileLoopNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a WhileLoopNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public WhileLoopNode makeWhileLoopNode(
             ExpressionNode condition,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations)
+    {
+        WhileLoopNode ret = new WhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a WhileLoopNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public WhileLoopNode makeWhileLoopNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9962,7 +10670,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        WhileLoopNode ret = new WhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9975,7 +10683,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode statement)
     {
-        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        WhileLoopNode ret = new WhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -9990,7 +10698,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, makeMetaAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        WhileLoopNode ret = new WhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a WildcardTypeNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public WildcardTypeNode makeWildcardTypeNode(
+            NodeUnion<? extends ReferenceTypeNode> bound,
+            boolean upperBound)
+    {
+        WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -10002,6 +10723,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public WildcardTypeNode makeWildcardTypeNode(
             ReferenceTypeNode bound,
             boolean upperBound)
+    {
+        WildcardTypeNode ret = new WildcardTypeNodeImpl(this.<ReferenceTypeNode>makeNormalNodeUnion(bound), upperBound, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a WildcardTypeNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public WildcardTypeNode makeWildcardTypeNode(
+            NodeUnion<? extends ReferenceTypeNode> bound,
+            boolean upperBound,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager, binary);
         return ret;
@@ -10018,7 +10754,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager, binary);
+        WildcardTypeNode ret = new WildcardTypeNodeImpl(this.<ReferenceTypeNode>makeNormalNodeUnion(bound), upperBound, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

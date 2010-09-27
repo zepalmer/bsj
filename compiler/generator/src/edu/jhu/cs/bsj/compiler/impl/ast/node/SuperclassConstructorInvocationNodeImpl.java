@@ -14,19 +14,21 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements SuperclassConstructorInvocationNode
 {
     /** The qualifying expression for the enclosing object. */
-    private PrimaryExpressionNode qualifyingExpression;
+    private NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -47,25 +49,46 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     
     /** General constructor. */
     public SuperclassConstructorInvocationNodeImpl(
-            PrimaryExpressionNode qualifyingExpression,
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments,
+            NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(arguments, typeArguments, startLocation, stopLocation, manager, binary);
-        setQualifyingExpression(qualifyingExpression, false);
+        setUnionForQualifyingExpression(qualifyingExpression, false);
+    }
+    
+    /**
+     * Gets the qualifying expression for the enclosing object.  This property's value is assumed to be a normal node.
+     * @return The qualifying expression for the enclosing object.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public PrimaryExpressionNode getQualifyingExpression()
+    {
+        getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.qualifyingExpression == null)
+        {
+            return null;
+        } else
+        {
+            return this.qualifyingExpression.getNormalNode();
+        }
     }
     
     /**
      * Gets the qualifying expression for the enclosing object.
      * @return The qualifying expression for the enclosing object.
      */
-    public PrimaryExpressionNode getQualifyingExpression()
+    public NodeUnion<? extends PrimaryExpressionNode> getUnionForQualifyingExpression()
     {
         getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.qualifyingExpression == null)
+        {
+            this.qualifyingExpression = new NormalNodeUnion<PrimaryExpressionNode>(null);
+        }
         return this.qualifyingExpression;
     }
     
@@ -86,9 +109,43 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.qualifyingExpression, false);
-        this.qualifyingExpression = qualifyingExpression;
+        
+        if (this.qualifyingExpression != null)
+        {
+            setAsChild(this.qualifyingExpression.getNodeValue(), false);
+        }
+        this.qualifyingExpression = new NormalNodeUnion<PrimaryExpressionNode>(qualifyingExpression);
         setAsChild(qualifyingExpression, true);
+    }
+    
+    /**
+     * Changes the qualifying expression for the enclosing object.
+     * @param qualifyingExpression The qualifying expression for the enclosing object.
+     */
+    public void setUnionForQualifyingExpression(NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression)
+    {
+            setUnionForQualifyingExpression(qualifyingExpression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForQualifyingExpression(NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (qualifyingExpression == null)
+        {
+            throw new NullPointerException("Node union for property qualifyingExpression cannot be null.");
+        }
+        if (this.qualifyingExpression != null)
+        {
+            setAsChild(this.qualifyingExpression.getNodeValue(), false);
+        }
+        this.qualifyingExpression = qualifyingExpression;
+        setAsChild(qualifyingExpression.getNodeValue(), true);
     }
     
     /**
@@ -102,9 +159,9 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.qualifyingExpression != null)
+        if (this.qualifyingExpression.getNodeValue() != null)
         {
-            this.qualifyingExpression.receive(visitor);
+            this.qualifyingExpression.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -127,9 +184,9 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.qualifyingExpression != null)
+        if (this.qualifyingExpression.getNodeValue() != null)
         {
-            this.qualifyingExpression.receiveTyped(visitor);
+            this.qualifyingExpression.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -177,7 +234,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getQualifyingExpression(), getArguments(), getTypeArguments()});
+        return Arrays.asList(new Node[]{getUnionForQualifyingExpression().getNodeValue(), getUnionForArguments().getNodeValue(), getUnionForTypeArguments().getNodeValue()});
     }
     
     /**
@@ -190,13 +247,13 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("qualifyingExpression=");
-        sb.append(this.getQualifyingExpression() == null? "null" : this.getQualifyingExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForQualifyingExpression().getNodeValue() == null? "null" : this.getUnionForQualifyingExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("arguments=");
-        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeArguments=");
-        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForTypeArguments().getNodeValue() == null? "null" : this.getUnionForTypeArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -240,10 +297,82 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     @Override
     public SuperclassConstructorInvocationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends PrimaryExpressionNode> qualifyingExpressionCopy;
+        switch (getUnionForQualifyingExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForQualifyingExpression().getNormalNode() == null)
+                {
+                    qualifyingExpressionCopy = factory.<PrimaryExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    qualifyingExpressionCopy = factory.makeNormalNodeUnion(getUnionForQualifyingExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForQualifyingExpression().getSpliceNode() == null)
+                {
+                    qualifyingExpressionCopy = factory.<PrimaryExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    qualifyingExpressionCopy = factory.makeSpliceNodeUnion(getUnionForQualifyingExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForQualifyingExpression().getType());
+        }
+        NodeUnion<? extends ExpressionListNode> argumentsCopy;
+        switch (getUnionForArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForArguments().getNormalNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeNormalNodeUnion(getUnionForArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForArguments().getSpliceNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeSpliceNodeUnion(getUnionForArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForArguments().getType());
+        }
+        NodeUnion<? extends ReferenceTypeListNode> typeArgumentsCopy;
+        switch (getUnionForTypeArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForTypeArguments().getNormalNode() == null)
+                {
+                    typeArgumentsCopy = factory.<ReferenceTypeListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeArgumentsCopy = factory.makeNormalNodeUnion(getUnionForTypeArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTypeArguments().getSpliceNode() == null)
+                {
+                    typeArgumentsCopy = factory.<ReferenceTypeListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeArgumentsCopy = factory.makeSpliceNodeUnion(getUnionForTypeArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
+        }
         return factory.makeSuperclassConstructorInvocationNode(
-                getQualifyingExpression()==null?null:getQualifyingExpression().deepCopy(factory),
-                getArguments()==null?null:getArguments().deepCopy(factory),
-                getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
+                qualifyingExpressionCopy,
+                argumentsCopy,
+                typeArgumentsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

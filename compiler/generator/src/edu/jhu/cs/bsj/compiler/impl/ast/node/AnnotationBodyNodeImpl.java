@@ -14,17 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNode
 {
     /** The members of this annotation body. */
-    private AnnotationMemberListNode members;
+    private NodeUnion<? extends AnnotationMemberListNode> members;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -45,23 +47,44 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     
     /** General constructor. */
     public AnnotationBodyNodeImpl(
-            AnnotationMemberListNode members,
+            NodeUnion<? extends AnnotationMemberListNode> members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setMembers(members, false);
+        setUnionForMembers(members, false);
+    }
+    
+    /**
+     * Gets the members of this annotation body.  This property's value is assumed to be a normal node.
+     * @return The members of this annotation body.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnnotationMemberListNode getMembers()
+    {
+        getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.members == null)
+        {
+            return null;
+        } else
+        {
+            return this.members.getNormalNode();
+        }
     }
     
     /**
      * Gets the members of this annotation body.
      * @return The members of this annotation body.
      */
-    public AnnotationMemberListNode getMembers()
+    public NodeUnion<? extends AnnotationMemberListNode> getUnionForMembers()
     {
         getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.members == null)
+        {
+            this.members = new NormalNodeUnion<AnnotationMemberListNode>(null);
+        }
         return this.members;
     }
     
@@ -82,9 +105,43 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.members, false);
-        this.members = members;
+        
+        if (this.members != null)
+        {
+            setAsChild(this.members.getNodeValue(), false);
+        }
+        this.members = new NormalNodeUnion<AnnotationMemberListNode>(members);
         setAsChild(members, true);
+    }
+    
+    /**
+     * Changes the members of this annotation body.
+     * @param members The members of this annotation body.
+     */
+    public void setUnionForMembers(NodeUnion<? extends AnnotationMemberListNode> members)
+    {
+            setUnionForMembers(members, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMembers(NodeUnion<? extends AnnotationMemberListNode> members, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (members == null)
+        {
+            throw new NullPointerException("Node union for property members cannot be null.");
+        }
+        if (this.members != null)
+        {
+            setAsChild(this.members.getNodeValue(), false);
+        }
+        this.members = members;
+        setAsChild(members.getNodeValue(), true);
     }
     
     /**
@@ -98,9 +155,9 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.members != null)
+        if (this.members.getNodeValue() != null)
         {
-            this.members.receive(visitor);
+            this.members.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -123,9 +180,9 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.members != null)
+        if (this.members.getNodeValue() != null)
         {
-            this.members.receiveTyped(visitor);
+            this.members.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -173,7 +230,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getMembers()});
+        return Arrays.asList(new Node[]{getUnionForMembers().getNodeValue()});
     }
     
     /**
@@ -186,7 +243,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("members=");
-        sb.append(this.getMembers() == null? "null" : this.getMembers().getClass().getSimpleName());
+        sb.append(this.getUnionForMembers().getNodeValue() == null? "null" : this.getUnionForMembers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -230,8 +287,32 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     @Override
     public AnnotationBodyNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends AnnotationMemberListNode> membersCopy;
+        switch (getUnionForMembers().getType())
+        {
+            case NORMAL:
+                if (getUnionForMembers().getNormalNode() == null)
+                {
+                    membersCopy = factory.<AnnotationMemberListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    membersCopy = factory.makeNormalNodeUnion(getUnionForMembers().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMembers().getSpliceNode() == null)
+                {
+                    membersCopy = factory.<AnnotationMemberListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    membersCopy = factory.makeSpliceNodeUnion(getUnionForMembers().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
+        }
         return factory.makeAnnotationBodyNode(
-                getMembers()==null?null:getMembers().deepCopy(factory),
+                membersCopy,
                 getStartLocation(),
                 getStopLocation());
     }

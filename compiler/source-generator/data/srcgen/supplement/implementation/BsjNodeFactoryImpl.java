@@ -154,5 +154,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		}
 		return ret;
 	}
+
 	/* GEN:stop */
 }

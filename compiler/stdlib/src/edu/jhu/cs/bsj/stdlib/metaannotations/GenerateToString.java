@@ -42,7 +42,7 @@ public class GenerateToString extends AbstractPropertyListMetaannotationMetaprog
 	}
 
 	@Override
-	public void execute(Context<MetaAnnotationMetaprogramAnchorNode> context,
+	public void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
 			List<Pair<String, TypeNode>> getterDescriptions)
 	{
 		// get all the members of our enclosing class
@@ -60,7 +60,7 @@ public class GenerateToString extends AbstractPropertyListMetaannotationMetaprog
 	 * @param classIdentifier the identifier of our enclosing class.
 	 * @return a method declaration for toString.
 	 */
-	private MethodDeclarationNode createToString(Context<MetaAnnotationMetaprogramAnchorNode> context,
+	private MethodDeclarationNode createToString(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
 			List<Pair<String, TypeNode>> getters, IdentifierNode classIdentifier)
 	{
 		BsjNodeFactory factory = context.getFactory();

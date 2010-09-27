@@ -14,18 +14,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryStatementExpressionNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryStatementExpressionNode
 {
     /** The expression on which to operate. */
-    private ExpressionNode expression;
+    private NodeUnion<? extends ExpressionNode> expression;
     
     /** The operator to apply. */
     private UnaryStatementOperator operator;
@@ -51,7 +53,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     
     /** General constructor. */
     public UnaryStatementExpressionNodeImpl(
-            ExpressionNode expression,
+            NodeUnion<? extends ExpressionNode> expression,
             UnaryStatementOperator operator,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -59,17 +61,38 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setExpression(expression, false);
+        setUnionForExpression(expression, false);
         this.operator = operator;
+    }
+    
+    /**
+     * Gets the expression on which to operate.  This property's value is assumed to be a normal node.
+     * @return The expression on which to operate.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ExpressionNode getExpression()
+    {
+        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            return null;
+        } else
+        {
+            return this.expression.getNormalNode();
+        }
     }
     
     /**
      * Gets the expression on which to operate.
      * @return The expression on which to operate.
      */
-    public ExpressionNode getExpression()
+    public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
         getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.expression == null)
+        {
+            this.expression = new NormalNodeUnion<ExpressionNode>(null);
+        }
         return this.expression;
     }
     
@@ -90,9 +113,43 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.expression, false);
-        this.expression = expression;
+        
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
         setAsChild(expression, true);
+    }
+    
+    /**
+     * Changes the expression on which to operate.
+     * @param expression The expression on which to operate.
+     */
+    public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
+    {
+            setUnionForExpression(expression, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (expression == null)
+        {
+            throw new NullPointerException("Node union for property expression cannot be null.");
+        }
+        if (this.expression != null)
+        {
+            setAsChild(this.expression.getNodeValue(), false);
+        }
+        this.expression = expression;
+        setAsChild(expression.getNodeValue(), true);
     }
     
     /**
@@ -122,6 +179,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.OPERATOR).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
+        
         this.operator = operator;
     }
     
@@ -136,9 +194,9 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receive(visitor);
+            this.expression.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -161,9 +219,9 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression != null)
+        if (this.expression.getNodeValue() != null)
         {
-            this.expression.receiveTyped(visitor);
+            this.expression.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -214,7 +272,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getExpression()});
+        return Arrays.asList(new Node[]{getUnionForExpression().getNodeValue()});
     }
     
     /**
@@ -227,7 +285,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("expression=");
-        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
+        sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("operator=");
         sb.append(String.valueOf(this.getOperator()) + ":" + (this.getOperator() != null ? this.getOperator().getClass().getSimpleName() : "null"));
@@ -274,8 +332,32 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     @Override
     public UnaryStatementExpressionNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionNode> expressionCopy;
+        switch (getUnionForExpression().getType())
+        {
+            case NORMAL:
+                if (getUnionForExpression().getNormalNode() == null)
+                {
+                    expressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeNormalNodeUnion(getUnionForExpression().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForExpression().getSpliceNode() == null)
+                {
+                    expressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    expressionCopy = factory.makeSpliceNodeUnion(getUnionForExpression().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
+        }
         return factory.makeUnaryStatementExpressionNode(
-                getExpression()==null?null:getExpression().deepCopy(factory),
+                expressionCopy,
                 getOperator(),
                 getStartLocation(),
                 getStopLocation());

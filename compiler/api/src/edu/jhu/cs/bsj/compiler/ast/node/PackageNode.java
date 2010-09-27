@@ -5,6 +5,7 @@ import java.util.Iterator;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.exception.DuplicatePackageMemberException;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
@@ -21,8 +22,15 @@ public interface PackageNode extends Node
     /**
      * Gets the simple name of this package.
      * @return The simple name of this package.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getName();
+    public IdentifierNode getName() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the simple name of this package.
+     * @return A union object representing The simple name of this package.
+     */
+    public NodeUnion<? extends IdentifierNode> getUnionForName();
     
     /**
      * Generates a deep copy of this node.

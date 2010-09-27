@@ -21,13 +21,21 @@ public class MetaAnnotationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNo
 {
     /** General constructor. */
     public MetaAnnotationMetaprogramAnchorNodeImpl(
-            MetaAnnotationMetaprogramAnchorNode replacement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(replacement, startLocation, stopLocation, manager, binary);
+        super(startLocation, stopLocation, manager, binary);
+    }
+    
+    /**
+     * Gets the type of node which can replace this anchor.
+     * @return The type of node which can replace this anchor.
+     */
+    public Class<MetaAnnotationMetaprogramAnchorNode> getReplacementType()
+    {
+        return MetaAnnotationMetaprogramAnchorNode.class;
     }
     
     /**
@@ -180,4 +188,8 @@ public class MetaAnnotationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNo
         return false;
     }
     
+	public MetaAnnotationMetaprogramAnchorNode getDefaultReplacement(BsjNodeFactory factory)
+	{
+		return null;
+	}
 }

@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
@@ -27,6 +28,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.NonConflictingReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.PackageCompilationUnitAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
@@ -38,7 +40,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 public class PackageNodeImpl extends NodeImpl implements PackageNode
 {
     /** The simple name of this package. */
-    private IdentifierNode name;
+    private NodeUnion<? extends IdentifierNode> name;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -59,7 +61,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     
     /** General constructor. */
     public PackageNodeImpl(
-            IdentifierNode name,
+            NodeUnion<? extends IdentifierNode> name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -70,12 +72,33 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     }
     
     /**
-     * Gets the simple name of this package.
+     * Gets the simple name of this package.  This property's value is assumed to be a normal node.
      * @return The simple name of this package.
+     * @throws ClassCastException If this property's value is not a normal node.
      */
     public IdentifierNode getName()
     {
         getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.name == null)
+        {
+            return null;
+        } else
+        {
+            return this.name.getNormalNode();
+        }
+    }
+    
+    /**
+     * Gets the simple name of this package.
+     * @return The simple name of this package.
+     */
+    public NodeUnion<? extends IdentifierNode> getUnionForName()
+    {
+        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.name == null)
+        {
+            this.name = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.name;
     }
     
@@ -90,9 +113,9 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.name != null)
+        if (this.name.getNodeValue() != null)
         {
-            this.name.receive(visitor);
+            this.name.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -115,9 +138,9 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.name != null)
+        if (this.name.getNodeValue() != null)
         {
-            this.name.receiveTyped(visitor);
+            this.name.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -163,7 +186,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getName()});
+        return Arrays.asList(new Node[]{getUnionForName().getNodeValue()});
     }
     
     /**
@@ -176,7 +199,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("name=");
-        sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
+        sb.append(this.getUnionForName().getNodeValue() == null? "null" : this.getUnionForName().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -220,8 +243,32 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     @Override
     public PackageNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends IdentifierNode> nameCopy;
+        switch (getUnionForName().getType())
+        {
+            case NORMAL:
+                if (getUnionForName().getNormalNode() == null)
+                {
+                    nameCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    nameCopy = factory.makeNormalNodeUnion(getUnionForName().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForName().getSpliceNode() == null)
+                {
+                    nameCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    nameCopy = factory.makeSpliceNodeUnion(getUnionForName().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForName().getType());
+        }
         return factory.makePackageNode(
-                getName()==null?null:getName().deepCopy(factory),
+                nameCopy,
                 getStartLocation(),
                 getStopLocation());
     }

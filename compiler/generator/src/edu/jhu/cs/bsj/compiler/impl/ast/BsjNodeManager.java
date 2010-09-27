@@ -76,7 +76,7 @@ public class BsjNodeManager
 	 * The stack of running metaprograms. This is specifically in place to permit code to temporarily suspend the
 	 * running metaprograms' effects (by pushing <code>null</code> onto the stack).
 	 */
-	private Stack<MetaprogramProfile<?>> metaprogramStack;
+	private Stack<MetaprogramProfile<?,?>> metaprogramStack;
 	/**
 	 * The stack of permission policy managers for nodes. If this manager is <code>null</code>, any mutation is
 	 * permitted.
@@ -93,7 +93,7 @@ public class BsjNodeManager
 	 */
 	public BsjNodeManager(BsjToolkit toolkit)
 	{
-		this.metaprogramStack = new Stack<MetaprogramProfile<?>>();
+		this.metaprogramStack = new Stack<MetaprogramProfile<?,?>>();
 		this.permissionPolicyStack = new Stack<PermissionPolicyManager>();
 		this.packageNodeManager = new PackageNodeManager(toolkit);
 		this.instantiator = new MetaAnnotationObjectInstantiator(toolkit);
@@ -161,7 +161,7 @@ public class BsjNodeManager
 
 	// *** Active metaprogram tracking methods
 
-	public MetaprogramProfile<?> getCurrentMetaprogram()
+	public MetaprogramProfile<?,?> getCurrentMetaprogram()
 	{
 		if (metaprogramStack.isEmpty())
 		{
@@ -172,7 +172,7 @@ public class BsjNodeManager
 		}
 	}
 
-	public void pushCurrentMetaprogram(MetaprogramProfile<?> metaprogram)
+	public void pushCurrentMetaprogram(MetaprogramProfile<?,?> metaprogram)
 	{
 		this.metaprogramStack.push(metaprogram);
 	}
@@ -184,7 +184,7 @@ public class BsjNodeManager
 
 	public Integer getCurrentMetaprogramId()
 	{
-		MetaprogramProfile<?> metaprogram = getCurrentMetaprogram();
+		MetaprogramProfile<?,?> metaprogram = getCurrentMetaprogram();
 		return metaprogram == null ? null : metaprogram.getMetaprogram().getID();
 	}
 
@@ -291,7 +291,7 @@ public class BsjNodeManager
 	 */
 	public MetaprogramAnchorNode<?> getAnchorByID(int id)
 	{
-		MetaprogramProfile<?> profile = this.getDependencyManager().getMetaprogramProfileByID(id);
+		MetaprogramProfile<?,?> profile = this.getDependencyManager().getMetaprogramProfileByID(id);
 		return profile == null ? null : profile.getAnchor();
 	}
 

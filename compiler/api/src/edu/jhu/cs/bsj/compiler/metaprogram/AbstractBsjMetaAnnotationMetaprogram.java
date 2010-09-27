@@ -207,10 +207,10 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
 	 * 
 	 * @param context The context of the metaprogram's execution.
 	 */
-	protected abstract void execute(Context<MetaAnnotationMetaprogramAnchorNode> context);
+	protected abstract void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context);
 
 	@Override
-	public BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> getMetaprogram()
+	public BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> getMetaprogram()
 	{
 		final List<String> targets = new ArrayList<String>();
 		targets.addAll(this.permanentTargets);
@@ -228,11 +228,11 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
 
 		final MetaprogramPackageMode packageMode = this.packageMode;
 
-		return new BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode>()
+		return new BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>()
 		{
 
 			@Override
-			public void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+			public void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context)
 			{
 				AbstractBsjMetaAnnotationMetaprogram.this.execute(context);
 			}

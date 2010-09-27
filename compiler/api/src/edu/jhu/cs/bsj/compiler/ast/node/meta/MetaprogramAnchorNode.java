@@ -16,6 +16,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 public interface MetaprogramAnchorNode<T extends Node> extends Node, BsjSpecificNode
 {
     /**
+     * Gets the type of node which can replace this anchor.
+     * @return The type of node which can replace this anchor.
+     */
+    public Class<T> getReplacementType();
+    
+    /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
      * @return The resulting deep copy node.
@@ -24,14 +30,9 @@ public interface MetaprogramAnchorNode<T extends Node> extends Node, BsjSpecific
     public MetaprogramAnchorNode<T> deepCopy(BsjNodeFactory factory);
     
 	/**
-	 * Retrieves the node with which this anchor will be replaced once its metaprogram executes.
-	 * @return The replacement node to use.
+	 * Creates a node which is suitable as a default replacement for this node.
+	 * @param factory The node factory to use.
+	 * @return A suitable default replacement for this node.
 	 */
-	public T getReplacement();
-	
-	/**
-	 * Changes the node with which this anchor will be replaced once its metaprogram executes.
-	 * @param replacement The replacement node to use.
-	 */
-	public void setReplacement(T replacement);
+	public T getDefaultReplacement(BsjNodeFactory factory);
 }

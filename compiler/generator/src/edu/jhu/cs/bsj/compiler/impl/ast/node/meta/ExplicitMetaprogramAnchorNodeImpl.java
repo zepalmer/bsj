@@ -10,17 +10,19 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends MetaprogramAnchorNodeImpl<T> implements ExplicitMetaprogramAnchorNode<T>
 {
     /** The metaprogram on this node. */
-    private MetaprogramNode metaprogram;
+    private NodeUnion<? extends MetaprogramNode> metaprogram;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -41,24 +43,44 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
     
     /** General constructor. */
     protected ExplicitMetaprogramAnchorNodeImpl(
-            MetaprogramNode metaprogram,
-            T replacement,
+            NodeUnion<? extends MetaprogramNode> metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(replacement, startLocation, stopLocation, manager, binary);
-        setMetaprogram(metaprogram, false);
+        super(startLocation, stopLocation, manager, binary);
+        setUnionForMetaprogram(metaprogram, false);
+    }
+    
+    /**
+     * Gets the metaprogram on this node.  This property's value is assumed to be a normal node.
+     * @return The metaprogram on this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaprogramNode getMetaprogram()
+    {
+        getAttribute(LocalAttribute.METAPROGRAM).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaprogram == null)
+        {
+            return null;
+        } else
+        {
+            return this.metaprogram.getNormalNode();
+        }
     }
     
     /**
      * Gets the metaprogram on this node.
      * @return The metaprogram on this node.
      */
-    public MetaprogramNode getMetaprogram()
+    public NodeUnion<? extends MetaprogramNode> getUnionForMetaprogram()
     {
         getAttribute(LocalAttribute.METAPROGRAM).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaprogram == null)
+        {
+            this.metaprogram = new NormalNodeUnion<MetaprogramNode>(null);
+        }
         return this.metaprogram;
     }
     
@@ -79,9 +101,43 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.METAPROGRAM).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.metaprogram, false);
-        this.metaprogram = metaprogram;
+        
+        if (this.metaprogram != null)
+        {
+            setAsChild(this.metaprogram.getNodeValue(), false);
+        }
+        this.metaprogram = new NormalNodeUnion<MetaprogramNode>(metaprogram);
         setAsChild(metaprogram, true);
+    }
+    
+    /**
+     * Changes the metaprogram on this node.
+     * @param metaprogram The metaprogram on this node.
+     */
+    public void setUnionForMetaprogram(NodeUnion<? extends MetaprogramNode> metaprogram)
+    {
+            setUnionForMetaprogram(metaprogram, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMetaprogram(NodeUnion<? extends MetaprogramNode> metaprogram, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.METAPROGRAM).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (metaprogram == null)
+        {
+            throw new NullPointerException("Node union for property metaprogram cannot be null.");
+        }
+        if (this.metaprogram != null)
+        {
+            setAsChild(this.metaprogram.getNodeValue(), false);
+        }
+        this.metaprogram = metaprogram;
+        setAsChild(metaprogram.getNodeValue(), true);
     }
     
     /**
@@ -95,9 +151,9 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.metaprogram != null)
+        if (this.metaprogram.getNodeValue() != null)
         {
-            this.metaprogram.receive(visitor);
+            this.metaprogram.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -120,9 +176,9 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.metaprogram != null)
+        if (this.metaprogram.getNodeValue() != null)
         {
-            this.metaprogram.receiveTyped(visitor);
+            this.metaprogram.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -173,7 +229,7 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("metaprogram=");
-        sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaprogram().getNodeValue() == null? "null" : this.getUnionForMetaprogram().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing a character literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface CharLiteralNode extends LiteralNode<Character>
+public interface CharLiteralNode extends Node, LiteralNode<Character>
 {
     /**
      * Generates a deep copy of this node.

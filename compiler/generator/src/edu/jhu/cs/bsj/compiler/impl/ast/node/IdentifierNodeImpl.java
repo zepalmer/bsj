@@ -81,6 +81,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
+        
         this.identifier = identifier;
     }
     

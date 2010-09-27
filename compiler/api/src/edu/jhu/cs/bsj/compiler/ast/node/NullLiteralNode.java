@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing a null literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface NullLiteralNode extends LiteralNode<Void>
+public interface NullLiteralNode extends Node, LiteralNode<Void>
 {
     /**
      * Generates a deep copy of this node.

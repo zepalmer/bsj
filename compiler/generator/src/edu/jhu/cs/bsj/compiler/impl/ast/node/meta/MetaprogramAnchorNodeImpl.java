@@ -1,9 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
-import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -13,43 +11,26 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl implements MetaprogramAnchorNode<T>
 {
-    /** The replacement node for this metaprogram. */
-    private T replacement;
-    
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MetaprogramAnchorNodeImpl.this);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute
-    {
-        /** Attribute identifier for the replacement property. */
-        REPLACEMENT,
-    }
-    
     /** General constructor. */
     protected MetaprogramAnchorNodeImpl(
-            T replacement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.replacement = replacement;
     }
+    
+    /**
+     * Gets the type of node which can replace this anchor.
+     * @return The type of node which can replace this anchor.
+     */
+    public abstract Class<T> getReplacementType();
     
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
@@ -62,10 +43,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.replacement != null)
-        {
-            this.replacement.receive(visitor);
-        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -87,10 +64,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.replacement != null)
-        {
-            this.replacement.receiveTyped(visitor);
-        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -147,26 +120,4 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     
     
     
-	/**
-	 * Retrieves the node with which this anchor will be replaced once its metaprogram executes.
-	 * @return The replacement node to use.
-	 */
-	public T getReplacement()
-	{
-		getAttribute(LocalAttribute.REPLACEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
-		return this.replacement;
-	}
-	
-	/**
-	 * Changes the node with which this anchor will be replaced once its metaprogram executes.
-	 * @param replacement The replacement node to use.
-	 */
-	public void setReplacement(T replacement)
-	{
-		// TODO: some kind of control on this; setReplacement should probably only be called one time?
-		getAttribute(LocalAttribute.REPLACEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-		setAsChild(this.replacement, false);
-		this.replacement = replacement;
-		setAsChild(this.replacement, true);
-	}
 }

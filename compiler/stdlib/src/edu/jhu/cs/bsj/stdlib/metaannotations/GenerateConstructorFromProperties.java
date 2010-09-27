@@ -38,7 +38,7 @@ public class GenerateConstructorFromProperties extends
     }
     
     @Override
-    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context)
     {
         ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
         BsjNodeFactory factory = context.getFactory();  

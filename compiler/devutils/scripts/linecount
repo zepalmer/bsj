@@ -47,13 +47,31 @@ statsforlist()
     echo "        without comments: $(padleft "$count" 8 ' ')" 
 }
 
+perFileLineCount()
+{
+    echo "########## $2"
+    total=0
+    echo "$1" | while read line; do
+        count="$(cat "$line" | egrep -v '^$' | wc -l)"
+        total="$(($total+$count))"
+        echo "$line: $count ($total)"
+    done
+    echo "LARGE FILES:"
+    echo "$1" | while read line; do
+        count="$(cat "$line" | egrep -v '^$' | wc -l)"
+        [ "$count" -gt 999 ] && echo "***** $line: $count";
+    done
+}
+
 getstats()
 {
     files="$(find $* -type f | egrep '\.(g|java)$' | grep -v 'resources/source-code' | grep -v '.svn')"
     genfiles="$(echo "$files" | while read line; do (infile "$line" "@Generated" || infile "$line" "@javax.annotation.Generated") && echo "$line"; done)"
     ngenfiles="$(echo "$files" | while read line; do (infile "$line" "@Generated" || infile "$line" "@javax.annotation.Generated") || echo "$line"; done)"
-    #echo "Generated: $genfiles"
-    #echo "Nongen:    $ngenfiles"
+    if [ "$debug" = 'y' ]; then
+        perFileLineCount "$genfiles" "Generated files"
+        perFileLineCount "$ngenfiles" "Non-generated files"
+    fi
     echo "    Overall:"
     statsforlist "$files"
     echo "    Generated:"
@@ -62,15 +80,36 @@ getstats()
     statsforlist "$ngenfiles"
 }
 
-if [ -n "$1" -a "$#" -eq "1" ]; then
-    if [ -d "$1" ]; then
-        echo "$1:"
-        getstats "$1"
-        exit 0
-    else
-        echo "$1 does not exist"
-        exit 1
-    fi
+debug='n'
+targets=""
+
+while [ "$#" -gt 0 -a "${1:0:1}" = "-" ]; do
+    case "$1" in
+        '-d')
+            debug='y'
+            shift
+            ;;
+        *)
+            echo "Invalid argument: $1"
+            exit 1
+            ;;
+    esac
+done
+
+targets="$*"
+
+if [ -n "$targets" ]; then
+    error='n'
+    for d in $targets; do
+        if [ -d "$d" ]; then
+            echo "$d:"
+            getstats "$d"
+        else
+            echo "$d does not exist"
+            error='y'
+        fi
+    done
+    [ $error = 'y' ] && exit 1 || exit 0
 fi
 
 tdir api

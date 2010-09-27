@@ -18,13 +18,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import edu.jhu.cs.bsj.compiler.impl.utils.ConcatenatingIterable;
 import edu.jhu.cs.bsj.compiler.impl.utils.NullOutputStream;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
@@ -42,13 +41,13 @@ public class SourceGenerator
 	 * Defines the number of node operation variations that exist. Each variation takes a different number of arguments.
 	 */
 	private static final int NUMBER_OF_OPERATION_VARIATIONS = 2;
+
 	/**
-	 * Defines which special nodes exist.
+	 * The names of the types of unionable nodes.
 	 */
-	private static final String[] SPECIAL_NODES = { "SpliceNode" };
+	private static final String[] UNION_TYPE_COMPONENTS = { "Normal", "Splice" };
 
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
-	private static final File SNIPPETS_DIR = new File("data/srcgen/snippet/");
 	private static final File TARGET_DIR = new File("out/");
 
 	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList("int", "long", "boolean",
@@ -340,10 +339,13 @@ public class SourceGenerator
 	 * 
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as parameters.
+	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
+	 *            <code>false</code> otherwise.
 	 */
-	private static void printParameterList(PrependablePrintStream ps, List<PropertyDefinition> props)
+	private static void printParameterList(PrependablePrintStream ps, List<? extends ModalPropertyDefinition<?>> props,
+			boolean skipMake)
 	{
-		printParameterList(ps, props, false);
+		printParameterList(ps, props, skipMake, false);
 	}
 
 	/**
@@ -353,9 +355,11 @@ public class SourceGenerator
 	 * @param props The properties to use as parameters.
 	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
 	 *            <code>false</code> otherwise.
+	 * @param nodeUnionTypes <code>true</code> if properties which are a subtype of {@link Node} should automatically be
+	 *            wrapped in a {@link NodeUnion}; <code>false</code> otherwise.
 	 */
 	private static void printParameterList(PrependablePrintStream ps, List<? extends ModalPropertyDefinition<?>> props,
-			boolean skipMake)
+			boolean skipMake, boolean nodeUnionTypes)
 	{
 		boolean first = true;
 		ps.print("(");
@@ -373,7 +377,14 @@ public class SourceGenerator
 					}
 					first = false;
 
-					ps.print(p.getFullType() + " " + p.getName());
+					if (nodeUnionTypes && p.isWrappable())
+					{
+						ps.print("NodeUnion<? extends " + p.getFullType() + ">");
+					} else
+					{
+						ps.print(p.getFullType());
+					}
+					ps.print(" " + p.getName());
 				}
 			}
 			ps.decPrependCount(2);
@@ -479,6 +490,17 @@ public class SourceGenerator
 		ps.println("@Generated(value={\"" + SourceGenerator.class.getName() + "\"})");
 	}
 
+	private static String getUnionComponentTypeString(String typeComponent)
+	{
+		if (typeComponent.equals("Normal"))
+		{
+			return "T";
+		} else
+		{
+			return typeComponent + "Node";
+		}
+	}
+
 	/**
 	 * An interface implemented by those modules that wish to handle class definitions.
 	 */
@@ -562,17 +584,41 @@ public class SourceGenerator
 			ps.incPrependCount();
 
 			// gen getters and setters
-			for (ModalPropertyDefinition<?> p : def.getProperties())
+			for (AbstractPropertyDefinition<?> p : new ConcatenatingIterable<AbstractPropertyDefinition<?>>(
+					def.getProperties(), def.getConstants()))
 			{
-				if (!p.isHide())
+				if (!(p instanceof ModalPropertyDefinition<?>) || !((ModalPropertyDefinition<?>)p).isHide())
 				{
-					ps.println("/**");
-					ps.println(" * Gets " + p.getDescription() + ".");
-					ps.println(" * @return " + capFirst(p.getDescription()) + ".");
-					ps.println(" */");
-					ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "();");
-					ps.println();
-					if (!p.isReadOnly())
+					if (p.isWrappable())
+					{
+						ps.println("/**");
+						ps.println(" * Gets " + p.getDescription() + ".");
+						ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+						ps.println(" * @throws ClassCastException If the value of this property is a special node.");
+						ps.println(" */");
+						ps.println("public " + p.getFullType() + " get" + capFirst(p.getName())
+								+ "() throws ClassCastException;");
+						ps.println();
+
+						ps.println("/**");
+						ps.println(" * Gets the union object for " + p.getDescription() + ".");
+						ps.println(" * @return A union object representing " + capFirst(p.getDescription()) + ".");
+						ps.println(" */");
+						ps.println("public NodeUnion<? extends " + p.getFullType() + "> getUnionFor"
+								+ capFirst(p.getName()) + "();");
+						ps.println();
+					} else
+					{
+						ps.println("/**");
+						ps.println(" * Gets " + p.getDescription() + ".");
+						ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+						ps.println(" */");
+						ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "();");
+						ps.println();
+
+					}
+
+					if (p instanceof ModalPropertyDefinition<?> && !((ModalPropertyDefinition<?>)p).isReadOnly())
 					{
 						ps.println("/**");
 						ps.println(" * Changes " + p.getDescription() + ".");
@@ -581,6 +627,21 @@ public class SourceGenerator
 						ps.println("public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
 								+ p.getName() + ");");
 						ps.println();
+
+						if (p.isWrappable())
+						{
+							ps.println("/**");
+							ps.println(" * Changes " + p.getDescription() + ".");
+							ps.println(" * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
+							ps.println(" * @throws NullPointerException If the provided value is <code>null</code>.");
+							ps.println(" *                              Node union values may have <code>null</code>");
+							ps.println(" *                              contents but are never <code>null</code>");
+							ps.println(" *                              themselves.");
+							ps.println(" */");
+							ps.println("public void setUnionFor" + capFirst(p.getName()) + "(NodeUnion<? extends "
+									+ p.getFullType() + "> " + p.getName() + ") throws NullPointerException;");
+							ps.println();
+						}
 					}
 				}
 			}
@@ -1031,6 +1092,34 @@ public class SourceGenerator
 					@Override
 					public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 					{
+						ps.println("NodeUnion<? extends " + p.getFullType() + "> " + p.getName() + "Copy;");
+						ps.println("switch (getUnionFor" + capFirst(p.getName()) + "().getType())");
+						ps.println("{");
+						ps.incPrependCount();
+						for (String typeComponent : UNION_TYPE_COMPONENTS)
+						{
+							ps.println("case " + typeComponent.toUpperCase() + ":");
+							ps.incPrependCount();
+							ps.println("if (getUnionFor" + capFirst(p.getName()) + "().get" + typeComponent
+									+ "Node() == null)");
+							ps.println("{");
+							ps.println("    " + p.getName() + "Copy = factory.<" + p.getFullType() + ">make"
+									+ typeComponent + "NodeUnion(null);");
+							ps.println("} else");
+							ps.println("{");
+							ps.println("    " + p.getName() + "Copy = factory.make" + typeComponent
+									+ "NodeUnion(getUnionFor" + capFirst(p.getName()) + "().get" + typeComponent
+									+ "Node().deepCopy(factory));");
+							ps.println("}");
+							ps.println("break;");
+							ps.decPrependCount();
+						}
+						ps.println("default:");
+						ps.incPrependCount();
+						ps.println("throw new IllegalStateException(\"Unrecognized union component type: \" + getUnionFor"
+								+ capFirst(p.getName()) + "().getType());");
+						ps.decPrependCount(2);
+						ps.println("}");
 					}
 
 					@Override
@@ -1064,8 +1153,7 @@ public class SourceGenerator
 
 					public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 					{
-						ps.print("get" + capFirst(p.getName()) + "()==null?null:get" + capFirst(p.getName())
-								+ "().deepCopy(factory)");
+						ps.print(p.getName() + "Copy");
 					}
 
 					public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
@@ -1167,7 +1255,13 @@ public class SourceGenerator
 			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
 			{
 				ps.println("/** " + capFirst(p.getDescription()) + ". */");
-				ps.println("private " + p.getFullType() + " " + p.getName() + ";");
+				if (p.isWrappable())
+				{
+					ps.println("private NodeUnion<? extends " + p.getFullType() + "> " + p.getName() + ";");
+				} else
+				{
+					ps.println("private " + p.getFullType() + " " + p.getName() + ";");
+				}
 				ps.println();
 			}
 
@@ -1204,7 +1298,7 @@ public class SourceGenerator
 				ps.println("/* (not generating constructor)"); // nogen logic
 			ps.print((def.getMode() == TypeDefinition.Mode.CONCRETE ? "public" : "protected") + " " + rawclassname);
 			List<PropertyDefinition> recProps = def.getRecursiveProperties();
-			printParameterList(ps, recProps);
+			printParameterList(ps, recProps, false, true);
 			ps.println();
 			ps.println("{");
 			ps.incPrependCount();
@@ -1226,9 +1320,9 @@ public class SourceGenerator
 				{
 					expr = p.getName();
 				}
-				if (propInstanceOf(p.getBaseType(), "Node", def) && !p.isReadOnly())
+				if (p.isWrappable() && !p.isReadOnly())
 				{
-					ps.println("set" + capFirst(p.getName()) + "(" + expr + ", false);");
+					ps.println("setUnionFor" + capFirst(p.getName()) + "(" + expr + ", false);");
 				} else
 				{
 					ps.println("this." + p.getName() + " = " + expr + ";");
@@ -1272,20 +1366,78 @@ public class SourceGenerator
 			{
 				if (!p.isHide())
 				{
-					ps.println("/**");
-					ps.println(" * Gets " + p.getDescription() + ".");
-					ps.println(" * @return " + capFirst(p.getDescription()) + ".");
-					ps.println(" */");
-					ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
-					ps.println("{");
-					ps.println("    getAttribute(LocalAttribute."
-							+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
-							+ ".recordAccess(ReadWriteAttribute.AccessType.READ);");
-					ps.println("    return this." + p.getName() + ";");
-					ps.println("}");
-					ps.println();
+					if (p.isWrappable())
+					{
+						ps.println("/**");
+						ps.println(" * Gets " + p.getDescription()
+								+ ".  This property's value is assumed to be a normal node.");
+						ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+						ps.println(" * @throws ClassCastException If this property's value is not a normal node.");
+						ps.println(" */");
+						ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
+						ps.println("{");
+						ps.incPrependCount();
+						ps.println("getAttribute(LocalAttribute."
+								+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
+								+ ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+						ps.println("if (this." + p.getName() + " == null)");
+						ps.println("{");
+						ps.println("    return null;");
+						ps.println("} else");
+						ps.println("{");
+						ps.println("    return this." + p.getName() + ".getNormalNode();");
+						ps.println("}");
+						ps.decPrependCount();
+						ps.println("}");
+						ps.println();
+
+						ps.println("/**");
+						ps.println(" * Gets " + p.getDescription() + ".");
+						ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+						ps.println(" */");
+						ps.println("public NodeUnion<? extends " + p.getFullType() + "> getUnionFor"
+								+ capFirst(p.getName()) + "()");
+						ps.println("{");
+						ps.incPrependCount();
+						ps.println("getAttribute(LocalAttribute."
+								+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
+								+ ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+						ps.println("if (this." + p.getName() + " == null)");
+						ps.println("{");
+						ps.println("    this." + p.getName() + " = new NormalNodeUnion<" + p.getFullType() + ">(null);");
+						ps.println("}");
+						ps.println("return this." + p.getName() + ";");
+						ps.decPrependCount();
+						ps.println("}");
+						ps.println();
+					} else
+					{
+						ps.println("/**");
+						ps.println(" * Gets " + p.getDescription() + ".");
+						ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+						ps.println(" */");
+						ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
+						ps.println("{");
+						ps.println("    getAttribute(LocalAttribute."
+								+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
+								+ ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+						ps.println("    return this." + p.getName() + ";");
+						ps.println("}");
+						ps.println();
+					}
+
 					if (!p.isReadOnly())
 					{
+						// @formatter:off
+						final String checkPermissionsStanza = "if (checkPermissions)\n" +
+							"{\n" +
+							"    getManager().assertMutatable(this);\n" +
+							"    getAttribute(LocalAttribute." +
+								StringUtilities.convertCamelCaseToUpperCase(p.getName()) +
+								").recordAccess(ReadWriteAttribute.AccessType.WRITE);\n" +
+							"}\n";
+						// @formatter:on
+
 						ps.println("/**");
 						ps.println(" * Changes " + p.getDescription() + ".");
 						ps.println(" * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
@@ -1306,25 +1458,62 @@ public class SourceGenerator
 								+ p.getName() + ", boolean checkPermissions)");
 						ps.println("{");
 						ps.incPrependCount();
-						ps.println("if (checkPermissions)");
-						ps.println("{");
-						ps.println("    getManager().assertMutatable(this);");
-						ps.println("    getAttribute(LocalAttribute."
-								+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
-								+ ".recordAccess(ReadWriteAttribute.AccessType.WRITE);");
-						ps.println("}");
-						if (propInstanceOf(p.getBaseType(), "Node", def))
+						ps.println(checkPermissionsStanza);
+						if (p.isWrappable())
 						{
-							ps.println("setAsChild(this." + p.getName() + ", false);");
-						}
-						ps.println("this." + p.getName() + " = " + p.getName() + ";");
-						if (propInstanceOf(p.getBaseType(), "Node", def))
-						{
+							ps.println("if (this." + p.getName() + " != null)");
+							ps.println("{");
+							ps.println("    setAsChild(this." + p.getName() + ".getNodeValue(), false);");
+							ps.println("}");
+							ps.println("this." + p.getName() + " = new NormalNodeUnion<" + p.getFullType() + ">("
+									+ p.getName() + ");");
 							ps.println("setAsChild(" + p.getName() + ", true);");
+						} else
+						{
+							ps.println("this." + p.getName() + " = " + p.getName() + ";");
 						}
 						ps.decPrependCount();
 						ps.println("}");
 						ps.println();
+
+						if (p.isWrappable())
+						{
+							ps.println("/**");
+							ps.println(" * Changes " + p.getDescription() + ".");
+							ps.println(" * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
+							ps.println(" */");
+							ps.println("public void setUnionFor" + capFirst(p.getName()) + "(NodeUnion<? extends "
+									+ p.getFullType() + "> " + p.getName() + ")");
+							ps.println("{");
+							ps.incPrependCount();
+							ps.println("    setUnionFor" + capFirst(p.getName()) + "(" + p.getName() + ", true);");
+							ps.println("    getManager().notifyChange(this);");
+							ps.decPrependCount();
+							ps.println("}");
+							ps.println();
+
+							// this separation is necessary to allow the constructor to use every aspect of the setter
+							// method except for the permission check
+							ps.println("private void setUnionFor" + capFirst(p.getName()) + "(NodeUnion<? extends "
+									+ p.getFullType() + "> " + p.getName() + ", boolean checkPermissions)");
+							ps.println("{");
+							ps.incPrependCount();
+							ps.println(checkPermissionsStanza);
+							ps.println("if (" + p.getName() + " == null)");
+							ps.println("{");
+							ps.println("    throw new NullPointerException(\"Node union for property " + p.getName()
+									+ " cannot be null.\");");
+							ps.println("}");
+							ps.println("if (this." + p.getName() + " != null)");
+							ps.println("{");
+							ps.println("    setAsChild(this." + p.getName() + ".getNodeValue(), false);");
+							ps.println("}");
+							ps.println("this." + p.getName() + " = " + p.getName() + ";");
+							ps.println("setAsChild(" + p.getName() + ".getNodeValue(), true);");
+							ps.decPrependCount();
+							ps.println("}");
+							ps.println();
+						}
 					}
 				}
 			}
@@ -1350,7 +1539,13 @@ public class SourceGenerator
 			}
 			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
 			{
-				if (propInstanceOf(p.getBaseType(), "Node", def))
+				if (p.isWrappable())
+				{
+					ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
+					ps.println("{");
+					ps.println("    this." + p.getName() + ".getNodeValue().receive(visitor);");
+					ps.println("}");
+				} else if (p.isNodeType())
 				{
 					ps.println("if (this." + p.getName() + " != null)");
 					ps.println("{");
@@ -1404,7 +1599,13 @@ public class SourceGenerator
 			}
 			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
 			{
-				if (propInstanceOf(p.getBaseType(), "Node", def))
+				if (p.isWrappable())
+				{
+					ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
+					ps.println("{");
+					ps.println("    this." + p.getName() + ".getNodeValue().receiveTyped(visitor);");
+					ps.println("}");
+				} else if (p.isNodeType())
 				{
 					ps.println("if (this." + p.getName() + " != null)");
 					ps.println("{");
@@ -1441,9 +1642,9 @@ public class SourceGenerator
 						}
 						if (isNode)
 						{
-							ps.println("if (this." + p.getName() + " != null)");
+							ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
 							ps.println("{");
-							ps.println("    this." + p.getName() + ".receiveTyped(visitor);");
+							ps.println("    this." + p.getName() + ".getNodeValue().receiveTyped(visitor);");
 							ps.println("}");
 						}
 					}
@@ -1572,7 +1773,13 @@ public class SourceGenerator
 						@Override
 						public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 						{
-							ps.println("ret.add(get" + capFirst(p.getName()) + "());");
+							if (p.isWrappable())
+							{
+								ps.println("ret.add(getUnionFor" + capFirst(p.getName()) + "().getNodeValue());");
+							} else
+							{
+								ps.println("ret.add(get" + capFirst(p.getName()) + "());");
+							}
 						}
 					};
 					for (PropertyDefinition p : def.getRecursiveProperties())
@@ -1594,7 +1801,13 @@ public class SourceGenerator
 						{
 							if (!first)
 								ps.print(", ");
-							ps.print("get" + capFirst(p.getName()) + "()");
+							if (p.isWrappable())
+							{
+								ps.print("getUnionFor" + capFirst(p.getName()) + "().getNodeValue()");
+							} else
+							{
+								ps.print("get" + capFirst(p.getName()) + "()");
+							}
 							first = false;
 						}
 					};
@@ -1637,11 +1850,17 @@ public class SourceGenerator
 					}
 					String capName = Character.toUpperCase(p.getName().charAt(0)) + p.getName().substring(1);
 					ps.println("    sb.append(\"" + p.getName() + "=\");");
-					if (propInstanceOf(p.getBaseType(), "Node", def))
+					if (p.isWrappable())
+					{
+						ps.println("    sb.append(this.getUnionFor" + capName
+								+ "().getNodeValue() == null? \"null\" : this.getUnionFor" + capName
+								+ "().getNodeValue().getClass().getSimpleName());");
+					} else if (p.isNodeType())
 					{
 						ps.println("    sb.append(this.get" + capName + "() == null? \"null\" : this.get" + capName
 								+ "().getClass().getSimpleName());");
 					} else
+
 					{
 						String typeString;
 						if (PRIMITIVE_TYPES.contains(p.getBaseType()))
@@ -1651,9 +1870,9 @@ public class SourceGenerator
 						{
 							typeString = "this.get" + capName + "() != null ? this.get" + capName
 									+ "().getClass().getSimpleName() : \"null\"";
+							ps.println("    sb.append(String.valueOf(this.get" + capName + "()) + \":\" + ("
+									+ typeString + "));");
 						}
-						ps.println("    sb.append(String.valueOf(this.get" + capName + "()) + \":\" + (" + typeString
-								+ "));");
 					}
 				}
 				ps.println("    sb.append(']');");
@@ -1944,12 +2163,15 @@ public class SourceGenerator
 	{
 		/** A mapping from factory type names to their print streams. */
 		private Map<String, PrependablePrintStream> mapping;
+		/** Decides if union methods have been written yet. */
+		private boolean unionMethodsWritten;
 
 		@Override
 		public void init() throws IOException
 		{
 			super.init();
 			mapping = new HashMap<String, PrependablePrintStream>();
+			unionMethodsWritten = false;
 		}
 
 		private void ensureStreams(GenerationProfile generationProfile) throws IOException
@@ -2004,6 +2226,8 @@ public class SourceGenerator
 			PrependablePrintStream cps = getStream(def, GenerationProfile.FACTORY_CLASS_NAME);
 			PrependablePrintStream dps = getStream(def, GenerationProfile.FACTORY_DECORATOR_CLASS_NAME);
 
+			ensureUnionMethodsWritten(ips, cps, dps);
+
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
 				List<PropertyDefinition> recProps = def.getRecursiveProperties();
@@ -2018,7 +2242,7 @@ public class SourceGenerator
 						standardFactoryMethodProperties);
 				for (boolean skipMake : new boolean[] { true, false })
 				{
-					writeFactoryMethod(ips, cps, dps, def, standardFactoryDefinition, skipMake);
+					writeFactoryMethod(ips, cps, dps, def, standardFactoryDefinition, skipMake, true);
 				}
 
 				// Write extra factory methods as instructed
@@ -2026,38 +2250,51 @@ public class SourceGenerator
 				{
 					for (boolean skipMake : new boolean[] { true, false })
 					{
-						writeFactoryMethod(ips, cps, dps, def, methodDefinition, skipMake);
+						writeFactoryMethod(ips, cps, dps, def, methodDefinition, skipMake, false);
 					}
 				}
 			}
+		}
 
-			// Write special factory methods
-			for (String special : SPECIAL_NODES)
+		private void ensureUnionMethodsWritten(PrependablePrintStream ips, PrependablePrintStream cps,
+				PrependablePrintStream dps)
+		{
+			if (!unionMethodsWritten)
 			{
-				// We write the special factory method if and only if some other node has this type as a property.
-				if (!typeExistsAsProperty(def.getBaseName()))
-					continue;
-
-				if (def.getTypeParameter() != null)
-					continue;
-
-				if (def.getBaseName().equals("Node"))
-					continue;
-
-				TypeDefinition specialDef = def.getNamespaceMap().get(special);
-				TypeDefinition specialSubDef = deriveTypeDefinitionWithName(specialDef,
-						def.getBaseName().replaceAll("Node", specialDef.getBaseName()));
-				specialSubDef.setParent(specialDef);
-				List<FactoryMethodPropertyDefinition> specialFactoryMethodProperties = new ArrayList<FactoryMethodPropertyDefinition>();
-				for (ModalPropertyDefinition<?> p : specialSubDef.getRecursiveProperties())
+				unionMethodsWritten = true;
+				// Union builders
+				for (String typeComponent : UNION_TYPE_COMPONENTS)
 				{
-					specialFactoryMethodProperties.add(new FactoryMethodPropertyDefinition(p.getName(), !p.isHide()));
-				}
-				FactoryMethodDefinition specialFactoryMethodDefinition = new EnumeratedFactoryMethodDefinition(
-						specialFactoryMethodProperties);
-				for (boolean skipMake : new boolean[] { true, false })
-				{
-					writeFactoryMethod(ips, cps, dps, specialSubDef, specialFactoryMethodDefinition, skipMake);
+					// Union interface method
+					ips.println("/**");
+					ips.println(" * Creates a {@link NodeUnion} value containing a " + typeComponent.toLowerCase()
+							+ " node.");
+					ips.println(" * @param node The node to use.");
+					ips.println(" * @return The resulting node union.");
+					ips.println(" */");
+					ips.println("public <T extends Node> NodeUnion<T> make" + typeComponent + "NodeUnion("
+							+ getUnionComponentTypeString(typeComponent) + " node);");
+					ips.println();
+
+					// Union backing class method
+					cps.println("/**");
+					cps.println(" * {@inheritDoc}");
+					cps.println(" */");
+					cps.println("public <T extends Node> NodeUnion<T> make" + typeComponent + "NodeUnion("
+							+ getUnionComponentTypeString(typeComponent) + " node)");
+					cps.println("{");
+					cps.println("    return new " + typeComponent + "NodeUnion<T>(node);");
+					cps.println("}");
+
+					// Union decorator method
+					dps.println("/**");
+					dps.println(" * {@inheritDoc}");
+					dps.println(" */");
+					dps.println("public <T extends Node> NodeUnion<T> make" + typeComponent + "NodeUnion("
+							+ getUnionComponentTypeString(typeComponent) + " node)");
+					dps.println("{");
+					dps.println("    return factory.make" + typeComponent + "NodeUnion(node);");
+					dps.println("}");
 				}
 			}
 		}
@@ -2076,7 +2313,7 @@ public class SourceGenerator
 
 		private void writeFactoryMethod(PrependablePrintStream ips, PrependablePrintStream cps,
 				PrependablePrintStream dps, TypeDefinition def, FactoryMethodDefinition methodDefinition,
-				boolean skipMake)
+				boolean skipMake, boolean allowVerbatim)
 		{
 			String typeParam;
 			String typeName;
@@ -2127,61 +2364,23 @@ public class SourceGenerator
 				ps.incPrependCount();
 			}
 
-			// Write documentation
-			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
+			if (allowVerbatim)
 			{
-				ps.println("/**");
-				ps.println(" * Creates a " + def.getBaseName() + ".");
-				if (!skipMake)
-				{
-					ps.println(" * The specified start and stop locations are used.");
-				} else
-				{
-					ps.println(" * The start and stop locations which have been set as properties of this factory are used.");
-				}
-				ps.println(" */");
+				handleFactoryMethodSet(ips, cps, dps, def, methodDefinition, skipMake, typeName, typeArg, typeParamS,
+						factoryOverrideMap, recProps, argProps, true);
 			}
 
-			// Write interface method description
-			ips.print("public " + typeParamS + typeName + " make" + def.getBaseName());
-			printParameterList(ips, argProps, skipMake);
-			ips.println(";");
-			ips.println();
-
-			// Write backing class implementation
-			cps.println("@Override");
-			cps.print("public " + typeParamS + typeName + " make" + def.getBaseName());
-			printParameterList(cps, argProps, skipMake);
-			cps.println();
-			cps.println("{");
-			cps.incPrependCount();
-			String classname = def.getBaseName() + "Impl" + typeArg;
-			cps.print(typeName + " ret = new " + classname);
-
-			printFactoryArgumentList(cps, recProps, factoryOverrideMap, methodDefinition, def);
-
-			cps.println(";");
-			cps.println("return ret;");
-			cps.decPrependCount();
-			cps.println("}");
-			cps.println();
-
-			// Write decorator implementation
-			dps.println("@Override");
-			dps.print("public " + typeParamS + typeName + " make" + def.getBaseName());
-			printParameterList(dps, argProps, skipMake);
-			dps.println();
-			dps.println("{");
-			dps.incPrependCount();
-			dps.println("this.before();");
-			dps.print(typeName + " node = factory.make" + def.getBaseName());
-			printArgumentList(dps, argProps, skipMake);
-			dps.println(";");
-			dps.println("this.after(node);");
-			dps.println("return node;");
-			dps.decPrependCount();
-			dps.println("}");
-			dps.println();
+			// Write a convenience method for nodes which contain only normal children?
+			boolean hasWrappedNodeChild = false;
+			for (PropertyDefinition p : argProps)
+			{
+				hasWrappedNodeChild |= p.isWrappable();
+			}
+			if (hasWrappedNodeChild || !allowVerbatim)
+			{
+				handleFactoryMethodSet(ips, cps, dps, def, methodDefinition, skipMake, typeName, typeArg, typeParamS,
+						factoryOverrideMap, recProps, argProps, false);
+			}
 
 			// Special ListNode constructor
 			if (this.<TypeDefinition, PropertyDefinition> propInstanceOf(def.getFullName(), "ListNode", null))
@@ -2215,7 +2414,7 @@ public class SourceGenerator
 					}
 				}
 				fakeProps.add(new PropertyDefinition(listDef.getName() + "Elements", listDef.getTypeArg() + "...",
-						null, ModalPropertyDefinition.Mode.NORMAL, "", listDef.getDefaultExpression()));
+						null, ModalPropertyDefinition.Mode.NORMAL, "", listDef.getDefaultExpression(), false));
 
 				// Write interface method description
 				ips.print("public " + typeName + " make" + def.getBaseName());
@@ -2262,8 +2461,70 @@ public class SourceGenerator
 			}
 		}
 
+		private void handleFactoryMethodSet(PrependablePrintStream ips, PrependablePrintStream cps,
+				PrependablePrintStream dps, TypeDefinition def, FactoryMethodDefinition methodDefinition,
+				boolean skipMake, String typeName, String typeArg, String typeParamS,
+				Map<String, String> factoryOverrideMap, List<PropertyDefinition> recProps,
+				List<PropertyDefinition> argProps, boolean nodeUnionType)
+		{
+			// Write documentation
+			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
+			{
+				ps.println("/**");
+				ps.println(" * Creates a " + def.getBaseName() + ".");
+				if (!skipMake)
+				{
+					ps.println(" * The specified start and stop locations are used.");
+				} else
+				{
+					ps.println(" * The start and stop locations which have been set as properties of this factory are used.");
+				}
+				ps.println(" */");
+			}
+
+			// Write interface method description
+			ips.print("public " + typeParamS + typeName + " make" + def.getBaseName());
+			printParameterList(ips, argProps, skipMake, nodeUnionType);
+			ips.println(";");
+			ips.println();
+
+			// Write backing class implementation
+			cps.println("@Override");
+			cps.print("public " + typeParamS + typeName + " make" + def.getBaseName());
+			printParameterList(cps, argProps, skipMake, nodeUnionType);
+			cps.println();
+			cps.println("{");
+			cps.incPrependCount();
+			String classname = def.getBaseName() + "Impl" + typeArg;
+			cps.print(typeName + " ret = new " + classname);
+			printFactoryArgumentList(cps, recProps, factoryOverrideMap, methodDefinition, def, !nodeUnionType);
+			cps.println(";");
+			cps.println("return ret;");
+			cps.decPrependCount();
+			cps.println("}");
+			cps.println();
+
+			// Write decorator implementation
+			dps.println("@Override");
+			dps.print("public " + typeParamS + typeName + " make" + def.getBaseName());
+			printParameterList(dps, argProps, skipMake, nodeUnionType);
+			dps.println();
+			dps.println("{");
+			dps.incPrependCount();
+			dps.println("this.before();");
+			dps.print(typeName + " node = factory.make" + def.getBaseName());
+			printArgumentList(dps, argProps, skipMake);
+			dps.println(";");
+			dps.println("this.after(node);");
+			dps.println("return node;");
+			dps.decPrependCount();
+			dps.println("}");
+			dps.println();
+		}
+
 		private void printFactoryArgumentList(PrintStream ps, List<PropertyDefinition> props,
-				Map<String, String> overrideMap, FactoryMethodDefinition methodDefinition, TypeDefinition def)
+				Map<String, String> overrideMap, FactoryMethodDefinition methodDefinition, TypeDefinition def,
+				boolean nodeUnionType)
 		{
 			boolean first = true;
 			ps.print("(");
@@ -2274,24 +2535,36 @@ public class SourceGenerator
 					ps.print(", ");
 				}
 				first = false;
+
+				final boolean needToWrapExpression;
+				final String expressionText;
 				if (overrideMap.containsKey(p.getName()))
 				{
-					ps.print(overrideMap.get(p.getName()).trim());
+					needToWrapExpression = p.isWrappable();
+					expressionText = overrideMap.get(p.getName()).trim();
 				} else if (methodDefinition.isVisible(p.getName()))
 				{
-					ps.print(p.getName());
+					needToWrapExpression = p.isWrappable() && nodeUnionType;
+					expressionText = p.getName();
 				} else if (p.getDefaultExpression() != null)
 				{
-					ps.print(p.getDefaultExpression());
+					needToWrapExpression = p.isWrappable();
+					expressionText = p.getDefaultExpression();
 				} else if (p.isSkipMake())
 				{
 					// If the property is skip make, assume it will be supplied anyway
-					ps.print(p.getName());
+					needToWrapExpression = p.isWrappable();
+					expressionText = p.getName();
 				} else
 				{
 					throw new IllegalStateException("Property " + p.getName() + " is invisible in factory method of "
 							+ def.getBaseName() + " with no default.");
 				}
+				if (needToWrapExpression)
+					ps.print("this.<" + p.getFullType() + ">makeNormalNodeUnion(");
+				ps.print(expressionText);
+				if (needToWrapExpression)
+					ps.print(")");
 			}
 			ps.print(")");
 		}
@@ -3729,275 +4002,137 @@ public class SourceGenerator
 		}
 	}
 
-	/**
-	 * A module which creates special nodes.
-	 */
-	public static class SpecialNodeWriter extends AbstractBackingClassWriter
+	public static class UnionWriter extends ClassHierarchyBuildingHandler
 	{
-		private static final Pattern METHOD_HEADER_PATTERN;
-		static
-		{
-			final String modifiersPart = "((?:(?:public|private|protected|abstract|final) )*)";
-			final String typeParamsPart = "(<[^>]> )?";
-			final String returnTypePart = "([]A-Za-z0-9<>\\[]+ )";
-			final String signaturePart = "([A-Za-z0-9_]+\\([^\\)]*\\))";
-			METHOD_HEADER_PATTERN = Pattern.compile(modifiersPart + typeParamsPart + returnTypePart + signaturePart);
-		}
-		private static final int METHOD_HEADER_MODIFIERS_GROUP = 1;
-		private static final int METHOD_HEADER_TYPE_PARAMS_GROUP = 2;
-		private static final int METHOD_HEADER_RETURN_TYPE_GROUP = 3;
-		private static final int METHOD_HEADER_SIGNATURE_GROUP = 4;
-
 		@Override
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			if (!typeExistsAsProperty(def.getBaseName()))
-			{
-				return;
-			}
-
-			if (def.getTypeParameter() != null)
-			{
-				return;
-			}
-
-			if (def.getBaseName().equals("Node"))
-			{
-				return;
-			}
-
-			for (final String specialNodeName : SPECIAL_NODES)
-			{
-				Writer writer = new Writer(specialNodeName, def);
-				writer.writeInterface();
-				writer.writeBackingClass();
-			}
 		}
 
-		private class Writer
+		@Override
+		public void finish() throws IOException
 		{
-			private final String specialNodeName;
-			private final String rawinterfacename;
-			private final String interfacename;
-			private final TypeDefinition def;
-			private final TypeDefinition specialDef;
-			private final TypeDefinition specialSubDef;
-			private final String rawclassname;
-			private final String classname;
-			private final String superclassname;
-			private final String exceptionName;
+			super.finish();
 
-			public Writer(String specialNodeName, TypeDefinition def)
+			writeInterface();
+			writeImplementation();
+		}
+
+		private void writeInterface() throws IOException
+		{
+			final String javadoc = "/**\n"
+					+ " * Represents a union type between a normal AST node and the special quasi-node values (splice and error nodes).\n"
+					+ " * @author Zachary Palmer\n"
+					+ " * @param <T> The type of normal node that this union represents if it represents a normal node.\n"
+					+ " */\n";
+			PrependablePrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", Mode.INTERFACE,
+					Project.GENERATOR, SupplementCategory.GENERAL, "NodeUnion<T extends Node>", false, javadoc, null);
+			ps.incPrependCount();
+
+			ps.println("/**");
+			ps.println(" * Retrieves the node value from this union.  This method will retrieve whatever object is stored in this union,");
+			ps.println(" * regardless of its type.");
+			ps.println(" * @return The object stored in this union.");
+			ps.println(" */");
+			ps.println("public Node getNodeValue();");
+			ps.println();
+
+			for (String typeComponent : UNION_TYPE_COMPONENTS)
 			{
-				this.specialNodeName = specialNodeName;
-				this.def = def;
-				this.rawinterfacename = def.getBaseName().replaceAll("Node", specialNodeName);
-				this.interfacename = this.rawinterfacename + this.def.getTypeParameterWithDelimiters();
-				this.specialDef = def.getNamespaceMap().get(specialNodeName);
-				this.specialSubDef = deriveTypeDefinitionWithName(this.specialDef, this.rawinterfacename);
-				this.rawclassname = rawinterfacename + "Impl";
-				this.classname = this.rawclassname + def.getTypeParameterWithDelimiters();
-				this.superclassname = this.specialNodeName + "Impl";
-				this.exceptionName = this.specialNodeName + "AccessException";
-			}
-
-			private void writeInterface() throws IOException
-			{
-				String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
-
-				// Write interface
-				PrependablePrintStream ps = createOutputFile(pkg, Mode.INTERFACE,
-						def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT), SupplementCategory.NODE,
-						interfacename, false, null, null, def.getName(), specialDef.getName());
-				ps.incPrependCount();
-
 				ps.println("/**");
-				ps.println(" * Generates a deep copy of this node.");
-				ps.println(" * @param factory The node factory to use to create the deep copy.");
-				ps.println(" * @return The resulting deep copy node.");
+				ps.println(" * Retrieves the " + typeComponent.toLowerCase()
+						+ " node value from this union.  If this union does not represent a "
+						+ typeComponent.toLowerCase() + " node value, an");
+				ps.println(" * exception is thrown.");
+				ps.println(" * @return The " + typeComponent.toLowerCase() + " node value of this union.");
+				ps.println(" * @throws ClassCastException If this node union does not represent a "
+						+ typeComponent.toLowerCase() + " node.");
 				ps.println(" */");
-				ps.println("public " + rawinterfacename + " deepCopy(BsjNodeFactory factory);");
+				ps.println("public " + getUnionComponentTypeString(typeComponent) + " get" + typeComponent
+						+ "Node() throws ClassCastException;");
 				ps.println();
-
-				ps.decPrependCount();
-				ps.println("}");
 			}
 
-			private void writeBackingClass() throws IOException
+			ps.println("/**");
+			ps.println(" * Determines the type of object contained in this union.");
+			ps.println(" * @return An enum value describing the type of object contained in this union.");
+			ps.println(" */");
+			ps.println("public Type getType();");
+			ps.println();
+
+			ps.println("/**");
+			ps.println(" * An enumeration listing the types of objects which can be contained in a {@link NodeUnion}.");
+			ps.println(" */");
+			ps.println("public static enum Type");
+			ps.println("{");
+			for (String typeComponent : UNION_TYPE_COMPONENTS)
 			{
-				Set<String> implementedMethodSignatures = new HashSet<String>();
+				ps.println(typeComponent.toUpperCase() + ",");
+			}
+			ps.println("}");
+			ps.println();
 
-				String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME).replaceAll(
-						"\\.node", "." + specialNodeName.toLowerCase());
+			ps.decPrependCount();
+			ps.println("}");
+		}
 
-				// Write backing class
-				PrependablePrintStream ps = createOutputFile(pkg, Mode.CONCRETE, Project.GENERATOR,
-						SupplementCategory.NODE, classname, false, null, superclassname, interfacename);
+		private void writeImplementation() throws IOException
+		{
+			for (String typeComponent : UNION_TYPE_COMPONENTS)
+			{
+				PrependablePrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.ast", Mode.CONCRETE,
+						Project.GENERATOR, SupplementCategory.GENERAL, typeComponent + "NodeUnion<T extends Node>",
+						false, "/**\n * Represents a {@link NodeUnion} containing a " + typeComponent.toLowerCase()
+								+ " value.\n */\n", null, "NodeUnion<T>");
 				ps.incPrependCount();
 
-				// Inherited wrapper constructor
-				ps.println("/** General constructor. */");
-				if (!specialDef.isGenConstructor())
-					ps.println("/* (not generating constructor)"); // nogen logic
-				ps.print("public " + rawclassname);
-				List<PropertyDefinition> recProps = specialDef.getRecursiveProperties();
-				printParameterList(ps, recProps);
+				final String type = getUnionComponentTypeString(typeComponent);
+				ps.println("private " + type + " node;");
 				ps.println();
+				ps.println("public " + typeComponent + "NodeUnion(" + type + " node)");
 				ps.println("{");
 				ps.incPrependCount();
-				ps.print("super");
-				printArgumentList(ps, recProps, specialDef.getConstructorOverrideMap());
-				ps.println(";");
+				ps.println("super();");
+				ps.println("this.node = node;");
 				ps.decPrependCount();
 				ps.println("}");
-				if (!def.isGenConstructor())
-					ps.print("*/"); // nogen logic
 				ps.println();
-
-				// Property exception methods
-				Set<AbstractPropertyDefinition<?>> props = new HashSet<AbstractPropertyDefinition<?>>(
-						def.getRecursiveProperties());
-				props.addAll(def.getConstants());
-				props.removeAll(specialDef.getRecursiveProperties());
-				props.removeAll(specialDef.getConstants());
-
-				for (AbstractPropertyDefinition<?> p : props)
+				ps.println("@Override");
+				ps.println("public Node getNodeValue()");
+				ps.println("{");
+				ps.println("    return this.node;");
+				ps.println("}");
+				ps.println();
+				for (String typeComponentInner : UNION_TYPE_COMPONENTS)
 				{
-					ps.println("/**");
-					ps.println(" * Implements the underlying property getter method by raising an exception.");
-					ps.println(" * @returns Nothing; an exception is always raised.");
-					ps.println(" * @throws " + exceptionName + " Always.");
-					ps.println(" */");
-					final String getterSignature = "get" + capFirst(p.getName()) + "()";
-					ps.println("public " + p.getFullType() + " " + getterSignature);
+					ps.println("@Override");
+					ps.println("public " + getUnionComponentTypeString(typeComponentInner) + " get"
+							+ typeComponentInner + "Node() throws ClassCastException");
 					ps.println("{");
-					ps.println("    "
-							+ getExceptionRaisingStatementString("Attempted to get property \"" + p.getName()
-									+ "\" from a splice node."));
+					ps.incPrependCount();
+					if (typeComponent.equals(typeComponentInner))
+					{
+						ps.println("return this.node;");
+					} else
+					{
+						ps.println("throw new ClassCastException(\"Attempted to retrieve "
+								+ typeComponent.toLowerCase() + " node value as a " + typeComponentInner.toLowerCase()
+								+ " node value.\");");
+					}
+					ps.decPrependCount();
 					ps.println("}");
 					ps.println();
-
-					implementedMethodSignatures.add(getterSignature);
-
-					if (p instanceof ModalPropertyDefinition && !((ModalPropertyDefinition<?>) p).isReadOnly())
-					{
-						ps.println("/**");
-						ps.println(" * Implements the underlying property settter method by raising an exception.");
-						ps.println(" * @param arg Ignored.");
-						ps.println(" * @throws " + exceptionName + " Always.");
-						ps.println(" */");
-						final String setterSignature = "set" + capFirst(p.getName()) + "(" + p.getFullType() + " arg)";
-						ps.println("public void " + setterSignature);
-						ps.println("{");
-						ps.println("    "
-								+ getExceptionRaisingStatementString("Attempted to set property \"" + p.getName()
-										+ "\" from a splice node."));
-						ps.println("}");
-						ps.println();
-
-						implementedMethodSignatures.add(setterSignature);
-					}
 				}
-
-				// Write a deep copy implementation
-				ps.println("/**");
-				ps.println(" * Generates a deep copy of this node.");
-				ps.println(" * @param factory The node factory to use to create the deep copy.");
-				ps.println(" * @return The resulting deep copy node.");
-				ps.println(" */");
-				if (def.getBaseSuperName() != null)
-					ps.println("@Override");
-				ps.println("public " + rawinterfacename + " deepCopy(BsjNodeFactory factory)");
+				ps.println("@Override");
+				ps.println("public Type getType()");
 				ps.println("{");
-				ps.incPrependCount();
-				writeDeepCopyBody(specialSubDef, ps, recProps);
-				ps.decPrependCount();
+				ps.println("    return Type." + typeComponent.toUpperCase() + ";");
 				ps.println("}");
 				ps.println();
 
-				// Add implementation of list interface if necessary
-				if (defInstanceOf(def, "ListNode"))
-				{
-					String include = readIncludedFileParts(new File(SNIPPETS_DIR.getPath() + File.separator
-							+ "ListNodeImpl.java"), "start", "stop");
-					include = include.replace("${METHOD_BODY}",
-							getExceptionRaisingStatementString("Attempting to invoke List method on a splice node."));
-
-					Map<String, String> typeArgMap = def.getTypeArgMap();
-					if (typeArgMap.containsKey("T"))
-					{
-						include = include.replaceAll("T([^A-Za-z0-9])", typeArgMap.get("T") + "$1");
-					}
-
-					ps.println(include);
-				}
-
-				// Add any applicable included methods
-				Set<TypeDefinition> types = SpecialNodeWriter.super.getDefTypes(def);
-				types.removeAll(SpecialNodeWriter.super.getDefTypes(specialDef));
-				for (TypeDefinition def : types)
-				{
-					for (String include : def.getIncludes())
-					{
-						File f = new File(getSupplementDir(Project.API, SupplementCategory.NODE).getPath()
-								+ File.separator + include);
-						String includeString = readIncludedFileParts(f, "start", "stop");
-						processIncludeString(ps, implementedMethodSignatures, includeString);
-					}
-				}
-
 				ps.decPrependCount();
 				ps.println("}");
-			}
-
-			private void processIncludeString(PrependablePrintStream ps, Set<String> methodSignatures,
-					String includeString)
-			{
-				includeString = includeString.replaceAll("\\s+", " ");
-
-				Matcher methodMatcher = METHOD_HEADER_PATTERN.matcher(includeString);
-				int searchIndex = 0;
-				while (methodMatcher.find(searchIndex))
-				{
-					searchIndex = methodMatcher.end();
-					String methodSignature = methodMatcher.group(METHOD_HEADER_SIGNATURE_GROUP);
-					if (methodSignatures.add(methodSignature))
-					{
-						// then we've never seen this signature before
-						String methodModifiers = methodMatcher.group(METHOD_HEADER_MODIFIERS_GROUP);
-						if (methodModifiers == null)
-							methodModifiers = "";
-						String methodTypeParams = methodMatcher.group(METHOD_HEADER_TYPE_PARAMS_GROUP);
-						if (methodTypeParams == null)
-							methodTypeParams = "";
-						String methodReturnType = methodMatcher.group(METHOD_HEADER_RETURN_TYPE_GROUP);
-
-						methodModifiers = methodModifiers.replaceAll("abstract ", "");
-						for (Map.Entry<String, String> entry : this.def.getTypeArgMap().entrySet())
-						{
-							final String typeParam = entry.getKey();
-							final String typeArg = entry.getValue();
-							methodReturnType = methodReturnType.replaceAll(typeParam + "([^A-Za-z0-9_])", typeArg
-									+ "$1");
-							methodSignature = methodSignature.replaceAll(typeParam + "([^A-Za-z0-9_])", typeArg + "$1");
-						}
-						String method = "/** Raises an exception. */\n"
-								+ methodModifiers
-								+ methodTypeParams
-								+ methodReturnType
-								+ methodSignature
-								+ "\n{\n    "
-								+ getExceptionRaisingStatementString("Attempting to invoke node method on a splice node.")
-								+ "\n}\n";
-						ps.println(method);
-					}
-				}
-			}
-
-			private String getExceptionRaisingStatementString(String message)
-			{
-				String escapedMessage = message.replace("\\", "\\\\").replace("\"", "\\\"");
-				return "throw new " + this.exceptionName + "(\"" + escapedMessage + "\");";
+				ps.close();
 			}
 		}
 	}

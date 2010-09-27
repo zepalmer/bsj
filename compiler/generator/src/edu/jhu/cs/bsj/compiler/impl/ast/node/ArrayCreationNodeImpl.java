@@ -10,17 +10,19 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCreationNode
 {
     /** The base type for this array. */
-    private BaseTypeNode baseType;
+    private NodeUnion<? extends BaseTypeNode> baseType;
     
     /** The number of uninitialized levels for this array. */
     private int arrayLevels;
@@ -46,7 +48,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     
     /** General constructor. */
     protected ArrayCreationNodeImpl(
-            BaseTypeNode baseType,
+            NodeUnion<? extends BaseTypeNode> baseType,
             int arrayLevels,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -54,17 +56,38 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setBaseType(baseType, false);
+        setUnionForBaseType(baseType, false);
         this.arrayLevels = arrayLevels;
+    }
+    
+    /**
+     * Gets the base type for this array.  This property's value is assumed to be a normal node.
+     * @return The base type for this array.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public BaseTypeNode getBaseType()
+    {
+        getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.baseType == null)
+        {
+            return null;
+        } else
+        {
+            return this.baseType.getNormalNode();
+        }
     }
     
     /**
      * Gets the base type for this array.
      * @return The base type for this array.
      */
-    public BaseTypeNode getBaseType()
+    public NodeUnion<? extends BaseTypeNode> getUnionForBaseType()
     {
         getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.baseType == null)
+        {
+            this.baseType = new NormalNodeUnion<BaseTypeNode>(null);
+        }
         return this.baseType;
     }
     
@@ -85,9 +108,43 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.baseType, false);
-        this.baseType = baseType;
+        
+        if (this.baseType != null)
+        {
+            setAsChild(this.baseType.getNodeValue(), false);
+        }
+        this.baseType = new NormalNodeUnion<BaseTypeNode>(baseType);
         setAsChild(baseType, true);
+    }
+    
+    /**
+     * Changes the base type for this array.
+     * @param baseType The base type for this array.
+     */
+    public void setUnionForBaseType(NodeUnion<? extends BaseTypeNode> baseType)
+    {
+            setUnionForBaseType(baseType, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBaseType(NodeUnion<? extends BaseTypeNode> baseType, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (baseType == null)
+        {
+            throw new NullPointerException("Node union for property baseType cannot be null.");
+        }
+        if (this.baseType != null)
+        {
+            setAsChild(this.baseType.getNodeValue(), false);
+        }
+        this.baseType = baseType;
+        setAsChild(baseType.getNodeValue(), true);
     }
     
     /**
@@ -117,6 +174,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
+        
         this.arrayLevels = arrayLevels;
     }
     
@@ -131,9 +189,9 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.baseType != null)
+        if (this.baseType.getNodeValue() != null)
         {
-            this.baseType.receive(visitor);
+            this.baseType.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -156,9 +214,9 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.baseType != null)
+        if (this.baseType.getNodeValue() != null)
         {
-            this.baseType.receiveTyped(visitor);
+            this.baseType.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -210,10 +268,9 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("baseType=");
-        sb.append(this.getBaseType() == null? "null" : this.getBaseType().getClass().getSimpleName());
+        sb.append(this.getUnionForBaseType().getNodeValue() == null? "null" : this.getUnionForBaseType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("arrayLevels=");
-        sb.append(String.valueOf(this.getArrayLevels()) + ":" + ("int"));
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

@@ -31,7 +31,7 @@ public class MakeSingleton extends AbstractBsjMetaAnnotationMetaprogram
     }
     
     @Override
-    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context)
     {
         // get all the members of our enclosing class
         ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);

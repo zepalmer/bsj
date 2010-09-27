@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 
 /**
@@ -19,14 +20,31 @@ public interface ArrayInstantiatorCreationNode extends ArrayCreationNode
     /**
      * Gets the dimension expressions for this array.
      * @return The dimension expressions for this array.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionListNode getDimExpressions();
+    public ExpressionListNode getDimExpressions() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the dimension expressions for this array.
+     * @return A union object representing The dimension expressions for this array.
+     */
+    public NodeUnion<? extends ExpressionListNode> getUnionForDimExpressions();
     
     /**
      * Changes the dimension expressions for this array.
      * @param dimExpressions The dimension expressions for this array.
      */
     public void setDimExpressions(ExpressionListNode dimExpressions);
+    
+    /**
+     * Changes the dimension expressions for this array.
+     * @param dimExpressions The dimension expressions for this array.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForDimExpressions(NodeUnion<? extends ExpressionListNode> dimExpressions) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

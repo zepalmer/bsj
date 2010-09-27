@@ -12,7 +12,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NoOperationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -23,14 +25,22 @@ public class InterfaceMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
 {
     /** General constructor. */
     public InterfaceMemberMetaprogramAnchorNodeImpl(
-            MetaprogramNode metaprogram,
-            InterfaceMemberNode replacement,
+            NodeUnion<? extends MetaprogramNode> metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(metaprogram, replacement, startLocation, stopLocation, manager, binary);
+        super(metaprogram, startLocation, stopLocation, manager, binary);
+    }
+    
+    /**
+     * Gets the type of node which can replace this anchor.
+     * @return The type of node which can replace this anchor.
+     */
+    public Class<InterfaceMemberNode> getReplacementType()
+    {
+        return InterfaceMemberNode.class;
     }
     
     /**
@@ -114,7 +124,7 @@ public class InterfaceMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getMetaprogram()});
+        return Arrays.asList(new Node[]{getUnionForMetaprogram().getNodeValue()});
     }
     
     /**
@@ -127,7 +137,7 @@ public class InterfaceMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("metaprogram=");
-        sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaprogram().getNodeValue() == null? "null" : this.getUnionForMetaprogram().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -171,8 +181,32 @@ public class InterfaceMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
     @Override
     public InterfaceMemberMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends MetaprogramNode> metaprogramCopy;
+        switch (getUnionForMetaprogram().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaprogram().getNormalNode() == null)
+                {
+                    metaprogramCopy = factory.<MetaprogramNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaprogramCopy = factory.makeNormalNodeUnion(getUnionForMetaprogram().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaprogram().getSpliceNode() == null)
+                {
+                    metaprogramCopy = factory.<MetaprogramNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaprogramCopy = factory.makeSpliceNodeUnion(getUnionForMetaprogram().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaprogram().getType());
+        }
         return factory.makeInterfaceMemberMetaprogramAnchorNode(
-                getMetaprogram()==null?null:getMetaprogram().deepCopy(factory),
+                metaprogramCopy,
                 getStartLocation(),
                 getStopLocation());
     }
@@ -196,4 +230,8 @@ public class InterfaceMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
         return false;
     }
     
+	public NoOperationNode getDefaultReplacement(BsjNodeFactory factory)
+	{
+		return factory.makeNoOperationNode();
+	}
 }

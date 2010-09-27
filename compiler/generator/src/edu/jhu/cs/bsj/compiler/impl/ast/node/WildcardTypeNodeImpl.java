@@ -14,17 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
 {
     /** The wildcard's bound. */
-    private ReferenceTypeNode bound;
+    private NodeUnion<? extends ReferenceTypeNode> bound;
     
     /** Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound. */
     private boolean upperBound;
@@ -50,7 +52,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     
     /** General constructor. */
     public WildcardTypeNodeImpl(
-            ReferenceTypeNode bound,
+            NodeUnion<? extends ReferenceTypeNode> bound,
             boolean upperBound,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -58,17 +60,38 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setBound(bound, false);
+        setUnionForBound(bound, false);
         this.upperBound = upperBound;
+    }
+    
+    /**
+     * Gets the wildcard's bound.  This property's value is assumed to be a normal node.
+     * @return The wildcard's bound.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public ReferenceTypeNode getBound()
+    {
+        getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.bound == null)
+        {
+            return null;
+        } else
+        {
+            return this.bound.getNormalNode();
+        }
     }
     
     /**
      * Gets the wildcard's bound.
      * @return The wildcard's bound.
      */
-    public ReferenceTypeNode getBound()
+    public NodeUnion<? extends ReferenceTypeNode> getUnionForBound()
     {
         getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.bound == null)
+        {
+            this.bound = new NormalNodeUnion<ReferenceTypeNode>(null);
+        }
         return this.bound;
     }
     
@@ -89,9 +112,43 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.bound, false);
-        this.bound = bound;
+        
+        if (this.bound != null)
+        {
+            setAsChild(this.bound.getNodeValue(), false);
+        }
+        this.bound = new NormalNodeUnion<ReferenceTypeNode>(bound);
         setAsChild(bound, true);
+    }
+    
+    /**
+     * Changes the wildcard's bound.
+     * @param bound The wildcard's bound.
+     */
+    public void setUnionForBound(NodeUnion<? extends ReferenceTypeNode> bound)
+    {
+            setUnionForBound(bound, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBound(NodeUnion<? extends ReferenceTypeNode> bound, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (bound == null)
+        {
+            throw new NullPointerException("Node union for property bound cannot be null.");
+        }
+        if (this.bound != null)
+        {
+            setAsChild(this.bound.getNodeValue(), false);
+        }
+        this.bound = bound;
+        setAsChild(bound.getNodeValue(), true);
     }
     
     /**
@@ -121,6 +178,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.UPPER_BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
+        
         this.upperBound = upperBound;
     }
     
@@ -135,9 +193,9 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.bound != null)
+        if (this.bound.getNodeValue() != null)
         {
-            this.bound.receive(visitor);
+            this.bound.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -160,9 +218,9 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.bound != null)
+        if (this.bound.getNodeValue() != null)
         {
-            this.bound.receiveTyped(visitor);
+            this.bound.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -211,7 +269,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getBound()});
+        return Arrays.asList(new Node[]{getUnionForBound().getNodeValue()});
     }
     
     /**
@@ -224,10 +282,9 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("bound=");
-        sb.append(this.getBound() == null? "null" : this.getBound().getClass().getSimpleName());
+        sb.append(this.getUnionForBound().getNodeValue() == null? "null" : this.getUnionForBound().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("upperBound=");
-        sb.append(String.valueOf(this.getUpperBound()) + ":" + ("boolean"));
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -271,8 +328,32 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     @Override
     public WildcardTypeNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ReferenceTypeNode> boundCopy;
+        switch (getUnionForBound().getType())
+        {
+            case NORMAL:
+                if (getUnionForBound().getNormalNode() == null)
+                {
+                    boundCopy = factory.<ReferenceTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    boundCopy = factory.makeNormalNodeUnion(getUnionForBound().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBound().getSpliceNode() == null)
+                {
+                    boundCopy = factory.<ReferenceTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    boundCopy = factory.makeSpliceNodeUnion(getUnionForBound().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBound().getType());
+        }
         return factory.makeWildcardTypeNode(
-                getBound()==null?null:getBound().deepCopy(factory),
+                boundCopy,
                 getUpperBound(),
                 getStartLocation(),
                 getStopLocation());

@@ -4,6 +4,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
@@ -23,14 +24,31 @@ public interface NameNode extends Node
     /**
      * Gets the identifier used in this name.
      * @return The identifier used in this name.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier();
+    public IdentifierNode getIdentifier() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the identifier used in this name.
+     * @return A union object representing The identifier used in this name.
+     */
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier();
     
     /**
      * Changes the identifier used in this name.
      * @param identifier The identifier used in this name.
      */
     public void setIdentifier(IdentifierNode identifier);
+    
+    /**
+     * Changes the identifier used in this name.
+     * @param identifier The identifier used in this name.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

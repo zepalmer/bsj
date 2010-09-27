@@ -1,8 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -15,10 +17,31 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.DoubleLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements DoubleLiteralNode
+public class DoubleLiteralNodeImpl extends NodeImpl implements DoubleLiteralNode
 {
+    /** The literal value for this node. */
+    private Double value;
+    
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
+    {
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(DoubleLiteralNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the value property. */
+        VALUE,
+    }
+    
     /** General constructor. */
     public DoubleLiteralNodeImpl(
             Double value,
@@ -27,7 +50,39 @@ public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements Do
             BsjNodeManager manager,
             boolean binary)
     {
-        super(value, startLocation, stopLocation, manager, binary);
+        super(startLocation, stopLocation, manager, binary);
+        this.value = value;
+    }
+    
+    /**
+     * Gets the literal value for this node.
+     * @return The literal value for this node.
+     */
+    public Double getValue()
+    {
+        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        return this.value;
+    }
+    
+    /**
+     * Changes the literal value for this node.
+     * @param value The literal value for this node.
+     */
+    public void setValue(Double value)
+    {
+            setValue(value, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setValue(Double value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        this.value = value;
     }
     
     /**
@@ -77,13 +132,13 @@ public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements Do
     {
         visitor.visitStartBegin(this);
         visitor.visitDoubleLiteralNodeStart(this, true);
-        visitor.visitLiteralNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitLiteralNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStop(this);
         visitor.visitLiteralNodeStop(this);
+        visitor.visitNodeStop(this);
         visitor.visitDoubleLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }

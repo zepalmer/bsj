@@ -14,18 +14,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedNameNode
 {
     /** The name being qualified. */
-    private NameNode base;
+    private NodeUnion<? extends NameNode> base;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -46,24 +48,45 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     
     /** General constructor. */
     public QualifiedNameNodeImpl(
-            NameNode base,
-            IdentifierNode identifier,
+            NodeUnion<? extends NameNode> base,
+            NodeUnion<? extends IdentifierNode> identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(identifier, startLocation, stopLocation, manager, binary);
-        setBase(base, false);
+        setUnionForBase(base, false);
+    }
+    
+    /**
+     * Gets the name being qualified.  This property's value is assumed to be a normal node.
+     * @return The name being qualified.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public NameNode getBase()
+    {
+        getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.base == null)
+        {
+            return null;
+        } else
+        {
+            return this.base.getNormalNode();
+        }
     }
     
     /**
      * Gets the name being qualified.
      * @return The name being qualified.
      */
-    public NameNode getBase()
+    public NodeUnion<? extends NameNode> getUnionForBase()
     {
         getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.base == null)
+        {
+            this.base = new NormalNodeUnion<NameNode>(null);
+        }
         return this.base;
     }
     
@@ -84,9 +107,43 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.base, false);
-        this.base = base;
+        
+        if (this.base != null)
+        {
+            setAsChild(this.base.getNodeValue(), false);
+        }
+        this.base = new NormalNodeUnion<NameNode>(base);
         setAsChild(base, true);
+    }
+    
+    /**
+     * Changes the name being qualified.
+     * @param base The name being qualified.
+     */
+    public void setUnionForBase(NodeUnion<? extends NameNode> base)
+    {
+            setUnionForBase(base, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBase(NodeUnion<? extends NameNode> base, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (base == null)
+        {
+            throw new NullPointerException("Node union for property base cannot be null.");
+        }
+        if (this.base != null)
+        {
+            setAsChild(this.base.getNodeValue(), false);
+        }
+        this.base = base;
+        setAsChild(base.getNodeValue(), true);
     }
     
     /**
@@ -100,9 +157,9 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.base != null)
+        if (this.base.getNodeValue() != null)
         {
-            this.base.receive(visitor);
+            this.base.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -125,9 +182,9 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.base != null)
+        if (this.base.getNodeValue() != null)
         {
-            this.base.receiveTyped(visitor);
+            this.base.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -175,7 +232,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getBase(), getIdentifier()});
+        return Arrays.asList(new Node[]{getUnionForBase().getNodeValue(), getUnionForIdentifier().getNodeValue()});
     }
     
     /**
@@ -236,9 +293,57 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     @Override
     public QualifiedNameNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends NameNode> baseCopy;
+        switch (getUnionForBase().getType())
+        {
+            case NORMAL:
+                if (getUnionForBase().getNormalNode() == null)
+                {
+                    baseCopy = factory.<NameNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    baseCopy = factory.makeNormalNodeUnion(getUnionForBase().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBase().getSpliceNode() == null)
+                {
+                    baseCopy = factory.<NameNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    baseCopy = factory.makeSpliceNodeUnion(getUnionForBase().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBase().getType());
+        }
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
         return factory.makeQualifiedNameNode(
-                getBase()==null?null:getBase().deepCopy(factory),
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                baseCopy,
+                identifierCopy,
                 getStartLocation(),
                 getStopLocation());
     }

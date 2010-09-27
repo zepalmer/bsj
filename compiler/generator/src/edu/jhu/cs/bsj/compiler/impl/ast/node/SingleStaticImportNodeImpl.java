@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStaticImportNode
 {
     /** The name of the type from which to import. */
-    private NameNode name;
+    private NodeUnion<? extends NameNode> name;
     
     /** The identifier to import from that type. */
-    private IdentifierNode identifier;
+    private NodeUnion<? extends IdentifierNode> identifier;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     
     /** General constructor. */
     public SingleStaticImportNodeImpl(
-            NameNode name,
-            IdentifierNode identifier,
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends IdentifierNode> identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setName(name, false);
-        setIdentifier(identifier, false);
+        setUnionForName(name, false);
+        setUnionForIdentifier(identifier, false);
+    }
+    
+    /**
+     * Gets the name of the type from which to import.  This property's value is assumed to be a normal node.
+     * @return The name of the type from which to import.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public NameNode getName()
+    {
+        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.name == null)
+        {
+            return null;
+        } else
+        {
+            return this.name.getNormalNode();
+        }
     }
     
     /**
      * Gets the name of the type from which to import.
      * @return The name of the type from which to import.
      */
-    public NameNode getName()
+    public NodeUnion<? extends NameNode> getUnionForName()
     {
         getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.name == null)
+        {
+            this.name = new NormalNodeUnion<NameNode>(null);
+        }
         return this.name;
     }
     
@@ -90,18 +113,73 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.name, false);
-        this.name = name;
+        
+        if (this.name != null)
+        {
+            setAsChild(this.name.getNodeValue(), false);
+        }
+        this.name = new NormalNodeUnion<NameNode>(name);
         setAsChild(name, true);
+    }
+    
+    /**
+     * Changes the name of the type from which to import.
+     * @param name The name of the type from which to import.
+     */
+    public void setUnionForName(NodeUnion<? extends NameNode> name)
+    {
+            setUnionForName(name, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForName(NodeUnion<? extends NameNode> name, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (name == null)
+        {
+            throw new NullPointerException("Node union for property name cannot be null.");
+        }
+        if (this.name != null)
+        {
+            setAsChild(this.name.getNodeValue(), false);
+        }
+        this.name = name;
+        setAsChild(name.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the identifier to import from that type.  This property's value is assumed to be a normal node.
+     * @return The identifier to import from that type.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            return null;
+        } else
+        {
+            return this.identifier.getNormalNode();
+        }
     }
     
     /**
      * Gets the identifier to import from that type.
      * @return The identifier to import from that type.
      */
-    public IdentifierNode getIdentifier()
+    public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
         getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.identifier == null)
+        {
+            this.identifier = new NormalNodeUnion<IdentifierNode>(null);
+        }
         return this.identifier;
     }
     
@@ -122,9 +200,43 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.identifier, false);
-        this.identifier = identifier;
+        
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
         setAsChild(identifier, true);
+    }
+    
+    /**
+     * Changes the identifier to import from that type.
+     * @param identifier The identifier to import from that type.
+     */
+    public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
+    {
+            setUnionForIdentifier(identifier, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (identifier == null)
+        {
+            throw new NullPointerException("Node union for property identifier cannot be null.");
+        }
+        if (this.identifier != null)
+        {
+            setAsChild(this.identifier.getNodeValue(), false);
+        }
+        this.identifier = identifier;
+        setAsChild(identifier.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.name != null)
+        if (this.name.getNodeValue() != null)
         {
-            this.name.receive(visitor);
+            this.name.getNodeValue().receive(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receive(visitor);
+            this.identifier.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.name != null)
+        if (this.name.getNodeValue() != null)
         {
-            this.name.receiveTyped(visitor);
+            this.name.getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier != null)
+        if (this.identifier.getNodeValue() != null)
         {
-            this.identifier.receiveTyped(visitor);
+            this.identifier.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -222,7 +334,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getName(), getIdentifier()});
+        return Arrays.asList(new Node[]{getUnionForName().getNodeValue(), getUnionForIdentifier().getNodeValue()});
     }
     
     /**
@@ -235,10 +347,10 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("name=");
-        sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
+        sb.append(this.getUnionForName().getNodeValue() == null? "null" : this.getUnionForName().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -282,9 +394,57 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     @Override
     public SingleStaticImportNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends NameNode> nameCopy;
+        switch (getUnionForName().getType())
+        {
+            case NORMAL:
+                if (getUnionForName().getNormalNode() == null)
+                {
+                    nameCopy = factory.<NameNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    nameCopy = factory.makeNormalNodeUnion(getUnionForName().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForName().getSpliceNode() == null)
+                {
+                    nameCopy = factory.<NameNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    nameCopy = factory.makeSpliceNodeUnion(getUnionForName().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForName().getType());
+        }
+        NodeUnion<? extends IdentifierNode> identifierCopy;
+        switch (getUnionForIdentifier().getType())
+        {
+            case NORMAL:
+                if (getUnionForIdentifier().getNormalNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeNormalNodeUnion(getUnionForIdentifier().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForIdentifier().getSpliceNode() == null)
+                {
+                    identifierCopy = factory.<IdentifierNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    identifierCopy = factory.makeSpliceNodeUnion(getUnionForIdentifier().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
+        }
         return factory.makeSingleStaticImportNode(
-                getName()==null?null:getName().deepCopy(factory),
-                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                nameCopy,
+                identifierCopy,
                 getStartLocation(),
                 getStopLocation());
     }

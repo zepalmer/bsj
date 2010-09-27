@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 
 /**
@@ -34,8 +35,15 @@ public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
     /**
      * Gets the parameterized type from which a type is selected.
      * @return The parameterized type from which a type is selected.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public ParameterizedTypeNode getBase();
+    public ParameterizedTypeNode getBase() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the parameterized type from which a type is selected.
+     * @return A union object representing The parameterized type from which a type is selected.
+     */
+    public NodeUnion<? extends ParameterizedTypeNode> getUnionForBase();
     
     /**
      * Changes the parameterized type from which a type is selected.
@@ -44,16 +52,43 @@ public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
     public void setBase(ParameterizedTypeNode base);
     
     /**
+     * Changes the parameterized type from which a type is selected.
+     * @param base The parameterized type from which a type is selected.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForBase(NodeUnion<? extends ParameterizedTypeNode> base) throws NullPointerException;
+    
+    /**
      * Gets the type which is selected from the base.
      * @return The type which is selected from the base.
+     * @throws ClassCastException If the value of this property is a special node.
      */
-    public DeclaredTypeNode getSelect();
+    public DeclaredTypeNode getSelect() throws ClassCastException;
+    
+    /**
+     * Gets the union object for the type which is selected from the base.
+     * @return A union object representing The type which is selected from the base.
+     */
+    public NodeUnion<? extends DeclaredTypeNode> getUnionForSelect();
     
     /**
      * Changes the type which is selected from the base.
      * @param select The type which is selected from the base.
      */
     public void setSelect(DeclaredTypeNode select);
+    
+    /**
+     * Changes the type which is selected from the base.
+     * @param select The type which is selected from the base.
+     * @throws NullPointerException If the provided value is <code>null</code>.
+     *                              Node union values may have <code>null</code>
+     *                              contents but are never <code>null</code>
+     *                              themselves.
+     */
+    public void setUnionForSelect(NodeUnion<? extends DeclaredTypeNode> select) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

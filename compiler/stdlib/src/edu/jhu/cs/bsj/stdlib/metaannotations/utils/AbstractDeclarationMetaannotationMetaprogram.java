@@ -39,9 +39,9 @@ public abstract class AbstractDeclarationMetaannotationMetaprogram<T extends Nod
 		this.clazz = clazz;
 	}
 
-	protected abstract void execute(Context<MetaAnnotationMetaprogramAnchorNode> context, T declaration);
+	protected abstract void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context, T declaration);
 	
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context) {
+	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context) {
 		Node greatGreatGrandparent = Utility.getAncestor(context.getAnchor(), 4);
 		T declaration;
 		if (clazz.isInstance(greatGreatGrandparent)) {

@@ -94,5 +94,6 @@ public interface BsjNodeFactory
 	 * @throws IllegalArgumentException If the provided level count is non-positive.
 	 */
 	public ArrayTypeNode wrapArrayLevels(TypeNode type, int levels);
+	
 	/* GEN:stop */
 }

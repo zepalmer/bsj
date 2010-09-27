@@ -14,25 +14,27 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDeclarationNode
 {
     /** The name of the package. */
-    private NameNode name;
+    private NodeUnion<? extends NameNode> name;
     
     /** The meta-annotations on the package declaration. */
-    private MetaAnnotationListNode metaAnnotations;
+    private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
     /** The annotations on the package declaration. */
-    private AnnotationListNode annotations;
+    private NodeUnion<? extends AnnotationListNode> annotations;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -57,27 +59,48 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     
     /** General constructor. */
     public PackageDeclarationNodeImpl(
-            NameNode name,
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setName(name, false);
-        setMetaAnnotations(metaAnnotations, false);
-        setAnnotations(annotations, false);
+        setUnionForName(name, false);
+        setUnionForMetaAnnotations(metaAnnotations, false);
+        setUnionForAnnotations(annotations, false);
+    }
+    
+    /**
+     * Gets the name of the package.  This property's value is assumed to be a normal node.
+     * @return The name of the package.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public NameNode getName()
+    {
+        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.name == null)
+        {
+            return null;
+        } else
+        {
+            return this.name.getNormalNode();
+        }
     }
     
     /**
      * Gets the name of the package.
      * @return The name of the package.
      */
-    public NameNode getName()
+    public NodeUnion<? extends NameNode> getUnionForName()
     {
         getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.name == null)
+        {
+            this.name = new NormalNodeUnion<NameNode>(null);
+        }
         return this.name;
     }
     
@@ -98,18 +121,73 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.name, false);
-        this.name = name;
+        
+        if (this.name != null)
+        {
+            setAsChild(this.name.getNodeValue(), false);
+        }
+        this.name = new NormalNodeUnion<NameNode>(name);
         setAsChild(name, true);
+    }
+    
+    /**
+     * Changes the name of the package.
+     * @param name The name of the package.
+     */
+    public void setUnionForName(NodeUnion<? extends NameNode> name)
+    {
+            setUnionForName(name, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForName(NodeUnion<? extends NameNode> name, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (name == null)
+        {
+            throw new NullPointerException("Node union for property name cannot be null.");
+        }
+        if (this.name != null)
+        {
+            setAsChild(this.name.getNodeValue(), false);
+        }
+        this.name = name;
+        setAsChild(name.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the meta-annotations on the package declaration.  This property's value is assumed to be a normal node.
+     * @return The meta-annotations on the package declaration.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            return null;
+        } else
+        {
+            return this.metaAnnotations.getNormalNode();
+        }
     }
     
     /**
      * Gets the meta-annotations on the package declaration.
      * @return The meta-annotations on the package declaration.
      */
-    public MetaAnnotationListNode getMetaAnnotations()
+    public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
         getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.metaAnnotations == null)
+        {
+            this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
+        }
         return this.metaAnnotations;
     }
     
@@ -130,18 +208,73 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.metaAnnotations, false);
-        this.metaAnnotations = metaAnnotations;
+        
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
         setAsChild(metaAnnotations, true);
+    }
+    
+    /**
+     * Changes the meta-annotations on the package declaration.
+     * @param metaAnnotations The meta-annotations on the package declaration.
+     */
+    public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
+    {
+            setUnionForMetaAnnotations(metaAnnotations, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (metaAnnotations == null)
+        {
+            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+        }
+        if (this.metaAnnotations != null)
+        {
+            setAsChild(this.metaAnnotations.getNodeValue(), false);
+        }
+        this.metaAnnotations = metaAnnotations;
+        setAsChild(metaAnnotations.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the annotations on the package declaration.  This property's value is assumed to be a normal node.
+     * @return The annotations on the package declaration.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnnotationListNode getAnnotations()
+    {
+        getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.annotations == null)
+        {
+            return null;
+        } else
+        {
+            return this.annotations.getNormalNode();
+        }
     }
     
     /**
      * Gets the annotations on the package declaration.
      * @return The annotations on the package declaration.
      */
-    public AnnotationListNode getAnnotations()
+    public NodeUnion<? extends AnnotationListNode> getUnionForAnnotations()
     {
         getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.annotations == null)
+        {
+            this.annotations = new NormalNodeUnion<AnnotationListNode>(null);
+        }
         return this.annotations;
     }
     
@@ -162,9 +295,43 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.annotations, false);
-        this.annotations = annotations;
+        
+        if (this.annotations != null)
+        {
+            setAsChild(this.annotations.getNodeValue(), false);
+        }
+        this.annotations = new NormalNodeUnion<AnnotationListNode>(annotations);
         setAsChild(annotations, true);
+    }
+    
+    /**
+     * Changes the annotations on the package declaration.
+     * @param annotations The annotations on the package declaration.
+     */
+    public void setUnionForAnnotations(NodeUnion<? extends AnnotationListNode> annotations)
+    {
+            setUnionForAnnotations(annotations, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForAnnotations(NodeUnion<? extends AnnotationListNode> annotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (annotations == null)
+        {
+            throw new NullPointerException("Node union for property annotations cannot be null.");
+        }
+        if (this.annotations != null)
+        {
+            setAsChild(this.annotations.getNodeValue(), false);
+        }
+        this.annotations = annotations;
+        setAsChild(annotations.getNodeValue(), true);
     }
     
     /**
@@ -178,17 +345,17 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.name != null)
+        if (this.name.getNodeValue() != null)
         {
-            this.name.receive(visitor);
+            this.name.getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receive(visitor);
+            this.metaAnnotations.getNodeValue().receive(visitor);
         }
-        if (this.annotations != null)
+        if (this.annotations.getNodeValue() != null)
         {
-            this.annotations.receive(visitor);
+            this.annotations.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -211,17 +378,17 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.name != null)
+        if (this.name.getNodeValue() != null)
         {
-            this.name.receiveTyped(visitor);
+            this.name.getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations != null)
+        if (this.metaAnnotations.getNodeValue() != null)
         {
-            this.metaAnnotations.receiveTyped(visitor);
+            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
         }
-        if (this.annotations != null)
+        if (this.annotations.getNodeValue() != null)
         {
-            this.annotations.receiveTyped(visitor);
+            this.annotations.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -273,7 +440,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getName(), getMetaAnnotations(), getAnnotations()});
+        return Arrays.asList(new Node[]{getUnionForName().getNodeValue(), getUnionForMetaAnnotations().getNodeValue(), getUnionForAnnotations().getNodeValue()});
     }
     
     /**
@@ -286,13 +453,13 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("name=");
-        sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
+        sb.append(this.getUnionForName().getNodeValue() == null? "null" : this.getUnionForName().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("annotations=");
-        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append(this.getUnionForAnnotations().getNodeValue() == null? "null" : this.getUnionForAnnotations().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -336,10 +503,82 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     @Override
     public PackageDeclarationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends NameNode> nameCopy;
+        switch (getUnionForName().getType())
+        {
+            case NORMAL:
+                if (getUnionForName().getNormalNode() == null)
+                {
+                    nameCopy = factory.<NameNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    nameCopy = factory.makeNormalNodeUnion(getUnionForName().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForName().getSpliceNode() == null)
+                {
+                    nameCopy = factory.<NameNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    nameCopy = factory.makeSpliceNodeUnion(getUnionForName().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForName().getType());
+        }
+        NodeUnion<? extends MetaAnnotationListNode> metaAnnotationsCopy;
+        switch (getUnionForMetaAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForMetaAnnotations().getNormalNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeNormalNodeUnion(getUnionForMetaAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForMetaAnnotations().getSpliceNode() == null)
+                {
+                    metaAnnotationsCopy = factory.<MetaAnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    metaAnnotationsCopy = factory.makeSpliceNodeUnion(getUnionForMetaAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
+        }
+        NodeUnion<? extends AnnotationListNode> annotationsCopy;
+        switch (getUnionForAnnotations().getType())
+        {
+            case NORMAL:
+                if (getUnionForAnnotations().getNormalNode() == null)
+                {
+                    annotationsCopy = factory.<AnnotationListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    annotationsCopy = factory.makeNormalNodeUnion(getUnionForAnnotations().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForAnnotations().getSpliceNode() == null)
+                {
+                    annotationsCopy = factory.<AnnotationListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    annotationsCopy = factory.makeSpliceNodeUnion(getUnionForAnnotations().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotations().getType());
+        }
         return factory.makePackageDeclarationNode(
-                getName()==null?null:getName().deepCopy(factory),
-                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
-                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
+                nameCopy,
+                metaAnnotationsCopy,
+                annotationsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

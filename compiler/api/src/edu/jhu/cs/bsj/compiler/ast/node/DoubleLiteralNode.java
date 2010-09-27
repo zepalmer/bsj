@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing a double literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface DoubleLiteralNode extends LiteralNode<Double>
+public interface DoubleLiteralNode extends Node, LiteralNode<Double>
 {
     /**
      * Generates a deep copy of this node.

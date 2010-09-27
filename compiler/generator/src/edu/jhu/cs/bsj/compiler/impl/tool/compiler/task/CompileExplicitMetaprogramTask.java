@@ -72,7 +72,7 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
  * @author Zachary Palmer
  */
 public class CompileExplicitMetaprogramTask<R extends Node> extends
-		AbstractMetaprogramProfileBuildingTask<ExplicitMetaprogramAnchorNode<R>>
+		AbstractMetaprogramProfileBuildingTask<ExplicitMetaprogramAnchorNode<R>, R>
 {
 	/** The packages which should be imported by metaprograms. */
 	private static String[] IMPORT_PACKAGES = { "edu.jhu.cs.bsj.compiler.impl.metaprogram",
@@ -87,7 +87,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 	}
 
 	@Override
-	protected MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>> buildProfile(
+	protected MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>, R> buildProfile(
 			MetacompilationContext metacompilationContext) throws IOException
 	{
 		// It is possible for this task to be added several times for a given metaprogram node before it is executed.
@@ -207,24 +207,25 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		anchor.setMetaprogram(null);
 
 		// now build the metaprogram itself
-		Context<ExplicitMetaprogramAnchorNode<R>> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>>(anchor,
-				factory, new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
-						this.anchor.getStartLocation()), loader);
+		Context<ExplicitMetaprogramAnchorNode<R>, R> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>, R>(
+				anchor, anchor.getDefaultReplacement(factory), factory, new BsjUserDiagnosticTranslatingListener(
+						this.metacompilationContext.getDiagnosticListener(), this.anchor.getStartLocation()), loader);
 
-		Metaprogram<ExplicitMetaprogramAnchorNode<R>> metaprogram = compileMetaprogram(metaprogramNode,
-				anchor.getClass().getName(), this.metacompilationContext.getDiagnosticListener());
+		Metaprogram<ExplicitMetaprogramAnchorNode<R>, R> metaprogram = compileMetaprogram(metaprogramNode,
+				anchor.getClass().getName(), anchor.getReplacementType().getName(),
+				this.metacompilationContext.getDiagnosticListener());
 
 		if (metaprogram == null)
 		{
 			return null;
 		}
 
-		return new MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>>(metaprogram, anchor, dependencies,
+		return new MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>, R>(metaprogram, anchor, dependencies,
 				qualifiedTargetNames, localMode, packageMode, context, injectionInfo.isPurelyInjected());
 	}
 
-	private <A extends ExplicitMetaprogramAnchorNode<? extends Node>> Metaprogram<A> compileMetaprogram(
-			MetaprogramNode metaprogramNode, String anchorClassName,
+	private <A extends ExplicitMetaprogramAnchorNode<B>, B extends Node> Metaprogram<A, B> compileMetaprogram(
+			MetaprogramNode metaprogramNode, String anchorClassName, String replacementClassName,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException
 	{
 		String metaprogramDescription = null;
@@ -293,7 +294,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 						factory.makeVariableModifiersNode(),
 						factory.makeParameterizedTypeNode(
 								factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("Context"))),
-								factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)))),
+								factory.makeTypeArgumentListNode(
+										factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)),
+										factory.makeUnparameterizedTypeNode(factory.parseNameNode(replacementClassName)))),
 						factory.makeIdentifierNode("context"))), factory.makeVoidTypeNode(), null);
 
 		ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(executeMethodImplementation));
@@ -302,7 +305,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 				factory.makeClassModifiersNode(AccessModifier.PUBLIC),
 				factory.makeParameterizedTypeNode(
 						factory.makeUnparameterizedTypeNode(factory.parseNameNode("AbstractMetaprogram")),
-						factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)))),
+						factory.makeTypeArgumentListNode(
+								factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)),
+								factory.makeUnparameterizedTypeNode(factory.parseNameNode(replacementClassName)))),
 				factory.makeDeclaredTypeListNode(), body, factory.makeTypeParameterListNode(),
 				factory.makeIdentifierNode(metaprogramClassName), null);
 
@@ -367,7 +372,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		}
 
 		ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
-		Class<? extends Metaprogram<A>> metaprogramClass;
+		Class<? extends Metaprogram<A, B>> metaprogramClass;
 		try
 		{
 			metaprogramClass = metaprogramClassCast(metaprogramClassLoader.loadClass(fullyQualifiedMetaprogramClassName));
@@ -376,7 +381,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 			throw new IllegalStateException("Class " + fullyQualifiedMetaprogramClassName
 					+ " that we just compiled is not found!", e);
 		}
-		Constructor<? extends Metaprogram<A>> constructor;
+		Constructor<? extends Metaprogram<A, B>> constructor;
 		try
 		{
 			constructor = metaprogramClass.getConstructor();
@@ -414,9 +419,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 	 * @return The casted result.
 	 */
 	@SuppressWarnings("unchecked")
-	private <A extends ExplicitMetaprogramAnchorNode<? extends Node>> Class<? extends Metaprogram<A>> metaprogramClassCast(
+	private <A extends ExplicitMetaprogramAnchorNode<B>, B extends Node> Class<? extends Metaprogram<A, B>> metaprogramClassCast(
 			Class<?> loadClass)
 	{
-		return (Class<? extends Metaprogram<A>>) loadClass;
+		return (Class<? extends Metaprogram<A, B>>) loadClass;
 	}
 }

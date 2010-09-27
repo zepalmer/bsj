@@ -14,25 +14,27 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalVariableDeclarationNode
 {
     /** The modifiers for this variable. */
-    private VariableModifiersNode modifiers;
+    private NodeUnion<? extends VariableModifiersNode> modifiers;
     
     /** The type of the declared variables. */
-    private TypeNode type;
+    private NodeUnion<? extends TypeNode> type;
     
     /** The variable declarators for this node. */
-    private VariableDeclaratorListNode declarators;
+    private NodeUnion<? extends VariableDeclaratorListNode> declarators;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -57,27 +59,48 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     
     /** General constructor. */
     public LocalVariableDeclarationNodeImpl(
-            VariableModifiersNode modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setModifiers(modifiers, false);
-        setType(type, false);
-        setDeclarators(declarators, false);
+        setUnionForModifiers(modifiers, false);
+        setUnionForType(type, false);
+        setUnionForDeclarators(declarators, false);
+    }
+    
+    /**
+     * Gets the modifiers for this variable.  This property's value is assumed to be a normal node.
+     * @return The modifiers for this variable.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public VariableModifiersNode getModifiers()
+    {
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.modifiers == null)
+        {
+            return null;
+        } else
+        {
+            return this.modifiers.getNormalNode();
+        }
     }
     
     /**
      * Gets the modifiers for this variable.
      * @return The modifiers for this variable.
      */
-    public VariableModifiersNode getModifiers()
+    public NodeUnion<? extends VariableModifiersNode> getUnionForModifiers()
     {
         getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.modifiers == null)
+        {
+            this.modifiers = new NormalNodeUnion<VariableModifiersNode>(null);
+        }
         return this.modifiers;
     }
     
@@ -98,18 +121,73 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.modifiers, false);
-        this.modifiers = modifiers;
+        
+        if (this.modifiers != null)
+        {
+            setAsChild(this.modifiers.getNodeValue(), false);
+        }
+        this.modifiers = new NormalNodeUnion<VariableModifiersNode>(modifiers);
         setAsChild(modifiers, true);
+    }
+    
+    /**
+     * Changes the modifiers for this variable.
+     * @param modifiers The modifiers for this variable.
+     */
+    public void setUnionForModifiers(NodeUnion<? extends VariableModifiersNode> modifiers)
+    {
+            setUnionForModifiers(modifiers, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForModifiers(NodeUnion<? extends VariableModifiersNode> modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (modifiers == null)
+        {
+            throw new NullPointerException("Node union for property modifiers cannot be null.");
+        }
+        if (this.modifiers != null)
+        {
+            setAsChild(this.modifiers.getNodeValue(), false);
+        }
+        this.modifiers = modifiers;
+        setAsChild(modifiers.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the type of the declared variables.  This property's value is assumed to be a normal node.
+     * @return The type of the declared variables.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public TypeNode getType()
+    {
+        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            return null;
+        } else
+        {
+            return this.type.getNormalNode();
+        }
     }
     
     /**
      * Gets the type of the declared variables.
      * @return The type of the declared variables.
      */
-    public TypeNode getType()
+    public NodeUnion<? extends TypeNode> getUnionForType()
     {
         getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            this.type = new NormalNodeUnion<TypeNode>(null);
+        }
         return this.type;
     }
     
@@ -130,18 +208,73 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.type, false);
-        this.type = type;
+        
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = new NormalNodeUnion<TypeNode>(type);
         setAsChild(type, true);
+    }
+    
+    /**
+     * Changes the type of the declared variables.
+     * @param type The type of the declared variables.
+     */
+    public void setUnionForType(NodeUnion<? extends TypeNode> type)
+    {
+            setUnionForType(type, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForType(NodeUnion<? extends TypeNode> type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (type == null)
+        {
+            throw new NullPointerException("Node union for property type cannot be null.");
+        }
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = type;
+        setAsChild(type.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the variable declarators for this node.  This property's value is assumed to be a normal node.
+     * @return The variable declarators for this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public VariableDeclaratorListNode getDeclarators()
+    {
+        getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.declarators == null)
+        {
+            return null;
+        } else
+        {
+            return this.declarators.getNormalNode();
+        }
     }
     
     /**
      * Gets the variable declarators for this node.
      * @return The variable declarators for this node.
      */
-    public VariableDeclaratorListNode getDeclarators()
+    public NodeUnion<? extends VariableDeclaratorListNode> getUnionForDeclarators()
     {
         getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.declarators == null)
+        {
+            this.declarators = new NormalNodeUnion<VariableDeclaratorListNode>(null);
+        }
         return this.declarators;
     }
     
@@ -162,9 +295,43 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.declarators, false);
-        this.declarators = declarators;
+        
+        if (this.declarators != null)
+        {
+            setAsChild(this.declarators.getNodeValue(), false);
+        }
+        this.declarators = new NormalNodeUnion<VariableDeclaratorListNode>(declarators);
         setAsChild(declarators, true);
+    }
+    
+    /**
+     * Changes the variable declarators for this node.
+     * @param declarators The variable declarators for this node.
+     */
+    public void setUnionForDeclarators(NodeUnion<? extends VariableDeclaratorListNode> declarators)
+    {
+            setUnionForDeclarators(declarators, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForDeclarators(NodeUnion<? extends VariableDeclaratorListNode> declarators, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (declarators == null)
+        {
+            throw new NullPointerException("Node union for property declarators cannot be null.");
+        }
+        if (this.declarators != null)
+        {
+            setAsChild(this.declarators.getNodeValue(), false);
+        }
+        this.declarators = declarators;
+        setAsChild(declarators.getNodeValue(), true);
     }
     
     /**
@@ -178,17 +345,17 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers != null)
+        if (this.modifiers.getNodeValue() != null)
         {
-            this.modifiers.receive(visitor);
+            this.modifiers.getNodeValue().receive(visitor);
         }
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receive(visitor);
+            this.type.getNodeValue().receive(visitor);
         }
-        if (this.declarators != null)
+        if (this.declarators.getNodeValue() != null)
         {
-            this.declarators.receive(visitor);
+            this.declarators.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -211,17 +378,17 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers != null)
+        if (this.modifiers.getNodeValue() != null)
         {
-            this.modifiers.receiveTyped(visitor);
+            this.modifiers.getNodeValue().receiveTyped(visitor);
         }
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receiveTyped(visitor);
+            this.type.getNodeValue().receiveTyped(visitor);
         }
-        if (this.declarators != null)
+        if (this.declarators.getNodeValue() != null)
         {
-            this.declarators.receiveTyped(visitor);
+            this.declarators.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -277,7 +444,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getModifiers(), getType(), getDeclarators()});
+        return Arrays.asList(new Node[]{getUnionForModifiers().getNodeValue(), getUnionForType().getNodeValue(), getUnionForDeclarators().getNodeValue()});
     }
     
     /**
@@ -290,13 +457,13 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
+        sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("type=");
-        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
+        sb.append(this.getUnionForType().getNodeValue() == null? "null" : this.getUnionForType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("declarators=");
-        sb.append(this.getDeclarators() == null? "null" : this.getDeclarators().getClass().getSimpleName());
+        sb.append(this.getUnionForDeclarators().getNodeValue() == null? "null" : this.getUnionForDeclarators().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -340,10 +507,82 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     @Override
     public LocalVariableDeclarationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends VariableModifiersNode> modifiersCopy;
+        switch (getUnionForModifiers().getType())
+        {
+            case NORMAL:
+                if (getUnionForModifiers().getNormalNode() == null)
+                {
+                    modifiersCopy = factory.<VariableModifiersNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    modifiersCopy = factory.makeNormalNodeUnion(getUnionForModifiers().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForModifiers().getSpliceNode() == null)
+                {
+                    modifiersCopy = factory.<VariableModifiersNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    modifiersCopy = factory.makeSpliceNodeUnion(getUnionForModifiers().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForModifiers().getType());
+        }
+        NodeUnion<? extends TypeNode> typeCopy;
+        switch (getUnionForType().getType())
+        {
+            case NORMAL:
+                if (getUnionForType().getNormalNode() == null)
+                {
+                    typeCopy = factory.<TypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeCopy = factory.makeNormalNodeUnion(getUnionForType().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForType().getSpliceNode() == null)
+                {
+                    typeCopy = factory.<TypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeCopy = factory.makeSpliceNodeUnion(getUnionForType().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForType().getType());
+        }
+        NodeUnion<? extends VariableDeclaratorListNode> declaratorsCopy;
+        switch (getUnionForDeclarators().getType())
+        {
+            case NORMAL:
+                if (getUnionForDeclarators().getNormalNode() == null)
+                {
+                    declaratorsCopy = factory.<VariableDeclaratorListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    declaratorsCopy = factory.makeNormalNodeUnion(getUnionForDeclarators().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForDeclarators().getSpliceNode() == null)
+                {
+                    declaratorsCopy = factory.<VariableDeclaratorListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    declaratorsCopy = factory.makeSpliceNodeUnion(getUnionForDeclarators().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForDeclarators().getType());
+        }
         return factory.makeLocalVariableDeclarationNode(
-                getModifiers()==null?null:getModifiers().deepCopy(factory),
-                getType()==null?null:getType().deepCopy(factory),
-                getDeclarators()==null?null:getDeclarators().deepCopy(factory),
+                modifiersCopy,
+                typeCopy,
+                declaratorsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

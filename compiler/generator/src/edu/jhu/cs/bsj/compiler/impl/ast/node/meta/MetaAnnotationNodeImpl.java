@@ -11,12 +11,14 @@ import javax.tools.DiagnosticListener;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
@@ -25,7 +27,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaAnnotationMetaprogram;
 public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnnotationNode
 {
     /** The annotation type. */
-    private UnparameterizedTypeNode annotationType;
+    private NodeUnion<? extends UnparameterizedTypeNode> annotationType;
     
     /** The anchor of a metaprogram attached to this node. */
     private MetaAnnotationMetaprogramAnchorNode metaprogramAnchor;
@@ -51,7 +53,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     
     /** General constructor. */
     protected MetaAnnotationNodeImpl(
-            UnparameterizedTypeNode annotationType,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
             MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -59,17 +61,38 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setAnnotationType(annotationType, false);
+        setUnionForAnnotationType(annotationType, false);
         this.metaprogramAnchor = metaprogramAnchor;
+    }
+    
+    /**
+     * Gets the annotation type.  This property's value is assumed to be a normal node.
+     * @return The annotation type.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public UnparameterizedTypeNode getAnnotationType()
+    {
+        getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.annotationType == null)
+        {
+            return null;
+        } else
+        {
+            return this.annotationType.getNormalNode();
+        }
     }
     
     /**
      * Gets the annotation type.
      * @return The annotation type.
      */
-    public UnparameterizedTypeNode getAnnotationType()
+    public NodeUnion<? extends UnparameterizedTypeNode> getUnionForAnnotationType()
     {
         getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.annotationType == null)
+        {
+            this.annotationType = new NormalNodeUnion<UnparameterizedTypeNode>(null);
+        }
         return this.annotationType;
     }
     
@@ -90,9 +113,43 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.annotationType, false);
-        this.annotationType = annotationType;
+        
+        if (this.annotationType != null)
+        {
+            setAsChild(this.annotationType.getNodeValue(), false);
+        }
+        this.annotationType = new NormalNodeUnion<UnparameterizedTypeNode>(annotationType);
         setAsChild(annotationType, true);
+    }
+    
+    /**
+     * Changes the annotation type.
+     * @param annotationType The annotation type.
+     */
+    public void setUnionForAnnotationType(NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+    {
+            setUnionForAnnotationType(annotationType, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForAnnotationType(NodeUnion<? extends UnparameterizedTypeNode> annotationType, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (annotationType == null)
+        {
+            throw new NullPointerException("Node union for property annotationType cannot be null.");
+        }
+        if (this.annotationType != null)
+        {
+            setAsChild(this.annotationType.getNodeValue(), false);
+        }
+        this.annotationType = annotationType;
+        setAsChild(annotationType.getNodeValue(), true);
     }
     
     /**
@@ -116,9 +173,9 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.annotationType != null)
+        if (this.annotationType.getNodeValue() != null)
         {
-            this.annotationType.receive(visitor);
+            this.annotationType.getNodeValue().receive(visitor);
         }
         if (this.metaprogramAnchor != null)
         {
@@ -145,9 +202,9 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.annotationType != null)
+        if (this.annotationType.getNodeValue() != null)
         {
-            this.annotationType.receiveTyped(visitor);
+            this.annotationType.getNodeValue().receiveTyped(visitor);
         }
         if (this.metaprogramAnchor != null)
         {
@@ -201,7 +258,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("annotationType=");
-        sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
+        sb.append(this.getUnionForAnnotationType().getNodeValue() == null? "null" : this.getUnionForAnnotationType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("metaprogramAnchor=");
         sb.append(this.getMetaprogramAnchor() == null? "null" : this.getMetaprogramAnchor().getClass().getSimpleName());

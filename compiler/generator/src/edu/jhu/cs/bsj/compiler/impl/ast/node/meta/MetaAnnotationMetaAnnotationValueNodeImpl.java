@@ -14,10 +14,12 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -25,7 +27,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implements MetaAnnotationMetaAnnotationValueNode
 {
     /** The annotation. */
-    private MetaAnnotationNode annotation;
+    private NodeUnion<? extends MetaAnnotationNode> annotation;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -46,23 +48,44 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     
     /** General constructor. */
     public MetaAnnotationMetaAnnotationValueNodeImpl(
-            MetaAnnotationNode annotation,
+            NodeUnion<? extends MetaAnnotationNode> annotation,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setAnnotation(annotation, false);
+        setUnionForAnnotation(annotation, false);
+    }
+    
+    /**
+     * Gets the annotation.  This property's value is assumed to be a normal node.
+     * @return The annotation.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public MetaAnnotationNode getAnnotation()
+    {
+        getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.annotation == null)
+        {
+            return null;
+        } else
+        {
+            return this.annotation.getNormalNode();
+        }
     }
     
     /**
      * Gets the annotation.
      * @return The annotation.
      */
-    public MetaAnnotationNode getAnnotation()
+    public NodeUnion<? extends MetaAnnotationNode> getUnionForAnnotation()
     {
         getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.annotation == null)
+        {
+            this.annotation = new NormalNodeUnion<MetaAnnotationNode>(null);
+        }
         return this.annotation;
     }
     
@@ -83,9 +106,43 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.annotation, false);
-        this.annotation = annotation;
+        
+        if (this.annotation != null)
+        {
+            setAsChild(this.annotation.getNodeValue(), false);
+        }
+        this.annotation = new NormalNodeUnion<MetaAnnotationNode>(annotation);
         setAsChild(annotation, true);
+    }
+    
+    /**
+     * Changes the annotation.
+     * @param annotation The annotation.
+     */
+    public void setUnionForAnnotation(NodeUnion<? extends MetaAnnotationNode> annotation)
+    {
+            setUnionForAnnotation(annotation, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForAnnotation(NodeUnion<? extends MetaAnnotationNode> annotation, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (annotation == null)
+        {
+            throw new NullPointerException("Node union for property annotation cannot be null.");
+        }
+        if (this.annotation != null)
+        {
+            setAsChild(this.annotation.getNodeValue(), false);
+        }
+        this.annotation = annotation;
+        setAsChild(annotation.getNodeValue(), true);
     }
     
     /**
@@ -99,9 +156,9 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.annotation != null)
+        if (this.annotation.getNodeValue() != null)
         {
-            this.annotation.receive(visitor);
+            this.annotation.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -124,9 +181,9 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.annotation != null)
+        if (this.annotation.getNodeValue() != null)
         {
-            this.annotation.receiveTyped(visitor);
+            this.annotation.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -174,7 +231,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getAnnotation()});
+        return Arrays.asList(new Node[]{getUnionForAnnotation().getNodeValue()});
     }
     
     /**
@@ -187,7 +244,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("annotation=");
-        sb.append(this.getAnnotation() == null? "null" : this.getAnnotation().getClass().getSimpleName());
+        sb.append(this.getUnionForAnnotation().getNodeValue() == null? "null" : this.getUnionForAnnotation().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -231,8 +288,32 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     @Override
     public MetaAnnotationMetaAnnotationValueNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends MetaAnnotationNode> annotationCopy;
+        switch (getUnionForAnnotation().getType())
+        {
+            case NORMAL:
+                if (getUnionForAnnotation().getNormalNode() == null)
+                {
+                    annotationCopy = factory.<MetaAnnotationNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    annotationCopy = factory.makeNormalNodeUnion(getUnionForAnnotation().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForAnnotation().getSpliceNode() == null)
+                {
+                    annotationCopy = factory.<MetaAnnotationNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    annotationCopy = factory.makeSpliceNodeUnion(getUnionForAnnotation().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotation().getType());
+        }
         return factory.makeMetaAnnotationMetaAnnotationValueNode(
-                getAnnotation()==null?null:getAnnotation().deepCopy(factory),
+                annotationCopy,
                 getStartLocation(),
                 getStopLocation());
     }

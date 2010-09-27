@@ -14,18 +14,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements NormalAnnotationNode
 {
     /** The arguments. */
-    private AnnotationElementListNode arguments;
+    private NodeUnion<? extends AnnotationElementListNode> arguments;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -46,24 +48,45 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     
     /** General constructor. */
     public NormalAnnotationNodeImpl(
-            AnnotationElementListNode arguments,
-            UnparameterizedTypeNode annotationType,
+            NodeUnion<? extends AnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(annotationType, startLocation, stopLocation, manager, binary);
-        setArguments(arguments, false);
+        setUnionForArguments(arguments, false);
+    }
+    
+    /**
+     * Gets the arguments.  This property's value is assumed to be a normal node.
+     * @return The arguments.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public AnnotationElementListNode getArguments()
+    {
+        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.arguments == null)
+        {
+            return null;
+        } else
+        {
+            return this.arguments.getNormalNode();
+        }
     }
     
     /**
      * Gets the arguments.
      * @return The arguments.
      */
-    public AnnotationElementListNode getArguments()
+    public NodeUnion<? extends AnnotationElementListNode> getUnionForArguments()
     {
         getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.arguments == null)
+        {
+            this.arguments = new NormalNodeUnion<AnnotationElementListNode>(null);
+        }
         return this.arguments;
     }
     
@@ -84,9 +107,43 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.arguments, false);
-        this.arguments = arguments;
+        
+        if (this.arguments != null)
+        {
+            setAsChild(this.arguments.getNodeValue(), false);
+        }
+        this.arguments = new NormalNodeUnion<AnnotationElementListNode>(arguments);
         setAsChild(arguments, true);
+    }
+    
+    /**
+     * Changes the arguments.
+     * @param arguments The arguments.
+     */
+    public void setUnionForArguments(NodeUnion<? extends AnnotationElementListNode> arguments)
+    {
+            setUnionForArguments(arguments, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForArguments(NodeUnion<? extends AnnotationElementListNode> arguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (arguments == null)
+        {
+            throw new NullPointerException("Node union for property arguments cannot be null.");
+        }
+        if (this.arguments != null)
+        {
+            setAsChild(this.arguments.getNodeValue(), false);
+        }
+        this.arguments = arguments;
+        setAsChild(arguments.getNodeValue(), true);
     }
     
     /**
@@ -100,9 +157,9 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.arguments != null)
+        if (this.arguments.getNodeValue() != null)
         {
-            this.arguments.receive(visitor);
+            this.arguments.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -125,9 +182,9 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.arguments != null)
+        if (this.arguments.getNodeValue() != null)
         {
-            this.arguments.receiveTyped(visitor);
+            this.arguments.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -175,7 +232,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getArguments(), getAnnotationType()});
+        return Arrays.asList(new Node[]{getUnionForArguments().getNodeValue(), getUnionForAnnotationType().getNodeValue()});
     }
     
     /**
@@ -188,10 +245,10 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("arguments=");
-        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("annotationType=");
-        sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
+        sb.append(this.getUnionForAnnotationType().getNodeValue() == null? "null" : this.getUnionForAnnotationType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -235,9 +292,57 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     @Override
     public NormalAnnotationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends AnnotationElementListNode> argumentsCopy;
+        switch (getUnionForArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForArguments().getNormalNode() == null)
+                {
+                    argumentsCopy = factory.<AnnotationElementListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeNormalNodeUnion(getUnionForArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForArguments().getSpliceNode() == null)
+                {
+                    argumentsCopy = factory.<AnnotationElementListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeSpliceNodeUnion(getUnionForArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForArguments().getType());
+        }
+        NodeUnion<? extends UnparameterizedTypeNode> annotationTypeCopy;
+        switch (getUnionForAnnotationType().getType())
+        {
+            case NORMAL:
+                if (getUnionForAnnotationType().getNormalNode() == null)
+                {
+                    annotationTypeCopy = factory.<UnparameterizedTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    annotationTypeCopy = factory.makeNormalNodeUnion(getUnionForAnnotationType().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForAnnotationType().getSpliceNode() == null)
+                {
+                    annotationTypeCopy = factory.<UnparameterizedTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    annotationTypeCopy = factory.makeSpliceNodeUnion(getUnionForAnnotationType().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotationType().getType());
+        }
         return factory.makeNormalAnnotationNode(
-                getArguments()==null?null:getArguments().deepCopy(factory),
-                getAnnotationType()==null?null:getAnnotationType().deepCopy(factory),
+                argumentsCopy,
+                annotationTypeCopy,
                 getStartLocation(),
                 getStopLocation());
     }

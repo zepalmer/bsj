@@ -1,8 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -12,23 +14,134 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.LiteralNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLiteralNode
+public class CodeLiteralNodeImpl extends NodeImpl implements CodeLiteralNode
 {
+    /** The node represented by this code literal. */
+    private NodeUnion<? extends Node> value;
+    
+    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
+    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
+    {
+        ReadWriteAttribute attribute = localAttributes.get(attributeName);
+        if (attribute == null)
+        {
+            attribute = new ReadWriteAttribute(CodeLiteralNodeImpl.this);
+            localAttributes.put(attributeName, attribute);
+        }
+        return attribute;
+    }
+    private static enum LocalAttribute
+    {
+        /** Attribute identifier for the value property. */
+        VALUE,
+    }
+    
     /** General constructor. */
     public CodeLiteralNodeImpl(
-            Node value,
+            NodeUnion<? extends Node> value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(value, startLocation, stopLocation, manager, binary);
+        super(startLocation, stopLocation, manager, binary);
+        setUnionForValue(value, false);
+    }
+    
+    /**
+     * Gets the node represented by this code literal.  This property's value is assumed to be a normal node.
+     * @return The node represented by this code literal.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public Node getValue()
+    {
+        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.value == null)
+        {
+            return null;
+        } else
+        {
+            return this.value.getNormalNode();
+        }
+    }
+    
+    /**
+     * Gets the node represented by this code literal.
+     * @return The node represented by this code literal.
+     */
+    public NodeUnion<? extends Node> getUnionForValue()
+    {
+        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.value == null)
+        {
+            this.value = new NormalNodeUnion<Node>(null);
+        }
+        return this.value;
+    }
+    
+    /**
+     * Changes the node represented by this code literal.
+     * @param value The node represented by this code literal.
+     */
+    public void setValue(Node value)
+    {
+            setValue(value, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setValue(Node value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (this.value != null)
+        {
+            setAsChild(this.value.getNodeValue(), false);
+        }
+        this.value = new NormalNodeUnion<Node>(value);
+        setAsChild(value, true);
+    }
+    
+    /**
+     * Changes the node represented by this code literal.
+     * @param value The node represented by this code literal.
+     */
+    public void setUnionForValue(NodeUnion<? extends Node> value)
+    {
+            setUnionForValue(value, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForValue(NodeUnion<? extends Node> value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (value == null)
+        {
+            throw new NullPointerException("Node union for property value cannot be null.");
+        }
+        if (this.value != null)
+        {
+            setAsChild(this.value.getNodeValue(), false);
+        }
+        this.value = value;
+        setAsChild(value.getNodeValue(), true);
     }
     
     /**
@@ -42,6 +155,10 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.value.getNodeValue() != null)
+        {
+            this.value.getNodeValue().receive(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -63,6 +180,10 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.value.getNodeValue() != null)
+        {
+            this.value.getNodeValue().receiveTyped(visitor);
+        }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
         {
@@ -78,13 +199,13 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     {
         visitor.visitStartBegin(this);
         visitor.visitCodeLiteralNodeStart(this, true);
-        visitor.visitLiteralNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitLiteralNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStop(this);
         visitor.visitLiteralNodeStop(this);
+        visitor.visitNodeStop(this);
         visitor.visitCodeLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
@@ -98,6 +219,7 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     
@@ -108,7 +230,7 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getValue()});
+        return Arrays.asList(new Node[]{getUnionForValue().getNodeValue()});
     }
     
     /**
@@ -121,7 +243,7 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("value=");
-        sb.append(this.getValue() == null? "null" : this.getValue().getClass().getSimpleName());
+        sb.append(this.getUnionForValue().getNodeValue() == null? "null" : this.getUnionForValue().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -165,8 +287,32 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     @Override
     public CodeLiteralNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends Node> valueCopy;
+        switch (getUnionForValue().getType())
+        {
+            case NORMAL:
+                if (getUnionForValue().getNormalNode() == null)
+                {
+                    valueCopy = factory.<Node>makeNormalNodeUnion(null);
+                } else
+                {
+                    valueCopy = factory.makeNormalNodeUnion(getUnionForValue().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForValue().getSpliceNode() == null)
+                {
+                    valueCopy = factory.<Node>makeSpliceNodeUnion(null);
+                } else
+                {
+                    valueCopy = factory.makeSpliceNodeUnion(getUnionForValue().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForValue().getType());
+        }
         return factory.makeCodeLiteralNode(
-                getValue()==null?null:getValue().deepCopy(factory),
+                valueCopy,
                 getStartLocation(),
                 getStopLocation());
     }

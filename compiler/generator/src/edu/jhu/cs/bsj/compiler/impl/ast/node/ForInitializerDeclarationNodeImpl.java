@@ -14,17 +14,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForInitializerDeclarationNode
 {
     /** The variables declared in this initializer. */
-    private LocalVariableDeclarationNode declaration;
+    private NodeUnion<? extends LocalVariableDeclarationNode> declaration;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -45,23 +47,44 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     
     /** General constructor. */
     public ForInitializerDeclarationNodeImpl(
-            LocalVariableDeclarationNode declaration,
+            NodeUnion<? extends LocalVariableDeclarationNode> declaration,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setDeclaration(declaration, false);
+        setUnionForDeclaration(declaration, false);
+    }
+    
+    /**
+     * Gets the variables declared in this initializer.  This property's value is assumed to be a normal node.
+     * @return The variables declared in this initializer.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public LocalVariableDeclarationNode getDeclaration()
+    {
+        getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.declaration == null)
+        {
+            return null;
+        } else
+        {
+            return this.declaration.getNormalNode();
+        }
     }
     
     /**
      * Gets the variables declared in this initializer.
      * @return The variables declared in this initializer.
      */
-    public LocalVariableDeclarationNode getDeclaration()
+    public NodeUnion<? extends LocalVariableDeclarationNode> getUnionForDeclaration()
     {
         getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.declaration == null)
+        {
+            this.declaration = new NormalNodeUnion<LocalVariableDeclarationNode>(null);
+        }
         return this.declaration;
     }
     
@@ -82,9 +105,43 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.declaration, false);
-        this.declaration = declaration;
+        
+        if (this.declaration != null)
+        {
+            setAsChild(this.declaration.getNodeValue(), false);
+        }
+        this.declaration = new NormalNodeUnion<LocalVariableDeclarationNode>(declaration);
         setAsChild(declaration, true);
+    }
+    
+    /**
+     * Changes the variables declared in this initializer.
+     * @param declaration The variables declared in this initializer.
+     */
+    public void setUnionForDeclaration(NodeUnion<? extends LocalVariableDeclarationNode> declaration)
+    {
+            setUnionForDeclaration(declaration, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForDeclaration(NodeUnion<? extends LocalVariableDeclarationNode> declaration, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (declaration == null)
+        {
+            throw new NullPointerException("Node union for property declaration cannot be null.");
+        }
+        if (this.declaration != null)
+        {
+            setAsChild(this.declaration.getNodeValue(), false);
+        }
+        this.declaration = declaration;
+        setAsChild(declaration.getNodeValue(), true);
     }
     
     /**
@@ -98,9 +155,9 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.declaration != null)
+        if (this.declaration.getNodeValue() != null)
         {
-            this.declaration.receive(visitor);
+            this.declaration.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -123,9 +180,9 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.declaration != null)
+        if (this.declaration.getNodeValue() != null)
         {
-            this.declaration.receiveTyped(visitor);
+            this.declaration.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -173,7 +230,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getDeclaration()});
+        return Arrays.asList(new Node[]{getUnionForDeclaration().getNodeValue()});
     }
     
     /**
@@ -186,7 +243,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("declaration=");
-        sb.append(this.getDeclaration() == null? "null" : this.getDeclaration().getClass().getSimpleName());
+        sb.append(this.getUnionForDeclaration().getNodeValue() == null? "null" : this.getUnionForDeclaration().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -230,8 +287,32 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     @Override
     public ForInitializerDeclarationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends LocalVariableDeclarationNode> declarationCopy;
+        switch (getUnionForDeclaration().getType())
+        {
+            case NORMAL:
+                if (getUnionForDeclaration().getNormalNode() == null)
+                {
+                    declarationCopy = factory.<LocalVariableDeclarationNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    declarationCopy = factory.makeNormalNodeUnion(getUnionForDeclaration().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForDeclaration().getSpliceNode() == null)
+                {
+                    declarationCopy = factory.<LocalVariableDeclarationNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    declarationCopy = factory.makeSpliceNodeUnion(getUnionForDeclaration().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForDeclaration().getType());
+        }
         return factory.makeForInitializerDeclarationNode(
-                getDeclaration()==null?null:getDeclaration().deepCopy(factory),
+                declarationCopy,
                 getStartLocation(),
                 getStopLocation());
     }

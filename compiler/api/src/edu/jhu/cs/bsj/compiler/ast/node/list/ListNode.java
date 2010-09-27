@@ -36,6 +36,12 @@ public interface ListNode<T extends Node> extends Node, List<T>, NodeList<T>
     public List<T> getChildren();
     
     /**
+     * Gets whether or not this list's contents are always order-dependent.
+     * @return Whether or not this list's contents are always order-dependent.
+     */
+    public boolean getAlwaysOrdered();
+    
+    /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
      * @return The resulting deep copy node.

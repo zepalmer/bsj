@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
@@ -23,8 +24,8 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
 {
     /** General constructor. */
     public AlternateConstructorInvocationNodeImpl(
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -110,7 +111,7 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getArguments(), getTypeArguments()});
+        return Arrays.asList(new Node[]{getUnionForArguments().getNodeValue(), getUnionForTypeArguments().getNodeValue()});
     }
     
     /**
@@ -123,10 +124,10 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("arguments=");
-        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeArguments=");
-        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForTypeArguments().getNodeValue() == null? "null" : this.getUnionForTypeArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -170,9 +171,57 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
     @Override
     public AlternateConstructorInvocationNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends ExpressionListNode> argumentsCopy;
+        switch (getUnionForArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForArguments().getNormalNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeNormalNodeUnion(getUnionForArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForArguments().getSpliceNode() == null)
+                {
+                    argumentsCopy = factory.<ExpressionListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    argumentsCopy = factory.makeSpliceNodeUnion(getUnionForArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForArguments().getType());
+        }
+        NodeUnion<? extends ReferenceTypeListNode> typeArgumentsCopy;
+        switch (getUnionForTypeArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForTypeArguments().getNormalNode() == null)
+                {
+                    typeArgumentsCopy = factory.<ReferenceTypeListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeArgumentsCopy = factory.makeNormalNodeUnion(getUnionForTypeArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTypeArguments().getSpliceNode() == null)
+                {
+                    typeArgumentsCopy = factory.<ReferenceTypeListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeArgumentsCopy = factory.makeSpliceNodeUnion(getUnionForTypeArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
+        }
         return factory.makeAlternateConstructorInvocationNode(
-                getArguments()==null?null:getArguments().deepCopy(factory),
-                getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
+                argumentsCopy,
+                typeArgumentsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

@@ -68,7 +68,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	{
 		CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
 				context.getDiagnosticListener());
-		MetaprogramProfile<?> profile = context.getDependencyManager().getNextMetaprogram(listener);
+		MetaprogramProfile<?, ?> profile = context.getDependencyManager().getNextMetaprogram(listener);
 		if (listener.getCount(Kind.ERROR) > 0)
 		{
 			return;
@@ -101,7 +101,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		}
 	}
 
-	private <A extends MetaprogramAnchorNode<?>> void execute(MetaprogramProfile<A> profile,
+	private <A extends MetaprogramAnchorNode<?>> void execute(MetaprogramProfile<?, ?> profile,
 			MetacompilationContext context)
 	{
 		// Log metaprogram execution
@@ -163,24 +163,12 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 
 		// Have the metaprogram replace itself with its replacement node
 		// TODO: what kind of policy should we put into place for this? can a read-only metaprogram replace itself?
-		Node replacement = profile.getAnchor().getReplacement();
+		Node replacement = profile.getContext().getReplacement();
 		if (replacement != null)
 		{
-			profile.getAnchor().setReplacement(null);
-			profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
+			profile.getContext().getAnchor().getParent().replace(profile.getContext().getAnchor(), replacement);
 		}
 
-		// // Pass the affected part of the AST back to allow name analysis, etc.
-		// // TODO: what if more than just this compilation unit was changed? Need name analysis on inserted CUs too
-		// if (replacement != null)
-		// {
-		// Node target = replacement.getNearestAncestorOfType(CompilationUnitNode.class);
-		// if (target == null)
-		// {
-		// target = replacement.getFurthestAncestor();
-		// }
-		// context.registerTask(new CategorizeNamesTask(target, profile));
-		// }
 		// Pass the affected part of the AST back to allow name analysis, etc.
 		// TODO: make the following a little bit more palatable by only analyzing those trees that changed
 		Node target;
@@ -204,7 +192,8 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	 * @param rootPackage The root package for the policy manager.
 	 * @return The policy manager for that metaprogram.
 	 */
-	private PermissionPolicyManager createPermissionPolicyManager(MetaprogramProfile<?> profile, PackageNode rootPackage)
+	private PermissionPolicyManager createPermissionPolicyManager(MetaprogramProfile<?, ?> profile,
+			PackageNode rootPackage)
 	{
 		if (LOGGER.isTraceEnabled())
 		{
@@ -422,10 +411,11 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	 * @param profile The profile of the metaprogram to execute.
 	 * @return A diagnostic if one should be reported or <code>null</code> if everything went fine.
 	 */
-	private <A extends MetaprogramAnchorNode<?>> BsjDiagnostic doExecute(MetaprogramProfile<A> profile)
+	private <A extends MetaprogramAnchorNode<B>, B extends Node> BsjDiagnostic doExecute(
+			MetaprogramProfile<A, B> profile)
 	{
-		Context<A> context = profile.getContext();
-		Metaprogram<A> metaprogram = profile.getMetaprogram();
+		Context<A, B> context = profile.getContext();
+		Metaprogram<A, B> metaprogram = profile.getMetaprogram();
 		if (context == null)
 		{
 			throw new IllegalStateException("Attempted to execute metaprogram profile with null context!");

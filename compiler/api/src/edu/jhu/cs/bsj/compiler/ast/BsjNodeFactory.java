@@ -6,53 +6,29 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationValueListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
@@ -61,41 +37,24 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencySpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleSpliceNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetListSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetSpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
@@ -196,6 +155,29 @@ public interface BsjNodeFactory
 	 * @throws IllegalArgumentException If the provided level count is non-positive.
 	 */
 	public ArrayTypeNode wrapArrayLevels(TypeNode type, int levels);
+	
+/**
+ * Creates a {@link NodeUnion} value containing a normal node.
+ * @param node The node to use.
+ * @return The resulting node union.
+ */
+public <T extends Node> NodeUnion<T> makeNormalNodeUnion(T node);
+
+/**
+ * Creates a {@link NodeUnion} value containing a splice node.
+ * @param node The node to use.
+ * @return The resulting node union.
+ */
+public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node);
+
+    /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments);
+    
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -203,6 +185,16 @@ public interface BsjNodeFactory
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments);
+    
+    /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AlternateConstructorInvocationNode.
@@ -235,7 +227,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
+            NodeUnion<? extends AnnotationNode> annotation);
+    
+    /**
+     * Creates a AnnotationAnnotationValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
             AnnotationNode annotation);
+    
+    /**
+     * Creates a AnnotationAnnotationValueNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
+            NodeUnion<? extends AnnotationNode> annotation,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AnnotationAnnotationValueNode.
@@ -251,7 +259,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
+            NodeUnion<? extends AnnotationValueListNode> values);
+    
+    /**
+     * Creates a AnnotationArrayValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationArrayValueNode makeAnnotationArrayValueNode(
             AnnotationValueListNode values);
+    
+    /**
+     * Creates a AnnotationArrayValueNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationArrayValueNode makeAnnotationArrayValueNode(
+            NodeUnion<? extends AnnotationValueListNode> values,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AnnotationArrayValueNode.
@@ -267,7 +291,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationBodyNode makeAnnotationBodyNode(
+            NodeUnion<? extends AnnotationMemberListNode> members);
+    
+    /**
+     * Creates a AnnotationBodyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationBodyNode makeAnnotationBodyNode(
             AnnotationMemberListNode members);
+    
+    /**
+     * Creates a AnnotationBodyNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationBodyNode makeAnnotationBodyNode(
+            NodeUnion<? extends AnnotationMemberListNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AnnotationBodyNode.
@@ -279,20 +319,14 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a AnnotationBodySpliceNode.
+     * Creates a AnnotationDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public AnnotationBodySpliceNode makeAnnotationBodySpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationBodySpliceNode makeAnnotationBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public AnnotationDeclarationNode makeAnnotationDeclarationNode(
+            NodeUnion<? extends AnnotationModifiersNode> modifiers,
+            NodeUnion<? extends AnnotationBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a AnnotationDeclarationNode.
@@ -303,6 +337,18 @@ public interface BsjNodeFactory
             AnnotationBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a AnnotationDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationDeclarationNode makeAnnotationDeclarationNode(
+            NodeUnion<? extends AnnotationModifiersNode> modifiers,
+            NodeUnion<? extends AnnotationBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AnnotationDeclarationNode.
@@ -349,20 +395,12 @@ public interface BsjNodeFactory
             AnnotationElementNode... childrenElements);
     
     /**
-     * Creates a AnnotationElementListSpliceNode.
+     * Creates a AnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public AnnotationElementListSpliceNode makeAnnotationElementListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationElementListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationElementListSpliceNode makeAnnotationElementListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public AnnotationElementNode makeAnnotationElementNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends AnnotationValueNode> value);
     
     /**
      * Creates a AnnotationElementNode.
@@ -377,24 +415,18 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public AnnotationElementNode makeAnnotationElementNode(
-            IdentifierNode identifier,
-            AnnotationValueNode value,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends AnnotationValueNode> value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a AnnotationElementSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public AnnotationElementSpliceNode makeAnnotationElementSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationElementSpliceNode.
+     * Creates a AnnotationElementNode.
      * The specified start and stop locations are used.
      */
-    public AnnotationElementSpliceNode makeAnnotationElementSpliceNode(
-            ExpressionNode spliceExpression,
+    public AnnotationElementNode makeAnnotationElementNode(
+            IdentifierNode identifier,
+            AnnotationValueNode value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -403,7 +435,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
+            NodeUnion<? extends NonAssignmentExpressionNode> expression);
+    
+    /**
+     * Creates a AnnotationExpressionValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
             NonAssignmentExpressionNode expression);
+    
+    /**
+     * Creates a AnnotationExpressionValueNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
+            NodeUnion<? extends NonAssignmentExpressionNode> expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AnnotationExpressionValueNode.
@@ -447,22 +495,6 @@ public interface BsjNodeFactory
             AnnotationNode... childrenElements);
     
     /**
-     * Creates a AnnotationListSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public AnnotationListSpliceNode makeAnnotationListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationListSpliceNode makeAnnotationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
      * Creates a AnnotationMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -495,20 +527,11 @@ public interface BsjNodeFactory
             AnnotationMemberNode... childrenElements);
     
     /**
-     * Creates a AnnotationMemberListSpliceNode.
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public AnnotationMemberListSpliceNode makeAnnotationMemberListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationMemberListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationMemberListSpliceNode makeAnnotationMemberListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram);
     
     /**
      * Creates a AnnotationMemberMetaprogramAnchorNode.
@@ -522,25 +545,29 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a AnnotationMemberSpliceNode.
+     * Creates a AnnotationMethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public AnnotationMemberSpliceNode makeAnnotationMemberSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationMemberSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationMemberSpliceNode makeAnnotationMemberSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public AnnotationMethodDeclarationNode makeAnnotationMethodDeclarationNode(
+            NodeUnion<? extends AnnotationMethodModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends AnnotationValueNode> defaultValue,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a AnnotationMethodDeclarationNode.
@@ -552,6 +579,19 @@ public interface BsjNodeFactory
             IdentifierNode identifier,
             AnnotationValueNode defaultValue,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a AnnotationMethodDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationMethodDeclarationNode makeAnnotationMethodDeclarationNode(
+            NodeUnion<? extends AnnotationMethodModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends AnnotationValueNode> defaultValue,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AnnotationMethodDeclarationNode.
@@ -571,8 +611,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a AnnotationMethodModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a AnnotationMethodModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AnnotationMethodModifiersNode.
@@ -585,20 +643,15 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a AnnotationMethodModifiersSpliceNode.
+     * Creates a AnnotationModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public AnnotationMethodModifiersSpliceNode makeAnnotationMethodModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationMethodModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationMethodModifiersSpliceNode makeAnnotationMethodModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
     
     /**
      * Creates a AnnotationModifiersNode.
@@ -610,6 +663,19 @@ public interface BsjNodeFactory
             boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a AnnotationModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AnnotationModifiersNode.
@@ -637,38 +703,6 @@ public interface BsjNodeFactory
      */
     public AnnotationModifiersNode makeAnnotationModifiersNode(
             AccessModifier access,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a AnnotationModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public AnnotationModifiersSpliceNode makeAnnotationModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationModifiersSpliceNode makeAnnotationModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a AnnotationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public AnnotationSpliceNode makeAnnotationSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationSpliceNode makeAnnotationSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -705,36 +739,11 @@ public interface BsjNodeFactory
             AnnotationValueNode... childrenElements);
     
     /**
-     * Creates a AnnotationValueListSpliceNode.
+     * Creates a AnonymousClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public AnnotationValueListSpliceNode makeAnnotationValueListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationValueListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationValueListSpliceNode makeAnnotationValueListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a AnnotationValueSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public AnnotationValueSpliceNode makeAnnotationValueSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnnotationValueSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnnotationValueSpliceNode makeAnnotationValueSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public AnonymousClassBodyNode makeAnonymousClassBodyNode(
+            NodeUnion<? extends AnonymousClassMemberListNode> members);
     
     /**
      * Creates a AnonymousClassBodyNode.
@@ -748,23 +757,16 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            AnonymousClassMemberListNode members,
+            NodeUnion<? extends AnonymousClassMemberListNode> members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a AnonymousClassBodySpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public AnonymousClassBodySpliceNode makeAnonymousClassBodySpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnonymousClassBodySpliceNode.
+     * Creates a AnonymousClassBodyNode.
      * The specified start and stop locations are used.
      */
-    public AnonymousClassBodySpliceNode makeAnonymousClassBodySpliceNode(
-            ExpressionNode spliceExpression,
+    public AnonymousClassBodyNode makeAnonymousClassBodyNode(
+            AnonymousClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -801,20 +803,11 @@ public interface BsjNodeFactory
             AnonymousClassMemberNode... childrenElements);
     
     /**
-     * Creates a AnonymousClassMemberListSpliceNode.
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public AnonymousClassMemberListSpliceNode makeAnonymousClassMemberListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnonymousClassMemberListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public AnonymousClassMemberListSpliceNode makeAnonymousClassMemberListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram);
     
     /**
      * Creates a AnonymousClassMemberMetaprogramAnchorNode.
@@ -828,23 +821,16 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram,
+            NodeUnion<? extends MetaprogramNode> metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a AnonymousClassMemberSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public AnonymousClassMemberSpliceNode makeAnonymousClassMemberSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a AnonymousClassMemberSpliceNode.
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
      */
-    public AnonymousClassMemberSpliceNode makeAnonymousClassMemberSpliceNode(
-            ExpressionNode spliceExpression,
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -853,8 +839,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ArrayAccessNode makeArrayAccessNode(
+            NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression,
+            NodeUnion<? extends ExpressionNode> indexExpression);
+    
+    /**
+     * Creates a ArrayAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ArrayAccessNode makeArrayAccessNode(
             RestrictedPrimaryExpressionNode arrayExpression,
             ExpressionNode indexExpression);
+    
+    /**
+     * Creates a ArrayAccessNode.
+     * The specified start and stop locations are used.
+     */
+    public ArrayAccessNode makeArrayAccessNode(
+            NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression,
+            NodeUnion<? extends ExpressionNode> indexExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ArrayAccessNode.
@@ -871,9 +875,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
+            NodeUnion<? extends ArrayInitializerNode> initializer,
+            NodeUnion<? extends BaseTypeNode> baseType,
+            int arrayLevels);
+    
+    /**
+     * Creates a ArrayInitializerCreationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
             ArrayInitializerNode initializer,
             BaseTypeNode baseType,
             int arrayLevels);
+    
+    /**
+     * Creates a ArrayInitializerCreationNode.
+     * The specified start and stop locations are used.
+     */
+    public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
+            NodeUnion<? extends ArrayInitializerNode> initializer,
+            NodeUnion<? extends BaseTypeNode> baseType,
+            int arrayLevels,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ArrayInitializerCreationNode.
@@ -891,7 +915,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ArrayInitializerNode makeArrayInitializerNode(
+            NodeUnion<? extends VariableInitializerListNode> initializers);
+    
+    /**
+     * Creates a ArrayInitializerNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ArrayInitializerNode makeArrayInitializerNode(
             VariableInitializerListNode initializers);
+    
+    /**
+     * Creates a ArrayInitializerNode.
+     * The specified start and stop locations are used.
+     */
+    public ArrayInitializerNode makeArrayInitializerNode(
+            NodeUnion<? extends VariableInitializerListNode> initializers,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ArrayInitializerNode.
@@ -903,20 +943,13 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ArrayInitializerSpliceNode.
+     * Creates a ArrayInstantiatorCreationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ArrayInitializerSpliceNode makeArrayInitializerSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ArrayInitializerSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ArrayInitializerSpliceNode makeArrayInitializerSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
+            NodeUnion<? extends ExpressionListNode> dimExpressions,
+            NodeUnion<? extends BaseTypeNode> baseType,
+            int arrayLevels);
     
     /**
      * Creates a ArrayInstantiatorCreationNode.
@@ -926,6 +959,17 @@ public interface BsjNodeFactory
             ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels);
+    
+    /**
+     * Creates a ArrayInstantiatorCreationNode.
+     * The specified start and stop locations are used.
+     */
+    public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
+            NodeUnion<? extends ExpressionListNode> dimExpressions,
+            NodeUnion<? extends BaseTypeNode> baseType,
+            int arrayLevels,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ArrayInstantiatorCreationNode.
@@ -943,7 +987,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ArrayTypeNode makeArrayTypeNode(
+            NodeUnion<? extends TypeNode> type);
+    
+    /**
+     * Creates a ArrayTypeNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ArrayTypeNode makeArrayTypeNode(
             TypeNode type);
+    
+    /**
+     * Creates a ArrayTypeNode.
+     * The specified start and stop locations are used.
+     */
+    public ArrayTypeNode makeArrayTypeNode(
+            NodeUnion<? extends TypeNode> type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ArrayTypeNode.
@@ -959,9 +1019,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AssertStatementNode makeAssertStatementNode(
+            NodeUnion<? extends ExpressionNode> testExpression,
+            NodeUnion<? extends ExpressionNode> messageExpression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a AssertStatementNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AssertStatementNode makeAssertStatementNode(
             ExpressionNode testExpression,
             ExpressionNode messageExpression,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a AssertStatementNode.
+     * The specified start and stop locations are used.
+     */
+    public AssertStatementNode makeAssertStatementNode(
+            NodeUnion<? extends ExpressionNode> testExpression,
+            NodeUnion<? extends ExpressionNode> messageExpression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AssertStatementNode.
@@ -1013,9 +1093,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AssignmentNode makeAssignmentNode(
+            NodeUnion<? extends ExpressionNode> variable,
+            AssignmentOperator operator,
+            NodeUnion<? extends ExpressionNode> expression);
+    
+    /**
+     * Creates a AssignmentNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AssignmentNode makeAssignmentNode(
             ExpressionNode variable,
             AssignmentOperator operator,
             ExpressionNode expression);
+    
+    /**
+     * Creates a AssignmentNode.
+     * The specified start and stop locations are used.
+     */
+    public AssignmentNode makeAssignmentNode(
+            NodeUnion<? extends ExpressionNode> variable,
+            AssignmentOperator operator,
+            NodeUnion<? extends ExpressionNode> expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a AssignmentNode.
@@ -1029,20 +1129,13 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a BaseTypeSpliceNode.
+     * Creates a BinaryExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public BaseTypeSpliceNode makeBaseTypeSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a BaseTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public BaseTypeSpliceNode makeBaseTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public BinaryExpressionNode makeBinaryExpressionNode(
+            NodeUnion<? extends ExpressionNode> leftOperand,
+            NodeUnion<? extends ExpressionNode> rightOperand,
+            BinaryOperator operator);
     
     /**
      * Creates a BinaryExpressionNode.
@@ -1052,6 +1145,17 @@ public interface BsjNodeFactory
             ExpressionNode leftOperand,
             ExpressionNode rightOperand,
             BinaryOperator operator);
+    
+    /**
+     * Creates a BinaryExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    public BinaryExpressionNode makeBinaryExpressionNode(
+            NodeUnion<? extends ExpressionNode> leftOperand,
+            NodeUnion<? extends ExpressionNode> rightOperand,
+            BinaryOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a BinaryExpressionNode.
@@ -1069,8 +1173,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public BlockNode makeBlockNode(
+            NodeUnion<? extends BlockStatementListNode> statements,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a BlockNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public BlockNode makeBlockNode(
             BlockStatementListNode statements,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a BlockNode.
+     * The specified start and stop locations are used.
+     */
+    public BlockNode makeBlockNode(
+            NodeUnion<? extends BlockStatementListNode> statements,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a BlockNode.
@@ -1131,20 +1253,11 @@ public interface BsjNodeFactory
             BlockStatementNode... childrenElements);
     
     /**
-     * Creates a BlockStatementListSpliceNode.
+     * Creates a BlockStatementMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public BlockStatementListSpliceNode makeBlockStatementListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a BlockStatementListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public BlockStatementListSpliceNode makeBlockStatementListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram);
     
     /**
      * Creates a BlockStatementMetaprogramAnchorNode.
@@ -1158,23 +1271,16 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
-            MetaprogramNode metaprogram,
+            NodeUnion<? extends MetaprogramNode> metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a BlockStatementSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public BlockStatementSpliceNode makeBlockStatementSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a BlockStatementSpliceNode.
+     * Creates a BlockStatementMetaprogramAnchorNode.
      * The specified start and stop locations are used.
      */
-    public BlockStatementSpliceNode makeBlockStatementSpliceNode(
-            ExpressionNode spliceExpression,
+    public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
+            MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -1199,8 +1305,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public BreakNode makeBreakNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a BreakNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public BreakNode makeBreakNode(
             IdentifierNode label,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a BreakNode.
+     * The specified start and stop locations are used.
+     */
+    public BreakNode makeBreakNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a BreakNode.
@@ -1275,20 +1399,12 @@ public interface BsjNodeFactory
             CaseNode... childrenElements);
     
     /**
-     * Creates a CaseListSpliceNode.
+     * Creates a CaseNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public CaseListSpliceNode makeCaseListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a CaseListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public CaseListSpliceNode makeCaseListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public CaseNode makeCaseNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> statements);
     
     /**
      * Creates a CaseNode.
@@ -1303,24 +1419,18 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public CaseNode makeCaseNode(
-            ExpressionNode expression,
-            BlockStatementListNode statements,
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a CaseSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public CaseSpliceNode makeCaseSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a CaseSpliceNode.
+     * Creates a CaseNode.
      * The specified start and stop locations are used.
      */
-    public CaseSpliceNode makeCaseSpliceNode(
-            ExpressionNode spliceExpression,
+    public CaseNode makeCaseNode(
+            ExpressionNode expression,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -1357,20 +1467,12 @@ public interface BsjNodeFactory
             CatchNode... childrenElements);
     
     /**
-     * Creates a CatchListSpliceNode.
+     * Creates a CatchNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public CatchListSpliceNode makeCatchListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a CatchListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public CatchListSpliceNode makeCatchListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public CatchNode makeCatchNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends VariableNode> parameter);
     
     /**
      * Creates a CatchNode.
@@ -1385,24 +1487,18 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public CatchNode makeCatchNode(
-            BlockStatementListNode body,
-            VariableNode parameter,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends VariableNode> parameter,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a CatchSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public CatchSpliceNode makeCatchSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a CatchSpliceNode.
+     * Creates a CatchNode.
      * The specified start and stop locations are used.
      */
-    public CatchSpliceNode makeCatchSpliceNode(
-            ExpressionNode spliceExpression,
+    public CatchNode makeCatchNode(
+            BlockStatementListNode body,
+            VariableNode parameter,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -1427,7 +1523,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ClassBodyNode makeClassBodyNode(
+            NodeUnion<? extends ClassMemberListNode> members);
+    
+    /**
+     * Creates a ClassBodyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ClassBodyNode makeClassBodyNode(
             ClassMemberListNode members);
+    
+    /**
+     * Creates a ClassBodyNode.
+     * The specified start and stop locations are used.
+     */
+    public ClassBodyNode makeClassBodyNode(
+            NodeUnion<? extends ClassMemberListNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ClassBodyNode.
@@ -1439,20 +1551,17 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ClassBodySpliceNode.
+     * Creates a ClassDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ClassBodySpliceNode makeClassBodySpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ClassBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ClassBodySpliceNode makeClassBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ClassDeclarationNode makeClassDeclarationNode(
+            NodeUnion<? extends ClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a ClassDeclarationNode.
@@ -1466,6 +1575,21 @@ public interface BsjNodeFactory
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a ClassDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public ClassDeclarationNode makeClassDeclarationNode(
+            NodeUnion<? extends ClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ClassDeclarationNode.
@@ -1487,7 +1611,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ClassLiteralNode makeClassLiteralNode(
+            NodeUnion<? extends LiteralizableTypeNode> value);
+    
+    /**
+     * Creates a ClassLiteralNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ClassLiteralNode makeClassLiteralNode(
             LiteralizableTypeNode value);
+    
+    /**
+     * Creates a ClassLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    public ClassLiteralNode makeClassLiteralNode(
+            NodeUnion<? extends LiteralizableTypeNode> value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ClassLiteralNode.
@@ -1531,20 +1671,11 @@ public interface BsjNodeFactory
             ClassMemberNode... childrenElements);
     
     /**
-     * Creates a ClassMemberListSpliceNode.
+     * Creates a ClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ClassMemberListSpliceNode makeClassMemberListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ClassMemberListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ClassMemberListSpliceNode makeClassMemberListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram);
     
     /**
      * Creates a ClassMemberMetaprogramAnchorNode.
@@ -1558,23 +1689,16 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram,
+            NodeUnion<? extends MetaprogramNode> metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ClassMemberSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public ClassMemberSpliceNode makeClassMemberSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ClassMemberSpliceNode.
+     * Creates a ClassMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
      */
-    public ClassMemberSpliceNode makeClassMemberSpliceNode(
-            ExpressionNode spliceExpression,
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -1588,8 +1712,36 @@ public interface BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a ClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a ClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ClassModifiersNode.
@@ -1623,20 +1775,11 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ClassModifiersSpliceNode.
+     * Creates a CodeLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ClassModifiersSpliceNode makeClassModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ClassModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ClassModifiersSpliceNode makeClassModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public CodeLiteralNode makeCodeLiteralNode(
+            NodeUnion<? extends Node> value);
     
     /**
      * Creates a CodeLiteralNode.
@@ -1644,6 +1787,15 @@ public interface BsjNodeFactory
      */
     public CodeLiteralNode makeCodeLiteralNode(
             Node value);
+    
+    /**
+     * Creates a CodeLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    public CodeLiteralNode makeCodeLiteralNode(
+            NodeUnion<? extends Node> value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a CodeLiteralNode.
@@ -1660,10 +1812,34 @@ public interface BsjNodeFactory
      */
     public CompilationUnitNode makeCompilationUnitNode(
             String name,
+            NodeUnion<? extends PackageDeclarationNode> packageDeclaration,
+            NodeUnion<? extends MetaprogramImportListNode> metaimports,
+            NodeUnion<? extends ImportListNode> imports,
+            NodeUnion<? extends TypeDeclarationListNode> typeDecls);
+    
+    /**
+     * Creates a CompilationUnitNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls);
+    
+    /**
+     * Creates a CompilationUnitNode.
+     * The specified start and stop locations are used.
+     */
+    public CompilationUnitNode makeCompilationUnitNode(
+            String name,
+            NodeUnion<? extends PackageDeclarationNode> packageDeclaration,
+            NodeUnion<? extends MetaprogramImportListNode> metaimports,
+            NodeUnion<? extends ImportListNode> imports,
+            NodeUnion<? extends TypeDeclarationListNode> typeDecls,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a CompilationUnitNode.
@@ -1705,9 +1881,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ConditionalExpressionNode makeConditionalExpressionNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends ExpressionNode> trueExpression,
+            NodeUnion<? extends ExpressionNode> falseExpression);
+    
+    /**
+     * Creates a ConditionalExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConditionalExpressionNode makeConditionalExpressionNode(
             ExpressionNode condition,
             ExpressionNode trueExpression,
             ExpressionNode falseExpression);
+    
+    /**
+     * Creates a ConditionalExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    public ConditionalExpressionNode makeConditionalExpressionNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends ExpressionNode> trueExpression,
+            NodeUnion<? extends ExpressionNode> falseExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ConditionalExpressionNode.
@@ -1725,10 +1921,32 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ConstantDeclarationNode makeConstantDeclarationNode(
+            NodeUnion<? extends ConstantModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc);
+    
+    /**
+     * Creates a ConstantDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConstantDeclarationNode makeConstantDeclarationNode(
             ConstantModifiersNode modifiers,
             TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a ConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstantDeclarationNode makeConstantDeclarationNode(
+            NodeUnion<? extends ConstantModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ConstantDeclarationNode.
@@ -1747,8 +1965,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ConstantModifiersNode makeConstantModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConstantModifiersNode makeConstantModifiersNode(
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a ConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstantModifiersNode makeConstantModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ConstantModifiersNode.
@@ -1776,20 +2012,12 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ConstantModifiersSpliceNode.
+     * Creates a ConstructorBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ConstantModifiersSpliceNode makeConstantModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ConstantModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ConstantModifiersSpliceNode makeConstantModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ConstructorBodyNode makeConstructorBodyNode(
+            NodeUnion<? extends ConstructorInvocationNode> constructorInvocation,
+            NodeUnion<? extends BlockStatementListNode> statements);
     
     /**
      * Creates a ConstructorBodyNode.
@@ -1804,26 +2032,34 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public ConstructorBodyNode makeConstructorBodyNode(
+            NodeUnion<? extends ConstructorInvocationNode> constructorInvocation,
+            NodeUnion<? extends BlockStatementListNode> statements,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a ConstructorBodyNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
             BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ConstructorBodySpliceNode.
+     * Creates a ConstructorDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ConstructorBodySpliceNode makeConstructorBodySpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ConstructorBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ConstructorBodySpliceNode makeConstructorBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ConstructorBodyNode> body,
+            NodeUnion<? extends ConstructorModifiersNode> modifiers,
+            NodeUnion<? extends VariableListNode> parameters,
+            NodeUnion<? extends VariableNode> varargParameter,
+            NodeUnion<? extends UnparameterizedTypeListNode> throwTypes,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a ConstructorDeclarationNode.
@@ -1838,6 +2074,22 @@ public interface BsjNodeFactory
             UnparameterizedTypeListNode throwTypes,
             TypeParameterListNode typeParameters,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a ConstructorDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ConstructorBodyNode> body,
+            NodeUnion<? extends ConstructorModifiersNode> modifiers,
+            NodeUnion<? extends VariableListNode> parameters,
+            NodeUnion<? extends VariableNode> varargParameter,
+            NodeUnion<? extends UnparameterizedTypeListNode> throwTypes,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ConstructorDeclarationNode.
@@ -1876,22 +2128,6 @@ public interface BsjNodeFactory
             ConstructorModifiersNode modifiers,
             VariableListNode parameters,
             JavadocNode javadoc,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a ConstructorInvocationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public ConstructorInvocationSpliceNode makeConstructorInvocationSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ConstructorInvocationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ConstructorInvocationSpliceNode makeConstructorInvocationSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -1901,8 +2137,28 @@ public interface BsjNodeFactory
      */
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ConstructorModifiersNode.
@@ -1932,20 +2188,12 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ConstructorModifiersSpliceNode.
+     * Creates a ContinueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ConstructorModifiersSpliceNode makeConstructorModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ConstructorModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ConstructorModifiersSpliceNode makeConstructorModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ContinueNode makeContinueNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
     
     /**
      * Creates a ContinueNode.
@@ -1954,6 +2202,16 @@ public interface BsjNodeFactory
     public ContinueNode makeContinueNode(
             IdentifierNode label,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a ContinueNode.
+     * The specified start and stop locations are used.
+     */
+    public ContinueNode makeContinueNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ContinueNode.
@@ -2028,36 +2286,13 @@ public interface BsjNodeFactory
             DeclaredTypeNode... childrenElements);
     
     /**
-     * Creates a DeclaredTypeListSpliceNode.
+     * Creates a DoWhileLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public DeclaredTypeListSpliceNode makeDeclaredTypeListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a DeclaredTypeListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public DeclaredTypeListSpliceNode makeDeclaredTypeListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a DeclaredTypeSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public DeclaredTypeSpliceNode makeDeclaredTypeSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a DeclaredTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public DeclaredTypeSpliceNode makeDeclaredTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public DoWhileLoopNode makeDoWhileLoopNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
     
     /**
      * Creates a DoWhileLoopNode.
@@ -2067,6 +2302,17 @@ public interface BsjNodeFactory
             ExpressionNode condition,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a DoWhileLoopNode.
+     * The specified start and stop locations are used.
+     */
+    public DoWhileLoopNode makeDoWhileLoopNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a DoWhileLoopNode.
@@ -2118,10 +2364,32 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnhancedForLoopNode makeEnhancedForLoopNode(
+            NodeUnion<? extends VariableNode> variable,
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a EnhancedForLoopNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
             VariableNode variable,
             ExpressionNode expression,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a EnhancedForLoopNode.
+     * The specified start and stop locations are used.
+     */
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            NodeUnion<? extends VariableNode> variable,
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a EnhancedForLoopNode.
@@ -2160,6 +2428,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnumBodyNode makeEnumBodyNode(
+            NodeUnion<? extends EnumConstantDeclarationListNode> constants,
+            NodeUnion<? extends ClassMemberListNode> members);
+    
+    /**
+     * Creates a EnumBodyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnumBodyNode makeEnumBodyNode(
             EnumConstantDeclarationListNode constants,
             ClassMemberListNode members);
     
@@ -2168,24 +2444,18 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public EnumBodyNode makeEnumBodyNode(
-            EnumConstantDeclarationListNode constants,
-            ClassMemberListNode members,
+            NodeUnion<? extends EnumConstantDeclarationListNode> constants,
+            NodeUnion<? extends ClassMemberListNode> members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a EnumBodySpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public EnumBodySpliceNode makeEnumBodySpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a EnumBodySpliceNode.
+     * Creates a EnumBodyNode.
      * The specified start and stop locations are used.
      */
-    public EnumBodySpliceNode makeEnumBodySpliceNode(
-            ExpressionNode spliceExpression,
+    public EnumBodyNode makeEnumBodyNode(
+            EnumConstantDeclarationListNode constants,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -2222,20 +2492,15 @@ public interface BsjNodeFactory
             EnumConstantDeclarationNode... childrenElements);
     
     /**
-     * Creates a EnumConstantDeclarationListSpliceNode.
+     * Creates a EnumConstantDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public EnumConstantDeclarationListSpliceNode makeEnumConstantDeclarationListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a EnumConstantDeclarationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public EnumConstantDeclarationListSpliceNode makeEnumConstantDeclarationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            NodeUnion<? extends EnumConstantModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a EnumConstantDeclarationNode.
@@ -2247,6 +2512,19 @@ public interface BsjNodeFactory
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a EnumConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            NodeUnion<? extends EnumConstantModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a EnumConstantDeclarationNode.
@@ -2280,22 +2558,6 @@ public interface BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a EnumConstantDeclarationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public EnumConstantDeclarationSpliceNode makeEnumConstantDeclarationSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a EnumConstantDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public EnumConstantDeclarationSpliceNode makeEnumConstantDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -2304,8 +2566,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a EnumConstantModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumConstantModifiersNode makeEnumConstantModifiersNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a EnumConstantModifiersNode.
@@ -2333,20 +2613,15 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a EnumConstantModifiersSpliceNode.
+     * Creates a EnumDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public EnumConstantModifiersSpliceNode makeEnumConstantModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a EnumConstantModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public EnumConstantModifiersSpliceNode makeEnumConstantModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public EnumDeclarationNode makeEnumDeclarationNode(
+            NodeUnion<? extends EnumModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends EnumBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a EnumDeclarationNode.
@@ -2358,6 +2633,19 @@ public interface BsjNodeFactory
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a EnumDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumDeclarationNode makeEnumDeclarationNode(
+            NodeUnion<? extends EnumModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends EnumBodyNode> body,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a EnumDeclarationNode.
@@ -2379,8 +2667,30 @@ public interface BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a EnumModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a EnumModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a EnumModifiersNode.
@@ -2407,22 +2717,6 @@ public interface BsjNodeFactory
      */
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a EnumModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public EnumModifiersSpliceNode makeEnumModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a EnumModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public EnumModifiersSpliceNode makeEnumModifiersSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -2459,36 +2753,12 @@ public interface BsjNodeFactory
             ExpressionNode... childrenElements);
     
     /**
-     * Creates a ExpressionListSpliceNode.
+     * Creates a ExpressionStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ExpressionListSpliceNode makeExpressionListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ExpressionListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ExpressionListSpliceNode makeExpressionListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a ExpressionSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public ExpressionSpliceNode makeExpressionSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ExpressionSpliceNode makeExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ExpressionStatementNode makeExpressionStatementNode(
+            NodeUnion<? extends StatementExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
     
     /**
      * Creates a ExpressionStatementNode.
@@ -2497,6 +2767,16 @@ public interface BsjNodeFactory
     public ExpressionStatementNode makeExpressionStatementNode(
             StatementExpressionNode expression,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a ExpressionStatementNode.
+     * The specified start and stop locations are used.
+     */
+    public ExpressionStatementNode makeExpressionStatementNode(
+            NodeUnion<? extends StatementExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ExpressionStatementNode.
@@ -2529,10 +2809,32 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
+            NodeUnion<? extends FieldModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc);
+    
+    /**
+     * Creates a FieldDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
             TypeNode type,
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a FieldDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public FieldDeclarationNode makeFieldDeclarationNode(
+            NodeUnion<? extends FieldModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a FieldDeclarationNode.
@@ -2556,8 +2858,36 @@ public interface BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a FieldModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean transientFlag,
+            boolean volatileFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a FieldModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean transientFlag,
+            boolean volatileFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a FieldModifiersNode.
@@ -2591,22 +2921,6 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a FieldModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public FieldModifiersSpliceNode makeFieldModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a FieldModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public FieldModifiersSpliceNode makeFieldModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
      * Creates a FloatLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2627,7 +2941,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
+            NodeUnion<? extends LocalVariableDeclarationNode> declaration);
+    
+    /**
+     * Creates a ForInitializerDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
             LocalVariableDeclarationNode declaration);
+    
+    /**
+     * Creates a ForInitializerDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
+            NodeUnion<? extends LocalVariableDeclarationNode> declaration,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ForInitializerDeclarationNode.
@@ -2643,7 +2973,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
+            NodeUnion<? extends StatementExpressionListNode> expressions);
+    
+    /**
+     * Creates a ForInitializerExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ForInitializerExpressionNode makeForInitializerExpressionNode(
             StatementExpressionListNode expressions);
+    
+    /**
+     * Creates a ForInitializerExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    public ForInitializerExpressionNode makeForInitializerExpressionNode(
+            NodeUnion<? extends StatementExpressionListNode> expressions,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ForInitializerExpressionNode.
@@ -2655,20 +3001,15 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ForInitializerSpliceNode.
+     * Creates a ForLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ForInitializerSpliceNode makeForInitializerSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ForInitializerSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ForInitializerSpliceNode makeForInitializerSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ForLoopNode makeForLoopNode(
+            NodeUnion<? extends ForInitializerNode> initializer,
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementExpressionListNode> update,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
     
     /**
      * Creates a ForLoopNode.
@@ -2680,6 +3021,19 @@ public interface BsjNodeFactory
             StatementExpressionListNode update,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a ForLoopNode.
+     * The specified start and stop locations are used.
+     */
+    public ForLoopNode makeForLoopNode(
+            NodeUnion<? extends ForInitializerNode> initializer,
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementExpressionListNode> update,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ForLoopNode.
@@ -2749,22 +3103,6 @@ public interface BsjNodeFactory
             IdentifierNode... childrenElements);
     
     /**
-     * Creates a IdentifierListSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public IdentifierListSpliceNode makeIdentifierListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a IdentifierListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public IdentifierListSpliceNode makeIdentifierListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
      * Creates a IdentifierNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2781,20 +3119,14 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a IdentifierSpliceNode.
+     * Creates a IfNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public IdentifierSpliceNode makeIdentifierSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a IdentifierSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public IdentifierSpliceNode makeIdentifierSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public IfNode makeIfNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> thenStatement,
+            NodeUnion<? extends StatementNode> elseStatement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
     
     /**
      * Creates a IfNode.
@@ -2805,6 +3137,18 @@ public interface BsjNodeFactory
             StatementNode thenStatement,
             StatementNode elseStatement,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a IfNode.
+     * The specified start and stop locations are used.
+     */
+    public IfNode makeIfNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> thenStatement,
+            NodeUnion<? extends StatementNode> elseStatement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a IfNode.
@@ -2889,36 +3233,11 @@ public interface BsjNodeFactory
             ImportNode... childrenElements);
     
     /**
-     * Creates a ImportListSpliceNode.
+     * Creates a ImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ImportListSpliceNode makeImportListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ImportListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ImportListSpliceNode makeImportListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a ImportSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public ImportSpliceNode makeImportSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ImportSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ImportSpliceNode makeImportSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ImportOnDemandNode makeImportOnDemandNode(
+            NodeUnion<? extends NameNode> name);
     
     /**
      * Creates a ImportOnDemandNode.
@@ -2926,6 +3245,15 @@ public interface BsjNodeFactory
      */
     public ImportOnDemandNode makeImportOnDemandNode(
             NameNode name);
+    
+    /**
+     * Creates a ImportOnDemandNode.
+     * The specified start and stop locations are used.
+     */
+    public ImportOnDemandNode makeImportOnDemandNode(
+            NodeUnion<? extends NameNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ImportOnDemandNode.
@@ -2941,7 +3269,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ImportSingleTypeNode makeImportSingleTypeNode(
+            NodeUnion<? extends NameNode> name);
+    
+    /**
+     * Creates a ImportSingleTypeNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ImportSingleTypeNode makeImportSingleTypeNode(
             NameNode name);
+    
+    /**
+     * Creates a ImportSingleTypeNode.
+     * The specified start and stop locations are used.
+     */
+    public ImportSingleTypeNode makeImportSingleTypeNode(
+            NodeUnion<? extends NameNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ImportSingleTypeNode.
@@ -2958,8 +3302,28 @@ public interface BsjNodeFactory
      */
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
             BlockStatementListNode body,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a InitializerDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a InitializerDeclarationNode.
@@ -2995,8 +3359,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public InstanceOfNode makeInstanceOfNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type);
+    
+    /**
+     * Creates a InstanceOfNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public InstanceOfNode makeInstanceOfNode(
             ExpressionNode expression,
             TypeNode type);
+    
+    /**
+     * Creates a InstanceOfNode.
+     * The specified start and stop locations are used.
+     */
+    public InstanceOfNode makeInstanceOfNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a InstanceOfNode.
@@ -3029,7 +3411,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public InterfaceBodyNode makeInterfaceBodyNode(
+            NodeUnion<? extends InterfaceMemberListNode> members);
+    
+    /**
+     * Creates a InterfaceBodyNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public InterfaceBodyNode makeInterfaceBodyNode(
             InterfaceMemberListNode members);
+    
+    /**
+     * Creates a InterfaceBodyNode.
+     * The specified start and stop locations are used.
+     */
+    public InterfaceBodyNode makeInterfaceBodyNode(
+            NodeUnion<? extends InterfaceMemberListNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a InterfaceBodyNode.
@@ -3041,20 +3439,16 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a InterfaceBodySpliceNode.
+     * Creates a InterfaceDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public InterfaceBodySpliceNode makeInterfaceBodySpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a InterfaceBodySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public InterfaceBodySpliceNode makeInterfaceBodySpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public InterfaceDeclarationNode makeInterfaceDeclarationNode(
+            NodeUnion<? extends InterfaceModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeListNode> extendsClause,
+            NodeUnion<? extends InterfaceBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a InterfaceDeclarationNode.
@@ -3067,6 +3461,20 @@ public interface BsjNodeFactory
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a InterfaceDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public InterfaceDeclarationNode makeInterfaceDeclarationNode(
+            NodeUnion<? extends InterfaceModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeListNode> extendsClause,
+            NodeUnion<? extends InterfaceBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a InterfaceDeclarationNode.
@@ -3115,20 +3523,11 @@ public interface BsjNodeFactory
             InterfaceMemberNode... childrenElements);
     
     /**
-     * Creates a InterfaceMemberListSpliceNode.
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public InterfaceMemberListSpliceNode makeInterfaceMemberListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a InterfaceMemberListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public InterfaceMemberListSpliceNode makeInterfaceMemberListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram);
     
     /**
      * Creates a InterfaceMemberMetaprogramAnchorNode.
@@ -3142,23 +3541,16 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram,
+            NodeUnion<? extends MetaprogramNode> metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a InterfaceMemberSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public InterfaceMemberSpliceNode makeInterfaceMemberSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a InterfaceMemberSpliceNode.
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
      */
-    public InterfaceMemberSpliceNode makeInterfaceMemberSpliceNode(
-            ExpressionNode spliceExpression,
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3170,8 +3562,32 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a InterfaceModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a InterfaceModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a InterfaceModifiersNode.
@@ -3203,22 +3619,6 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a InterfaceModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public InterfaceModifiersSpliceNode makeInterfaceModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a InterfaceModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public InterfaceModifiersSpliceNode makeInterfaceModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
      * Creates a JavadocNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3235,20 +3635,13 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a JavadocSpliceNode.
+     * Creates a LabeledStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public JavadocSpliceNode makeJavadocSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a JavadocSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public JavadocSpliceNode makeJavadocSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public LabeledStatementNode makeLabeledStatementNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
     
     /**
      * Creates a LabeledStatementNode.
@@ -3258,6 +3651,17 @@ public interface BsjNodeFactory
             IdentifierNode label,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a LabeledStatementNode.
+     * The specified start and stop locations are used.
+     */
+    public LabeledStatementNode makeLabeledStatementNode(
+            NodeUnion<? extends IdentifierNode> label,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a LabeledStatementNode.
@@ -3289,20 +3693,17 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a LiteralizableTypeSpliceNode.
+     * Creates a LocalClassDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public LiteralizableTypeSpliceNode makeLiteralizableTypeSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a LiteralizableTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public LiteralizableTypeSpliceNode makeLiteralizableTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public LocalClassDeclarationNode makeLocalClassDeclarationNode(
+            NodeUnion<? extends LocalClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a LocalClassDeclarationNode.
@@ -3316,6 +3717,21 @@ public interface BsjNodeFactory
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a LocalClassDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public LocalClassDeclarationNode makeLocalClassDeclarationNode(
+            NodeUnion<? extends LocalClassModifiersNode> modifiers,
+            NodeUnion<? extends DeclaredTypeNode> extendsClause,
+            NodeUnion<? extends DeclaredTypeListNode> implementsClause,
+            NodeUnion<? extends ClassBodyNode> body,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a LocalClassDeclarationNode.
@@ -3340,8 +3756,32 @@ public interface BsjNodeFactory
             boolean abstractFlag,
             boolean finalFlag,
             boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            boolean abstractFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a LocalClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public LocalClassModifiersNode makeLocalClassModifiersNode(
+            boolean abstractFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a LocalClassModifiersNode.
@@ -3372,20 +3812,13 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a LocalClassModifiersSpliceNode.
+     * Creates a LocalVariableDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public LocalClassModifiersSpliceNode makeLocalClassModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a LocalClassModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public LocalClassModifiersSpliceNode makeLocalClassModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators);
     
     /**
      * Creates a LocalVariableDeclarationNode.
@@ -3395,6 +3828,17 @@ public interface BsjNodeFactory
             VariableModifiersNode modifiers,
             TypeNode type,
             VariableDeclaratorListNode declarators);
+    
+    /**
+     * Creates a LocalVariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a LocalVariableDeclarationNode.
@@ -3422,22 +3866,6 @@ public interface BsjNodeFactory
     public LocalVariableDeclarationNode makeLocalVariableDeclarationNode(
             TypeNode type,
             VariableDeclaratorListNode declarators,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a LocalVariableDeclarationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public LocalVariableDeclarationSpliceNode makeLocalVariableDeclarationSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a LocalVariableDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public LocalVariableDeclarationSpliceNode makeLocalVariableDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3462,7 +3890,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            NodeUnion<? extends MetaAnnotationValueListNode> values);
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
             MetaAnnotationValueListNode values);
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            NodeUnion<? extends MetaAnnotationValueListNode> values,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a MetaAnnotationArrayValueNode.
@@ -3506,20 +3950,12 @@ public interface BsjNodeFactory
             MetaAnnotationElementNode... childrenElements);
     
     /**
-     * Creates a MetaAnnotationElementListSpliceNode.
+     * Creates a MetaAnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaAnnotationElementListSpliceNode makeMetaAnnotationElementListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaAnnotationElementListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaAnnotationElementListSpliceNode makeMetaAnnotationElementListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends MetaAnnotationValueNode> value);
     
     /**
      * Creates a MetaAnnotationElementNode.
@@ -3534,24 +3970,18 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public MetaAnnotationElementNode makeMetaAnnotationElementNode(
-            IdentifierNode identifier,
-            MetaAnnotationValueNode value,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends MetaAnnotationValueNode> value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MetaAnnotationElementSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaAnnotationElementSpliceNode makeMetaAnnotationElementSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaAnnotationElementSpliceNode.
+     * Creates a MetaAnnotationElementNode.
      * The specified start and stop locations are used.
      */
-    public MetaAnnotationElementSpliceNode makeMetaAnnotationElementSpliceNode(
-            ExpressionNode spliceExpression,
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            IdentifierNode identifier,
+            MetaAnnotationValueNode value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3560,7 +3990,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NodeUnion<? extends NonAssignmentExpressionNode> expression);
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
             NonAssignmentExpressionNode expression);
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NodeUnion<? extends NonAssignmentExpressionNode> expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a MetaAnnotationExpressionValueNode.
@@ -3604,20 +4050,11 @@ public interface BsjNodeFactory
             MetaAnnotationNode... childrenElements);
     
     /**
-     * Creates a MetaAnnotationListSpliceNode.
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaAnnotationListSpliceNode makeMetaAnnotationListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaAnnotationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaAnnotationListSpliceNode makeMetaAnnotationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            NodeUnion<? extends MetaAnnotationNode> annotation);
     
     /**
      * Creates a MetaAnnotationMetaAnnotationValueNode.
@@ -3625,6 +4062,15 @@ public interface BsjNodeFactory
      */
     public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
             MetaAnnotationNode annotation);
+    
+    /**
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            NodeUnion<? extends MetaAnnotationNode> annotation,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a MetaAnnotationMetaAnnotationValueNode.
@@ -3647,38 +4093,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public MetaAnnotationMetaprogramAnchorNode makeMetaAnnotationMetaprogramAnchorNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a MetaAnnotationMetaprogramAnchorSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaAnnotationMetaprogramAnchorSpliceNode makeMetaAnnotationMetaprogramAnchorSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaAnnotationMetaprogramAnchorSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaAnnotationMetaprogramAnchorSpliceNode makeMetaAnnotationMetaprogramAnchorSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a MetaAnnotationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaAnnotationSpliceNode makeMetaAnnotationSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaAnnotationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaAnnotationSpliceNode makeMetaAnnotationSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3715,38 +4129,6 @@ public interface BsjNodeFactory
             MetaAnnotationValueNode... childrenElements);
     
     /**
-     * Creates a MetaAnnotationValueListSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaAnnotationValueListSpliceNode makeMetaAnnotationValueListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaAnnotationValueListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaAnnotationValueListSpliceNode makeMetaAnnotationValueListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a MetaAnnotationValueSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaAnnotationValueSpliceNode makeMetaAnnotationValueSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaAnnotationValueSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaAnnotationValueSpliceNode makeMetaAnnotationValueSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
      * Creates a MetaprogramDependencyDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3779,20 +4161,11 @@ public interface BsjNodeFactory
             MetaprogramDependencyDeclarationNode... childrenElements);
     
     /**
-     * Creates a MetaprogramDependencyDeclarationListSpliceNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramDependencyDeclarationListSpliceNode makeMetaprogramDependencyDeclarationListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramDependencyDeclarationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramDependencyDeclarationListSpliceNode makeMetaprogramDependencyDeclarationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            NodeUnion<? extends MetaprogramDependencyListNode> targets);
     
     /**
      * Creates a MetaprogramDependencyDeclarationNode.
@@ -3806,23 +4179,16 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
-            MetaprogramDependencyListNode targets,
+            NodeUnion<? extends MetaprogramDependencyListNode> targets,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MetaprogramDependencyDeclarationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaprogramDependencyDeclarationSpliceNode makeMetaprogramDependencyDeclarationSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramDependencyDeclarationSpliceNode.
+     * Creates a MetaprogramDependencyDeclarationNode.
      * The specified start and stop locations are used.
      */
-    public MetaprogramDependencyDeclarationSpliceNode makeMetaprogramDependencyDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
+    public MetaprogramDependencyDeclarationNode makeMetaprogramDependencyDeclarationNode(
+            MetaprogramDependencyListNode targets,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3859,20 +4225,12 @@ public interface BsjNodeFactory
             MetaprogramDependencyNode... childrenElements);
     
     /**
-     * Creates a MetaprogramDependencyListSpliceNode.
+     * Creates a MetaprogramDependencyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramDependencyListSpliceNode makeMetaprogramDependencyListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramDependencyListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramDependencyListSpliceNode makeMetaprogramDependencyListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NodeUnion<? extends NameNode> targetName,
+            boolean weak);
     
     /**
      * Creates a MetaprogramDependencyNode.
@@ -3881,6 +4239,16 @@ public interface BsjNodeFactory
     public MetaprogramDependencyNode makeMetaprogramDependencyNode(
             NameNode targetName,
             boolean weak);
+    
+    /**
+     * Creates a MetaprogramDependencyNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramDependencyNode makeMetaprogramDependencyNode(
+            NodeUnion<? extends NameNode> targetName,
+            boolean weak,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a MetaprogramDependencyNode.
@@ -3905,22 +4273,6 @@ public interface BsjNodeFactory
      */
     public MetaprogramDependencyNode makeMetaprogramDependencyNode(
             NameNode targetName,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a MetaprogramDependencySpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaprogramDependencySpliceNode makeMetaprogramDependencySpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramDependencySpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramDependencySpliceNode makeMetaprogramDependencySpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3957,20 +4309,11 @@ public interface BsjNodeFactory
             MetaprogramImportNode... childrenElements);
     
     /**
-     * Creates a MetaprogramImportListSpliceNode.
+     * Creates a MetaprogramImportNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramImportListSpliceNode makeMetaprogramImportListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramImportListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramImportListSpliceNode makeMetaprogramImportListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MetaprogramImportNode makeMetaprogramImportNode(
+            NodeUnion<? extends ImportNode> importNode);
     
     /**
      * Creates a MetaprogramImportNode.
@@ -3984,25 +4327,26 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public MetaprogramImportNode makeMetaprogramImportNode(
+            NodeUnion<? extends ImportNode> importNode,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaprogramImportNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramImportNode makeMetaprogramImportNode(
             ImportNode importNode,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MetaprogramImportSpliceNode.
+     * Creates a MetaprogramNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramImportSpliceNode makeMetaprogramImportSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramImportSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramImportSpliceNode makeMetaprogramImportSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MetaprogramNode makeMetaprogramNode(
+            NodeUnion<? extends MetaprogramPreambleNode> preamble,
+            NodeUnion<? extends BlockStatementListNode> body);
     
     /**
      * Creates a MetaprogramNode.
@@ -4017,26 +4361,31 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public MetaprogramNode makeMetaprogramNode(
+            NodeUnion<? extends MetaprogramPreambleNode> preamble,
+            NodeUnion<? extends BlockStatementListNode> body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaprogramNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramNode makeMetaprogramNode(
             MetaprogramPreambleNode preamble,
             BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MetaprogramSpliceNode.
+     * Creates a MetaprogramPreambleNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramSpliceNode makeMetaprogramSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramSpliceNode makeMetaprogramSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            NodeUnion<? extends MetaprogramImportListNode> imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
+            NodeUnion<? extends MetaprogramTargetListNode> targets,
+            NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies);
     
     /**
      * Creates a MetaprogramPreambleNode.
@@ -4048,6 +4397,19 @@ public interface BsjNodeFactory
             MetaprogramPackageMode packageMode,
             MetaprogramTargetListNode targets,
             MetaprogramDependencyDeclarationListNode dependencies);
+    
+    /**
+     * Creates a MetaprogramPreambleNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            NodeUnion<? extends MetaprogramImportListNode> imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
+            NodeUnion<? extends MetaprogramTargetListNode> targets,
+            NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a MetaprogramPreambleNode.
@@ -4079,22 +4441,6 @@ public interface BsjNodeFactory
             MetaprogramImportListNode imports,
             MetaprogramTargetListNode targets,
             MetaprogramDependencyDeclarationListNode dependencies,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a MetaprogramPreambleSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaprogramPreambleSpliceNode makeMetaprogramPreambleSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramPreambleSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramPreambleSpliceNode makeMetaprogramPreambleSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -4131,20 +4477,11 @@ public interface BsjNodeFactory
             MetaprogramTargetNode... childrenElements);
     
     /**
-     * Creates a MetaprogramTargetListSpliceNode.
+     * Creates a MetaprogramTargetNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramTargetListSpliceNode makeMetaprogramTargetListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramTargetListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramTargetListSpliceNode makeMetaprogramTargetListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            NodeUnion<? extends IdentifierListNode> targets);
     
     /**
      * Creates a MetaprogramTargetNode.
@@ -4158,25 +4495,33 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public MetaprogramTargetNode makeMetaprogramTargetNode(
+            NodeUnion<? extends IdentifierListNode> targets,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaprogramTargetNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
             IdentifierListNode targets,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MetaprogramTargetSpliceNode.
+     * Creates a MethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramTargetSpliceNode makeMetaprogramTargetSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MetaprogramTargetSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramTargetSpliceNode makeMetaprogramTargetSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public MethodDeclarationNode makeMethodDeclarationNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MethodModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends VariableListNode> parameters,
+            NodeUnion<? extends VariableNode> varargParameter,
+            NodeUnion<? extends TypeNode> returnType,
+            NodeUnion<? extends UnparameterizedTypeListNode> throwTypes,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends JavadocNode> javadoc);
     
     /**
      * Creates a MethodDeclarationNode.
@@ -4192,6 +4537,23 @@ public interface BsjNodeFactory
             UnparameterizedTypeListNode throwTypes,
             TypeParameterListNode typeParameters,
             JavadocNode javadoc);
+    
+    /**
+     * Creates a MethodDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodDeclarationNode makeMethodDeclarationNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MethodModifiersNode> modifiers,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends VariableListNode> parameters,
+            NodeUnion<? extends VariableNode> varargParameter,
+            NodeUnion<? extends TypeNode> returnType,
+            NodeUnion<? extends UnparameterizedTypeListNode> throwTypes,
+            NodeUnion<? extends TypeParameterListNode> typeParameters,
+            NodeUnion<? extends JavadocNode> javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a MethodDeclarationNode.
@@ -4241,10 +4603,32 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public MethodInvocationNode makeMethodInvocationNode(
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments);
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodInvocationNode makeMethodInvocationNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments);
+    
+    /**
+     * Creates a MethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodInvocationNode makeMethodInvocationNode(
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a MethodInvocationNode.
@@ -4342,8 +4726,40 @@ public interface BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a MethodModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean synchronizedFlag,
+            boolean nativeFlag,
+            boolean strictfpFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a MethodModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean synchronizedFlag,
+            boolean nativeFlag,
+            boolean strictfpFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a MethodModifiersNode.
@@ -4379,52 +4795,11 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a MethodModifiersSpliceNode.
+     * Creates a NoOperationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MethodModifiersSpliceNode makeMethodModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a MethodModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public MethodModifiersSpliceNode makeMethodModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a ModifiersSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public ModifiersSpliceNode makeModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ModifiersSpliceNode makeModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a NameSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public NameSpliceNode makeNameSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a NameSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public NameSpliceNode makeNameSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public NoOperationNode makeNoOperationNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
     
     /**
      * Creates a NoOperationNode.
@@ -4432,6 +4807,15 @@ public interface BsjNodeFactory
      */
     public NoOperationNode makeNoOperationNode(
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a NoOperationNode.
+     * The specified start and stop locations are used.
+     */
+    public NoOperationNode makeNoOperationNode(
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a NoOperationNode.
@@ -4458,20 +4842,12 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a NonAssignmentExpressionSpliceNode.
+     * Creates a NormalAnnotationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public NonAssignmentExpressionSpliceNode makeNonAssignmentExpressionSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a NonAssignmentExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public NonAssignmentExpressionSpliceNode makeNonAssignmentExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public NormalAnnotationNode makeNormalAnnotationNode(
+            NodeUnion<? extends AnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType);
     
     /**
      * Creates a NormalAnnotationNode.
@@ -4480,6 +4856,16 @@ public interface BsjNodeFactory
     public NormalAnnotationNode makeNormalAnnotationNode(
             AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType);
+    
+    /**
+     * Creates a NormalAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    public NormalAnnotationNode makeNormalAnnotationNode(
+            NodeUnion<? extends AnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a NormalAnnotationNode.
@@ -4496,8 +4882,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            NodeUnion<? extends MetaAnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType);
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType);
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            NodeUnion<? extends MetaAnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a NormalMetaAnnotationNode.
@@ -4529,9 +4933,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public PackageDeclarationNode makePackageDeclarationNode(
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
+    
+    /**
+     * Creates a PackageDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a PackageDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public PackageDeclarationNode makePackageDeclarationNode(
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a PackageDeclarationNode.
@@ -4561,20 +4985,11 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a PackageDeclarationSpliceNode.
+     * Creates a PackageNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public PackageDeclarationSpliceNode makePackageDeclarationSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a PackageDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public PackageDeclarationSpliceNode makePackageDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public PackageNode makePackageNode(
+            NodeUnion<? extends IdentifierNode> name);
     
     /**
      * Creates a PackageNode.
@@ -4582,6 +4997,15 @@ public interface BsjNodeFactory
      */
     public PackageNode makePackageNode(
             IdentifierNode name);
+    
+    /**
+     * Creates a PackageNode.
+     * The specified start and stop locations are used.
+     */
+    public PackageNode makePackageNode(
+            NodeUnion<? extends IdentifierNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a PackageNode.
@@ -4597,8 +5021,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
+            NodeUnion<? extends UnparameterizedTypeNode> baseType,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments);
+    
+    /**
+     * Creates a ParameterizedTypeNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
             TypeArgumentListNode typeArguments);
+    
+    /**
+     * Creates a ParameterizedTypeNode.
+     * The specified start and stop locations are used.
+     */
+    public ParameterizedTypeNode makeParameterizedTypeNode(
+            NodeUnion<? extends UnparameterizedTypeNode> baseType,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ParameterizedTypeNode.
@@ -4611,20 +5053,12 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a ParameterizedTypeSpliceNode.
+     * Creates a ParameterizedTypeSelectNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ParameterizedTypeSpliceNode makeParameterizedTypeSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ParameterizedTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ParameterizedTypeSpliceNode makeParameterizedTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
+            NodeUnion<? extends ParameterizedTypeNode> base,
+            NodeUnion<? extends DeclaredTypeNode> select);
     
     /**
      * Creates a ParameterizedTypeSelectNode.
@@ -4633,6 +5067,16 @@ public interface BsjNodeFactory
     public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
             ParameterizedTypeNode base,
             DeclaredTypeNode select);
+    
+    /**
+     * Creates a ParameterizedTypeSelectNode.
+     * The specified start and stop locations are used.
+     */
+    public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
+            NodeUnion<? extends ParameterizedTypeNode> base,
+            NodeUnion<? extends DeclaredTypeNode> select,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ParameterizedTypeSelectNode.
@@ -4649,6 +5093,13 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression);
+    
+    /**
+     * Creates a ParenthesizedExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
             ExpressionNode expression);
     
     /**
@@ -4656,23 +5107,16 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
-            ExpressionNode expression,
+            NodeUnion<? extends ExpressionNode> expression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a PrimaryExpressionSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public PrimaryExpressionSpliceNode makePrimaryExpressionSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a PrimaryExpressionSpliceNode.
+     * Creates a ParenthesizedExpressionNode.
      * The specified start and stop locations are used.
      */
-    public PrimaryExpressionSpliceNode makePrimaryExpressionSpliceNode(
-            ExpressionNode spliceExpression,
+    public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
+            ExpressionNode expression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -4697,12 +5141,38 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            NodeUnion<? extends ExpressionNode> enclosingExpression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body);
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
             TypeArgumentListNode typeArguments,
             TypeArgumentListNode constructorTypeArguments,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body);
+    
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            NodeUnion<? extends ExpressionNode> enclosingExpression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a QualifiedClassInstantiationNode.
@@ -4743,8 +5213,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public QualifiedNameNode makeQualifiedNameNode(
+            NodeUnion<? extends NameNode> base,
+            NodeUnion<? extends IdentifierNode> identifier);
+    
+    /**
+     * Creates a QualifiedNameNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
             IdentifierNode identifier);
+    
+    /**
+     * Creates a QualifiedNameNode.
+     * The specified start and stop locations are used.
+     */
+    public QualifiedNameNode makeQualifiedNameNode(
+            NodeUnion<? extends NameNode> base,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a QualifiedNameNode.
@@ -4805,52 +5293,12 @@ public interface BsjNodeFactory
             ReferenceTypeNode... childrenElements);
     
     /**
-     * Creates a ReferenceTypeListSpliceNode.
+     * Creates a ReturnNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public ReferenceTypeListSpliceNode makeReferenceTypeListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ReferenceTypeListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ReferenceTypeListSpliceNode makeReferenceTypeListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a ReferenceTypeSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public ReferenceTypeSpliceNode makeReferenceTypeSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a ReferenceTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public ReferenceTypeSpliceNode makeReferenceTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a RestrictedPrimaryExpressionSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public RestrictedPrimaryExpressionSpliceNode makeRestrictedPrimaryExpressionSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a RestrictedPrimaryExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public RestrictedPrimaryExpressionSpliceNode makeRestrictedPrimaryExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public ReturnNode makeReturnNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
     
     /**
      * Creates a ReturnNode.
@@ -4859,6 +5307,16 @@ public interface BsjNodeFactory
     public ReturnNode makeReturnNode(
             ExpressionNode expression,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a ReturnNode.
+     * The specified start and stop locations are used.
+     */
+    public ReturnNode makeReturnNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ReturnNode.
@@ -4891,7 +5349,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SimpleNameNode makeSimpleNameNode(
+            NodeUnion<? extends IdentifierNode> identifier);
+    
+    /**
+     * Creates a SimpleNameNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SimpleNameNode makeSimpleNameNode(
             IdentifierNode identifier);
+    
+    /**
+     * Creates a SimpleNameNode.
+     * The specified start and stop locations are used.
+     */
+    public SimpleNameNode makeSimpleNameNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SimpleNameNode.
@@ -4907,8 +5381,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
+            NodeUnion<? extends AnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType);
+    
+    /**
+     * Creates a SingleElementAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
             UnparameterizedTypeNode annotationType);
+    
+    /**
+     * Creates a SingleElementAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    public SingleElementAnnotationNode makeSingleElementAnnotationNode(
+            NodeUnion<? extends AnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SingleElementAnnotationNode.
@@ -4925,8 +5417,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            NodeUnion<? extends MetaAnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType);
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
             UnparameterizedTypeNode annotationType);
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            NodeUnion<? extends MetaAnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SingleElementMetaAnnotationNode.
@@ -4943,8 +5453,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SingleStaticImportNode makeSingleStaticImportNode(
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends IdentifierNode> identifier);
+    
+    /**
+     * Creates a SingleStaticImportNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SingleStaticImportNode makeSingleStaticImportNode(
             NameNode name,
             IdentifierNode identifier);
+    
+    /**
+     * Creates a SingleStaticImportNode.
+     * The specified start and stop locations are used.
+     */
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NodeUnion<? extends NameNode> name,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SingleStaticImportNode.
@@ -4961,7 +5489,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SpliceNode makeSpliceNode(
+            NodeUnion<? extends ExpressionNode> spliceExpression);
+    
+    /**
+     * Creates a SpliceNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SpliceNode makeSpliceNode(
             ExpressionNode spliceExpression);
+    
+    /**
+     * Creates a SpliceNode.
+     * The specified start and stop locations are used.
+     */
+    public SpliceNode makeSpliceNode(
+            NodeUnion<? extends ExpressionNode> spliceExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SpliceNode.
@@ -5005,52 +5549,11 @@ public interface BsjNodeFactory
             StatementExpressionNode... childrenElements);
     
     /**
-     * Creates a StatementExpressionListSpliceNode.
+     * Creates a StaticImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public StatementExpressionListSpliceNode makeStatementExpressionListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a StatementExpressionListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public StatementExpressionListSpliceNode makeStatementExpressionListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a StatementExpressionSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public StatementExpressionSpliceNode makeStatementExpressionSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a StatementExpressionSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public StatementExpressionSpliceNode makeStatementExpressionSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a StatementSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public StatementSpliceNode makeStatementSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a StatementSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public StatementSpliceNode makeStatementSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NodeUnion<? extends NameNode> name);
     
     /**
      * Creates a StaticImportOnDemandNode.
@@ -5058,6 +5561,15 @@ public interface BsjNodeFactory
      */
     public StaticImportOnDemandNode makeStaticImportOnDemandNode(
             NameNode name);
+    
+    /**
+     * Creates a StaticImportOnDemandNode.
+     * The specified start and stop locations are used.
+     */
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NodeUnion<? extends NameNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a StaticImportOnDemandNode.
@@ -5089,8 +5601,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SuperFieldAccessNode makeSuperFieldAccessNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier);
+    
+    /**
+     * Creates a SuperFieldAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
             UnparameterizedTypeNode type,
             IdentifierNode identifier);
+    
+    /**
+     * Creates a SuperFieldAccessNode.
+     * The specified start and stop locations are used.
+     */
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SuperFieldAccessNode.
@@ -5123,10 +5653,32 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments);
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments);
+    
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SuperMethodInvocationNode.
@@ -5183,9 +5735,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments);
+    
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments);
+    
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends ReferenceTypeListNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SuperclassConstructorInvocationNode.
@@ -5219,9 +5791,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SwitchNode makeSwitchNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends CaseListNode> cases,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a SwitchNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SwitchNode makeSwitchNode(
             ExpressionNode expression,
             CaseListNode cases,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a SwitchNode.
+     * The specified start and stop locations are used.
+     */
+    public SwitchNode makeSwitchNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends CaseListNode> cases,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SwitchNode.
@@ -5257,9 +5849,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public SynchronizedNode makeSynchronizedNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a SynchronizedNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SynchronizedNode makeSynchronizedNode(
             ExpressionNode expression,
             BlockStatementListNode body,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a SynchronizedNode.
+     * The specified start and stop locations are used.
+     */
+    public SynchronizedNode makeSynchronizedNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SynchronizedNode.
@@ -5295,7 +5907,23 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ThisNode makeThisNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type);
+    
+    /**
+     * Creates a ThisNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ThisNode makeThisNode(
             UnparameterizedTypeNode type);
+    
+    /**
+     * Creates a ThisNode.
+     * The specified start and stop locations are used.
+     */
+    public ThisNode makeThisNode(
+            NodeUnion<? extends UnparameterizedTypeNode> type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ThisNode.
@@ -5325,8 +5953,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ThrowNode makeThrowNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a ThrowNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ThrowNode makeThrowNode(
             ExpressionNode expression,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a ThrowNode.
+     * The specified start and stop locations are used.
+     */
+    public ThrowNode makeThrowNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a ThrowNode.
@@ -5359,10 +6005,32 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public TryNode makeTryNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends CatchListNode> catches,
+            NodeUnion<? extends BlockStatementListNode> finallyBlock,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a TryNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public TryNode makeTryNode(
             BlockStatementListNode body,
             CatchListNode catches,
             BlockStatementListNode finallyBlock,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a TryNode.
+     * The specified start and stop locations are used.
+     */
+    public TryNode makeTryNode(
+            NodeUnion<? extends BlockStatementListNode> body,
+            NodeUnion<? extends CatchListNode> catches,
+            NodeUnion<? extends BlockStatementListNode> finallyBlock,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a TryNode.
@@ -5465,36 +6133,12 @@ public interface BsjNodeFactory
             TypeArgumentNode... childrenElements);
     
     /**
-     * Creates a TypeArgumentListSpliceNode.
+     * Creates a TypeCastNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public TypeArgumentListSpliceNode makeTypeArgumentListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a TypeArgumentListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public TypeArgumentListSpliceNode makeTypeArgumentListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a TypeArgumentSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public TypeArgumentSpliceNode makeTypeArgumentSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a TypeArgumentSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public TypeArgumentSpliceNode makeTypeArgumentSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public TypeCastNode makeTypeCastNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type);
     
     /**
      * Creates a TypeCastNode.
@@ -5503,6 +6147,16 @@ public interface BsjNodeFactory
     public TypeCastNode makeTypeCastNode(
             ExpressionNode expression,
             TypeNode type);
+    
+    /**
+     * Creates a TypeCastNode.
+     * The specified start and stop locations are used.
+     */
+    public TypeCastNode makeTypeCastNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            NodeUnion<? extends TypeNode> type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a TypeCastNode.
@@ -5547,20 +6201,11 @@ public interface BsjNodeFactory
             TypeDeclarationNode... childrenElements);
     
     /**
-     * Creates a TypeDeclarationListSpliceNode.
+     * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public TypeDeclarationListSpliceNode makeTypeDeclarationListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a TypeDeclarationListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public TypeDeclarationListSpliceNode makeTypeDeclarationListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram);
     
     /**
      * Creates a TypeDeclarationMetaprogramAnchorNode.
@@ -5574,39 +6219,16 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
+            NodeUnion<? extends MetaprogramNode> metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a TypeDeclarationMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
             MetaprogramNode metaprogram,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a TypeDeclarationSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public TypeDeclarationSpliceNode makeTypeDeclarationSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a TypeDeclarationSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public TypeDeclarationSpliceNode makeTypeDeclarationSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a TypeSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public TypeSpliceNode makeTypeSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a TypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public TypeSpliceNode makeTypeSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -5643,20 +6265,12 @@ public interface BsjNodeFactory
             TypeParameterNode... childrenElements);
     
     /**
-     * Creates a TypeParameterListSpliceNode.
+     * Creates a TypeParameterNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public TypeParameterListSpliceNode makeTypeParameterListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a TypeParameterListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public TypeParameterListSpliceNode makeTypeParameterListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public TypeParameterNode makeTypeParameterNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends DeclaredTypeListNode> bounds);
     
     /**
      * Creates a TypeParameterNode.
@@ -5671,24 +6285,18 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public TypeParameterNode makeTypeParameterNode(
-            IdentifierNode identifier,
-            DeclaredTypeListNode bounds,
+            NodeUnion<? extends IdentifierNode> identifier,
+            NodeUnion<? extends DeclaredTypeListNode> bounds,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a TypeParameterSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public TypeParameterSpliceNode makeTypeParameterSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a TypeParameterSpliceNode.
+     * Creates a TypeParameterNode.
      * The specified start and stop locations are used.
      */
-    public TypeParameterSpliceNode makeTypeParameterSpliceNode(
-            ExpressionNode spliceExpression,
+    public TypeParameterNode makeTypeParameterNode(
+            IdentifierNode identifier,
+            DeclaredTypeListNode bounds,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -5697,8 +6305,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public UnaryExpressionNode makeUnaryExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            UnaryOperator operator);
+    
+    /**
+     * Creates a UnaryExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public UnaryExpressionNode makeUnaryExpressionNode(
             ExpressionNode expression,
             UnaryOperator operator);
+    
+    /**
+     * Creates a UnaryExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    public UnaryExpressionNode makeUnaryExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            UnaryOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a UnaryExpressionNode.
@@ -5715,8 +6341,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            UnaryStatementOperator operator);
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
             ExpressionNode expression,
             UnaryStatementOperator operator);
+    
+    /**
+     * Creates a UnaryStatementExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            NodeUnion<? extends ExpressionNode> expression,
+            UnaryStatementOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a UnaryStatementExpressionNode.
@@ -5761,20 +6405,11 @@ public interface BsjNodeFactory
             UnparameterizedTypeNode... childrenElements);
     
     /**
-     * Creates a UnparameterizedTypeListSpliceNode.
+     * Creates a UnparameterizedTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public UnparameterizedTypeListSpliceNode makeUnparameterizedTypeListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a UnparameterizedTypeListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public UnparameterizedTypeListSpliceNode makeUnparameterizedTypeListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public UnparameterizedTypeNode makeUnparameterizedTypeNode(
+            NodeUnion<? extends NameNode> name);
     
     /**
      * Creates a UnparameterizedTypeNode.
@@ -5788,25 +6423,28 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public UnparameterizedTypeNode makeUnparameterizedTypeNode(
+            NodeUnion<? extends NameNode> name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a UnparameterizedTypeNode.
+     * The specified start and stop locations are used.
+     */
+    public UnparameterizedTypeNode makeUnparameterizedTypeNode(
             NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a UnparameterizedTypeSpliceNode.
+     * Creates a UnqualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public UnparameterizedTypeSpliceNode makeUnparameterizedTypeSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a UnparameterizedTypeSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public UnparameterizedTypeSpliceNode makeUnparameterizedTypeSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            NodeUnion<? extends DeclaredTypeNode> type,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body);
     
     /**
      * Creates a UnqualifiedClassInstantiationNode.
@@ -5817,6 +6455,18 @@ public interface BsjNodeFactory
             TypeArgumentListNode constructorTypeArguments,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body);
+    
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            NodeUnion<? extends DeclaredTypeNode> type,
+            NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments,
+            NodeUnion<? extends ExpressionListNode> arguments,
+            NodeUnion<? extends AnonymousClassBodyNode> body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a UnqualifiedClassInstantiationNode.
@@ -5869,8 +6519,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public VariableAccessNode makeVariableAccessNode(
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier);
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableAccessNode makeVariableAccessNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier);
+    
+    /**
+     * Creates a VariableAccessNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableAccessNode makeVariableAccessNode(
+            NodeUnion<? extends PrimaryExpressionNode> expression,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a VariableAccessNode.
@@ -5931,20 +6599,13 @@ public interface BsjNodeFactory
             VariableDeclaratorNode... childrenElements);
     
     /**
-     * Creates a VariableDeclaratorListSpliceNode.
+     * Creates a VariableDeclaratorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public VariableDeclaratorListSpliceNode makeVariableDeclaratorListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a VariableDeclaratorListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableDeclaratorListSpliceNode makeVariableDeclaratorListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            int arrayLevels,
+            NodeUnion<? extends VariableInitializerNode> initializer);
     
     /**
      * Creates a VariableDeclaratorNode.
@@ -5954,6 +6615,17 @@ public interface BsjNodeFactory
             IdentifierNode identifier,
             int arrayLevels,
             VariableInitializerNode initializer);
+    
+    /**
+     * Creates a VariableDeclaratorNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            NodeUnion<? extends IdentifierNode> identifier,
+            int arrayLevels,
+            NodeUnion<? extends VariableInitializerNode> initializer,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a VariableDeclaratorNode.
@@ -5981,22 +6653,6 @@ public interface BsjNodeFactory
     public VariableDeclaratorNode makeVariableDeclaratorNode(
             IdentifierNode identifier,
             VariableInitializerNode initializer,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a VariableDeclaratorSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public VariableDeclaratorSpliceNode makeVariableDeclaratorSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a VariableDeclaratorSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableDeclaratorSpliceNode makeVariableDeclaratorSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -6033,38 +6689,6 @@ public interface BsjNodeFactory
             VariableInitializerNode... childrenElements);
     
     /**
-     * Creates a VariableInitializerListSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public VariableInitializerListSpliceNode makeVariableInitializerListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a VariableInitializerListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableInitializerListSpliceNode makeVariableInitializerListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a VariableInitializerSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public VariableInitializerSpliceNode makeVariableInitializerSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a VariableInitializerSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableInitializerSpliceNode makeVariableInitializerSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
      * Creates a VariableListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -6097,20 +6721,13 @@ public interface BsjNodeFactory
             VariableNode... childrenElements);
     
     /**
-     * Creates a VariableListSpliceNode.
+     * Creates a VariableModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public VariableListSpliceNode makeVariableListSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a VariableListSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableListSpliceNode makeVariableListSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public VariableModifiersNode makeVariableModifiersNode(
+            boolean finalFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations);
     
     /**
      * Creates a VariableModifiersNode.
@@ -6120,6 +6737,17 @@ public interface BsjNodeFactory
             boolean finalFlag,
             MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
+    
+    /**
+     * Creates a VariableModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableModifiersNode makeVariableModifiersNode(
+            boolean finalFlag,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            NodeUnion<? extends AnnotationListNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a VariableModifiersNode.
@@ -6147,20 +6775,13 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a VariableModifiersSpliceNode.
+     * Creates a VariableNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public VariableModifiersSpliceNode makeVariableModifiersSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a VariableModifiersSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableModifiersSpliceNode makeVariableModifiersSpliceNode(
-            ExpressionNode spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
+    public VariableNode makeVariableNode(
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier);
     
     /**
      * Creates a VariableNode.
@@ -6170,6 +6791,17 @@ public interface BsjNodeFactory
             VariableModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier);
+    
+    /**
+     * Creates a VariableNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableNode makeVariableNode(
+            NodeUnion<? extends VariableModifiersNode> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends IdentifierNode> identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a VariableNode.
@@ -6197,22 +6829,6 @@ public interface BsjNodeFactory
     public VariableNode makeVariableNode(
             TypeNode type,
             IdentifierNode identifier,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a VariableSpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public VariableSpliceNode makeVariableSpliceNode(
-            ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a VariableSpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public VariableSpliceNode makeVariableSpliceNode(
-            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -6236,9 +6852,29 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public WhileLoopNode makeWhileLoopNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations);
+    
+    /**
+     * Creates a WhileLoopNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public WhileLoopNode makeWhileLoopNode(
             ExpressionNode condition,
             StatementNode statement,
             MetaAnnotationListNode metaAnnotations);
+    
+    /**
+     * Creates a WhileLoopNode.
+     * The specified start and stop locations are used.
+     */
+    public WhileLoopNode makeWhileLoopNode(
+            NodeUnion<? extends ExpressionNode> condition,
+            NodeUnion<? extends StatementNode> statement,
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a WhileLoopNode.
@@ -6274,8 +6910,26 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public WildcardTypeNode makeWildcardTypeNode(
+            NodeUnion<? extends ReferenceTypeNode> bound,
+            boolean upperBound);
+    
+    /**
+     * Creates a WildcardTypeNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public WildcardTypeNode makeWildcardTypeNode(
             ReferenceTypeNode bound,
             boolean upperBound);
+    
+    /**
+     * Creates a WildcardTypeNode.
+     * The specified start and stop locations are used.
+     */
+    public WildcardTypeNode makeWildcardTypeNode(
+            NodeUnion<? extends ReferenceTypeNode> bound,
+            boolean upperBound,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
     
     /**
      * Creates a WildcardTypeNode.

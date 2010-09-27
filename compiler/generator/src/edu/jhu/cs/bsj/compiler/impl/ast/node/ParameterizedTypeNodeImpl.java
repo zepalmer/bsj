@@ -14,21 +14,23 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParameterizedTypeNodeImpl extends NodeImpl implements ParameterizedTypeNode
 {
     /** The base type being parameterized. */
-    private UnparameterizedTypeNode baseType;
+    private NodeUnion<? extends UnparameterizedTypeNode> baseType;
     
     /** The type arguments for this node. */
-    private TypeArgumentListNode typeArguments;
+    private NodeUnion<? extends TypeArgumentListNode> typeArguments;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -51,25 +53,46 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     
     /** General constructor. */
     public ParameterizedTypeNodeImpl(
-            UnparameterizedTypeNode baseType,
-            TypeArgumentListNode typeArguments,
+            NodeUnion<? extends UnparameterizedTypeNode> baseType,
+            NodeUnion<? extends TypeArgumentListNode> typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setBaseType(baseType, false);
-        setTypeArguments(typeArguments, false);
+        setUnionForBaseType(baseType, false);
+        setUnionForTypeArguments(typeArguments, false);
+    }
+    
+    /**
+     * Gets the base type being parameterized.  This property's value is assumed to be a normal node.
+     * @return The base type being parameterized.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public UnparameterizedTypeNode getBaseType()
+    {
+        getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.baseType == null)
+        {
+            return null;
+        } else
+        {
+            return this.baseType.getNormalNode();
+        }
     }
     
     /**
      * Gets the base type being parameterized.
      * @return The base type being parameterized.
      */
-    public UnparameterizedTypeNode getBaseType()
+    public NodeUnion<? extends UnparameterizedTypeNode> getUnionForBaseType()
     {
         getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.baseType == null)
+        {
+            this.baseType = new NormalNodeUnion<UnparameterizedTypeNode>(null);
+        }
         return this.baseType;
     }
     
@@ -90,18 +113,73 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.baseType, false);
-        this.baseType = baseType;
+        
+        if (this.baseType != null)
+        {
+            setAsChild(this.baseType.getNodeValue(), false);
+        }
+        this.baseType = new NormalNodeUnion<UnparameterizedTypeNode>(baseType);
         setAsChild(baseType, true);
+    }
+    
+    /**
+     * Changes the base type being parameterized.
+     * @param baseType The base type being parameterized.
+     */
+    public void setUnionForBaseType(NodeUnion<? extends UnparameterizedTypeNode> baseType)
+    {
+            setUnionForBaseType(baseType, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForBaseType(NodeUnion<? extends UnparameterizedTypeNode> baseType, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (baseType == null)
+        {
+            throw new NullPointerException("Node union for property baseType cannot be null.");
+        }
+        if (this.baseType != null)
+        {
+            setAsChild(this.baseType.getNodeValue(), false);
+        }
+        this.baseType = baseType;
+        setAsChild(baseType.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the type arguments for this node.  This property's value is assumed to be a normal node.
+     * @return The type arguments for this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public TypeArgumentListNode getTypeArguments()
+    {
+        getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.typeArguments == null)
+        {
+            return null;
+        } else
+        {
+            return this.typeArguments.getNormalNode();
+        }
     }
     
     /**
      * Gets the type arguments for this node.
      * @return The type arguments for this node.
      */
-    public TypeArgumentListNode getTypeArguments()
+    public NodeUnion<? extends TypeArgumentListNode> getUnionForTypeArguments()
     {
         getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.typeArguments == null)
+        {
+            this.typeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
+        }
         return this.typeArguments;
     }
     
@@ -122,9 +200,43 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.typeArguments, false);
-        this.typeArguments = typeArguments;
+        
+        if (this.typeArguments != null)
+        {
+            setAsChild(this.typeArguments.getNodeValue(), false);
+        }
+        this.typeArguments = new NormalNodeUnion<TypeArgumentListNode>(typeArguments);
         setAsChild(typeArguments, true);
+    }
+    
+    /**
+     * Changes the type arguments for this node.
+     * @param typeArguments The type arguments for this node.
+     */
+    public void setUnionForTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments)
+    {
+            setUnionForTypeArguments(typeArguments, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (typeArguments == null)
+        {
+            throw new NullPointerException("Node union for property typeArguments cannot be null.");
+        }
+        if (this.typeArguments != null)
+        {
+            setAsChild(this.typeArguments.getNodeValue(), false);
+        }
+        this.typeArguments = typeArguments;
+        setAsChild(typeArguments.getNodeValue(), true);
     }
     
     /**
@@ -138,13 +250,13 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.baseType != null)
+        if (this.baseType.getNodeValue() != null)
         {
-            this.baseType.receive(visitor);
+            this.baseType.getNodeValue().receive(visitor);
         }
-        if (this.typeArguments != null)
+        if (this.typeArguments.getNodeValue() != null)
         {
-            this.typeArguments.receive(visitor);
+            this.typeArguments.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -167,13 +279,13 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.baseType != null)
+        if (this.baseType.getNodeValue() != null)
         {
-            this.baseType.receiveTyped(visitor);
+            this.baseType.getNodeValue().receiveTyped(visitor);
         }
-        if (this.typeArguments != null)
+        if (this.typeArguments.getNodeValue() != null)
         {
-            this.typeArguments.receiveTyped(visitor);
+            this.typeArguments.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -222,7 +334,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getBaseType(), getTypeArguments()});
+        return Arrays.asList(new Node[]{getUnionForBaseType().getNodeValue(), getUnionForTypeArguments().getNodeValue()});
     }
     
     /**
@@ -235,10 +347,10 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("baseType=");
-        sb.append(this.getBaseType() == null? "null" : this.getBaseType().getClass().getSimpleName());
+        sb.append(this.getUnionForBaseType().getNodeValue() == null? "null" : this.getUnionForBaseType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeArguments=");
-        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(this.getUnionForTypeArguments().getNodeValue() == null? "null" : this.getUnionForTypeArguments().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -282,9 +394,57 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     @Override
     public ParameterizedTypeNode deepCopy(BsjNodeFactory factory)
     {
+        NodeUnion<? extends UnparameterizedTypeNode> baseTypeCopy;
+        switch (getUnionForBaseType().getType())
+        {
+            case NORMAL:
+                if (getUnionForBaseType().getNormalNode() == null)
+                {
+                    baseTypeCopy = factory.<UnparameterizedTypeNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    baseTypeCopy = factory.makeNormalNodeUnion(getUnionForBaseType().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForBaseType().getSpliceNode() == null)
+                {
+                    baseTypeCopy = factory.<UnparameterizedTypeNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    baseTypeCopy = factory.makeSpliceNodeUnion(getUnionForBaseType().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForBaseType().getType());
+        }
+        NodeUnion<? extends TypeArgumentListNode> typeArgumentsCopy;
+        switch (getUnionForTypeArguments().getType())
+        {
+            case NORMAL:
+                if (getUnionForTypeArguments().getNormalNode() == null)
+                {
+                    typeArgumentsCopy = factory.<TypeArgumentListNode>makeNormalNodeUnion(null);
+                } else
+                {
+                    typeArgumentsCopy = factory.makeNormalNodeUnion(getUnionForTypeArguments().getNormalNode().deepCopy(factory));
+                }
+                break;
+            case SPLICE:
+                if (getUnionForTypeArguments().getSpliceNode() == null)
+                {
+                    typeArgumentsCopy = factory.<TypeArgumentListNode>makeSpliceNodeUnion(null);
+                } else
+                {
+                    typeArgumentsCopy = factory.makeSpliceNodeUnion(getUnionForTypeArguments().getSpliceNode().deepCopy(factory));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
+        }
         return factory.makeParameterizedTypeNode(
-                getBaseType()==null?null:getBaseType().deepCopy(factory),
-                getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
+                baseTypeCopy,
+                typeArgumentsCopy,
                 getStartLocation(),
                 getStopLocation());
     }

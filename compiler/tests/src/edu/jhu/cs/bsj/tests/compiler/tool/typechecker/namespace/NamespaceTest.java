@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.RecordingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
@@ -94,7 +95,7 @@ public class NamespaceTest extends AbstractTest
 
 		BsjToolkit toolkit = getToolkit(SPECIFIC_SOURCE_DIR);
 		final BsjNodeFactory factory = toolkit.getNodeFactory();
-		rootPackage = factory.makePackageNode(null);
+		rootPackage = factory.makePackageNode((IdentifierNode)null);
 		final CompilationUnitLoader loader = toolkit.getCompilationUnitLoaderFactory().makeLoader(diagnosticListener);
 		compilationUnitNode = loader.load(rootPackage, "ExampleNamespace");
 		assertNoNewErrorDiagnostics("Error while loading ExampleNamespace.bsj");

@@ -10,6 +10,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractMemberVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
@@ -17,22 +18,23 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends ModifiersNode> extends NodeImpl implements AbstractMemberVariableDeclarationNode<T>
 {
     /** The modifiers for this declaration. */
-    private T modifiers;
+    private NodeUnion<? extends T> modifiers;
     
     /** The type of the declared variables. */
-    private TypeNode type;
+    private NodeUnion<? extends TypeNode> type;
     
     /** The variable declarators for this node. */
-    private VariableDeclaratorListNode declarators;
+    private NodeUnion<? extends VariableDeclaratorListNode> declarators;
     
     /** The associated javadoc comment for this node. */
-    private JavadocNode javadoc;
+    private NodeUnion<? extends JavadocNode> javadoc;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -59,29 +61,50 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     
     /** General constructor. */
     protected AbstractMemberVariableDeclarationNodeImpl(
-            T modifiers,
-            TypeNode type,
-            VariableDeclaratorListNode declarators,
-            JavadocNode javadoc,
+            NodeUnion<? extends T> modifiers,
+            NodeUnion<? extends TypeNode> type,
+            NodeUnion<? extends VariableDeclaratorListNode> declarators,
+            NodeUnion<? extends JavadocNode> javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setModifiers(modifiers, false);
-        setType(type, false);
-        setDeclarators(declarators, false);
-        setJavadoc(javadoc, false);
+        setUnionForModifiers(modifiers, false);
+        setUnionForType(type, false);
+        setUnionForDeclarators(declarators, false);
+        setUnionForJavadoc(javadoc, false);
+    }
+    
+    /**
+     * Gets the modifiers for this declaration.  This property's value is assumed to be a normal node.
+     * @return The modifiers for this declaration.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public T getModifiers()
+    {
+        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.modifiers == null)
+        {
+            return null;
+        } else
+        {
+            return this.modifiers.getNormalNode();
+        }
     }
     
     /**
      * Gets the modifiers for this declaration.
      * @return The modifiers for this declaration.
      */
-    public T getModifiers()
+    public NodeUnion<? extends T> getUnionForModifiers()
     {
         getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.modifiers == null)
+        {
+            this.modifiers = new NormalNodeUnion<T>(null);
+        }
         return this.modifiers;
     }
     
@@ -102,18 +125,73 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.modifiers, false);
-        this.modifiers = modifiers;
+        
+        if (this.modifiers != null)
+        {
+            setAsChild(this.modifiers.getNodeValue(), false);
+        }
+        this.modifiers = new NormalNodeUnion<T>(modifiers);
         setAsChild(modifiers, true);
+    }
+    
+    /**
+     * Changes the modifiers for this declaration.
+     * @param modifiers The modifiers for this declaration.
+     */
+    public void setUnionForModifiers(NodeUnion<? extends T> modifiers)
+    {
+            setUnionForModifiers(modifiers, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForModifiers(NodeUnion<? extends T> modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (modifiers == null)
+        {
+            throw new NullPointerException("Node union for property modifiers cannot be null.");
+        }
+        if (this.modifiers != null)
+        {
+            setAsChild(this.modifiers.getNodeValue(), false);
+        }
+        this.modifiers = modifiers;
+        setAsChild(modifiers.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the type of the declared variables.  This property's value is assumed to be a normal node.
+     * @return The type of the declared variables.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public TypeNode getType()
+    {
+        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            return null;
+        } else
+        {
+            return this.type.getNormalNode();
+        }
     }
     
     /**
      * Gets the type of the declared variables.
      * @return The type of the declared variables.
      */
-    public TypeNode getType()
+    public NodeUnion<? extends TypeNode> getUnionForType()
     {
         getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.type == null)
+        {
+            this.type = new NormalNodeUnion<TypeNode>(null);
+        }
         return this.type;
     }
     
@@ -134,18 +212,73 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.type, false);
-        this.type = type;
+        
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = new NormalNodeUnion<TypeNode>(type);
         setAsChild(type, true);
+    }
+    
+    /**
+     * Changes the type of the declared variables.
+     * @param type The type of the declared variables.
+     */
+    public void setUnionForType(NodeUnion<? extends TypeNode> type)
+    {
+            setUnionForType(type, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForType(NodeUnion<? extends TypeNode> type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (type == null)
+        {
+            throw new NullPointerException("Node union for property type cannot be null.");
+        }
+        if (this.type != null)
+        {
+            setAsChild(this.type.getNodeValue(), false);
+        }
+        this.type = type;
+        setAsChild(type.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the variable declarators for this node.  This property's value is assumed to be a normal node.
+     * @return The variable declarators for this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public VariableDeclaratorListNode getDeclarators()
+    {
+        getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.declarators == null)
+        {
+            return null;
+        } else
+        {
+            return this.declarators.getNormalNode();
+        }
     }
     
     /**
      * Gets the variable declarators for this node.
      * @return The variable declarators for this node.
      */
-    public VariableDeclaratorListNode getDeclarators()
+    public NodeUnion<? extends VariableDeclaratorListNode> getUnionForDeclarators()
     {
         getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.declarators == null)
+        {
+            this.declarators = new NormalNodeUnion<VariableDeclaratorListNode>(null);
+        }
         return this.declarators;
     }
     
@@ -166,18 +299,73 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.declarators, false);
-        this.declarators = declarators;
+        
+        if (this.declarators != null)
+        {
+            setAsChild(this.declarators.getNodeValue(), false);
+        }
+        this.declarators = new NormalNodeUnion<VariableDeclaratorListNode>(declarators);
         setAsChild(declarators, true);
+    }
+    
+    /**
+     * Changes the variable declarators for this node.
+     * @param declarators The variable declarators for this node.
+     */
+    public void setUnionForDeclarators(NodeUnion<? extends VariableDeclaratorListNode> declarators)
+    {
+            setUnionForDeclarators(declarators, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForDeclarators(NodeUnion<? extends VariableDeclaratorListNode> declarators, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (declarators == null)
+        {
+            throw new NullPointerException("Node union for property declarators cannot be null.");
+        }
+        if (this.declarators != null)
+        {
+            setAsChild(this.declarators.getNodeValue(), false);
+        }
+        this.declarators = declarators;
+        setAsChild(declarators.getNodeValue(), true);
+    }
+    
+    /**
+     * Gets the associated javadoc comment for this node.  This property's value is assumed to be a normal node.
+     * @return The associated javadoc comment for this node.
+     * @throws ClassCastException If this property's value is not a normal node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.javadoc == null)
+        {
+            return null;
+        } else
+        {
+            return this.javadoc.getNormalNode();
+        }
     }
     
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
      */
-    public JavadocNode getJavadoc()
+    public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
         getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.javadoc == null)
+        {
+            this.javadoc = new NormalNodeUnion<JavadocNode>(null);
+        }
         return this.javadoc;
     }
     
@@ -198,9 +386,43 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
             getManager().assertMutatable(this);
             getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
-        setAsChild(this.javadoc, false);
-        this.javadoc = javadoc;
+        
+        if (this.javadoc != null)
+        {
+            setAsChild(this.javadoc.getNodeValue(), false);
+        }
+        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
         setAsChild(javadoc, true);
+    }
+    
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
+    {
+            setUnionForJavadoc(javadoc, true);
+            getManager().notifyChange(this);
+    }
+    
+    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
+        }
+        
+        if (javadoc == null)
+        {
+            throw new NullPointerException("Node union for property javadoc cannot be null.");
+        }
+        if (this.javadoc != null)
+        {
+            setAsChild(this.javadoc.getNodeValue(), false);
+        }
+        this.javadoc = javadoc;
+        setAsChild(javadoc.getNodeValue(), true);
     }
     
     /**
@@ -214,21 +436,21 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers != null)
+        if (this.modifiers.getNodeValue() != null)
         {
-            this.modifiers.receive(visitor);
+            this.modifiers.getNodeValue().receive(visitor);
         }
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receive(visitor);
+            this.type.getNodeValue().receive(visitor);
         }
-        if (this.declarators != null)
+        if (this.declarators.getNodeValue() != null)
         {
-            this.declarators.receive(visitor);
+            this.declarators.getNodeValue().receive(visitor);
         }
-        if (this.javadoc != null)
+        if (this.javadoc.getNodeValue() != null)
         {
-            this.javadoc.receive(visitor);
+            this.javadoc.getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -251,21 +473,21 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers != null)
+        if (this.modifiers.getNodeValue() != null)
         {
-            this.modifiers.receiveTyped(visitor);
+            this.modifiers.getNodeValue().receiveTyped(visitor);
         }
-        if (this.type != null)
+        if (this.type.getNodeValue() != null)
         {
-            this.type.receiveTyped(visitor);
+            this.type.getNodeValue().receiveTyped(visitor);
         }
-        if (this.declarators != null)
+        if (this.declarators.getNodeValue() != null)
         {
-            this.declarators.receiveTyped(visitor);
+            this.declarators.getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc != null)
+        if (this.javadoc.getNodeValue() != null)
         {
-            this.javadoc.receiveTyped(visitor);
+            this.javadoc.getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -321,16 +543,16 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
+        sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("type=");
-        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
+        sb.append(this.getUnionForType().getNodeValue() == null? "null" : this.getUnionForType().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("declarators=");
-        sb.append(this.getDeclarators() == null? "null" : this.getDeclarators().getClass().getSimpleName());
+        sb.append(this.getUnionForDeclarators().getNodeValue() == null? "null" : this.getUnionForDeclarators().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
-        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(this.getUnionForJavadoc().getNodeValue() == null? "null" : this.getUnionForJavadoc().getNodeValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

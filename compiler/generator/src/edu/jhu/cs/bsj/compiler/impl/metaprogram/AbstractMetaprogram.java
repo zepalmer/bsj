@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.metaprogram;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
@@ -10,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
  * @author Zachary Palmer
  * @param <T> The type of anchor node associated with this metaprogram.
  */
-public abstract class AbstractMetaprogram<T extends MetaprogramAnchorNode<?>> implements Metaprogram<T>
+public abstract class AbstractMetaprogram<T extends MetaprogramAnchorNode<U>, U extends Node> implements Metaprogram<T,U>
 {
 	/** The next UID to be assigned to a metaprogram. */
 	private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
@@ -32,7 +33,7 @@ public abstract class AbstractMetaprogram<T extends MetaprogramAnchorNode<?>> im
 	 * metaprogrammer's code.
 	 * @param context The context in which to execute the metaprogram.
 	 */
-	public abstract void execute(Context<T> context);
+	public abstract void execute(Context<T,U> context);
 	
 	/**
 	 * Retrieves the ID number for this metaprogram.

@@ -55,7 +55,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
 	}
 
 	@Override
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context)
 	{
 		ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
 		MethodDeclarationNode method = MethodDeclUtils.getNearestMethodDeclaration(context, this);
