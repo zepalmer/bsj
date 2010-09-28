@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramDependencyTypeNameResolutionDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingListener;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.UserMetaprogramWrapper;
-import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.Dependency;
@@ -19,21 +20,23 @@ import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
-public class PrepareMetaAnnotationMetaprorgamTask extends
-		AbstractMetaprogramProfileBuildingTask<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>
+public class PrepareMetaAnnotationMetaprorgamTask
+		extends
+		AbstractMetaprogramProfileBuildingTask<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>
 {
 	/** The meta-annotation metaprogram for which a profile should be constructed and registered. */
-	private BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> metaprogramObject;
+	private BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> metaprogramObject;
 
 	public PrepareMetaAnnotationMetaprorgamTask(MetaAnnotationMetaprogramAnchorNode anchor,
-			InjectionInfo injectionInfo, BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> metaprogramObject)
+			InjectionInfo injectionInfo,
+			BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> metaprogramObject)
 	{
 		super(TaskPriority.PREPARE_METAANNOTATION_METAPROGRAM, anchor, injectionInfo);
 		this.metaprogramObject = metaprogramObject;
 	}
 
 	@Override
-	protected MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> buildProfile(
+	protected MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> buildProfile(
 			MetacompilationContext metacompilationContext) throws IOException
 	{
 		Collection<String> targetNames = new ArrayList<String>();
@@ -52,15 +55,16 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 		// TODO: validate that the target names and dependency names are not bogus
 		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
 				this.metacompilationContext.getDiagnosticListener());
-		Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>(
+		Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(
 				this.anchor, null, this.metacompilationContext.getToolkit().getNodeFactory(),
 				new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
 						this.anchor.getStartLocation()), loader);
 
-		MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>(
-				new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode>(this.metaprogramObject), this.anchor,
-				dependencies, targetNames, this.metaprogramObject.getLocalMode(),
-				this.metaprogramObject.getPackageMode(), context, injectionInfo.isPurelyInjected());
+		MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(
+				new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(
+						this.metaprogramObject), this.anchor, dependencies, targetNames,
+				this.metaprogramObject.getLocalMode(), this.metaprogramObject.getPackageMode(), context,
+				injectionInfo.isPurelyInjected());
 		return profile;
 	}
 
@@ -69,7 +73,7 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 		for (String depName : depNames)
 		{
 			String qualifiedDepName;
-			// TODO: clean this up; using raw strings is a bit dangerous
+			// TODO: clean this up; using raw strings is a bit dangerous because types and packages could overlap
 			if (!depName.contains("."))
 			{
 				// Then the dependency name is simple. Qualify it with the enclosing type
@@ -77,26 +81,28 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 			} else
 			{
 				// Then the name is at least partially qualified
-				CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
-						this.metacompilationContext.getDiagnosticListener());
-				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = this.anchor.executeOperation(
-						new TypeDeclarationLocatingNodeOperation(
-								this.metacompilationContext.getToolkit().getNodeFactory().parseNameNode(depName),
-								loader), null);
-				if (namedTypeDeclarationNode == null)
+				NameNode typeNameNode = this.metacompilationContext.getToolkit().getNodeFactory().parseNameNode(
+						depName.substring(0, depName.lastIndexOf('.')));
+				Collection<? extends Node> declarations = this.anchor.getDeclarationsInScope(typeNameNode);
+				if (declarations.size() != 1)
 				{
-					// We could not find the type name contained in the dependency. This is an error; the
-					// metaprogram is referring to a type which does not exist in the object program namespace.
-					String typeName = depName.substring(0, depName.lastIndexOf('.'));
 					metacompilationContext.getDiagnosticListener().report(
 							new MetaprogramDependencyTypeNameResolutionDiagnosticImpl(this.anchor.getStartLocation(),
-									typeName));
+									typeNameNode.getNameString()));
 					return false;
-				} else
-				{
-					qualifiedDepName = namedTypeDeclarationNode.getFullyQualifiedName() + "."
-							+ depName.substring(depName.lastIndexOf('.') + 1);
 				}
+				Node declarationNode = declarations.iterator().next();
+				if (!(declarationNode instanceof NamedTypeDeclarationNode<?>))
+				{
+					metacompilationContext.getDiagnosticListener().report(
+							new MetaprogramDependencyTypeNameResolutionDiagnosticImpl(this.anchor.getStartLocation(),
+									typeNameNode.getNameString()));
+					return false;
+				}
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) declarationNode;
+
+				qualifiedDepName = namedTypeDeclarationNode.getFullyQualifiedName() + "."
+						+ depName.substring(depName.lastIndexOf('.') + 1);
 			}
 			list.add(new Dependency(qualifiedDepName, weak));
 		}
