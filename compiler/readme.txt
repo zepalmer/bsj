@@ -4,7 +4,7 @@ Project Name        Dependencies               Purpose
 ===============================================================================
 api                                            public API for BSJ
 devutils            api, generator, parser,
-                      source-generator, utils  developer utilities
+                    utils                      developer utilities
 generator           api, parser, utils         BSJ compiler implementation
 parser              api, utils                 BSJ parser implementation
 plugin                                         BSJ Eclipse plugin

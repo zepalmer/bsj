@@ -22,8 +22,7 @@ public enum Project
 	GENERATOR("implementation", Arrays.asList("edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.attribute.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.list.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
-			"edu.jhu.cs.bsj.compiler.impl.ast.splicenode.*", "edu.jhu.cs.bsj.compiler.impl.ast.splicenode.list.*",
-			"edu.jhu.cs.bsj.compiler.impl.ast.splicenode.meta.*", "edu.jhu.cs.bsj.compiler.impl.utils.*",
+			"edu.jhu.cs.bsj.compiler.impl.utils.*",
 			"javax.annotation.Generated", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager.*"), Arrays.asList(API)),
 	BSJ_UTILS("utils", Arrays.<String> asList(), Arrays.asList(API));
 

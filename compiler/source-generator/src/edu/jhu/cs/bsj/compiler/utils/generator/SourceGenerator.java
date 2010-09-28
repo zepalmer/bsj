@@ -587,7 +587,7 @@ public class SourceGenerator
 			for (AbstractPropertyDefinition<?> p : new ConcatenatingIterable<AbstractPropertyDefinition<?>>(
 					def.getProperties(), def.getConstants()))
 			{
-				if (!(p instanceof ModalPropertyDefinition<?>) || !((ModalPropertyDefinition<?>)p).isHide())
+				if (!(p instanceof ModalPropertyDefinition<?>) || !((ModalPropertyDefinition<?>) p).isHide())
 				{
 					if (p.isWrappable())
 					{
@@ -618,7 +618,7 @@ public class SourceGenerator
 
 					}
 
-					if (p instanceof ModalPropertyDefinition<?> && !((ModalPropertyDefinition<?>)p).isReadOnly())
+					if (p instanceof ModalPropertyDefinition<?> && !((ModalPropertyDefinition<?>) p).isReadOnly())
 					{
 						ps.println("/**");
 						ps.println(" * Changes " + p.getDescription() + ".");
@@ -874,6 +874,11 @@ public class SourceGenerator
 			{
 				useDefinition(def);
 			}
+		}
+
+		protected TypeDefinition getTypeDefinitionByName(String name)
+		{
+			return this.map.get(name);
 		}
 
 		protected TypeDefinition deriveTypeDefinitionWithName(TypeDefinition specialDef, String name)
@@ -3134,11 +3139,31 @@ public class SourceGenerator
 						}
 						ps.println("ExpressionNode lift" + capFirst(p.getName()) + " = ");
 						ps.incPrependCount(2);
-						ps.println("node.get" + capFirst(p.getName()) + "() != null ?");
-						ps.incPrependCount(2);
-						ps.println("node.get" + capFirst(p.getName()) + "().executeOperation(this,factoryNode) :");
-						ps.println("factory.makeNullLiteralNode();");
-						ps.decPrependCount(4);
+						if (p.isWrappable())
+						{
+							for (String typeComponent : UNION_TYPE_COMPONENTS)
+							{
+								if (typeComponent.equals("Normal"))
+									continue;
+								ps.println("node.getUnionFor" + capFirst(p.getName())
+										+ "().getType() == NodeUnion.Type." + typeComponent.toUpperCase() + " ? ");
+								ps.incPrependCount(2);
+								ps.println("expressionize" + typeComponent + "NodeUnion(" + "node.getUnionFor"
+										+ capFirst(p.getName()) + "().get" + typeComponent + "Node(), factoryNode, \""
+										+ p.getFullType() + "\") :");
+								ps.decPrependCount(2);
+							}
+							ps.println("expressionizeNormalNodeUnion(node.get" + capFirst(p.getName())
+									+ "(), factoryNode, \"" + p.getFullType() + "\");");
+							ps.decPrependCount(2);
+						} else
+						{
+							ps.println("node.get" + capFirst(p.getName()) + "() != null ?");
+							ps.incPrependCount(2);
+							ps.println("node.get" + capFirst(p.getName()) + "().executeOperation(this,factoryNode) :");
+							ps.println("factory.makeNullLiteralNode();");
+							ps.decPrependCount(4);
+						}
 						if (generic)
 						{
 							ps.println("argsFor" + rawName + "Stack.pop();");
@@ -3236,8 +3261,8 @@ public class SourceGenerator
 						ps.incPrependCount(2);
 						ps.println("factory.makeSimpleNameNode(");
 						ps.incPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\")))))");
-						ps.decPrependCount(8);
+						ps.print("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\")))))");
+						ps.decPrependCount(6);
 					}
 
 					public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
@@ -3263,10 +3288,52 @@ public class SourceGenerator
 			ps.println();
 		}
 
+		private void writeExpressionizeForUnions() throws IOException
+		{
+			for (String typeComponent : UNION_TYPE_COMPONENTS)
+			{
+				String typeString = getUnionComponentTypeString(typeComponent);
+				if (typeString.equals("T"))
+					typeString = "Node";
+				ps.println("public ExpressionNode expressionize" + typeComponent + "NodeUnion(" + typeString
+						+ " node, ExpressionNode factoryNode, String typeParameterName)");
+				ps.println("{");
+				ps.incPrependCount();
+
+				if (typeComponent.equals("Splice"))
+				{
+					// special case - splices, when lifted, just use their expressions in their place
+					ps.println("return node.getSpliceExpression().deepCopy(factory);");
+				} else
+				{
+					// factory.<T>makeFooNodeUnion(>>node<<)
+					ps.println("return factory.makeMethodInvocationNode(");
+					ps.incPrependCount(2);
+					ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
+					ps.println("factory.makeIdentifierNode(\"make" + typeComponent + "NodeUnion\"),");
+					ps.println("factory.makeExpressionListNode(");
+					ps.incPrependCount(2);
+					ps.println("node == null ? factory.makeNullLiteralNode() : node.executeOperation(this, factoryNode)");
+					ps.println("),");
+					ps.decPrependCount(2);
+					ps.println("factory.makeReferenceTypeListNode(factory.makeUnparameterizedTypeNode(");
+					ps.println("        factory.makeSimpleNameNode(factory.makeIdentifierNode(typeParameterName)))));");
+					ps.decPrependCount(2);
+				}
+
+				ps.decPrependCount();
+				ps.println("}");
+				ps.println();
+			}
+		}
+
 		@Override
 		public void finish() throws IOException
 		{
 			super.finish();
+
+			writeExpressionizeForUnions();
+
 			ps.decPrependCount();
 			ps.println("}");
 			ps.close();
@@ -4025,8 +4092,8 @@ public class SourceGenerator
 					+ " * @author Zachary Palmer\n"
 					+ " * @param <T> The type of normal node that this union represents if it represents a normal node.\n"
 					+ " */\n";
-			PrependablePrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", Mode.INTERFACE,
-					Project.GENERATOR, SupplementCategory.GENERAL, "NodeUnion<T extends Node>", false, javadoc, null);
+			PrependablePrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", Mode.INTERFACE, Project.API,
+					SupplementCategory.GENERAL, "NodeUnion<T extends Node>", false, javadoc, null);
 			ps.incPrependCount();
 
 			ps.println("/**");
