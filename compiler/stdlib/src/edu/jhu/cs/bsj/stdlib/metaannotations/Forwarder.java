@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
@@ -42,24 +41,22 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
-import edu.jhu.cs.bsj.compiler.tool.data.BsjThreadLocalData;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
 
 /**
- * This meta-annotation metaprogram generates method forwards to fields and
- * methods that have private access. The metaannotation is anchored around a
- * field declaration, and takes two string arrays, the first is not optional,
- * and is the list of methods of the private field to forward. The second is a
- * list of the names of the forwarded methods. Forwarded methods are added to
- * the class the metaannotation is anchored on, while methods to forward are
- * methods of the field type.
+ * This meta-annotation metaprogram generates method forwards to fields and methods that have private access. The
+ * metaannotation is anchored around a field declaration, and takes two string arrays, the first is not optional, and is
+ * the list of methods of the private field to forward. The second is a list of the names of the forwarded methods.
+ * Forwarded methods are added to the class the metaannotation is anchored on, while methods to forward are methods of
+ * the field type.
  * 
  * @author Nathan Krasnopoler
  */
 // TODO make multiple @@Forwarders not conflict, and make it so that each one
 // can only take a single methodName and forwardedMethodName
-public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
+public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram
+{
 
 	private String[] methodName = null;
 	private String[] forwardedMethodName = null;
@@ -71,75 +68,87 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 	/**
 	 * 
 	 */
-	public Forwarder() {
+	public Forwarder()
+	{
 		super(Arrays.asList("forwarder"), new ArrayList<String>(), Arrays.asList("property"));
 	}
 
 	@BsjMetaAnnotationElementGetter
-	public String[] getMethodName() {
+	public String[] getMethodName()
+	{
 		return this.methodName;
 	}
+
 	@BsjMetaAnnotationElementSetter
-	public void setMethodName(String[] methodName) {
+	public void setMethodName(String[] methodName)
+	{
 		this.methodName = methodName;
 	}
 
 	@BsjMetaAnnotationElementSetter
-	public void setDepends(String[] depends) {
-		if (depends != null) {
+	public void setDepends(String[] depends)
+	{
+		if (depends != null)
+		{
 			changeInstanceDependencies(Arrays.asList(depends));
 		}
 	}
-	
+
 	@BsjMetaAnnotationElementGetter
-	public String[] getDepends() {
+	public String[] getDepends()
+	{
 		return (String[]) retrieveInstanceDependencies().toArray();
 	}
-	
+
 	@BsjMetaAnnotationElementSetter
-	public void setTargets(String[] targets) {
-		if (targets != null) {
+	public void setTargets(String[] targets)
+	{
+		if (targets != null)
+		{
 			changeInstanceTargets(Arrays.asList(targets));
 		}
 	}
-	
+
 	@BsjMetaAnnotationElementGetter
-	public String[] getTargets() {
+	public String[] getTargets()
+	{
 		return (String[]) retrieveInstanceTargets().toArray();
 	}
-	
+
 	@BsjMetaAnnotationElementGetter
-	public String[] getForwardedMethodName() {
+	public String[] getForwardedMethodName()
+	{
 		return forwardedMethodName;
 	} // TODO add specify arbitrary targets
 
-	
 	@BsjMetaAnnotationElementSetter
-	public void setForwardedMethodName(String[] forwardedMethodName) {
+	public void setForwardedMethodName(String[] forwardedMethodName)
+	{
 		this.forwardedMethodName = forwardedMethodName;
 	}
-	
+
 	@BsjMetaAnnotationElementSetter
-	public void setFieldNameOverride(String fieldNameOverride) {
+	public void setFieldNameOverride(String fieldNameOverride)
+	{
 		this.fieldNameOverride = fieldNameOverride;
 	}
 
 	@BsjMetaAnnotationElementGetter
-	public String getFieldNameOverride() {
+	public String getFieldNameOverride()
+	{
 		return fieldNameOverride;
 	}
 
 	@Override
-	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context) {
+	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context)
+	{
 		// Prelude/preparation
 		// get anchor and such
 		// This is the factory that allows us to build new AST parts.
 		BsjNodeFactory factory = context.getFactory();
 		this.anchor = context.getAnchor();
 		this.factory = factory;
-		ClassDeclarationNode classDeclaration = anchor
-				.getNearestAncestorOfType(ClassDeclarationNode.class);
-
+		ClassDeclarationNode classDeclaration = anchor.getNearestAncestorOfType(ClassDeclarationNode.class);
 
 		// TODO Currently this assumes we are on a field,
 
@@ -150,41 +159,41 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 
 		// Get the FieldDeclarationNode that this metaannotation is anchored on.
 		MethodDeclarationNode methodNode;
-		FieldDeclarationNode fieldNode = anchor
-				.getNearestAncestorOfType(FieldDeclarationNode.class);
+		FieldDeclarationNode fieldNode = anchor.getNearestAncestorOfType(FieldDeclarationNode.class);
 		String fieldName;
 		TypeNode fieldType;
 		List<ClassMemberNode> classDeclarationList = classDeclaration.getBody().getMembers().getChildren();
 
-		if (fieldNode == null) {
+		if (fieldNode == null)
+		{
 			// TODO: consider: what if this meta-annotation is on neither a field nor a method but is contained within
 			// a method?
 			// ex.
 			// public void foo() {
-			//     @@Forwarder
-			//     class Bar { }
+			// @@Forwarder
+			// class Bar { }
 			// }
 			// this should produce an error but currently would execute the forwarder on foo()
-			
+
 			methodNode = anchor.getNearestAncestorOfType(MethodDeclarationNode.class);
 			onFieldDeclaration = false;
-			
+
 			// Throw an error if none can be found
-			if (methodNode == null) {
+			if (methodNode == null)
+			{
 				context.getDiagnosticListener().report(
-					new InvalidAnnotatedDeclarationDiagnosticImpl(
-							getClass(),
-							null,
-							Collections
-							.<Class<? extends Node>> singletonList(FieldDeclarationNode.class)));
-				throw new MetaprogramExecutionFailureException();				
+						new InvalidAnnotatedDeclarationDiagnosticImpl(getClass(), null,
+								Collections.<Class<? extends Node>> singletonList(FieldDeclarationNode.class)));
+				throw new MetaprogramExecutionFailureException();
 			}
 			fieldType = methodNode.getReturnType();
-//			fieldName = trimName(methodNode.getIdentifier().getIdentifier());
+			// fieldName = trimName(methodNode.getIdentifier().getIdentifier());
 			fieldName = methodNode.getIdentifier().getIdentifier();
 			getAllMethods(fieldName, fieldType, fieldType, classDeclarationList);
-		} else {
-			for (VariableDeclaratorNode variableDeclaration : fieldNode.getDeclarators().getChildren()) {
+		} else
+		{
+			for (VariableDeclaratorNode variableDeclaration : fieldNode.getDeclarators().getChildren())
+			{
 				fieldName = variableDeclaration.getIdentifier().getIdentifier();
 				if (variableDeclaration.getArrayLevels() > 0)
 				{
@@ -196,7 +205,7 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 					fieldType = fieldNode.getType();
 				}
 				getAllMethods(fieldName, variableDeclaration, fieldType, classDeclarationList);
-			} 
+			}
 		}
 
 		// for each method in the argument list,
@@ -218,118 +227,118 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		// and make it simply call methodName on accessorName().
 	}
 
-
-
-
-
-	private void getAllMethods(
-			String fieldNameString, Node typeScopeNode, TypeNode fieldType,
-			List<ClassMemberNode> classDeclarationList) {
+	private void getAllMethods(String fieldNameString, Node typeScopeNode, TypeNode fieldType,
+			List<ClassMemberNode> classDeclarationList)
+	{
 		int i = 0;
 		IdentifierNode fieldName = factory.makeIdentifierNode(fieldNameString);
-		for (String methodName : getMethodName()) {
+		for (String methodName : getMethodName())
+		{
 			String forwardedMethodName = getForwardedMethodName(fieldName.getIdentifier(), i);
-			classDeclarationList.addAll(createForwardedMethod(
-					typeScopeNode, fieldType, fieldName, methodName, forwardedMethodName));
+			classDeclarationList.addAll(createForwardedMethod(typeScopeNode, fieldType, fieldName, methodName,
+					forwardedMethodName));
 			i++;
 		}
-	}	
-	
+	}
 
-	public String getForwardedMethodName(String fieldName, int i) {
+	public String getForwardedMethodName(String fieldName, int i)
+	{
 		String methodName = getMethodName()[i];
-		if (forwardedMethodName != null && forwardedMethodName.length < i && forwardedMethodName[i] != null) {
+		if (forwardedMethodName != null && forwardedMethodName.length < i && forwardedMethodName[i] != null)
+		{
 			return forwardedMethodName[i];
-		} else {
-			if (fieldNameOverride != null) {
+		} else
+		{
+			if (fieldNameOverride != null)
+			{
 				fieldName = fieldNameOverride;
 			}
 			return fieldName + upcaseFirstLetter(methodName);
 		}
 	}
 
-	private static String upcaseFirstLetter(String name) {
+	private static String upcaseFirstLetter(String name)
+	{
 		return Character.toUpperCase(name.charAt(0)) + name.substring(1);
 	}
 
 	@Override
-	public void complete() throws InvalidMetaAnnotationConfigurationException {
+	public void complete() throws InvalidMetaAnnotationConfigurationException
+	{
 	}
 
-	private List<MethodDeclarationNode> createForwardedMethod(
-			Node typeScopeNode, TypeNode variableType, IdentifierNode variableName, String methodName,
-			String forwardedMethodName) {
+	private List<MethodDeclarationNode> createForwardedMethod(Node typeScopeNode, TypeNode variableType,
+			IdentifierNode variableName, String methodName, String forwardedMethodName)
+	{
 		// Let fieldName be the name of the field
 		List<MethodDeclarationNode> methodsToAdd = new ArrayList<MethodDeclarationNode>();
 		int i = 0;
 
-		for (MethodDeclarationNode methodToAdd : getMethodsToForward(
-				typeScopeNode, variableType, methodName)) {
+		for (MethodDeclarationNode methodToAdd : getMethodsToForward(typeScopeNode, variableType, methodName))
+		{
 			// String forwardedMethodName = "";
 
-			IdentifierNode forwardedMethodNameIdentifier = factory
-					.makeIdentifierNode(forwardedMethodName);
+			IdentifierNode forwardedMethodNameIdentifier = factory.makeIdentifierNode(forwardedMethodName);
 			i++;
 			VariableListNode parameters = methodToAdd.getParameters();
 
 			/* return ~:fieldName:~.~:methodName:~(~:someArgs:~) */
 			IdentifierNode fieldIdentifier = variableName.deepCopy(factory);
 			PrimaryExpressionNode fieldExpression;
-			if (onFieldDeclaration) {
-				fieldExpression = makeFieldAccess(fieldIdentifier);	
-			} else {
-				 fieldExpression = makeMethodAccess(fieldIdentifier);	
+			if (onFieldDeclaration)
+			{
+				fieldExpression = makeFieldAccess(fieldIdentifier);
+			} else
+			{
+				fieldExpression = makeMethodAccess(fieldIdentifier);
 			}
 			List<ExpressionNode> listOfArguments = new ArrayList<ExpressionNode>();
-			for (VariableNode parameter : parameters.getChildren()) {
+			for (VariableNode parameter : parameters.getChildren())
+			{
 				listOfArguments.add(factory.makeVariableAccessNode(null, parameter.getIdentifier().deepCopy(factory)));
 			}
 			ExpressionListNode someArgs = factory.makeExpressionListNode(listOfArguments);
-			ReturnNode returnNode = factory.makeReturnNode(factory.makeMethodInvocationNode(fieldExpression, factory.makeIdentifierNode(methodName), someArgs));
+			ReturnNode returnNode = factory.makeReturnNode(factory.makeMethodInvocationNode(fieldExpression,
+					factory.makeIdentifierNode(methodName), someArgs));
 			List<BlockStatementNode> listOfStatements = new ArrayList<BlockStatementNode>();
 			listOfStatements.add(returnNode);
-			BlockStatementListNode body = factory
-					.makeBlockStatementListNode(listOfStatements);
+			BlockStatementListNode body = factory.makeBlockStatementListNode(listOfStatements);
 
-			MethodModifiersNode modifiers = factory
-					.makeMethodModifiersNode(AccessModifier.PUBLIC);
+			MethodModifiersNode modifiers = factory.makeMethodModifiersNode(AccessModifier.PUBLIC);
 			VariableNode varargParameter = methodToAdd.getVarargParameter();
-			UnparameterizedTypeListNode throwTypes = methodToAdd
-					.getThrowTypes();
-			TypeParameterListNode typeParameters = methodToAdd
-					.getTypeParameters();
+			UnparameterizedTypeListNode throwTypes = methodToAdd.getThrowTypes();
+			TypeParameterListNode typeParameters = methodToAdd.getTypeParameters();
 			JavadocNode javadocNode = methodToAdd.getJavadoc();
 			String javadocString;
-			if (javadocNode == null) {
+			if (javadocNode == null)
+			{
 				javadocString = "";
-			} else {
+			} else
+			{
 				javadocString = javadocNode.getText();
 			}
-			JavadocNode javadoc = factory.makeJavadocNode("forwarded: "
-					+ javadocString);
+			JavadocNode javadoc = factory.makeJavadocNode("forwarded: " + javadocString);
 			TypeNode returnType = methodToAdd.getReturnType();
-			methodsToAdd.add(factory.makeMethodDeclarationNode(body, modifiers,
-					forwardedMethodNameIdentifier, parameters, varargParameter,
-					returnType, throwTypes, typeParameters, javadoc));
+			methodsToAdd.add(factory.makeMethodDeclarationNode(body, modifiers, forwardedMethodNameIdentifier,
+					parameters.deepCopy(factory), varargParameter, returnType.deepCopy(factory),
+					throwTypes.deepCopy(factory), typeParameters.deepCopy(factory), javadoc));
 		}
 		return methodsToAdd;
 	}
 
-	private List<MethodDeclarationNode> getMethodsToForward(
-			Node typeScopeNode, TypeNode callerType, String methodName) {
+	private List<MethodDeclarationNode> getMethodsToForward(Node typeScopeNode, TypeNode callerType, String methodName)
+	{
 
 		List<MethodDeclarationNode> returnValue = new ArrayList<MethodDeclarationNode>();
 
 		NameNode name = getNameFromType(callerType);
-		Context<?,?> context = BsjServiceRegistry.getThreadLocalData().get(BsjThreadLocalData.Element.CONTEXT);
-//		NamedTypeDeclarationNode<?> type = new TypeDeclarationLocatingNodeOperation(
-//				name, context.getCompilationUnitLoader()).executeDefault(anchor, null);
 		Collection<? extends Node> declarations = typeScopeNode.getDeclarationsInScope(name);
 		if (declarations.size() != 1)
 		{
 			// then either the declaration isn't in scope or there is more than one declaration in scope
 			// TODO: produce an appropriate diagnostic
-			throw new NotImplementedYetException(declarations.size() + " declarations found for name " + name.getNameString() + " at position " + callerType.getStartLocation());
+			throw new NotImplementedYetException(declarations.size() + " declarations found for name "
+					+ name.getNameString() + " at position " + callerType.getStartLocation());
 		}
 		Node declaration = declarations.iterator().next();
 		if (!(declaration instanceof NamedTypeDeclarationNode<?>))
@@ -338,11 +347,13 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 			// TODO: produce an appropriate diagnostic
 			throw new NotImplementedYetException("got " + declaration.getClass().getCanonicalName());
 		}
-		NamedTypeDeclarationNode<?> type = (NamedTypeDeclarationNode<?>)declaration;
+		NamedTypeDeclarationNode<?> type = (NamedTypeDeclarationNode<?>) declaration;
 		TypeBodyNode<?> typeBody = type.getBody();
 		ListNode<? extends Node> listOfMembers = typeBody.getMembers();
-		for (Node node : listOfMembers.filter(new FilterByMethodName(methodName))) {
-			if (node instanceof MethodDeclarationNode) {
+		for (Node node : listOfMembers.filter(new FilterByMethodName(methodName)))
+		{
+			if (node instanceof MethodDeclarationNode)
+			{
 				MethodDeclarationNode methodNode = (MethodDeclarationNode) node;
 				returnValue.add(methodNode);
 			}
@@ -350,18 +361,24 @@ public class Forwarder extends AbstractBsjMetaAnnotationMetaprogram {
 		return returnValue;
 	}
 
-	private NameNode getNameFromType(TypeNode type) {
-		if (type instanceof UnparameterizedTypeNode) {
+	private NameNode getNameFromType(TypeNode type)
+	{
+		if (type instanceof UnparameterizedTypeNode)
+		{
 			return ((UnparameterizedTypeNode) type).getName();
-		} else {
+		} else
+		{
 			throw new NotImplementedYetException();
 		}
 	}
-	
-	private PrimaryExpressionNode makeFieldAccess(IdentifierNode fieldIdentifier) {
+
+	private PrimaryExpressionNode makeFieldAccess(IdentifierNode fieldIdentifier)
+	{
 		return factory.makeVariableAccessNode(null, fieldIdentifier.deepCopy(factory));
-	}	
-	private PrimaryExpressionNode makeMethodAccess(IdentifierNode fieldIdentifier) {
+	}
+
+	private PrimaryExpressionNode makeMethodAccess(IdentifierNode fieldIdentifier)
+	{
 		return factory.makeMethodInvocationNode(fieldIdentifier.deepCopy(factory));
 	}
 

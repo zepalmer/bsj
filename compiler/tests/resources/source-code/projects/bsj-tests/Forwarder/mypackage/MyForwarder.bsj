@@ -14,7 +14,7 @@ public class MyForwarder {
 	/*
 	@@Forwarder(methodName="length")
 	*/
-	@@Forwarder(methodName="isEmpty")
+	//@@Forwarder(methodName="isEmpty")
 	private java.lang.String s;
 
 	public MyForwarder(Test o) {
