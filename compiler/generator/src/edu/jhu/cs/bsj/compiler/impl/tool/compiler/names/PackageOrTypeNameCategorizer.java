@@ -1,15 +1,15 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler.names;
 
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.impl.operations.TypeDeclarationLocatingNodeOperation;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
 /**
@@ -47,10 +47,8 @@ public class PackageOrTypeNameCategorizer
 		{
 			// If a type is in scope which has the same name as this node, the node refers to a type. Otherwise, this
 			// node refers to a package.
-			// TODO: retrieve from toolkit?
-			TypeDeclarationNode typeDeclarationNode = name.executeOperation(new TypeDeclarationLocatingNodeOperation(
-					(SimpleNameNode) name, NameCategory.TYPE, loader), null);
-			if (typeDeclarationNode == null)
+			Collection<? extends TypeNameBindingNode> declarations = name.getParent().getTypeDeclarationsInScope(name.getIdentifier().getIdentifier());
+			if (declarations.size() == 0)
 			{
 				category = NameCategory.PACKAGE;
 			} else
@@ -79,23 +77,12 @@ public class PackageOrTypeNameCategorizer
 				}
 			} else if (qualifiedNameNode.getBase().getCategory(loader) == NameCategory.TYPE)
 			{
-				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = name.executeOperation(
-						new TypeDeclarationLocatingNodeOperation(name, loader), null);
-				if (namedTypeDeclarationNode == null)
-				{
-					// TODO: this means that this is a type declaration which should contain another type declaration
-					// but does not. This will cause problems; should we produce a diagnostic?
-					category = NameCategory.PACKAGE;
-				} else
-				{
-					if (namedTypeDeclarationNode.getTypeDeclaration(qualifiedNameNode.getIdentifier().getIdentifier()) == null)
-					{
-						category = NameCategory.PACKAGE;
-					} else
-					{
-						category = NameCategory.TYPE;
-					}
-				}
+				// If the qualified name is classified as a type, then this name either refers to an existing member
+				// type of that type or it does not make sense. In light of this, we can just assume that it should
+				// always be classified as a type. (The JLSv3 in §6.5.4.2 technically indicates that, if the member
+				// type does not exist, this classification should produce PACKAGE as the name category. This will
+				// inevitably produce an error later on anyway, so the particular category chosen does not matter.)
+				category = NameCategory.TYPE;
 			} else
 			{
 				throw new IllegalStateException(

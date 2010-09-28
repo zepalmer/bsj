@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.tools.DiagnosticListener;
 
+import org.apache.log4j.Logger;
+
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractlyUnmodifiedClassDeclarationNode;
@@ -39,6 +41,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
@@ -51,6 +54,8 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 public class TypeNamespaceModifyingOperation extends
 		AbstractNamespaceModifyingOperation<String, BsjTypeLikeElement, TypeNamespaceMap>
 {
+	private static Logger LOGGER = Logger.getLogger(TypeNamespaceModifyingOperation.class);
+
 	/**
 	 * Creates a type namespace modifier.
 	 * 
@@ -150,47 +155,57 @@ public class TypeNamespaceModifyingOperation extends
 
 	@Override
 	public ChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap> executeCompilationUnitNode(
-			CompilationUnitNode node, TypeNamespaceMap map)
+			final CompilationUnitNode node, final TypeNamespaceMap map)
 	{
 		// Only the type declarations contained in a compilation unit benefit from the declarations contained within
 		// it; import statements, for instance, do not apply to other import statements.
 		TypeNamespaceMap defaultNamespace = map; // used for everything other than the type declaration list
 
-		// *** Create a new scope for the on-demand imports
-		map = makeMap(map, EnvType.ON_DEMAND_IMPORT);
+		// Create the scope for top-level type declarations lazily
+		Function<Void, TypeNamespaceMap> topLevelTypeDeclarationThunk = new Function<Void, TypeNamespaceMap>()
+		{
+			public TypeNamespaceMap execute(Void p)
+			{
+				// *** Create a new scope for the on-demand imports
+				TypeNamespaceMap namespaceMap = makeMap(map, EnvType.ON_DEMAND_IMPORT);
 
-		// *** Process on-demand imports. This namespace has a lazy error policy, as ambiguities in on-demand
-		// imports (such as "import java.util.*; import java.awt.*;" only matter if the ambiguous name is used
-		// (such as in "List").
-		populateOnDemandImports(map, node.getImports());
+				// *** Process on-demand imports. This namespace has a lazy error policy, as ambiguities in on-demand
+				// imports (such as "import java.util.*; import java.awt.*;" only matter if the ambiguous name is used
+				// (such as in "List").
+				populateOnDemandImports(namespaceMap, node.getImports());
 
-		// Automatic import of java.lang.* is treated as an on-demand import
-		PackageNode javaLangPackage = node.getRootPackage().getSubpackageByQualifiedName("java.lang");
-		getLoader().loadAll(javaLangPackage);
-		populateNamespaceMapWithPackage(map, javaLangPackage, node, AccessModifier.PUBLIC);
+				// Automatic import of java.lang.* is treated as an on-demand import
+				PackageNode javaLangPackage = node.getRootPackage().getSubpackageByQualifiedName("java.lang");
+				getLoader().loadAll(javaLangPackage);
+				populateNamespaceMapWithPackage(namespaceMap, javaLangPackage, node, AccessModifier.PUBLIC);
 
-		// *** Process on-demand static imports.
-		populateOnDemandStaticImports(map, node.getImports());
+				// *** Process on-demand static imports.
+				populateOnDemandStaticImports(namespaceMap, node.getImports());
 
-		// *** Process top-level package peers. This namespace has an eager error policy as any duplication means
-		// a name conflict in the local package.
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
-		populateNamespaceMapWithPackage(map, (PackageNode) node.getParent(),
-				node.getPackageDeclaration() == null ? node : node.getPackageDeclaration(), AccessModifier.PACKAGE);
+				// *** Process top-level package peers. This namespace has an eager error policy as any duplication
+				// means a name conflict in the local package.
+				namespaceMap = makeMap(namespaceMap, EnvType.TYPE_OR_MEMBER);
+				populateNamespaceMapWithPackage(namespaceMap, (PackageNode) node.getParent(),
+						node.getPackageDeclaration() == null ? node : node.getPackageDeclaration(),
+						AccessModifier.PACKAGE);
 
-		// *** Process single-type imports. This namespace has a eager error policy, as ambiguities in single-type
-		// imports cause the import statements to be useless in any context (such as
-		// "import java.util.List; import java.awt.List;").
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
-		populateSingleTypeImports(map, node.getImports());
+				// *** Process single-type imports. This namespace has a eager error policy, as ambiguities in
+				// single-type imports cause the import statements to be useless in any context (such as
+				// "import java.util.List; import java.awt.List;").
+				namespaceMap = makeMap(namespaceMap, EnvType.TYPE_OR_MEMBER);
+				populateSingleTypeImports(namespaceMap, node.getImports());
 
-		// *** Process single-type static imports.
-		populateSingleStaticImports(map, node.getImports());
+				// *** Process single-type static imports.
+				populateSingleStaticImports(namespaceMap, node.getImports());
+
+				return namespaceMap;
+			}
+		};
 
 		// *** Finished!
-		Map<Node, TypeNamespaceMap> namespaceMap = Collections.<Node, TypeNamespaceMap> singletonMap(
-				node.getTypeDecls(), map);
-		return new MappedChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(defaultNamespace,
+		Map<Node, Function<Void,TypeNamespaceMap>> namespaceMap = Collections.<Node, Function<Void,TypeNamespaceMap>> singletonMap(
+				node.getTypeDecls(), topLevelTypeDeclarationThunk);
+		return new LazilyMappedChildNamespaceProducer<String, BsjTypeLikeElement, TypeNamespaceMap>(defaultNamespace,
 				namespaceMap);
 	}
 
@@ -362,6 +377,11 @@ public class TypeNamespaceModifyingOperation extends
 		{
 			if (importNode instanceof ImportOnDemandNode)
 			{
+				if (LOGGER.isTraceEnabled())
+				{
+					LOGGER.trace("Processing type namespace for ImportOnDemandNode for name "
+							+ importNode.getName().getNameString());
+				}
 				switch (importNode.getName().getCategory(getLoader()))
 				{
 					case PACKAGE:
