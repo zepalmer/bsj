@@ -10,7 +10,7 @@
         <parserule name="Annotations">
             <outputType name="AnnotationListNode" />
         </parserule>
-        <parserule name="AnnotationMethod">
+        <parserule name="AnnotationMethodDeclaration">
             <outputType name="AnnotationMethodDeclarationNode" />
         </parserule>
         <parserule name="AnnotationModifiers">

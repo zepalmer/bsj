@@ -124,9 +124,9 @@ public class ParserGeneratedUtilities
             @SuppressWarnings("unchecked") T ret = (T)node;
             return ret;
         }
-        if (rule.equals(ParseRule.ANNOTATION_METHOD))
+        if (rule.equals(ParseRule.ANNOTATION_METHOD_DECLARATION))
         {
-            AnnotationMethodDeclarationNode node = parser.parseRule_AnnotationMethod();
+            AnnotationMethodDeclarationNode node = parser.parseRule_AnnotationMethodDeclaration();
             @SuppressWarnings("unchecked") T ret = (T)node;
             return ret;
         }

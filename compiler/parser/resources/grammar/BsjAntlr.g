@@ -6141,10 +6141,10 @@ parseRule_Annotations returns [AnnotationListNode ret]
         }
     ;
 
-parseRule_AnnotationMethod returns [AnnotationMethodDeclarationNode ret]
+parseRule_AnnotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         scope Rule;
         @init {
-            ruleStart("parseRule_AnnotationMethod");
+            ruleStart("parseRule_AnnotationMethodDeclaration");
         }
         @after {
             ruleStop();

@@ -118,8 +118,8 @@ public class ParseRule<T extends Node>
         new ParseRule<AnnotationListNode>("Annotations",
             Collections.<Class<? extends AnnotationListNode>>singleton(AnnotationListNode.class));
     
-    public static final ParseRule<AnnotationMethodDeclarationNode> ANNOTATION_METHOD = 
-        new ParseRule<AnnotationMethodDeclarationNode>("AnnotationMethod",
+    public static final ParseRule<AnnotationMethodDeclarationNode> ANNOTATION_METHOD_DECLARATION = 
+        new ParseRule<AnnotationMethodDeclarationNode>("AnnotationMethodDeclaration",
             Collections.<Class<? extends AnnotationMethodDeclarationNode>>singleton(AnnotationMethodDeclarationNode.class));
     
     public static final ParseRule<AnnotationModifiersNode> ANNOTATION_MODIFIERS = 
@@ -563,7 +563,7 @@ public class ParseRule<T extends Node>
             list.add(ABSTRACT_METHOD_MODIFIERS);
             list.add(ANNOTATION);
             list.add(ANNOTATIONS);
-            list.add(ANNOTATION_METHOD);
+            list.add(ANNOTATION_METHOD_DECLARATION);
             list.add(ANNOTATION_MODIFIERS);
             list.add(ANNOTATION_TYPE_BODY);
             list.add(ANNOTATION_TYPE_ELEMENT_DECLARATIONS);
