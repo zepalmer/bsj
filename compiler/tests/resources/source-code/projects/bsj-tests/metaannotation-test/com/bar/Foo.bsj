@@ -1,0 +1,22 @@
+package com.bar;
+
+public interface Foo {
+	public void getFoo1();
+	public void getFoo2();
+	public void getFoo3();
+	public void getFoo4();
+	public void getFoo5();
+	public void getFoo6();
+	public void getFoo7();
+	public void getFoo8();
+	public void getFoo9();
+	public void getFoo10();
+	public void getFoo11();
+	public void getFoo12();
+	public void getFoo13();
+	public void getFoo14();
+	public void getFoo15();
+	public void getFoo16();
+	public void getFoo17();
+	public void getFoo18();
+}
