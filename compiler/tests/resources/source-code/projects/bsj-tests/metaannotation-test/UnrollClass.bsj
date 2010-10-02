@@ -7,6 +7,14 @@ public class UnrollClass{
 			System.out.println(i);
 		}
 	}
+	void bar(){
+		@@Unroll
+		for (int q=0;q<5;q++)
+		{
+			System.out.println(q < 3 ? q : q*q);
+		}
+
+	}
 	public static void main(String[] args) {
 		
 	}

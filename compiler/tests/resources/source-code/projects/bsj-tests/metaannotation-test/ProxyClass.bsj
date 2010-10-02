@@ -1,0 +1,21 @@
+
+#import edu.jhu.cs.bsj.stdlib.metaannotations.Proxy;
+
+import com.bar.Foo;
+
+@@Proxy(interfaceName="Foo")
+public class ProxyClass{
+	
+	public void getFoo2() {
+		System.out.println("hello");
+	}
+	
+	public void getFoo3() {
+		System.out.println("hello");
+	}
+	
+
+	public static void main(String[] args) {
+		System.out.println("hello");
+	}
+}
