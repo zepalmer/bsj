@@ -4322,23 +4322,11 @@ public class SourceGenerator
 				final String templateCommand = matcher.group(0);
 				final String operation = matcher.group(1);
 				final char argValDelimiter = matcher.group(2).charAt(0);
-				final String parameterDelimiter = matcher.group(3);
+				final char parameterDelimiter = matcher.group(3).charAt(0);
 				final String argValPairs = matcher.group(4);
 
-				final String[] parameters = argValPairs.split("(" + Pattern.quote(parameterDelimiter) + "|\n)+");
-				final Map<String, String> parameterMap = new HashMap<String, String>();
-				for (String parameter : parameters)
-				{
-					final int index = parameter.indexOf(argValDelimiter);
-					if (index == -1)
-					{
-						throw new IllegalStateException("Missing argval delimiter '" + argValDelimiter
-								+ "' in parameter " + parameter + " of the following template:\n" + templateCommand);
-					}
-					String paramName = parameter.substring(0, index);
-					String paramVal = parameter.substring(index + 1);
-					parameterMap.put(paramName, paramVal);
-				}
+				final Map<String, String> parameterMap = parseParameters(templateCommand, argValDelimiter,
+						parameterDelimiter, argValPairs);
 
 				TemplateCommand command;
 				if (operation.equals("standardRuleIntro"))
@@ -4360,6 +4348,67 @@ public class SourceGenerator
 
 			ps.println(grammarTemplate);
 			ps.close();
+		}
+
+		private Map<String, String> parseParameters(final String templateCommand, final char argValDelimiter,
+				final char parameterDelimiter, final String argValPairs)
+		{
+			final Map<String, String> parameterMap = new HashMap<String, String>();
+			int index = 0;
+			while (index < argValPairs.length())
+			{
+				// parse name
+				int startIndex = index;
+				while (index < argValPairs.length() && argValPairs.charAt(index) != argValDelimiter
+						&& argValPairs.charAt(index) != parameterDelimiter && argValPairs.charAt(index) != '\n')
+				{
+					index++;
+				}
+				if (index >= argValPairs.length() || argValPairs.charAt(index) == parameterDelimiter
+						|| argValPairs.charAt(index) == '\n')
+				{
+					throw new IllegalStateException("Missing argval delimiter '" + argValDelimiter
+							+ "' in parameter " + argValPairs.substring(startIndex, index)
+							+ " of the following template:\n" + templateCommand);
+				}
+				final String paramName = argValPairs.substring(startIndex, index);
+				index++; // skip delimiter
+				// parse value
+				startIndex = index;
+				boolean quoteMode = false;
+				int quoteCount = 0;
+				while (index < argValPairs.length()
+						&& ((argValPairs.charAt(index) != parameterDelimiter && argValPairs.charAt(index) != '\n') || quoteMode))
+				{
+					if (argValPairs.charAt(index) == '"')
+					{
+						quoteCount++;
+						if (quoteCount == 3)
+						{
+							quoteCount = 0;
+							quoteMode = !quoteMode;
+						}
+					} else
+					{
+						quoteCount = 0;
+					}
+					index++;
+				}
+				if (quoteMode)
+				{
+					throw new IllegalStateException("Unterminated quotation in parameter " + paramName
+							+ " of the following template:\n" + templateCommand);
+				}
+				final String paramValue = argValPairs.substring(startIndex, index).replaceAll("\"\"\"", "");
+				parameterMap.put(paramName, paramValue);
+				// advance over delimiters
+				while (index < argValPairs.length()
+						&& (argValPairs.charAt(index) == parameterDelimiter || argValPairs.charAt(index) == '\n'))
+				{
+					index++;
+				}
+			}
+			return parameterMap;
 		}
 
 		private static abstract class TemplateCommand
@@ -4508,10 +4557,27 @@ public class SourceGenerator
 				final String ruleName = before.getSecond();
 
 				String returnTypeName = getParameter("type");
+
+				String initTerms = "";
+				int index = 0;
+				while (hasParameter("init" + index))
+				{
+					initTerms += "            " + getParameter("init" + index) + "\n";
+					index++;
+				}
+
+				String afterTerms = "";
+				index = 0;
+				while (hasParameter("after" + index))
+				{
+					afterTerms += "            " + getParameter("after" + index) + "\n";
+					index++;
+				}
+
 				assertAccessedAllParameters();
 
 				Map<String, String> params = new MapBuilder<String, String>().add("rule", ruleName).add("type",
-						returnTypeName).getMap();
+						returnTypeName).add("initTerms", initTerms).add("afterTerms", afterTerms).getMap();
 				final String replacement = fillFragment("standardRuleIntro", params);
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);

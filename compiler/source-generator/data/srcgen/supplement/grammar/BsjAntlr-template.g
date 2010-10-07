@@ -783,15 +783,8 @@ metaprogramDependencyDeclaration /*%% standardRuleIntro= type=MetaprogramDepende
 metaprogramDependencyList /*%% generateListRule= type=MetaprogramDependencyListNode
                       separator=',' lastSeparator=true %%*/ :;
 
-metaprogramDependency returns [MetaprogramDependencyNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramDependency");
-            boolean weak = false;
-        }
-        @after {
-            ruleStop();
-        }
+metaprogramDependency /*%% standardRuleIntro: type:MetaprogramDependencyNode
+                               init0:"""boolean weak = false;""" %%*/ 
     :
         (
             '#weak'
