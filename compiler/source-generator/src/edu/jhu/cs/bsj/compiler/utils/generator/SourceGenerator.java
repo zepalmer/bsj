@@ -225,6 +225,17 @@ public class SourceGenerator
 	}
 
 	/**
+	 * Lower-cases the first letter of a string.
+	 * 
+	 * @param s The string.
+	 * @return The modified string.
+	 */
+	static String lowerFirst(String s)
+	{
+		return Character.toLowerCase(s.charAt(0)) + s.substring(1);
+	}
+
+	/**
 	 * Performs a generic source file inclusion.
 	 * 
 	 * @param f The {@link File} to include.
@@ -4289,6 +4300,9 @@ public class SourceGenerator
 				} else if (operation.equals("generateListRule"))
 				{
 					command = new GenerateListRuleCommand(templateCommand, parameterMap);
+				} else if (operation.equals("generateParseRule"))
+				{
+					command = new GenerateParseRuleCommand(templateCommand, parameterMap);
 				} else
 				{
 					throw new IllegalStateException("Unrecognized operation " + operation);
@@ -4477,7 +4491,7 @@ public class SourceGenerator
 						throw error("Unable to infer component type name for " + returnTypeName);
 					}
 				}
-				
+
 				if (hasParameter("separator"))
 				{
 					separator = getParameter("separator");
@@ -4485,7 +4499,7 @@ public class SourceGenerator
 				{
 					separator = null;
 				}
-				
+
 				if (hasParameter("lastSeparator"))
 				{
 					lastSeparator = getParameterAsBoolean("lastSeparator");
@@ -4493,7 +4507,7 @@ public class SourceGenerator
 				{
 					lastSeparator = false;
 				}
-				
+
 				if (hasParameter("prefix"))
 				{
 					prefix = getParameter("prefix");
@@ -4501,7 +4515,7 @@ public class SourceGenerator
 				{
 					prefix = null;
 				}
-				
+
 				if (hasParameter("postfix"))
 				{
 					postfix = getParameter("postfix");
@@ -4509,14 +4523,14 @@ public class SourceGenerator
 				{
 					postfix = null;
 				}
-				
+
 				assertAccessedAllParameters();
-				
+
 				final String separatorPart;
 				final String lastSeparatorPart;
 				final String prefixPart = (prefix == null ? "" : "        " + prefix + "\n");
 				final String postfixPart = (prefix == null ? "" : "        " + postfix + "\n");
-				
+
 				if (separator == null)
 				{
 					separatorPart = "";
@@ -4532,7 +4546,7 @@ public class SourceGenerator
 						lastSeparatorPart = "";
 					}
 				}
-				
+
 				// @formatter:off
 				String replacement =
 				        ruleName + " returns [" + returnTypeName + " ret]\n" +
@@ -4563,10 +4577,58 @@ public class SourceGenerator
 				        postfixPart +
 				        "    ;\n";
 				// @formatter:on
-				
-				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);				
+
+				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}
 
+		}
+
+		public static class GenerateParseRuleCommand extends TemplateCommand
+		{
+
+			public GenerateParseRuleCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex)
+			{
+				final String parseRuleName = getParameter("parseRuleName");
+				final String antlrRuleName;
+				final String returnTypeName = getParameter("type");
+
+				if (hasParameter("antlrRuleName"))
+				{
+					antlrRuleName = getParameter("antlrRuleName");
+				} else
+				{
+					antlrRuleName = lowerFirst(parseRuleName);
+				}
+
+				assertAccessedAllParameters();
+
+				/* @formatter:off */
+				final String replacement =
+					"parseRule_" + parseRuleName + " returns [" + returnTypeName + " ret]\n" +
+					"        scope Rule;\n" +
+					"        @init {\n" +
+					"            ruleStart(\"parseRule_" + parseRuleName + "\");\n" +
+					"        }\n" +
+					"        @after {\n" +
+					"            ruleStop();\n" +
+					"        }\n" +
+					"    :\n" +
+					"        " + antlrRuleName + "\n" +
+					"        EOF\n" +
+					"        {\n" +
+					"             $ret = $" + antlrRuleName + ".ret;\n" +
+					"        }\n" +
+					"    ;\n";
+				/* @formatter:on */
+
+				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
+			}
 		}
 	}
 }
