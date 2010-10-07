@@ -8775,4 +8775,3 @@ IdentifierPart
     |   '\ufff9'..'\ufffb' 
     |   ('\ud800'..'\udbff') ('\udc00'..'\udfff')
     ;
-

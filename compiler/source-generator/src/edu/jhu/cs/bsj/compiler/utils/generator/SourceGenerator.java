@@ -2,11 +2,13 @@ package edu.jhu.cs.bsj.compiler.utils.generator;
 
 import static edu.jhu.cs.bsj.compiler.utils.generator.SourceGeneratorUtilities.CONTENTS_FILE;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,8 +49,9 @@ public class SourceGenerator
 	 */
 	private static final String[] UNION_TYPE_COMPONENTS = { "Normal", "Splice" };
 
-	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
-	private static final File TARGET_DIR = new File("out/");
+	private static final File SUPPLEMENTS_DIR = new File("data" + File.separator + "srcgen" + File.separator
+			+ "supplement");
+	private static final File TARGET_DIR = new File("out");
 
 	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList("int", "long", "boolean",
 			"float", "double", "short", "byte", "char"));
@@ -202,8 +205,8 @@ public class SourceGenerator
 
 	public static File getSupplementDir(Project p, SupplementCategory category)
 	{
-		File f = new File(SUPPLEMENTS_DIR.getAbsolutePath() + category.getSubdirSuffix() + File.separator
-				+ p.getResourceDirName());
+		File f = new File(SUPPLEMENTS_DIR.getAbsolutePath() + File.separator + category.getSubdirSuffix()
+				+ File.separator + p.getResourceDirName());
 		return f;
 	}
 
@@ -355,8 +358,8 @@ public class SourceGenerator
 	 * @param props The properties to use as parameters.
 	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
 	 *            <code>false</code> otherwise.
-	 * @param nodeUnionTypes <code>true</code> if properties which are a subtype of {@link Node} should automatically be
-	 *            wrapped in a {@link NodeUnion}; <code>false</code> otherwise.
+	 * @param nodeUnionTypes <code>true</code> if properties which are a subtype of <tt>Node</tt> should automatically
+	 *            be wrapped in a {@link NodeUnion}; <code>false</code> otherwise.
 	 */
 	private static void printParameterList(PrependablePrintStream ps, List<? extends ModalPropertyDefinition<?>> props,
 			boolean skipMake, boolean nodeUnionTypes)
@@ -4201,6 +4204,59 @@ public class SourceGenerator
 				ps.println("}");
 				ps.close();
 			}
+		}
+	}
+
+	public static class AntlrGrammarProcessor extends AbstractDefinitionHandler
+	{
+		private static final File GRAMMAR_SUPPLEMENTS_DIR = new File(SUPPLEMENTS_DIR.getPath() + File.separator
+				+ "grammar");
+		private static final File GRAMMAR_TEMPLATE = new File(GRAMMAR_SUPPLEMENTS_DIR.getPath() + File.separator
+				+ "BsjAntlr.g");
+
+		private static final File OUTPUT_GRAMMAR = new File(TARGET_DIR.getPath() + File.separator + "parser-root"
+				+ File.separator + "resources" + File.separator + "grammar" + File.separator + "BsjAntlr.g");
+
+		@Override
+		public void init() throws IOException
+		{
+		}
+
+		@Override
+		public void handleTypeDefinition(TypeDefinition def) throws IOException
+		{
+		}
+
+		private String readGrammarTemplate() throws IOException
+		{
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(GRAMMAR_TEMPLATE)));
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = br.readLine()) != null)
+			{
+				sb.append(line);
+				sb.append('\n');
+			}
+			br.close();
+			return sb.toString();
+		}
+
+		private PrintStream openOutputGrammar() throws IOException
+		{
+			OUTPUT_GRAMMAR.getParentFile().mkdirs();
+			return new PrintStream(new FileOutputStream(OUTPUT_GRAMMAR));
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
+			String grammarTemplate = readGrammarTemplate();
+			PrintStream pps = openOutputGrammar();
+
+			// TODO: perform reprocessing
+
+			pps.println(grammarTemplate);
+			pps.close();
 		}
 	}
 }

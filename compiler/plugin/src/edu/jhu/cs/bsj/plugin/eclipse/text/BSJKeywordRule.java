@@ -1,12 +1,10 @@
 package edu.jhu.cs.bsj.plugin.eclipse.text;
 
 import org.eclipse.jface.text.rules.ICharacterScanner;
-import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WordRule;
-import org.eclipse.ui.internal.registry.KeywordRegistry;
 
 /**
  * 

@@ -42,6 +42,7 @@ filecount="$(\
             doCopy implementation $astsrc; \
             doCopy parser         $parsrc; \
             doCopy utils          $utlsrc; \
+            doCopy parser-root    ../../parser; \
         ) | (n=0; while read line; do n="$(($n+$line))"; echo $n; done | tail -n 1) \
     )"
 
