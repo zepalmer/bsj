@@ -4451,6 +4451,40 @@ public class SourceGenerator
 					index++;
 				return new Pair<Integer, String>(index, s.substring(firstIndex, index));
 			}
+
+			protected Pair<String, Pair<Integer, Integer>> expectRuleReplacement(String grammarTemplate,
+					int startIndex, int endIndex)
+			{
+				Pair<Integer, String> before = getTokenBefore(grammarTemplate, startIndex);
+				Pair<Integer, String> after = getTokenAfter(grammarTemplate, endIndex);
+				startIndex = before.getFirst();
+				endIndex = after.getFirst();
+				if (!after.getSecond().equals(":;"))
+				{
+					boolean valid = false;
+					if (after.getSecond().equals(":"))
+					{
+						while (endIndex < grammarTemplate.length()
+								&& Character.isWhitespace(grammarTemplate.charAt(endIndex)))
+						{
+							endIndex++;
+						}
+						if (endIndex < grammarTemplate.length() && grammarTemplate.charAt(endIndex) == ';')
+						{
+							endIndex++;
+							valid = true;
+						}
+					}
+					if (!valid)
+					{
+						throw error("Invalid use of standard rule introduction: missing ':' following command");
+					}
+				}
+				final String ruleName = before.getSecond();
+
+				return new Pair<String, Pair<Integer, Integer>>(ruleName, new Pair<Integer, Integer>(startIndex,
+						endIndex));
+			}
 		}
 
 		private static class StandardRuleIntroCommand extends TemplateCommand
@@ -4463,26 +4497,24 @@ public class SourceGenerator
 			@Override
 			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
 			{
-				String returnTypeName = getParameter("type");
-				assertAccessedAllParameters();
-
 				Pair<Integer, String> before = getTokenBefore(grammarTemplate, startIndex);
 				Pair<Integer, String> after = getTokenAfter(grammarTemplate, endIndex);
+				startIndex = before.getFirst();
+				endIndex = after.getFirst();
 				if (!after.getSecond().equals(":"))
 				{
 					throw error("Invalid use of standard rule introduction: missing ':' following command");
 				}
-
-				final int newStartIndex = before.getFirst();
-				final int newEndIndex = after.getFirst();
 				final String ruleName = before.getSecond();
+
+				String returnTypeName = getParameter("type");
+				assertAccessedAllParameters();
 
 				Map<String, String> params = new MapBuilder<String, String>().add("rule", ruleName).add("type",
 						returnTypeName).getMap();
 				final String replacement = fillFragment("standardRuleIntro", params);
 
-				return grammarTemplate.substring(0, newStartIndex) + replacement
-						+ grammarTemplate.substring(newEndIndex);
+				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}
 		}
 
@@ -4496,7 +4528,12 @@ public class SourceGenerator
 			@Override
 			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
 			{
-				final String ruleName = getParameter("name");
+				Pair<String, Pair<Integer, Integer>> replacementMetrics = expectRuleReplacement(grammarTemplate,
+						startIndex, endIndex);
+				startIndex = replacementMetrics.getSecond().getFirst();
+				endIndex = replacementMetrics.getSecond().getSecond();
+				final String ruleName = replacementMetrics.getFirst();
+
 				final String returnTypeName = getParameter("type");
 				final String componentRuleName;
 				final String componentTypeName;
@@ -4610,7 +4647,18 @@ public class SourceGenerator
 			@Override
 			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
 			{
-				final String parseRuleName = getParameter("parseRuleName");
+				Pair<String, Pair<Integer, Integer>> replacementMetrics = expectRuleReplacement(grammarTemplate,
+						startIndex, endIndex);
+				startIndex = replacementMetrics.getSecond().getFirst();
+				endIndex = replacementMetrics.getSecond().getSecond();
+				final String ruleName = replacementMetrics.getFirst();
+				if (!ruleName.startsWith("parseRule_"))
+				{
+					throw new IllegalStateException("Used generateParseRule on a rule not starting with parseRule_ ("
+							+ ruleName + ")");
+				}
+				final String parseRuleName = ruleName.substring(10);
+
 				final String antlrRuleName;
 				final String returnTypeName = getParameter("type");
 

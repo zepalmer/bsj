@@ -768,7 +768,7 @@ metaprogramMode returns [MetaprogramPackageMode packageMode, MetaprogramLocalMod
         ';'
     ;
 
-/*%% generateListRule= name=metaprogramDependencyDeclarationList type=MetaprogramDependencyDeclarationListNode %%*/
+metaprogramDependencyDeclarationList /*%% generateListRule= type=MetaprogramDependencyDeclarationListNode %%*/ :;
 
 metaprogramDependencyDeclaration /*%% standardRuleIntro= type=MetaprogramDependencyDeclarationNode %%*/
     :   
@@ -780,8 +780,8 @@ metaprogramDependencyDeclaration /*%% standardRuleIntro= type=MetaprogramDepende
         }
     ;
 
-/*%% generateListRule= name=metaprogramDependencyList type=MetaprogramDependencyListNode
-                      separator=',' lastSeparator=true %%*/
+metaprogramDependencyList /*%% generateListRule= type=MetaprogramDependencyListNode
+                      separator=',' lastSeparator=true %%*/ :;
 
 metaprogramDependency returns [MetaprogramDependencyNode ret]
         scope Rule;
@@ -805,7 +805,7 @@ metaprogramDependency returns [MetaprogramDependencyNode ret]
         }
     ;
 
-/*%% generateListRule= name=metaprogramTargetList type=MetaprogramTargetListNode %%*/
+metaprogramTargetList /*%% generateListRule= type=MetaprogramTargetListNode %%*/ :;
 
 metaprogramTarget /*%% standardRuleIntro= type=MetaprogramTargetNode %%*/
     :   
@@ -825,8 +825,8 @@ metaprogramTargetName /*%% standardRuleIntro= type=NameNode %%*/
         }
     ;
 
-/*%% generateListRule= name=identifierList type=IdentifierListNode
-                      separator=',' lastSeparator=true %%*/
+identifierList /*%% generateListRule= type=IdentifierListNode
+                      separator=',' lastSeparator=true %%*/ :;
 
 typeDeclarationBsjMetaprogramAnchor /*%% standardRuleIntro= type=TypeDeclarationMetaprogramAnchorNode %%*/
     :
@@ -900,7 +900,7 @@ optionalMetaAnnotationList returns [MetaAnnotationListNode ret]
 // Parses a list of meta-annotations.  Note that this rule is not used for declarations, since meta-annotations can be
 // interspersed amongst annotations and modifiers.  This rule is used for meta-annotations which are applied to
 // statements and other constructs which only permit meta-annotations and not other modifiers.
-/*%% generateListRule= name=metaAnnotationList type=MetaAnnotationListNode %%*/
+metaAnnotationList /*%% generateListRule= type=MetaAnnotationListNode %%*/ :;
 
 // Parses a sequence of any annotations: BSJ meta-annotations or Java annotations.  These are returned as two lists.
 // This rule is used for those grammar rules which cannot have other forms of modifier.
@@ -975,9 +975,9 @@ metaAnnotation /*%% standardRuleIntro= type=MetaAnnotationNode %%*/
 //     @@Foo(bar="baz",happy=5)
 // this rule would parse
 //     bar="baz",happy=5
-/*%% generateListRule= name=metaAnnotationElementValuePairs type=MetaAnnotationElementListNode
+metaAnnotationElementValuePairs /*%% generateListRule= type=MetaAnnotationElementListNode
                       componentName=metaAnnotationElementValuePair
-                      separator=',' lastSeparator=false %%*/
+                      separator=',' lastSeparator=false %%*/ :;
 
 // Parses a single meta-annotation element-value pair.
 // For example, in
@@ -1030,9 +1030,9 @@ metaAnnotationElementValue /*%% standardRuleIntro= type=MetaAnnotationValueNode 
 //     @@Test({1,2,3})
 // this rule would parse
 //     1,2,3
-/*%% generateListRule= name=metaAnnotationElementValues type=MetaAnnotationValueListNode
+metaAnnotationElementValues /*%% generateListRule= type=MetaAnnotationValueListNode
                       componentName=metaAnnotationElementValue
-                      separator=',' lastSeparator=false %%*/
+                      separator=',' lastSeparator=false %%*/ :;
 
 // Parses a meta-annotation element array.
 // For example, in
@@ -1194,11 +1194,11 @@ packageDeclaration returns [PackageDeclarationNode ret]
         }
     ;
 
-/*%% generateListRule= name=metaImportDeclarations type=MetaprogramImportListNode
-                      componentName=metaprogramImport %%*/
+metaImportDeclarations /*%% generateListRule= type=MetaprogramImportListNode
+                      componentName=metaprogramImport %%*/ :;
 
-/*%% generateListRule= name=importDeclarations type=ImportListNode
-                      componentName=importDeclaration %%*/
+importDeclarations /*%% generateListRule= type=ImportListNode
+                      componentName=importDeclaration %%*/ :;
 
 importBody returns [boolean staticImport, boolean onDemand, NameNode name]
         scope Rule;
@@ -1282,8 +1282,8 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
     :
     ;
 
-/*%% generateListRule= name=typeDeclarations type=TypeDeclarationListNode
-                      componentName=typeDeclaration %%*/
+typeDeclarations /*%% generateListRule= type=TypeDeclarationListNode
+                      componentName=typeDeclaration %%*/ :;
 
 typeDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
     :
@@ -1688,9 +1688,9 @@ inlineClassDeclaration returns [LocalClassDeclarationNode ret]
         }
     ;
 
-/*%% generateListRule= name=typeParameters type=TypeParameterListNode
+typeParameters /*%% generateListRule= type=TypeParameterListNode
                       componentName=typeParameter separator=',' lastSeparator=false
-                      prefix='<' postfix='>' %%*/
+                      prefix='<' postfix='>' %%*/ :;
 
 typeParameter returns [TypeParameterNode ret]
         scope Rule;
@@ -1716,8 +1716,8 @@ typeParameter returns [TypeParameterNode ret]
         }        
     ;
 
-/*%% generateListRule= name=typeBound type=DeclaredTypeListNode
-                      componentName=classOrInterfaceType separator='&' lastSeparator=false %%*/
+typeBound /*%% generateListRule= type=DeclaredTypeListNode
+                      componentName=classOrInterfaceType separator='&' lastSeparator=false %%*/ :;
 
 enumDeclaration returns [EnumDeclarationNode ret]
         scope Rule;
@@ -1783,8 +1783,8 @@ enumBody returns [EnumBodyNode ret]
         }
     ;
 
-/*%% generateListRule= name=enumConstants type=EnumConstantDeclarationListNode
-                       componentName=enumConstant separator=',' %%*/
+enumConstants /*%% generateListRule= type=EnumConstantDeclarationListNode
+                       componentName=enumConstant separator=',' %%*/ :;
 
 enumConstant returns [EnumConstantDeclarationNode ret]
         scope Rule;
@@ -1895,11 +1895,11 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         }
     ;
 
-/*%% generateListRule= name=declaredTypeList type=DeclaredTypeListNode
-                       componentName=classOrInterfaceType separator=',' %%*/
+declaredTypeList /*%% generateListRule= type=DeclaredTypeListNode
+                       componentName=classOrInterfaceType separator=',' %%*/ :;
 
-/*%% generateListRule= name=referenceTypeList type=ReferenceTypeListNode
-                       componentName=referenceType separator=',' %%*/
+referenceTypeList /*%% generateListRule= type=ReferenceTypeListNode
+                       componentName=referenceType separator=',' %%*/ :;
 
 classBody returns [ClassBodyNode ret]
         scope Rule;
@@ -1977,8 +1977,8 @@ initializerBlock /*%% standardRuleIntro= type=InitializerDeclarationNode %%*/
         }
     ;
 
-/*%% generateListRule= name=classBodyDeclarations type=ClassMemberListNode
-                       componentName=classBodyDeclaration %%*/
+classBodyDeclarations /*%% generateListRule= type=ClassMemberListNode
+                       componentName=classBodyDeclaration %%*/ :;
     
 classBodyDeclaration /*%% standardRuleIntro= type=ClassMemberNode %%*/
     :
@@ -2011,8 +2011,8 @@ classBodyDeclaration /*%% standardRuleIntro= type=ClassMemberNode %%*/
         }
     ;
 
-/*%% generateListRule= name=anonymousClassBodyDeclarations type=AnonymousClassMemberListNode
-                       componentName=anonymousClassBodyDeclaration %%*/
+anonymousClassBodyDeclarations /*%% generateListRule= type=AnonymousClassMemberListNode
+                       componentName=anonymousClassBodyDeclaration %%*/ :;
     
 anonymousClassBodyDeclaration /*%% standardRuleIntro= type=AnonymousClassMemberNode %%*/
     :
@@ -2214,8 +2214,8 @@ fieldDeclaration /*%% standardRuleIntro= type=FieldDeclarationNode %%*/
         }
     ;
     
-/*%% generateListRule= name=interfaceBodyDeclarations type=InterfaceMemberListNode
-                       componentName=interfaceBodyDeclaration %%*/
+interfaceBodyDeclarations /*%% generateListRule= type=InterfaceMemberListNode
+                       componentName=interfaceBodyDeclaration %%*/ :;
     
 interfaceBodyDeclaration /*%% standardRuleIntro= type=InterfaceMemberNode %%*/
     :
@@ -2327,8 +2327,8 @@ constantDeclaration returns [ConstantDeclarationNode ret]
     ;
 
 // Represents a non-empty sequence of variable declarators.
-/*%% generateListRule= name=variableDeclarators type=VariableDeclaratorListNode
-                       componentName=variableDeclarator separator=',' %%*/
+variableDeclarators /*%% generateListRule= type=VariableDeclaratorListNode
+                       componentName=variableDeclarator separator=',' %%*/ :;
  
 // Represents the combination of an identifier and an initializer.  This construct is necessary on its own to support
 // the multiple declaration sugar ("int x,y;").
@@ -2561,8 +2561,8 @@ primitiveType returns [PrimitiveTypeNode ret]
 //     Map.Entry<K,V> entry;
 // this node would parse
 //     <K,V>
-/*%% generateListRule= name=typeArguments type=TypeArgumentListNode
-                       componentName=typeArgument separator=',' prefix='<' postfix='>' %%*/
+typeArguments /*%% generateListRule= type=TypeArgumentListNode
+                       componentName=typeArgument separator=',' prefix='<' postfix='>' %%*/ :;
 
 // Parses a single type argument for a declared type.
 // For example, in
@@ -2773,7 +2773,7 @@ explicitConstructorInvocation /*%% standardRuleIntro= type=ConstructorInvocation
         }
     ;
 
-/*%% generateListRule= name=annotations type=AnnotationListNode componentName=annotation %%*/
+annotations /*%% generateListRule= type=AnnotationListNode componentName=annotation %%*/ :;
 
 // Parses an annotation.
 // For example, in
@@ -2815,8 +2815,8 @@ annotation /*%% standardRuleIntro= type=AnnotationNode %%*/
 //     @Foo(bar="baz",happy=5)
 // this rule would parse
 //     bar="baz",happy=5
-/*%% generateListRule= name=elementValuePairs type=AnnotationElementListNode
-                       componentName=elementValuePair separator=',' %%*/
+elementValuePairs /*%% generateListRule= type=AnnotationElementListNode
+                       componentName=elementValuePair separator=',' %%*/ :;
 
 // Parses a single annotation element-value pair.
 // For example, in
@@ -2861,8 +2861,8 @@ elementValue /*%% standardRuleIntro= type=AnnotationValueNode %%*/
     ;
 
 // Parses a non-empty list of annotation element values.
-/*%% generateListRule= name=elementValues type=AnnotationValueListNode
-                       componentName=elementValue separator=',' lastSeparator=true %%*/
+elementValues /*%% generateListRule= type=AnnotationValueListNode
+                       componentName=elementValue separator=',' lastSeparator=true %%*/ :;
     
 // Parses an annotation element array.
 // For example, in
@@ -2932,8 +2932,8 @@ annotationTypeBody returns [AnnotationBodyNode ret]
         '}'
     ;
     
-/*%% generateListRule= name=annotationTypeElementDeclarations type=AnnotationMemberListNode
-                       componentName=annotationTypeElementDeclaration %%*/
+annotationTypeElementDeclarations /*%% generateListRule= type=AnnotationMemberListNode
+                       componentName=annotationTypeElementDeclaration %%*/ :;
 
 annotationTypeElementDeclaration /*%% standardRuleIntro= type=AnnotationMemberNode %%*/
     :   
@@ -3041,7 +3041,7 @@ optionalBlockStatementList returns [BlockStatementListNode ret]
         )?
     ;
 
-/*%% generateListRule= name=blockStatementList type=BlockStatementListNode %%*/
+blockStatementList /*%% generateListRule= type=BlockStatementListNode %%*/ :;
 
 // Parses a statement from a block of statements.
 blockStatement /*%% standardRuleIntro= type=BlockStatementNode %%*/
@@ -3306,8 +3306,8 @@ switchStatement[MetaAnnotationListNode metaAnnotations] returns [SwitchNode ret]
         '}'
     ;
 
-/*%% generateListRule= name=switchBlockStatementGroups type=CaseListNode
-                       componentName=switchBlockStatementGroup %%*/
+switchBlockStatementGroups /*%% generateListRule= type=CaseListNode
+                       componentName=switchBlockStatementGroup %%*/ :;
 
 switchBlockStatementGroup returns [CaseNode ret]
         scope Rule;
@@ -3383,7 +3383,7 @@ trystatement[MetaAnnotationListNode metaAnnotations] returns [TryNode ret]
         }        
     ;
 
-/*%% generateListRule= name=catches type=CatchListNode componentName=catchClause %%*/
+catches /*%% generateListRule= type=CatchListNode componentName=catchClause %%*/ :;
 
 catchClause /*%% standardRuleIntro= type=CatchNode %%*/
     :   
@@ -3513,9 +3513,9 @@ parExpression /*%% standardRuleIntro= type=ExpressionNode %%*/
         }
     ;
 
-/*%% generateListRule= name=statementExpressionList type=StatementExpressionListNode separator=',' %%*/
+statementExpressionList /*%% generateListRule= type=StatementExpressionListNode separator=',' %%*/ :;
 
-/*%% generateListRule= name=expressionList type=ExpressionListNode separator=',' %%*/
+expressionList /*%% generateListRule= type=ExpressionListNode separator=',' %%*/ :;
                        
 /* This rule parses a statement expression.  A statement expression is one of those types of expressions which may be
  * used as a statement (such as x++) but not any other kind of expression (such as ~x). */
@@ -4622,8 +4622,8 @@ variableInitializer /*%% standardRuleIntro= type=VariableInitializerNode %%*/
         }
     ;
 
-/*%% generateListRule= name=variableInitializers type=VariableInitializerListNode
-                       componentName=variableInitializer separator=',' %%*/
+variableInitializers /*%% generateListRule= type=VariableInitializerListNode
+                       componentName=variableInitializer separator=',' %%*/ :;
 
 arrayInitializer returns [ArrayInitializerNode ret]
         scope Rule;
@@ -4908,27 +4908,27 @@ localVariableHeader
 
 /* *** BSJ Code Literal Parse Rules *************************************** */
 
-/*%% generateParseRule= parseRuleName=AbstractMethodModifiers antlrRuleName=annotationMethodModifiers type=AnnotationMethodModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=Annotation type=AnnotationNode %%*/
-/*%% generateParseRule= parseRuleName=Annotations type=AnnotationListNode %%*/
-/*%% generateParseRule= parseRuleName=AnnotationMethodDeclaration type=AnnotationMethodDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=AnnotationModifiers type=AnnotationModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=AnnotationTypeBody type=AnnotationBodyNode %%*/
-/*%% generateParseRule= parseRuleName=AnnotationTypeElementDeclarations type=AnnotationMemberListNode %%*/
-/*%% generateParseRule= parseRuleName=AnnotationTypeElementDeclaration type=AnnotationMemberNode %%*/
-/*%% generateParseRule= parseRuleName=AnonymousClassBody type=AnonymousClassBodyNode %%*/
-/*%% generateParseRule= parseRuleName=AnonymousClassBodyDeclarations type=AnonymousClassMemberListNode %%*/
-/*%% generateParseRule= parseRuleName=AnonymousClassBodyDeclaration type=AnonymousClassMemberNode %%*/
-/*%% generateParseRule= parseRuleName=ArgumentList antlrRuleName=expressionList type=ExpressionListNode %%*/
-/*%% generateParseRule= parseRuleName=BlockStatement type=BlockStatementNode %%*/
-/*%% generateParseRule= parseRuleName=BlockStatements antlrRuleName=blockStatementList type=BlockStatementListNode %%*/
-/*%% generateParseRule= parseRuleName=CatchClause type=CatchNode %%*/
-/*%% generateParseRule= parseRuleName=Catches type=CatchListNode %%*/
-/*%% generateParseRule= parseRuleName=ClassBody type=ClassBodyNode %%*/
-/*%% generateParseRule= parseRuleName=ClassBodyDeclaration type=ClassMemberNode %%*/
-/*%% generateParseRule= parseRuleName=ClassBodyDeclarations type=ClassMemberListNode %%*/
-/*%% generateParseRule= parseRuleName=ClassModifiers type=ClassModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=ClassOrInterfaceTypeList antlrRuleName=declaredTypeList type=DeclaredTypeListNode %%*/
+parseRule_AbstractMethodModifiers /*%% generateParseRule= antlrRuleName=annotationMethodModifiers type=AnnotationMethodModifiersNode %%*/ :;
+parseRule_Annotation /*%% generateParseRule= type=AnnotationNode %%*/ :;
+parseRule_Annotations /*%% generateParseRule= type=AnnotationListNode %%*/ :;
+parseRule_AnnotationMethodDeclaration /*%% generateParseRule= type=AnnotationMethodDeclarationNode %%*/ :;
+parseRule_AnnotationModifiers /*%% generateParseRule= type=AnnotationModifiersNode %%*/ :;
+parseRule_AnnotationTypeBody /*%% generateParseRule= type=AnnotationBodyNode %%*/ :;
+parseRule_AnnotationTypeElementDeclarations /*%% generateParseRule= type=AnnotationMemberListNode %%*/ :;
+parseRule_AnnotationTypeElementDeclaration /*%% generateParseRule= type=AnnotationMemberNode %%*/ :;
+parseRule_AnonymousClassBody /*%% generateParseRule= type=AnonymousClassBodyNode %%*/ :;
+parseRule_AnonymousClassBodyDeclarations /*%% generateParseRule= type=AnonymousClassMemberListNode %%*/ :;
+parseRule_AnonymousClassBodyDeclaration /*%% generateParseRule= type=AnonymousClassMemberNode %%*/ :;
+parseRule_ArgumentList /*%% generateParseRule= antlrRuleName=expressionList type=ExpressionListNode %%*/ :;
+parseRule_BlockStatement /*%% generateParseRule= type=BlockStatementNode %%*/ :;
+parseRule_BlockStatements /*%% generateParseRule= antlrRuleName=blockStatementList type=BlockStatementListNode %%*/ :;
+parseRule_CatchClause /*%% generateParseRule= type=CatchNode %%*/ :;
+parseRule_Catches /*%% generateParseRule= type=CatchListNode %%*/ :;
+parseRule_ClassBody /*%% generateParseRule= type=ClassBodyNode %%*/ :;
+parseRule_ClassBodyDeclaration /*%% generateParseRule= type=ClassMemberNode %%*/ :;
+parseRule_ClassBodyDeclarations /*%% generateParseRule= type=ClassMemberListNode %%*/ :;
+parseRule_ClassModifiers /*%% generateParseRule= type=ClassModifiersNode %%*/ :;
+parseRule_ClassOrInterfaceTypeList /*%% generateParseRule= antlrRuleName=declaredTypeList type=DeclaredTypeListNode %%*/ :;
 parseRule_CompilationUnit[String name] returns [CompilationUnitNode ret]
         scope Rule;
         @init {
@@ -4945,34 +4945,34 @@ parseRule_CompilationUnit[String name] returns [CompilationUnitNode ret]
         }
     ;
 
-/*%% generateParseRule= parseRuleName=ConstantDeclaration type=ConstantDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=ConstantModifiers type=ConstantModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=ConstructorBody type=ConstructorBodyNode %%*/
-/*%% generateParseRule= parseRuleName=ConstructorDeclaration type=ConstructorDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=ConstructorModifiers type=ConstructorModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=ElementValue type=AnnotationValueNode %%*/
-/*%% generateParseRule= parseRuleName=ElementValues type=AnnotationValueListNode %%*/
-/*%% generateParseRule= parseRuleName=ElementValuePair type=AnnotationElementNode %%*/
-/*%% generateParseRule= parseRuleName=ElementValuePairs type=AnnotationElementListNode %%*/
-/*%% generateParseRule= parseRuleName=EnumBody type=EnumBodyNode %%*/
-/*%% generateParseRule= parseRuleName=EnumConstant type=EnumConstantDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=EnumConstants type=EnumConstantDeclarationListNode %%*/
-/*%% generateParseRule= parseRuleName=EnumModifiers type=EnumModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=ExceptionTypeList antlrRuleName=unparameterizedTypeList type=UnparameterizedTypeListNode %%*/
-/*%% generateParseRule= parseRuleName=ExplicitConstructorInvocation type=ConstructorInvocationNode %%*/
-/*%% generateParseRule= parseRuleName=FieldDeclaration type=FieldDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=FieldModifiers type=FieldModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=ForInit type=ForInitializerNode %%*/
-/*%% generateParseRule= parseRuleName=FormalParameter type=VariableNode %%*/
-/*%% generateParseRule= parseRuleName=Identifier type=IdentifierNode %%*/
-/*%% generateParseRule= parseRuleName=IdentifierList type=IdentifierListNode %%*/
-/*%% generateParseRule= parseRuleName=ImportDeclaration type=ImportNode %%*/
-/*%% generateParseRule= parseRuleName=ImportDeclarations type=ImportListNode %%*/
-/*%% generateParseRule= parseRuleName=Initializer antlrRuleName=initializerBlock type=InitializerDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=InterfaceBody type=InterfaceBodyNode %%*/
-/*%% generateParseRule= parseRuleName=InterfaceMemberDeclaration antlrRuleName=interfaceBodyDeclaration type=InterfaceMemberNode %%*/
-/*%% generateParseRule= parseRuleName=InterfaceMemberDeclarations antlrRuleName=interfaceBodyDeclarations type=InterfaceMemberListNode %%*/
-/*%% generateParseRule= parseRuleName=InterfaceModifiers type=InterfaceModifiersNode %%*/
+parseRule_ConstantDeclaration /*%% generateParseRule= type=ConstantDeclarationNode %%*/ :;
+parseRule_ConstantModifiers /*%% generateParseRule= type=ConstantModifiersNode %%*/ :;
+parseRule_ConstructorBody /*%% generateParseRule= type=ConstructorBodyNode %%*/ :;
+parseRule_ConstructorDeclaration /*%% generateParseRule= type=ConstructorDeclarationNode %%*/ :;
+parseRule_ConstructorModifiers /*%% generateParseRule= type=ConstructorModifiersNode %%*/ :;
+parseRule_ElementValue /*%% generateParseRule= type=AnnotationValueNode %%*/ :;
+parseRule_ElementValues /*%% generateParseRule= type=AnnotationValueListNode %%*/ :;
+parseRule_ElementValuePair /*%% generateParseRule= type=AnnotationElementNode %%*/ :;
+parseRule_ElementValuePairs /*%% generateParseRule= type=AnnotationElementListNode %%*/ :;
+parseRule_EnumBody /*%% generateParseRule= type=EnumBodyNode %%*/ :;
+parseRule_EnumConstant /*%% generateParseRule= type=EnumConstantDeclarationNode %%*/ :;
+parseRule_EnumConstants /*%% generateParseRule= type=EnumConstantDeclarationListNode %%*/ :;
+parseRule_EnumModifiers /*%% generateParseRule= type=EnumModifiersNode %%*/ :;
+parseRule_ExceptionTypeList /*%% generateParseRule= antlrRuleName=unparameterizedTypeList type=UnparameterizedTypeListNode %%*/ :;
+parseRule_ExplicitConstructorInvocation /*%% generateParseRule= type=ConstructorInvocationNode %%*/ :;
+parseRule_FieldDeclaration /*%% generateParseRule= type=FieldDeclarationNode %%*/ :;
+parseRule_FieldModifiers /*%% generateParseRule= type=FieldModifiersNode %%*/ :;
+parseRule_ForInit /*%% generateParseRule= type=ForInitializerNode %%*/ :;
+parseRule_FormalParameter /*%% generateParseRule= type=VariableNode %%*/ :;
+parseRule_Identifier /*%% generateParseRule= type=IdentifierNode %%*/ :;
+parseRule_IdentifierList /*%% generateParseRule= type=IdentifierListNode %%*/ :;
+parseRule_ImportDeclaration /*%% generateParseRule= type=ImportNode %%*/ :;
+parseRule_ImportDeclarations /*%% generateParseRule= type=ImportListNode %%*/ :;
+parseRule_Initializer /*%% generateParseRule= antlrRuleName=initializerBlock type=InitializerDeclarationNode %%*/ :;
+parseRule_InterfaceBody /*%% generateParseRule= type=InterfaceBodyNode %%*/ :;
+parseRule_InterfaceMemberDeclaration /*%% generateParseRule= antlrRuleName=interfaceBodyDeclaration type=InterfaceMemberNode %%*/ :;
+parseRule_InterfaceMemberDeclarations /*%% generateParseRule= antlrRuleName=interfaceBodyDeclarations type=InterfaceMemberListNode %%*/ :;
+parseRule_InterfaceModifiers /*%% generateParseRule= type=InterfaceModifiersNode %%*/ :;
 parseRule_JavadocComment returns [JavadocNode ret]
         scope Rule;
         @init {
@@ -4986,44 +4986,45 @@ parseRule_JavadocComment returns [JavadocNode ret]
         EOF
     ;
 
-/*%% generateParseRule= parseRuleName=LocalClassDeclaration antlrRuleName=inlineClassDeclaration type=LocalClassDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=LocalClassModifiers antlrRuleName=inlineClassModifiers type=LocalClassModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=MetaAnnotation type=MetaAnnotationNode %%*/
-/*%% generateParseRule= parseRuleName=MetaAnnotationList type=MetaAnnotationListNode %%*/
-/*%% generateParseRule= parseRuleName=MetaAnnotationElement antlrRuleName=metaAnnotationElementValuePair type=MetaAnnotationElementNode %%*/
-/*%% generateParseRule= parseRuleName=MetaAnnotationElements antlrRuleName=metaAnnotationElementValuePairs type=MetaAnnotationElementListNode %%*/
-/*%% generateParseRule= parseRuleName=MetaAnnotationElementValue type=MetaAnnotationValueNode %%*/
-/*%% generateParseRule= parseRuleName=MetaAnnotationElementValues type=MetaAnnotationValueListNode %%*/
-/*%% generateParseRule= parseRuleName=Metaprogram antlrRuleName=bsjMetaprogram type=MetaprogramNode %%*/
-/*%% generateParseRule= parseRuleName=MetaprogramDependency type=MetaprogramDependencyNode %%*/
-/*%% generateParseRule= parseRuleName=MetaprogramDependencyDeclaration type=MetaprogramDependencyDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=MetaprogramDependencyDeclarationList type=MetaprogramDependencyDeclarationListNode %%*/
-/*%% generateParseRule= parseRuleName=MetaprogramDependencyList type=MetaprogramDependencyListNode %%*/
-/*%% generateParseRule= parseRuleName=MetaprogramImportDeclaration antlrRuleName=metaprogramImport type=MetaprogramImportNode %%*/
-/*%% generateParseRule= parseRuleName=MetaprogramImportDeclarationList antlrRuleName=metaImportDeclarations type=MetaprogramImportListNode %%*/
-/*%% generateParseRule= parseRuleName=MetaprogramTargetDeclaration antlrRuleName=metaprogramTarget type=MetaprogramTargetNode %%*/
-/*%% generateParseRule= parseRuleName=MetaprogramTargetDeclarationList antlrRuleName=metaprogramTargetList type=MetaprogramTargetListNode %%*/
-/*%% generateParseRule= parseRuleName=MethodDeclaration type=MethodDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=MethodModifiers type=MethodModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=Name type=NameNode %%*/
-/*%% generateParseRule= parseRuleName=PackageDeclaration type=PackageDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=Preamble type=MetaprogramPreambleNode %%*/
-/*%% generateParseRule= parseRuleName=ReferenceTypeList type=ReferenceTypeListNode %%*/
-/*%% generateParseRule= parseRuleName=StatementExpressionList type=StatementExpressionListNode %%*/
-/*%% generateParseRule= parseRuleName=SwitchBlockStatementGroup type=CaseNode %%*/
-/*%% generateParseRule= parseRuleName=SwitchBlockStatementGroups type=CaseListNode %%*/
-/*%% generateParseRule= parseRuleName=Type type=TypeNode %%*/
-/*%% generateParseRule= parseRuleName=TypeArguments type=TypeArgumentListNode %%*/
-/*%% generateParseRule= parseRuleName=TypeDeclaration type=TypeDeclarationNode %%*/
-/*%% generateParseRule= parseRuleName=TypeDeclarations type=TypeDeclarationListNode %%*/
-/*%% generateParseRule= parseRuleName=TypeParameter type=TypeParameterNode %%*/
-/*%% generateParseRule= parseRuleName=TypeParameters type=TypeParameterListNode %%*/
-/*%% generateParseRule= parseRuleName=VariableDeclarator type=VariableDeclaratorNode %%*/
-/*%% generateParseRule= parseRuleName=VariableDeclarators type=VariableDeclaratorListNode %%*/
-/*%% generateParseRule= parseRuleName=VariableInitializer type=VariableInitializerNode %%*/
-/*%% generateParseRule= parseRuleName=VariableInitializers type=VariableInitializerListNode %%*/
-/*%% generateParseRule= parseRuleName=VariableModifiers type=VariableModifiersNode %%*/
-/*%% generateParseRule= parseRuleName=Wildcard type=WildcardTypeNode %%*/
+parseRule_LocalClassDeclaration /*%% generateParseRule= antlrRuleName=inlineClassDeclaration type=LocalClassDeclarationNode %%*/ :;
+parseRule_LocalClassModifiers /*%% generateParseRule= antlrRuleName=inlineClassModifiers type=LocalClassModifiersNode %%*/ :;
+parseRule_MetaAnnotation /*%% generateParseRule= type=MetaAnnotationNode %%*/ :;
+parseRule_MetaAnnotationList /*%% generateParseRule= type=MetaAnnotationListNode %%*/ :;
+parseRule_MetaAnnotationElement /*%% generateParseRule= antlrRuleName=metaAnnotationElementValuePair type=MetaAnnotationElementNode %%*/ :;
+parseRule_MetaAnnotationElements /*%% generateParseRule= antlrRuleName=metaAnnotationElementValuePairs type=MetaAnnotationElementListNode %%*/ :;
+parseRule_MetaAnnotationElementValue /*%% generateParseRule= type=MetaAnnotationValueNode %%*/ :;
+parseRule_MetaAnnotationElementValues /*%% generateParseRule= type=MetaAnnotationValueListNode %%*/ :;
+parseRule_Metaprogram /*%% generateParseRule= antlrRuleName=bsjMetaprogram type=MetaprogramNode %%*/ :;
+parseRule_MetaprogramDependency /*%% generateParseRule= type=MetaprogramDependencyNode %%*/ :;
+parseRule_MetaprogramDependencyDeclaration /*%% generateParseRule= type=MetaprogramDependencyDeclarationNode %%*/ :;
+parseRule_MetaprogramDependencyDeclarationList /*%% generateParseRule= type=MetaprogramDependencyDeclarationListNode %%*/ :;
+parseRule_MetaprogramDependencyList /*%% generateParseRule= type=MetaprogramDependencyListNode %%*/ :;
+parseRule_MetaprogramImportDeclaration /*%% generateParseRule= antlrRuleName=metaprogramImport type=MetaprogramImportNode %%*/ :;
+parseRule_MetaprogramImportDeclarationList /*%% generateParseRule= antlrRuleName=metaImportDeclarations type=MetaprogramImportListNode %%*/ :;
+parseRule_MetaprogramTargetDeclaration /*%% generateParseRule= antlrRuleName=metaprogramTarget type=MetaprogramTargetNode %%*/ :;
+parseRule_MetaprogramTargetDeclarationList /*%% generateParseRule= antlrRuleName=metaprogramTargetList type=MetaprogramTargetListNode %%*/ :;
+parseRule_MethodDeclaration /*%% generateParseRule= type=MethodDeclarationNode %%*/ :;
+parseRule_MethodModifiers /*%% generateParseRule= type=MethodModifiersNode %%*/ :;
+parseRule_Name /*%% generateParseRule= type=NameNode %%*/ :;
+parseRule_PackageDeclaration /*%% generateParseRule= type=PackageDeclarationNode %%*/ :;
+parseRule_Preamble /*%% generateParseRule= type=MetaprogramPreambleNode %%*/ :;
+parseRule_ReferenceTypeList /*%% generateParseRule= type=ReferenceTypeListNode %%*/ :;
+parseRule_StatementExpressionList /*%% generateParseRule= type=StatementExpressionListNode %%*/ :;
+parseRule_SwitchBlockStatementGroup /*%% generateParseRule= type=CaseNode %%*/ :;
+parseRule_SwitchBlockStatementGroups /*%% generateParseRule= type=CaseListNode %%*/ :;
+parseRule_Type /*%% generateParseRule= type=TypeNode %%*/ :;
+parseRule_TypeArguments /*%% generateParseRule= type=TypeArgumentListNode %%*/ :;
+parseRule_TypeDeclaration /*%% generateParseRule= type=TypeDeclarationNode %%*/ :;
+parseRule_TypeDeclarations /*%% generateParseRule= type=TypeDeclarationListNode %%*/ :;
+parseRule_TypeParameter /*%% generateParseRule= type=TypeParameterNode %%*/ :;
+parseRule_TypeParameters /*%% generateParseRule= type=TypeParameterListNode %%*/ :;
+parseRule_VariableDeclarator /*%% generateParseRule= type=VariableDeclaratorNode %%*/ :;
+parseRule_VariableDeclarators /*%% generateParseRule= type=VariableDeclaratorListNode %%*/ :;
+parseRule_VariableInitializer /*%% generateParseRule= type=VariableInitializerNode %%*/ :;
+parseRule_VariableInitializers /*%% generateParseRule= type=VariableInitializerListNode %%*/ :;
+parseRule_VariableModifiers /*%% generateParseRule= type=VariableModifiersNode %%*/ :;
+parseRule_Wildcard /*%% generateParseRule= type=WildcardTypeNode %%*/ :;
+
 /********************************************************************************************
                   Lexer section
 *********************************************************************************************/
