@@ -4754,6 +4754,7 @@ conditionalOrExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
         @init {
             ruleStart("conditionalOrExpression");
+            BinaryOperator op = null;
         }
         @after {
             ruleStop();
@@ -4764,20 +4765,25 @@ conditionalOrExpression returns [NonAssignmentExpressionNode ret]
             $ret = $e1.ret;
         }    
         (
-            '||' e2=conditionalAndExpression
+            (
+                '||'
+                {
+                    op = BinaryOperator.CONDITIONAL_OR;
+                }
+            )
+            e2=conditionalAndExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.CONDITIONAL_OR);
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
             }            
         )*
     ;
+
 
 conditionalAndExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
         @init {
             ruleStart("conditionalAndExpression");
+            BinaryOperator op = null;
         }
         @after {
             ruleStop();
@@ -4786,22 +4792,27 @@ conditionalAndExpression returns [NonAssignmentExpressionNode ret]
         e1=inclusiveOrExpression
         {
             $ret = $e1.ret;
-        }         
+        }    
         (
-            '&&' e2=inclusiveOrExpression
+            (
+                '&&'
+                {
+                    op = BinaryOperator.CONDITIONAL_AND;
+                }
+            )
+            e2=inclusiveOrExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.CONDITIONAL_AND);
-            }             
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+            }            
         )*
     ;
+
 
 inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
         @init {
             ruleStart("inclusiveOrExpression");
+            BinaryOperator op = null;
         }
         @after {
             ruleStop();
@@ -4812,20 +4823,25 @@ inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
             $ret = $e1.ret;
         }    
         (
-            '|' e2=exclusiveOrExpression
+            (
+                '|'
+                {
+                    op = BinaryOperator.LOGICAL_OR;
+                }
+            )
+            e2=exclusiveOrExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.LOGICAL_OR);
-            }             
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+            }            
         )*
     ;
+
 
 exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
         @init {
             ruleStart("exclusiveOrExpression");
+            BinaryOperator op = null;
         }
         @after {
             ruleStop();
@@ -4834,22 +4850,27 @@ exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
         e1=andExpression
         {
             $ret = $e1.ret;
-        }          
+        }    
         (
-            '^' e2=andExpression
+            (
+                '^'
+                {
+                    op = BinaryOperator.XOR;
+                }
+            )
+            e2=andExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.XOR);
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
             }            
         )*
     ;
+
 
 andExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
         @init {
             ruleStart("andExpression");
+            BinaryOperator op = null;
         }
         @after {
             ruleStop();
@@ -4858,21 +4879,25 @@ andExpression returns [NonAssignmentExpressionNode ret]
         e1=equalityExpression
         {
             $ret = $e1.ret;
-        }         
+        }    
         (
-            '&' e2=equalityExpression
+            (
+                '&'
+                {
+                    op = BinaryOperator.LOGICAL_AND;
+                }
+            )
+            e2=equalityExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.LOGICAL_AND);
-            }              
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+            }            
         )*
     ;
 
+
 equalityExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
-        @init{
+        @init {
             ruleStart("equalityExpression");
             BinaryOperator op = null;
         }
@@ -4883,26 +4908,26 @@ equalityExpression returns [NonAssignmentExpressionNode ret]
         e1=instanceOfExpression
         {
             $ret = $e1.ret;
-        }        
-        (   
-            (   '=='
+        }    
+        (
+            (
+                '=='
                 {
                     op = BinaryOperator.EQUAL;
                 }
-            |   '!='
+            |
+                '!='
                 {
                     op = BinaryOperator.NOT_EQUAL;
-                }            
+                }
             )
             e2=instanceOfExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    op);
-            }             
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+            }            
         )*
     ;
+
 
 instanceOfExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
@@ -4931,6 +4956,7 @@ relationalExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
         @init {
             ruleStart("relationalExpression");
+            BinaryOperator op = null;
         }
         @after {
             ruleStop();
@@ -4939,52 +4965,42 @@ relationalExpression returns [NonAssignmentExpressionNode ret]
         e1=shiftExpression
         {
             $ret = $e1.ret;
-        }         
+        }    
         (
-            op=relationalOp e2=shiftExpression
+            (
+                '<' '='
+                {
+                    op = BinaryOperator.LESS_THAN_EQUAL;
+                }
+            |
+                '>' '='
+                {
+                    op = BinaryOperator.GREATER_THAN_EQUAL;
+                }
+            |
+                '<'
+                {
+                    op = BinaryOperator.LESS_THAN;
+                }
+            |
+                '>'
+                {
+                    op = BinaryOperator.GREATER_THAN;
+                }
+            )
+            e2=shiftExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    $op.ret);
-            }             
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+            }            
         )*
     ;
 
-relationalOp returns [BinaryOperator ret]
-        scope Rule;
-        @init {
-            ruleStart("relationalOp");
-        }
-        @after {
-            ruleStop();
-        }
-    :    
-        '<' '='
-        {
-            $ret = BinaryOperator.LESS_THAN_EQUAL;
-        }         
-    |   
-        '>' '='
-        {
-            $ret = BinaryOperator.GREATER_THAN_EQUAL;
-        }         
-    |   
-        '<'
-        {
-            $ret = BinaryOperator.LESS_THAN;
-        }         
-    |   
-        '>'
-        {
-            $ret = BinaryOperator.GREATER_THAN;
-        }         
-    ;
 
 shiftExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
         @init {
             ruleStart("shiftExpression");
+            BinaryOperator op = null;
         }
         @after {
             ruleStop();
@@ -4993,48 +5009,35 @@ shiftExpression returns [NonAssignmentExpressionNode ret]
         e1=additiveExpression
         {
             $ret = $e1.ret;
-        }        
+        }    
         (
-            op=shiftOp e2=additiveExpression
+            (
+                '<' '<'
+                {
+                    op = BinaryOperator.LEFT_SHIFT;
+                }
+            |
+                '>' '>' '>'
+                {
+                    op = BinaryOperator.UNSIGNED_RIGHT_SHIFT;
+                }
+            |
+                '>' '>'
+                {
+                    op = BinaryOperator.RIGHT_SHIFT;
+                }
+            )
+            e2=additiveExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    $op.ret);
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
             }            
         )*
     ;
 
 
-shiftOp returns [BinaryOperator ret]
-        scope Rule;
-        @init {
-            ruleStart("shiftOp");
-        }
-        @after {
-            ruleStop();
-        }
-    :    
-        '<' '<'
-        {
-            $ret = BinaryOperator.LEFT_SHIFT;
-        }         
-    |   
-        '>' '>' '>'
-        {
-            $ret = BinaryOperator.UNSIGNED_RIGHT_SHIFT;
-        }         
-    |   
-        '>' '>'
-        {
-            $ret = BinaryOperator.RIGHT_SHIFT;
-        }        
-    ;
-
-
 additiveExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
-        @init{
+        @init {
             ruleStart("additiveExpression");
             BinaryOperator op = null;
         }
@@ -5045,64 +5048,65 @@ additiveExpression returns [NonAssignmentExpressionNode ret]
         e1=multiplicativeExpression
         {
             $ret = $e1.ret;
-        }        
-        (   
-            (   '+'
+        }    
+        (
+            (
+                '+'
                 {
                     op = BinaryOperator.PLUS;
                 }
-            |   '-'
+            |
+                '-'
                 {
                     op = BinaryOperator.MINUS;
-                }            
+                }
             )
             e2=multiplicativeExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    op);
-            }             
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+            }            
         )*
     ;
 
+
 multiplicativeExpression returns [NonAssignmentExpressionNode ret]
         scope Rule;
-        @init{
+        @init {
             ruleStart("multiplicativeExpression");
             BinaryOperator op = null;
         }
         @after {
             ruleStop();
         }
-    :
+    :   
         e1=unaryExpression
         {
             $ret = $e1.ret;
-        }        
-        (   
-            (   '*'
+        }    
+        (
+            (
+                '*'
                 {
                     op = BinaryOperator.MULTIPLY;
-                }            
-            |   '/'
+                }
+            |
+                '/'
                 {
                     op = BinaryOperator.DIVIDE;
-                }            
-            |   '%'
+                }
+            |
+                '%'
                 {
                     op = BinaryOperator.MODULUS;
-                }            
+                }
             )
             e2=unaryExpression
             {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    op);
+                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
             }            
         )*
     ;
+
 
 /**
  * NOTE: for '+' and '-', if the next token is int or long literal, then it's not a unary expression.

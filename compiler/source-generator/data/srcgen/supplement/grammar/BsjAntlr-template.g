@@ -3630,124 +3630,24 @@ conditionalExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %
         )?
     ;
 
-conditionalOrExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
-    :   
-        e1=conditionalAndExpression
-        {
-            $ret = $e1.ret;
-        }    
-        (
-            '||' e2=conditionalAndExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.CONDITIONAL_OR);
-            }            
-        )*
-    ;
+conditionalOrExpression /*%% generateBinaryExpressionRule= chainRule=conditionalAndExpression
+                                 op0='||'#BinaryOperator.CONDITIONAL_OR %%*/ :;
 
-conditionalAndExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
-    :   
-        e1=inclusiveOrExpression
-        {
-            $ret = $e1.ret;
-        }         
-        (
-            '&&' e2=inclusiveOrExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.CONDITIONAL_AND);
-            }             
-        )*
-    ;
+conditionalAndExpression /*%% generateBinaryExpressionRule= chainRule=inclusiveOrExpression
+                                 op0='&&'#BinaryOperator.CONDITIONAL_AND %%*/ :;
 
-inclusiveOrExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
-    :   
-        e1=exclusiveOrExpression
-        {
-            $ret = $e1.ret;
-        }    
-        (
-            '|' e2=exclusiveOrExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.LOGICAL_OR);
-            }             
-        )*
-    ;
+inclusiveOrExpression /*%% generateBinaryExpressionRule= chainRule=exclusiveOrExpression
+                                 op0='|'#BinaryOperator.LOGICAL_OR %%*/ :;
 
-exclusiveOrExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
-    :   
-        e1=andExpression
-        {
-            $ret = $e1.ret;
-        }          
-        (
-            '^' e2=andExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.XOR);
-            }            
-        )*
-    ;
+exclusiveOrExpression /*%% generateBinaryExpressionRule= chainRule=andExpression
+                                 op0='^'#BinaryOperator.XOR %%*/ :;
 
-andExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
-    :   
-        e1=equalityExpression
-        {
-            $ret = $e1.ret;
-        }         
-        (
-            '&' e2=equalityExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    BinaryOperator.LOGICAL_AND);
-            }              
-        )*
-    ;
+andExpression /*%% generateBinaryExpressionRule= chainRule=equalityExpression
+                                 op0='&'#BinaryOperator.LOGICAL_AND %%*/ :;
 
-equalityExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init{
-            ruleStart("equalityExpression");
-            BinaryOperator op = null;
-        }
-        @after {
-            ruleStop();
-        }
-    :   
-        e1=instanceOfExpression
-        {
-            $ret = $e1.ret;
-        }        
-        (   
-            (   '=='
-                {
-                    op = BinaryOperator.EQUAL;
-                }
-            |   '!='
-                {
-                    op = BinaryOperator.NOT_EQUAL;
-                }            
-            )
-            e2=instanceOfExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    op);
-            }             
-        )*
-    ;
+equalityExpression /*%% generateBinaryExpressionRule: chainRule:instanceOfExpression
+                                 op0:'=='#BinaryOperator.EQUAL
+                                 op1:'!='#BinaryOperator.NOT_EQUAL %%*/ :;
 
 instanceOfExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
@@ -3765,154 +3665,25 @@ instanceOfExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%
         )?
     ;
 
-relationalExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
-    :   
-        e1=shiftExpression
-        {
-            $ret = $e1.ret;
-        }         
-        (
-            op=relationalOp e2=shiftExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    $op.ret);
-            }             
-        )*
-    ;
+relationalExpression /*%% generateBinaryExpressionRule: chainRule:shiftExpression
+                                 op0:"""'<' '='"""#BinaryOperator.LESS_THAN_EQUAL
+                                 op1:"""'>' '='"""#BinaryOperator.GREATER_THAN_EQUAL
+                                 op2:'<'#BinaryOperator.LESS_THAN
+                                 op3:'>'#BinaryOperator.GREATER_THAN %%*/ :;
 
-relationalOp /*%% standardRuleIntro= type=BinaryOperator %%*/
-    :    
-        '<' '='
-        {
-            $ret = BinaryOperator.LESS_THAN_EQUAL;
-        }         
-    |   
-        '>' '='
-        {
-            $ret = BinaryOperator.GREATER_THAN_EQUAL;
-        }         
-    |   
-        '<'
-        {
-            $ret = BinaryOperator.LESS_THAN;
-        }         
-    |   
-        '>'
-        {
-            $ret = BinaryOperator.GREATER_THAN;
-        }         
-    ;
+shiftExpression /*%% generateBinaryExpressionRule= chainRule=additiveExpression
+                                 op0="""'<' '<'"""#BinaryOperator.LEFT_SHIFT
+                                 op1="""'>' '>' '>'"""#BinaryOperator.UNSIGNED_RIGHT_SHIFT
+                                 op2="""'>' '>'"""#BinaryOperator.RIGHT_SHIFT %%*/ :;
 
-shiftExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
-    :   
-        e1=additiveExpression
-        {
-            $ret = $e1.ret;
-        }        
-        (
-            op=shiftOp e2=additiveExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    $op.ret);
-            }            
-        )*
-    ;
+additiveExpression /*%% generateBinaryExpressionRule= chainRule=multiplicativeExpression
+                                 op0='+'#BinaryOperator.PLUS
+                                 op1='-'#BinaryOperator.MINUS %%*/ :;
 
-
-shiftOp /*%% standardRuleIntro= type=BinaryOperator %%*/
-    :    
-        '<' '<'
-        {
-            $ret = BinaryOperator.LEFT_SHIFT;
-        }         
-    |   
-        '>' '>' '>'
-        {
-            $ret = BinaryOperator.UNSIGNED_RIGHT_SHIFT;
-        }         
-    |   
-        '>' '>'
-        {
-            $ret = BinaryOperator.RIGHT_SHIFT;
-        }        
-    ;
-
-
-additiveExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init{
-            ruleStart("additiveExpression");
-            BinaryOperator op = null;
-        }
-        @after {
-            ruleStop();
-        }
-    :   
-        e1=multiplicativeExpression
-        {
-            $ret = $e1.ret;
-        }        
-        (   
-            (   '+'
-                {
-                    op = BinaryOperator.PLUS;
-                }
-            |   '-'
-                {
-                    op = BinaryOperator.MINUS;
-                }            
-            )
-            e2=multiplicativeExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    op);
-            }             
-        )*
-    ;
-
-multiplicativeExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init{
-            ruleStart("multiplicativeExpression");
-            BinaryOperator op = null;
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        e1=unaryExpression
-        {
-            $ret = $e1.ret;
-        }        
-        (   
-            (   '*'
-                {
-                    op = BinaryOperator.MULTIPLY;
-                }            
-            |   '/'
-                {
-                    op = BinaryOperator.DIVIDE;
-                }            
-            |   '%'
-                {
-                    op = BinaryOperator.MODULUS;
-                }            
-            )
-            e2=unaryExpression
-            {
-                $ret = factory.makeBinaryExpressionNode(
-                    $ret, 
-                    $e2.ret, 
-                    op);
-            }            
-        )*
-    ;
+multiplicativeExpression /*%% generateBinaryExpressionRule= chainRule=unaryExpression
+                                 op0='*'#BinaryOperator.MULTIPLY
+                                 op1='/'#BinaryOperator.DIVIDE
+                                 op2='%'#BinaryOperator.MODULUS %%*/ :;
 
 /**
  * NOTE: for '+' and '-', if the next token is int or long literal, then it's not a unary expression.

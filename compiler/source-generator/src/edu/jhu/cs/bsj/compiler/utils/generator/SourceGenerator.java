@@ -4338,6 +4338,9 @@ public class SourceGenerator
 				} else if (operation.equals("generateParseRule"))
 				{
 					command = new GenerateParseRuleCommand(templateCommand, parameterMap);
+				} else if (operation.equals("generateBinaryExpressionRule"))
+				{
+					command = new GenerateBinaryExpressionRuleCommand(templateCommand, parameterMap);
 				} else
 				{
 					throw new IllegalStateException("Unrecognized operation " + operation);
@@ -4367,9 +4370,9 @@ public class SourceGenerator
 				if (index >= argValPairs.length() || argValPairs.charAt(index) == parameterDelimiter
 						|| argValPairs.charAt(index) == '\n')
 				{
-					throw new IllegalStateException("Missing argval delimiter '" + argValDelimiter
-							+ "' in parameter " + argValPairs.substring(startIndex, index)
-							+ " of the following template:\n" + templateCommand);
+					throw new IllegalStateException("Missing argval delimiter '" + argValDelimiter + "' in parameter "
+							+ argValPairs.substring(startIndex, index) + " of the following template:\n"
+							+ templateCommand);
 				}
 				final String paramName = argValPairs.substring(startIndex, index);
 				index++; // skip delimiter
@@ -4461,6 +4464,18 @@ public class SourceGenerator
 				{
 					throw error("Invalid boolean: " + string);
 				}
+			}
+
+			protected List<String> getParameterAsArray(String name)
+			{
+				int index = 0;
+				List<String> ret = new ArrayList<String>();
+				while (hasParameter(name + index))
+				{
+					ret.add(getParameter(name + index));
+					index++;
+				}
+				return ret;
 			}
 
 			protected void assertAccessedAllParameters()
@@ -4558,20 +4573,18 @@ public class SourceGenerator
 
 				String returnTypeName = getParameter("type");
 
+				List<String> initTermList = getParameterAsArray("init");
 				String initTerms = "";
-				int index = 0;
-				while (hasParameter("init" + index))
+				for (String initTerm : initTermList)
 				{
-					initTerms += "            " + getParameter("init" + index) + "\n";
-					index++;
+					initTerms += "            " + initTerm + "\n";
 				}
 
+				List<String> afterTermList = getParameterAsArray("after");
 				String afterTerms = "";
-				index = 0;
-				while (hasParameter("after" + index))
+				for (String afterTerm : afterTermList)
 				{
-					afterTerms += "            " + getParameter("after" + index) + "\n";
-					index++;
+					afterTerms += "            " + afterTerm + "\n";
 				}
 
 				assertAccessedAllParameters();
@@ -4742,6 +4755,59 @@ public class SourceGenerator
 						"generateParseRule",
 						new MapBuilder<String, String>().add("rule", parseRuleName).add("antlrRule", antlrRuleName).add(
 								"type", returnTypeName).getMap());
+
+				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
+			}
+		}
+
+		public static class GenerateBinaryExpressionRuleCommand extends TemplateCommand
+		{
+			public GenerateBinaryExpressionRuleCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
+			{
+				Pair<String, Pair<Integer, Integer>> replacementMetrics = expectRuleReplacement(grammarTemplate,
+						startIndex, endIndex);
+				startIndex = replacementMetrics.getSecond().getFirst();
+				endIndex = replacementMetrics.getSecond().getSecond();
+				final String ruleName = replacementMetrics.getFirst();
+
+				final String chainRuleName = getParameter("chainRule");
+				boolean found = false;
+				String operatorPart = "";
+				for (String opPairs : getParameterAsArray("op"))
+				{
+					if (found)
+					{
+						operatorPart += "            |\n";
+					} else
+					{
+						operatorPart += "            (\n";
+					}
+					int index = opPairs.indexOf('#');
+					String operator = opPairs.substring(0, index);
+					String enumVal = opPairs.substring(index + 1);
+					operatorPart += "                " + operator + "\n";
+					operatorPart += "                {\n";
+					operatorPart += "                    op = " + enumVal + ";\n";
+					operatorPart += "                }\n";
+					found = true;
+				}
+				operatorPart += "            )\n";
+				if (!found)
+				{
+					throw error("No operators specified for binary expression rule " + ruleName);
+				}
+				assertAccessedAllParameters();
+				
+				final String replacement = fillFragment(
+						"generateBinaryExpressionRule",
+						new MapBuilder<String, String>().add("rule", ruleName).add("chainRule", chainRuleName).add(
+								"operatorPart", operatorPart).getMap());
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}
