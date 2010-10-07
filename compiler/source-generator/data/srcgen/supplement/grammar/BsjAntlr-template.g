@@ -768,25 +768,7 @@ metaprogramMode returns [MetaprogramPackageMode packageMode, MetaprogramLocalMod
         ';'
     ;
 
-metaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramDependencyDeclarationList");
-            List<MetaprogramDependencyDeclarationNode> list = new ArrayList<MetaprogramDependencyDeclarationNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeMetaprogramDependencyDeclarationListNode(list);
-            ruleStop();
-        }
-    :   
-        (
-            metaprogramDependencyDeclaration
-	        {
-	            list.add($metaprogramDependencyDeclaration.ret);
-	        }
-        )+
-    ;
+/*%% generateListRule= name=metaprogramDependencyDeclarationList type=MetaprogramDependencyDeclarationListNode %%*/
 
 metaprogramDependencyDeclaration /*%% standardRuleIntro= type=MetaprogramDependencyDeclarationNode %%*/
     :   
@@ -798,31 +780,8 @@ metaprogramDependencyDeclaration /*%% standardRuleIntro= type=MetaprogramDepende
         }
     ;
 
-metaprogramDependencyList returns [MetaprogramDependencyListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramDependencyList");
-            List<MetaprogramDependencyNode> names = new ArrayList<MetaprogramDependencyNode>();
-        }
-        @after {
-            while (names.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeMetaprogramDependencyListNode(names);
-            ruleStop();
-        }
-    :
-        a=metaprogramDependency
-        {
-            names.add($a.ret);
-        }
-        (
-            ','
-            b=metaprogramDependency
-            {
-                names.add($b.ret);
-            }
-        )*
-        ','?
-    ;
+/*%% generateListRule= name=metaprogramDependencyList type=MetaprogramDependencyListNode
+                      separator=',' lastSeparator=true %%*/
 
 metaprogramDependency returns [MetaprogramDependencyNode ret]
         scope Rule;
@@ -846,25 +805,7 @@ metaprogramDependency returns [MetaprogramDependencyNode ret]
         }
     ;
 
-metaprogramTargetList returns [MetaprogramTargetListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramTargetList");
-            List<MetaprogramTargetNode> list = new ArrayList<MetaprogramTargetNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeMetaprogramTargetListNode(list);
-            ruleStop();
-        }
-    :   
-        (
-            metaprogramTarget
-            {
-                list.add($metaprogramTarget.ret);
-            }
-        )+
-    ;
+/*%% generateListRule= name=metaprogramTargetList type=MetaprogramTargetListNode %%*/
 
 metaprogramTarget /*%% standardRuleIntro= type=MetaprogramTargetNode %%*/
     :   
@@ -883,32 +824,10 @@ metaprogramTargetName /*%% standardRuleIntro= type=NameNode %%*/
             $ret = $name.ret;
         }
     ;
-    
-identifierList returns [IdentifierListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramIdentifierList");
-            List<IdentifierNode> ids = new ArrayList<IdentifierNode>();
-        }
-        @after {
-            while (ids.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeIdentifierListNode(ids);
-            ruleStop();
-        }
-    :
-        a=identifier
-        {
-            ids.add($a.ret);
-        }
-        (
-            ',' b=identifier
-            {
-                ids.add($b.ret);
-            }
-        )*
-        ','?
-    ;
-        
+
+/*%% generateListRule= name=identifierList type=IdentifierListNode
+                      separator=',' lastSeparator=true %%*/
+
 typeDeclarationBsjMetaprogramAnchor /*%% standardRuleIntro= type=TypeDeclarationMetaprogramAnchorNode %%*/
     :
         bsjMetaprogram
@@ -981,25 +900,7 @@ optionalMetaAnnotationList returns [MetaAnnotationListNode ret]
 // Parses a list of meta-annotations.  Note that this rule is not used for declarations, since meta-annotations can be
 // interspersed amongst annotations and modifiers.  This rule is used for meta-annotations which are applied to
 // statements and other constructs which only permit meta-annotations and not other modifiers.
-metaAnnotationList returns [MetaAnnotationListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaAnnotationList");
-            List<MetaAnnotationNode> list = new ArrayList<MetaAnnotationNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeMetaAnnotationListNode(list);
-            ruleStop();
-        }
-    :
-        (
-            metaAnnotation
-            {
-                list.add($metaAnnotation.ret);
-            }
-        )+
-    ;
+/*%% generateListRule= name=metaAnnotationList type=MetaAnnotationListNode %%*/
 
 // Parses a sequence of any annotations: BSJ meta-annotations or Java annotations.  These are returned as two lists.
 // This rule is used for those grammar rules which cannot have other forms of modifier.
@@ -1074,30 +975,9 @@ metaAnnotation /*%% standardRuleIntro= type=MetaAnnotationNode %%*/
 //     @@Foo(bar="baz",happy=5)
 // this rule would parse
 //     bar="baz",happy=5
-metaAnnotationElementValuePairs returns [MetaAnnotationElementListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaAnnotationElementValuePairs");
-            List<MetaAnnotationElementNode> list = new ArrayList<MetaAnnotationElementNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeMetaAnnotationElementListNode(list);
-            ruleStop();
-        }
-    :
-        a=metaAnnotationElementValuePair
-        {
-            list.add($a.ret);
-        }
-        (
-            ','
-            b=metaAnnotationElementValuePair
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
+/*%% generateListRule= name=metaAnnotationElementValuePairs type=MetaAnnotationElementListNode
+                      componentName=metaAnnotationElementValuePair
+                      separator=',' lastSeparator=false %%*/
 
 // Parses a single meta-annotation element-value pair.
 // For example, in
@@ -1150,29 +1030,9 @@ metaAnnotationElementValue /*%% standardRuleIntro= type=MetaAnnotationValueNode 
 //     @@Test({1,2,3})
 // this rule would parse
 //     1,2,3
-metaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaAnnotationElementValues");
-            List<MetaAnnotationValueNode> list = new ArrayList<MetaAnnotationValueNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeMetaAnnotationValueListNode(list);
-            ruleStop();
-        }
-    :   
-        a=metaAnnotationElementValue
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=metaAnnotationElementValue
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
+/*%% generateListRule= name=metaAnnotationElementValues type=MetaAnnotationValueListNode
+                      componentName=metaAnnotationElementValue
+                      separator=',' lastSeparator=false %%*/
 
 // Parses a meta-annotation element array.
 // For example, in
@@ -1334,45 +1194,11 @@ packageDeclaration returns [PackageDeclarationNode ret]
         }
     ;
 
-metaImportDeclarations returns  [MetaprogramImportListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaImportDeclarations");
-            List<MetaprogramImportNode> metaprogramImportList = new ArrayList<MetaprogramImportNode>();
-        }
-        @after {
-            while (metaprogramImportList.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeMetaprogramImportListNode(metaprogramImportList);
-            ruleStop();
-        }
-    :
-        (
-            metaprogramImport
-            {
-                metaprogramImportList.add($metaprogramImport.ret);
-            }
-        )+
-    ;
-    
-importDeclarations returns [ImportListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("importDeclarations");
-            List<ImportNode> importList = new ArrayList<ImportNode>();
-        }
-        @after {
-            while (importList.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeImportListNode(importList);
-            ruleStop();
-        }
-    :
-        (
-            importDeclaration
-            {
-                importList.add($importDeclaration.ret);
-            }
-        )+
-    ;
+/*%% generateListRule= name=metaImportDeclarations type=MetaprogramImportListNode
+                      componentName=metaprogramImport %%*/
+
+/*%% generateListRule= name=importDeclarations type=ImportListNode
+                      componentName=importDeclaration %%*/
 
 importBody returns [boolean staticImport, boolean onDemand, NameNode name]
         scope Rule;
@@ -1456,25 +1282,8 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
     :
     ;
 
-typeDeclarations returns [TypeDeclarationListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeDeclarations");
-            List<TypeDeclarationNode> list = new ArrayList<TypeDeclarationNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeTypeDeclarationListNode(list);
-            ruleStop();
-        }
-    :
-        (
-            typeDeclaration
-            {
-                list.add($typeDeclaration.ret);
-            }
-        )+
-    ;
+/*%% generateListRule= name=typeDeclarations type=TypeDeclarationListNode
+                      componentName=typeDeclaration %%*/
 
 typeDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
     :
@@ -1788,14 +1597,7 @@ variableModifiers /*%% standardRuleIntro= type=VariableModifiersNode %%*/
         }
     ;
 
-classDeclaration returns [TypeDeclarationNode ret] 
-        scope Rule;
-        @init {
-            ruleStart("classDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+classDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
     :
         (classHeader)=>normalClassDeclaration
         {
@@ -1886,31 +1688,9 @@ inlineClassDeclaration returns [LocalClassDeclarationNode ret]
         }
     ;
 
-typeParameters returns [TypeParameterListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeParameters");
-            List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeTypeParameterListNode(list);
-            ruleStop();
-        }
-    :   
-        '<'
-            a=typeParameter
-            {
-                list.add($a.ret);
-            }
-            (',' b=typeParameter
-                {
-                    list.add($b.ret);
-                }
-            )*
-        '>'
-    ;
-
+/*%% generateListRule= name=typeParameters type=TypeParameterListNode
+                      componentName=typeParameter separator=',' lastSeparator=false
+                      prefix='<' postfix='>' %%*/
 
 typeParameter returns [TypeParameterNode ret]
         scope Rule;
@@ -1936,31 +1716,8 @@ typeParameter returns [TypeParameterNode ret]
         }        
     ;
 
-
-typeBound returns [DeclaredTypeListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeBound");
-            List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeDeclaredTypeListNode(list);
-            ruleStop();
-        }
-    :   
-        a=classOrInterfaceType
-        {
-            list.add($a.ret);
-        }
-        (
-            '&' b=classOrInterfaceType
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
-
+/*%% generateListRule= name=typeBound type=DeclaredTypeListNode
+                      componentName=classOrInterfaceType separator='&' lastSeparator=false %%*/
 
 enumDeclaration returns [EnumDeclarationNode ret]
         scope Rule;
@@ -2026,30 +1783,8 @@ enumBody returns [EnumBodyNode ret]
         }
     ;
 
-enumConstants returns [EnumConstantDeclarationListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("enumConstants");
-            List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeEnumConstantDeclarationListNode(list);
-            ruleStop();
-        }
-    :
-        a=enumConstant
-        {
-            list.add($a.ret);
-        }
-        (
-            ','
-            b=enumConstant
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
+/*%% generateListRule= name=enumConstants type=EnumConstantDeclarationListNode
+                       componentName=enumConstant separator=',' %%*/
 
 enumConstant returns [EnumConstantDeclarationNode ret]
         scope Rule;
@@ -2110,14 +1845,7 @@ enumBodyDeclarations returns [ClassMemberListNode ret]
     ;
 
 
-interfaceDeclaration returns [TypeDeclarationNode ret] 
-        scope Rule;
-        @init {
-            ruleStart("interfaceDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+interfaceDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
     :   
         (interfaceHeader)=>a=normalInterfaceDeclaration
         {
@@ -2167,53 +1895,11 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         }
     ;
 
-declaredTypeList returns [DeclaredTypeListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("declaredTypeList");
-            List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeDeclaredTypeListNode(list);
-            ruleStop();
-        }
-    :   
-        a=classOrInterfaceType
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=classOrInterfaceType
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
+/*%% generateListRule= name=declaredTypeList type=DeclaredTypeListNode
+                       componentName=classOrInterfaceType separator=',' %%*/
 
-referenceTypeList returns [ReferenceTypeListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("referenceTypeList");
-            List<ReferenceTypeNode> list = new ArrayList<ReferenceTypeNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeReferenceTypeListNode(list);
-            ruleStop();
-        }
-    :   
-        a=referenceType
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=referenceType
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
+/*%% generateListRule= name=referenceTypeList type=ReferenceTypeListNode
+                       componentName=referenceType separator=',' %%*/
 
 classBody returns [ClassBodyNode ret]
         scope Rule;
@@ -2290,26 +1976,9 @@ initializerBlock /*%% standardRuleIntro= type=InitializerDeclarationNode %%*/
                     $optionalMetaAnnotationList.ret);
         }
     ;
-    
-classBodyDeclarations returns [ClassMemberListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("classBodyDeclarations");
-            List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeClassMemberListNode(list);
-            ruleStop();
-        }
-    :
-        (
-            classBodyDeclaration
-            {
-                list.add($classBodyDeclaration.ret);
-            }
-        )+
-    ;
+
+/*%% generateListRule= name=classBodyDeclarations type=ClassMemberListNode
+                       componentName=classBodyDeclaration %%*/
     
 classBodyDeclaration /*%% standardRuleIntro= type=ClassMemberNode %%*/
     :
@@ -2342,25 +2011,8 @@ classBodyDeclaration /*%% standardRuleIntro= type=ClassMemberNode %%*/
         }
     ;
 
-anonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("anonymousClassBodyDeclarations");
-            List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeAnonymousClassMemberListNode(list);
-            ruleStop();
-        }
-    :
-        (
-            anonymousClassBodyDeclaration
-            {
-                list.add($anonymousClassBodyDeclaration.ret);
-            }
-        )+
-    ;
+/*%% generateListRule= name=anonymousClassBodyDeclarations type=AnonymousClassMemberListNode
+                       componentName=anonymousClassBodyDeclaration %%*/
     
 anonymousClassBodyDeclaration /*%% standardRuleIntro= type=AnonymousClassMemberNode %%*/
     :
@@ -2562,26 +2214,9 @@ fieldDeclaration /*%% standardRuleIntro= type=FieldDeclarationNode %%*/
         }
     ;
     
-interfaceBodyDeclarations returns [InterfaceMemberListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("interfaceBodyDeclarations");
-            List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeInterfaceMemberListNode(list);
-            ruleStop();
-        }
-    :
-        (
-            interfaceBodyDeclaration
-            {
-                list.add($interfaceBodyDeclaration.ret);
-            }        
-        )+
-    ;
-
+/*%% generateListRule= name=interfaceBodyDeclarations type=InterfaceMemberListNode
+                       componentName=interfaceBodyDeclaration %%*/
+    
 interfaceBodyDeclaration /*%% standardRuleIntro= type=InterfaceMemberNode %%*/
     :
         constantDeclaration
@@ -2692,29 +2327,8 @@ constantDeclaration returns [ConstantDeclarationNode ret]
     ;
 
 // Represents a non-empty sequence of variable declarators.
-variableDeclarators returns [VariableDeclaratorListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("variableDeclarator");
-            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeVariableDeclaratorListNode(list);
-            ruleStop();
-        }
-    :
-        a=variableDeclarator
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=variableDeclarator
-            {
-                list.add($b.ret);
-            }
-        )*
-    ; 
+/*%% generateListRule= name=variableDeclarators type=VariableDeclaratorListNode
+                       componentName=variableDeclarator separator=',' %%*/
  
 // Represents the combination of an identifier and an initializer.  This construct is necessary on its own to support
 // the multiple declaration sugar ("int x,y;").
@@ -2765,7 +2379,7 @@ unparameterizedTypeList returns [UnparameterizedTypeListNode ret]
             ruleStop();
         }
     :
-        THROWS
+        THROWS // TODO: does this belong here?
         a=name
         {
             list.add(factory.makeUnparameterizedTypeNode($a.ret));
@@ -2947,30 +2561,8 @@ primitiveType returns [PrimitiveTypeNode ret]
 //     Map.Entry<K,V> entry;
 // this node would parse
 //     <K,V>
-typeArguments returns [TypeArgumentListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeArguments");
-            List<TypeArgumentNode> list = new ArrayList<TypeArgumentNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeTypeArgumentListNode(list);
-            ruleStop();
-        }
-    :   
-        '<' a=typeArgument
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=typeArgument
-            {
-                list.add($b.ret);
-            }
-        )* 
-        '>'
-    ;
+/*%% generateListRule= name=typeArguments type=TypeArgumentListNode
+                       componentName=typeArgument separator=',' prefix='<' postfix='>' %%*/
 
 // Parses a single type argument for a declared type.
 // For example, in
@@ -2979,14 +2571,7 @@ typeArguments returns [TypeArgumentListNode ret]
 //     Foo<? extends Bar>
 // this node would parse
 //     ? extends Bar
-typeArgument returns [TypeArgumentNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeArgument");
-        } 
-        @after {
-            ruleStop();
-        }
+typeArgument /*%% standardRuleIntro= type=TypeArgumentNode %%*/
     :
         referenceType
         {
@@ -3188,25 +2773,7 @@ explicitConstructorInvocation /*%% standardRuleIntro= type=ConstructorInvocation
         }
     ;
 
-annotations returns [AnnotationListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotations");
-            List<AnnotationNode> annotationsList = new ArrayList<AnnotationNode>();
-        }
-        @after {
-            while (annotationsList.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeAnnotationListNode(annotationsList);
-            ruleStop();
-        }
-    :   
-        (
-            annotation
-            {
-                annotationsList.add($annotation.ret);
-            }
-        )+
-    ;
+/*%% generateListRule= name=annotations type=AnnotationListNode componentName=annotation %%*/
 
 // Parses an annotation.
 // For example, in
@@ -3248,30 +2815,8 @@ annotation /*%% standardRuleIntro= type=AnnotationNode %%*/
 //     @Foo(bar="baz",happy=5)
 // this rule would parse
 //     bar="baz",happy=5
-elementValuePairs returns [AnnotationElementListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("elementValuePairs");
-            List<AnnotationElementNode> list = new ArrayList<AnnotationElementNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeAnnotationElementListNode(list);
-            ruleStop();
-        }
-    :
-        a=elementValuePair
-        {
-            list.add($a.ret);
-        }
-        (
-            ','
-            b=elementValuePair
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
+/*%% generateListRule= name=elementValuePairs type=AnnotationElementListNode
+                       componentName=elementValuePair separator=',' %%*/
 
 // Parses a single annotation element-value pair.
 // For example, in
@@ -3316,30 +2861,8 @@ elementValue /*%% standardRuleIntro= type=AnnotationValueNode %%*/
     ;
 
 // Parses a non-empty list of annotation element values.
-elementValues returns [AnnotationValueListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("elementValue");
-            List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeAnnotationValueListNode(list);
-            ruleStop();
-        }
-    :
-        a=elementValue
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=elementValue
-            {
-                list.add($b.ret);
-            }
-        )*
-        ','?
-    ;
+/*%% generateListRule= name=elementValues type=AnnotationValueListNode
+                       componentName=elementValue separator=',' lastSeparator=true %%*/
     
 // Parses an annotation element array.
 // For example, in
@@ -3409,25 +2932,8 @@ annotationTypeBody returns [AnnotationBodyNode ret]
         '}'
     ;
     
-annotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotationTypeElementDeclarations");
-            List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeAnnotationMemberListNode(list);
-            ruleStop();
-        }
-    :
-        (
-            annotationTypeElementDeclaration
-            {
-                list.add($annotationTypeElementDeclaration.ret);
-            }
-        )+ 
-    ;
+/*%% generateListRule= name=annotationTypeElementDeclarations type=AnnotationMemberListNode
+                       componentName=annotationTypeElementDeclaration %%*/
 
 annotationTypeElementDeclaration /*%% standardRuleIntro= type=AnnotationMemberNode %%*/
     :   
@@ -3535,25 +3041,7 @@ optionalBlockStatementList returns [BlockStatementListNode ret]
         )?
     ;
 
-blockStatementList returns [BlockStatementListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("blockStatementList");
-            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeBlockStatementListNode(list);
-            ruleStop();
-        }
-    :
-        (
-            blockStatement
-            {
-                list.add($blockStatement.ret);
-            }
-        )+
-    ;
+/*%% generateListRule= name=blockStatementList type=BlockStatementListNode %%*/
 
 // Parses a statement from a block of statements.
 blockStatement /*%% standardRuleIntro= type=BlockStatementNode %%*/
@@ -3818,25 +3306,8 @@ switchStatement[MetaAnnotationListNode metaAnnotations] returns [SwitchNode ret]
         '}'
     ;
 
-switchBlockStatementGroups returns [CaseListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("switchBlockStatementGroups");
-            List<CaseNode> list = new ArrayList<CaseNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeCaseListNode(list);
-            ruleStop();
-        }
-    :   
-        (
-            switchBlockStatementGroup 
-            {
-                list.add($switchBlockStatementGroup.ret);
-            }   
-        )+
-    ;
+/*%% generateListRule= name=switchBlockStatementGroups type=CaseListNode
+                       componentName=switchBlockStatementGroup %%*/
 
 switchBlockStatementGroup returns [CaseNode ret]
         scope Rule;
@@ -3912,25 +3383,7 @@ trystatement[MetaAnnotationListNode metaAnnotations] returns [TryNode ret]
         }        
     ;
 
-catches returns [CatchListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("catches");
-            List<CatchNode> list = new ArrayList<CatchNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeCatchListNode(list);
-            ruleStop();
-        }
-    :   
-        (
-            catchClause
-            {
-                list.add($catchClause.ret);
-            }
-        )+
-    ;
+/*%% generateListRule= name=catches type=CatchListNode componentName=catchClause %%*/
 
 catchClause /*%% standardRuleIntro= type=CatchNode %%*/
     :   
@@ -4060,54 +3513,10 @@ parExpression /*%% standardRuleIntro= type=ExpressionNode %%*/
         }
     ;
 
-statementExpressionList returns [StatementExpressionListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("statementExpressionList");
-            List<StatementExpressionNode> list = new ArrayList<StatementExpressionNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeStatementExpressionListNode(list);
-            ruleStop();
-        }
-    :   
-        a=statementExpression
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=statementExpression
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
+/*%% generateListRule= name=statementExpressionList type=StatementExpressionListNode separator=',' %%*/
 
-expressionList returns [ExpressionListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("expressionList");
-            List<ExpressionNode> list = new ArrayList<ExpressionNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeExpressionListNode(list);
-            ruleStop();
-        }
-    :   
-        a=expression
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=expression
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
-
+/*%% generateListRule= name=expressionList type=ExpressionListNode separator=',' %%*/
+                       
 /* This rule parses a statement expression.  A statement expression is one of those types of expressions which may be
  * used as a statement (such as x++) but not any other kind of expression (such as ~x). */
 statementExpression /*%% standardRuleIntro= type=StatementExpressionNode %%*/
@@ -5213,29 +4622,8 @@ variableInitializer /*%% standardRuleIntro= type=VariableInitializerNode %%*/
         }
     ;
 
-variableInitializers returns [VariableInitializerListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("variableInitializer");
-            List<VariableInitializerNode> list = new ArrayList<VariableInitializerNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeVariableInitializerListNode(list);
-            ruleStop();
-        }
-    :
-        v1=variableInitializer
-        {
-            list.add($v1.ret);   
-        }            
-        (
-            ',' v2=variableInitializer
-            {
-                list.add($v2.ret);   
-            }                    
-        )*
-    ;
+/*%% generateListRule= name=variableInitializers type=VariableInitializerListNode
+                       componentName=variableInitializer separator=',' %%*/
 
 arrayInitializer returns [ArrayInitializerNode ret]
         scope Rule;

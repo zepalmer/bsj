@@ -4215,7 +4215,7 @@ public class SourceGenerator
 		private static final File GRAMMAR_SUPPLEMENTS_DIR = new File(SUPPLEMENTS_DIR.getPath() + File.separator
 				+ "grammar");
 		private static final File GRAMMAR_TEMPLATE = new File(GRAMMAR_SUPPLEMENTS_DIR.getPath() + File.separator
-				+ "BsjAntlr.g");
+				+ "BsjAntlr-template.g");
 
 		private static final File OUTPUT_GRAMMAR = new File(TARGET_DIR.getPath() + File.separator + "parser-root"
 				+ File.separator + "resources" + File.separator + "grammar" + File.separator + "BsjAntlr.g");
@@ -4267,7 +4267,7 @@ public class SourceGenerator
 				final String parameterDelimiter = matcher.group(3);
 				final String argValPairs = matcher.group(4);
 
-				final String[] parameters = argValPairs.split(Pattern.quote(parameterDelimiter));
+				final String[] parameters = argValPairs.split("(" + Pattern.quote(parameterDelimiter) + "|\n)+");
 				final Map<String, String> parameterMap = new HashMap<String, String>();
 				for (String parameter : parameters)
 				{
@@ -4286,11 +4286,14 @@ public class SourceGenerator
 				if (operation.equals("standardRuleIntro"))
 				{
 					command = new StandardRuleIntroCommand(templateCommand, parameterMap);
+				} else if (operation.equals("generateListRule"))
+				{
+					command = new GenerateListRuleCommand(templateCommand, parameterMap);
 				} else
 				{
 					throw new IllegalStateException("Unrecognized operation " + operation);
 				}
-				
+
 				grammarTemplate = command.executeCommand(grammarTemplate, matcher.start(), matcher.end());
 			}
 
@@ -4312,6 +4315,17 @@ public class SourceGenerator
 				this.parameterAccessSet = new HashSet<String>();
 			}
 
+			protected boolean hasParameter(String name)
+			{
+				return this.parameters.containsKey(name);
+			}
+
+			protected IllegalStateException error(String message)
+			{
+				return new IllegalStateException(this.getClass().getName() + ": " + message
+						+ "\nTemplate command is as follows:\n" + templateCommand);
+			}
+
 			protected String getParameter(String name)
 			{
 				this.parameterAccessSet.add(name);
@@ -4320,8 +4334,22 @@ public class SourceGenerator
 					return this.parameters.get(name);
 				} else
 				{
-					throw new IllegalStateException(this.getClass().getName() + ": requested non-existent parameter "
-							+ name + " at template command as follows:\n" + templateCommand);
+					throw error("requested non-existent parameter " + name);
+				}
+			}
+
+			protected boolean getParameterAsBoolean(String string)
+			{
+				string = this.getParameter(string);
+				if (string.equalsIgnoreCase("true"))
+				{
+					return true;
+				} else if (string.equalsIgnoreCase("false"))
+				{
+					return false;
+				} else
+				{
+					throw error("Invalid boolean: " + string);
 				}
 			}
 
@@ -4331,8 +4359,7 @@ public class SourceGenerator
 				all.removeAll(this.parameterAccessSet);
 				if (all.size() > 0)
 				{
-					throw new IllegalStateException(this.getClass().getName() + ": unexpected parameters " + all
-							+ " at template command as follows:\n" + templateCommand);
+					throw error("unexpected parameters " + all);
 				}
 			}
 
@@ -4381,8 +4408,7 @@ public class SourceGenerator
 				Pair<Integer, String> after = getTokenAfter(grammarTemplate, endIndex);
 				if (!after.getSecond().equals(":"))
 				{
-					throw new IllegalStateException(
-							"Invalid use of standard rule introduction: missing : following command");
+					throw error("Invalid use of standard rule introduction: missing ':' following command");
 				}
 
 				final int newStartIndex = before.getFirst();
@@ -4403,6 +4429,144 @@ public class SourceGenerator
 				return grammarTemplate.substring(0, newStartIndex) + replacement
 						+ grammarTemplate.substring(newEndIndex);
 			}
+		}
+
+		private static class GenerateListRuleCommand extends TemplateCommand
+		{
+			public GenerateListRuleCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex)
+			{
+				final String ruleName = getParameter("name");
+				final String returnTypeName = getParameter("type");
+				final String componentRuleName;
+				final String componentTypeName;
+				final String separator;
+				final boolean lastSeparator;
+				final String prefix;
+				final String postfix;
+
+				if (hasParameter("componentName"))
+				{
+					componentRuleName = getParameter("componentName");
+				} else
+				{
+					if (ruleName.contains("List"))
+					{
+						componentRuleName = ruleName.replaceAll("List", "");
+					} else
+					{
+						throw error("Unable to infer component rule name for " + ruleName);
+					}
+				}
+
+				if (hasParameter("componentType"))
+				{
+					componentTypeName = getParameter("componentType");
+				} else
+				{
+					if (returnTypeName.contains("List"))
+					{
+						componentTypeName = returnTypeName.replaceAll("List", "");
+					} else
+					{
+						throw error("Unable to infer component type name for " + returnTypeName);
+					}
+				}
+				
+				if (hasParameter("separator"))
+				{
+					separator = getParameter("separator");
+				} else
+				{
+					separator = null;
+				}
+				
+				if (hasParameter("lastSeparator"))
+				{
+					lastSeparator = getParameterAsBoolean("lastSeparator");
+				} else
+				{
+					lastSeparator = false;
+				}
+				
+				if (hasParameter("prefix"))
+				{
+					prefix = getParameter("prefix");
+				} else
+				{
+					prefix = null;
+				}
+				
+				if (hasParameter("postfix"))
+				{
+					postfix = getParameter("postfix");
+				} else
+				{
+					postfix = null;
+				}
+				
+				assertAccessedAllParameters();
+				
+				final String separatorPart;
+				final String lastSeparatorPart;
+				final String prefixPart = (prefix == null ? "" : "        " + prefix + "\n");
+				final String postfixPart = (prefix == null ? "" : "        " + postfix + "\n");
+				
+				if (separator == null)
+				{
+					separatorPart = "";
+					lastSeparatorPart = "";
+				} else
+				{
+					separatorPart = "            " + separator + "\n";
+					if (lastSeparator)
+					{
+						lastSeparatorPart = "        " + separator + "?\n";
+					} else
+					{
+						lastSeparatorPart = "";
+					}
+				}
+				
+				// @formatter:off
+				String replacement =
+				        ruleName + " returns [" + returnTypeName + " ret]\n" +
+				        "        scope Rule;\n" +
+				        "        @init {\n" +
+				        "            ruleStart(\"" + ruleName + "\");\n" +
+				        "            List<" + componentTypeName + "> list = new ArrayList<" + componentTypeName + ">();\n" +
+				        "        }\n" +
+				        "        @after {\n" +
+				        "            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes\n" +
+				        "            $ret = factory.make" + returnTypeName + "(list);\n" +
+				        "            ruleStop();\n" +
+				        "        }\n" +
+				        "    :\n" +
+				        prefixPart +
+				        "        a=" + componentRuleName + "\n" +
+				        "        {\n" +
+				        "            list.add($a.ret);\n" +
+				        "        }\n" +
+				        "        (\n" +
+				        separatorPart +
+				        "            b=" + componentRuleName + "\n" +
+				        "            {\n" +
+				        "                list.add($b.ret);\n" +
+				        "            }\n" +
+				        "        )*\n" +
+				        lastSeparatorPart +
+				        postfixPart +
+				        "    ;\n";
+				// @formatter:on
+				
+				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);				
+			}
+
 		}
 	}
 }
