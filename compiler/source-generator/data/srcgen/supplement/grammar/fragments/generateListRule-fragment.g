@@ -21,3 +21,25 @@ $$$separatorPart$$$            b=$$$componentRule$$$
             }
         )*
 $$$lastSeparatorPart$$$$$$postfixPart$$$    ;
+
+optional$$$capRule$$$ returns [$$$type$$$ ret]
+        scope Rule;
+        @init {
+            ruleStart("optional$$$capRule$$$");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.make$$$type$$$();
+            }
+            ruleStop();
+        }
+    :
+        (
+            $$$rule$$$
+            {
+                $ret = $$$$rule$$$.ret;
+            }
+        )?
+    ;

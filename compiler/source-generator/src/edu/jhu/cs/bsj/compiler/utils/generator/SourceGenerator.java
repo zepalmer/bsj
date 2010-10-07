@@ -4704,12 +4704,14 @@ public class SourceGenerator
 					}
 				}
 
+				final String capRuleName = capFirst(ruleName);
+
 				final String replacement = fillFragment(
 						"generateListRule",
 						new MapBuilder<String, String>().add("rule", ruleName).add("type", returnTypeName).add(
 								"componentType", componentTypeName).add("componentRule", componentRuleName).add(
 								"prefixPart", prefixPart).add("postfixPart", postfixPart).add("separatorPart",
-								separatorPart).add("lastSeparatorPart", lastSeparatorPart).getMap());
+								separatorPart).add("lastSeparatorPart", lastSeparatorPart).add("capRule", capRuleName).getMap());
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}
@@ -4803,7 +4805,7 @@ public class SourceGenerator
 					throw error("No operators specified for binary expression rule " + ruleName);
 				}
 				assertAccessedAllParameters();
-				
+
 				final String replacement = fillFragment(
 						"generateBinaryExpressionRule",
 						new MapBuilder<String, String>().add("rule", ruleName).add("chainRule", chainRuleName).add(

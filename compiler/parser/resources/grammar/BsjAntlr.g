@@ -694,25 +694,14 @@ preamble returns [MetaprogramPreambleNode ret]
         scope Rule;
         @init {
             ruleStart("preamble");
-            List<MetaprogramImportNode> list = new ArrayList<MetaprogramImportNode>();
             MetaprogramPackageMode packageMode = MetaprogramPackageMode.READ_ONLY;
             MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;
-            MetaprogramTargetListNode target = factory.makeMetaprogramTargetListNode();
-            MetaprogramDependencyDeclarationListNode depends = factory.makeMetaprogramDependencyDeclarationListNode();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeMetaprogramPreambleNode(factory.makeMetaprogramImportListNode(list),
-                    localMode, packageMode, target, depends);
             ruleStop();
         }
     :
-        (
-            metaprogramImport
-            {
-                list.add($metaprogramImport.ret);
-            }
-        )*
+        optionalMetaImportDeclarations
         (
             metaprogramMode
             {
@@ -720,18 +709,13 @@ preamble returns [MetaprogramPreambleNode ret]
                 localMode = $metaprogramMode.localMode;
             }
         )?
-        (
-            metaprogramTargetList
-            {
-                target = $metaprogramTargetList.ret;
-            }
-        )?
-        (
-            metaprogramDependencyDeclarationList
-            {
-                depends = $metaprogramDependencyDeclarationList.ret;
-            }
-        )?
+        optionalMetaprogramTargetList
+        optionalMetaprogramDependencyDeclarationList
+        {
+            $ret = factory.makeMetaprogramPreambleNode($optionalMetaImportDeclarations.ret,
+                    localMode, packageMode, $optionalMetaprogramTargetList.ret,
+                    $optionalMetaprogramDependencyDeclarationList.ret);
+        }
     ;
 
 metaprogramImport returns [MetaprogramImportNode ret]
@@ -806,6 +790,28 @@ metaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationLi
         )*
     ;
 
+optionalMetaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalMetaprogramDependencyDeclarationList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeMetaprogramDependencyDeclarationListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            metaprogramDependencyDeclarationList
+            {
+                $ret = $metaprogramDependencyDeclarationList.ret;
+            }
+        )?
+    ;
+
 
 metaprogramDependencyDeclaration returns [MetaprogramDependencyDeclarationNode ret]
         scope Rule;
@@ -848,6 +854,28 @@ metaprogramDependencyList returns [MetaprogramDependencyListNode ret]
             }
         )*
         ','?
+    ;
+
+optionalMetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalMetaprogramDependencyList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeMetaprogramDependencyListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            metaprogramDependencyList
+            {
+                $ret = $metaprogramDependencyList.ret;
+            }
+        )?
     ;
 
 
@@ -895,6 +923,28 @@ metaprogramTargetList returns [MetaprogramTargetListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalMetaprogramTargetList returns [MetaprogramTargetListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalMetaprogramTargetList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeMetaprogramTargetListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            metaprogramTargetList
+            {
+                $ret = $metaprogramTargetList.ret;
+            }
+        )?
     ;
 
 
@@ -954,6 +1004,28 @@ identifierList returns [IdentifierListNode ret]
             }
         )*
         ','?
+    ;
+
+optionalIdentifierList returns [IdentifierListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalIdentifierList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeIdentifierListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            identifierList
+            {
+                $ret = $identifierList.ret;
+            }
+        )?
     ;
 
 
@@ -1047,27 +1119,6 @@ blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode 
         }
     ;
 
-// Parses an optional list of meta-annotations.  This rule handles the logic of creating an empty list if no
-// meta-annotations are present.
-optionalMetaAnnotationList returns [MetaAnnotationListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("optionalMetaAnnotationList");
-            MetaAnnotationListNode listNode = null;
-        }
-        @after {
-            $ret = (listNode == null ? factory.makeMetaAnnotationListNode() : listNode);
-            ruleStop();
-        }
-    :
-        (
-            metaAnnotationList
-            {
-                listNode = $metaAnnotationList.ret;
-            }
-        )?
-    ;
-
 // Parses a list of meta-annotations.  Note that this rule is not used for declarations, since meta-annotations can be
 // interspersed amongst annotations and modifiers.  This rule is used for meta-annotations which are applied to
 // statements and other constructs which only permit meta-annotations and not other modifiers.
@@ -1093,6 +1144,28 @@ metaAnnotationList returns [MetaAnnotationListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalMetaAnnotationList returns [MetaAnnotationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalMetaAnnotationList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeMetaAnnotationListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            metaAnnotationList
+            {
+                $ret = $metaAnnotationList.ret;
+            }
+        )?
     ;
 
 
@@ -1201,6 +1274,28 @@ metaAnnotationElementValuePairs returns [MetaAnnotationElementListNode ret]
         )*
     ;
 
+optionalMetaAnnotationElementValuePairs returns [MetaAnnotationElementListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalMetaAnnotationElementValuePairs");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeMetaAnnotationElementListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            metaAnnotationElementValuePairs
+            {
+                $ret = $metaAnnotationElementValuePairs.ret;
+            }
+        )?
+    ;
+
 
 // Parses a single meta-annotation element-value pair.
 // For example, in
@@ -1292,6 +1387,28 @@ metaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
         )*
     ;
 
+optionalMetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalMetaAnnotationElementValues");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeMetaAnnotationValueListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            metaAnnotationElementValues
+            {
+                $ret = $metaAnnotationElementValues.ret;
+            }
+        )?
+    ;
+
 
 // Parses a meta-annotation element array.
 // For example, in
@@ -1306,20 +1423,16 @@ metaAnnotationElementValueArrayInitializer returns [MetaAnnotationArrayValueNode
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValueArrayInitializer");
-            MetaAnnotationValueListNode node = null;
         }
         @after {
-            $ret = factory.makeMetaAnnotationArrayValueNode(node == null ? factory.makeMetaAnnotationValueListNode() : node);
             ruleStop();
         }
     :   
         '{'
-        (
-            metaAnnotationElementValues
-            {
-                node = $metaAnnotationElementValues.ret;
-            }
-        )?
+        optionalMetaAnnotationElementValues
+        {
+            $ret = factory.makeMetaAnnotationArrayValueNode($optionalMetaAnnotationElementValues.ret);
+        }
         ','?
         '}'
     ;
@@ -1402,41 +1515,23 @@ compilationUnit[String name] returns [CompilationUnitNode ret]
         scope Rule;
         @init {
             ruleStart("compilationUnit");
-            MetaprogramImportListNode metaImportList = null;
-            ImportListNode importList = null;
-            TypeDeclarationListNode typeList = null;
         }
         @after {
             ruleStop();
         }
     :
         packageDeclaration?
-        (
-            metaImportDeclarations
-            {
-                metaImportList = $metaImportDeclarations.ret;
-            }
-        )?
-        (
-            importDeclarations
-            {
-                importList = $importDeclarations.ret;
-            }
-        )?
-        (
-            typeDeclarations
-            {
-                typeList = $typeDeclarations.ret;
-            }
-        )?
+        optionalMetaImportDeclarations
+        optionalImportDeclarations
+        optionalTypeDeclarations
         EOF
         {
             $ret = factory.makeCompilationUnitNode(
                         name,
                         $packageDeclaration.ret,
-                        metaImportList == null ? factory.makeMetaprogramImportListNode() : metaImportList,
-                        importList == null ? factory.makeImportListNode() : importList,
-                        typeList == null ? factory.makeTypeDeclarationListNode() : typeList);
+                        $optionalMetaImportDeclarations.ret,
+                        $optionalImportDeclarations.ret,
+                        $optionalTypeDeclarations.ret);
         }
     ;
 
@@ -1491,6 +1586,28 @@ metaImportDeclarations returns [MetaprogramImportListNode ret]
         )*
     ;
 
+optionalMetaImportDeclarations returns [MetaprogramImportListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalMetaImportDeclarations");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeMetaprogramImportListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            metaImportDeclarations
+            {
+                $ret = $metaImportDeclarations.ret;
+            }
+        )?
+    ;
+
 
 importDeclarations returns [ImportListNode ret]
         scope Rule;
@@ -1514,6 +1631,28 @@ importDeclarations returns [ImportListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalImportDeclarations returns [ImportListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalImportDeclarations");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeImportListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            importDeclarations
+            {
+                $ret = $importDeclarations.ret;
+            }
+        )?
     ;
 
 
@@ -1628,6 +1767,28 @@ typeDeclarations returns [TypeDeclarationListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalTypeDeclarations returns [TypeDeclarationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalTypeDeclarations");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeTypeDeclarationListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            typeDeclarations
+            {
+                $ret = $typeDeclarations.ret;
+            }
+        )?
     ;
 
 
@@ -2073,7 +2234,6 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         @init {
             ruleStart("normalClassDeclaration");
             DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
-            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode();
         }         
         @after {
             ruleStop();
@@ -2081,12 +2241,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
     :   
         javadoc classModifiers
         'class' id=identifier
-        (
-            typeParameters
-            {
-                typeParamsNode = $typeParameters.ret;
-            }
-        )?
+        optionalTypeParameters
         ('extends' classOrInterfaceType)?
         (
             'implements' declaredTypeList
@@ -2101,7 +2256,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
                     $classOrInterfaceType.ret,
                     declaredTypeListNode,
                     $classBody.ret,
-                    typeParamsNode,                    
+                    $optionalTypeParameters.ret,                    
                     $id.ret,
                     $javadoc.ret);
         }
@@ -2112,7 +2267,6 @@ inlineClassDeclaration returns [LocalClassDeclarationNode ret]
         @init {
             ruleStart("inlineClassDeclaration");
             DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
-            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode();
         }         
         @after {
             ruleStop();
@@ -2120,12 +2274,7 @@ inlineClassDeclaration returns [LocalClassDeclarationNode ret]
     :   
         javadoc inlineClassModifiers
         'class' id=identifier
-        (
-            typeParameters
-            {
-                typeParamsNode = $typeParameters.ret;
-            }
-        )?
+        optionalTypeParameters
         ('extends' classOrInterfaceType)?
         (
             'implements' declaredTypeList
@@ -2140,7 +2289,7 @@ inlineClassDeclaration returns [LocalClassDeclarationNode ret]
                     $classOrInterfaceType.ret,
                     declaredTypeListNode,
                     $classBody.ret,
-                    typeParamsNode,                    
+                    $optionalTypeParameters.ret,                    
                     $id.ret,
                     $javadoc.ret);
         }
@@ -2171,6 +2320,28 @@ typeParameters returns [TypeParameterListNode ret]
             }
         )*
         '>'
+    ;
+
+optionalTypeParameters returns [TypeParameterListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalTypeParameters");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeTypeParameterListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            typeParameters
+            {
+                $ret = $typeParameters.ret;
+            }
+        )?
     ;
 
 
@@ -2223,6 +2394,28 @@ typeBound returns [DeclaredTypeListNode ret]
         )*
     ;
 
+optionalTypeBound returns [DeclaredTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalTypeBound");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeDeclaredTypeListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            typeBound
+            {
+                $ret = $typeBound.ret;
+            }
+        )?
+    ;
+
 
 enumDeclaration returns [EnumDeclarationNode ret]
         scope Rule;
@@ -2259,7 +2452,6 @@ enumBody returns [EnumBodyNode ret]
         scope Rule;
         @init {
             ruleStart("enumBody");
-            EnumConstantDeclarationListNode enumConstantsNode = factory.makeEnumConstantDeclarationListNode();
             ClassMemberListNode enumBodyDeclarationsNode = factory.makeClassMemberListNode();
         }
         @after {
@@ -2267,12 +2459,7 @@ enumBody returns [EnumBodyNode ret]
         }
     :   
         '{'
-        (
-            enumConstants
-            {
-                enumConstantsNode = $enumConstants.ret;
-            }
-        )? 
+        optionalEnumConstants
         ','?
         (
             enumBodyDeclarations
@@ -2282,9 +2469,7 @@ enumBody returns [EnumBodyNode ret]
         )?
         '}'
         {
-            $ret = factory.makeEnumBodyNode(
-                    enumConstantsNode,
-                    enumBodyDeclarationsNode);
+            $ret = factory.makeEnumBodyNode($optionalEnumConstants.ret, enumBodyDeclarationsNode);
         }
     ;
 
@@ -2311,6 +2496,28 @@ enumConstants returns [EnumConstantDeclarationListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalEnumConstants returns [EnumConstantDeclarationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalEnumConstants");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeEnumConstantDeclarationListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            enumConstants
+            {
+                $ret = $enumConstants.ret;
+            }
+        )?
     ;
 
 
@@ -2398,7 +2605,6 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         @init {
             ruleStart("normalInterfaceDeclaration");
             DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
-            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode();
         } 
         @after {
             ruleStop();
@@ -2406,12 +2612,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
     :   
         javadoc interfaceModifiers
         'interface' id=identifier
-        (
-            typeParameters
-            {
-                typeParamsNode = $typeParameters.ret;
-            }
-        )?
+        optionalTypeParameters
         (
             'extends' declaredTypeList
             {
@@ -2424,7 +2625,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
                     $interfaceModifiers.ret,
                     declaredTypeListNode,
                     $interfaceBody.ret,
-                    typeParamsNode,
+                    $optionalTypeParameters.ret,
                     $id.ret,
                     $javadoc.ret);
         }
@@ -2455,6 +2656,28 @@ declaredTypeList returns [DeclaredTypeListNode ret]
         )*
     ;
 
+optionalDeclaredTypeList returns [DeclaredTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalDeclaredTypeList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeDeclaredTypeListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            declaredTypeList
+            {
+                $ret = $declaredTypeList.ret;
+            }
+        )?
+    ;
+
 
 referenceTypeList returns [ReferenceTypeListNode ret]
         scope Rule;
@@ -2481,68 +2704,78 @@ referenceTypeList returns [ReferenceTypeListNode ret]
         )*
     ;
 
+optionalReferenceTypeList returns [ReferenceTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalReferenceTypeList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeReferenceTypeListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            referenceTypeList
+            {
+                $ret = $referenceTypeList.ret;
+            }
+        )?
+    ;
+
 
 classBody returns [ClassBodyNode ret]
         scope Rule;
         @init {
             ruleStart("classBody");
-            ClassMemberListNode listNode = null;
         }
         @after {
-            $ret = factory.makeClassBodyNode(listNode == null ? factory.makeClassMemberListNode() : listNode);
             ruleStop();
         }
     :   
         '{'
-        (
-            classBodyDeclarations
-            {
-                listNode = $classBodyDeclarations.ret;
-            }
-        )?
+        optionalClassBodyDeclarations
         '}'
+        {
+            $ret = factory.makeClassBodyNode($optionalClassBodyDeclarations.ret);
+        }
     ;
 
 anonymousClassBody returns [AnonymousClassBodyNode ret]
         scope Rule;
         @init {
             ruleStart("anonymousClassBody");
-            AnonymousClassMemberListNode listNode = factory.makeAnonymousClassMemberListNode();
         }
         @after {
-            $ret = factory.makeAnonymousClassBodyNode(listNode);
             ruleStop();
         }
     :   
         '{' 
-        (
-            anonymousClassBodyDeclarations
-            {
-                listNode = $anonymousClassBodyDeclarations.ret;
-            }
-        )?
+        optionalAnonymousClassBodyDeclarations
         '}'
+        {
+            $ret = factory.makeAnonymousClassBodyNode($optionalAnonymousClassBodyDeclarations.ret);
+        }
     ;
 
 interfaceBody returns [InterfaceBodyNode ret]
         scope Rule;
         @init {
             ruleStart("interfaceBody");
-            InterfaceMemberListNode listNode = null;
         }
         @after {
-            $ret = factory.makeInterfaceBodyNode(listNode == null ? factory.makeInterfaceMemberListNode() : listNode);
             ruleStop();
         }
     :   
-        '{' 
-        (
-            interfaceBodyDeclarations
-            {
-                listNode = $interfaceBodyDeclarations.ret;
-            }
-        )?
+        '{'
+        optionalInterfaceBodyDeclarations 
         '}'
+        {
+            $ret = factory.makeInterfaceBodyNode($optionalInterfaceBodyDeclarations.ret);
+        }
     ;
 
 initializerBlock returns [InitializerDeclarationNode ret]
@@ -2587,6 +2820,28 @@ classBodyDeclarations returns [ClassMemberListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalClassBodyDeclarations returns [ClassMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalClassBodyDeclarations");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeClassMemberListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            classBodyDeclarations
+            {
+                $ret = $classBodyDeclarations.ret;
+            }
+        )?
     ;
 
     
@@ -2650,6 +2905,28 @@ anonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalAnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalAnonymousClassBodyDeclarations");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeAnonymousClassMemberListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            anonymousClassBodyDeclarations
+            {
+                $ret = $anonymousClassBodyDeclarations.ret;
+            }
+        )?
     ;
 
     
@@ -2737,7 +3014,6 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("constructorDeclaration");
-            TypeParameterListNode typeParametersNode = factory.makeTypeParameterListNode();
             UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
         }
         @after {
@@ -2745,12 +3021,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         }
     :
         javadoc constructorModifiers
-        (
-            typeParameters
-            {
-                typeParametersNode = $typeParameters.ret;
-            }
-        )?
+        optionalTypeParameters
         identifier
         formalParameters
         (
@@ -2768,7 +3039,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
                 $formalParameters.parameters,
                 $formalParameters.varargParameter,
                 throwsNode,
-                typeParametersNode,
+                $optionalTypeParameters.ret,
                 $javadoc.ret);
         }
     ;
@@ -2777,11 +3048,9 @@ constructorBody returns [ConstructorBodyNode ret]
         scope Rule;
         @init {
             ruleStart("constructorBody");
-            BlockStatementListNode listNode = null;
             ConstructorInvocationNode constructorInvocationNode = null;
         }
         @after {
-            $ret = factory.makeConstructorBodyNode(constructorInvocationNode, listNode);
             ruleStop();
         }
     :
@@ -2793,10 +3062,10 @@ constructorBody returns [ConstructorBodyNode ret]
             }
         )?
         optionalBlockStatementList
-        {
-            listNode = $optionalBlockStatementList.ret;
-        }
         '}'
+        {
+            $ret = factory.makeConstructorBodyNode(constructorInvocationNode, $optionalBlockStatementList.ret);
+        }
     ;
 
 methodDeclaration returns [MethodDeclarationNode ret]
@@ -2804,7 +3073,6 @@ methodDeclaration returns [MethodDeclarationNode ret]
         @init {
             ruleStart("methodDeclaration");
             BlockStatementListNode body = null;
-            TypeParameterListNode typeParametersNode = factory.makeTypeParameterListNode();
             UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
             TypeNode returnTypeNode = null;
         }
@@ -2813,12 +3081,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         }
     :
         javadoc methodModifiers
-        (
-            typeParameters
-            {
-                typeParametersNode = $typeParameters.ret;
-            }
-        )?
+        optionalTypeParameters
         methodReturnType
         {
             returnTypeNode = $methodReturnType.ret;
@@ -2854,7 +3117,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
                     $formalParameters.varargParameter,
                     returnTypeNode,
                     throwsNode,
-                    typeParametersNode,
+                    $optionalTypeParameters.ret,
                     $javadoc.ret);
         }        
     ;
@@ -2905,6 +3168,28 @@ interfaceBodyDeclarations returns [InterfaceMemberListNode ret]
         )*
     ;
 
+optionalInterfaceBodyDeclarations returns [InterfaceMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalInterfaceBodyDeclarations");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeInterfaceMemberListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            interfaceBodyDeclarations
+            {
+                $ret = $interfaceBodyDeclarations.ret;
+            }
+        )?
+    ;
+
     
 interfaceBodyDeclaration returns [InterfaceMemberNode ret]
         scope Rule;
@@ -2950,8 +3235,6 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("interfaceMethodDeclaration");
-            TypeParameterListNode typeParametersNode =
-                    factory.makeTypeParameterListNode();
             TypeNode returnTypeNode = null;
             UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
         }
@@ -2960,12 +3243,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         }
     :   
         javadoc methodModifiers
-        (
-            typeParameters
-            {
-                typeParametersNode = $typeParameters.ret;
-            }
-        )?
+        optionalTypeParameters
         methodReturnType
         {
             returnTypeNode = $methodReturnType.ret;
@@ -2994,7 +3272,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                     $formalParameters.varargParameter,
                     returnTypeNode,
                     throwsNode,
-                    typeParametersNode,
+                    $optionalTypeParameters.ret,
                     $javadoc.ret);
         }         
     ;
@@ -3003,7 +3281,6 @@ constantDeclaration returns [ConstantDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("constantDeclaration");
-            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
         }
         @after {
             ruleStop();
@@ -3046,6 +3323,28 @@ variableDeclarators returns [VariableDeclaratorListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalVariableDeclarators returns [VariableDeclaratorListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalVariableDeclarators");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeVariableDeclaratorListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            variableDeclarators
+            {
+                $ret = $variableDeclarators.ret;
+            }
+        )?
     ;
 
  
@@ -3328,6 +3627,28 @@ typeArguments returns [TypeArgumentListNode ret]
         '>'
     ;
 
+optionalTypeArguments returns [TypeArgumentListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalTypeArguments");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeTypeArgumentListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            typeArguments
+            {
+                $ret = $typeArguments.ret;
+            }
+        )?
+    ;
+
 
 // Parses a single type argument for a declared type.
 // For example, in
@@ -3590,6 +3911,28 @@ annotations returns [AnnotationListNode ret]
         )*
     ;
 
+optionalAnnotations returns [AnnotationListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalAnnotations");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeAnnotationListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            annotations
+            {
+                $ret = $annotations.ret;
+            }
+        )?
+    ;
+
 
 // Parses an annotation.
 // For example, in
@@ -3661,6 +4004,28 @@ elementValuePairs returns [AnnotationElementListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalElementValuePairs returns [AnnotationElementListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalElementValuePairs");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeAnnotationElementListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            elementValuePairs
+            {
+                $ret = $elementValuePairs.ret;
+            }
+        )?
     ;
 
 
@@ -3747,6 +4112,28 @@ elementValues returns [AnnotationValueListNode ret]
         ','?
     ;
 
+optionalElementValues returns [AnnotationValueListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalElementValues");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeAnnotationValueListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            elementValues
+            {
+                $ret = $elementValues.ret;
+            }
+        )?
+    ;
+
     
 // Parses an annotation element array.
 // For example, in
@@ -3761,21 +4148,17 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
         scope Rule;
         @init {
             ruleStart("elementValueArrayInitializer");
-            AnnotationValueListNode listNode = null;
         }
         @after {
-            $ret = factory.makeAnnotationArrayValueNode(listNode == null ? factory.makeAnnotationValueListNode() : listNode);
             ruleStop();
         }
     :   
         '{'
-        (
-            elementValues
-            {
-                listNode = $elementValues.ret;
-            }
-        )?
+        optionalElementValues
         '}'
+        {
+            $ret = factory.makeAnnotationArrayValueNode($optionalElementValues.ret);
+        }
     ;
 
 /**
@@ -3845,6 +4228,28 @@ annotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalAnnotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalAnnotationTypeElementDeclarations");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeAnnotationMemberListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            annotationTypeElementDeclarations
+            {
+                $ret = $annotationTypeElementDeclarations.ret;
+            }
+        )?
     ;
 
 
@@ -3947,27 +4352,6 @@ block returns [BlockStatementListNode ret]
         }
     ;
 
-// This rule encompasses the idea of an optional block statement list.  If no block statements appear in the source
-// code, this rule still parses but returns an empty list.
-optionalBlockStatementList returns [BlockStatementListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("optionalBlockStatementList");
-            BlockStatementListNode listNode = null;
-        }
-        @after {
-            $ret = (listNode == null ? factory.makeBlockStatementListNode() : listNode);
-            ruleStop();
-        }
-    :
-        (
-            blockStatementList
-            {
-                listNode = $blockStatementList.ret;
-            }
-        )?
-    ;
-
 blockStatementList returns [BlockStatementListNode ret]
         scope Rule;
         @init {
@@ -3990,6 +4374,28 @@ blockStatementList returns [BlockStatementListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalBlockStatementList returns [BlockStatementListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalBlockStatementList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeBlockStatementListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            blockStatementList
+            {
+                $ret = $blockStatementList.ret;
+            }
+        )?
     ;
 
 
@@ -4242,32 +4648,21 @@ switchStatement[MetaAnnotationListNode metaAnnotations] returns [SwitchNode ret]
         scope Rule;
         @init {
             ruleStart("switchStatement");
-            CaseListNode listNode = null;
-            ExpressionNode expression = null;
         }
         @after {
-            $ret = factory.makeSwitchNode(
-                expression,
-                listNode == null ? factory.makeCaseListNode() : listNode,
-                metaAnnotations);
             ruleStop();
         }
     :
         'switch'
         '('
         expression
-        {
-            expression = $expression.ret;
-        }
         ')'
         '{'
-        (
-            switchBlockStatementGroups
-            {
-                listNode = $switchBlockStatementGroups.ret;
-            }
-        )?
+        optionalSwitchBlockStatementGroups
         '}'
+        {
+            $ret = factory.makeSwitchNode($expression.ret, $optionalSwitchBlockStatementGroups.ret, metaAnnotations);
+        }
     ;
 
 switchBlockStatementGroups returns [CaseListNode ret]
@@ -4292,6 +4687,28 @@ switchBlockStatementGroups returns [CaseListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalSwitchBlockStatementGroups returns [CaseListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalSwitchBlockStatementGroups");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeCaseListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            switchBlockStatementGroups
+            {
+                $ret = $switchBlockStatementGroups.ret;
+            }
+        )?
     ;
 
 
@@ -4342,7 +4759,7 @@ trystatement[MetaAnnotationListNode metaAnnotations] returns [TryNode ret]
         scope Rule;
         @init {
             ruleStart("trystatement");
-            CatchListNode catchList = factory.makeCatchListNode();
+            CatchListNode catchList = null;
             BlockStatementListNode finallyBlock = null;
         }    
         @after {
@@ -4360,10 +4777,12 @@ trystatement[MetaAnnotationListNode metaAnnotations] returns [TryNode ret]
             c=catches
             {
                 catchList = $c.ret;
+                finallyBlock = null;
             }            
         |   
             'finally' fb=block
             {
+                catchList = factory.makeCatchListNode();
                 finallyBlock = $fb.ret;
             }            
         )
@@ -4398,6 +4817,28 @@ catches returns [CatchListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalCatches returns [CatchListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalCatches");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeCatchListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            catches
+            {
+                $ret = $catches.ret;
+            }
+        )?
     ;
 
 
@@ -4460,8 +4901,6 @@ forstatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret]
             ruleStart("forstatement");
             ForInitializerNode forInitNode = null;
             ExpressionNode expNode = null;
-            StatementExpressionListNode expListNode =
-                    factory.makeStatementExpressionListNode();
         }
         @after {
             ruleStop();
@@ -4494,20 +4933,15 @@ forstatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret]
             {
                 expNode = $expression.ret;
             }
-        )? ';' 
-        (
-            statementExpressionList
-            {
-                expListNode = $statementExpressionList.ret;
-            }
-        )?
+        )? ';'
+        optionalStatementExpressionList
         ')'
         statement
         {
             $ret = factory.makeForLoopNode(
                     forInitNode, 
                     expNode,
-                    expListNode,
+                    $optionalStatementExpressionList.ret,
                     $statement.ret,
                     metaAnnotations);
         }                 
@@ -4575,6 +5009,28 @@ statementExpressionList returns [StatementExpressionListNode ret]
         )*
     ;
 
+optionalStatementExpressionList returns [StatementExpressionListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalStatementExpressionList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeStatementExpressionListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            statementExpressionList
+            {
+                $ret = $statementExpressionList.ret;
+            }
+        )?
+    ;
+
 
 expressionList returns [ExpressionListNode ret]
         scope Rule;
@@ -4599,6 +5055,28 @@ expressionList returns [ExpressionListNode ret]
                 list.add($b.ret);
             }
         )*
+    ;
+
+optionalExpressionList returns [ExpressionListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalExpressionList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeExpressionListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            expressionList
+            {
+                $ret = $expressionList.ret;
+            }
+        )?
     ;
 
                        
@@ -5434,19 +5912,13 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
         @init {
             ruleStart("unqualifiedClassInstantiation");
             AnonymousClassBodyNode anonymousClassBodyNode = null;
-            TypeArgumentListNode typeArgumentsNode = factory.makeTypeArgumentListNode();
         }
         @after {
             ruleStop();
         }
     :
         NEW
-        (
-            typeArguments
-            {
-                typeArgumentsNode = $typeArguments.ret;
-            }
-        )?
+        optionalTypeArguments
         classOrInterfaceType arguments
         (
             anonymousClassBody
@@ -5457,7 +5929,7 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
         {
             $ret = factory.makeUnqualifiedClassInstantiationNode(
                     $classOrInterfaceType.ret,
-                    typeArgumentsNode,
+                    $optionalTypeArguments.ret,
                     $arguments.ret,
                     anonymousClassBodyNode);
         }
@@ -5890,27 +6362,45 @@ variableInitializers returns [VariableInitializerListNode ret]
         )*
     ;
 
+optionalVariableInitializers returns [VariableInitializerListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalVariableInitializers");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeVariableInitializerListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            variableInitializers
+            {
+                $ret = $variableInitializers.ret;
+            }
+        )?
+    ;
+
 
 arrayInitializer returns [ArrayInitializerNode ret]
         scope Rule;
         @init {
             ruleStart("arrayInitializer");
-            VariableInitializerListNode listNode = null;
         }
         @after {
-            $ret = factory.makeArrayInitializerNode(listNode == null ? factory.makeVariableInitializerListNode() : listNode);
             ruleStop();
         }
     :   
         '{' 
-            (
-                variableInitializers
-                {
-                    listNode = $variableInitializers.ret;
-                }
-            )? 
-            (',')? 
+            optionalVariableInitializers
+            ','? 
         '}'             //Yang's fix, position change.
+        {
+            $ret = factory.makeArrayInitializerNode($optionalVariableInitializers.ret);
+        }
     ;
 
 
@@ -5954,20 +6444,17 @@ arguments returns [ExpressionListNode ret]
         scope Rule;
         @init {
             ruleStart("arguments");
-            $ret = factory.makeExpressionListNode();
         }
         @after {
             ruleStop();
         }
     :
         '('
-        (
-            expressionList
-            {
-                $ret = $expressionList.ret;
-            }
-        )?
+        optionalExpressionList
         ')'
+        {
+            $ret = $optionalExpressionList.ret;
+        }
     ;
 
 // Parses a name chain.
