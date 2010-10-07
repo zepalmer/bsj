@@ -2,13 +2,11 @@ package edu.jhu.cs.bsj.compiler.utils.generator;
 
 import static edu.jhu.cs.bsj.compiler.utils.generator.SourceGeneratorUtilities.CONTENTS_FILE;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +26,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.ConcatenatingIterable;
+import edu.jhu.cs.bsj.compiler.impl.utils.MapBuilder;
 import edu.jhu.cs.bsj.compiler.impl.utils.NullOutputStream;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
@@ -4225,11 +4224,68 @@ public class SourceGenerator
 	{
 		private static final File GRAMMAR_SUPPLEMENTS_DIR = new File(SUPPLEMENTS_DIR.getPath() + File.separator
 				+ "grammar");
+		private static final File GRAMMAR_FRAGMENTS_DIR = new File(GRAMMAR_SUPPLEMENTS_DIR.getPath() + File.separator
+				+ "fragments");
 		private static final File GRAMMAR_TEMPLATE = new File(GRAMMAR_SUPPLEMENTS_DIR.getPath() + File.separator
 				+ "BsjAntlr-template.g");
 
 		private static final File OUTPUT_GRAMMAR = new File(TARGET_DIR.getPath() + File.separator + "parser-root"
 				+ File.separator + "resources" + File.separator + "grammar" + File.separator + "BsjAntlr.g");
+
+		private static final Map<String, String> FRAGMENT_CACHE = new HashMap<String, String>();
+
+		private static String getFragment(String name) throws IOException
+		{
+			String template = FRAGMENT_CACHE.get(name);
+			if (template == null)
+			{
+				template = readFile(new File(GRAMMAR_FRAGMENTS_DIR.getPath() + File.separator + name + "-fragment.g"));
+				FRAGMENT_CACHE.put(name, template);
+			}
+			return template;
+		}
+
+		private static String fillFragment(String name, Map<String, String> parameters) throws IOException
+		{
+			String template = getFragment(name);
+			for (Map.Entry<String, String> entry : parameters.entrySet())
+			{
+				Pattern p = Pattern.compile(Pattern.quote("$$$") + entry.getKey() + Pattern.quote("$$$"));
+				Matcher m = p.matcher(template);
+				if (!m.find())
+				{
+					throw new IllegalStateException("Parameter " + entry.getKey() + " provided to template " + name
+							+ " that doesn't use it.");
+				}
+				while ((m = p.matcher(template)).find())
+				{
+					template = template.substring(0, m.start()) + entry.getValue() + template.substring(m.end());
+				}
+			}
+			Matcher m = Pattern.compile(Pattern.quote("$$$") + "([A-Za-z_]+)" + Pattern.quote("$$$")).matcher(template);
+			if (m.find())
+			{
+				throw new IllegalStateException("Parameter " + m.group(1) + " not filled in template " + name);
+			}
+			return template;
+		}
+
+		private static String readFile(File f) throws IOException
+		{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			FileInputStream fis = new FileInputStream(f);
+			byte[] buffer = new byte[16384];
+			int read;
+
+			while ((read = fis.read(buffer)) > 0)
+			{
+				baos.write(buffer, 0, read);
+			}
+			baos.close();
+			fis.close();
+
+			return baos.toString();
+		}
 
 		@Override
 		public void init() throws IOException
@@ -4243,16 +4299,7 @@ public class SourceGenerator
 
 		private String readGrammarTemplate() throws IOException
 		{
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(GRAMMAR_TEMPLATE)));
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = br.readLine()) != null)
-			{
-				sb.append(line);
-				sb.append('\n');
-			}
-			br.close();
-			return sb.toString();
+			return readFile(GRAMMAR_TEMPLATE);
 		}
 
 		private PrintStream openOutputGrammar() throws IOException
@@ -4377,7 +4424,8 @@ public class SourceGenerator
 				}
 			}
 
-			protected abstract String executeCommand(String grammarTemplate, int startIndex, int endIndex);
+			protected abstract String executeCommand(String grammarTemplate, int startIndex, int endIndex)
+					throws IOException;
 
 			protected Pair<Integer, String> getTokenBefore(String s, int index)
 			{
@@ -4413,7 +4461,7 @@ public class SourceGenerator
 			}
 
 			@Override
-			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex)
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
 			{
 				String returnTypeName = getParameter("type");
 				assertAccessedAllParameters();
@@ -4429,17 +4477,10 @@ public class SourceGenerator
 				final int newEndIndex = after.getFirst();
 				final String ruleName = before.getSecond();
 
-				// @formatter:off
-				String replacement = ruleName + " returns [" + returnTypeName + " ret]\n" +
-						"        scope Rule;\n" +
-						"        @init {\n" +
-						"            ruleStart(\"" + ruleName + "\");\n" +
-						"        }\n" +
-						"        @after {\n" +
-						"            ruleStop();\n" +
-						"        }\n" +
-						"    :";
-				// @formatter:on
+				Map<String, String> params = new MapBuilder<String, String>().add("rule", ruleName).add("type",
+						returnTypeName).getMap();
+				final String replacement = fillFragment("standardRuleIntro", params);
+
 				return grammarTemplate.substring(0, newStartIndex) + replacement
 						+ grammarTemplate.substring(newEndIndex);
 			}
@@ -4453,7 +4494,7 @@ public class SourceGenerator
 			}
 
 			@Override
-			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex)
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
 			{
 				final String ruleName = getParameter("name");
 				final String returnTypeName = getParameter("type");
@@ -4547,40 +4588,15 @@ public class SourceGenerator
 					}
 				}
 
-				// @formatter:off
-				String replacement =
-				        ruleName + " returns [" + returnTypeName + " ret]\n" +
-				        "        scope Rule;\n" +
-				        "        @init {\n" +
-				        "            ruleStart(\"" + ruleName + "\");\n" +
-				        "            List<" + componentTypeName + "> list = new ArrayList<" + componentTypeName + ">();\n" +
-				        "        }\n" +
-				        "        @after {\n" +
-				        "            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes\n" +
-				        "            $ret = factory.make" + returnTypeName + "(list);\n" +
-				        "            ruleStop();\n" +
-				        "        }\n" +
-				        "    :\n" +
-				        prefixPart +
-				        "        a=" + componentRuleName + "\n" +
-				        "        {\n" +
-				        "            list.add($a.ret);\n" +
-				        "        }\n" +
-				        "        (\n" +
-				        separatorPart +
-				        "            b=" + componentRuleName + "\n" +
-				        "            {\n" +
-				        "                list.add($b.ret);\n" +
-				        "            }\n" +
-				        "        )*\n" +
-				        lastSeparatorPart +
-				        postfixPart +
-				        "    ;\n";
-				// @formatter:on
+				final String replacement = fillFragment(
+						"generateListRule",
+						new MapBuilder<String, String>().add("rule", ruleName).add("type", returnTypeName).add(
+								"componentType", componentTypeName).add("componentRule", componentRuleName).add(
+								"prefixPart", prefixPart).add("postfixPart", postfixPart).add("separatorPart",
+								separatorPart).add("lastSeparatorPart", lastSeparatorPart).getMap());
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}
-
 		}
 
 		public static class GenerateParseRuleCommand extends TemplateCommand
@@ -4592,7 +4608,7 @@ public class SourceGenerator
 			}
 
 			@Override
-			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex)
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
 			{
 				final String parseRuleName = getParameter("parseRuleName");
 				final String antlrRuleName;
@@ -4608,24 +4624,10 @@ public class SourceGenerator
 
 				assertAccessedAllParameters();
 
-				/* @formatter:off */
-				final String replacement =
-					"parseRule_" + parseRuleName + " returns [" + returnTypeName + " ret]\n" +
-					"        scope Rule;\n" +
-					"        @init {\n" +
-					"            ruleStart(\"parseRule_" + parseRuleName + "\");\n" +
-					"        }\n" +
-					"        @after {\n" +
-					"            ruleStop();\n" +
-					"        }\n" +
-					"    :\n" +
-					"        " + antlrRuleName + "\n" +
-					"        EOF\n" +
-					"        {\n" +
-					"             $ret = $" + antlrRuleName + ".ret;\n" +
-					"        }\n" +
-					"    ;\n";
-				/* @formatter:on */
+				final String replacement = fillFragment(
+						"generateParseRule",
+						new MapBuilder<String, String>().add("rule", parseRuleName).add("antlrRule", antlrRuleName).add(
+								"type", returnTypeName).getMap());
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}

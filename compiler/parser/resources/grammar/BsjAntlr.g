@@ -6203,7 +6203,7 @@ parseRule_AbstractMethodModifiers returns [AnnotationMethodModifiersNode ret]
         annotationMethodModifiers
         EOF
         {
-             $ret = $annotationMethodModifiers.ret;
+            $ret = $annotationMethodModifiers.ret;
         }
     ;
 
@@ -6219,7 +6219,7 @@ parseRule_Annotation returns [AnnotationNode ret]
         annotation
         EOF
         {
-             $ret = $annotation.ret;
+            $ret = $annotation.ret;
         }
     ;
 
@@ -6235,7 +6235,7 @@ parseRule_Annotations returns [AnnotationListNode ret]
         annotations
         EOF
         {
-             $ret = $annotations.ret;
+            $ret = $annotations.ret;
         }
     ;
 
@@ -6251,7 +6251,7 @@ parseRule_AnnotationMethodDeclaration returns [AnnotationMethodDeclarationNode r
         annotationMethodDeclaration
         EOF
         {
-             $ret = $annotationMethodDeclaration.ret;
+            $ret = $annotationMethodDeclaration.ret;
         }
     ;
 
@@ -6267,7 +6267,7 @@ parseRule_AnnotationModifiers returns [AnnotationModifiersNode ret]
         annotationModifiers
         EOF
         {
-             $ret = $annotationModifiers.ret;
+            $ret = $annotationModifiers.ret;
         }
     ;
 
@@ -6283,7 +6283,7 @@ parseRule_AnnotationTypeBody returns [AnnotationBodyNode ret]
         annotationTypeBody
         EOF
         {
-             $ret = $annotationTypeBody.ret;
+            $ret = $annotationTypeBody.ret;
         }
     ;
 
@@ -6299,7 +6299,7 @@ parseRule_AnnotationTypeElementDeclarations returns [AnnotationMemberListNode re
         annotationTypeElementDeclarations
         EOF
         {
-             $ret = $annotationTypeElementDeclarations.ret;
+            $ret = $annotationTypeElementDeclarations.ret;
         }
     ;
 
@@ -6315,7 +6315,7 @@ parseRule_AnnotationTypeElementDeclaration returns [AnnotationMemberNode ret]
         annotationTypeElementDeclaration
         EOF
         {
-             $ret = $annotationTypeElementDeclaration.ret;
+            $ret = $annotationTypeElementDeclaration.ret;
         }
     ;
 
@@ -6331,7 +6331,7 @@ parseRule_AnonymousClassBody returns [AnonymousClassBodyNode ret]
         anonymousClassBody
         EOF
         {
-             $ret = $anonymousClassBody.ret;
+            $ret = $anonymousClassBody.ret;
         }
     ;
 
@@ -6347,7 +6347,7 @@ parseRule_AnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode r
         anonymousClassBodyDeclarations
         EOF
         {
-             $ret = $anonymousClassBodyDeclarations.ret;
+            $ret = $anonymousClassBodyDeclarations.ret;
         }
     ;
 
@@ -6363,7 +6363,7 @@ parseRule_AnonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
         anonymousClassBodyDeclaration
         EOF
         {
-             $ret = $anonymousClassBodyDeclaration.ret;
+            $ret = $anonymousClassBodyDeclaration.ret;
         }
     ;
 
@@ -6379,7 +6379,7 @@ parseRule_ArgumentList returns [ExpressionListNode ret]
         expressionList
         EOF
         {
-             $ret = $expressionList.ret;
+            $ret = $expressionList.ret;
         }
     ;
 
@@ -6395,7 +6395,7 @@ parseRule_BlockStatement returns [BlockStatementNode ret]
         blockStatement
         EOF
         {
-             $ret = $blockStatement.ret;
+            $ret = $blockStatement.ret;
         }
     ;
 
@@ -6411,7 +6411,7 @@ parseRule_BlockStatements returns [BlockStatementListNode ret]
         blockStatementList
         EOF
         {
-             $ret = $blockStatementList.ret;
+            $ret = $blockStatementList.ret;
         }
     ;
 
@@ -6427,7 +6427,7 @@ parseRule_CatchClause returns [CatchNode ret]
         catchClause
         EOF
         {
-             $ret = $catchClause.ret;
+            $ret = $catchClause.ret;
         }
     ;
 
@@ -6443,7 +6443,7 @@ parseRule_Catches returns [CatchListNode ret]
         catches
         EOF
         {
-             $ret = $catches.ret;
+            $ret = $catches.ret;
         }
     ;
 
@@ -6459,7 +6459,7 @@ parseRule_ClassBody returns [ClassBodyNode ret]
         classBody
         EOF
         {
-             $ret = $classBody.ret;
+            $ret = $classBody.ret;
         }
     ;
 
@@ -6475,7 +6475,7 @@ parseRule_ClassBodyDeclaration returns [ClassMemberNode ret]
         classBodyDeclaration
         EOF
         {
-             $ret = $classBodyDeclaration.ret;
+            $ret = $classBodyDeclaration.ret;
         }
     ;
 
@@ -6491,7 +6491,7 @@ parseRule_ClassBodyDeclarations returns [ClassMemberListNode ret]
         classBodyDeclarations
         EOF
         {
-             $ret = $classBodyDeclarations.ret;
+            $ret = $classBodyDeclarations.ret;
         }
     ;
 
@@ -6507,7 +6507,7 @@ parseRule_ClassModifiers returns [ClassModifiersNode ret]
         classModifiers
         EOF
         {
-             $ret = $classModifiers.ret;
+            $ret = $classModifiers.ret;
         }
     ;
 
@@ -6523,7 +6523,7 @@ parseRule_ClassOrInterfaceTypeList returns [DeclaredTypeListNode ret]
         declaredTypeList
         EOF
         {
-             $ret = $declaredTypeList.ret;
+            $ret = $declaredTypeList.ret;
         }
     ;
 
@@ -6555,7 +6555,7 @@ parseRule_ConstantDeclaration returns [ConstantDeclarationNode ret]
         constantDeclaration
         EOF
         {
-             $ret = $constantDeclaration.ret;
+            $ret = $constantDeclaration.ret;
         }
     ;
 
@@ -6571,7 +6571,7 @@ parseRule_ConstantModifiers returns [ConstantModifiersNode ret]
         constantModifiers
         EOF
         {
-             $ret = $constantModifiers.ret;
+            $ret = $constantModifiers.ret;
         }
     ;
 
@@ -6587,7 +6587,7 @@ parseRule_ConstructorBody returns [ConstructorBodyNode ret]
         constructorBody
         EOF
         {
-             $ret = $constructorBody.ret;
+            $ret = $constructorBody.ret;
         }
     ;
 
@@ -6603,7 +6603,7 @@ parseRule_ConstructorDeclaration returns [ConstructorDeclarationNode ret]
         constructorDeclaration
         EOF
         {
-             $ret = $constructorDeclaration.ret;
+            $ret = $constructorDeclaration.ret;
         }
     ;
 
@@ -6619,7 +6619,7 @@ parseRule_ConstructorModifiers returns [ConstructorModifiersNode ret]
         constructorModifiers
         EOF
         {
-             $ret = $constructorModifiers.ret;
+            $ret = $constructorModifiers.ret;
         }
     ;
 
@@ -6635,7 +6635,7 @@ parseRule_ElementValue returns [AnnotationValueNode ret]
         elementValue
         EOF
         {
-             $ret = $elementValue.ret;
+            $ret = $elementValue.ret;
         }
     ;
 
@@ -6651,7 +6651,7 @@ parseRule_ElementValues returns [AnnotationValueListNode ret]
         elementValues
         EOF
         {
-             $ret = $elementValues.ret;
+            $ret = $elementValues.ret;
         }
     ;
 
@@ -6667,7 +6667,7 @@ parseRule_ElementValuePair returns [AnnotationElementNode ret]
         elementValuePair
         EOF
         {
-             $ret = $elementValuePair.ret;
+            $ret = $elementValuePair.ret;
         }
     ;
 
@@ -6683,7 +6683,7 @@ parseRule_ElementValuePairs returns [AnnotationElementListNode ret]
         elementValuePairs
         EOF
         {
-             $ret = $elementValuePairs.ret;
+            $ret = $elementValuePairs.ret;
         }
     ;
 
@@ -6699,7 +6699,7 @@ parseRule_EnumBody returns [EnumBodyNode ret]
         enumBody
         EOF
         {
-             $ret = $enumBody.ret;
+            $ret = $enumBody.ret;
         }
     ;
 
@@ -6715,7 +6715,7 @@ parseRule_EnumConstant returns [EnumConstantDeclarationNode ret]
         enumConstant
         EOF
         {
-             $ret = $enumConstant.ret;
+            $ret = $enumConstant.ret;
         }
     ;
 
@@ -6731,7 +6731,7 @@ parseRule_EnumConstants returns [EnumConstantDeclarationListNode ret]
         enumConstants
         EOF
         {
-             $ret = $enumConstants.ret;
+            $ret = $enumConstants.ret;
         }
     ;
 
@@ -6747,7 +6747,7 @@ parseRule_EnumModifiers returns [EnumModifiersNode ret]
         enumModifiers
         EOF
         {
-             $ret = $enumModifiers.ret;
+            $ret = $enumModifiers.ret;
         }
     ;
 
@@ -6763,7 +6763,7 @@ parseRule_ExceptionTypeList returns [UnparameterizedTypeListNode ret]
         unparameterizedTypeList
         EOF
         {
-             $ret = $unparameterizedTypeList.ret;
+            $ret = $unparameterizedTypeList.ret;
         }
     ;
 
@@ -6779,7 +6779,7 @@ parseRule_ExplicitConstructorInvocation returns [ConstructorInvocationNode ret]
         explicitConstructorInvocation
         EOF
         {
-             $ret = $explicitConstructorInvocation.ret;
+            $ret = $explicitConstructorInvocation.ret;
         }
     ;
 
@@ -6795,7 +6795,7 @@ parseRule_FieldDeclaration returns [FieldDeclarationNode ret]
         fieldDeclaration
         EOF
         {
-             $ret = $fieldDeclaration.ret;
+            $ret = $fieldDeclaration.ret;
         }
     ;
 
@@ -6811,7 +6811,7 @@ parseRule_FieldModifiers returns [FieldModifiersNode ret]
         fieldModifiers
         EOF
         {
-             $ret = $fieldModifiers.ret;
+            $ret = $fieldModifiers.ret;
         }
     ;
 
@@ -6827,7 +6827,7 @@ parseRule_ForInit returns [ForInitializerNode ret]
         forInit
         EOF
         {
-             $ret = $forInit.ret;
+            $ret = $forInit.ret;
         }
     ;
 
@@ -6843,7 +6843,7 @@ parseRule_FormalParameter returns [VariableNode ret]
         formalParameter
         EOF
         {
-             $ret = $formalParameter.ret;
+            $ret = $formalParameter.ret;
         }
     ;
 
@@ -6859,7 +6859,7 @@ parseRule_Identifier returns [IdentifierNode ret]
         identifier
         EOF
         {
-             $ret = $identifier.ret;
+            $ret = $identifier.ret;
         }
     ;
 
@@ -6875,7 +6875,7 @@ parseRule_IdentifierList returns [IdentifierListNode ret]
         identifierList
         EOF
         {
-             $ret = $identifierList.ret;
+            $ret = $identifierList.ret;
         }
     ;
 
@@ -6891,7 +6891,7 @@ parseRule_ImportDeclaration returns [ImportNode ret]
         importDeclaration
         EOF
         {
-             $ret = $importDeclaration.ret;
+            $ret = $importDeclaration.ret;
         }
     ;
 
@@ -6907,7 +6907,7 @@ parseRule_ImportDeclarations returns [ImportListNode ret]
         importDeclarations
         EOF
         {
-             $ret = $importDeclarations.ret;
+            $ret = $importDeclarations.ret;
         }
     ;
 
@@ -6923,7 +6923,7 @@ parseRule_Initializer returns [InitializerDeclarationNode ret]
         initializerBlock
         EOF
         {
-             $ret = $initializerBlock.ret;
+            $ret = $initializerBlock.ret;
         }
     ;
 
@@ -6939,7 +6939,7 @@ parseRule_InterfaceBody returns [InterfaceBodyNode ret]
         interfaceBody
         EOF
         {
-             $ret = $interfaceBody.ret;
+            $ret = $interfaceBody.ret;
         }
     ;
 
@@ -6955,7 +6955,7 @@ parseRule_InterfaceMemberDeclaration returns [InterfaceMemberNode ret]
         interfaceBodyDeclaration
         EOF
         {
-             $ret = $interfaceBodyDeclaration.ret;
+            $ret = $interfaceBodyDeclaration.ret;
         }
     ;
 
@@ -6971,7 +6971,7 @@ parseRule_InterfaceMemberDeclarations returns [InterfaceMemberListNode ret]
         interfaceBodyDeclarations
         EOF
         {
-             $ret = $interfaceBodyDeclarations.ret;
+            $ret = $interfaceBodyDeclarations.ret;
         }
     ;
 
@@ -6987,7 +6987,7 @@ parseRule_InterfaceModifiers returns [InterfaceModifiersNode ret]
         interfaceModifiers
         EOF
         {
-             $ret = $interfaceModifiers.ret;
+            $ret = $interfaceModifiers.ret;
         }
     ;
 
@@ -7016,7 +7016,7 @@ parseRule_LocalClassDeclaration returns [LocalClassDeclarationNode ret]
         inlineClassDeclaration
         EOF
         {
-             $ret = $inlineClassDeclaration.ret;
+            $ret = $inlineClassDeclaration.ret;
         }
     ;
 
@@ -7032,7 +7032,7 @@ parseRule_LocalClassModifiers returns [LocalClassModifiersNode ret]
         inlineClassModifiers
         EOF
         {
-             $ret = $inlineClassModifiers.ret;
+            $ret = $inlineClassModifiers.ret;
         }
     ;
 
@@ -7048,7 +7048,7 @@ parseRule_MetaAnnotation returns [MetaAnnotationNode ret]
         metaAnnotation
         EOF
         {
-             $ret = $metaAnnotation.ret;
+            $ret = $metaAnnotation.ret;
         }
     ;
 
@@ -7064,7 +7064,7 @@ parseRule_MetaAnnotationList returns [MetaAnnotationListNode ret]
         metaAnnotationList
         EOF
         {
-             $ret = $metaAnnotationList.ret;
+            $ret = $metaAnnotationList.ret;
         }
     ;
 
@@ -7080,7 +7080,7 @@ parseRule_MetaAnnotationElement returns [MetaAnnotationElementNode ret]
         metaAnnotationElementValuePair
         EOF
         {
-             $ret = $metaAnnotationElementValuePair.ret;
+            $ret = $metaAnnotationElementValuePair.ret;
         }
     ;
 
@@ -7096,7 +7096,7 @@ parseRule_MetaAnnotationElements returns [MetaAnnotationElementListNode ret]
         metaAnnotationElementValuePairs
         EOF
         {
-             $ret = $metaAnnotationElementValuePairs.ret;
+            $ret = $metaAnnotationElementValuePairs.ret;
         }
     ;
 
@@ -7112,7 +7112,7 @@ parseRule_MetaAnnotationElementValue returns [MetaAnnotationValueNode ret]
         metaAnnotationElementValue
         EOF
         {
-             $ret = $metaAnnotationElementValue.ret;
+            $ret = $metaAnnotationElementValue.ret;
         }
     ;
 
@@ -7128,7 +7128,7 @@ parseRule_MetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
         metaAnnotationElementValues
         EOF
         {
-             $ret = $metaAnnotationElementValues.ret;
+            $ret = $metaAnnotationElementValues.ret;
         }
     ;
 
@@ -7144,7 +7144,7 @@ parseRule_Metaprogram returns [MetaprogramNode ret]
         bsjMetaprogram
         EOF
         {
-             $ret = $bsjMetaprogram.ret;
+            $ret = $bsjMetaprogram.ret;
         }
     ;
 
@@ -7160,7 +7160,7 @@ parseRule_MetaprogramDependency returns [MetaprogramDependencyNode ret]
         metaprogramDependency
         EOF
         {
-             $ret = $metaprogramDependency.ret;
+            $ret = $metaprogramDependency.ret;
         }
     ;
 
@@ -7176,7 +7176,7 @@ parseRule_MetaprogramDependencyDeclaration returns [MetaprogramDependencyDeclara
         metaprogramDependencyDeclaration
         EOF
         {
-             $ret = $metaprogramDependencyDeclaration.ret;
+            $ret = $metaprogramDependencyDeclaration.ret;
         }
     ;
 
@@ -7192,7 +7192,7 @@ parseRule_MetaprogramDependencyDeclarationList returns [MetaprogramDependencyDec
         metaprogramDependencyDeclarationList
         EOF
         {
-             $ret = $metaprogramDependencyDeclarationList.ret;
+            $ret = $metaprogramDependencyDeclarationList.ret;
         }
     ;
 
@@ -7208,7 +7208,7 @@ parseRule_MetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
         metaprogramDependencyList
         EOF
         {
-             $ret = $metaprogramDependencyList.ret;
+            $ret = $metaprogramDependencyList.ret;
         }
     ;
 
@@ -7224,7 +7224,7 @@ parseRule_MetaprogramImportDeclaration returns [MetaprogramImportNode ret]
         metaprogramImport
         EOF
         {
-             $ret = $metaprogramImport.ret;
+            $ret = $metaprogramImport.ret;
         }
     ;
 
@@ -7240,7 +7240,7 @@ parseRule_MetaprogramImportDeclarationList returns [MetaprogramImportListNode re
         metaImportDeclarations
         EOF
         {
-             $ret = $metaImportDeclarations.ret;
+            $ret = $metaImportDeclarations.ret;
         }
     ;
 
@@ -7256,7 +7256,7 @@ parseRule_MetaprogramTargetDeclaration returns [MetaprogramTargetNode ret]
         metaprogramTarget
         EOF
         {
-             $ret = $metaprogramTarget.ret;
+            $ret = $metaprogramTarget.ret;
         }
     ;
 
@@ -7272,7 +7272,7 @@ parseRule_MetaprogramTargetDeclarationList returns [MetaprogramTargetListNode re
         metaprogramTargetList
         EOF
         {
-             $ret = $metaprogramTargetList.ret;
+            $ret = $metaprogramTargetList.ret;
         }
     ;
 
@@ -7288,7 +7288,7 @@ parseRule_MethodDeclaration returns [MethodDeclarationNode ret]
         methodDeclaration
         EOF
         {
-             $ret = $methodDeclaration.ret;
+            $ret = $methodDeclaration.ret;
         }
     ;
 
@@ -7304,7 +7304,7 @@ parseRule_MethodModifiers returns [MethodModifiersNode ret]
         methodModifiers
         EOF
         {
-             $ret = $methodModifiers.ret;
+            $ret = $methodModifiers.ret;
         }
     ;
 
@@ -7320,7 +7320,7 @@ parseRule_Name returns [NameNode ret]
         name
         EOF
         {
-             $ret = $name.ret;
+            $ret = $name.ret;
         }
     ;
 
@@ -7336,7 +7336,7 @@ parseRule_PackageDeclaration returns [PackageDeclarationNode ret]
         packageDeclaration
         EOF
         {
-             $ret = $packageDeclaration.ret;
+            $ret = $packageDeclaration.ret;
         }
     ;
 
@@ -7352,7 +7352,7 @@ parseRule_Preamble returns [MetaprogramPreambleNode ret]
         preamble
         EOF
         {
-             $ret = $preamble.ret;
+            $ret = $preamble.ret;
         }
     ;
 
@@ -7368,7 +7368,7 @@ parseRule_ReferenceTypeList returns [ReferenceTypeListNode ret]
         referenceTypeList
         EOF
         {
-             $ret = $referenceTypeList.ret;
+            $ret = $referenceTypeList.ret;
         }
     ;
 
@@ -7384,7 +7384,7 @@ parseRule_StatementExpressionList returns [StatementExpressionListNode ret]
         statementExpressionList
         EOF
         {
-             $ret = $statementExpressionList.ret;
+            $ret = $statementExpressionList.ret;
         }
     ;
 
@@ -7400,7 +7400,7 @@ parseRule_SwitchBlockStatementGroup returns [CaseNode ret]
         switchBlockStatementGroup
         EOF
         {
-             $ret = $switchBlockStatementGroup.ret;
+            $ret = $switchBlockStatementGroup.ret;
         }
     ;
 
@@ -7416,7 +7416,7 @@ parseRule_SwitchBlockStatementGroups returns [CaseListNode ret]
         switchBlockStatementGroups
         EOF
         {
-             $ret = $switchBlockStatementGroups.ret;
+            $ret = $switchBlockStatementGroups.ret;
         }
     ;
 
@@ -7432,7 +7432,7 @@ parseRule_Type returns [TypeNode ret]
         type
         EOF
         {
-             $ret = $type.ret;
+            $ret = $type.ret;
         }
     ;
 
@@ -7448,7 +7448,7 @@ parseRule_TypeArguments returns [TypeArgumentListNode ret]
         typeArguments
         EOF
         {
-             $ret = $typeArguments.ret;
+            $ret = $typeArguments.ret;
         }
     ;
 
@@ -7464,7 +7464,7 @@ parseRule_TypeDeclaration returns [TypeDeclarationNode ret]
         typeDeclaration
         EOF
         {
-             $ret = $typeDeclaration.ret;
+            $ret = $typeDeclaration.ret;
         }
     ;
 
@@ -7480,7 +7480,7 @@ parseRule_TypeDeclarations returns [TypeDeclarationListNode ret]
         typeDeclarations
         EOF
         {
-             $ret = $typeDeclarations.ret;
+            $ret = $typeDeclarations.ret;
         }
     ;
 
@@ -7496,7 +7496,7 @@ parseRule_TypeParameter returns [TypeParameterNode ret]
         typeParameter
         EOF
         {
-             $ret = $typeParameter.ret;
+            $ret = $typeParameter.ret;
         }
     ;
 
@@ -7512,7 +7512,7 @@ parseRule_TypeParameters returns [TypeParameterListNode ret]
         typeParameters
         EOF
         {
-             $ret = $typeParameters.ret;
+            $ret = $typeParameters.ret;
         }
     ;
 
@@ -7528,7 +7528,7 @@ parseRule_VariableDeclarator returns [VariableDeclaratorNode ret]
         variableDeclarator
         EOF
         {
-             $ret = $variableDeclarator.ret;
+            $ret = $variableDeclarator.ret;
         }
     ;
 
@@ -7544,7 +7544,7 @@ parseRule_VariableDeclarators returns [VariableDeclaratorListNode ret]
         variableDeclarators
         EOF
         {
-             $ret = $variableDeclarators.ret;
+            $ret = $variableDeclarators.ret;
         }
     ;
 
@@ -7560,7 +7560,7 @@ parseRule_VariableInitializer returns [VariableInitializerNode ret]
         variableInitializer
         EOF
         {
-             $ret = $variableInitializer.ret;
+            $ret = $variableInitializer.ret;
         }
     ;
 
@@ -7576,7 +7576,7 @@ parseRule_VariableInitializers returns [VariableInitializerListNode ret]
         variableInitializers
         EOF
         {
-             $ret = $variableInitializers.ret;
+            $ret = $variableInitializers.ret;
         }
     ;
 
@@ -7592,7 +7592,7 @@ parseRule_VariableModifiers returns [VariableModifiersNode ret]
         variableModifiers
         EOF
         {
-             $ret = $variableModifiers.ret;
+            $ret = $variableModifiers.ret;
         }
     ;
 
@@ -7608,7 +7608,7 @@ parseRule_Wildcard returns [WildcardTypeNode ret]
         wildcard
         EOF
         {
-             $ret = $wildcard.ret;
+            $ret = $wildcard.ret;
         }
     ;
 
