@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.user.BsjUserDiagnosticListener;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypecheckerFactory;
 
 /**
  * Represents a standard context implementation.
@@ -25,12 +26,14 @@ public class ContextImpl<T extends MetaprogramAnchorNode<U>, U extends Node> imp
 	private BsjUserDiagnosticListener diagnosticListener;
 	/** The compilation unit loader for this context. */
 	private CompilationUnitLoader compilationUnitLoader;
+	/** The typechecker factory for this context. */
+	private BsjTypecheckerFactory typecheckerFactory;
 	
 	/**
 	 * Creates a standard context implementation.
 	 */
 	public ContextImpl(T anchor, U replacement, BsjNodeFactory factory, BsjUserDiagnosticListener diagnosticListener,
-			CompilationUnitLoader compilationUnitLoader)
+			CompilationUnitLoader compilationUnitLoader, BsjTypecheckerFactory typecheckerFactory)
 	{
 		super();
 		this.anchor = anchor;
@@ -38,7 +41,8 @@ public class ContextImpl<T extends MetaprogramAnchorNode<U>, U extends Node> imp
 		this.factory = factory;
 		this.diagnosticListener = diagnosticListener;
 		this.compilationUnitLoader = compilationUnitLoader;
-	}
+		this.typecheckerFactory = typecheckerFactory;
+	}	
 
 	@Override
 	public T getAnchor()
@@ -74,5 +78,12 @@ public class ContextImpl<T extends MetaprogramAnchorNode<U>, U extends Node> imp
 	public void setReplacement(U replacement)
 	{
 		this.replacement = replacement;
-	}	
+	}
+
+	@Override
+	public BsjTypecheckerFactory getTypecheckerFactory()
+	{
+		return this.typecheckerFactory;
+	}
+	
 }

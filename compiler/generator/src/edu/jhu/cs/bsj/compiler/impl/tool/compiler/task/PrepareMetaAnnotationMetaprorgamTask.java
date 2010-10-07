@@ -58,7 +58,8 @@ public class PrepareMetaAnnotationMetaprorgamTask
 		Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(
 				this.anchor, null, this.metacompilationContext.getToolkit().getNodeFactory(),
 				new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
-						this.anchor.getStartLocation()), loader);
+						this.anchor.getStartLocation()), loader,
+				this.metacompilationContext.getToolkit().getTypecheckerFactory());
 
 		MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(
 				new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(

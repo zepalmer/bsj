@@ -209,7 +209,8 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		// now build the metaprogram itself
 		Context<ExplicitMetaprogramAnchorNode<R>, R> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>, R>(
 				anchor, anchor.getDefaultReplacement(factory), factory, new BsjUserDiagnosticTranslatingListener(
-						this.metacompilationContext.getDiagnosticListener(), this.anchor.getStartLocation()), loader);
+						this.metacompilationContext.getDiagnosticListener(), this.anchor.getStartLocation()), loader,
+						this.metacompilationContext.getToolkit().getTypecheckerFactory());
 
 		Metaprogram<ExplicitMetaprogramAnchorNode<R>, R> metaprogram = compileMetaprogram(metaprogramNode,
 				anchor.getClass().getName(), anchor.getReplacementType().getName(),
