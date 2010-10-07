@@ -671,14 +671,7 @@ arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
  */
 
 /* This rule parses a BSJ metaprogram. */
-bsjMetaprogram returns [MetaprogramNode ret]
-        scope Rule;
-        @init {
-            ruleStart("bsjMetaprogram");
-        }
-        @after {
-            ruleStop();
-        }
+bsjMetaprogram /*%% standardRuleIntro= type=MetaprogramNode %%*/
     :
         '[:'
         preamble
@@ -734,14 +727,7 @@ preamble returns [MetaprogramPreambleNode ret]
         )?
     ;
 
-metaprogramImport returns [MetaprogramImportNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramImport");
-        }
-        @after {
-            ruleStop();
-        }
+metaprogramImport /*%% standardRuleIntro= type=MetaprogramImportNode %%*/
     :   
         '#import'
         importBody
@@ -802,14 +788,7 @@ metaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationLi
         )+
     ;
 
-metaprogramDependencyDeclaration returns [MetaprogramDependencyDeclarationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramDependencyDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+metaprogramDependencyDeclaration /*%% standardRuleIntro= type=MetaprogramDependencyDeclarationNode %%*/
     :   
         '#depends'
         metaprogramDependencyList
@@ -887,14 +866,7 @@ metaprogramTargetList returns [MetaprogramTargetListNode ret]
         )+
     ;
 
-metaprogramTarget returns [MetaprogramTargetNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramTarget");
-        }
-        @after {
-            ruleStop();
-        }
+metaprogramTarget /*%% standardRuleIntro= type=MetaprogramTargetNode %%*/
     :   
         '#target'
         identifierList
@@ -904,14 +876,7 @@ metaprogramTarget returns [MetaprogramTargetNode ret]
         }
     ;
 
-metaprogramTargetName returns [NameNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaprogramTargetName");
-        }
-        @after {
-            ruleStop();
-        }
+metaprogramTargetName /*%% standardRuleIntro= type=NameNode %%*/
     :
         name
         {
@@ -944,14 +909,7 @@ identifierList returns [IdentifierListNode ret]
         ','?
     ;
         
-typeDeclarationBsjMetaprogramAnchor returns [TypeDeclarationMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeDeclarationBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
+typeDeclarationBsjMetaprogramAnchor /*%% standardRuleIntro= type=TypeDeclarationMetaprogramAnchorNode %%*/
     :
         bsjMetaprogram
         {
@@ -959,14 +917,7 @@ typeDeclarationBsjMetaprogramAnchor returns [TypeDeclarationMetaprogramAnchorNod
         }
     ;    
 
-annotationMemberBsjMetaprogramAnchor returns [AnnotationMemberMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotationMemberBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
+annotationMemberBsjMetaprogramAnchor /*%% standardRuleIntro= type=AnnotationMemberMetaprogramAnchorNode %%*/
     :
         bsjMetaprogram
         {
@@ -974,14 +925,7 @@ annotationMemberBsjMetaprogramAnchor returns [AnnotationMemberMetaprogramAnchorN
         }
     ;
 
-anonymousClassMemberBsjMetaprogramAnchor returns [AnonymousClassMemberMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("anonymousClassMemberBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
+anonymousClassMemberBsjMetaprogramAnchor /*%% standardRuleIntro= type=AnonymousClassMemberMetaprogramAnchorNode %%*/
     :
         bsjMetaprogram
         {
@@ -989,14 +933,7 @@ anonymousClassMemberBsjMetaprogramAnchor returns [AnonymousClassMemberMetaprogra
         }
     ;
 
-classMemberBsjMetaprogramAnchor returns [ClassMemberMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("classMemberBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
+classMemberBsjMetaprogramAnchor /*%% standardRuleIntro= type=ClassMemberMetaprogramAnchorNode %%*/
     :
         bsjMetaprogram
         {
@@ -1004,14 +941,7 @@ classMemberBsjMetaprogramAnchor returns [ClassMemberMetaprogramAnchorNode ret]
         }
     ;
 
-interfaceMemberBsjMetaprogramAnchor returns [InterfaceMemberMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("interfaceMemberBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
+interfaceMemberBsjMetaprogramAnchor /*%% standardRuleIntro= type=InterfaceMemberMetaprogramAnchorNode %%*/
     :
         bsjMetaprogram
         {
@@ -1019,14 +949,7 @@ interfaceMemberBsjMetaprogramAnchor returns [InterfaceMemberMetaprogramAnchorNod
         }
     ;
 
-blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("blockStatementBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
+blockStatementBsjMetaprogramAnchor /*%% standardRuleIntro= type=BlockStatementMetaprogramAnchorNode %%*/
     :
         bsjMetaprogram
         {
@@ -1114,14 +1037,7 @@ anyAnnotations returns [MetaAnnotationListNode metaAnnotations, AnnotationListNo
 //     public void foo() { }
 // This rule would parse
 //     @@Test("foo")
-metaAnnotation returns [MetaAnnotationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaAnnotation");
-        }
-        @after {
-            ruleStop();
-        }
+metaAnnotation /*%% standardRuleIntro= type=MetaAnnotationNode %%*/
     :   
         {configuration.getMetaAnnotationsSupported()}?=>
         (
@@ -1190,14 +1106,7 @@ metaAnnotationElementValuePairs returns [MetaAnnotationElementListNode ret]
 //     bar="baz"
 // or
 //     happy=5
-metaAnnotationElementValuePair returns [MetaAnnotationElementNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaAnnotationElementValuePair");
-        }
-        @after {
-            ruleStop();
-        }
+metaAnnotationElementValuePair /*%% standardRuleIntro= type=MetaAnnotationElementNode %%*/
     :
         id=identifier '=' metaAnnotationElementValue
         {
@@ -1214,14 +1123,7 @@ metaAnnotationElementValuePair returns [MetaAnnotationElementNode ret]
 //    {7,8}
 // or
 //    @@Test
-metaAnnotationElementValue returns [MetaAnnotationValueNode ret]
-        scope Rule;
-        @init {
-            ruleStart("metaAnnotationElementValue");
-        }
-        @after {
-            ruleStop();
-        }
+metaAnnotationElementValue /*%% standardRuleIntro= type=MetaAnnotationValueNode %%*/
     :   
         conditionalExpression
         {
@@ -1304,14 +1206,7 @@ metaAnnotationElementValueArrayInitializer returns [MetaAnnotationArrayValueNode
     ;
 
 // Parses a code literal
-codeLiteral returns [RawCodeLiteralNode ret]
-        scope Rule;
-        @init {
-            ruleStart("codeLiteral");
-        }
-        @after {
-            ruleStop();
-        }
+codeLiteral /*%% standardRuleIntro= type=RawCodeLiteralNode %%*/
     :
         '<:'
         codeLiteralBody
@@ -1357,14 +1252,7 @@ codeLiteralBody returns [List<BsjTokenImpl> ret]
     ;
 
 // This rule matches exactly one token which is not a code literal delimiter
-anyNonCodeLiteralToken returns [BsjTokenImpl ret]
-        scope Rule;
-        @init {
-            ruleStart("anyNonCodeLiteralToken");
-        }
-        @after {
-            ruleStop();
-        }
+anyNonCodeLiteralToken /*%% standardRuleIntro= type=BsjTokenImpl %%*/
     :
         ~(CODELITERAL_START | CODELITERAL_STOP)
         {
@@ -1524,14 +1412,7 @@ importBody returns [boolean staticImport, boolean onDemand, NameNode name]
         }
     ;
 
-importDeclaration returns [ImportNode ret]
-        scope Rule;
-        @init {
-            ruleStart("importDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+importDeclaration /*%% standardRuleIntro= type=ImportNode %%*/
     :   
         'import'
         importBody
@@ -1595,14 +1476,7 @@ typeDeclarations returns [TypeDeclarationListNode ret]
         )+
     ;
 
-typeDeclaration returns [TypeDeclarationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+typeDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
     :
         classOrInterfaceDeclaration
         {
@@ -1620,14 +1494,7 @@ typeDeclaration returns [TypeDeclarationNode ret]
         }
     ;
 
-noOp returns [NoOperationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("noOp");
-        }
-        @after {
-            ruleStop();
-        }
+noOp /*%% standardRuleIntro= type=NoOperationNode %%*/
     :
         optionalMetaAnnotationList
         ';'
@@ -1636,14 +1503,7 @@ noOp returns [NoOperationNode ret]
         }
     ;
 
-classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("classOrInterfaceDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+classOrInterfaceDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
     :
         (classHeader | enumHeader) => classDeclaration
         {
@@ -1781,14 +1641,7 @@ modifiers[boolean accessAllowed, Modifier... mods]
         )*
     ;
 
-annotationMethodModifiers returns [AnnotationMethodModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotationMethodModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+annotationMethodModifiers /*%% standardRuleIntro= type=AnnotationMethodModifiersNode %%*/
     :
         modifiers[false, Modifier.PUBLIC, Modifier.ABSTRACT]
         {
@@ -1796,14 +1649,7 @@ annotationMethodModifiers returns [AnnotationMethodModifiersNode ret]
         }
     ;
 
-annotationModifiers returns [AnnotationModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotationModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+annotationModifiers /*%% standardRuleIntro= type=AnnotationModifiersNode %%*/
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.STRICTFP]
         {
@@ -1816,14 +1662,7 @@ annotationModifiers returns [AnnotationModifiersNode ret]
         }
     ;
     
-classModifiers returns [ClassModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("classModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+classModifiers /*%% standardRuleIntro= type=ClassModifiersNode %%*/
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.STRICTFP]
         {
@@ -1838,14 +1677,7 @@ classModifiers returns [ClassModifiersNode ret]
         }
     ;
     
-constantModifiers returns [ConstantModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("constantModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+constantModifiers /*%% standardRuleIntro= type=ConstantModifiersNode %%*/
     :
         modifiers[false, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL]
         {
@@ -1855,14 +1687,7 @@ constantModifiers returns [ConstantModifiersNode ret]
         }
     ;
 
-constructorModifiers returns [ConstructorModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("constructorModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+constructorModifiers /*%% standardRuleIntro= type=ConstructorModifiersNode %%*/
     :
         modifiers[true]
         {
@@ -1871,14 +1696,7 @@ constructorModifiers returns [ConstructorModifiersNode ret]
         }
     ;
     
-enumConstantModifiers returns [EnumConstantModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("enumConstantModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+enumConstantModifiers /*%% standardRuleIntro= type=EnumConstantModifiersNode %%*/
     :
         modifiers[false]
         {
@@ -1888,14 +1706,7 @@ enumConstantModifiers returns [EnumConstantModifiersNode ret]
         }
     ;
 
-enumModifiers returns [EnumModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("enumModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+enumModifiers /*%% standardRuleIntro= type=EnumModifiersNode %%*/
     :
         modifiers[true, Modifier.STATIC, Modifier.STRICTFP]
         {
@@ -1907,14 +1718,7 @@ enumModifiers returns [EnumModifiersNode ret]
         }
     ;
     
-fieldModifiers returns [FieldModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("fieldModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+fieldModifiers /*%% standardRuleIntro= type=FieldModifiersNode %%*/
     :
         modifiers[true, Modifier.STATIC, Modifier.FINAL, Modifier.TRANSIENT, Modifier.VOLATILE]
         {
@@ -1929,14 +1733,7 @@ fieldModifiers returns [FieldModifiersNode ret]
         }
     ;
     
-inlineClassModifiers returns [LocalClassModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("inlineClassModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+inlineClassModifiers /*%% standardRuleIntro= type=LocalClassModifiersNode %%*/
     :
         modifiers[false, Modifier.ABSTRACT, Modifier.FINAL, Modifier.STRICTFP]
         {
@@ -1949,14 +1746,7 @@ inlineClassModifiers returns [LocalClassModifiersNode ret]
         }
     ;
     
-interfaceModifiers returns [InterfaceModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("interfaceModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+interfaceModifiers /*%% standardRuleIntro= type=InterfaceModifiersNode %%*/
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.STRICTFP]
         {
@@ -1969,14 +1759,7 @@ interfaceModifiers returns [InterfaceModifiersNode ret]
         }
     ;
     
-methodModifiers returns [MethodModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("methodModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+methodModifiers /*%% standardRuleIntro= type=MethodModifiersNode %%*/
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.SYNCHRONIZED, Modifier.NATIVE,
             Modifier.STRICTFP]
@@ -1994,14 +1777,7 @@ methodModifiers returns [MethodModifiersNode ret]
         }
     ;
     
-variableModifiers returns [VariableModifiersNode ret]
-        scope Rule;
-        @init {
-            ruleStart("variableModifiers");
-        }
-        @after {
-            ruleStop();
-        }
+variableModifiers /*%% standardRuleIntro= type=VariableModifiersNode %%*/
     :
         modifiers[false, Modifier.FINAL]
         {
@@ -2502,14 +2278,7 @@ interfaceBody returns [InterfaceBodyNode ret]
         '}'
     ;
 
-initializerBlock returns [InitializerDeclarationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("initializerBlock");
-        }
-        @after {
-            ruleStop();
-        }
+initializerBlock /*%% standardRuleIntro= type=InitializerDeclarationNode %%*/
     :
         optionalMetaAnnotationList
         staticText='static'?
@@ -2542,14 +2311,7 @@ classBodyDeclarations returns [ClassMemberListNode ret]
         )+
     ;
     
-classBodyDeclaration returns [ClassMemberNode ret]
-        scope Rule;
-        @init {
-            ruleStart("classBodyDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+classBodyDeclaration /*%% standardRuleIntro= type=ClassMemberNode %%*/
     :
         /* This has to go at the top so it overrides the anonymousClassMemberBsjMetaprogramAnchor
          * Otherwise, it would be impossible to create a metaprogram that could replace itself with an initializer or
@@ -2600,14 +2362,7 @@ anonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
         )+
     ;
     
-anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
-        scope Rule;
-        @init {
-            ruleStart("anonymousClassBodyDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+anonymousClassBodyDeclaration /*%% standardRuleIntro= type=AnonymousClassMemberNode %%*/
     :
         noOp
         {
@@ -2630,14 +2385,7 @@ anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
         }
     ;
 
-memberDecl returns [AnonymousClassMemberNode ret]
-        scope Rule;
-        @init {
-            ruleStart("memberDecl");
-        }
-        @after {
-            ruleStop();
-        }
+memberDecl /*%% standardRuleIntro= type=AnonymousClassMemberNode %%*/
     :    
         (fieldHeader)=>fieldDeclaration
         {
@@ -2660,14 +2408,7 @@ memberDecl returns [AnonymousClassMemberNode ret]
         }
     ;
 
-methodReturnType returns [TypeNode ret]
-        scope Rule;
-        @init {
-            ruleStart("methodReturnType");
-        }
-        @after {
-            ruleStop();
-        }
+methodReturnType /*%% standardRuleIntro= type=TypeNode %%*/
     :
         type
         {
@@ -2806,14 +2547,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         }        
     ;
 
-fieldDeclaration returns [FieldDeclarationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("fieldDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+fieldDeclaration /*%% standardRuleIntro= type=FieldDeclarationNode %%*/
     :   
         javadoc fieldModifiers
         type
@@ -2848,14 +2582,7 @@ interfaceBodyDeclarations returns [InterfaceMemberListNode ret]
         )+
     ;
 
-interfaceBodyDeclaration returns [InterfaceMemberNode ret]
-        scope Rule;
-        @init {
-            ruleStart("interfaceBodyDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+interfaceBodyDeclaration /*%% standardRuleIntro= type=InterfaceMemberNode %%*/
     :
         constantDeclaration
         {
@@ -3051,14 +2778,7 @@ unparameterizedTypeList returns [UnparameterizedTypeListNode ret]
         )*
     ;
 
-throwsClause returns [UnparameterizedTypeListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("throwsClause");
-        }
-        @after {
-            ruleStop();
-        }
+throwsClause /*%% standardRuleIntro= type=UnparameterizedTypeListNode %%*/
     :
         THROWS
         unparameterizedTypeList
@@ -3067,14 +2787,7 @@ throwsClause returns [UnparameterizedTypeListNode ret]
         }
     ;
 
-referenceType returns [ReferenceTypeNode ret]
-        scope Rule;
-        @init {
-            ruleStart("referenceType");
-        }
-        @after {
-            ruleStop();
-        }
+referenceType /*%% standardRuleIntro= type=ReferenceTypeNode %%*/
     :
         classOrInterfaceType
         {
@@ -3101,14 +2814,7 @@ referenceType returns [ReferenceTypeNode ret]
 //     Comparator<String>
 //     Map.Entry<K,V>
 //     List<String>[] (even though this generates a warning later)
-type returns [TypeNode ret]
-        scope Rule;
-        @init {
-            ruleStart("type");
-        }
-        @after {
-            ruleStop();
-        }
+type /*%% standardRuleIntro= type=TypeNode %%*/
     :   
         (
             classOrInterfaceType
@@ -3419,14 +3125,7 @@ normalParameterDecl returns [VariableNode ret]
         }
     ;
 
-ellipsisParameterDecl returns [VariableNode ret]
-        scope Rule;
-        @init {
-            ruleStart("ellipsisParameterDecl");
-        }
-        @after {
-            ruleStop();
-        }
+ellipsisParameterDecl /*%% standardRuleIntro= type=VariableNode %%*/
     :
         mod=variableModifiers t=type '...' id=identifier
         {
@@ -3434,14 +3133,7 @@ ellipsisParameterDecl returns [VariableNode ret]
         }
     ;
 
-alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("alternateConstructorInvocation");
-        }
-        @after {
-            ruleStop();
-        }
+alternateConstructorInvocation /*%% standardRuleIntro= type=AlternateConstructorInvocationNode %%*/
     :
         nonWildcardTypeArguments? 'this' arguments ';'
         {
@@ -3483,14 +3175,7 @@ superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret
         }
     ;
 
-explicitConstructorInvocation returns [ConstructorInvocationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("explicitConstructorInvocation");
-        }
-        @after {
-            ruleStop();
-        }
+explicitConstructorInvocation /*%% standardRuleIntro= type=ConstructorInvocationNode %%*/
     :
         alternateConstructorInvocation
         {
@@ -3529,14 +3214,7 @@ annotations returns [AnnotationListNode ret]
 //     public void foo() { }
 // This rule would parse
 //     @Test("foo")
-annotation returns [AnnotationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotation");
-        }
-        @after {
-            ruleStop();
-        }
+annotation /*%% standardRuleIntro= type=AnnotationNode %%*/
     :   
         '@' name
         {
@@ -3602,14 +3280,7 @@ elementValuePairs returns [AnnotationElementListNode ret]
 //     bar="baz"
 // or
 //     happy=5
-elementValuePair returns [AnnotationElementNode ret]
-        scope Rule;
-        @init {
-            ruleStart("elementValuePair");
-        }
-        @after {
-            ruleStop();
-        }
+elementValuePair /*%% standardRuleIntro= type=AnnotationElementNode %%*/
     :
         id=identifier '=' elementValue
         {
@@ -3626,14 +3297,7 @@ elementValuePair returns [AnnotationElementNode ret]
 //    {7,8}
 // or
 //    @Test
-elementValue returns [AnnotationValueNode ret]
-        scope Rule;
-        @init {
-            ruleStart("elementValue");
-        }
-        @after {
-            ruleStop();
-        }
+elementValue /*%% standardRuleIntro= type=AnnotationValueNode %%*/
     :   
         conditionalExpression
         {
@@ -3710,14 +3374,7 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
 /**
  * Annotation declaration.
  */
-annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotationTypeDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+annotationTypeDeclaration /*%% standardRuleIntro= type=AnnotationDeclarationNode %%*/
     :   
         javadoc annotationModifiers '@'
         'interface'
@@ -3772,14 +3429,7 @@ annotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
         )+ 
     ;
 
-annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotationTypeElementDeclaration");
-        }
-        @after {
-            ruleStop();
-        }
+annotationTypeElementDeclaration /*%% standardRuleIntro= type=AnnotationMemberNode %%*/
     :   
         annotationMethodDeclaration
         {
@@ -3854,14 +3504,7 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         }
         ;
 
-block returns [BlockStatementListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("block");
-        }
-        @after {
-            ruleStop();
-        }
+block /*%% standardRuleIntro= type=BlockStatementListNode %%*/
     :   
         '{'
         optionalBlockStatementList
@@ -3913,14 +3556,7 @@ blockStatementList returns [BlockStatementListNode ret]
     ;
 
 // Parses a statement from a block of statements.
-blockStatement returns [BlockStatementNode ret]
-        scope Rule;
-        @init {
-            ruleStart("blockStatement");
-        }
-        @after {
-            ruleStop();
-        }
+blockStatement /*%% standardRuleIntro= type=BlockStatementNode %%*/
     :   
         (localVariableHeader)=>localVariableDeclarationStatement
         {
@@ -3946,14 +3582,7 @@ blockStatement returns [BlockStatementNode ret]
 // Parses local variable declaration statement.
 // For example, this rule would match
 //     int x = 5, y;
-localVariableDeclarationStatement returns [LocalVariableDeclarationNode ret]
-        scope Rule;
-        @init {
-            ruleStart("localVariableDeclarationStatement");
-        }
-        @after {
-            ruleStop();
-        }
+localVariableDeclarationStatement /*%% standardRuleIntro= type=LocalVariableDeclarationNode %%*/
     :
         localVariableDeclaration ';'
         {
@@ -4231,14 +3860,7 @@ switchBlockStatementGroup returns [CaseNode ret]
         }
     ;
 
-switchLabel returns [ExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("switchLabel");
-        }
-        @after {
-            ruleStop();
-        }
+switchLabel /*%% standardRuleIntro= type=ExpressionNode %%*/
     :   
         'case' expression ':'
         {
@@ -4310,14 +3932,7 @@ catches returns [CatchListNode ret]
         )+
     ;
 
-catchClause returns [CatchNode ret]
-        scope Rule;
-        @init {
-            ruleStart("catchClause");
-        }
-        @after {
-            ruleStop();
-        }
+catchClause /*%% standardRuleIntro= type=CatchNode %%*/
     :   
         'catch' '(' formalParameter ')'
         block
@@ -4424,14 +4039,7 @@ forstatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret]
 
 // Parses the initializer for a standard for loop.  This may either be a list of variable declarations or a list of
 // initialization expressions.
-forInit returns [ForInitializerNode ret]
-        scope Rule;
-        @init {
-            ruleStart("forInit");
-        }
-        @after {
-            ruleStop();
-        }
+forInit /*%% standardRuleIntro= type=ForInitializerNode %%*/
     :   
         localVariableDeclaration
         {
@@ -4444,14 +4052,7 @@ forInit returns [ForInitializerNode ret]
         }
     ;
 
-parExpression returns [ExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("parExpression");
-        }
-        @after {
-            ruleStop();
-        }
+parExpression /*%% standardRuleIntro= type=ExpressionNode %%*/
     :   
         '(' expression ')'
         {
@@ -4509,14 +4110,7 @@ expressionList returns [ExpressionListNode ret]
 
 /* This rule parses a statement expression.  A statement expression is one of those types of expressions which may be
  * used as a statement (such as x++) but not any other kind of expression (such as ~x). */
-statementExpression returns [StatementExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("statementExpression");
-        }
-        @after {
-            ruleStop();
-        }
+statementExpression /*%% standardRuleIntro= type=StatementExpressionNode %%*/
     :
         // Okay, this is a bit hacky but seriously reduces duplication as well as maintenance.
         // We'll just grab any expression we can.  If it's not a statement expression, we raise a RecognitionException.
@@ -4534,14 +4128,7 @@ statementExpression returns [StatementExpressionNode ret]
         }
     ;
 
-expression returns [ExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("expression");
-        }
-        @after {
-            ruleStop();
-        }
+expression /*%% standardRuleIntro= type=ExpressionNode %%*/
     :   
         conditionalExpression
         {
@@ -4560,14 +4147,7 @@ expression returns [ExpressionNode ret]
     ;
 
 
-assignmentOperator returns [AssignmentOperator ret]
-        scope Rule;
-        @init {
-            ruleStart("assignmentOperator");
-        }
-        @after {
-            ruleStop();
-        }
+assignmentOperator /*%% standardRuleIntro= type=AssignmentOperator %%*/
     :   
         '='
         {
@@ -4631,14 +4211,7 @@ assignmentOperator returns [AssignmentOperator ret]
     ;
 
 
-conditionalExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("conditionalExpression");
-        }
-        @after {
-            ruleStop();
-        }
+conditionalExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         conditionalOrExpression
         {
@@ -4655,14 +4228,7 @@ conditionalExpression returns [NonAssignmentExpressionNode ret]
         )?
     ;
 
-conditionalOrExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("conditionalOrExpression");
-        }
-        @after {
-            ruleStop();
-        }
+conditionalOrExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         e1=conditionalAndExpression
         {
@@ -4679,14 +4245,7 @@ conditionalOrExpression returns [NonAssignmentExpressionNode ret]
         )*
     ;
 
-conditionalAndExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("conditionalAndExpression");
-        }
-        @after {
-            ruleStop();
-        }
+conditionalAndExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         e1=inclusiveOrExpression
         {
@@ -4703,14 +4262,7 @@ conditionalAndExpression returns [NonAssignmentExpressionNode ret]
         )*
     ;
 
-inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("inclusiveOrExpression");
-        }
-        @after {
-            ruleStop();
-        }
+inclusiveOrExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         e1=exclusiveOrExpression
         {
@@ -4727,14 +4279,7 @@ inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
         )*
     ;
 
-exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("exclusiveOrExpression");
-        }
-        @after {
-            ruleStop();
-        }
+exclusiveOrExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         e1=andExpression
         {
@@ -4751,14 +4296,7 @@ exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
         )*
     ;
 
-andExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("andExpression");
-        }
-        @after {
-            ruleStop();
-        }
+andExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         e1=equalityExpression
         {
@@ -4809,14 +4347,7 @@ equalityExpression returns [NonAssignmentExpressionNode ret]
         )*
     ;
 
-instanceOfExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("instanceOfExpression");
-        }
-        @after {
-            ruleStop();
-        }
+instanceOfExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         e1=relationalExpression
         {
@@ -4832,14 +4363,7 @@ instanceOfExpression returns [NonAssignmentExpressionNode ret]
         )?
     ;
 
-relationalExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("relationalExpression");
-        }
-        @after {
-            ruleStop();
-        }
+relationalExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         e1=shiftExpression
         {
@@ -4856,14 +4380,7 @@ relationalExpression returns [NonAssignmentExpressionNode ret]
         )*
     ;
 
-relationalOp returns [BinaryOperator ret]
-        scope Rule;
-        @init {
-            ruleStart("relationalOp");
-        }
-        @after {
-            ruleStop();
-        }
+relationalOp /*%% standardRuleIntro= type=BinaryOperator %%*/
     :    
         '<' '='
         {
@@ -4886,14 +4403,7 @@ relationalOp returns [BinaryOperator ret]
         }         
     ;
 
-shiftExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("shiftExpression");
-        }
-        @after {
-            ruleStop();
-        }
+shiftExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         e1=additiveExpression
         {
@@ -4911,14 +4421,7 @@ shiftExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 
-shiftOp returns [BinaryOperator ret]
-        scope Rule;
-        @init {
-            ruleStart("shiftOp");
-        }
-        @after {
-            ruleStop();
-        }
+shiftOp /*%% standardRuleIntro= type=BinaryOperator %%*/
     :    
         '<' '<'
         {
@@ -5013,14 +4516,7 @@ multiplicativeExpression returns [NonAssignmentExpressionNode ret]
  * NOTE: for '+' and '-', if the next token is int or long literal, then it's not a unary expression.
  *       it's a literal with signed value. INTLITERAL AND LONG LITERAL are added here for this.
  */
-unaryExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("unaryExpression");
-        }
-        @after {
-            ruleStop();
-        }
+unaryExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         '+'  e=unaryExpression
         {
@@ -5066,14 +4562,7 @@ unaryExpression returns [NonAssignmentExpressionNode ret]
         }
     ;
 
-unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("unaryExpressionNotPlusMinus");
-        }
-        @after {
-            ruleStop();
-        }
+unaryExpressionNotPlusMinus /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :   
         '~' unaryExpression
         {
@@ -5100,14 +4589,7 @@ unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
         }
     ;
 
-castExpression returns [TypeCastNode ret]
-        scope Rule;
-        @init {
-            ruleStart("castExpression");
-        }
-        @after {
-            ruleStop();
-        }
+castExpression /*%% standardRuleIntro= type=TypeCastNode %%*/
     :   
         '(' type ')' unaryExpressionNotPlusMinus
         {
@@ -5117,14 +4599,7 @@ castExpression returns [TypeCastNode ret]
         }
     ;
 
-postfixExpression returns [NonAssignmentExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("postfixExpression");
-        }
-        @after {
-            ruleStop();
-        }
+postfixExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :
         primary
         {
@@ -5179,14 +4654,7 @@ primary returns [PrimaryExpressionNode ret]
         }
     ;
 
-restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
-        scope Rule;
-        @init {
-            ruleStart("restrictedPrimary");
-        }
-        @after {
-            ruleStop();
-        }
+restrictedPrimary /*%% standardRuleIntro= type=RestrictedPrimaryExpressionNode %%*/
     :
         (
             // lexical literal
@@ -5580,14 +5048,7 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
         }
     ;
 
-variableAccessByName returns [VariableAccessNode ret]
-        scope Rule;
-        @init {
-            ruleStart("variableAccessByName");
-        }
-        @after {
-            ruleStop();
-        }
+variableAccessByName /*%% standardRuleIntro= type=VariableAccessNode %%*/
     :
         a=identifier
         {
@@ -5670,14 +5131,7 @@ primitiveClassLiteral returns [ClassLiteralNode ret]
         '.' 'class'
     ;
 
-voidClassLiteral returns [ClassLiteralNode ret]
-        scope Rule;
-        @init {
-            ruleStart("voidClassLiteral");
-        }
-        @after {
-            ruleStop();
-        }
+voidClassLiteral /*%% standardRuleIntro= type=ClassLiteralNode %%*/
     :
         'void' '.' 'class'
         {
@@ -5746,14 +5200,7 @@ arrayCreator returns [ArrayCreationNode ret]
         }        
     ;
 
-variableInitializer returns [VariableInitializerNode ret]
-        scope Rule;
-        @init {
-            ruleStart("variableInitializer");
-        }
-        @after {
-            ruleStop();
-        }
+variableInitializer /*%% standardRuleIntro= type=VariableInitializerNode %%*/
     :   
         arrayInitializer
         {
@@ -5813,33 +5260,20 @@ arrayInitializer returns [ArrayInitializerNode ret]
     ;
 
 
-createdName returns [BaseTypeNode ret]
-        scope Rule;
-        @init {
-            ruleStart("createdName");
-        }
-        @after {
-            ruleStop();
-        }
+createdName /*%% standardRuleIntro= type=BaseTypeNode %%*/
     :   
         classOrInterfaceType
         {
             $ret = $classOrInterfaceType.ret;
         }
-    |   primitiveType
+    |   
+        primitiveType
         {
             $ret = $primitiveType.ret;
         }    
     ;
 
-nonWildcardTypeArguments returns [ReferenceTypeListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("nonWildcardTypeArguments");
-        }
-        @after {
-            ruleStop();
-        }
+nonWildcardTypeArguments /*%% standardRuleIntro= type=ReferenceTypeListNode %%*/
     :   
         '<' referenceTypeList
         {
@@ -6035,14 +5469,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
         }
     ;
 
-identifier returns [IdentifierNode ret]
-        scope Rule;
-        @init {
-            ruleStart("identifier");
-        }
-        @after {
-            ruleStop();
-        }
+identifier /*%% standardRuleIntro= type=IdentifierNode %%*/
     :
         IDENTIFIER
         {

@@ -20,6 +20,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -27,6 +29,7 @@ import org.xml.sax.SAXException;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.ConcatenatingIterable;
 import edu.jhu.cs.bsj.compiler.impl.utils.NullOutputStream;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.utils.generator.TypeDefinition.Mode;
@@ -4251,12 +4254,155 @@ public class SourceGenerator
 		public void finish() throws IOException
 		{
 			String grammarTemplate = readGrammarTemplate();
-			PrintStream pps = openOutputGrammar();
+			PrintStream ps = openOutputGrammar();
 
-			// TODO: perform reprocessing
+			Pattern templatePattern = Pattern.compile("/\\*%% *([a-z][a-zA-Z]*)(.)(.)((?:[^%]|(?:%[^%]))*) *%%\\*/",
+					Pattern.MULTILINE);
+			Matcher matcher;
+			while ((matcher = templatePattern.matcher(grammarTemplate)).find())
+			{
+				final String templateCommand = matcher.group(0);
+				final String operation = matcher.group(1);
+				final char argValDelimiter = matcher.group(2).charAt(0);
+				final String parameterDelimiter = matcher.group(3);
+				final String argValPairs = matcher.group(4);
 
-			pps.println(grammarTemplate);
-			pps.close();
+				final String[] parameters = argValPairs.split(Pattern.quote(parameterDelimiter));
+				final Map<String, String> parameterMap = new HashMap<String, String>();
+				for (String parameter : parameters)
+				{
+					final int index = parameter.indexOf(argValDelimiter);
+					if (index == -1)
+					{
+						throw new IllegalStateException("Missing argval delimiter '" + argValDelimiter
+								+ "' in parameter " + parameter + " of the following template:\n" + templateCommand);
+					}
+					String paramName = parameter.substring(0, index);
+					String paramVal = parameter.substring(index + 1);
+					parameterMap.put(paramName, paramVal);
+				}
+
+				TemplateCommand command;
+				if (operation.equals("standardRuleIntro"))
+				{
+					command = new StandardRuleIntroCommand(templateCommand, parameterMap);
+				} else
+				{
+					throw new IllegalStateException("Unrecognized operation " + operation);
+				}
+				
+				grammarTemplate = command.executeCommand(grammarTemplate, matcher.start(), matcher.end());
+			}
+
+			ps.println(grammarTemplate);
+			ps.close();
+		}
+
+		private static abstract class TemplateCommand
+		{
+			private String templateCommand;
+			private Map<String, String> parameters;
+			private Set<String> parameterAccessSet;
+
+			public TemplateCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super();
+				this.templateCommand = templateCommand;
+				this.parameters = parameters;
+				this.parameterAccessSet = new HashSet<String>();
+			}
+
+			protected String getParameter(String name)
+			{
+				this.parameterAccessSet.add(name);
+				if (this.parameters.containsKey(name))
+				{
+					return this.parameters.get(name);
+				} else
+				{
+					throw new IllegalStateException(this.getClass().getName() + ": requested non-existent parameter "
+							+ name + " at template command as follows:\n" + templateCommand);
+				}
+			}
+
+			protected void assertAccessedAllParameters()
+			{
+				Set<String> all = new HashSet<String>(this.parameters.keySet());
+				all.removeAll(this.parameterAccessSet);
+				if (all.size() > 0)
+				{
+					throw new IllegalStateException(this.getClass().getName() + ": unexpected parameters " + all
+							+ " at template command as follows:\n" + templateCommand);
+				}
+			}
+
+			protected abstract String executeCommand(String grammarTemplate, int startIndex, int endIndex);
+
+			protected Pair<Integer, String> getTokenBefore(String s, int index)
+			{
+				while (index >= 0 && !Character.isWhitespace(s.charAt(index)))
+					index--;
+				while (index >= 0 && Character.isWhitespace(s.charAt(index)))
+					index--;
+				final int lastIndex = index + 1;
+				while (index >= 0 && !Character.isWhitespace(s.charAt(index)))
+					index--;
+				index++;
+				return new Pair<Integer, String>(index, s.substring(index, lastIndex));
+			}
+
+			protected Pair<Integer, String> getTokenAfter(String s, int index)
+			{
+				while (index < s.length() && !Character.isWhitespace(s.charAt(index)))
+					index++;
+				while (index < s.length() && Character.isWhitespace(s.charAt(index)))
+					index++;
+				final int firstIndex = index;
+				while (index < s.length() && !Character.isWhitespace(s.charAt(index)))
+					index++;
+				return new Pair<Integer, String>(index, s.substring(firstIndex, index));
+			}
+		}
+
+		private static class StandardRuleIntroCommand extends TemplateCommand
+		{
+			public StandardRuleIntroCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex)
+			{
+				String returnTypeName = getParameter("type");
+				assertAccessedAllParameters();
+
+				Pair<Integer, String> before = getTokenBefore(grammarTemplate, startIndex);
+				Pair<Integer, String> after = getTokenAfter(grammarTemplate, endIndex);
+				if (!after.getSecond().equals(":"))
+				{
+					throw new IllegalStateException(
+							"Invalid use of standard rule introduction: missing : following command");
+				}
+
+				final int newStartIndex = before.getFirst();
+				final int newEndIndex = after.getFirst();
+				final String ruleName = before.getSecond();
+
+				// @formatter:off
+				String replacement = ruleName + " returns [" + returnTypeName + " ret]\n" +
+						"        scope Rule;\n" +
+						"        @init {\n" +
+						"            ruleStart(\"" + ruleName + "\");\n" +
+						"        }\n" +
+						"        @after {\n" +
+						"            ruleStop();\n" +
+						"        }\n" +
+						"    :";
+				// @formatter:on
+				return grammarTemplate.substring(0, newStartIndex) + replacement
+						+ grammarTemplate.substring(newEndIndex);
+			}
 		}
 	}
 }

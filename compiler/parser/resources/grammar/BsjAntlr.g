@@ -5826,7 +5826,8 @@ createdName returns [BaseTypeNode ret]
         {
             $ret = $classOrInterfaceType.ret;
         }
-    |   primitiveType
+    |   
+        primitiveType
         {
             $ret = $primitiveType.ret;
         }    
