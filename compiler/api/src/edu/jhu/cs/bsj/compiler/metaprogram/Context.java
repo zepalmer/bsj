@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.user.BsjUserDiagnosticListener;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypecheckerFactory;
 
 /**
  * Represents the execution context for a metaprogram. Instances of this interface are provided to metaprograms to allow
@@ -33,6 +34,12 @@ public interface Context<T extends MetaprogramAnchorNode<U>, U extends Node>
 	 * @return The node factory to use.
 	 */
 	public BsjNodeFactory getFactory();
+	
+	/**
+	 * Retrieves a typechecker factory which can be used to create typecheckers for the metaprogram.
+	 * @return A factory for typechecker creation.
+	 */
+	public BsjTypecheckerFactory getTypecheckerFactory();
 
 	/**
 	 * Retrieves the listener for user diagnostics. Metaprograms should create and provide diagnostic objects to this
