@@ -2281,30 +2281,15 @@ variableDeclarator returns [VariableDeclaratorNode ret]
         }
     ;
 
-unparameterizedTypeList returns [UnparameterizedTypeListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("unparameterizedTypeList");
-            List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeUnparameterizedTypeListNode(list);
-            ruleStop();
-        }
+unparameterizedType /*%% standardRuleIntro= type=UnparameterizedTypeNode %%*/
     :
-        THROWS // TODO: does this belong here?
-        a=name
+        name
         {
-            list.add(factory.makeUnparameterizedTypeNode($a.ret));
+            $ret = factory.makeUnparameterizedTypeNode($name.ret);
         }
-        (
-            ',' b=name
-            {
-                list.add(factory.makeUnparameterizedTypeNode($b.ret));
-            }
-        )*
     ;
+
+unparameterizedTypeList /*%% generateListRule= type=UnparameterizedTypeListNode separator=',' %%*/ :;
 
 throwsClause /*%% standardRuleIntro= type=UnparameterizedTypeListNode %%*/
     :

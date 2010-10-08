@@ -3392,6 +3392,21 @@ variableDeclarator returns [VariableDeclaratorNode ret]
         }
     ;
 
+unparameterizedType returns [UnparameterizedTypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("unparameterizedType");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        name
+        {
+            $ret = factory.makeUnparameterizedTypeNode($name.ret);
+        }
+    ;
+
 unparameterizedTypeList returns [UnparameterizedTypeListNode ret]
         scope Rule;
         @init {
@@ -3399,23 +3414,46 @@ unparameterizedTypeList returns [UnparameterizedTypeListNode ret]
             List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list
+            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
             $ret = factory.makeUnparameterizedTypeListNode(list);
             ruleStop();
         }
     :
-        THROWS // TODO: does this belong here?
-        a=name
+        a=unparameterizedType
         {
-            list.add(factory.makeUnparameterizedTypeNode($a.ret));
+            list.add($a.ret);
         }
         (
-            ',' b=name
+            ','
+            b=unparameterizedType
             {
-                list.add(factory.makeUnparameterizedTypeNode($b.ret));
+                list.add($b.ret);
             }
         )*
     ;
+
+optionalUnparameterizedTypeList returns [UnparameterizedTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalUnparameterizedTypeList");
+            $ret = null;
+        }
+        @after {
+            if ($ret == null)
+            {
+                $ret = factory.makeUnparameterizedTypeListNode();
+            }
+            ruleStop();
+        }
+    :
+        (
+            unparameterizedTypeList
+            {
+                $ret = $unparameterizedTypeList.ret;
+            }
+        )?
+    ;
+
 
 throwsClause returns [UnparameterizedTypeListNode ret]
         scope Rule;
