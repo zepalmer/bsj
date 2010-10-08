@@ -88,6 +88,31 @@ public class SourceGenerator
 	private static final Set<String> CLONEABLE_NAMES = Collections.unmodifiableSet(new HashSet<String>(
 			Arrays.<String> asList()));
 
+	/* @formatter:off */
+	/**
+	 * A comment which is inserted into generated files to warn developers of their status.
+	 */
+	private static final String GENERATION_COMMENT =
+        "WARNING: THIS FILE IS GENERATED.  Do not make any changes to this file\n" +
+        "directly; it was generated from the BSJ source generator project.  If changes\n" +
+        "are necessary, changes must be applied either to the source generator\n" +
+        "application or to one of its data files.  The source generator's fully\n" +
+        "qualified name is edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator.\n";
+    /* @formatter:on */
+	private static final String SLASH_STAR_GENERATION_COMMENT;
+	static
+	{
+		StringBuilder sb = new StringBuilder("/*\n");
+		for (String line : GENERATION_COMMENT.split("\n"))
+		{
+			sb.append(" * ");
+			sb.append(line);
+			sb.append('\n');
+		}
+		sb.append(" */\n");
+		SLASH_STAR_GENERATION_COMMENT = sb.toString();
+	}
+
 	private Set<DefinitionHandler> handlers = new HashSet<DefinitionHandler>();
 
 	public static void main(String[] arg) throws Exception
@@ -769,6 +794,7 @@ public class SourceGenerator
 					+ pkg.replaceAll("\\.", File.separator) + File.separator + name);
 			f.getParentFile().mkdirs();
 			PrependablePrintStream ret = new PrependablePrintStream(new FileOutputStream(f), "    ", 0);
+			ret.println(SLASH_STAR_GENERATION_COMMENT);
 			ret.println("package " + pkg + ";");
 			ret.println();
 			printImports(ret, project);
@@ -4314,43 +4340,171 @@ public class SourceGenerator
 			String grammarTemplate = readGrammarTemplate();
 			PrintStream ps = openOutputGrammar();
 
-			Pattern templatePattern = Pattern.compile("/\\*%% *([a-z][a-zA-Z]*)(.)(.)((?:[^%]|(?:%[^%]))*) *%%\\*/",
-					Pattern.MULTILINE);
-			Matcher matcher;
-			while ((matcher = templatePattern.matcher(grammarTemplate)).find())
+			CommandMatch match;
+			while ((match = search(grammarTemplate)) != null)
 			{
-				final String templateCommand = matcher.group(0);
-				final String operation = matcher.group(1);
-				final char argValDelimiter = matcher.group(2).charAt(0);
-				final char parameterDelimiter = matcher.group(3).charAt(0);
-				final String argValPairs = matcher.group(4);
-
-				final Map<String, String> parameterMap = parseParameters(templateCommand, argValDelimiter,
-						parameterDelimiter, argValPairs);
+				final Map<String, String> parameterMap = parseParameters(match.templateCommand, match.argValDelimiter,
+						match.parameterDelimiter, match.argValPairs);
 
 				TemplateCommand command;
-				if (operation.equals("standardRuleIntro"))
+				if (match.operation.equals("templateComment"))
 				{
-					command = new StandardRuleIntroCommand(templateCommand, parameterMap);
-				} else if (operation.equals("generateListRule"))
+					command = new TemplateCommentCommand(match.templateCommand, parameterMap);
+				} else if (match.operation.equals("generationComment"))
 				{
-					command = new GenerateListRuleCommand(templateCommand, parameterMap);
-				} else if (operation.equals("generateParseRule"))
+					command = new GenerationCommentCommand(match.templateCommand, parameterMap);
+				} else if (match.operation.equals("standardRuleIntro"))
 				{
-					command = new GenerateParseRuleCommand(templateCommand, parameterMap);
-				} else if (operation.equals("generateBinaryExpressionRule"))
+					command = new StandardRuleIntroCommand(match.templateCommand, parameterMap);
+				} else if (match.operation.equals("generateListRule"))
 				{
-					command = new GenerateBinaryExpressionRuleCommand(templateCommand, parameterMap);
+					command = new GenerateListRuleCommand(match.templateCommand, parameterMap);
+				} else if (match.operation.equals("generateParseRule"))
+				{
+					command = new GenerateParseRuleCommand(match.templateCommand, parameterMap);
+				} else if (match.operation.equals("generateBinaryExpressionRule"))
+				{
+					command = new GenerateBinaryExpressionRuleCommand(match.templateCommand, parameterMap);
 				} else
 				{
-					throw new IllegalStateException("Unrecognized operation " + operation);
+					throw new IllegalStateException("Unrecognized operation " + match.operation);
 				}
 
-				grammarTemplate = command.executeCommand(grammarTemplate, matcher.start(), matcher.end());
+				grammarTemplate = command.executeCommand(grammarTemplate, match.startIndex, match.stopIndex);
 			}
 
 			ps.println(grammarTemplate);
 			ps.close();
+		}
+
+		private static class CommandMatch
+		{
+			final String templateCommand;
+			final String operation;
+			final char argValDelimiter;
+			final char parameterDelimiter;
+			final String argValPairs;
+			final int startIndex;
+			final int stopIndex;
+
+			public CommandMatch(String templateCommand, String operation, char argValDelimiter,
+					char parameterDelimiter, String argValPairs, int startIndex, int stopIndex)
+			{
+				super();
+				this.templateCommand = templateCommand;
+				this.operation = operation;
+				this.argValDelimiter = argValDelimiter;
+				this.parameterDelimiter = parameterDelimiter;
+				this.argValPairs = argValPairs;
+				this.startIndex = startIndex;
+				this.stopIndex = stopIndex;
+			}
+		}
+
+		/**
+		 * Used because regular expressions were either terribly slow or tended to stack overflow (see Java bug
+		 * #6337993).
+		 */
+		private CommandMatch search(final String template)
+		{
+			// First, find the command comment
+			int index = 0;
+			while (index < template.length())
+			{
+				int findProgress = 0;
+				char[] startChars = "/*%%".toCharArray();
+				while (index < template.length() && findProgress < startChars.length)
+				{
+					char c = template.charAt(index);
+					if (startChars[findProgress] == c)
+					{
+						findProgress++;
+					} else
+					{
+						findProgress = 0;
+					}
+					index++;
+				}
+				if (findProgress < startChars.length)
+				{
+					// Couldn't find a /*%% comment.
+					return null;
+				}
+
+				final int startIndex = index;
+
+				// Now find the end of the comment and see if it matches the correct format
+				char[] stopChars = "*/".toCharArray();
+				findProgress = 0;
+				while (index < template.length() && findProgress < stopChars.length)
+				{
+					char c = template.charAt(index);
+					if (stopChars[findProgress] == c)
+					{
+						findProgress++;
+					} else
+					{
+						findProgress = 0;
+					}
+					index++;
+				}
+				if (findProgress < stopChars.length)
+				{
+					// Couldn't find the end of the comment
+					return null;
+				}
+				index -= stopChars.length;
+				index -= 2;
+				if (!(index > startIndex && template.charAt(index) == '%' && template.charAt(index + 1) == '%'))
+				{
+					// This comment does not end with %%*/, so skip it and look for another one later
+					index += 2 + stopChars.length;
+					continue;
+				}
+				final int stopIndex = index;
+
+				// We now have the command's text
+				final int commandStartIndex = startIndex - 4;
+				final int commandStopIndex = stopIndex + 4;
+				final String templateCommand = template.substring(commandStartIndex, commandStopIndex);
+
+				// Now parse it
+				index = 4;
+				while (index < templateCommand.length() && Character.isWhitespace(templateCommand.charAt(index)))
+				{
+					index++;
+				}
+				final int operationStartIndex = index;
+				while (index < templateCommand.length() && Character.isLetter(templateCommand.charAt(index)))
+				{
+					index++;
+				}
+				final String operation = templateCommand.substring(operationStartIndex, index);
+				if (operation.length() == 0)
+				{
+					throw new IllegalStateException("Could not parse operation for template command " + templateCommand);
+				}
+
+				if (index >= templateCommand.length())
+				{
+					throw new IllegalStateException("Could not find arg-val separator character for template command "
+							+ templateCommand);
+				}
+				final char argValSeparator = templateCommand.charAt(index++);
+
+				if (index >= templateCommand.length())
+				{
+					throw new IllegalStateException(
+							"Could not find parameter separator character for template command " + templateCommand);
+				}
+				final char parameterSeparator = templateCommand.charAt(index++);
+
+				final String argValPairs = templateCommand.substring(index, templateCommand.length() - 4);
+
+				return new CommandMatch(templateCommand, operation, argValSeparator, parameterSeparator, argValPairs,
+						commandStartIndex, commandStopIndex);
+			}
+			return null;
 		}
 
 		private Map<String, String> parseParameters(final String templateCommand, final char argValDelimiter,
@@ -4548,6 +4702,43 @@ public class SourceGenerator
 
 				return new Pair<String, Pair<Integer, Integer>>(ruleName, new Pair<Integer, Integer>(startIndex,
 						endIndex));
+			}
+		}
+
+		private static class TemplateCommentCommand extends TemplateCommand
+		{
+			public TemplateCommentCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
+			{
+				while (endIndex < grammarTemplate.length() && Character.isWhitespace(grammarTemplate.charAt(endIndex)))
+				{
+					endIndex++;
+				}
+				return grammarTemplate.substring(0, startIndex) + grammarTemplate.substring(endIndex);
+			}
+		}
+
+		private static class GenerationCommentCommand extends TemplateCommand
+		{
+			public GenerationCommentCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
+			{
+				while (endIndex < grammarTemplate.length() && Character.isWhitespace(grammarTemplate.charAt(endIndex)))
+				{
+					endIndex++;
+				}
+				return grammarTemplate.substring(0, startIndex) + SLASH_STAR_GENERATION_COMMENT + "\n"
+						+ grammarTemplate.substring(endIndex);
 			}
 		}
 

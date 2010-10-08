@@ -1,3 +1,77 @@
+/*%% templateComment= value="""
+
+    DISCUSSION OF BSJ ANTLR GRAMMAR TEMPLATE FILE
+    =============================================
+    This file is a template which is used by the BSJ source generator to create an ANTLR grammar for the BSJ language.
+    Certain patterns appear in this grammar which require somewhat sophisticated tooling, so a templating system was
+    devised in order to reduce duplicate effort and maintenance burden.
+    
+    Comments of the form used by this comment (starting with /*%% and ending with the reverse) are parsed by the source
+    generator and replaced in-place with other content.  For the remainder of this discussion, the delimiter %% will be
+    used to indicate template commands so as to avoid inadvertently inserting an end-of-comment character sequence.  :)
+    
+    Template comments are of a following form:
+    
+        %% command= name=value name=value ... %%
+    
+    The name of the command must contain only alphabetic characters.  The command can take any sequence of name-value
+    pairs for arguments.  Which arguments are valid is dependent upon the particular command that is invoked; validation
+    occurs in the source generator module which produces the ANTLR grammar.  Arguments which are not used by the
+    appropriate command submodule cause the source generator to terminate with an error; required arguments which are
+    not present do so as well.
+    
+    In order to support a variety of argument values and formats, an awk-like syntax is used.  The two characters
+    immediately following the command name have special semantic meaning: the first is the character used to separate
+    names from values while the second is the character used to separate name-value pairs from each other.  For
+    instance,
+    
+        %% foo= bar=baz bar2=baz2 %%
+
+    is equivalent in every way to
+    
+        %% foo#!bar#baz!bar2#baz2#%%
+    
+    This is convenient when the argument value includes the '=' character, such as in describing a token for equality
+    operations.
+    
+    In addition to the specified separator character, newlines may be used to separate name-value pairs.  As a result,
+    
+        %% foo= bar=baz
+                bar2=baz2  %%
+
+    Is equivalent to both of the above.
+    
+    In order to permit multi-line arguments, triple-quoting syntax is used.  If the value of an argument contains a
+    sequence of three quotation marks, those quotation marks begin a literal quote which ends and the next sequence of
+    three quotation marks.  The quotation marks themselves are not included in the value.  If further characters appear
+    before the next name-value separator, they are concatenated onto the resulting value.  This is similar in behavior
+    to string concatenation in bash (where "hel"'lo' is equivalent to "hello") and to tripe-quote syntax in Python.
+    There are no escape sequences which would allow a triple quote to be provided as the argument to a parameter.
+    
+    For an example of triple-quoting, please refer to this comment.  This comment is of the form of a template command.
+    It uses the command named "templateComment" and has a single parameter named "value".  The entire body of this
+    comment is the argument provided for the "value" parameter.  The semantics of the templateComment command simply
+    consist of removing the comment and any trailing whitespace from the grammar.  As a result, this comment will not
+    appear in that grammar.
+    
+    The specific behaviors of the template commands are not described here out of concern for the integrity of such
+    documentation.  The edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator.AntlrGrammarProcessor class is
+    responsible for the processing of this file.  It contains a number of member classes which implement the commands
+    in question.
+    
+    The philosophy behind the structure of the template commands is of particular note.  Rather than generating entire
+    rules using template commands, the declaration of the rule is left in place and the template command is placed
+    immediately after the rule name.  After the template command, some body may be provided for the rule.  In some
+    cases, the body may be used; in others, a faux ":;" body is expected and will be replaced when the command is
+    expanded.  The rationale behind this structure (as well as behind the use of semantically-loaded comments) is that
+    this template file still reads as a valid (if incorrect) ANTLR grammar and so is parseable and syntax highlightable
+    by standard tools.  The ANTLR-IDE Eclipse plugin, for instance, builds a sensible outline view for this template
+    even though it is not truly the BSJ ANTLR grammar.  Template commands introduced in the future should continue to
+    follow this tradition.
+    
+""" %%*/
+
+
 /*
  [The "BSD license"]
  Copyright (c) 2007-2008 Terence Parr
@@ -51,6 +125,7 @@
  * "-Xconversiontimeout 100000" to ensure proper translation.
  */
 
+/*%% generationComment= %%*/
 
 grammar BsjAntlr;
 
