@@ -142,7 +142,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         
         if (statements == null)
         {
-            throw new NullPointerException("Node union for property statements cannot be null.");
+            statements = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.statements != null)
         {
@@ -229,7 +229,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -441,7 +441,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeBlockNode(
+        return factory.makeBlockNodeWithUnions(
                 statementsCopy,
                 metaAnnotationsCopy,
                 getStartLocation(),
@@ -459,12 +459,12 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getStatements()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForStatements().getNodeValue()))
         {
             setStatements((BlockStatementListNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

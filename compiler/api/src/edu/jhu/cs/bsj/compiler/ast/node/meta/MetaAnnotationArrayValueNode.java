@@ -21,7 +21,7 @@ public interface MetaAnnotationArrayValueNode extends Node, MetaAnnotationValueN
      * @return The array values.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaAnnotationValueListNode getValues() throws ClassCastException;
+    public MetaAnnotationValueListNode getValues()throws ClassCastException;
     
     /**
      * Gets the union object for the array values.

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
@@ -22,7 +23,7 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
 {
     /** General constructor. */
     public ExpressionListNodeImpl(
-            List<ExpressionNode> children,
+            List<NodeUnion<? extends ExpressionNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
     public boolean getAlwaysOrdered()
     {
         return true;
+    }
+    
+    protected Class<ExpressionNode> getChildrenElementType()
+    {
+        return ExpressionNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
     @Override
     public ExpressionListNode deepCopy(BsjNodeFactory factory)
     {
-        List<ExpressionNode> childrenCopy = new ArrayList<ExpressionNode>(getChildren().size());
-        for (ExpressionNode element : getChildren())
+        List<NodeUnion<? extends ExpressionNode>> childrenCopy = new ArrayList<NodeUnion<? extends ExpressionNode>>(getChildren().size());
+        for (NodeUnion<? extends ExpressionNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends ExpressionNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeExpressionListNode(
+        return factory.makeExpressionListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

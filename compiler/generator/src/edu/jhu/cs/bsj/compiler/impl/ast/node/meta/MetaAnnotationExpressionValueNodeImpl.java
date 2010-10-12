@@ -135,7 +135,7 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<NonAssignmentExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -312,7 +312,7 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
         }
-        return factory.makeMetaAnnotationExpressionValueNode(
+        return factory.makeMetaAnnotationExpressionValueNodeWithUnions(
                 expressionCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -329,7 +329,7 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof NonAssignmentExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((NonAssignmentExpressionNode)after);
             return true;

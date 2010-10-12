@@ -142,7 +142,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         
         if (arrayExpression == null)
         {
-            throw new NullPointerException("Node union for property arrayExpression cannot be null.");
+            arrayExpression = new NormalNodeUnion<RestrictedPrimaryExpressionNode>(null);
         }
         if (this.arrayExpression != null)
         {
@@ -229,7 +229,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         
         if (indexExpression == null)
         {
-            throw new NullPointerException("Node union for property indexExpression cannot be null.");
+            indexExpression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.indexExpression != null)
         {
@@ -442,7 +442,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForIndexExpression().getType());
         }
-        return factory.makeArrayAccessNode(
+        return factory.makeArrayAccessNodeWithUnions(
                 arrayExpressionCopy,
                 indexExpressionCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getArrayExpression()) && (after instanceof RestrictedPrimaryExpressionNode))
+        if (before.equals(this.getUnionForArrayExpression().getNodeValue()))
         {
             setArrayExpression((RestrictedPrimaryExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getIndexExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForIndexExpression().getNodeValue()))
         {
             setIndexExpression((ExpressionNode)after);
             return true;

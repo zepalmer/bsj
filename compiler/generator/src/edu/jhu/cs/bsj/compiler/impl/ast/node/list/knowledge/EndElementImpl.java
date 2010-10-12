@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge;
 
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.EndElement;
 
@@ -24,7 +25,7 @@ public class EndElementImpl<T extends Node> extends AbstractSymbolicElementImpl<
 	}
 
 	@Override
-	public T getData()
+	public NodeUnion<? extends T> getData()
 	{
 		return null;
 	}

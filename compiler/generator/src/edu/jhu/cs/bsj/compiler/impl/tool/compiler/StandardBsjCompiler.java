@@ -122,14 +122,15 @@ public class StandardBsjCompiler implements BsjCompiler
 		{
 			listener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
 		}
+		final CountingDiagnosticProxyListener<BsjSourceLocation> diagnosticListener = new CountingDiagnosticProxyListener<BsjSourceLocation>(listener); 
 
 		// Start compilation
-		initialize(listener, random);
+		initialize(diagnosticListener, random);
 
 		try
 		{
 			// Initialize the compilation unit manager with the names of the files it must compile
-			CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener);
+			CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(diagnosticListener);
 			for (BsjFileObject file : units)
 			{
 				String binaryName = file.inferBinaryName();
@@ -145,7 +146,14 @@ public class StandardBsjCompiler implements BsjCompiler
 				}
 				loader.load(packageNode, compilationUnitName);
 			}
-
+			
+			// If there were no errors in parsing, attempt metacompilation
+			if (diagnosticListener.getCount(Kind.ERROR) != 0)
+			{
+				LOGGER.info(diagnosticListener.getCount(Kind.ERROR) + " errors during initial parsing of source units");
+				return;				
+			}
+			
 			// Allow the compilation unit manager to handle the work in the sense of a work queue
 			while (!this.metacompilationManager.isFinished())
 			{
@@ -160,7 +168,8 @@ public class StandardBsjCompiler implements BsjCompiler
 			}
 
 			// Now compile everything in the generated source directory
-			compileGeneratedSources(listener);
+			compileGeneratedSources(diagnosticListener);
+			
 		} finally
 		{
 			// Clean up
@@ -245,7 +254,6 @@ public class StandardBsjCompiler implements BsjCompiler
 			LOGGER.trace("Initializing compiler data structures.");
 		}
 		this.rootPackage = toolkit.getNodeFactory().makePackageNode((IdentifierNode)null);
-		;
 		this.metacompilationManager = new MetacompilationManager(this.toolkit, this.manager, this.rootPackage,
 				listener, random);
 	}

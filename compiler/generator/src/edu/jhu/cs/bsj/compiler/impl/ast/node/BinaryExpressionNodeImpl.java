@@ -149,7 +149,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         
         if (leftOperand == null)
         {
-            throw new NullPointerException("Node union for property leftOperand cannot be null.");
+            leftOperand = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.leftOperand != null)
         {
@@ -236,7 +236,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         
         if (rightOperand == null)
         {
-            throw new NullPointerException("Node union for property rightOperand cannot be null.");
+            rightOperand = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.rightOperand != null)
         {
@@ -484,7 +484,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForRightOperand().getType());
         }
-        return factory.makeBinaryExpressionNode(
+        return factory.makeBinaryExpressionNodeWithUnions(
                 leftOperandCopy,
                 rightOperandCopy,
                 getOperator(),
@@ -503,12 +503,12 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getLeftOperand()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForLeftOperand().getNodeValue()))
         {
             setLeftOperand((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getRightOperand()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForRightOperand().getNodeValue()))
         {
             setRightOperand((ExpressionNode)after);
             return true;

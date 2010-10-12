@@ -20,7 +20,7 @@ public interface ReturnNode extends Node, StatementNode
      * @return The expression to return.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression to return.

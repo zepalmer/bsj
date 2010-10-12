@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
@@ -23,7 +24,7 @@ public class MetaprogramDependencyDeclarationListNodeImpl extends ListNodeImpl<M
 {
     /** General constructor. */
     public MetaprogramDependencyDeclarationListNodeImpl(
-            List<MetaprogramDependencyDeclarationNode> children,
+            List<NodeUnion<? extends MetaprogramDependencyDeclarationNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -39,6 +40,11 @@ public class MetaprogramDependencyDeclarationListNodeImpl extends ListNodeImpl<M
     public boolean getAlwaysOrdered()
     {
         return false;
+    }
+    
+    protected Class<MetaprogramDependencyDeclarationNode> getChildrenElementType()
+    {
+        return MetaprogramDependencyDeclarationNode.class;
     }
     
     /**
@@ -133,7 +139,7 @@ public class MetaprogramDependencyDeclarationListNodeImpl extends ListNodeImpl<M
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -177,13 +183,19 @@ public class MetaprogramDependencyDeclarationListNodeImpl extends ListNodeImpl<M
     @Override
     public MetaprogramDependencyDeclarationListNode deepCopy(BsjNodeFactory factory)
     {
-        List<MetaprogramDependencyDeclarationNode> childrenCopy = new ArrayList<MetaprogramDependencyDeclarationNode>(getChildren().size());
-        for (MetaprogramDependencyDeclarationNode element : getChildren())
+        List<NodeUnion<? extends MetaprogramDependencyDeclarationNode>> childrenCopy = new ArrayList<NodeUnion<? extends MetaprogramDependencyDeclarationNode>>(getChildren().size());
+        for (NodeUnion<? extends MetaprogramDependencyDeclarationNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends MetaprogramDependencyDeclarationNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeMetaprogramDependencyDeclarationListNode(
+        return factory.makeMetaprogramDependencyDeclarationListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

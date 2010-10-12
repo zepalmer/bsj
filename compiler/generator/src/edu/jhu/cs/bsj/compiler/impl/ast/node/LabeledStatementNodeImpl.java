@@ -150,7 +150,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         
         if (label == null)
         {
-            throw new NullPointerException("Node union for property label cannot be null.");
+            label = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.label != null)
         {
@@ -237,7 +237,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         
         if (statement == null)
         {
-            throw new NullPointerException("Node union for property statement cannot be null.");
+            statement = new NormalNodeUnion<StatementNode>(null);
         }
         if (this.statement != null)
         {
@@ -324,7 +324,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -572,7 +572,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeLabeledStatementNode(
+        return factory.makeLabeledStatementNodeWithUnions(
                 labelCopy,
                 statementCopy,
                 metaAnnotationsCopy,
@@ -591,17 +591,17 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getLabel()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForLabel().getNodeValue()))
         {
             setLabel((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getStatement()) && (after instanceof StatementNode))
+        if (before.equals(this.getUnionForStatement().getNodeValue()))
         {
             setStatement((StatementNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

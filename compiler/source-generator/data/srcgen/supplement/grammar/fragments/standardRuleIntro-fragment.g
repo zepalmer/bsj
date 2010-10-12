@@ -1,4 +1,4 @@
-$$$rule$$$ returns [$$$type$$$ ret]
+$$$rule$$$$$$ruleParams$$$ returns [$$$type$$$ ret]
         scope Rule;
         @init {
             ruleStart("$$$rule$$$");

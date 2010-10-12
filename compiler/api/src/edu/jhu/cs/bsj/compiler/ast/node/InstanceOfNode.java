@@ -19,7 +19,7 @@ public interface InstanceOfNode extends Node, NonAssignmentExpressionNode
      * @return The expression being evaluated.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression being evaluated.
@@ -48,7 +48,7 @@ public interface InstanceOfNode extends Node, NonAssignmentExpressionNode
      * @return The type being checked.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getType() throws ClassCastException;
+    public TypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the type being checked.

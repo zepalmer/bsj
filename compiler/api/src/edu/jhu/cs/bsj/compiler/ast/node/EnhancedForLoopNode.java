@@ -20,7 +20,7 @@ public interface EnhancedForLoopNode extends Node, StatementNode
      * @return The iterator variable.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableNode getVariable() throws ClassCastException;
+    public VariableNode getVariable()throws ClassCastException;
     
     /**
      * Gets the union object for the iterator variable.
@@ -49,7 +49,7 @@ public interface EnhancedForLoopNode extends Node, StatementNode
      * @return The loop's iterable expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the loop's iterable expression.
@@ -78,7 +78,7 @@ public interface EnhancedForLoopNode extends Node, StatementNode
      * @return The loop's statement.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementNode getStatement() throws ClassCastException;
+    public StatementNode getStatement()throws ClassCastException;
     
     /**
      * Gets the union object for the loop's statement.

@@ -219,7 +219,7 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
         }
-        return factory.makeAlternateConstructorInvocationNode(
+        return factory.makeAlternateConstructorInvocationNodeWithUnions(
                 argumentsCopy,
                 typeArgumentsCopy,
                 getStartLocation(),
@@ -237,12 +237,12 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
+        if (before.equals(this.getUnionForArguments().getNodeValue()))
         {
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
+        if (before.equals(this.getUnionForTypeArguments().getNodeValue()))
         {
             setTypeArguments((ReferenceTypeListNode)after);
             return true;

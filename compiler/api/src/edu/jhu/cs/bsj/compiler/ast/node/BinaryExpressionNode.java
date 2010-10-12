@@ -17,7 +17,7 @@ public interface BinaryExpressionNode extends Node, NonAssignmentExpressionNode
      * @return The left operand of the expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getLeftOperand() throws ClassCastException;
+    public ExpressionNode getLeftOperand()throws ClassCastException;
     
     /**
      * Gets the union object for the left operand of the expression.
@@ -46,7 +46,7 @@ public interface BinaryExpressionNode extends Node, NonAssignmentExpressionNode
      * @return The right operand of the expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getRightOperand() throws ClassCastException;
+    public ExpressionNode getRightOperand()throws ClassCastException;
     
     /**
      * Gets the union object for the right operand of the expression.

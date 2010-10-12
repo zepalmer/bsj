@@ -20,7 +20,7 @@ public interface UnqualifiedClassInstantiationNode extends ClassInstantiationNod
      * @return The type being instantiated.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public DeclaredTypeNode getType() throws ClassCastException;
+    public DeclaredTypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the type being instantiated.

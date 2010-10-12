@@ -134,7 +134,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
         
         if (members == null)
         {
-            throw new NullPointerException("Node union for property members cannot be null.");
+            members = new NormalNodeUnion<AnnotationMemberListNode>(null);
         }
         if (this.members != null)
         {
@@ -311,7 +311,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
         }
-        return factory.makeAnnotationBodyNode(
+        return factory.makeAnnotationBodyNodeWithUnions(
                 membersCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMembers()) && (after instanceof AnnotationMemberListNode))
+        if (before.equals(this.getUnionForMembers().getNodeValue()))
         {
             setMembers((AnnotationMemberListNode)after);
             return true;

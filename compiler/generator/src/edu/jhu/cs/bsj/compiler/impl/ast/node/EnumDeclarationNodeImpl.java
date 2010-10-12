@@ -168,7 +168,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<EnumModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -255,7 +255,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         
         if (implementsClause == null)
         {
-            throw new NullPointerException("Node union for property implementsClause cannot be null.");
+            implementsClause = new NormalNodeUnion<DeclaredTypeListNode>(null);
         }
         if (this.implementsClause != null)
         {
@@ -342,7 +342,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<EnumBodyNode>(null);
         }
         if (this.body != null)
         {
@@ -429,7 +429,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -516,7 +516,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {
@@ -837,7 +837,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeEnumDeclarationNode(
+        return factory.makeEnumDeclarationNodeWithUnions(
                 modifiersCopy,
                 implementsClauseCopy,
                 bodyCopy,
@@ -858,27 +858,27 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof EnumModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((EnumModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getImplementsClause()) && (after instanceof DeclaredTypeListNode))
+        if (before.equals(this.getUnionForImplementsClause().getNodeValue()))
         {
             setImplementsClause((DeclaredTypeListNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof EnumBodyNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((EnumBodyNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

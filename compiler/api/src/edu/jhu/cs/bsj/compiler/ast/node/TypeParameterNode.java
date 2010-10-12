@@ -28,7 +28,7 @@ public interface TypeParameterNode extends Node, TypeNameBindingNode
      * @return The base type name for the parameter.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the base type name for the parameter.
@@ -57,7 +57,7 @@ public interface TypeParameterNode extends Node, TypeNameBindingNode
      * @return The bounds over the base type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public DeclaredTypeListNode getBounds() throws ClassCastException;
+    public DeclaredTypeListNode getBounds()throws ClassCastException;
     
     /**
      * Gets the union object for the bounds over the base type.

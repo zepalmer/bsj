@@ -19,7 +19,7 @@ public interface IfNode extends Node, StatementNode
      * @return The condition.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getCondition() throws ClassCastException;
+    public ExpressionNode getCondition()throws ClassCastException;
     
     /**
      * Gets the union object for the condition.
@@ -48,7 +48,7 @@ public interface IfNode extends Node, StatementNode
      * @return The then branch's statement.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementNode getThenStatement() throws ClassCastException;
+    public StatementNode getThenStatement()throws ClassCastException;
     
     /**
      * Gets the union object for the then branch's statement.
@@ -77,7 +77,7 @@ public interface IfNode extends Node, StatementNode
      * @return The else branch's statement.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementNode getElseStatement() throws ClassCastException;
+    public StatementNode getElseStatement()throws ClassCastException;
     
     /**
      * Gets the union object for the else branch's statement.

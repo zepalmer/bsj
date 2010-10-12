@@ -28,7 +28,7 @@ public interface LocalVariableDeclarationNode extends Node, BlockStatementNode, 
      * @return The modifiers for this variable.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableModifiersNode getModifiers() throws ClassCastException;
+    public VariableModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this variable.
@@ -57,7 +57,7 @@ public interface LocalVariableDeclarationNode extends Node, BlockStatementNode, 
      * @return The type of the declared variables.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getType() throws ClassCastException;
+    public TypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the type of the declared variables.
@@ -86,7 +86,7 @@ public interface LocalVariableDeclarationNode extends Node, BlockStatementNode, 
      * @return The variable declarators for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableDeclaratorListNode getDeclarators() throws ClassCastException;
+    public VariableDeclaratorListNode getDeclarators()throws ClassCastException;
     
     /**
      * Gets the union object for the variable declarators for this node.

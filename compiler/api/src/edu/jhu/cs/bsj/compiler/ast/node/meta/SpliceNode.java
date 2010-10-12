@@ -24,7 +24,7 @@ public interface SpliceNode extends Node, BsjSpecificNode
      * @return The expression which will replace this splice upon lifting.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getSpliceExpression() throws ClassCastException;
+    public ExpressionNode getSpliceExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression which will replace this splice upon lifting.

@@ -205,7 +205,7 @@ public class BlockStatementMetaprogramAnchorNodeImpl extends ExplicitMetaprogram
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaprogram().getType());
         }
-        return factory.makeBlockStatementMetaprogramAnchorNode(
+        return factory.makeBlockStatementMetaprogramAnchorNodeWithUnions(
                 metaprogramCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -222,7 +222,7 @@ public class BlockStatementMetaprogramAnchorNodeImpl extends ExplicitMetaprogram
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaprogram()) && (after instanceof MetaprogramNode))
+        if (before.equals(this.getUnionForMetaprogram().getNodeValue()))
         {
             setMetaprogram((MetaprogramNode)after);
             return true;

@@ -134,7 +134,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<UnparameterizedTypeNode>(null);
         }
         if (this.type != null)
         {
@@ -311,7 +311,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForType().getType());
         }
-        return factory.makeThisNode(
+        return factory.makeThisNodeWithUnions(
                 typeCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getType()) && (after instanceof UnparameterizedTypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((UnparameterizedTypeNode)after);
             return true;

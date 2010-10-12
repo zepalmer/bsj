@@ -154,7 +154,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<T>(null);
         }
         if (this.modifiers != null)
         {
@@ -241,7 +241,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<TypeNode>(null);
         }
         if (this.type != null)
         {
@@ -328,7 +328,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
         
         if (declarators == null)
         {
-            throw new NullPointerException("Node union for property declarators cannot be null.");
+            declarators = new NormalNodeUnion<VariableDeclaratorListNode>(null);
         }
         if (this.declarators != null)
         {
@@ -415,7 +415,7 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {

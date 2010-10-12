@@ -142,7 +142,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.body != null)
         {
@@ -229,7 +229,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         
         if (parameter == null)
         {
-            throw new NullPointerException("Node union for property parameter cannot be null.");
+            parameter = new NormalNodeUnion<VariableNode>(null);
         }
         if (this.parameter != null)
         {
@@ -440,7 +440,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForParameter().getType());
         }
-        return factory.makeCatchNode(
+        return factory.makeCatchNodeWithUnions(
                 bodyCopy,
                 parameterCopy,
                 getStartLocation(),
@@ -458,12 +458,12 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((BlockStatementListNode)after);
             return true;
         }
-        if (before.equals(this.getParameter()) && (after instanceof VariableNode))
+        if (before.equals(this.getUnionForParameter().getNodeValue()))
         {
             setParameter((VariableNode)after);
             return true;

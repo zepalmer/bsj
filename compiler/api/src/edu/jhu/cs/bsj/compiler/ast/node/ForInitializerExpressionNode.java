@@ -20,7 +20,7 @@ public interface ForInitializerExpressionNode extends Node, ForInitializerNode
      * @return The expressions used in this initializer.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementExpressionListNode getExpressions() throws ClassCastException;
+    public StatementExpressionListNode getExpressions()throws ClassCastException;
     
     /**
      * Gets the union object for the expressions used in this initializer.

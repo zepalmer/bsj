@@ -22,7 +22,7 @@ public interface NormalMetaAnnotationNode extends MetaAnnotationNode, BsjSpecifi
      * @return The arguments.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaAnnotationElementListNode getArguments() throws ClassCastException;
+    public MetaAnnotationElementListNode getArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the arguments.

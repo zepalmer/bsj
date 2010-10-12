@@ -37,7 +37,7 @@ public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
      * @return The parameterized type from which a type is selected.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ParameterizedTypeNode getBase() throws ClassCastException;
+    public ParameterizedTypeNode getBase()throws ClassCastException;
     
     /**
      * Gets the union object for the parameterized type from which a type is selected.
@@ -66,7 +66,7 @@ public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
      * @return The type which is selected from the base.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public DeclaredTypeNode getSelect() throws ClassCastException;
+    public DeclaredTypeNode getSelect()throws ClassCastException;
     
     /**
      * Gets the union object for the type which is selected from the base.

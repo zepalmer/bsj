@@ -18,7 +18,7 @@ public interface AnnotationArrayValueNode extends Node, AnnotationValueNode
      * @return The array values.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationValueListNode getValues() throws ClassCastException;
+    public AnnotationValueListNode getValues()throws ClassCastException;
     
     /**
      * Gets the union object for the array values.

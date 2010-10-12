@@ -26,7 +26,7 @@ public interface UnaryExpressionNode extends Node, NonAssignmentExpressionNode
      * @return The expression on which to operate.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression on which to operate.

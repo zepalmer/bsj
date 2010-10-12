@@ -136,7 +136,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         
         if (arguments == null)
         {
-            throw new NullPointerException("Node union for property arguments cannot be null.");
+            arguments = new NormalNodeUnion<AnnotationElementListNode>(null);
         }
         if (this.arguments != null)
         {
@@ -340,7 +340,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotationType().getType());
         }
-        return factory.makeNormalAnnotationNode(
+        return factory.makeNormalAnnotationNodeWithUnions(
                 argumentsCopy,
                 annotationTypeCopy,
                 getStartLocation(),
@@ -358,12 +358,12 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getArguments()) && (after instanceof AnnotationElementListNode))
+        if (before.equals(this.getUnionForArguments().getNodeValue()))
         {
             setArguments((AnnotationElementListNode)after);
             return true;
         }
-        if (before.equals(this.getAnnotationType()) && (after instanceof UnparameterizedTypeNode))
+        if (before.equals(this.getUnionForAnnotationType().getNodeValue()))
         {
             setAnnotationType((UnparameterizedTypeNode)after);
             return true;

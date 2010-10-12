@@ -27,7 +27,7 @@ public interface AbstractlyUnmodifiedClassDeclarationNode<T extends ModifiersNod
      * @return The modifiers for this type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public T getModifiers() throws ClassCastException;
+    public T getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this type.
@@ -56,7 +56,7 @@ public interface AbstractlyUnmodifiedClassDeclarationNode<T extends ModifiersNod
      * @return The extends clause.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public DeclaredTypeNode getExtendsClause() throws ClassCastException;
+    public DeclaredTypeNode getExtendsClause()throws ClassCastException;
     
     /**
      * Gets the union object for the extends clause.
@@ -85,7 +85,7 @@ public interface AbstractlyUnmodifiedClassDeclarationNode<T extends ModifiersNod
      * @return The implements clause.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public DeclaredTypeListNode getImplementsClause() throws ClassCastException;
+    public DeclaredTypeListNode getImplementsClause()throws ClassCastException;
     
     /**
      * Gets the union object for the implements clause.
@@ -114,7 +114,7 @@ public interface AbstractlyUnmodifiedClassDeclarationNode<T extends ModifiersNod
      * @return The body of this class.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ClassBodyNode getBody() throws ClassCastException;
+    public ClassBodyNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the body of this class.
@@ -143,7 +143,7 @@ public interface AbstractlyUnmodifiedClassDeclarationNode<T extends ModifiersNod
      * @return This class's type parameters.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeParameterListNode getTypeParameters() throws ClassCastException;
+    public TypeParameterListNode getTypeParameters()throws ClassCastException;
     
     /**
      * Gets the union object for this class's type parameters.

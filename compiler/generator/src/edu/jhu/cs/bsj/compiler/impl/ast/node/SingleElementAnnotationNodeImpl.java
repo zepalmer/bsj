@@ -136,7 +136,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
         
         if (value == null)
         {
-            throw new NullPointerException("Node union for property value cannot be null.");
+            value = new NormalNodeUnion<AnnotationValueNode>(null);
         }
         if (this.value != null)
         {
@@ -340,7 +340,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotationType().getType());
         }
-        return factory.makeSingleElementAnnotationNode(
+        return factory.makeSingleElementAnnotationNodeWithUnions(
                 valueCopy,
                 annotationTypeCopy,
                 getStartLocation(),
@@ -358,12 +358,12 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getValue()) && (after instanceof AnnotationValueNode))
+        if (before.equals(this.getUnionForValue().getNodeValue()))
         {
             setValue((AnnotationValueNode)after);
             return true;
         }
-        if (before.equals(this.getAnnotationType()) && (after instanceof UnparameterizedTypeNode))
+        if (before.equals(this.getUnionForAnnotationType().getNodeValue()))
         {
             setAnnotationType((UnparameterizedTypeNode)after);
             return true;

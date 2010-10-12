@@ -18,7 +18,7 @@ public interface SingleElementMetaAnnotationNode extends MetaAnnotationNode, Bsj
      * @return The value of the "value" element.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaAnnotationValueNode getValue() throws ClassCastException;
+    public MetaAnnotationValueNode getValue()throws ClassCastException;
     
     /**
      * Gets the union object for the value of the "value" element.

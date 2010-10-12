@@ -138,7 +138,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         
         if (qualifyingExpression == null)
         {
-            throw new NullPointerException("Node union for property qualifyingExpression cannot be null.");
+            qualifyingExpression = new NormalNodeUnion<PrimaryExpressionNode>(null);
         }
         if (this.qualifyingExpression != null)
         {
@@ -369,7 +369,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
         }
-        return factory.makeSuperclassConstructorInvocationNode(
+        return factory.makeSuperclassConstructorInvocationNodeWithUnions(
                 qualifyingExpressionCopy,
                 argumentsCopy,
                 typeArgumentsCopy,
@@ -388,17 +388,17 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getQualifyingExpression()) && (after instanceof PrimaryExpressionNode))
+        if (before.equals(this.getUnionForQualifyingExpression().getNodeValue()))
         {
             setQualifyingExpression((PrimaryExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
+        if (before.equals(this.getUnionForArguments().getNodeValue()))
         {
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
+        if (before.equals(this.getUnionForTypeArguments().getNodeValue()))
         {
             setTypeArguments((ReferenceTypeListNode)after);
             return true;

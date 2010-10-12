@@ -22,7 +22,7 @@ public interface ArrayInstantiatorCreationNode extends ArrayCreationNode
      * @return The dimension expressions for this array.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionListNode getDimExpressions() throws ClassCastException;
+    public ExpressionListNode getDimExpressions()throws ClassCastException;
     
     /**
      * Gets the union object for the dimension expressions for this array.

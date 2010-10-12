@@ -132,7 +132,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {

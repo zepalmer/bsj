@@ -150,7 +150,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<VariableModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -237,7 +237,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<TypeNode>(null);
         }
         if (this.type != null)
         {
@@ -324,7 +324,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
         
         if (declarators == null)
         {
-            throw new NullPointerException("Node union for property declarators cannot be null.");
+            declarators = new NormalNodeUnion<VariableDeclaratorListNode>(null);
         }
         if (this.declarators != null)
         {
@@ -579,7 +579,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForDeclarators().getType());
         }
-        return factory.makeLocalVariableDeclarationNode(
+        return factory.makeLocalVariableDeclarationNodeWithUnions(
                 modifiersCopy,
                 typeCopy,
                 declaratorsCopy,
@@ -598,17 +598,17 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof VariableModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((VariableModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((TypeNode)after);
             return true;
         }
-        if (before.equals(this.getDeclarators()) && (after instanceof VariableDeclaratorListNode))
+        if (before.equals(this.getUnionForDeclarators().getNodeValue()))
         {
             setDeclarators((VariableDeclaratorListNode)after);
             return true;

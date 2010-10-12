@@ -142,7 +142,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -229,7 +229,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         
         if (bounds == null)
         {
-            throw new NullPointerException("Node union for property bounds cannot be null.");
+            bounds = new NormalNodeUnion<DeclaredTypeListNode>(null);
         }
         if (this.bounds != null)
         {
@@ -442,7 +442,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForBounds().getType());
         }
-        return factory.makeTypeParameterNode(
+        return factory.makeTypeParameterNodeWithUnions(
                 identifierCopy,
                 boundsCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getBounds()) && (after instanceof DeclaredTypeListNode))
+        if (before.equals(this.getUnionForBounds().getNodeValue()))
         {
             setBounds((DeclaredTypeListNode)after);
             return true;

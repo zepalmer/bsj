@@ -150,7 +150,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         
         if (condition == null)
         {
-            throw new NullPointerException("Node union for property condition cannot be null.");
+            condition = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.condition != null)
         {
@@ -237,7 +237,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         
         if (statement == null)
         {
-            throw new NullPointerException("Node union for property statement cannot be null.");
+            statement = new NormalNodeUnion<StatementNode>(null);
         }
         if (this.statement != null)
         {
@@ -324,7 +324,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -572,7 +572,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeDoWhileLoopNode(
+        return factory.makeDoWhileLoopNodeWithUnions(
                 conditionCopy,
                 statementCopy,
                 metaAnnotationsCopy,
@@ -591,17 +591,17 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getCondition()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForCondition().getNodeValue()))
         {
             setCondition((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getStatement()) && (after instanceof StatementNode))
+        if (before.equals(this.getUnionForStatement().getNodeValue()))
         {
             setStatement((StatementNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

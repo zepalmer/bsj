@@ -25,7 +25,7 @@ public interface VariableDeclaratorNode extends Node, VariableNameBindingNode
      * @return The name of this variable.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the name of this variable.
@@ -66,7 +66,7 @@ public interface VariableDeclaratorNode extends Node, VariableNameBindingNode
      * @return The initializer to use.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableInitializerNode getInitializer() throws ClassCastException;
+    public VariableInitializerNode getInitializer()throws ClassCastException;
     
     /**
      * Gets the union object for the initializer to use.

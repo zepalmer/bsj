@@ -39,7 +39,7 @@ public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionN
      * @return The expression against which to invoke the method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public PrimaryExpressionNode getExpression() throws ClassCastException;
+    public PrimaryExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression against which to invoke the method.
@@ -68,7 +68,7 @@ public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionN
      * @return The name of the method to invoke.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the name of the method to invoke.
@@ -97,7 +97,7 @@ public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionN
      * @return The arguments to pass to the method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionListNode getArguments() throws ClassCastException;
+    public ExpressionListNode getArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the arguments to pass to the method.
@@ -126,7 +126,7 @@ public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionN
      * @return The type arguments for the method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ReferenceTypeListNode getTypeArguments() throws ClassCastException;
+    public ReferenceTypeListNode getTypeArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the type arguments for the method.

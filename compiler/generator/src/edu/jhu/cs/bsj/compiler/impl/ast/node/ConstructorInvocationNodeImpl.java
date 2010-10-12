@@ -138,7 +138,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         
         if (arguments == null)
         {
-            throw new NullPointerException("Node union for property arguments cannot be null.");
+            arguments = new NormalNodeUnion<ExpressionListNode>(null);
         }
         if (this.arguments != null)
         {
@@ -225,7 +225,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         
         if (typeArguments == null)
         {
-            throw new NullPointerException("Node union for property typeArguments cannot be null.");
+            typeArguments = new NormalNodeUnion<ReferenceTypeListNode>(null);
         }
         if (this.typeArguments != null)
         {

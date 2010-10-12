@@ -175,7 +175,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         
         if (packageDeclaration == null)
         {
-            throw new NullPointerException("Node union for property packageDeclaration cannot be null.");
+            packageDeclaration = new NormalNodeUnion<PackageDeclarationNode>(null);
         }
         if (this.packageDeclaration != null)
         {
@@ -262,7 +262,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         
         if (metaimports == null)
         {
-            throw new NullPointerException("Node union for property metaimports cannot be null.");
+            metaimports = new NormalNodeUnion<MetaprogramImportListNode>(null);
         }
         if (this.metaimports != null)
         {
@@ -349,7 +349,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         
         if (imports == null)
         {
-            throw new NullPointerException("Node union for property imports cannot be null.");
+            imports = new NormalNodeUnion<ImportListNode>(null);
         }
         if (this.imports != null)
         {
@@ -436,7 +436,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         
         if (typeDecls == null)
         {
-            throw new NullPointerException("Node union for property typeDecls cannot be null.");
+            typeDecls = new NormalNodeUnion<TypeDeclarationListNode>(null);
         }
         if (this.typeDecls != null)
         {
@@ -723,7 +723,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeDecls().getType());
         }
-        return factory.makeCompilationUnitNode(
+        return factory.makeCompilationUnitNodeWithUnions(
                 getName(),
                 packageDeclarationCopy,
                 metaimportsCopy,
@@ -744,22 +744,22 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getPackageDeclaration()) && (after instanceof PackageDeclarationNode))
+        if (before.equals(this.getUnionForPackageDeclaration().getNodeValue()))
         {
             setPackageDeclaration((PackageDeclarationNode)after);
             return true;
         }
-        if (before.equals(this.getMetaimports()) && (after instanceof MetaprogramImportListNode))
+        if (before.equals(this.getUnionForMetaimports().getNodeValue()))
         {
             setMetaimports((MetaprogramImportListNode)after);
             return true;
         }
-        if (before.equals(this.getImports()) && (after instanceof ImportListNode))
+        if (before.equals(this.getUnionForImports().getNodeValue()))
         {
             setImports((ImportListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeDecls()) && (after instanceof TypeDeclarationListNode))
+        if (before.equals(this.getUnionForTypeDecls().getNodeValue()))
         {
             setTypeDecls((TypeDeclarationListNode)after);
             return true;

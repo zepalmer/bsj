@@ -15,8 +15,8 @@ import java.util.Map;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListMissingElementException;
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramListMissingElementDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -36,14 +36,14 @@ public class MetaprogramListMissingElementDiagnosticImpl extends MetaprogramDete
     private BsjSourceLocation metaprogram;
     
     /** The element which was used as a base in the list which did not contain it. */
-    private Node element;
+    private NodeUnion<?> element;
     
     public MetaprogramListMissingElementDiagnosticImpl(
             BsjSourceLocation source,
             MetaprogramListMissingElementException exception,
             MetaprogramAnchorNode<?> anchor,
             BsjSourceLocation metaprogram,
-            Node element)
+            NodeUnion<?> element)
     {
         super(source, MetaprogramListMissingElementDiagnostic.CODE, Kind.ERROR, exception);
         this.anchor = anchor;
@@ -70,7 +70,7 @@ public class MetaprogramListMissingElementDiagnosticImpl extends MetaprogramDete
     /**
      * {@inheritDoc}
      */
-    public Node getElement()
+    public NodeUnion<?> getElement()
     {
         return this.element;
     }

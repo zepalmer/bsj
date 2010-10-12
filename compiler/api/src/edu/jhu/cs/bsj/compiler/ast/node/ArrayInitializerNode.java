@@ -21,7 +21,7 @@ public interface ArrayInitializerNode extends Node, VariableInitializerNode
      * @return The initializers for the array.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableInitializerListNode getInitializers() throws ClassCastException;
+    public VariableInitializerListNode getInitializers()throws ClassCastException;
     
     /**
      * Gets the union object for the initializers for the array.

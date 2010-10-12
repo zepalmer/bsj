@@ -22,7 +22,7 @@ public interface NormalAnnotationNode extends AnnotationNode
      * @return The arguments.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationElementListNode getArguments() throws ClassCastException;
+    public AnnotationElementListNode getArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the arguments.

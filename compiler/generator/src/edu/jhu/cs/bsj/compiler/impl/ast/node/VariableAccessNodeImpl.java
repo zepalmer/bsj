@@ -142,7 +142,7 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<PrimaryExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -229,7 +229,7 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -442,7 +442,7 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
         }
-        return factory.makeVariableAccessNode(
+        return factory.makeVariableAccessNodeWithUnions(
                 expressionCopy,
                 identifierCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof PrimaryExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((PrimaryExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;

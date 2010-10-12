@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
@@ -22,7 +23,7 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
 {
     /** General constructor. */
     public ImportListNodeImpl(
-            List<ImportNode> children,
+            List<NodeUnion<? extends ImportNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
     public boolean getAlwaysOrdered()
     {
         return false;
+    }
+    
+    protected Class<ImportNode> getChildrenElementType()
+    {
+        return ImportNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
     @Override
     public ImportListNode deepCopy(BsjNodeFactory factory)
     {
-        List<ImportNode> childrenCopy = new ArrayList<ImportNode>(getChildren().size());
-        for (ImportNode element : getChildren())
+        List<NodeUnion<? extends ImportNode>> childrenCopy = new ArrayList<NodeUnion<? extends ImportNode>>(getChildren().size());
+        for (NodeUnion<? extends ImportNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends ImportNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeImportListNode(
+        return factory.makeImportListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

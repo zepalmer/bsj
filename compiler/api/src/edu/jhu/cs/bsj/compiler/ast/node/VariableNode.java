@@ -19,7 +19,7 @@ public interface VariableNode extends Node, VariableNameBindingNode, ModifiedNod
      * @return The modifiers of this parameter.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableModifiersNode getModifiers() throws ClassCastException;
+    public VariableModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers of this parameter.
@@ -48,7 +48,7 @@ public interface VariableNode extends Node, VariableNameBindingNode, ModifiedNod
      * @return The type of the variable.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getType() throws ClassCastException;
+    public TypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the type of the variable.
@@ -77,7 +77,7 @@ public interface VariableNode extends Node, VariableNameBindingNode, ModifiedNod
      * @return The name of the variable.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the name of the variable.

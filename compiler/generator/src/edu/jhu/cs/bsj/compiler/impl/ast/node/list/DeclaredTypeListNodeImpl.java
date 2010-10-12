@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
@@ -22,7 +23,7 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
 {
     /** General constructor. */
     public DeclaredTypeListNodeImpl(
-            List<DeclaredTypeNode> children,
+            List<NodeUnion<? extends DeclaredTypeNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
     public boolean getAlwaysOrdered()
     {
         return true;
+    }
+    
+    protected Class<DeclaredTypeNode> getChildrenElementType()
+    {
+        return DeclaredTypeNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
     @Override
     public DeclaredTypeListNode deepCopy(BsjNodeFactory factory)
     {
-        List<DeclaredTypeNode> childrenCopy = new ArrayList<DeclaredTypeNode>(getChildren().size());
-        for (DeclaredTypeNode element : getChildren())
+        List<NodeUnion<? extends DeclaredTypeNode>> childrenCopy = new ArrayList<NodeUnion<? extends DeclaredTypeNode>>(getChildren().size());
+        for (NodeUnion<? extends DeclaredTypeNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends DeclaredTypeNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeDeclaredTypeListNode(
+        return factory.makeDeclaredTypeListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

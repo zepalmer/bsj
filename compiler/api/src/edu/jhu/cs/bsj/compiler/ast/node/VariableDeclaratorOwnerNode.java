@@ -17,7 +17,7 @@ public interface VariableDeclaratorOwnerNode extends Node
      * @return The type of the declared variables.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getType() throws ClassCastException;
+    public TypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the type of the declared variables.
@@ -46,7 +46,7 @@ public interface VariableDeclaratorOwnerNode extends Node
      * @return The variable declarators for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableDeclaratorListNode getDeclarators() throws ClassCastException;
+    public VariableDeclaratorListNode getDeclarators()throws ClassCastException;
     
     /**
      * Gets the union object for the variable declarators for this node.

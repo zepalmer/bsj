@@ -17,7 +17,7 @@ public interface MetaAnnotatableNode extends Node
      * @return The meta-annotations associated with this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaAnnotationListNode getMetaAnnotations() throws ClassCastException;
+    public MetaAnnotationListNode getMetaAnnotations()throws ClassCastException;
     
     /**
      * Gets the union object for the meta-annotations associated with this node.

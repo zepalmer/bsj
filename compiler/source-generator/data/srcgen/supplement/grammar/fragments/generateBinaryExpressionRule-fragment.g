@@ -8,7 +8,7 @@ $$$rule$$$ /*%% standardRuleIntro= type=NonAssignmentExpressionNode
         (
 $$$operatorPart$$$            e2=$$$chainRule$$$
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;

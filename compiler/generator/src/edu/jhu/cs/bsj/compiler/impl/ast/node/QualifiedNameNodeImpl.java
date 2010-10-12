@@ -136,7 +136,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         
         if (base == null)
         {
-            throw new NullPointerException("Node union for property base cannot be null.");
+            base = new NormalNodeUnion<NameNode>(null);
         }
         if (this.base != null)
         {
@@ -341,7 +341,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
         }
-        return factory.makeQualifiedNameNode(
+        return factory.makeQualifiedNameNodeWithUnions(
                 baseCopy,
                 identifierCopy,
                 getStartLocation(),
@@ -359,12 +359,12 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBase()) && (after instanceof NameNode))
+        if (before.equals(this.getUnionForBase().getNodeValue()))
         {
             setBase((NameNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;

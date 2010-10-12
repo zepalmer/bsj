@@ -134,7 +134,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
         
         if (annotation == null)
         {
-            throw new NullPointerException("Node union for property annotation cannot be null.");
+            annotation = new NormalNodeUnion<AnnotationNode>(null);
         }
         if (this.annotation != null)
         {
@@ -311,7 +311,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotation().getType());
         }
-        return factory.makeAnnotationAnnotationValueNode(
+        return factory.makeAnnotationAnnotationValueNodeWithUnions(
                 annotationCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getAnnotation()) && (after instanceof AnnotationNode))
+        if (before.equals(this.getUnionForAnnotation().getNodeValue()))
         {
             setAnnotation((AnnotationNode)after);
             return true;

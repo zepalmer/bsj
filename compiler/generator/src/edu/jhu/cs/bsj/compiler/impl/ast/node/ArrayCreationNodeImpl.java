@@ -137,7 +137,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         
         if (baseType == null)
         {
-            throw new NullPointerException("Node union for property baseType cannot be null.");
+            baseType = new NormalNodeUnion<BaseTypeNode>(null);
         }
         if (this.baseType != null)
         {

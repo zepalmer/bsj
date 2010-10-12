@@ -157,7 +157,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         
         if (condition == null)
         {
-            throw new NullPointerException("Node union for property condition cannot be null.");
+            condition = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.condition != null)
         {
@@ -244,7 +244,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         
         if (thenStatement == null)
         {
-            throw new NullPointerException("Node union for property thenStatement cannot be null.");
+            thenStatement = new NormalNodeUnion<StatementNode>(null);
         }
         if (this.thenStatement != null)
         {
@@ -331,7 +331,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         
         if (elseStatement == null)
         {
-            throw new NullPointerException("Node union for property elseStatement cannot be null.");
+            elseStatement = new NormalNodeUnion<StatementNode>(null);
         }
         if (this.elseStatement != null)
         {
@@ -418,7 +418,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -702,7 +702,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeIfNode(
+        return factory.makeIfNodeWithUnions(
                 conditionCopy,
                 thenStatementCopy,
                 elseStatementCopy,
@@ -722,22 +722,22 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getCondition()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForCondition().getNodeValue()))
         {
             setCondition((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getThenStatement()) && (after instanceof StatementNode))
+        if (before.equals(this.getUnionForThenStatement().getNodeValue()))
         {
             setThenStatement((StatementNode)after);
             return true;
         }
-        if (before.equals(this.getElseStatement()) && (after instanceof StatementNode))
+        if (before.equals(this.getUnionForElseStatement().getNodeValue()))
         {
             setElseStatement((StatementNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

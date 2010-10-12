@@ -146,7 +146,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         
         if (constructorTypeArguments == null)
         {
-            throw new NullPointerException("Node union for property constructorTypeArguments cannot be null.");
+            constructorTypeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
         }
         if (this.constructorTypeArguments != null)
         {
@@ -233,7 +233,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         
         if (arguments == null)
         {
-            throw new NullPointerException("Node union for property arguments cannot be null.");
+            arguments = new NormalNodeUnion<ExpressionListNode>(null);
         }
         if (this.arguments != null)
         {
@@ -320,7 +320,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<AnonymousClassBodyNode>(null);
         }
         if (this.body != null)
         {

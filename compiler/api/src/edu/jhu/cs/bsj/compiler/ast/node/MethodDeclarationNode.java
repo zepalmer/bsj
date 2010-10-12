@@ -36,7 +36,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return The body of this method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getBody() throws ClassCastException;
+    public BlockStatementListNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the body of this method.
@@ -65,7 +65,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return The modifiers for this method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MethodModifiersNode getModifiers() throws ClassCastException;
+    public MethodModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this method.
@@ -94,7 +94,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return This method's name.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for this method's name.
@@ -123,7 +123,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return The parameters declared by this method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableListNode getParameters() throws ClassCastException;
+    public VariableListNode getParameters()throws ClassCastException;
     
     /**
      * Gets the union object for the parameters declared by this method.
@@ -152,7 +152,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return The vararg parameter declared by this method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableNode getVarargParameter() throws ClassCastException;
+    public VariableNode getVarargParameter()throws ClassCastException;
     
     /**
      * Gets the union object for the vararg parameter declared by this method.
@@ -181,7 +181,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return The type of value returned.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getReturnType() throws ClassCastException;
+    public TypeNode getReturnType()throws ClassCastException;
     
     /**
      * Gets the union object for the type of value returned.
@@ -210,7 +210,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return The types of exceptions thrown by this method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeListNode getThrowTypes() throws ClassCastException;
+    public UnparameterizedTypeListNode getThrowTypes()throws ClassCastException;
     
     /**
      * Gets the union object for the types of exceptions thrown by this method.
@@ -239,7 +239,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return This method's applicable type parameters.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeParameterListNode getTypeParameters() throws ClassCastException;
+    public TypeParameterListNode getTypeParameters()throws ClassCastException;
     
     /**
      * Gets the union object for this method's applicable type parameters.
@@ -268,7 +268,7 @@ public interface MethodDeclarationNode extends Node, InterfaceMemberNode, Anonym
      * @return The associated javadoc comment for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public JavadocNode getJavadoc() throws ClassCastException;
+    public JavadocNode getJavadoc()throws ClassCastException;
     
     /**
      * Gets the union object for the associated javadoc comment for this node.

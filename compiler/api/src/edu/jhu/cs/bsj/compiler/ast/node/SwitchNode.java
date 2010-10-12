@@ -23,7 +23,7 @@ public interface SwitchNode extends Node, StatementNode
      * @return The expression over which to switch.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression over which to switch.
@@ -52,7 +52,7 @@ public interface SwitchNode extends Node, StatementNode
      * @return The cases in this switch.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public CaseListNode getCases() throws ClassCastException;
+    public CaseListNode getCases()throws ClassCastException;
     
     /**
      * Gets the union object for the cases in this switch.

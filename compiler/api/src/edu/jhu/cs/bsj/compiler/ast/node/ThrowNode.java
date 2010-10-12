@@ -19,7 +19,7 @@ public interface ThrowNode extends Node, StatementNode
      * @return The Throwable to throw.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the Throwable to throw.

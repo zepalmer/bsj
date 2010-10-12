@@ -25,7 +25,7 @@ public interface InterfaceDeclarationNode extends Node, NamedTypeDeclarationNode
      * @return The modifiers for this type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public InterfaceModifiersNode getModifiers() throws ClassCastException;
+    public InterfaceModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this type.
@@ -54,7 +54,7 @@ public interface InterfaceDeclarationNode extends Node, NamedTypeDeclarationNode
      * @return The extends clause.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public DeclaredTypeListNode getExtendsClause() throws ClassCastException;
+    public DeclaredTypeListNode getExtendsClause()throws ClassCastException;
     
     /**
      * Gets the union object for the extends clause.
@@ -83,7 +83,7 @@ public interface InterfaceDeclarationNode extends Node, NamedTypeDeclarationNode
      * @return This interface's body.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public InterfaceBodyNode getBody() throws ClassCastException;
+    public InterfaceBodyNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for this interface's body.
@@ -112,7 +112,7 @@ public interface InterfaceDeclarationNode extends Node, NamedTypeDeclarationNode
      * @return This class's type parameters.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeParameterListNode getTypeParameters() throws ClassCastException;
+    public TypeParameterListNode getTypeParameters()throws ClassCastException;
     
     /**
      * Gets the union object for this class's type parameters.

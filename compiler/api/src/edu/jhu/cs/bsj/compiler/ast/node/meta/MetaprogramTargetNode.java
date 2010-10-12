@@ -22,7 +22,7 @@ public interface MetaprogramTargetNode extends Node, BsjSpecificNode
      * @return The names of the metaprogram targets in which to participate.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierListNode getTargets() throws ClassCastException;
+    public IdentifierListNode getTargets()throws ClassCastException;
     
     /**
      * Gets the union object for the names of the metaprogram targets in which to participate.

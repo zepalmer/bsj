@@ -186,7 +186,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
         }
-        return factory.makeSimpleNameNode(
+        return factory.makeSimpleNameNodeWithUnions(
                 identifierCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -203,7 +203,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;

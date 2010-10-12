@@ -142,7 +142,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         
         if (base == null)
         {
-            throw new NullPointerException("Node union for property base cannot be null.");
+            base = new NormalNodeUnion<ParameterizedTypeNode>(null);
         }
         if (this.base != null)
         {
@@ -229,7 +229,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         
         if (select == null)
         {
-            throw new NullPointerException("Node union for property select cannot be null.");
+            select = new NormalNodeUnion<DeclaredTypeNode>(null);
         }
         if (this.select != null)
         {
@@ -442,7 +442,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForSelect().getType());
         }
-        return factory.makeParameterizedTypeSelectNode(
+        return factory.makeParameterizedTypeSelectNodeWithUnions(
                 baseCopy,
                 selectCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBase()) && (after instanceof ParameterizedTypeNode))
+        if (before.equals(this.getUnionForBase().getNodeValue()))
         {
             setBase((ParameterizedTypeNode)after);
             return true;
         }
-        if (before.equals(this.getSelect()) && (after instanceof DeclaredTypeNode))
+        if (before.equals(this.getUnionForSelect().getNodeValue()))
         {
             setSelect((DeclaredTypeNode)after);
             return true;

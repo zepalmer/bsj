@@ -17,7 +17,7 @@ public interface SingleElementAnnotationNode extends AnnotationNode
      * @return The value of the "value" element.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationValueNode getValue() throws ClassCastException;
+    public AnnotationValueNode getValue()throws ClassCastException;
     
     /**
      * Gets the union object for the value of the "value" element.

@@ -134,7 +134,7 @@ public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -312,7 +312,7 @@ public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeNoOperationNode(
+        return factory.makeNoOperationNodeWithUnions(
                 metaAnnotationsCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -329,7 +329,7 @@ public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

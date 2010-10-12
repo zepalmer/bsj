@@ -16,7 +16,7 @@ public interface ArrayTypeNode extends Node, ReferenceTypeNode, LiteralizableTyp
      * @return The element type of the array.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getType() throws ClassCastException;
+    public TypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the element type of the array.

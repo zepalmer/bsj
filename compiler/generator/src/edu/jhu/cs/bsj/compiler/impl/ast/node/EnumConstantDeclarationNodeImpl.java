@@ -166,7 +166,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<EnumConstantModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -253,7 +253,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -340,7 +340,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         
         if (arguments == null)
         {
-            throw new NullPointerException("Node union for property arguments cannot be null.");
+            arguments = new NormalNodeUnion<ExpressionListNode>(null);
         }
         if (this.arguments != null)
         {
@@ -427,7 +427,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<AnonymousClassBodyNode>(null);
         }
         if (this.body != null)
         {
@@ -514,7 +514,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {
@@ -839,7 +839,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeEnumConstantDeclarationNode(
+        return factory.makeEnumConstantDeclarationNodeWithUnions(
                 modifiersCopy,
                 identifierCopy,
                 argumentsCopy,
@@ -860,27 +860,27 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof EnumConstantModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((EnumConstantModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
+        if (before.equals(this.getUnionForArguments().getNodeValue()))
         {
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof AnonymousClassBodyNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((AnonymousClassBodyNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

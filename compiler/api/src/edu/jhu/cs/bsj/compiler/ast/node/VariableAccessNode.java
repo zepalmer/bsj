@@ -29,7 +29,7 @@ public interface VariableAccessNode extends Node, RestrictedPrimaryExpressionNod
      * @return The expression from which the variable is being selected.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public PrimaryExpressionNode getExpression() throws ClassCastException;
+    public PrimaryExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression from which the variable is being selected.
@@ -58,7 +58,7 @@ public interface VariableAccessNode extends Node, RestrictedPrimaryExpressionNod
      * @return The name of the variable.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the name of the variable.

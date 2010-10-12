@@ -135,7 +135,7 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
         
         if (targets == null)
         {
-            throw new NullPointerException("Node union for property targets cannot be null.");
+            targets = new NormalNodeUnion<MetaprogramDependencyListNode>(null);
         }
         if (this.targets != null)
         {
@@ -310,7 +310,7 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTargets().getType());
         }
-        return factory.makeMetaprogramDependencyDeclarationNode(
+        return factory.makeMetaprogramDependencyDeclarationNodeWithUnions(
                 targetsCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -327,7 +327,7 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getTargets()) && (after instanceof MetaprogramDependencyListNode))
+        if (before.equals(this.getUnionForTargets().getNodeValue()))
         {
             setTargets((MetaprogramDependencyListNode)after);
             return true;

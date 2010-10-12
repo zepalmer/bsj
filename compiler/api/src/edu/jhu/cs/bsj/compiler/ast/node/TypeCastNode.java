@@ -19,7 +19,7 @@ public interface TypeCastNode extends Node, NonAssignmentExpressionNode
      * @return The expression to cast.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression to cast.
@@ -48,7 +48,7 @@ public interface TypeCastNode extends Node, NonAssignmentExpressionNode
      * @return The type to which to cast.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getType() throws ClassCastException;
+    public TypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the type to which to cast.

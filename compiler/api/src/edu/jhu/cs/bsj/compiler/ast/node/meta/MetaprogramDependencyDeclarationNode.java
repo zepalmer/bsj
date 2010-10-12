@@ -21,7 +21,7 @@ public interface MetaprogramDependencyDeclarationNode extends Node, BsjSpecificN
      * @return The names of the metaprogram targets on which to depend.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaprogramDependencyListNode getTargets() throws ClassCastException;
+    public MetaprogramDependencyListNode getTargets()throws ClassCastException;
     
     /**
      * Gets the union object for the names of the metaprogram targets on which to depend.

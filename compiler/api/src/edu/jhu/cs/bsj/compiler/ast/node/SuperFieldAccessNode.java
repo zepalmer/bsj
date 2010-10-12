@@ -38,7 +38,7 @@ public interface SuperFieldAccessNode extends Node, RestrictedPrimaryExpressionN
      * @return The qualifying type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeNode getType() throws ClassCastException;
+    public UnparameterizedTypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the qualifying type.
@@ -67,7 +67,7 @@ public interface SuperFieldAccessNode extends Node, RestrictedPrimaryExpressionN
      * @return The identifier of the field being accessed.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier of the field being accessed.

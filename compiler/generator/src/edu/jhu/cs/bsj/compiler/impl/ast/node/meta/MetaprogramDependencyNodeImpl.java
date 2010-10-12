@@ -142,7 +142,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
         
         if (targetName == null)
         {
-            throw new NullPointerException("Node union for property targetName cannot be null.");
+            targetName = new NormalNodeUnion<NameNode>(null);
         }
         if (this.targetName != null)
         {
@@ -351,7 +351,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTargetName().getType());
         }
-        return factory.makeMetaprogramDependencyNode(
+        return factory.makeMetaprogramDependencyNodeWithUnions(
                 targetNameCopy,
                 getWeak(),
                 getStartLocation(),
@@ -369,7 +369,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getTargetName()) && (after instanceof NameNode))
+        if (before.equals(this.getUnionForTargetName().getNodeValue()))
         {
             setTargetName((NameNode)after);
             return true;

@@ -20,7 +20,7 @@ public interface ExplicitMetaprogramAnchorNode<T extends Node> extends Metaprogr
      * @return The metaprogram on this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaprogramNode getMetaprogram() throws ClassCastException;
+    public MetaprogramNode getMetaprogram()throws ClassCastException;
     
     /**
      * Gets the union object for the metaprogram on this node.

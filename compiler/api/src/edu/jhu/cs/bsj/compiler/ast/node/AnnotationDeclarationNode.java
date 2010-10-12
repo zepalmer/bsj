@@ -23,7 +23,7 @@ public interface AnnotationDeclarationNode extends Node, NamedTypeDeclarationNod
      * @return The modifiers for this type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationModifiersNode getModifiers() throws ClassCastException;
+    public AnnotationModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this type.
@@ -52,7 +52,7 @@ public interface AnnotationDeclarationNode extends Node, NamedTypeDeclarationNod
      * @return This annotation's body.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationBodyNode getBody() throws ClassCastException;
+    public AnnotationBodyNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for this annotation's body.

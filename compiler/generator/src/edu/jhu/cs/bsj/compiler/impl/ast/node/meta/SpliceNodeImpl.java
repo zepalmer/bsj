@@ -135,7 +135,7 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
         
         if (spliceExpression == null)
         {
-            throw new NullPointerException("Node union for property spliceExpression cannot be null.");
+            spliceExpression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.spliceExpression != null)
         {
@@ -310,7 +310,7 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForSpliceExpression().getType());
         }
-        return factory.makeSpliceNode(
+        return factory.makeSpliceNodeWithUnions(
                 spliceExpressionCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -327,7 +327,7 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getSpliceExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForSpliceExpression().getNodeValue()))
         {
             setSpliceExpression((ExpressionNode)after);
             return true;

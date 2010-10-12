@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * 
  * @author Zachary Palmer
  * @param <T> The type of node handled by this filter.
+ * @see NodeUnionFilter
  */
 public interface NodeFilter<T extends Node>
 {

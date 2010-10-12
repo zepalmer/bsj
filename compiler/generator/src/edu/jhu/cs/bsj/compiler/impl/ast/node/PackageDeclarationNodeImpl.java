@@ -150,7 +150,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         
         if (name == null)
         {
-            throw new NullPointerException("Node union for property name cannot be null.");
+            name = new NormalNodeUnion<NameNode>(null);
         }
         if (this.name != null)
         {
@@ -237,7 +237,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -324,7 +324,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         
         if (annotations == null)
         {
-            throw new NullPointerException("Node union for property annotations cannot be null.");
+            annotations = new NormalNodeUnion<AnnotationListNode>(null);
         }
         if (this.annotations != null)
         {
@@ -575,7 +575,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotations().getType());
         }
-        return factory.makePackageDeclarationNode(
+        return factory.makePackageDeclarationNodeWithUnions(
                 nameCopy,
                 metaAnnotationsCopy,
                 annotationsCopy,
@@ -594,17 +594,17 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getName()) && (after instanceof NameNode))
+        if (before.equals(this.getUnionForName().getNodeValue()))
         {
             setName((NameNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
-        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
+        if (before.equals(this.getUnionForAnnotations().getNodeValue()))
         {
             setAnnotations((AnnotationListNode)after);
             return true;

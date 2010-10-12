@@ -52,12 +52,21 @@ public interface NodeUnion<T extends Node>
     public Type getType();
     
     /**
+     * Casts the type of the node contained within this union to another type.
+     * @param factory The factory to use to create the new object.
+     * @param type The type to which to cast.
+     * @return The resulting union object.
+     * @throws ClassCastException If that cast is not legal.
+     */
+    public <E extends Node> NodeUnion<E> castNodeType(BsjNodeFactory factory, Class<E> type);
+    
+    /**
      * An enumeration listing the types of objects which can be contained in a {@link NodeUnion}.
      */
     public static enum Type
     {
-    NORMAL,
-    SPLICE,
+        NORMAL,
+        SPLICE,
     }
     
 }

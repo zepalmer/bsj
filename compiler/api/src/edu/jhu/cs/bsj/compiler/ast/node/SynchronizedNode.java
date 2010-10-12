@@ -22,7 +22,7 @@ public interface SynchronizedNode extends Node, StatementNode
      * @return The synchronization expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the synchronization expression.
@@ -51,7 +51,7 @@ public interface SynchronizedNode extends Node, StatementNode
      * @return The block statements to synchronize.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getBody() throws ClassCastException;
+    public BlockStatementListNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the block statements to synchronize.

@@ -148,7 +148,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         
         if (condition == null)
         {
-            throw new NullPointerException("Node union for property condition cannot be null.");
+            condition = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.condition != null)
         {
@@ -235,7 +235,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         
         if (trueExpression == null)
         {
-            throw new NullPointerException("Node union for property trueExpression cannot be null.");
+            trueExpression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.trueExpression != null)
         {
@@ -322,7 +322,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         
         if (falseExpression == null)
         {
-            throw new NullPointerException("Node union for property falseExpression cannot be null.");
+            falseExpression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.falseExpression != null)
         {
@@ -571,7 +571,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForFalseExpression().getType());
         }
-        return factory.makeConditionalExpressionNode(
+        return factory.makeConditionalExpressionNodeWithUnions(
                 conditionCopy,
                 trueExpressionCopy,
                 falseExpressionCopy,
@@ -590,17 +590,17 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getCondition()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForCondition().getNodeValue()))
         {
             setCondition((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getTrueExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForTrueExpression().getNodeValue()))
         {
             setTrueExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getFalseExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForFalseExpression().getNodeValue()))
         {
             setFalseExpression((ExpressionNode)after);
             return true;

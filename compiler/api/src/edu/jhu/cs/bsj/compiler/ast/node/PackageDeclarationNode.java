@@ -26,7 +26,7 @@ public interface PackageDeclarationNode extends Node, MetaAnnotatableNode, Decla
      * @return The name of the package.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public NameNode getName() throws ClassCastException;
+    public NameNode getName()throws ClassCastException;
     
     /**
      * Gets the union object for the name of the package.
@@ -55,7 +55,7 @@ public interface PackageDeclarationNode extends Node, MetaAnnotatableNode, Decla
      * @return The meta-annotations on the package declaration.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaAnnotationListNode getMetaAnnotations() throws ClassCastException;
+    public MetaAnnotationListNode getMetaAnnotations()throws ClassCastException;
     
     /**
      * Gets the union object for the meta-annotations on the package declaration.
@@ -84,7 +84,7 @@ public interface PackageDeclarationNode extends Node, MetaAnnotatableNode, Decla
      * @return The annotations on the package declaration.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationListNode getAnnotations() throws ClassCastException;
+    public AnnotationListNode getAnnotations()throws ClassCastException;
     
     /**
      * Gets the union object for the annotations on the package declaration.

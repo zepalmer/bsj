@@ -160,7 +160,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<AnnotationModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -247,7 +247,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<AnnotationBodyNode>(null);
         }
         if (this.body != null)
         {
@@ -334,7 +334,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -421,7 +421,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {
@@ -706,7 +706,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeAnnotationDeclarationNode(
+        return factory.makeAnnotationDeclarationNodeWithUnions(
                 modifiersCopy,
                 bodyCopy,
                 identifierCopy,
@@ -726,22 +726,22 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof AnnotationModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((AnnotationModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof AnnotationBodyNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((AnnotationBodyNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

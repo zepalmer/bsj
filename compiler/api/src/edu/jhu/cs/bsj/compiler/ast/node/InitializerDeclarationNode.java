@@ -34,7 +34,7 @@ public interface InitializerDeclarationNode extends Node, ClassMemberNode, Anony
      * @return The body of the initializer.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getBody() throws ClassCastException;
+    public BlockStatementListNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the body of the initializer.

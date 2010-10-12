@@ -134,7 +134,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         
         if (members == null)
         {
-            throw new NullPointerException("Node union for property members cannot be null.");
+            members = new NormalNodeUnion<InterfaceMemberListNode>(null);
         }
         if (this.members != null)
         {
@@ -311,7 +311,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
         }
-        return factory.makeInterfaceBodyNode(
+        return factory.makeInterfaceBodyNodeWithUnions(
                 membersCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMembers()) && (after instanceof InterfaceMemberListNode))
+        if (before.equals(this.getUnionForMembers().getNodeValue()))
         {
             setMembers((InterfaceMemberListNode)after);
             return true;

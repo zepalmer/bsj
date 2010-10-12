@@ -23,7 +23,7 @@ public interface CatchNode extends Node
      * @return The block statements to try.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getBody() throws ClassCastException;
+    public BlockStatementListNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the block statements to try.
@@ -52,7 +52,7 @@ public interface CatchNode extends Node
      * @return This catch block's exception variable.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableNode getParameter() throws ClassCastException;
+    public VariableNode getParameter()throws ClassCastException;
     
     /**
      * Gets the union object for this catch block's exception variable.

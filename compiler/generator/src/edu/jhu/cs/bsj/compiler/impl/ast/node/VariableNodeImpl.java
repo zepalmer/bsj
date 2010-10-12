@@ -150,7 +150,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<VariableModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -237,7 +237,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<TypeNode>(null);
         }
         if (this.type != null)
         {
@@ -324,7 +324,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -575,7 +575,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
         }
-        return factory.makeVariableNode(
+        return factory.makeVariableNodeWithUnions(
                 modifiersCopy,
                 typeCopy,
                 identifierCopy,
@@ -594,17 +594,17 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof VariableModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((VariableModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((TypeNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;

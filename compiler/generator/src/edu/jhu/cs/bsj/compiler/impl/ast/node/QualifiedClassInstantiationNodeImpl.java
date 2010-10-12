@@ -155,7 +155,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         
         if (enclosingExpression == null)
         {
-            throw new NullPointerException("Node union for property enclosingExpression cannot be null.");
+            enclosingExpression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.enclosingExpression != null)
         {
@@ -242,7 +242,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -329,7 +329,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         
         if (typeArguments == null)
         {
-            throw new NullPointerException("Node union for property typeArguments cannot be null.");
+            typeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
         }
         if (this.typeArguments != null)
         {
@@ -659,7 +659,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
         }
-        return factory.makeQualifiedClassInstantiationNode(
+        return factory.makeQualifiedClassInstantiationNodeWithUnions(
                 enclosingExpressionCopy,
                 identifierCopy,
                 typeArgumentsCopy,
@@ -681,32 +681,32 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getEnclosingExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForEnclosingExpression().getNodeValue()))
         {
             setEnclosingExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof TypeArgumentListNode))
+        if (before.equals(this.getUnionForTypeArguments().getNodeValue()))
         {
             setTypeArguments((TypeArgumentListNode)after);
             return true;
         }
-        if (before.equals(this.getConstructorTypeArguments()) && (after instanceof TypeArgumentListNode))
+        if (before.equals(this.getUnionForConstructorTypeArguments().getNodeValue()))
         {
             setConstructorTypeArguments((TypeArgumentListNode)after);
             return true;
         }
-        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
+        if (before.equals(this.getUnionForArguments().getNodeValue()))
         {
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof AnonymousClassBodyNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((AnonymousClassBodyNode)after);
             return true;

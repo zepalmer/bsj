@@ -26,7 +26,7 @@ public interface NameNode extends Node
      * @return The identifier used in this name.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier used in this name.

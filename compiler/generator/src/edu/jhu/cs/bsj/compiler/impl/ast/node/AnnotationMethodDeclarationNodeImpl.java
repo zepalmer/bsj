@@ -166,7 +166,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<AnnotationMethodModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -253,7 +253,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<TypeNode>(null);
         }
         if (this.type != null)
         {
@@ -340,7 +340,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -427,7 +427,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         
         if (defaultValue == null)
         {
-            throw new NullPointerException("Node union for property defaultValue cannot be null.");
+            defaultValue = new NormalNodeUnion<AnnotationValueNode>(null);
         }
         if (this.defaultValue != null)
         {
@@ -514,7 +514,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {
@@ -841,7 +841,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeAnnotationMethodDeclarationNode(
+        return factory.makeAnnotationMethodDeclarationNodeWithUnions(
                 modifiersCopy,
                 typeCopy,
                 identifierCopy,
@@ -862,27 +862,27 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof AnnotationMethodModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((AnnotationMethodModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((TypeNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getDefaultValue()) && (after instanceof AnnotationValueNode))
+        if (before.equals(this.getUnionForDefaultValue().getNodeValue()))
         {
             setDefaultValue((AnnotationValueNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

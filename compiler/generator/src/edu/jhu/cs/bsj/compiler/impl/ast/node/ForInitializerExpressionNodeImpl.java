@@ -134,7 +134,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         
         if (expressions == null)
         {
-            throw new NullPointerException("Node union for property expressions cannot be null.");
+            expressions = new NormalNodeUnion<StatementExpressionListNode>(null);
         }
         if (this.expressions != null)
         {
@@ -311,7 +311,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpressions().getType());
         }
-        return factory.makeForInitializerExpressionNode(
+        return factory.makeForInitializerExpressionNodeWithUnions(
                 expressionsCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpressions()) && (after instanceof StatementExpressionListNode))
+        if (before.equals(this.getUnionForExpressions().getNodeValue()))
         {
             setExpressions((StatementExpressionListNode)after);
             return true;

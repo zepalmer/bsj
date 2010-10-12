@@ -16,7 +16,7 @@ public interface SingleStaticImportNode extends Node, ImportNode
      * @return The name of the type from which to import.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public NameNode getName() throws ClassCastException;
+    public NameNode getName()throws ClassCastException;
     
     /**
      * Gets the union object for the name of the type from which to import.
@@ -45,7 +45,7 @@ public interface SingleStaticImportNode extends Node, ImportNode
      * @return The identifier to import from that type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier to import from that type.

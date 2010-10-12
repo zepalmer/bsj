@@ -1,45 +1,55 @@
-$$$rule$$$ returns [$$$type$$$ ret]
+$$$rule$$$ returns [$$$returnType$$$ ret]
         scope Rule;
         @init {
             ruleStart("$$$rule$$$");
-            List<$$$componentType$$$> list = new ArrayList<$$$componentType$$$>();
+            List<NodeUnion<? extends $$$componentType$$$>> list =
+                    new ArrayList<NodeUnion<? extends $$$componentType$$$>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.make$$$type$$$(list);
+            $ret = factory.makeNormalNodeUnion(factory.make$$$nodeType$$$WithUnions(list));
             ruleStop();
         }
     :
 $$$prefixPart$$$        a=$$$componentRule$$$
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "$$$componentRule$$$", getSourceLocation($a.stop)));
+            }
         }
         (
 $$$separatorPart$$$            b=$$$componentRule$$$
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "$$$componentRule$$$", getSourceLocation($b.stop)));
+	            }
             }
         )*
 $$$lastSeparatorPart$$$$$$postfixPart$$$    ;
 
-optional$$$capRule$$$ returns [$$$type$$$ ret]
-        scope Rule;
-        @init {
-            ruleStart("optional$$$capRule$$$");
-            $ret = null;
-        }
-        @after {
-            if ($ret == null)
-            {
-                $ret = factory.make$$$type$$$();
-            }
-            ruleStop();
-        }
+optional$$$capRule$$$ /*%% standardRuleIntro= type=$$$nodeType$$$ %%*/
     :
         (
             $$$rule$$$
             {
                 $ret = $$$$rule$$$.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.make$$$nodeType$$$());
+            }
+        )
     ;

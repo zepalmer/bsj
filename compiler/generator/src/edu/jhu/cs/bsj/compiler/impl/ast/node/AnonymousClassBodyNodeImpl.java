@@ -134,7 +134,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         
         if (members == null)
         {
-            throw new NullPointerException("Node union for property members cannot be null.");
+            members = new NormalNodeUnion<AnonymousClassMemberListNode>(null);
         }
         if (this.members != null)
         {
@@ -311,7 +311,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
         }
-        return factory.makeAnonymousClassBodyNode(
+        return factory.makeAnonymousClassBodyNodeWithUnions(
                 membersCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMembers()) && (after instanceof AnonymousClassMemberListNode))
+        if (before.equals(this.getUnionForMembers().getNodeValue()))
         {
             setMembers((AnonymousClassMemberListNode)after);
             return true;

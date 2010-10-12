@@ -198,7 +198,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.body != null)
         {
@@ -285,7 +285,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<MethodModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -372,7 +372,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -459,7 +459,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (parameters == null)
         {
-            throw new NullPointerException("Node union for property parameters cannot be null.");
+            parameters = new NormalNodeUnion<VariableListNode>(null);
         }
         if (this.parameters != null)
         {
@@ -546,7 +546,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (varargParameter == null)
         {
-            throw new NullPointerException("Node union for property varargParameter cannot be null.");
+            varargParameter = new NormalNodeUnion<VariableNode>(null);
         }
         if (this.varargParameter != null)
         {
@@ -633,7 +633,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (returnType == null)
         {
-            throw new NullPointerException("Node union for property returnType cannot be null.");
+            returnType = new NormalNodeUnion<TypeNode>(null);
         }
         if (this.returnType != null)
         {
@@ -720,7 +720,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (throwTypes == null)
         {
-            throw new NullPointerException("Node union for property throwTypes cannot be null.");
+            throwTypes = new NormalNodeUnion<UnparameterizedTypeListNode>(null);
         }
         if (this.throwTypes != null)
         {
@@ -807,7 +807,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (typeParameters == null)
         {
-            throw new NullPointerException("Node union for property typeParameters cannot be null.");
+            typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
         }
         if (this.typeParameters != null)
         {
@@ -894,7 +894,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {
@@ -1365,7 +1365,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeMethodDeclarationNode(
+        return factory.makeMethodDeclarationNodeWithUnions(
                 bodyCopy,
                 modifiersCopy,
                 identifierCopy,
@@ -1390,47 +1390,47 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((BlockStatementListNode)after);
             return true;
         }
-        if (before.equals(this.getModifiers()) && (after instanceof MethodModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((MethodModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getParameters()) && (after instanceof VariableListNode))
+        if (before.equals(this.getUnionForParameters().getNodeValue()))
         {
             setParameters((VariableListNode)after);
             return true;
         }
-        if (before.equals(this.getVarargParameter()) && (after instanceof VariableNode))
+        if (before.equals(this.getUnionForVarargParameter().getNodeValue()))
         {
             setVarargParameter((VariableNode)after);
             return true;
         }
-        if (before.equals(this.getReturnType()) && (after instanceof TypeNode))
+        if (before.equals(this.getUnionForReturnType().getNodeValue()))
         {
             setReturnType((TypeNode)after);
             return true;
         }
-        if (before.equals(this.getThrowTypes()) && (after instanceof UnparameterizedTypeListNode))
+        if (before.equals(this.getUnionForThrowTypes().getNodeValue()))
         {
             setThrowTypes((UnparameterizedTypeListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeParameters()) && (after instanceof TypeParameterListNode))
+        if (before.equals(this.getUnionForTypeParameters().getNodeValue()))
         {
             setTypeParameters((TypeParameterListNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

@@ -142,7 +142,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -229,7 +229,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<TypeNode>(null);
         }
         if (this.type != null)
         {
@@ -442,7 +442,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForType().getType());
         }
-        return factory.makeTypeCastNode(
+        return factory.makeTypeCastNodeWithUnions(
                 expressionCopy,
                 typeCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((TypeNode)after);
             return true;

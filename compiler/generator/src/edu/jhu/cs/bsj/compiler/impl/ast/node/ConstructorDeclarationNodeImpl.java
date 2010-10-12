@@ -190,7 +190,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -277,7 +277,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<ConstructorBodyNode>(null);
         }
         if (this.body != null)
         {
@@ -364,7 +364,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<ConstructorModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -451,7 +451,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         
         if (parameters == null)
         {
-            throw new NullPointerException("Node union for property parameters cannot be null.");
+            parameters = new NormalNodeUnion<VariableListNode>(null);
         }
         if (this.parameters != null)
         {
@@ -538,7 +538,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         
         if (varargParameter == null)
         {
-            throw new NullPointerException("Node union for property varargParameter cannot be null.");
+            varargParameter = new NormalNodeUnion<VariableNode>(null);
         }
         if (this.varargParameter != null)
         {
@@ -625,7 +625,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         
         if (throwTypes == null)
         {
-            throw new NullPointerException("Node union for property throwTypes cannot be null.");
+            throwTypes = new NormalNodeUnion<UnparameterizedTypeListNode>(null);
         }
         if (this.throwTypes != null)
         {
@@ -712,7 +712,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         
         if (typeParameters == null)
         {
-            throw new NullPointerException("Node union for property typeParameters cannot be null.");
+            typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
         }
         if (this.typeParameters != null)
         {
@@ -799,7 +799,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {
@@ -1228,7 +1228,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeConstructorDeclarationNode(
+        return factory.makeConstructorDeclarationNodeWithUnions(
                 identifierCopy,
                 bodyCopy,
                 modifiersCopy,
@@ -1252,42 +1252,42 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof ConstructorBodyNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((ConstructorBodyNode)after);
             return true;
         }
-        if (before.equals(this.getModifiers()) && (after instanceof ConstructorModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((ConstructorModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getParameters()) && (after instanceof VariableListNode))
+        if (before.equals(this.getUnionForParameters().getNodeValue()))
         {
             setParameters((VariableListNode)after);
             return true;
         }
-        if (before.equals(this.getVarargParameter()) && (after instanceof VariableNode))
+        if (before.equals(this.getUnionForVarargParameter().getNodeValue()))
         {
             setVarargParameter((VariableNode)after);
             return true;
         }
-        if (before.equals(this.getThrowTypes()) && (after instanceof UnparameterizedTypeListNode))
+        if (before.equals(this.getUnionForThrowTypes().getNodeValue()))
         {
             setThrowTypes((UnparameterizedTypeListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeParameters()) && (after instanceof TypeParameterListNode))
+        if (before.equals(this.getUnionForTypeParameters().getNodeValue()))
         {
             setTypeParameters((TypeParameterListNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

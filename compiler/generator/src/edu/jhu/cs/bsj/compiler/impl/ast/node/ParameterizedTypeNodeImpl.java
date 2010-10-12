@@ -142,7 +142,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         
         if (baseType == null)
         {
-            throw new NullPointerException("Node union for property baseType cannot be null.");
+            baseType = new NormalNodeUnion<UnparameterizedTypeNode>(null);
         }
         if (this.baseType != null)
         {
@@ -229,7 +229,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         
         if (typeArguments == null)
         {
-            throw new NullPointerException("Node union for property typeArguments cannot be null.");
+            typeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
         }
         if (this.typeArguments != null)
         {
@@ -442,7 +442,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
         }
-        return factory.makeParameterizedTypeNode(
+        return factory.makeParameterizedTypeNodeWithUnions(
                 baseTypeCopy,
                 typeArgumentsCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBaseType()) && (after instanceof UnparameterizedTypeNode))
+        if (before.equals(this.getUnionForBaseType().getNodeValue()))
         {
             setBaseType((UnparameterizedTypeNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof TypeArgumentListNode))
+        if (before.equals(this.getUnionForTypeArguments().getNodeValue()))
         {
             setTypeArguments((TypeArgumentListNode)after);
             return true;

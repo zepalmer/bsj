@@ -130,7 +130,7 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
         
         if (metaprogram == null)
         {
-            throw new NullPointerException("Node union for property metaprogram cannot be null.");
+            metaprogram = new NormalNodeUnion<MetaprogramNode>(null);
         }
         if (this.metaprogram != null)
         {

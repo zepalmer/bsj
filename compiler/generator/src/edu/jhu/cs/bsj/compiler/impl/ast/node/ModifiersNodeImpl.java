@@ -138,7 +138,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -225,7 +225,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         
         if (annotations == null)
         {
-            throw new NullPointerException("Node union for property annotations cannot be null.");
+            annotations = new NormalNodeUnion<AnnotationListNode>(null);
         }
         if (this.annotations != null)
         {

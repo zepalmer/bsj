@@ -135,7 +135,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
         
         if (values == null)
         {
-            throw new NullPointerException("Node union for property values cannot be null.");
+            values = new NormalNodeUnion<MetaAnnotationValueListNode>(null);
         }
         if (this.values != null)
         {
@@ -312,7 +312,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForValues().getType());
         }
-        return factory.makeMetaAnnotationArrayValueNode(
+        return factory.makeMetaAnnotationArrayValueNodeWithUnions(
                 valuesCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -329,7 +329,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getValues()) && (after instanceof MetaAnnotationValueListNode))
+        if (before.equals(this.getUnionForValues().getNodeValue()))
         {
             setValues((MetaAnnotationValueListNode)after);
             return true;

@@ -137,7 +137,7 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
         
         if (initializer == null)
         {
-            throw new NullPointerException("Node union for property initializer cannot be null.");
+            initializer = new NormalNodeUnion<ArrayInitializerNode>(null);
         }
         if (this.initializer != null)
         {
@@ -343,7 +343,7 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForBaseType().getType());
         }
-        return factory.makeArrayInitializerCreationNode(
+        return factory.makeArrayInitializerCreationNodeWithUnions(
                 initializerCopy,
                 baseTypeCopy,
                 getArrayLevels(),
@@ -362,12 +362,12 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getInitializer()) && (after instanceof ArrayInitializerNode))
+        if (before.equals(this.getUnionForInitializer().getNodeValue()))
         {
             setInitializer((ArrayInitializerNode)after);
             return true;
         }
-        if (before.equals(this.getBaseType()) && (after instanceof BaseTypeNode))
+        if (before.equals(this.getUnionForBaseType().getNodeValue()))
         {
             setBaseType((BaseTypeNode)after);
             return true;

@@ -21,7 +21,7 @@ public interface ArrayInitializerCreationNode extends ArrayCreationNode
      * @return The initializer for this array.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ArrayInitializerNode getInitializer() throws ClassCastException;
+    public ArrayInitializerNode getInitializer()throws ClassCastException;
     
     /**
      * Gets the union object for the initializer for this array.

@@ -16,7 +16,7 @@ public interface ArrayCreationNode extends Node, PrimaryExpressionNode
      * @return The base type for this array.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BaseTypeNode getBaseType() throws ClassCastException;
+    public BaseTypeNode getBaseType()throws ClassCastException;
     
     /**
      * Gets the union object for the base type for this array.

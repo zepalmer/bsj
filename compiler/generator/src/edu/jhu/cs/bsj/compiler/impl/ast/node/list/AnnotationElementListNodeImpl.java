@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
@@ -22,7 +23,7 @@ public class AnnotationElementListNodeImpl extends ListNodeImpl<AnnotationElemen
 {
     /** General constructor. */
     public AnnotationElementListNodeImpl(
-            List<AnnotationElementNode> children,
+            List<NodeUnion<? extends AnnotationElementNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class AnnotationElementListNodeImpl extends ListNodeImpl<AnnotationElemen
     public boolean getAlwaysOrdered()
     {
         return true;
+    }
+    
+    protected Class<AnnotationElementNode> getChildrenElementType()
+    {
+        return AnnotationElementNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class AnnotationElementListNodeImpl extends ListNodeImpl<AnnotationElemen
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class AnnotationElementListNodeImpl extends ListNodeImpl<AnnotationElemen
     @Override
     public AnnotationElementListNode deepCopy(BsjNodeFactory factory)
     {
-        List<AnnotationElementNode> childrenCopy = new ArrayList<AnnotationElementNode>(getChildren().size());
-        for (AnnotationElementNode element : getChildren())
+        List<NodeUnion<? extends AnnotationElementNode>> childrenCopy = new ArrayList<NodeUnion<? extends AnnotationElementNode>>(getChildren().size());
+        for (NodeUnion<? extends AnnotationElementNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends AnnotationElementNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeAnnotationElementListNode(
+        return factory.makeAnnotationElementListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

@@ -149,7 +149,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         
         if (variable == null)
         {
-            throw new NullPointerException("Node union for property variable cannot be null.");
+            variable = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.variable != null)
         {
@@ -267,7 +267,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -484,7 +484,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
         }
-        return factory.makeAssignmentNode(
+        return factory.makeAssignmentNodeWithUnions(
                 variableCopy,
                 getOperator(),
                 expressionCopy,
@@ -503,12 +503,12 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getVariable()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForVariable().getNodeValue()))
         {
             setVariable((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;

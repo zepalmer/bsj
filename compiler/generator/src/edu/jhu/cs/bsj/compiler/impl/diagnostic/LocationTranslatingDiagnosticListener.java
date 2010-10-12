@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.serializer.SerializedNodeMap;
 
 /**
  * This listener receives BSJ diagnostics and translates them using a serialized node translation map.
+ * 
  * @author Zachary Palmer
  */
 public class LocationTranslatingDiagnosticListener implements DiagnosticListener<BsjSourceLocation>
@@ -19,20 +20,32 @@ public class LocationTranslatingDiagnosticListener implements DiagnosticListener
 	private DiagnosticListener<BsjSourceLocation> listener;
 	/** The node map for translation. */
 	private SerializedNodeMap nodeMap;
+	/** The default location for no-position diagnostics. */
+	private BsjSourceLocation defaultLocation;
 
 	public LocationTranslatingDiagnosticListener(DiagnosticListener<BsjSourceLocation> listener,
-			SerializedNodeMap nodeMap)
+			SerializedNodeMap nodeMap, BsjSourceLocation defaultLocation)
 	{
 		super();
 		this.listener = listener;
 		this.nodeMap = nodeMap;
+		this.defaultLocation = defaultLocation;
 	}
 
 	@Override
 	public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
 	{
-		Node node = this.nodeMap.get((int)diagnostic.getLineNumber(), (int)diagnostic.getColumnNumber());
-		BsjSourceLocation location = node.getStartLocation();
+		int line = (int) diagnostic.getLineNumber();
+		int column = (int) diagnostic.getColumnNumber();
+		final BsjSourceLocation location;
+		if (line == -1 || column == -1)
+		{
+			location = this.defaultLocation;
+		} else
+		{
+			Node node = this.nodeMap.get(line, column);
+			location = node.getStartLocation();
+		}
 		this.listener.report(create(location, diagnostic));
 	}
 

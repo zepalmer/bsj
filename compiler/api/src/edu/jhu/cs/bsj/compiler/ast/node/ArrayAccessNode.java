@@ -19,7 +19,7 @@ public interface ArrayAccessNode extends Node, RestrictedPrimaryExpressionNode
      * @return The expression identifying the array.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public RestrictedPrimaryExpressionNode getArrayExpression() throws ClassCastException;
+    public RestrictedPrimaryExpressionNode getArrayExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression identifying the array.
@@ -48,7 +48,7 @@ public interface ArrayAccessNode extends Node, RestrictedPrimaryExpressionNode
      * @return The index into the array.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getIndexExpression() throws ClassCastException;
+    public ExpressionNode getIndexExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the index into the array.

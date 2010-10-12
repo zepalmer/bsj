@@ -149,7 +149,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         
         if (testExpression == null)
         {
-            throw new NullPointerException("Node union for property testExpression cannot be null.");
+            testExpression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.testExpression != null)
         {
@@ -236,7 +236,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         
         if (messageExpression == null)
         {
-            throw new NullPointerException("Node union for property messageExpression cannot be null.");
+            messageExpression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.messageExpression != null)
         {
@@ -323,7 +323,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -571,7 +571,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeAssertStatementNode(
+        return factory.makeAssertStatementNodeWithUnions(
                 testExpressionCopy,
                 messageExpressionCopy,
                 metaAnnotationsCopy,
@@ -590,17 +590,17 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getTestExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForTestExpression().getNodeValue()))
         {
             setTestExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getMessageExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForMessageExpression().getNodeValue()))
         {
             setMessageExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

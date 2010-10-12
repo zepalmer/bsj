@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
@@ -23,7 +24,7 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
 {
     /** General constructor. */
     public MetaAnnotationValueListNodeImpl(
-            List<MetaAnnotationValueNode> children,
+            List<NodeUnion<? extends MetaAnnotationValueNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -39,6 +40,11 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
     public boolean getAlwaysOrdered()
     {
         return true;
+    }
+    
+    protected Class<MetaAnnotationValueNode> getChildrenElementType()
+    {
+        return MetaAnnotationValueNode.class;
     }
     
     /**
@@ -133,7 +139,7 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -177,13 +183,19 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
     @Override
     public MetaAnnotationValueListNode deepCopy(BsjNodeFactory factory)
     {
-        List<MetaAnnotationValueNode> childrenCopy = new ArrayList<MetaAnnotationValueNode>(getChildren().size());
-        for (MetaAnnotationValueNode element : getChildren())
+        List<NodeUnion<? extends MetaAnnotationValueNode>> childrenCopy = new ArrayList<NodeUnion<? extends MetaAnnotationValueNode>>(getChildren().size());
+        for (NodeUnion<? extends MetaAnnotationValueNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends MetaAnnotationValueNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeMetaAnnotationValueListNode(
+        return factory.makeMetaAnnotationValueListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

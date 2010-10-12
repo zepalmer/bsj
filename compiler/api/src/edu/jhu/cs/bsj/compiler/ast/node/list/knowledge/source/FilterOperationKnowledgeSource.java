@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.source;
 
-import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnionFilter;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -15,5 +15,5 @@ public interface FilterOperationKnowledgeSource<T extends Node> extends Operatio
 	 * Retrieves the input filter.
 	 * @return The filter which was used.
 	 */
-	public NodeFilter<? super T> getFilter();
+	public NodeUnionFilter<? super T> getFilter();
 }

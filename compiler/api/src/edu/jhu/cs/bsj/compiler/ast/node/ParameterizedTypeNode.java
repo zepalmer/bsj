@@ -19,7 +19,7 @@ public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
      * @return The base type being parameterized.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeNode getBaseType() throws ClassCastException;
+    public UnparameterizedTypeNode getBaseType()throws ClassCastException;
     
     /**
      * Gets the union object for the base type being parameterized.
@@ -48,7 +48,7 @@ public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
      * @return The type arguments for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeArgumentListNode getTypeArguments() throws ClassCastException;
+    public TypeArgumentListNode getTypeArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the type arguments for this node.

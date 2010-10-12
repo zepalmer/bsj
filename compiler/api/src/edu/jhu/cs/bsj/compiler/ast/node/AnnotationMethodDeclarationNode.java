@@ -19,7 +19,7 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      * @return The modifiers for this annotation method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationMethodModifiersNode getModifiers() throws ClassCastException;
+    public AnnotationMethodModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this annotation method.
@@ -48,7 +48,7 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      * @return The return type of this annotation method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getType() throws ClassCastException;
+    public TypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the return type of this annotation method.
@@ -77,7 +77,7 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      * @return This annotation method's name.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for this annotation method's name.
@@ -106,7 +106,7 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      * @return The default value for this method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationValueNode getDefaultValue() throws ClassCastException;
+    public AnnotationValueNode getDefaultValue()throws ClassCastException;
     
     /**
      * Gets the union object for the default value for this method.
@@ -135,7 +135,7 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      * @return The associated javadoc comment for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public JavadocNode getJavadoc() throws ClassCastException;
+    public JavadocNode getJavadoc()throws ClassCastException;
     
     /**
      * Gets the union object for the associated javadoc comment for this node.

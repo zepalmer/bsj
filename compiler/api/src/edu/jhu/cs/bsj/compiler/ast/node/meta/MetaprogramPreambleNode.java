@@ -20,7 +20,7 @@ public interface MetaprogramPreambleNode extends Node, BsjSpecificNode
      * @return The imports for this metaprogram.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaprogramImportListNode getImports() throws ClassCastException;
+    public MetaprogramImportListNode getImports()throws ClassCastException;
     
     /**
      * Gets the union object for the imports for this metaprogram.
@@ -73,7 +73,7 @@ public interface MetaprogramPreambleNode extends Node, BsjSpecificNode
      * @return The targets for this metaprogram.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaprogramTargetListNode getTargets() throws ClassCastException;
+    public MetaprogramTargetListNode getTargets()throws ClassCastException;
     
     /**
      * Gets the union object for the targets for this metaprogram.
@@ -102,7 +102,7 @@ public interface MetaprogramPreambleNode extends Node, BsjSpecificNode
      * @return The dependencies for this metaprogram.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaprogramDependencyDeclarationListNode getDependencies() throws ClassCastException;
+    public MetaprogramDependencyDeclarationListNode getDependencies()throws ClassCastException;
     
     /**
      * Gets the union object for the dependencies for this metaprogram.

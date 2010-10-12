@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
-
 public abstract class AbstractPropertyDefinition<T extends AbstractPropertyDefinition<T>>
 {
 	private String name;
@@ -82,7 +81,7 @@ public abstract class AbstractPropertyDefinition<T extends AbstractPropertyDefin
 			return true;
 
 		// See if the type is a parameter with an upper bound of a node
-		if (this.getParentDef().getTypeParameter() != null)
+		if (this.getParentDef() != null && this.getParentDef().getTypeParameter() != null)
 		{
 			String[] components = this.getParentDef().getTypeParameter().split("\\s+");
 			if (components.length >= 3 && components[1].equals("extends") && components[0].equals(this.getBaseType()))
@@ -105,9 +104,56 @@ public abstract class AbstractPropertyDefinition<T extends AbstractPropertyDefin
 		return false;
 	}
 	
+	public boolean isNodeListType()
+	{
+		// See if the type is a list of nodes
+		if (this.getBaseType().equals("List"))
+		{
+			// Is it directly a list of nodes?
+			if (getTypeArg() != null && getTypeArg().endsWith("Node"))
+			{
+				return true;
+			}
+			
+			// Is the type in question a type parameter which we know to be bounded by some node type?
+			// TODO: clean this up - requires knowledge of scope.  For now, assuming that T is always of type node
+			if ("T".equals(getTypeArg()))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * If this property is wrappable, returns a description of the wrapped type for this property; otherwise, returns
+	 * the full type of this property.
+	 * @return The wrapped type of this property.
+	 */
+	public String getWrappedType()
+	{
+		if (this.isWrappable())
+		{
+			if (this.isNodeType())
+			{
+				return "NodeUnion<? extends " + getFullType() + ">";
+			} else if (this.isNodeListType())
+			{
+				return "List<NodeUnion<? extends " + getTypeArg() + ">>";
+			} else
+			{
+				throw new IllegalStateException("Don't know what to do here - there wasn't another option when this code was written");
+			}
+		} else
+		{
+			return this.getFullType();
+		}
+	}
+
 	public boolean isWrappable()
 	{
-		return this.isNodeType() && this.isAllowUnion();
+		return (this.isNodeType() || this.isNodeListType()) && this.isAllowUnion();
 	}
 
 	public abstract T deriveWithBaseType(String name);

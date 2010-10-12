@@ -134,7 +134,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<TypeNode>(null);
         }
         if (this.type != null)
         {
@@ -313,7 +313,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForType().getType());
         }
-        return factory.makeArrayTypeNode(
+        return factory.makeArrayTypeNodeWithUnions(
                 typeCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -330,7 +330,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((TypeNode)after);
             return true;

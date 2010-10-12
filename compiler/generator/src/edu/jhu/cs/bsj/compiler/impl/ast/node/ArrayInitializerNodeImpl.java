@@ -134,7 +134,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         
         if (initializers == null)
         {
-            throw new NullPointerException("Node union for property initializers cannot be null.");
+            initializers = new NormalNodeUnion<VariableInitializerListNode>(null);
         }
         if (this.initializers != null)
         {
@@ -311,7 +311,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForInitializers().getType());
         }
-        return factory.makeArrayInitializerNode(
+        return factory.makeArrayInitializerNodeWithUnions(
                 initializersCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getInitializers()) && (after instanceof VariableInitializerListNode))
+        if (before.equals(this.getUnionForInitializers().getNodeValue()))
         {
             setInitializers((VariableInitializerListNode)after);
             return true;

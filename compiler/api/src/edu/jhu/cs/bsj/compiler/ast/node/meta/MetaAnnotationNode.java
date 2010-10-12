@@ -24,7 +24,7 @@ public interface MetaAnnotationNode extends Node, BsjSpecificNode
      * @return The annotation type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeNode getAnnotationType() throws ClassCastException;
+    public UnparameterizedTypeNode getAnnotationType()throws ClassCastException;
     
     /**
      * Gets the union object for the annotation type.

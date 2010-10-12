@@ -158,7 +158,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<UnparameterizedTypeNode>(null);
         }
         if (this.type != null)
         {
@@ -245,7 +245,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -332,7 +332,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         
         if (arguments == null)
         {
-            throw new NullPointerException("Node union for property arguments cannot be null.");
+            arguments = new NormalNodeUnion<ExpressionListNode>(null);
         }
         if (this.arguments != null)
         {
@@ -419,7 +419,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         
         if (typeArguments == null)
         {
-            throw new NullPointerException("Node union for property typeArguments cannot be null.");
+            typeArguments = new NormalNodeUnion<ReferenceTypeListNode>(null);
         }
         if (this.typeArguments != null)
         {
@@ -706,7 +706,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
         }
-        return factory.makeSuperMethodInvocationNode(
+        return factory.makeSuperMethodInvocationNodeWithUnions(
                 typeCopy,
                 identifierCopy,
                 argumentsCopy,
@@ -726,22 +726,22 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getType()) && (after instanceof UnparameterizedTypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((UnparameterizedTypeNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
+        if (before.equals(this.getUnionForArguments().getNodeValue()))
         {
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
+        if (before.equals(this.getUnionForTypeArguments().getNodeValue()))
         {
             setTypeArguments((ReferenceTypeListNode)after);
             return true;

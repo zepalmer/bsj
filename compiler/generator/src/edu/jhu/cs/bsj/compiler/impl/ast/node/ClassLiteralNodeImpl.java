@@ -134,7 +134,7 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
         
         if (value == null)
         {
-            throw new NullPointerException("Node union for property value cannot be null.");
+            value = new NormalNodeUnion<LiteralizableTypeNode>(null);
         }
         if (this.value != null)
         {
@@ -311,7 +311,7 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForValue().getType());
         }
-        return factory.makeClassLiteralNode(
+        return factory.makeClassLiteralNodeWithUnions(
                 valueCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getValue()) && (after instanceof LiteralizableTypeNode))
+        if (before.equals(this.getUnionForValue().getNodeValue()))
         {
             setValue((LiteralizableTypeNode)after);
             return true;

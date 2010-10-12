@@ -26,7 +26,7 @@ public interface CompilationUnitNode extends Node
      * @return The package declaration for this unit.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public PackageDeclarationNode getPackageDeclaration() throws ClassCastException;
+    public PackageDeclarationNode getPackageDeclaration()throws ClassCastException;
     
     /**
      * Gets the union object for the package declaration for this unit.
@@ -55,7 +55,7 @@ public interface CompilationUnitNode extends Node
      * @return The global metaprogram imports used in this unit.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaprogramImportListNode getMetaimports() throws ClassCastException;
+    public MetaprogramImportListNode getMetaimports()throws ClassCastException;
     
     /**
      * Gets the union object for the global metaprogram imports used in this unit.
@@ -84,7 +84,7 @@ public interface CompilationUnitNode extends Node
      * @return The imports used in this unit.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ImportListNode getImports() throws ClassCastException;
+    public ImportListNode getImports()throws ClassCastException;
     
     /**
      * Gets the union object for the imports used in this unit.
@@ -113,7 +113,7 @@ public interface CompilationUnitNode extends Node
      * @return The type declarations of this unit.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeDeclarationListNode getTypeDecls() throws ClassCastException;
+    public TypeDeclarationListNode getTypeDecls()throws ClassCastException;
     
     /**
      * Gets the union object for the type declarations of this unit.

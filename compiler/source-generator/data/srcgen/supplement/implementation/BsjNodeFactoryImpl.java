@@ -16,7 +16,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 
 	/** The node manager to provide to all nodes. */
 	private BsjNodeManager manager;
-	
+
 	/** Whether or not to mark created nodes as binary nodes. */
 	private boolean binary;
 
@@ -79,7 +79,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	{
 		this.stopLocation = stopLocation;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -88,7 +88,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	{
 		return this.binary;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -137,7 +137,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		}
 		return node;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -148,12 +148,31 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 			throw new IllegalArgumentException("Invalid level count: " + levels);
 		}
 		ArrayTypeNode ret = makeArrayTypeNode(type);
-		for (int i=1;i<levels;i++)
+		for (int i = 1; i < levels; i++)
 		{
 			ret = makeArrayTypeNode(ret);
 		}
 		return ret;
 	}
 
+	// MAKE METHOD SUPPORT ROUTINES //////////////////////////////////////////
+
+	/**
+	 * Wraps a list of nodes in normal unions.
+	 * 
+	 * @param list The list of nodes.
+	 * @return The resulting union list.
+	 */
+	private <T extends Node> List<NodeUnion<? extends T>> unionWrapList(List<? extends T> nodes)
+	{
+		List<NodeUnion<? extends T>> list = new ArrayList<NodeUnion<? extends T>>(nodes.size());
+		for (T node : nodes)
+		{
+			list.add(makeNormalNodeUnion(node));
+		}
+		return list;
+	}
+
+	// END MANUALLY WRITTEN CODE /////////////////////////////////////////////
 	/* GEN:stop */
 }

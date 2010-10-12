@@ -17,7 +17,7 @@ public interface ParameterizableTypeDeclarationNode extends Node, TypeDeclaratio
      * @return The name of this type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the name of this type.
@@ -46,7 +46,7 @@ public interface ParameterizableTypeDeclarationNode extends Node, TypeDeclaratio
      * @return This type's type parameters.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeParameterListNode getTypeParameters() throws ClassCastException;
+    public TypeParameterListNode getTypeParameters()throws ClassCastException;
     
     /**
      * Gets the union object for this type's type parameters.

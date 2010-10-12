@@ -135,7 +135,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
         
         if (annotation == null)
         {
-            throw new NullPointerException("Node union for property annotation cannot be null.");
+            annotation = new NormalNodeUnion<MetaAnnotationNode>(null);
         }
         if (this.annotation != null)
         {
@@ -312,7 +312,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotation().getType());
         }
-        return factory.makeMetaAnnotationMetaAnnotationValueNode(
+        return factory.makeMetaAnnotationMetaAnnotationValueNodeWithUnions(
                 annotationCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -329,7 +329,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getAnnotation()) && (after instanceof MetaAnnotationNode))
+        if (before.equals(this.getUnionForAnnotation().getNodeValue()))
         {
             setAnnotation((MetaAnnotationNode)after);
             return true;

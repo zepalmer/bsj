@@ -150,7 +150,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -237,7 +237,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.body != null)
         {
@@ -324,7 +324,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -572,7 +572,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeSynchronizedNode(
+        return factory.makeSynchronizedNodeWithUnions(
                 expressionCopy,
                 bodyCopy,
                 metaAnnotationsCopy,
@@ -591,17 +591,17 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((BlockStatementListNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

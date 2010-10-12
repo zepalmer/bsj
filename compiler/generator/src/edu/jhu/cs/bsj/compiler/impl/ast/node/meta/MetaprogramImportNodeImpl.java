@@ -135,7 +135,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         
         if (importNode == null)
         {
-            throw new NullPointerException("Node union for property importNode cannot be null.");
+            importNode = new NormalNodeUnion<ImportNode>(null);
         }
         if (this.importNode != null)
         {
@@ -310,7 +310,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForImportNode().getType());
         }
-        return factory.makeMetaprogramImportNode(
+        return factory.makeMetaprogramImportNodeWithUnions(
                 importNodeCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -327,7 +327,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getImportNode()) && (after instanceof ImportNode))
+        if (before.equals(this.getUnionForImportNode().getNodeValue()))
         {
             setImportNode((ImportNode)after);
             return true;

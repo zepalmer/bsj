@@ -19,7 +19,7 @@ public interface CodeLiteralNode extends Node, LiteralNode<Node>, BsjSpecificNod
      * @return The node represented by this code literal.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public Node getValue() throws ClassCastException;
+    public Node getValue()throws ClassCastException;
     
     /**
      * Gets the union object for the node represented by this code literal.

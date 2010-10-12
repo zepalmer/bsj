@@ -21,7 +21,7 @@ public interface AssignmentNode extends Node, StatementExpressionNode
      * @return The variable to which to assign a value.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getVariable() throws ClassCastException;
+    public ExpressionNode getVariable()throws ClassCastException;
     
     /**
      * Gets the union object for the variable to which to assign a value.
@@ -62,7 +62,7 @@ public interface AssignmentNode extends Node, StatementExpressionNode
      * @return The expression to use.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression to use.

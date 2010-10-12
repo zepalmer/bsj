@@ -19,7 +19,7 @@ public interface LabeledStatementNode extends Node, StatementNode
      * @return The statement's label.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getLabel() throws ClassCastException;
+    public IdentifierNode getLabel()throws ClassCastException;
     
     /**
      * Gets the union object for the statement's label.
@@ -48,7 +48,7 @@ public interface LabeledStatementNode extends Node, StatementNode
      * @return The statement being labeled.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementNode getStatement() throws ClassCastException;
+    public StatementNode getStatement()throws ClassCastException;
     
     /**
      * Gets the union object for the statement being labeled.

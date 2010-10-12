@@ -180,7 +180,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<T>(null);
         }
         if (this.modifiers != null)
         {
@@ -267,7 +267,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         
         if (extendsClause == null)
         {
-            throw new NullPointerException("Node union for property extendsClause cannot be null.");
+            extendsClause = new NormalNodeUnion<DeclaredTypeNode>(null);
         }
         if (this.extendsClause != null)
         {
@@ -354,7 +354,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         
         if (implementsClause == null)
         {
-            throw new NullPointerException("Node union for property implementsClause cannot be null.");
+            implementsClause = new NormalNodeUnion<DeclaredTypeListNode>(null);
         }
         if (this.implementsClause != null)
         {
@@ -441,7 +441,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<ClassBodyNode>(null);
         }
         if (this.body != null)
         {
@@ -528,7 +528,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         
         if (typeParameters == null)
         {
-            throw new NullPointerException("Node union for property typeParameters cannot be null.");
+            typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
         }
         if (this.typeParameters != null)
         {
@@ -615,7 +615,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -702,7 +702,7 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {

@@ -19,7 +19,7 @@ public interface QualifiedNameNode extends NameNode
      * @return The name being qualified.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public NameNode getBase() throws ClassCastException;
+    public NameNode getBase()throws ClassCastException;
     
     /**
      * Gets the union object for the name being qualified.

@@ -267,7 +267,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForName().getType());
         }
-        return factory.makePackageNode(
+        return factory.makePackageNodeWithUnions(
                 nameCopy,
                 getStartLocation(),
                 getStopLocation());

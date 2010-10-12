@@ -11,8 +11,8 @@ package edu.jhu.cs.bsj.compiler.impl.ast.exception;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListMissingElementException;
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramListMissingElementDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramListMissingElementDiagnosticImpl;
@@ -29,7 +29,7 @@ public class MetaprogramListMissingElementExceptionImpl extends MetaprogramListM
     public MetaprogramListMissingElementExceptionImpl(
             MetaprogramAnchorNode<?> anchor,
             BsjSourceLocation metaprogram,
-            Node element)
+            NodeUnion<?> element)
     {
         super(anchor, metaprogram, element);
     }

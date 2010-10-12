@@ -16,7 +16,7 @@ public interface InvokableNameBindingNode extends Node
      * @return The identifier naming the invokable which is declared.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier naming the invokable which is declared.

@@ -142,7 +142,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -229,7 +229,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         
         if (value == null)
         {
-            throw new NullPointerException("Node union for property value cannot be null.");
+            value = new NormalNodeUnion<AnnotationValueNode>(null);
         }
         if (this.value != null)
         {
@@ -440,7 +440,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForValue().getType());
         }
-        return factory.makeAnnotationElementNode(
+        return factory.makeAnnotationElementNodeWithUnions(
                 identifierCopy,
                 valueCopy,
                 getStartLocation(),
@@ -458,12 +458,12 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getValue()) && (after instanceof AnnotationValueNode))
+        if (before.equals(this.getUnionForValue().getNodeValue()))
         {
             setValue((AnnotationValueNode)after);
             return true;

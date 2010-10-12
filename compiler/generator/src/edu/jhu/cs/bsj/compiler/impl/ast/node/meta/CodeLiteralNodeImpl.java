@@ -134,7 +134,7 @@ public class CodeLiteralNodeImpl extends NodeImpl implements CodeLiteralNode
         
         if (value == null)
         {
-            throw new NullPointerException("Node union for property value cannot be null.");
+            value = new NormalNodeUnion<Node>(null);
         }
         if (this.value != null)
         {
@@ -311,7 +311,7 @@ public class CodeLiteralNodeImpl extends NodeImpl implements CodeLiteralNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForValue().getType());
         }
-        return factory.makeCodeLiteralNode(
+        return factory.makeCodeLiteralNodeWithUnions(
                 valueCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class CodeLiteralNodeImpl extends NodeImpl implements CodeLiteralNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getValue()) && (after instanceof Node))
+        if (before.equals(this.getUnionForValue().getNodeValue()))
         {
             setValue((Node)after);
             return true;

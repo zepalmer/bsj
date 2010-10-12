@@ -29,7 +29,7 @@ public interface CaseNode extends Node
      * @return The expression used in this case label.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression used in this case label.
@@ -58,7 +58,7 @@ public interface CaseNode extends Node
      * @return The statements to execute in this case node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getStatements() throws ClassCastException;
+    public BlockStatementListNode getStatements()throws ClassCastException;
     
     /**
      * Gets the union object for the statements to execute in this case node.

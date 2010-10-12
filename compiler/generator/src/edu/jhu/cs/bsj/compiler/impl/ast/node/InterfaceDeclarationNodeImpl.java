@@ -176,7 +176,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         
         if (modifiers == null)
         {
-            throw new NullPointerException("Node union for property modifiers cannot be null.");
+            modifiers = new NormalNodeUnion<InterfaceModifiersNode>(null);
         }
         if (this.modifiers != null)
         {
@@ -263,7 +263,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         
         if (extendsClause == null)
         {
-            throw new NullPointerException("Node union for property extendsClause cannot be null.");
+            extendsClause = new NormalNodeUnion<DeclaredTypeListNode>(null);
         }
         if (this.extendsClause != null)
         {
@@ -350,7 +350,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<InterfaceBodyNode>(null);
         }
         if (this.body != null)
         {
@@ -437,7 +437,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         
         if (typeParameters == null)
         {
-            throw new NullPointerException("Node union for property typeParameters cannot be null.");
+            typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
         }
         if (this.typeParameters != null)
         {
@@ -524,7 +524,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -611,7 +611,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         
         if (javadoc == null)
         {
-            throw new NullPointerException("Node union for property javadoc cannot be null.");
+            javadoc = new NormalNodeUnion<JavadocNode>(null);
         }
         if (this.javadoc != null)
         {
@@ -970,7 +970,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeInterfaceDeclarationNode(
+        return factory.makeInterfaceDeclarationNodeWithUnions(
                 modifiersCopy,
                 extendsClauseCopy,
                 bodyCopy,
@@ -992,32 +992,32 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof InterfaceModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((InterfaceModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getExtendsClause()) && (after instanceof DeclaredTypeListNode))
+        if (before.equals(this.getUnionForExtendsClause().getNodeValue()))
         {
             setExtendsClause((DeclaredTypeListNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof InterfaceBodyNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((InterfaceBodyNode)after);
             return true;
         }
-        if (before.equals(this.getTypeParameters()) && (after instanceof TypeParameterListNode))
+        if (before.equals(this.getUnionForTypeParameters().getNodeValue()))
         {
             setTypeParameters((TypeParameterListNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

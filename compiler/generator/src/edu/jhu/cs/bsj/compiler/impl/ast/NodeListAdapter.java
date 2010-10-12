@@ -8,6 +8,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import edu.jhu.cs.bsj.compiler.ast.NodeList;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.utils.SubList;
 
@@ -19,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.SubList;
  * 
  * @author Zachary Palmer
  */
-public class NodeListAdapter<T extends Node> implements List<T>
+public class NodeListAdapter<T extends Node> implements List<NodeUnion<? extends T>>
 {
 	/** The node list which backs all operations by this list. */
 	private NodeList<T> list;
@@ -31,37 +32,37 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	}
 
 	@Override
-	public void add(int index, T element)
+	public void add(int index, NodeUnion<? extends T> element)
 	{
 		if (index == 0)
 		{
-			this.list.addFirst(element);
+			this.list.addFirstUnion(element);
 		} else
 		{
-			T e = this.list.getFirst();
+			NodeUnion<? extends T> e = this.list.getFirstUnion();
 			for (int i = 0; i < index - 1; i++)
 			{
 				if (e == null)
 					throw new IndexOutOfBoundsException(String.valueOf(index));
-				e = this.list.getAfter(e);
+				e = this.list.getAfterUnion(e);
 			}
 			if (e == null)
 				throw new IndexOutOfBoundsException(String.valueOf(index));
-			this.list.addAfter(e, element);
+			this.list.addAfterUnion(e, element);
 		}
 	}
 
 	@Override
-	public boolean add(T e)
+	public boolean add(NodeUnion<? extends T> e)
 	{
-		this.list.addLast(e);
+		this.list.addLastUnion(e);
 		return true;
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends T> c)
+	public boolean addAll(Collection<? extends NodeUnion<? extends T>> c)
 	{
-		for (T e : c)
+		for (NodeUnion<? extends T> e : c)
 		{
 			this.add(e);
 		}
@@ -69,9 +70,9 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends T> c)
+	public boolean addAll(int index, Collection<? extends NodeUnion<? extends T>> c)
 	{
-		for (T t : c)
+		for (NodeUnion<? extends T> t : c)
 		{
 			add(index, t);
 			index++;
@@ -91,7 +92,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	@Override
 	public boolean contains(Object o)
 	{
-		for (T t : this)
+		for (NodeUnion<? extends T> t : this)
 		{
 			if (t.equals(o))
 			{
@@ -113,14 +114,14 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	}
 
 	@Override
-	public T get(int index)
+	public NodeUnion<? extends T> get(int index)
 	{
 		if (index < 0)
 		{
 			throw new IndexOutOfBoundsException(String.valueOf(index));
 		}
-		Iterator<T> it = this.iterator();
-		T ret = null;
+		Iterator<NodeUnion<? extends T>> it = this.iterator();
+		NodeUnion<? extends T> ret = null;
 		for (int i = 0; i <= index; i++)
 		{
 			if (!it.hasNext())
@@ -136,7 +137,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	public int indexOf(Object o)
 	{
 		int i = 0;
-		for (T t : this)
+		for (NodeUnion<? extends T> t : this)
 		{
 			if (t.equals(o))
 			{
@@ -154,7 +155,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	}
 
 	@Override
-	public Iterator<T> iterator()
+	public Iterator<NodeUnion<? extends T>> iterator()
 	{
 		return listIterator(0);
 	}
@@ -162,7 +163,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	@Override
 	public int lastIndexOf(Object o)
 	{
-		ListIterator<T> it = this.listIterator();
+		ListIterator<NodeUnion<? extends T>> it = this.listIterator();
 		int i = 0;
 		while (it.hasNext())
 		{
@@ -172,7 +173,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 		while (it.hasPrevious())
 		{
 			i--;
-			T t = it.previous();
+			NodeUnion<? extends T> t = it.previous();
 			if (t.equals(o))
 			{
 				return i;
@@ -182,22 +183,22 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	}
 
 	@Override
-	public ListIterator<T> listIterator()
+	public ListIterator<NodeUnion<? extends T>> listIterator()
 	{
 		return listIterator(0);
 	}
 
 	@Override
-	public ListIterator<T> listIterator(int index)
+	public ListIterator<NodeUnion<? extends T>> listIterator(int index)
 	{
-		return new ListIterator<T>()
+		return new ListIterator<NodeUnion<? extends T>>()
 		{
 			/** Indicates this iterator's current cursor. */
 			private int position = 0;
 			/** Indicates the index of the anchor. */
 			private int anchorIndex = Integer.MIN_VALUE;
 			/** Indicates a value in the list (or <code>null</code> if no value has been read). */
-			private T anchor = null;
+			private NodeUnion<? extends T> anchor = null;
 			/** Indicates whether or not set may be called. */
 			private boolean setValid = false;
 			/** Indicates whether or not remove may be called. */
@@ -209,7 +210,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 			{
 				if (anchor == null)
 				{
-					T t = NodeListAdapter.this.list.getFirst();
+					NodeUnion<? extends T> t = NodeListAdapter.this.list.getFirstUnion();
 					if (t == null)
 					{
 						anchor = null;
@@ -222,7 +223,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 
 				while (anchorIndex < index)
 				{
-					T result = NodeListAdapter.this.list.getAfter(anchor);
+					NodeUnion<? extends T> result = NodeListAdapter.this.list.getAfterUnion(anchor);
 					if (result == null)
 					{
 						return false;
@@ -233,7 +234,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 
 				while (anchorIndex > index)
 				{
-					T result = NodeListAdapter.this.list.getBefore(anchor);
+					NodeUnion<? extends T> result = NodeListAdapter.this.list.getBeforeUnion(anchor);
 					if (result == null)
 					{
 						return false;
@@ -245,7 +246,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 				return true;
 			}
 
-			private T peekNext()
+			private NodeUnion<? extends T> peekNext()
 			{
 				if (moveAnchorTo(position))
 				{
@@ -256,7 +257,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 				}
 			}
 
-			private T peekPrevious()
+			private NodeUnion<? extends T> peekPrevious()
 			{
 				if (moveAnchorTo(position - 1))
 				{
@@ -268,14 +269,14 @@ public class NodeListAdapter<T extends Node> implements List<T>
 			}
 
 			@Override
-			public void add(T e)
+			public void add(NodeUnion<? extends T> e)
 			{
 				if (moveAnchorTo(this.position))
 				{
-					NodeListAdapter.this.list.addAfter(anchor, e);
+					NodeListAdapter.this.list.addAfterUnion(anchor, e);
 				} else
 				{
-					NodeListAdapter.this.list.addLast(e);
+					NodeListAdapter.this.list.addLastUnion(e);
 				}
 				this.position++;
 				this.setValid = false;
@@ -295,9 +296,9 @@ public class NodeListAdapter<T extends Node> implements List<T>
 			}
 
 			@Override
-			public T next()
+			public NodeUnion<? extends T> next()
 			{
-				T ret = peekNext();
+				NodeUnion<? extends T> ret = peekNext();
 				if (ret == null)
 				{
 					throw new NoSuchElementException();
@@ -316,9 +317,9 @@ public class NodeListAdapter<T extends Node> implements List<T>
 			}
 
 			@Override
-			public T previous()
+			public NodeUnion<? extends T> previous()
 			{
-				T ret = peekPrevious();
+				NodeUnion<? extends T> ret = peekPrevious();
 				if (ret == null)
 				{
 					throw new NoSuchElementException();
@@ -345,7 +346,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 				}
 
 				moveAnchorTo(lastIndex);
-				T value = this.anchor;
+				NodeUnion<? extends T> value = this.anchor;
 				if (this.lastIndex == 0)
 				{
 					moveAnchorTo(lastIndex + 1);
@@ -353,7 +354,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 				{
 					moveAnchorTo(lastIndex - 1);
 				}
-				NodeListAdapter.this.list.remove(value);
+				NodeListAdapter.this.list.removeUnion(value);
 				this.removeValid = false;
 				this.setValid = false;
 				if (anchorIndex >= lastIndex)
@@ -361,7 +362,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 			}
 
 			@Override
-			public void set(T e)
+			public void set(NodeUnion<? extends T> e)
 			{
 				if (!setValid)
 				{
@@ -370,8 +371,8 @@ public class NodeListAdapter<T extends Node> implements List<T>
 
 				if (lastIndex == 0)
 				{
-					NodeListAdapter.this.list.remove(NodeListAdapter.this.list.getFirst());
-					NodeListAdapter.this.list.addFirst(e);
+					NodeListAdapter.this.list.removeUnion(NodeListAdapter.this.list.getFirstUnion());
+					NodeListAdapter.this.list.addFirstUnion(e);
 					if (anchorIndex == 0)
 					{
 						anchor = e;
@@ -379,8 +380,8 @@ public class NodeListAdapter<T extends Node> implements List<T>
 				} else
 				{
 					moveAnchorTo(lastIndex - 1);
-					NodeListAdapter.this.list.remove(NodeListAdapter.this.list.getAfter(anchor));
-					NodeListAdapter.this.list.addAfter(anchor, e);
+					NodeListAdapter.this.list.removeUnion(NodeListAdapter.this.list.getAfterUnion(anchor));
+					NodeListAdapter.this.list.addAfterUnion(anchor, e);
 				}
 			}
 
@@ -395,9 +396,9 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	}
 
 	@Override
-	public T remove(int index)
+	public NodeUnion<? extends T> remove(int index)
 	{
-		T ret = this.get(index);
+		NodeUnion<? extends T> ret = this.get(index);
 		this.remove(ret);
 		return ret;
 	}
@@ -405,7 +406,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	@Override
 	public boolean remove(Object o)
 	{
-		Iterator<T> it = this.iterator();
+		Iterator<NodeUnion<? extends T>> it = this.iterator();
 		while (it.hasNext())
 		{
 			if (it.next().equals(o))
@@ -432,7 +433,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	public boolean retainAll(Collection<?> c)
 	{
 		boolean ret = false;
-		Iterator<T> it = this.iterator();
+		Iterator<NodeUnion<? extends T>> it = this.iterator();
 		while (it.hasNext())
 		{
 			if (!c.contains(it.next()))
@@ -445,14 +446,14 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	}
 
 	@Override
-	public T set(int index, T element)
+	public NodeUnion<? extends T> set(int index, NodeUnion<? extends T> element)
 	{
 		if (index < 0)
 		{
 			throw new IndexOutOfBoundsException(String.valueOf(index));
 		}
-		ListIterator<T> it = this.listIterator();
-		T last = null;
+		ListIterator<NodeUnion<? extends T>> it = this.listIterator();
+		NodeUnion<? extends T> last = null;
 		for (int i = 0; i <= index; i++)
 		{
 			if (!it.hasNext())
@@ -470,7 +471,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	{
 		int size = 0;
 		for (@SuppressWarnings("unused")
-		T t : this)
+		NodeUnion<? extends T> t : this)
 		{
 			size++;
 		}
@@ -478,9 +479,9 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	}
 
 	@Override
-	public List<T> subList(int fromIndex, int toIndex)
+	public List<NodeUnion<? extends T>> subList(int fromIndex, int toIndex)
 	{
-		return new SubList<T>(this, fromIndex, toIndex);
+		return new SubList<NodeUnion<? extends T>>(this, fromIndex, toIndex);
 	}
 
 	@Override
@@ -488,7 +489,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 	{
 		Object[] ret = new Object[size()];
 		int i = 0;
-		for (T t : this)
+		for (NodeUnion<? extends T> t : this)
 		{
 			ret[i++] = t;
 		}
@@ -506,7 +507,7 @@ public class NodeListAdapter<T extends Node> implements List<T>
 			a = (E[]) Array.newInstance(a.getClass().getComponentType(), size);
 		}
 
-		for (T t : this)
+		for (NodeUnion<? extends T> t : this)
 		{
 			Array.set(a, i++, t);
 		}

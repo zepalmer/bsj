@@ -26,7 +26,7 @@ public interface MetaprogramImportNode extends Node, BsjSpecificNode
      * @return The import for the metaprogram.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ImportNode getImportNode() throws ClassCastException;
+    public ImportNode getImportNode()throws ClassCastException;
     
     /**
      * Gets the union object for the import for the metaprogram.

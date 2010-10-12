@@ -24,7 +24,7 @@ public interface EnumDeclarationNode extends Node, NamedTypeDeclarationNode<Clas
      * @return The modifiers for this type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public EnumModifiersNode getModifiers() throws ClassCastException;
+    public EnumModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this type.
@@ -53,7 +53,7 @@ public interface EnumDeclarationNode extends Node, NamedTypeDeclarationNode<Clas
      * @return The implements clause.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public DeclaredTypeListNode getImplementsClause() throws ClassCastException;
+    public DeclaredTypeListNode getImplementsClause()throws ClassCastException;
     
     /**
      * Gets the union object for the implements clause.
@@ -82,7 +82,7 @@ public interface EnumDeclarationNode extends Node, NamedTypeDeclarationNode<Clas
      * @return This enum's body.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public EnumBodyNode getBody() throws ClassCastException;
+    public EnumBodyNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for this enum's body.

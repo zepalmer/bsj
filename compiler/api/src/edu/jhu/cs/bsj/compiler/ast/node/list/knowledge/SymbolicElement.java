@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node.list.knowledge;
 
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -16,7 +17,7 @@ public interface SymbolicElement<T extends Node>
 	 * element, <code>null</code> is returned.
 	 * @return The data contained in this symbolic element.
 	 */
-	public T getData();
+	public NodeUnion<? extends T> getData();
 	
 	/**
 	 * Determines whether or not this element is order-dependent.

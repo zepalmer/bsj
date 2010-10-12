@@ -19,7 +19,7 @@ public interface EnumConstantDeclarationNode extends Node, DeclarationNode, Vari
      * @return The modifiers for this enum constant.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public EnumConstantModifiersNode getModifiers() throws ClassCastException;
+    public EnumConstantModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this enum constant.
@@ -48,7 +48,7 @@ public interface EnumConstantDeclarationNode extends Node, DeclarationNode, Vari
      * @return The name of this constant.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the name of this constant.
@@ -77,7 +77,7 @@ public interface EnumConstantDeclarationNode extends Node, DeclarationNode, Vari
      * @return The arguments to the enum constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionListNode getArguments() throws ClassCastException;
+    public ExpressionListNode getArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the arguments to the enum constructor.
@@ -106,7 +106,7 @@ public interface EnumConstantDeclarationNode extends Node, DeclarationNode, Vari
      * @return The body used to anonymously subclass the constant.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnonymousClassBodyNode getBody() throws ClassCastException;
+    public AnonymousClassBodyNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the body used to anonymously subclass the constant.
@@ -135,7 +135,7 @@ public interface EnumConstantDeclarationNode extends Node, DeclarationNode, Vari
      * @return The associated javadoc comment for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public JavadocNode getJavadoc() throws ClassCastException;
+    public JavadocNode getJavadoc()throws ClassCastException;
     
     /**
      * Gets the union object for the associated javadoc comment for this node.

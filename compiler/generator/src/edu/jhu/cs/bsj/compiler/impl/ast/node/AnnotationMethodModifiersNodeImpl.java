@@ -219,7 +219,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotations().getType());
         }
-        return factory.makeAnnotationMethodModifiersNode(
+        return factory.makeAnnotationMethodModifiersNodeWithUnions(
                 metaAnnotationsCopy,
                 annotationsCopy,
                 getStartLocation(),
@@ -237,12 +237,12 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
-        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
+        if (before.equals(this.getUnionForAnnotations().getNodeValue()))
         {
             setAnnotations((AnnotationListNode)after);
             return true;

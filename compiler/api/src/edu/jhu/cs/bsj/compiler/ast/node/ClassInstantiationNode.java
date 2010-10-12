@@ -18,7 +18,7 @@ public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressio
      * @return The type arguments for the constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeArgumentListNode getConstructorTypeArguments() throws ClassCastException;
+    public TypeArgumentListNode getConstructorTypeArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the type arguments for the constructor.
@@ -47,7 +47,7 @@ public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressio
      * @return The arguments to the constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionListNode getArguments() throws ClassCastException;
+    public ExpressionListNode getArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the arguments to the constructor.
@@ -76,7 +76,7 @@ public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressio
      * @return The body of the anonymous class.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnonymousClassBodyNode getBody() throws ClassCastException;
+    public AnonymousClassBodyNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the body of the anonymous class.

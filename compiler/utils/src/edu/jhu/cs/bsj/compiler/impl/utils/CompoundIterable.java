@@ -5,10 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Implements a compound iterable object.  This object is comprised of a number of underlying iterable objects which
- * are iterated in turn when this object is asked for an iterator.
+ * Implements a compound iterable object. This object is comprised of a number of underlying iterable objects which are
+ * iterated in turn when this object is asked for an iterator.
+ * 
  * @author Zachary Palmer
- *
+ * 
  * @param <T>
  */
 public class CompoundIterable<T> implements Iterable<T>
@@ -17,7 +18,16 @@ public class CompoundIterable<T> implements Iterable<T>
 	private Iterable<Iterable<? extends T>> backingIterables;
 
 	/**
+	 * Creates a new compound iterable for two backing iterables. This is a convenience routine.
+	 */
+	public CompoundIterable(Iterable<? extends T> a, Iterable<? extends T> b)
+	{
+		this(new TwoElementImmutableList<Iterable<? extends T>>(a, b));
+	}
+
+	/**
 	 * Creates a new compound iterable.
+	 * 
 	 * @param backingIterables The iterable object containing the iterables.
 	 */
 	public CompoundIterable(Iterable<Iterable<? extends T>> backingIterables)

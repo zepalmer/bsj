@@ -44,7 +44,7 @@ public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpres
      * @return The qualifying type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeNode getType() throws ClassCastException;
+    public UnparameterizedTypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the qualifying type.
@@ -73,7 +73,7 @@ public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpres
      * @return The identifier of the method being invoked.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier of the method being invoked.
@@ -102,7 +102,7 @@ public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpres
      * @return The arguments to pass to the method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionListNode getArguments() throws ClassCastException;
+    public ExpressionListNode getArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the arguments to pass to the method.
@@ -131,7 +131,7 @@ public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpres
      * @return The type arguments for the method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ReferenceTypeListNode getTypeArguments() throws ClassCastException;
+    public ReferenceTypeListNode getTypeArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the type arguments for the method.

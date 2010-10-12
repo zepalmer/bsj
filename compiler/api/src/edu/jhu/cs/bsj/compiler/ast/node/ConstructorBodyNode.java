@@ -27,7 +27,7 @@ public interface ConstructorBodyNode extends Node
      * @return The (nullable) constructor invocation.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ConstructorInvocationNode getConstructorInvocation() throws ClassCastException;
+    public ConstructorInvocationNode getConstructorInvocation()throws ClassCastException;
     
     /**
      * Gets the union object for the (nullable) constructor invocation.
@@ -56,7 +56,7 @@ public interface ConstructorBodyNode extends Node
      * @return The statements contained in this constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getStatements() throws ClassCastException;
+    public BlockStatementListNode getStatements()throws ClassCastException;
     
     /**
      * Gets the union object for the statements contained in this constructor.

@@ -134,7 +134,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
         
         if (members == null)
         {
-            throw new NullPointerException("Node union for property members cannot be null.");
+            members = new NormalNodeUnion<ClassMemberListNode>(null);
         }
         if (this.members != null)
         {
@@ -311,7 +311,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
         }
-        return factory.makeClassBodyNode(
+        return factory.makeClassBodyNodeWithUnions(
                 membersCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMembers()) && (after instanceof ClassMemberListNode))
+        if (before.equals(this.getUnionForMembers().getNodeValue()))
         {
             setMembers((ClassMemberListNode)after);
             return true;

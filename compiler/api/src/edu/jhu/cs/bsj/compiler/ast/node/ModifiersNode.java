@@ -20,7 +20,7 @@ public interface ModifiersNode extends Node, MetaAnnotatableNode
      * @return The meta-annotations modifying the subject.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaAnnotationListNode getMetaAnnotations() throws ClassCastException;
+    public MetaAnnotationListNode getMetaAnnotations()throws ClassCastException;
     
     /**
      * Gets the union object for the meta-annotations modifying the subject.
@@ -49,7 +49,7 @@ public interface ModifiersNode extends Node, MetaAnnotatableNode
      * @return The annotations modifying the subject.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationListNode getAnnotations() throws ClassCastException;
+    public AnnotationListNode getAnnotations()throws ClassCastException;
     
     /**
      * Gets the union object for the annotations modifying the subject.

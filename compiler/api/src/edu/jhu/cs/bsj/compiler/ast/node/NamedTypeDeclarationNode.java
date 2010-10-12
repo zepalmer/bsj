@@ -16,7 +16,7 @@ public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDecl
      * @return The name of this declared type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the name of this declared type.
@@ -45,7 +45,7 @@ public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDecl
      * @return The associated javadoc comment for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public JavadocNode getJavadoc() throws ClassCastException;
+    public JavadocNode getJavadoc()throws ClassCastException;
     
     /**
      * Gets the union object for the associated javadoc comment for this node.
@@ -74,7 +74,7 @@ public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDecl
      * @return The modifiers associated with this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ModifiersNode getModifiers() throws ClassCastException;
+    public ModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers associated with this node.
@@ -87,7 +87,7 @@ public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDecl
      * @return This type's body.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeBodyNode<? extends T> getBody() throws ClassCastException;
+    public TypeBodyNode<? extends T> getBody()throws ClassCastException;
     
     /**
      * Gets the union object for this type's body.

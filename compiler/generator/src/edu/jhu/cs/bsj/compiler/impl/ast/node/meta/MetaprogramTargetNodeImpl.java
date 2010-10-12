@@ -135,7 +135,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
         
         if (targets == null)
         {
-            throw new NullPointerException("Node union for property targets cannot be null.");
+            targets = new NormalNodeUnion<IdentifierListNode>(null);
         }
         if (this.targets != null)
         {
@@ -310,7 +310,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTargets().getType());
         }
-        return factory.makeMetaprogramTargetNode(
+        return factory.makeMetaprogramTargetNodeWithUnions(
                 targetsCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -327,7 +327,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getTargets()) && (after instanceof IdentifierListNode))
+        if (before.equals(this.getUnionForTargets().getNodeValue()))
         {
             setTargets((IdentifierListNode)after);
             return true;

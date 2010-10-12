@@ -166,7 +166,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         
         if (initializer == null)
         {
-            throw new NullPointerException("Node union for property initializer cannot be null.");
+            initializer = new NormalNodeUnion<ForInitializerNode>(null);
         }
         if (this.initializer != null)
         {
@@ -253,7 +253,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         
         if (condition == null)
         {
-            throw new NullPointerException("Node union for property condition cannot be null.");
+            condition = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.condition != null)
         {
@@ -340,7 +340,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         
         if (update == null)
         {
-            throw new NullPointerException("Node union for property update cannot be null.");
+            update = new NormalNodeUnion<StatementExpressionListNode>(null);
         }
         if (this.update != null)
         {
@@ -427,7 +427,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         
         if (statement == null)
         {
-            throw new NullPointerException("Node union for property statement cannot be null.");
+            statement = new NormalNodeUnion<StatementNode>(null);
         }
         if (this.statement != null)
         {
@@ -514,7 +514,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -834,7 +834,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeForLoopNode(
+        return factory.makeForLoopNodeWithUnions(
                 initializerCopy,
                 conditionCopy,
                 updateCopy,
@@ -855,27 +855,27 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getInitializer()) && (after instanceof ForInitializerNode))
+        if (before.equals(this.getUnionForInitializer().getNodeValue()))
         {
             setInitializer((ForInitializerNode)after);
             return true;
         }
-        if (before.equals(this.getCondition()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForCondition().getNodeValue()))
         {
             setCondition((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getUpdate()) && (after instanceof StatementExpressionListNode))
+        if (before.equals(this.getUnionForUpdate().getNodeValue()))
         {
             setUpdate((StatementExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getStatement()) && (after instanceof StatementNode))
+        if (before.equals(this.getUnionForStatement().getNodeValue()))
         {
             setStatement((StatementNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
@@ -200,7 +201,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeAnnotationArrayValueNode(AnnotationArrayValueNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeAnnotationArrayValueNode(AnnotationArrayValueNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled AnnotationArrayValueNode.");
@@ -214,14 +216,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeAnnotationDeclarationNode(AnnotationDeclarationNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeAnnotationDeclarationNode(AnnotationDeclarationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled AnnotationDeclarationNode.");
 	}
 
 	@Override
-	public TypecheckerResultImpl executeAnnotationElementListNode(AnnotationElementListNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeAnnotationElementListNode(AnnotationElementListNode node,
+			TypecheckerEnvironment env)
 	{
 		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
@@ -248,14 +252,15 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeAnnotationMemberListNode(AnnotationMemberListNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeAnnotationMemberListNode(AnnotationMemberListNode node,
+			TypecheckerEnvironment env)
 	{
 		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
 
 	@Override
-	public TypecheckerResultImpl executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
-			TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeAnnotationMemberMetaprogramAnchorNode(
+			AnnotationMemberMetaprogramAnchorNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled AnnotationMemberMetaprogramAnchorNode.");
@@ -654,7 +659,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeConditionalExpressionNode(ConditionalExpressionNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeConditionalExpressionNode(ConditionalExpressionNode node,
+			TypecheckerEnvironment env)
 	{
 		TypecheckerMetadataImpl metadata = new TypecheckerMetadataImpl();
 
@@ -770,7 +776,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeConstructorModifiersNode(ConstructorModifiersNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeConstructorModifiersNode(ConstructorModifiersNode node,
+			TypecheckerEnvironment env)
 	{
 		return new TypecheckerResultImpl(new NonePseudoTypeImpl(this.manager), new TypecheckerMetadataImpl());
 	}
@@ -830,7 +837,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeEnumConstantModifiersNode(EnumConstantModifiersNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeEnumConstantModifiersNode(EnumConstantModifiersNode node,
+			TypecheckerEnvironment env)
 	{
 		return new TypecheckerResultImpl(new NonePseudoTypeImpl(this.manager), new TypecheckerMetadataImpl());
 	}
@@ -1009,7 +1017,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeInterfaceDeclarationNode(InterfaceDeclarationNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeInterfaceDeclarationNode(InterfaceDeclarationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled InterfaceDeclarationNode.");
@@ -1048,7 +1057,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeLocalClassDeclarationNode(LocalClassDeclarationNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeLocalClassDeclarationNode(LocalClassDeclarationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled LocalClassDeclarationNode.");
@@ -1089,7 +1099,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeMetaAnnotationElementNode(MetaAnnotationElementNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeMetaAnnotationElementNode(MetaAnnotationElementNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled MetaAnnotationElementNode.");
@@ -1110,8 +1121,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node,
-			TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeMetaAnnotationMetaAnnotationValueNode(
+			MetaAnnotationMetaAnnotationValueNode node, TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled MetaAnnotationMetaAnnotationValueNode.");
@@ -1156,14 +1167,16 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeMetaprogramDependencyNode(MetaprogramDependencyNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeMetaprogramDependencyNode(MetaprogramDependencyNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled MetaprogramDependencyNode.");
 	}
 
 	@Override
-	public TypecheckerResultImpl executeMetaprogramImportListNode(MetaprogramImportListNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeMetaprogramImportListNode(MetaprogramImportListNode node,
+			TypecheckerEnvironment env)
 	{
 		return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildren());
 	}
@@ -1190,7 +1203,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeMetaprogramTargetListNode(MetaprogramTargetListNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeMetaprogramTargetListNode(MetaprogramTargetListNode node,
+			TypecheckerEnvironment env)
 	{
 		return expectNoError(env, node.getChildren());
 	}
@@ -1435,7 +1449,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled NormalMetaAnnotationNode.");
@@ -1508,12 +1523,12 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		// TODO: perform these parsing operations lazily; create a specialized type which will only evaluate these
 		// parse values on demand
 
-		Bag<Pair<Node, BsjActualType>> parseResultBag = new HashBag<Pair<Node, BsjActualType>>();
+		Bag<Pair<NodeUnion<?>, BsjActualType>> parseResultBag = new HashBag<Pair<NodeUnion<?>, BsjActualType>>();
 		for (ParseRule<?> rule : ParseRule.values())
 		{
 			CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
 					new NoOperationDiagnosticListener<BsjSourceLocation>());
-			Node result = this.parser.parse(node.getValue(), rule, listener);
+			NodeUnion<?> result = this.parser.parse(node.getValue(), rule, listener);
 			if (listener.getCount(Kind.ERROR) > 0)
 			{
 				// TODO: perhaps preserve these diagnostics for use later?
@@ -1534,15 +1549,22 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 							+ clazz);
 				}
 			}
-			BsjTypeArgument resultType = codeLiteralTypeReduction(
-					this.manager.getModelingFactory().makeMetaprogramClasspathType(result.getClass()),
-					baseTypes);
+
+			// TODO: fix this bit - it breaks down if the top-level node in the literal is not a normal node
+			// this fix is going to involve a change to the spec somehow since the parse rule return types specified
+			// in the BLS don't say anything about returning a node union
+			BsjActualType resultType = this.manager.getModelingFactory().makeMetaprogramClasspathType(
+					result.getNodeValue().getClass());
+
+			// Reduce the type of the captured literal to something implementation-independent
+			resultType = codeLiteralTypeReduction(resultType, baseTypes);
 
 			// Aggregate data for the raw code literal record
-			parseResultBag.add(new Pair<Node, BsjActualType>(result, resultType));
+			parseResultBag.add(new Pair<NodeUnion<?>, BsjActualType>(result, resultType));
 		}
 
-		SelectionBag<Node> codeLiteralValueBag = new CodeLiteralSelectionBagImpl<Node>(this.manager, parseResultBag);
+		SelectionBag<NodeUnion<?>> codeLiteralValueBag = new CodeLiteralSelectionBagImpl<NodeUnion<?>>(this.manager,
+				parseResultBag);
 		metadata.addRawCodeLiteralParseResult(node, new RawCodeLiteralParseResultImpl(codeLiteralValueBag));
 		if (env.getExpectedType() != null)
 		{
@@ -1615,7 +1637,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeStaticImportOnDemandNode(StaticImportOnDemandNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeStaticImportOnDemandNode(StaticImportOnDemandNode node,
+			TypecheckerEnvironment env)
 	{
 		// Validate that the named type exists.
 		Collection<? extends Node> declarations = node.getDeclarationsInScope(node.getName());
@@ -1633,7 +1656,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	@Override
 	public TypecheckerResultImpl executeStringLiteralNode(StringLiteralNode node, TypecheckerEnvironment env)
 	{
-		return new TypecheckerResultImpl(this.manager.getToolkit().getStringElement().asType(), new TypecheckerMetadataImpl());
+		return new TypecheckerResultImpl(this.manager.getToolkit().getStringElement().asType(),
+				new TypecheckerMetadataImpl());
 	}
 
 	@Override
@@ -1644,7 +1668,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 	}
 
 	@Override
-	public TypecheckerResultImpl executeSuperMethodInvocationNode(SuperMethodInvocationNode node, TypecheckerEnvironment env)
+	public TypecheckerResultImpl executeSuperMethodInvocationNode(SuperMethodInvocationNode node,
+			TypecheckerEnvironment env)
 	{
 		// TODO Auto-generated method stub
 		throw new NotImplementedYetException("Have not yet handled SuperMethodInvocationNode.");
@@ -2278,8 +2303,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		return new TypecheckerResultImpl(new NonePseudoTypeImpl(this.manager), new TypecheckerMetadataImpl());
 	}
 
-	private TypecheckerResultImpl handleVariableDeclaratorOwnerNode(VariableDeclaratorOwnerNode node, BsjType successType,
-			TypecheckerEnvironment env)
+	private TypecheckerResultImpl handleVariableDeclaratorOwnerNode(VariableDeclaratorOwnerNode node,
+			BsjType successType, TypecheckerEnvironment env)
 	{
 		BsjType variableType = this.manager.getToolkit().getTypeBuilder().makeType(node.getType());
 		if (variableType instanceof BsjErrorType)

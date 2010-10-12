@@ -150,7 +150,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -268,7 +268,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         
         if (initializer == null)
         {
-            throw new NullPointerException("Node union for property initializer cannot be null.");
+            initializer = new NormalNodeUnion<VariableInitializerNode>(null);
         }
         if (this.initializer != null)
         {
@@ -484,7 +484,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForInitializer().getType());
         }
-        return factory.makeVariableDeclaratorNode(
+        return factory.makeVariableDeclaratorNodeWithUnions(
                 identifierCopy,
                 getArrayLevels(),
                 initializerCopy,
@@ -503,12 +503,12 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getInitializer()) && (after instanceof VariableInitializerNode))
+        if (before.equals(this.getUnionForInitializer().getNodeValue()))
         {
             setInitializer((VariableInitializerNode)after);
             return true;

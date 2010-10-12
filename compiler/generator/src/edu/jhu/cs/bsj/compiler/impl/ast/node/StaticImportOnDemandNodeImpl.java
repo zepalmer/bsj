@@ -134,7 +134,7 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
         
         if (name == null)
         {
-            throw new NullPointerException("Node union for property name cannot be null.");
+            name = new NormalNodeUnion<NameNode>(null);
         }
         if (this.name != null)
         {
@@ -311,7 +311,7 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForName().getType());
         }
-        return factory.makeStaticImportOnDemandNode(
+        return factory.makeStaticImportOnDemandNodeWithUnions(
                 nameCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getName()) && (after instanceof NameNode))
+        if (before.equals(this.getUnionForName().getNodeValue()))
         {
             setName((NameNode)after);
             return true;

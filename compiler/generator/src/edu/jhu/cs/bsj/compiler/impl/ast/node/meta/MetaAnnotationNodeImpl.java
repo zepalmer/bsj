@@ -142,7 +142,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
         
         if (annotationType == null)
         {
-            throw new NullPointerException("Node union for property annotationType cannot be null.");
+            annotationType = new NormalNodeUnion<UnparameterizedTypeNode>(null);
         }
         if (this.annotationType != null)
         {

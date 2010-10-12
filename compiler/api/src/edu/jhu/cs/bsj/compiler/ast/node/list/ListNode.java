@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NodeList;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -19,12 +20,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * <pre>
  * ListNode&lt;X&gt; parent = (ListNode&lt;X&gt;)getParent();
  * </pre>
- * In order to prevent this problem, this AST library creates an individual list node type for each list
- * element type, allowing the above code to be replaced by
+ * This is an unsafe cast and would result in an obscure runtime error if the parent is not a list of the
+ * correct type.  In order to prevent this problem, this AST library creates an individual list node type
+ * for each list element type, allowing the above code to be replaced by
  * <pre>
  * XListNode parent = (XListNode)getParent();
  * </pre>
- * which is guaranteed to be type checked at runtime.
+ * If the parent is not a list of the correct type, an error still occurs at runtime.  However, the error
+ * will occur at this line and not later in the code when an attempt is made to retrieve an element from
+ * the list.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ListNode<T extends Node> extends Node, List<T>, NodeList<T>
@@ -34,6 +38,12 @@ public interface ListNode<T extends Node> extends Node, List<T>, NodeList<T>
      * @return The list of children.
      */
     public List<T> getChildren();
+    
+    /**
+     * Gets the union object for the list of children.
+     * @return A union object representing The list of children.
+     */
+    public List<NodeUnion<? extends T>> getUnionForChildren();
     
     /**
      * Gets whether or not this list's contents are always order-dependent.

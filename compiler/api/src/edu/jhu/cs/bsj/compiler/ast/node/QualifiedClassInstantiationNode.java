@@ -38,7 +38,7 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
      * @return The expression enclosing the non-static inner class.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getEnclosingExpression() throws ClassCastException;
+    public ExpressionNode getEnclosingExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression enclosing the non-static inner class.
@@ -67,7 +67,7 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
      * @return The name of the class being instantiated.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the name of the class being instantiated.
@@ -96,7 +96,7 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
      * @return The type arguments to apply to the class being instantiated.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeArgumentListNode getTypeArguments() throws ClassCastException;
+    public TypeArgumentListNode getTypeArguments()throws ClassCastException;
     
     /**
      * Gets the union object for the type arguments to apply to the class being instantiated.

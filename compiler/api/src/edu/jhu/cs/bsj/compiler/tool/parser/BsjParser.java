@@ -7,6 +7,7 @@ import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjRawCodeLiteralPayload;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
@@ -37,9 +38,9 @@ public interface BsjParser
 	 * @param rule The parse rule to use when parsing the payload.
 	 * @param diagnosticListener The listener to which diagnostics are reported. If <code>null</code>, a default
 	 *            listener is used which reports messages to standard error.
-	 * @return The AST node representing the parse.
+	 * @return A union containing the AST node representing the parse.
 	 * @throws IllegalArgumentException If the provided list of tokens is empty.
 	 */
-	public <T extends Node> T parse(BsjRawCodeLiteralPayload payload, ParseRule<T> rule,
+	public <T extends Node> NodeUnion<? extends T> parse(BsjRawCodeLiteralPayload payload, ParseRule<T> rule,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IllegalArgumentException;
 }

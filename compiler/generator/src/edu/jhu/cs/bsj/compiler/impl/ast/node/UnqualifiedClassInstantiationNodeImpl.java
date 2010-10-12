@@ -140,7 +140,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<DeclaredTypeNode>(null);
         }
         if (this.type != null)
         {
@@ -398,7 +398,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
         }
-        return factory.makeUnqualifiedClassInstantiationNode(
+        return factory.makeUnqualifiedClassInstantiationNodeWithUnions(
                 typeCopy,
                 constructorTypeArgumentsCopy,
                 argumentsCopy,
@@ -418,22 +418,22 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getType()) && (after instanceof DeclaredTypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((DeclaredTypeNode)after);
             return true;
         }
-        if (before.equals(this.getConstructorTypeArguments()) && (after instanceof TypeArgumentListNode))
+        if (before.equals(this.getUnionForConstructorTypeArguments().getNodeValue()))
         {
             setConstructorTypeArguments((TypeArgumentListNode)after);
             return true;
         }
-        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
+        if (before.equals(this.getUnionForArguments().getNodeValue()))
         {
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof AnonymousClassBodyNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((AnonymousClassBodyNode)after);
             return true;

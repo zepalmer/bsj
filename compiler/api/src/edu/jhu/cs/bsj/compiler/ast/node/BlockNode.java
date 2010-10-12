@@ -23,7 +23,7 @@ public interface BlockNode extends Node, StatementNode
      * @return The statements contained in this block statement.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getStatements() throws ClassCastException;
+    public BlockStatementListNode getStatements()throws ClassCastException;
     
     /**
      * Gets the union object for the statements contained in this block statement.

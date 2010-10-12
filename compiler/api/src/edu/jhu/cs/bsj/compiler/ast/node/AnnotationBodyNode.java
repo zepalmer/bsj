@@ -17,7 +17,7 @@ public interface AnnotationBodyNode extends Node, TypeBodyNode<AnnotationMemberN
      * @return The members of this annotation body.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationMemberListNode getMembers() throws ClassCastException;
+    public AnnotationMemberListNode getMembers()throws ClassCastException;
     
     /**
      * Gets the union object for the members of this annotation body.

@@ -27,6 +27,14 @@
 */
 
 /*
+ * WARNING: THIS FILE IS GENERATED.  Do not make any changes to this file
+ * directly; it was generated from the BSJ source generator project.  If changes
+ * are necessary, changes must be applied either to the source generator
+ * application or to one of its data files.  The source generator's fully
+ * qualified name is edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator.
+ */
+
+/*
  * This file was obtained from www.antlr.org and included modifications by
  * Yang Jiang (yang.jiang.z@gmail.com).  It is a modified version of the
  * ANTLR Java grammar.
@@ -49,14 +57,8 @@
  *
  * This grammar should be compiled using the ANTLR option
  * "-Xconversiontimeout 100000" to ensure proper translation.
- */
-
-/*
- * WARNING: THIS FILE IS GENERATED.  Do not make any changes to this file
- * directly; it was generated from the BSJ source generator project.  If changes
- * are necessary, changes must be applied either to the source generator
- * application or to one of its data files.  The source generator's fully
- * qualified name is edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator.
+ * Failure to provide sufficient timeout leniency will result in numerous
+ * messages of the "Multiple token rules can match input" variety.
  */
 
 grammar BsjAntlr;
@@ -245,7 +247,20 @@ scope Rule {
      */
     protected int getLineNumber(int rel)
     {
-        Token token = input.LT(rel);
+        return getLineNumber(input.LT(rel));
+    }
+    /**
+     * Retrieves the line number for the specified relative token index (as per input.LT).
+     */
+    protected int getColumnNumber(int rel)
+    {
+        return getColumnNumber(input.LT(rel));
+    }
+    /**
+     * Retrieves the line number for the specified token.
+     */
+    protected int getLineNumber(Token token)
+    {
         if (token == null)
         {
             return BsjSourceLocation.NOPOS;
@@ -255,11 +270,10 @@ scope Rule {
         }
     }
     /**
-     * Retrieves the line number for the specified relative token index (as per input.LT).
+     * Retrieves the line number for the specified token.
      */
-    protected int getColumnNumber(int rel)
+    protected int getColumnNumber(Token token)
     {
-        Token token = input.LT(rel);
         if (token == null)
         {
             return BsjSourceLocation.NOPOS;
@@ -274,6 +288,13 @@ scope Rule {
     protected BsjSourceLocation getSourceLocation(int rel)
     {
         return new BsjSourceLocation(getResourceName(), getLineNumber(rel), getColumnNumber(rel));
+    }
+    /**
+     * Retrieves a source location object describing the start of the specified relative token index (as per input.LT).
+     */
+    protected BsjSourceLocation getSourceLocation(Token token)
+    {
+        return new BsjSourceLocation(getResourceName(), getLineNumber(token), getColumnNumber(token));
     }
 
     // *** FACTORY NODE PROPERTY **********************************************
@@ -583,41 +604,6 @@ scope Rule {
             logger.trace("Rule stopped: " + $Rule::name);
         }
     }
-    
-    // *** PARSER ACTION SUBROUTINES ******************************************
-    private ImportNode createImport(boolean onDemand, boolean staticImport, NameNode name)
-    {
-        if (onDemand)
-        {
-            if (staticImport)
-            {
-                return factory.makeStaticImportOnDemandNode(name);
-            } else
-            {
-                return factory.makeImportOnDemandNode(name);
-            }
-            
-        } else
-        {
-            if (staticImport)
-            {
-                if (name instanceof QualifiedNameNode)
-                {
-                    return factory.makeSingleStaticImportNode((QualifiedNameNode)name);
-                } else
-                {
-                    reportDiagnostic(new UnqualifiedSingleStaticImportNameDiagnosticImpl(
-                            getSourceLocation(-1),
-                            $Rule::name,
-                            name.getNameString()));
-                    return null;
-                }
-            } else
-            {
-                return factory.makeImportSingleTypeNode(name);
-            }
-        }
-    }
 }
 
 
@@ -657,7 +643,7 @@ arrayTypeCounter returns [int ret]
     ;
 
 // Performs type wrapping for a counted array type
-arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
+arrayTypeIndicator[NodeUnion<? extends TypeNode> inType] returns [NodeUnion<? extends ArrayTypeNode> ret]
         scope Rule;
         @init {
             ruleStart("arrayTypeIndicator");
@@ -668,7 +654,11 @@ arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
     :
         arrayTypeCounter
         {
-            $ret = factory.wrapArrayLevels(inType, $arrayTypeCounter.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions(inType));
+            for (int i=1;i<$arrayTypeCounter.ret;i++)
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions($ret));
+            }
         }
     ;
 
@@ -678,7 +668,7 @@ arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
  */
 
 /* This rule parses a BSJ metaprogram. */
-bsjMetaprogram returns [MetaprogramNode ret]
+bsjMetaprogram returns [NodeUnion<? extends MetaprogramNode> ret]
         scope Rule;
         @init {
             ruleStart("bsjMetaprogram");
@@ -692,12 +682,13 @@ bsjMetaprogram returns [MetaprogramNode ret]
         optionalBlockStatementList
         ':]'
         {
-            $ret = factory.makeMetaprogramNode($preamble.ret, $optionalBlockStatementList.ret);
+            $ret = factory.makeNormalNodeUnion(
+                    factory.makeMetaprogramNodeWithUnions($preamble.ret, $optionalBlockStatementList.ret));
         }
     ;
 
 /* This rule parses a BSJ metaprogram preamble */
-preamble returns [MetaprogramPreambleNode ret]
+preamble returns [NodeUnion<? extends MetaprogramPreambleNode> ret]
         scope Rule;
         @init {
             ruleStart("preamble");
@@ -719,13 +710,13 @@ preamble returns [MetaprogramPreambleNode ret]
         optionalMetaprogramTargetList
         optionalMetaprogramDependencyDeclarationList
         {
-            $ret = factory.makeMetaprogramPreambleNode($optionalMetaImportDeclarations.ret,
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramPreambleNodeWithUnions($optionalMetaImportDeclarations.ret,
                     localMode, packageMode, $optionalMetaprogramTargetList.ret,
-                    $optionalMetaprogramDependencyDeclarationList.ret);
+                    $optionalMetaprogramDependencyDeclarationList.ret));
         }
     ;
 
-metaprogramImport returns [MetaprogramImportNode ret]
+metaprogramImport returns [NodeUnion<? extends MetaprogramImportNode> ret]
         scope Rule;
         @init {
             ruleStart("metaprogramImport");
@@ -738,8 +729,8 @@ metaprogramImport returns [MetaprogramImportNode ret]
         importBody
         ';'
         {
-            ImportNode node = createImport($importBody.onDemand, $importBody.staticImport, $importBody.name);
-            $ret = factory.makeMetaprogramImportNode(node);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramImportNodeWithUnions(
+                    $importBody.ret));
         }
     ;
     
@@ -757,13 +748,13 @@ metaprogramMode returns [MetaprogramPackageMode packageMode, MetaprogramLocalMod
     :
         '#mode'
         (
-            a=identifier
+            a=unsplicableIdentifier
             {
                 modeValues.parse($a.ret);
             }
             (
                 ','
-                b=identifier
+                b=unsplicableIdentifier
                 {
                     modeValues.parse($b.ret);
                 }
@@ -773,41 +764,52 @@ metaprogramMode returns [MetaprogramPackageMode packageMode, MetaprogramLocalMod
         ';'
     ;
 
-metaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationListNode ret]
+metaprogramDependencyDeclarationList returns [NodeUnion<? extends MetaprogramDependencyDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("metaprogramDependencyDeclarationList");
-            List<MetaprogramDependencyDeclarationNode> list = new ArrayList<MetaprogramDependencyDeclarationNode>();
+            List<NodeUnion<? extends MetaprogramDependencyDeclarationNode>> list =
+                    new ArrayList<NodeUnion<? extends MetaprogramDependencyDeclarationNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeMetaprogramDependencyDeclarationListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyDeclarationListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=metaprogramDependencyDeclaration
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "metaprogramDependencyDeclaration", getSourceLocation($a.stop)));
+            }
         }
         (
             b=metaprogramDependencyDeclaration
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "metaprogramDependencyDeclaration", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalMetaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationListNode ret]
+optionalMetaprogramDependencyDeclarationList returns [NodeUnion<? extends MetaprogramDependencyDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalMetaprogramDependencyDeclarationList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeMetaprogramDependencyDeclarationListNode();
-            }
             ruleStop();
         }
     :
@@ -816,11 +818,17 @@ optionalMetaprogramDependencyDeclarationList returns [MetaprogramDependencyDecla
             {
                 $ret = $metaprogramDependencyDeclarationList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyDeclarationListNode());
+            }
+        )
     ;
 
 
-metaprogramDependencyDeclaration returns [MetaprogramDependencyDeclarationNode ret]
+metaprogramDependencyDeclaration returns [NodeUnion<? extends MetaprogramDependencyDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("metaprogramDependencyDeclaration");
@@ -833,47 +841,59 @@ metaprogramDependencyDeclaration returns [MetaprogramDependencyDeclarationNode r
         metaprogramDependencyList
         ';'
         {
-            $ret = factory.makeMetaprogramDependencyDeclarationNode($metaprogramDependencyList.ret);
+            $ret = factory.makeNormalNodeUnion(
+                    factory.makeMetaprogramDependencyDeclarationNodeWithUnions($metaprogramDependencyList.ret));
         }
     ;
 
-metaprogramDependencyList returns [MetaprogramDependencyListNode ret]
+metaprogramDependencyList returns [NodeUnion<? extends MetaprogramDependencyListNode> ret]
         scope Rule;
         @init {
             ruleStart("metaprogramDependencyList");
-            List<MetaprogramDependencyNode> list = new ArrayList<MetaprogramDependencyNode>();
+            List<NodeUnion<? extends MetaprogramDependencyNode>> list =
+                    new ArrayList<NodeUnion<? extends MetaprogramDependencyNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeMetaprogramDependencyListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=metaprogramDependency
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "metaprogramDependency", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=metaprogramDependency
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "metaprogramDependency", getSourceLocation($b.stop)));
+	            }
             }
         )*
         ','?
     ;
 
-optionalMetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
+optionalMetaprogramDependencyList returns [NodeUnion<? extends MetaprogramDependencyListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalMetaprogramDependencyList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeMetaprogramDependencyListNode();
-            }
             ruleStop();
         }
     :
@@ -882,11 +902,17 @@ optionalMetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
             {
                 $ret = $metaprogramDependencyList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyListNode());
+            }
+        )
     ;
 
 
-metaprogramDependency returns [MetaprogramDependencyNode ret]
+metaprogramDependency returns [NodeUnion<? extends MetaprogramDependencyNode> ret]
         scope Rule;
         @init {
             ruleStart("metaprogramDependency");
@@ -904,45 +930,56 @@ metaprogramDependency returns [MetaprogramDependencyNode ret]
         )?
         metaprogramTargetName
         {
-            $ret = factory.makeMetaprogramDependencyNode($metaprogramTargetName.ret, weak);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyNodeWithUnions($metaprogramTargetName.ret, weak));
         }
     ;
 
-metaprogramTargetList returns [MetaprogramTargetListNode ret]
+metaprogramTargetList returns [NodeUnion<? extends MetaprogramTargetListNode> ret]
         scope Rule;
         @init {
             ruleStart("metaprogramTargetList");
-            List<MetaprogramTargetNode> list = new ArrayList<MetaprogramTargetNode>();
+            List<NodeUnion<? extends MetaprogramTargetNode>> list =
+                    new ArrayList<NodeUnion<? extends MetaprogramTargetNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeMetaprogramTargetListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramTargetListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=metaprogramTarget
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "metaprogramTarget", getSourceLocation($a.stop)));
+            }
         }
         (
             b=metaprogramTarget
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "metaprogramTarget", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalMetaprogramTargetList returns [MetaprogramTargetListNode ret]
+optionalMetaprogramTargetList returns [NodeUnion<? extends MetaprogramTargetListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalMetaprogramTargetList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeMetaprogramTargetListNode();
-            }
             ruleStop();
         }
     :
@@ -951,11 +988,17 @@ optionalMetaprogramTargetList returns [MetaprogramTargetListNode ret]
             {
                 $ret = $metaprogramTargetList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramTargetListNode());
+            }
+        )
     ;
 
 
-metaprogramTarget returns [MetaprogramTargetNode ret]
+metaprogramTarget returns [NodeUnion<? extends MetaprogramTargetNode> ret]
         scope Rule;
         @init {
             ruleStart("metaprogramTarget");
@@ -968,11 +1011,11 @@ metaprogramTarget returns [MetaprogramTargetNode ret]
         identifierList
         ';'
         {
-            $ret = factory.makeMetaprogramTargetNode($identifierList.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramTargetNodeWithUnions($identifierList.ret));
         }
     ;
 
-metaprogramTargetName returns [NameNode ret]
+metaprogramTargetName returns [NodeUnion<? extends NameNode> ret]
         scope Rule;
         @init {
             ruleStart("metaprogramTargetName");
@@ -987,43 +1030,54 @@ metaprogramTargetName returns [NameNode ret]
         }
     ;
 
-identifierList returns [IdentifierListNode ret]
+identifierList returns [NodeUnion<? extends IdentifierListNode> ret]
         scope Rule;
         @init {
             ruleStart("identifierList");
-            List<IdentifierNode> list = new ArrayList<IdentifierNode>();
+            List<NodeUnion<? extends IdentifierNode>> list =
+                    new ArrayList<NodeUnion<? extends IdentifierNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeIdentifierListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeIdentifierListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=identifier
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "identifier", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=identifier
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "identifier", getSourceLocation($b.stop)));
+	            }
             }
         )*
         ','?
     ;
 
-optionalIdentifierList returns [IdentifierListNode ret]
+optionalIdentifierList returns [NodeUnion<? extends IdentifierListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalIdentifierList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeIdentifierListNode();
-            }
             ruleStop();
         }
     :
@@ -1032,11 +1086,17 @@ optionalIdentifierList returns [IdentifierListNode ret]
             {
                 $ret = $identifierList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeIdentifierListNode());
+            }
+        )
     ;
 
 
-typeDeclarationBsjMetaprogramAnchor returns [TypeDeclarationMetaprogramAnchorNode ret]
+typeDeclarationBsjMetaprogramAnchor returns [NodeUnion<? extends TypeDeclarationMetaprogramAnchorNode> ret]
         scope Rule;
         @init {
             ruleStart("typeDeclarationBsjMetaprogramAnchor");
@@ -1047,11 +1107,11 @@ typeDeclarationBsjMetaprogramAnchor returns [TypeDeclarationMetaprogramAnchorNod
     :
         bsjMetaprogram
         {
-            $ret = factory.makeTypeDeclarationMetaprogramAnchorNode($bsjMetaprogram.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeTypeDeclarationMetaprogramAnchorNodeWithUnions($bsjMetaprogram.ret));
         }
     ;    
 
-annotationMemberBsjMetaprogramAnchor returns [AnnotationMemberMetaprogramAnchorNode ret]
+annotationMemberBsjMetaprogramAnchor returns [NodeUnion<? extends AnnotationMemberMetaprogramAnchorNode> ret]
         scope Rule;
         @init {
             ruleStart("annotationMemberBsjMetaprogramAnchor");
@@ -1062,11 +1122,11 @@ annotationMemberBsjMetaprogramAnchor returns [AnnotationMemberMetaprogramAnchorN
     :
         bsjMetaprogram
         {
-            $ret = factory.makeAnnotationMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationMemberMetaprogramAnchorNodeWithUnions($bsjMetaprogram.ret));
         }
     ;
 
-anonymousClassMemberBsjMetaprogramAnchor returns [AnonymousClassMemberMetaprogramAnchorNode ret]
+anonymousClassMemberBsjMetaprogramAnchor returns [NodeUnion<? extends AnonymousClassMemberMetaprogramAnchorNode> ret]
         scope Rule;
         @init {
             ruleStart("anonymousClassMemberBsjMetaprogramAnchor");
@@ -1077,11 +1137,11 @@ anonymousClassMemberBsjMetaprogramAnchor returns [AnonymousClassMemberMetaprogra
     :
         bsjMetaprogram
         {
-            $ret = factory.makeAnonymousClassMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnonymousClassMemberMetaprogramAnchorNodeWithUnions($bsjMetaprogram.ret));
         }
     ;
 
-classMemberBsjMetaprogramAnchor returns [ClassMemberMetaprogramAnchorNode ret]
+classMemberBsjMetaprogramAnchor returns [NodeUnion<? extends ClassMemberMetaprogramAnchorNode> ret]
         scope Rule;
         @init {
             ruleStart("classMemberBsjMetaprogramAnchor");
@@ -1092,11 +1152,11 @@ classMemberBsjMetaprogramAnchor returns [ClassMemberMetaprogramAnchorNode ret]
     :
         bsjMetaprogram
         {
-            $ret = factory.makeClassMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeClassMemberMetaprogramAnchorNodeWithUnions($bsjMetaprogram.ret));
         }
     ;
 
-interfaceMemberBsjMetaprogramAnchor returns [InterfaceMemberMetaprogramAnchorNode ret]
+interfaceMemberBsjMetaprogramAnchor returns [NodeUnion<? extends InterfaceMemberMetaprogramAnchorNode> ret]
         scope Rule;
         @init {
             ruleStart("interfaceMemberBsjMetaprogramAnchor");
@@ -1107,11 +1167,11 @@ interfaceMemberBsjMetaprogramAnchor returns [InterfaceMemberMetaprogramAnchorNod
     :
         bsjMetaprogram
         {
-            $ret = factory.makeInterfaceMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeInterfaceMemberMetaprogramAnchorNodeWithUnions($bsjMetaprogram.ret));
         }
     ;
 
-blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode ret]
+blockStatementBsjMetaprogramAnchor returns [NodeUnion<? extends BlockStatementMetaprogramAnchorNode> ret]
         scope Rule;
         @init {
             ruleStart("blockStatementBsjMetaprogramAnchor");
@@ -1122,48 +1182,59 @@ blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode 
     :
         bsjMetaprogram
         {
-            $ret = factory.makeBlockStatementMetaprogramAnchorNode($bsjMetaprogram.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeBlockStatementMetaprogramAnchorNodeWithUnions($bsjMetaprogram.ret));
         }
     ;
 
 // Parses a list of meta-annotations.  Note that this rule is not used for declarations, since meta-annotations can be
 // interspersed amongst annotations and modifiers.  This rule is used for meta-annotations which are applied to
 // statements and other constructs which only permit meta-annotations and not other modifiers.
-metaAnnotationList returns [MetaAnnotationListNode ret]
+metaAnnotationList returns [NodeUnion<? extends MetaAnnotationListNode> ret]
         scope Rule;
         @init {
             ruleStart("metaAnnotationList");
-            List<MetaAnnotationNode> list = new ArrayList<MetaAnnotationNode>();
+            List<NodeUnion<? extends MetaAnnotationNode>> list =
+                    new ArrayList<NodeUnion<? extends MetaAnnotationNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeMetaAnnotationListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=metaAnnotation
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "metaAnnotation", getSourceLocation($a.stop)));
+            }
         }
         (
             b=metaAnnotation
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "metaAnnotation", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalMetaAnnotationList returns [MetaAnnotationListNode ret]
+optionalMetaAnnotationList returns [NodeUnion<? extends MetaAnnotationListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalMetaAnnotationList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeMetaAnnotationListNode();
-            }
             ruleStop();
         }
     :
@@ -1172,39 +1243,15 @@ optionalMetaAnnotationList returns [MetaAnnotationListNode ret]
             {
                 $ret = $metaAnnotationList.ret;
             }
-        )?
-    ;
-
-
-// Parses a sequence of any annotations: BSJ meta-annotations or Java annotations.  These are returned as two lists.
-// This rule is used for those grammar rules which cannot have other forms of modifier.
-anyAnnotations returns [MetaAnnotationListNode metaAnnotations, AnnotationListNode annotations]
-        scope Rule;
-        @init {
-            ruleStart("anyAnnotations");
-            List<MetaAnnotationNode> metaAnnotationList = new ArrayList<MetaAnnotationNode>();
-            List<AnnotationNode> annotationList = new ArrayList<AnnotationNode>();
-        }
-        @after {
-            while (metaAnnotationList.remove(null)) ; // remove all nulls from the list
-            while (annotationList.remove(null)) ; // remove all nulls from the list
-            $metaAnnotations = factory.makeMetaAnnotationListNode(metaAnnotationList);
-            $annotations = factory.makeAnnotationListNode(annotationList);
-            ruleStop();
-        }
-    :
+        )
+    |
         (
-            metaAnnotation
             {
-                metaAnnotationList.add($metaAnnotation.ret);
+                $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationListNode());
             }
-        |
-            annotation
-            {
-                annotationList.add($annotation.ret);
-            }
-        )+
+        )
     ;
+
 
 // Parses a meta-annotation.
 // For example, in
@@ -1212,7 +1259,7 @@ anyAnnotations returns [MetaAnnotationListNode metaAnnotations, AnnotationListNo
 //     public void foo() { }
 // This rule would parse
 //     @@Test("foo")
-metaAnnotation returns [MetaAnnotationNode ret]
+metaAnnotation returns [NodeUnion<? extends MetaAnnotationNode> ret]
         scope Rule;
         @init {
             ruleStart("metaAnnotation");
@@ -1223,31 +1270,37 @@ metaAnnotation returns [MetaAnnotationNode ret]
     :   
         {configuration.getMetaAnnotationsSupported()}?=>
         (
-	        '@' '@' name
-	        {
-	            $ret = factory.makeNormalMetaAnnotationNode(
-	                    factory.makeMetaAnnotationElementListNode(),
-	                    factory.makeUnparameterizedTypeNode($name.ret));
-	        }
+	        '@' '@' unparameterizedType
 	        (
-	            '('   
-	            (
-	                metaAnnotationElementValuePairs
-	                {
-	                    $ret = factory.makeNormalMetaAnnotationNode(
-	                            $metaAnnotationElementValuePairs.ret,
-	                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
-	                }
-	            |
-	                metaAnnotationElementValue
-	                {
-	                    $ret = factory.makeSingleElementMetaAnnotationNode(
-	                            $metaAnnotationElementValue.ret,
-	                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
-	                }
-	            )? 
-	            ')' 
-            )?
+		        (
+		            '('   
+		            (
+		                optionalMetaAnnotationElementValuePairs
+		                {
+		                    $ret = factory.makeNormalNodeUnion(
+		                               factory.makeNormalMetaAnnotationNodeWithUnions(
+		                                       $optionalMetaAnnotationElementValuePairs.ret,
+		                                       $unparameterizedType.ret));
+		                }
+		            |
+		                metaAnnotationElementValue
+		                {
+		                    $ret = factory.makeNormalNodeUnion(
+		                               factory.makeSingleElementMetaAnnotationNodeWithUnions(
+		                                   $metaAnnotationElementValue.ret,
+		                                   $unparameterizedType.ret));
+		                }
+		            )? 
+		            ')' 
+	            )
+            |
+	            {
+	                $ret = factory.makeNormalNodeUnion(
+	                           factory.makeNormalMetaAnnotationNodeWithUnions(
+	                               factory.makeNormalNodeUnion(factory.makeMetaAnnotationElementListNode()),
+	                               $unparameterizedType.ret));
+	            }            
+            )
         )
     ;
 
@@ -1256,42 +1309,53 @@ metaAnnotation returns [MetaAnnotationNode ret]
 //     @@Foo(bar="baz",happy=5)
 // this rule would parse
 //     bar="baz",happy=5
-metaAnnotationElementValuePairs returns [MetaAnnotationElementListNode ret]
+metaAnnotationElementValuePairs returns [NodeUnion<? extends MetaAnnotationElementListNode> ret]
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValuePairs");
-            List<MetaAnnotationElementNode> list = new ArrayList<MetaAnnotationElementNode>();
+            List<NodeUnion<? extends MetaAnnotationElementNode>> list =
+                    new ArrayList<NodeUnion<? extends MetaAnnotationElementNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeMetaAnnotationElementListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationElementListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=metaAnnotationElementValuePair
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "metaAnnotationElementValuePair", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=metaAnnotationElementValuePair
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "metaAnnotationElementValuePair", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalMetaAnnotationElementValuePairs returns [MetaAnnotationElementListNode ret]
+optionalMetaAnnotationElementValuePairs returns [NodeUnion<? extends MetaAnnotationElementListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalMetaAnnotationElementValuePairs");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeMetaAnnotationElementListNode();
-            }
             ruleStop();
         }
     :
@@ -1300,7 +1364,13 @@ optionalMetaAnnotationElementValuePairs returns [MetaAnnotationElementListNode r
             {
                 $ret = $metaAnnotationElementValuePairs.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationElementListNode());
+            }
+        )
     ;
 
 
@@ -1311,7 +1381,7 @@ optionalMetaAnnotationElementValuePairs returns [MetaAnnotationElementListNode r
 //     bar="baz"
 // or
 //     happy=5
-metaAnnotationElementValuePair returns [MetaAnnotationElementNode ret]
+metaAnnotationElementValuePair returns [NodeUnion<? extends MetaAnnotationElementNode> ret]
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValuePair");
@@ -1322,7 +1392,8 @@ metaAnnotationElementValuePair returns [MetaAnnotationElementNode ret]
     :
         id=identifier '=' metaAnnotationElementValue
         {
-            $ret = factory.makeMetaAnnotationElementNode($id.ret, $metaAnnotationElementValue.ret);
+            $ret = factory.makeNormalNodeUnion(
+                    factory.makeMetaAnnotationElementNodeWithUnions($id.ret, $metaAnnotationElementValue.ret));
         }
     ;
 
@@ -1335,7 +1406,7 @@ metaAnnotationElementValuePair returns [MetaAnnotationElementNode ret]
 //    {7,8}
 // or
 //    @@Test
-metaAnnotationElementValue returns [MetaAnnotationValueNode ret]
+metaAnnotationElementValue returns [NodeUnion<? extends MetaAnnotationValueNode> ret]
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValue");
@@ -1346,12 +1417,12 @@ metaAnnotationElementValue returns [MetaAnnotationValueNode ret]
     :   
         conditionalExpression
         {
-            $ret = factory.makeMetaAnnotationExpressionValueNode($conditionalExpression.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationExpressionValueNodeWithUnions($conditionalExpression.ret));
         }
     |   
         metaAnnotation
         {
-            $ret = factory.makeMetaAnnotationMetaAnnotationValueNode($metaAnnotation.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationMetaAnnotationValueNodeWithUnions($metaAnnotation.ret));
         }
     |   
         metaAnnotationElementValueArrayInitializer
@@ -1369,42 +1440,53 @@ metaAnnotationElementValue returns [MetaAnnotationValueNode ret]
 //     @@Test({1,2,3})
 // this rule would parse
 //     1,2,3
-metaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
+metaAnnotationElementValues returns [NodeUnion<? extends MetaAnnotationValueListNode> ret]
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValues");
-            List<MetaAnnotationValueNode> list = new ArrayList<MetaAnnotationValueNode>();
+            List<NodeUnion<? extends MetaAnnotationValueNode>> list =
+                    new ArrayList<NodeUnion<? extends MetaAnnotationValueNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeMetaAnnotationValueListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationValueListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=metaAnnotationElementValue
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "metaAnnotationElementValue", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=metaAnnotationElementValue
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "metaAnnotationElementValue", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalMetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
+optionalMetaAnnotationElementValues returns [NodeUnion<? extends MetaAnnotationValueListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalMetaAnnotationElementValues");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeMetaAnnotationValueListNode();
-            }
             ruleStop();
         }
     :
@@ -1413,7 +1495,13 @@ optionalMetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
             {
                 $ret = $metaAnnotationElementValues.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationValueListNode());
+            }
+        )
     ;
 
 
@@ -1426,7 +1514,7 @@ optionalMetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
 //     @@Test({1,2,3})
 // this rule would parse
 //     {1,2,3}
-metaAnnotationElementValueArrayInitializer returns [MetaAnnotationArrayValueNode ret]
+metaAnnotationElementValueArrayInitializer returns [NodeUnion<? extends MetaAnnotationArrayValueNode> ret]
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValueArrayInitializer");
@@ -1438,14 +1526,15 @@ metaAnnotationElementValueArrayInitializer returns [MetaAnnotationArrayValueNode
         '{'
         optionalMetaAnnotationElementValues
         {
-            $ret = factory.makeMetaAnnotationArrayValueNode($optionalMetaAnnotationElementValues.ret);
+            $ret = factory.makeNormalNodeUnion(
+                        factory.makeMetaAnnotationArrayValueNodeWithUnions($optionalMetaAnnotationElementValues.ret));
         }
         ','?
         '}'
     ;
 
 // Parses a code literal
-codeLiteral returns [RawCodeLiteralNode ret]
+codeLiteral returns [NodeUnion<? extends RawCodeLiteralNode> ret]
         scope Rule;
         @init {
             ruleStart("codeLiteral");
@@ -1458,10 +1547,9 @@ codeLiteral returns [RawCodeLiteralNode ret]
         codeLiteralBody
         ':>'
         {
-            $ret = factory.makeRawCodeLiteralNode(new BsjRawCodeLiteralPayloadAntlrImpl(
-                getResourceName(),
-                $codeLiteralBody.ret
-            ));
+            $ret = factory.makeNormalNodeUnion(factory.makeRawCodeLiteralNode(new BsjRawCodeLiteralPayloadAntlrImpl(
+	                getResourceName(),
+	                $codeLiteralBody.ret)));
         }
     ;
 
@@ -1518,7 +1606,7 @@ anyNonCodeLiteralToken returns [BsjTokenImpl ret]
  * ===========================================================================
  */
 
-compilationUnit[String name] returns [CompilationUnitNode ret]
+compilationUnit[String name] returns [NodeUnion<? extends CompilationUnitNode> ret]
         scope Rule;
         @init {
             ruleStart("compilationUnit");
@@ -1533,77 +1621,80 @@ compilationUnit[String name] returns [CompilationUnitNode ret]
         optionalTypeDeclarations
         EOF
         {
-            $ret = factory.makeCompilationUnitNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeCompilationUnitNodeWithUnions(
                         name,
                         $packageDeclaration.ret,
                         $optionalMetaImportDeclarations.ret,
                         $optionalImportDeclarations.ret,
-                        $optionalTypeDeclarations.ret);
+                        $optionalTypeDeclarations.ret));
         }
     ;
 
-packageDeclaration returns [PackageDeclarationNode ret]
+packageDeclaration returns [NodeUnion<? extends PackageDeclarationNode> ret]
         scope Rule;
-        @init{
+        @init {
             ruleStart("packageDeclaration");
-            AnnotationListNode annotationsNode = factory.makeAnnotationListNode();
-            MetaAnnotationListNode metaAnnotationsNode = factory.makeMetaAnnotationListNode();
         }
         @after {
             ruleStop();
         }
     :
-        (
-            anyAnnotations
-            {
-                annotationsNode = $anyAnnotations.annotations;
-                metaAnnotationsNode = $anyAnnotations.metaAnnotations;
-            }
-        )?
+        modifiers[false]
         'package' name ';'
         {
-            $ret = factory.makePackageDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makePackageDeclarationNodeWithUnions(
                     $name.ret,
-                    metaAnnotationsNode,
-                    annotationsNode);
+                    factory.makeNormalNodeUnion($modifiers.metaAnnotations),
+                    factory.makeNormalNodeUnion($modifiers.annotations)));
         }
     ;
 
-metaImportDeclarations returns [MetaprogramImportListNode ret]
+metaImportDeclarations returns [NodeUnion<? extends MetaprogramImportListNode> ret]
         scope Rule;
         @init {
             ruleStart("metaImportDeclarations");
-            List<MetaprogramImportNode> list = new ArrayList<MetaprogramImportNode>();
+            List<NodeUnion<? extends MetaprogramImportNode>> list =
+                    new ArrayList<NodeUnion<? extends MetaprogramImportNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeMetaprogramImportListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramImportListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=metaprogramImport
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "metaprogramImport", getSourceLocation($a.stop)));
+            }
         }
         (
             b=metaprogramImport
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "metaprogramImport", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalMetaImportDeclarations returns [MetaprogramImportListNode ret]
+optionalMetaImportDeclarations returns [NodeUnion<? extends MetaprogramImportListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalMetaImportDeclarations");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeMetaprogramImportListNode();
-            }
             ruleStop();
         }
     :
@@ -1612,45 +1703,62 @@ optionalMetaImportDeclarations returns [MetaprogramImportListNode ret]
             {
                 $ret = $metaImportDeclarations.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramImportListNode());
+            }
+        )
     ;
 
 
-importDeclarations returns [ImportListNode ret]
+importDeclarations returns [NodeUnion<? extends ImportListNode> ret]
         scope Rule;
         @init {
             ruleStart("importDeclarations");
-            List<ImportNode> list = new ArrayList<ImportNode>();
+            List<NodeUnion<? extends ImportNode>> list =
+                    new ArrayList<NodeUnion<? extends ImportNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeImportListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeImportListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=importDeclaration
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "importDeclaration", getSourceLocation($a.stop)));
+            }
         }
         (
             b=importDeclaration
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "importDeclaration", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalImportDeclarations returns [ImportListNode ret]
+optionalImportDeclarations returns [NodeUnion<? extends ImportListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalImportDeclarations");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeImportListNode();
-            }
             ruleStop();
         }
     :
@@ -1659,11 +1767,17 @@ optionalImportDeclarations returns [ImportListNode ret]
             {
                 $ret = $importDeclarations.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeImportListNode());
+            }
+        )
     ;
 
 
-importBody returns [boolean staticImport, boolean onDemand, NameNode name]
+importBody returns [NodeUnion<? extends ImportNode> ret]
         scope Rule;
         @init {
             ruleStart("importBody");
@@ -1672,36 +1786,92 @@ importBody returns [boolean staticImport, boolean onDemand, NameNode name]
             ruleStop();
         }
     :
+        (
+            importStaticOnDemandBody
+            {
+                $ret = $importStaticOnDemandBody.ret;
+            }
+        |
+            importStaticSingleBody
+            {
+                $ret = $importStaticSingleBody.ret;
+            }
+        |
+            importOnDemandBody
+            {
+                $ret = $importOnDemandBody.ret;
+            }
+        |
+            importSingleBody
+            {
+                $ret = $importSingleBody.ret;
+            }
+        )
+
+    ;
+
+importStaticOnDemandBody returns [NodeUnion<? extends StaticImportOnDemandNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("importStaticOnDemandBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
         'static' name '.' '*'
         {
-            $staticImport = true;
-            $onDemand = true;
-            $name = $name.ret;
-        }
-    |
-        'static' name
-        {
-            $staticImport = true;
-            $onDemand = false;
-            $name = $name.ret;
-        }
-    |
-        name '.' '*'
-        {
-            $staticImport = false;
-            $onDemand = true;
-            $name = $name.ret;
-        }
-    |
-        name
-        {
-            $staticImport = false;
-            $onDemand = false;
-            $name = $name.ret;
+            $ret = factory.makeNormalNodeUnion(factory.makeStaticImportOnDemandNodeWithUnions($name.ret));
         }
     ;
 
-importDeclaration returns [ImportNode ret]
+importStaticSingleBody returns [NodeUnion<? extends SingleStaticImportNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("importStaticSingleBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        'static' separatedQualifiedName
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeSingleStaticImportNodeWithUnions(
+                    $separatedQualifiedName.name, $separatedQualifiedName.ident));
+        }
+    ;
+
+importOnDemandBody returns [NodeUnion<? extends ImportOnDemandNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("importOnDemandBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        name '.' '*'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeImportOnDemandNodeWithUnions($name.ret));
+        }
+    ;
+
+importSingleBody returns [NodeUnion<? extends ImportSingleTypeNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("importSingleBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        name
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeImportSingleTypeNodeWithUnions($name.ret));
+        }
+    ;
+
+importDeclaration returns [NodeUnion<? extends ImportNode> ret]
         scope Rule;
         @init {
             ruleStart("importDeclaration");
@@ -1714,11 +1884,11 @@ importDeclaration returns [ImportNode ret]
         importBody
         ';'
         {
-            $ret = createImport($importBody.onDemand, $importBody.staticImport, $importBody.name);
+            $ret = $importBody.ret;
         }
     ;
 
-javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
+javadoc returns [NodeUnion<JavadocNode> ret] // TODO: parse out Javadoc contents
         scope Rule;
         @init{
             ruleStart("javadoc");
@@ -1736,7 +1906,7 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
                     factory.setStartSourceLocation(startSourceLocation);
                     factory.setStopSourceLocation(stopSourceLocation);
                     factorySourceLocationOverride = true;
-                    $ret = factory.makeJavadocNode(parseJavadoc(token.getText()));
+                    $ret = factory.makeNormalNodeUnion(factory.makeJavadocNode(parseJavadoc(token.getText())));
                     factorySourceLocationOverride = false;
                     break;
                 }
@@ -1752,41 +1922,52 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
     :
     ;
 
-typeDeclarations returns [TypeDeclarationListNode ret]
+typeDeclarations returns [NodeUnion<? extends TypeDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("typeDeclarations");
-            List<TypeDeclarationNode> list = new ArrayList<TypeDeclarationNode>();
+            List<NodeUnion<? extends TypeDeclarationNode>> list =
+                    new ArrayList<NodeUnion<? extends TypeDeclarationNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeTypeDeclarationListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeTypeDeclarationListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=typeDeclaration
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "typeDeclaration", getSourceLocation($a.stop)));
+            }
         }
         (
             b=typeDeclaration
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "typeDeclaration", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalTypeDeclarations returns [TypeDeclarationListNode ret]
+optionalTypeDeclarations returns [NodeUnion<? extends TypeDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalTypeDeclarations");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeTypeDeclarationListNode();
-            }
             ruleStop();
         }
     :
@@ -1795,11 +1976,17 @@ optionalTypeDeclarations returns [TypeDeclarationListNode ret]
             {
                 $ret = $typeDeclarations.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeTypeDeclarationListNode());
+            }
+        )
     ;
 
 
-typeDeclaration returns [TypeDeclarationNode ret]
+typeDeclaration returns [NodeUnion<? extends TypeDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("typeDeclaration");
@@ -1824,7 +2011,7 @@ typeDeclaration returns [TypeDeclarationNode ret]
         }
     ;
 
-noOp returns [NoOperationNode ret]
+noOp returns [NodeUnion<? extends NoOperationNode> ret]
         scope Rule;
         @init {
             ruleStart("noOp");
@@ -1836,11 +2023,11 @@ noOp returns [NoOperationNode ret]
         optionalMetaAnnotationList
         ';'
         {
-            $ret = factory.makeNoOperationNode($optionalMetaAnnotationList.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeNoOperationNodeWithUnions($optionalMetaAnnotationList.ret));
         }
     ;
 
-classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
+classOrInterfaceDeclaration returns [NodeUnion<? extends TypeDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("classOrInterfaceDeclaration");
@@ -1869,30 +2056,50 @@ modifiers[boolean accessAllowed, Modifier... mods]
         scope Rule;
         @init {
             ruleStart("modifiers");
-            List<AnnotationNode> annotationList = new ArrayList<AnnotationNode>();
-            List<MetaAnnotationNode> metaAnnotationList = new ArrayList<MetaAnnotationNode>();
+            List<NodeUnion<? extends AnnotationNode>> annotationList =
+                    new ArrayList<NodeUnion<? extends AnnotationNode>>();
+            List<NodeUnion<? extends MetaAnnotationNode>> metaAnnotationList =
+                    new ArrayList<NodeUnion<? extends MetaAnnotationNode>>();
             $access = AccessModifier.PACKAGE;
             $modifiers = new ModifierSet(mods);
             AccessModifier currentAccess = null;
             Modifier accessAsModifier = null;
         }
         @after {
-            while (annotationList.remove(null)) ; // remove all nulls from the list
-            while (metaAnnotationList.remove(null)) ; // remove all nulls from the list
-            $annotations = factory.makeAnnotationListNode(annotationList);
-            $metaAnnotations = factory.makeMetaAnnotationListNode(metaAnnotationList);
+            $annotations = factory.makeAnnotationListNodeWithUnions(annotationList);
+            $metaAnnotations = factory.makeMetaAnnotationListNodeWithUnions(metaAnnotationList);
             ruleStop();
         }
     :
         (
             metaAnnotation
             {
-                metaAnnotationList.add($metaAnnotation.ret);
+                // TODO: fix with error nodes
+                if ($metaAnnotation.ret != null && $metaAnnotation.ret.getNodeValue() != null)
+                {
+                    metaAnnotationList.add($metaAnnotation.ret);
+                } else
+                {
+                    reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                            getSourceLocation($metaAnnotation.start),
+                            "metaAnnotation",
+                            getSourceLocation($metaAnnotation.stop)));
+                }
             }
         |
             annotation
             {
-                annotationList.add($annotation.ret);
+                // TODO: fix with error nodes
+                if ($annotation.ret != null && $annotation.ret.getNodeValue() != null)
+                {
+                    annotationList.add($annotation.ret);
+                } else
+                {
+                    reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                            getSourceLocation($annotation.start),
+                            "annotation",
+                            getSourceLocation($annotation.stop)));
+                }
             }
         |
             (
@@ -1985,7 +2192,7 @@ modifiers[boolean accessAllowed, Modifier... mods]
         )*
     ;
 
-annotationMethodModifiers returns [AnnotationMethodModifiersNode ret]
+annotationMethodModifiers returns [NodeUnion<? extends AnnotationMethodModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("annotationMethodModifiers");
@@ -1996,11 +2203,13 @@ annotationMethodModifiers returns [AnnotationMethodModifiersNode ret]
     :
         modifiers[false, Modifier.PUBLIC, Modifier.ABSTRACT]
         {
-            $ret = factory.makeAnnotationMethodModifiersNode($modifiers.metaAnnotations, $modifiers.annotations);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationMethodModifiersNode(
+                    $modifiers.metaAnnotations,
+                    $modifiers.annotations));
         }
     ;
 
-annotationModifiers returns [AnnotationModifiersNode ret]
+annotationModifiers returns [NodeUnion<? extends AnnotationModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("annotationModifiers");
@@ -2009,18 +2218,18 @@ annotationModifiers returns [AnnotationModifiersNode ret]
             ruleStop();
         }
     :
-        modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.STRICTFP]
+        modifiers[true, Modifier.STATIC, Modifier.STRICTFP, Modifier.ABSTRACT]
         {
-            $ret = factory.makeAnnotationModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationModifiersNode(
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.STATIC),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
-    
-classModifiers returns [ClassModifiersNode ret]
+     
+classModifiers returns [NodeUnion<? extends ClassModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("classModifiers");
@@ -2031,18 +2240,18 @@ classModifiers returns [ClassModifiersNode ret]
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.STRICTFP]
         {
-            $ret = factory.makeClassModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeClassModifiersNode(
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.ABSTRACT),
                     $modifiers.modifiers.has(Modifier.STATIC),
                     $modifiers.modifiers.has(Modifier.FINAL),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
-    
-constantModifiers returns [ConstantModifiersNode ret]
+
+constantModifiers returns [NodeUnion<? extends ConstantModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("constantModifiers");
@@ -2053,13 +2262,13 @@ constantModifiers returns [ConstantModifiersNode ret]
     :
         modifiers[false, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL]
         {
-            $ret = factory.makeConstantModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeConstantModifiersNode(
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
 
-constructorModifiers returns [ConstructorModifiersNode ret]
+constructorModifiers returns [NodeUnion<? extends ConstructorModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("constructorModifiers");
@@ -2070,12 +2279,14 @@ constructorModifiers returns [ConstructorModifiersNode ret]
     :
         modifiers[true]
         {
-            $ret = factory.makeConstructorModifiersNode($modifiers.access, $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+            $ret = factory.makeNormalNodeUnion(factory.makeConstructorModifiersNode(
+                    $modifiers.access,
+                    $modifiers.metaAnnotations,
+                    $modifiers.annotations));
         }
     ;
-    
-enumConstantModifiers returns [EnumConstantModifiersNode ret]
+
+enumConstantModifiers returns [NodeUnion<? extends EnumConstantModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("enumConstantModifiers");
@@ -2086,13 +2297,13 @@ enumConstantModifiers returns [EnumConstantModifiersNode ret]
     :
         modifiers[false]
         {
-            $ret = factory.makeEnumConstantModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeEnumConstantModifiersNode(
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
 
-enumModifiers returns [EnumModifiersNode ret]
+enumModifiers returns [NodeUnion<? extends EnumModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("enumModifiers");
@@ -2101,17 +2312,17 @@ enumModifiers returns [EnumModifiersNode ret]
             ruleStop();
         }
     :
-        modifiers[true, Modifier.STATIC, Modifier.STRICTFP]
+        modifiers[true, Modifier.STRICTFP, Modifier.STATIC]
         {
-            $ret = factory.makeEnumModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeEnumModifiersNode(
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.STRICTFP),
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
-    
-fieldModifiers returns [FieldModifiersNode ret]
+
+fieldModifiers returns [NodeUnion<? extends FieldModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("fieldModifiers");
@@ -2122,21 +2333,21 @@ fieldModifiers returns [FieldModifiersNode ret]
     :
         modifiers[true, Modifier.STATIC, Modifier.FINAL, Modifier.TRANSIENT, Modifier.VOLATILE]
         {
-            $ret = factory.makeFieldModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeFieldModifiersNode(
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.STATIC),
                     $modifiers.modifiers.has(Modifier.FINAL),
                     $modifiers.modifiers.has(Modifier.TRANSIENT),
                     $modifiers.modifiers.has(Modifier.VOLATILE),
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
-    
-inlineClassModifiers returns [LocalClassModifiersNode ret]
+
+localClassModifiers returns [NodeUnion<? extends LocalClassModifiersNode> ret]
         scope Rule;
         @init {
-            ruleStart("inlineClassModifiers");
+            ruleStart("localClassModifiers");
         }
         @after {
             ruleStop();
@@ -2144,16 +2355,16 @@ inlineClassModifiers returns [LocalClassModifiersNode ret]
     :
         modifiers[false, Modifier.ABSTRACT, Modifier.FINAL, Modifier.STRICTFP]
         {
-            $ret = factory.makeLocalClassModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeLocalClassModifiersNode(
                     $modifiers.modifiers.has(Modifier.ABSTRACT),
                     $modifiers.modifiers.has(Modifier.FINAL),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
-    
-interfaceModifiers returns [InterfaceModifiersNode ret]
+
+interfaceModifiers returns [NodeUnion<? extends InterfaceModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("interfaceModifiers");
@@ -2162,18 +2373,18 @@ interfaceModifiers returns [InterfaceModifiersNode ret]
             ruleStop();
         }
     :
-        modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.STRICTFP]
+        modifiers[true, Modifier.STATIC, Modifier.STRICTFP, Modifier.ABSTRACT]
         {
-            $ret = factory.makeInterfaceModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeInterfaceModifiersNode(
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.STATIC),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
-    
-methodModifiers returns [MethodModifiersNode ret]
+
+methodModifiers returns [NodeUnion<? extends MethodModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("methodModifiers");
@@ -2182,10 +2393,9 @@ methodModifiers returns [MethodModifiersNode ret]
             ruleStop();
         }
     :
-        modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.SYNCHRONIZED, Modifier.NATIVE,
-            Modifier.STRICTFP]
+        modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.SYNCHRONIZED, Modifier.NATIVE, Modifier.STRICTFP]
         {
-            $ret = factory.makeMethodModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeMethodModifiersNode(
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.ABSTRACT),
                     $modifiers.modifiers.has(Modifier.STATIC),
@@ -2194,11 +2404,11 @@ methodModifiers returns [MethodModifiersNode ret]
                     $modifiers.modifiers.has(Modifier.NATIVE),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
-    
-variableModifiers returns [VariableModifiersNode ret]
+
+variableModifiers returns [NodeUnion<? extends VariableModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("variableModifiers");
@@ -2209,14 +2419,15 @@ variableModifiers returns [VariableModifiersNode ret]
     :
         modifiers[false, Modifier.FINAL]
         {
-            $ret = factory.makeVariableModifiersNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableModifiersNode(
                     $modifiers.modifiers.has(Modifier.FINAL),
                     $modifiers.metaAnnotations,
-                    $modifiers.annotations);
+                    $modifiers.annotations));
         }
     ;
 
-classDeclaration returns [TypeDeclarationNode ret]
+
+classDeclaration returns [NodeUnion<? extends TypeDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("classDeclaration");
@@ -2236,12 +2447,13 @@ classDeclaration returns [TypeDeclarationNode ret]
         }
     ;
 
-normalClassDeclaration returns [ClassDeclarationNode ret]
+normalClassDeclaration returns [NodeUnion<? extends ClassDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("normalClassDeclaration");
-            DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
-        }         
+            NodeUnion<? extends DeclaredTypeListNode> declaredTypeListNode = 
+                    factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNode());
+        }
         @after {
             ruleStop();
         }
@@ -2258,28 +2470,29 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         )?            
         classBody
         {            
-            $ret = factory.makeClassDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeClassDeclarationNodeWithUnions(
                     $classModifiers.ret,
                     $classOrInterfaceType.ret,
                     declaredTypeListNode,
                     $classBody.ret,
                     $optionalTypeParameters.ret,                    
                     $id.ret,
-                    $javadoc.ret);
+                    $javadoc.ret));
         }
     ;
 
-inlineClassDeclaration returns [LocalClassDeclarationNode ret]
+inlineClassDeclaration returns [NodeUnion<? extends LocalClassDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("inlineClassDeclaration");
-            DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
-        }         
+            NodeUnion<? extends DeclaredTypeListNode> declaredTypeListNode = 
+                    factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNode());
+        }
         @after {
             ruleStop();
         }
     :   
-        javadoc inlineClassModifiers
+        javadoc localClassModifiers
         'class' id=identifier
         optionalTypeParameters
         ('extends' classOrInterfaceType)?
@@ -2291,55 +2504,66 @@ inlineClassDeclaration returns [LocalClassDeclarationNode ret]
         )?            
         classBody
         {            
-            $ret = factory.makeLocalClassDeclarationNode(
-                    $inlineClassModifiers.ret,
+            $ret = factory.makeNormalNodeUnion(factory.makeLocalClassDeclarationNodeWithUnions(
+                    $localClassModifiers.ret,
                     $classOrInterfaceType.ret,
                     declaredTypeListNode,
                     $classBody.ret,
                     $optionalTypeParameters.ret,                    
                     $id.ret,
-                    $javadoc.ret);
+                    $javadoc.ret));
         }
     ;
 
-typeParameters returns [TypeParameterListNode ret]
+typeParameters returns [NodeUnion<? extends TypeParameterListNode> ret]
         scope Rule;
         @init {
             ruleStart("typeParameters");
-            List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
+            List<NodeUnion<? extends TypeParameterNode>> list =
+                    new ArrayList<NodeUnion<? extends TypeParameterNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeTypeParameterListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeTypeParameterListNodeWithUnions(list));
             ruleStop();
         }
     :
         '<'
         a=typeParameter
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "typeParameter", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=typeParameter
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "typeParameter", getSourceLocation($b.stop)));
+	            }
             }
         )*
         '>'
     ;
 
-optionalTypeParameters returns [TypeParameterListNode ret]
+optionalTypeParameters returns [NodeUnion<? extends TypeParameterListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalTypeParameters");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeTypeParameterListNode();
-            }
             ruleStop();
         }
     :
@@ -2348,15 +2572,22 @@ optionalTypeParameters returns [TypeParameterListNode ret]
             {
                 $ret = $typeParameters.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeTypeParameterListNode());
+            }
+        )
     ;
 
 
-typeParameter returns [TypeParameterNode ret]
+typeParameter returns [NodeUnion<? extends TypeParameterNode> ret]
         scope Rule;
         @init {
             ruleStart("typeParameter");
-            DeclaredTypeListNode typeBoundNode = factory.makeDeclaredTypeListNode();
+            NodeUnion<? extends DeclaredTypeListNode> typeBoundNode = 
+                    factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNode());
         }
         @after {
             ruleStop();
@@ -2370,48 +2601,57 @@ typeParameter returns [TypeParameterNode ret]
             }
         )?
         {
-            $ret = factory.makeTypeParameterNode(
-                        $id.ret,
-                        typeBoundNode);
+            $ret = factory.makeNormalNodeUnion(factory.makeTypeParameterNodeWithUnions($id.ret, typeBoundNode));
         }        
     ;
 
-typeBound returns [DeclaredTypeListNode ret]
+typeBound returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("typeBound");
-            List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
+            List<NodeUnion<? extends DeclaredTypeNode>> list =
+                    new ArrayList<NodeUnion<? extends DeclaredTypeNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeDeclaredTypeListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=classOrInterfaceType
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "classOrInterfaceType", getSourceLocation($a.stop)));
+            }
         }
         (
             '&'
             b=classOrInterfaceType
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "classOrInterfaceType", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalTypeBound returns [DeclaredTypeListNode ret]
+optionalTypeBound returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalTypeBound");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeDeclaredTypeListNode();
-            }
             ruleStop();
         }
     :
@@ -2420,16 +2660,23 @@ optionalTypeBound returns [DeclaredTypeListNode ret]
             {
                 $ret = $typeBound.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNode());
+            }
+        )
     ;
 
 
-enumDeclaration returns [EnumDeclarationNode ret]
+enumDeclaration returns [NodeUnion<? extends EnumDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("enumDeclaration");
-            DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
-        } 
+            NodeUnion<? extends DeclaredTypeListNode> declaredTypeListNode = 
+                    factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNode());
+        }
         @after {
             ruleStop();
         }
@@ -2445,21 +2692,22 @@ enumDeclaration returns [EnumDeclarationNode ret]
         )?
         enumBody
         {
-            $ret = factory.makeEnumDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeEnumDeclarationNodeWithUnions(
                         $enumModifiers.ret,
                         declaredTypeListNode,
                         $enumBody.ret,
                         $id.ret,
-                        $javadoc.ret);
+                        $javadoc.ret));
         }
     ;
 
 
-enumBody returns [EnumBodyNode ret]
+enumBody returns [NodeUnion<? extends EnumBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("enumBody");
-            ClassMemberListNode enumBodyDeclarationsNode = factory.makeClassMemberListNode();
+            NodeUnion<? extends ClassMemberListNode> enumBodyDeclarationsNode = 
+                    factory.makeNormalNodeUnion(factory.makeClassMemberListNode());
         }
         @after {
             ruleStop();
@@ -2476,46 +2724,58 @@ enumBody returns [EnumBodyNode ret]
         )?
         '}'
         {
-            $ret = factory.makeEnumBodyNode($optionalEnumConstants.ret, enumBodyDeclarationsNode);
+            $ret = factory.makeNormalNodeUnion(
+                        factory.makeEnumBodyNodeWithUnions($optionalEnumConstants.ret, enumBodyDeclarationsNode));
         }
     ;
 
-enumConstants returns [EnumConstantDeclarationListNode ret]
+enumConstants returns [NodeUnion<? extends EnumConstantDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("enumConstants");
-            List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
+            List<NodeUnion<? extends EnumConstantDeclarationNode>> list =
+                    new ArrayList<NodeUnion<? extends EnumConstantDeclarationNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeEnumConstantDeclarationListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeEnumConstantDeclarationListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=enumConstant
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "enumConstant", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=enumConstant
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "enumConstant", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalEnumConstants returns [EnumConstantDeclarationListNode ret]
+optionalEnumConstants returns [NodeUnion<? extends EnumConstantDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalEnumConstants");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeEnumConstantDeclarationListNode();
-            }
             ruleStop();
         }
     :
@@ -2524,18 +2784,28 @@ optionalEnumConstants returns [EnumConstantDeclarationListNode ret]
             {
                 $ret = $enumConstants.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeEnumConstantDeclarationListNode());
+            }
+        )
     ;
 
 
-enumConstant returns [EnumConstantDeclarationNode ret]
+enumConstant returns [NodeUnion<? extends EnumConstantDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("enumConstant");
-            AnnotationListNode annotationsNode = factory.makeAnnotationListNode();
-            MetaAnnotationListNode metaAnnotationsNode = factory.makeMetaAnnotationListNode();
-            ExpressionListNode argumentsNode = factory.makeExpressionListNode();
-            AnonymousClassBodyNode anonymousClassBodyNode = null;
+            NodeUnion<? extends AnnotationListNode> annotationsNode = 
+                    factory.makeNormalNodeUnion(factory.makeAnnotationListNode());
+            NodeUnion<? extends MetaAnnotationListNode> metaAnnotationsNode = 
+                    factory.makeNormalNodeUnion(factory.makeMetaAnnotationListNode());
+            NodeUnion<? extends ExpressionListNode> argumentsNode = 
+                    factory.makeNormalNodeUnion(factory.makeExpressionListNode());
+            NodeUnion<? extends AnonymousClassBodyNode> anonymousClassBodyNode = 
+                    factory.makeNormalNodeUnion(null);
         }
         @after {
             ruleStop();
@@ -2556,38 +2826,33 @@ enumConstant returns [EnumConstantDeclarationNode ret]
             }
         )?
         {
-            $ret = factory.makeEnumConstantDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeEnumConstantDeclarationNodeWithUnions(
                 $enumConstantModifiers.ret,
                 $id.ret,
                 argumentsNode,
                 anonymousClassBodyNode,
-                $javadoc.ret);
+                $javadoc.ret));
         }
     ;
 
-enumBodyDeclarations returns [ClassMemberListNode ret]
+enumBodyDeclarations returns [NodeUnion<? extends ClassMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("enumBodyDeclarations");
-            List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeClassMemberListNode(list);
             ruleStop();
         }
     :
         ';'
-        (
-            classBodyDeclaration
-            {
-                list.add($classBodyDeclaration.ret);
-            }
-        )*
+        optionalClassBodyDeclarations
+        {
+            $ret = $optionalClassBodyDeclarations.ret;
+        }
     ;
 
 
-interfaceDeclaration returns [TypeDeclarationNode ret]
+interfaceDeclaration returns [NodeUnion<? extends TypeDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("interfaceDeclaration");
@@ -2607,12 +2872,13 @@ interfaceDeclaration returns [TypeDeclarationNode ret]
         }
     ;
     
-normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
+normalInterfaceDeclaration returns [NodeUnion<? extends InterfaceDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("normalInterfaceDeclaration");
-            DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
-        } 
+            NodeUnion<? extends DeclaredTypeListNode> declaredTypeListNode = 
+                    factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNode());
+        }
         @after {
             ruleStop();
         }
@@ -2628,52 +2894,63 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         )?        
         interfaceBody
         {
-            $ret = factory.makeInterfaceDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeInterfaceDeclarationNodeWithUnions(
                     $interfaceModifiers.ret,
                     declaredTypeListNode,
                     $interfaceBody.ret,
                     $optionalTypeParameters.ret,
                     $id.ret,
-                    $javadoc.ret);
+                    $javadoc.ret));
         }
     ;
 
-declaredTypeList returns [DeclaredTypeListNode ret]
+declaredTypeList returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("declaredTypeList");
-            List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
+            List<NodeUnion<? extends DeclaredTypeNode>> list =
+                    new ArrayList<NodeUnion<? extends DeclaredTypeNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeDeclaredTypeListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=classOrInterfaceType
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "classOrInterfaceType", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=classOrInterfaceType
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "classOrInterfaceType", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalDeclaredTypeList returns [DeclaredTypeListNode ret]
+optionalDeclaredTypeList returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalDeclaredTypeList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeDeclaredTypeListNode();
-            }
             ruleStop();
         }
     :
@@ -2682,46 +2959,63 @@ optionalDeclaredTypeList returns [DeclaredTypeListNode ret]
             {
                 $ret = $declaredTypeList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNode());
+            }
+        )
     ;
 
 
-referenceTypeList returns [ReferenceTypeListNode ret]
+referenceTypeList returns [NodeUnion<? extends ReferenceTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("referenceTypeList");
-            List<ReferenceTypeNode> list = new ArrayList<ReferenceTypeNode>();
+            List<NodeUnion<? extends ReferenceTypeNode>> list =
+                    new ArrayList<NodeUnion<? extends ReferenceTypeNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeReferenceTypeListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeReferenceTypeListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=referenceType
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "referenceType", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=referenceType
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "referenceType", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalReferenceTypeList returns [ReferenceTypeListNode ret]
+optionalReferenceTypeList returns [NodeUnion<? extends ReferenceTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalReferenceTypeList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeReferenceTypeListNode();
-            }
             ruleStop();
         }
     :
@@ -2730,11 +3024,17 @@ optionalReferenceTypeList returns [ReferenceTypeListNode ret]
             {
                 $ret = $referenceTypeList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeReferenceTypeListNode());
+            }
+        )
     ;
 
 
-classBody returns [ClassBodyNode ret]
+classBody returns [NodeUnion<? extends ClassBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("classBody");
@@ -2747,11 +3047,11 @@ classBody returns [ClassBodyNode ret]
         optionalClassBodyDeclarations
         '}'
         {
-            $ret = factory.makeClassBodyNode($optionalClassBodyDeclarations.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeClassBodyNodeWithUnions($optionalClassBodyDeclarations.ret));
         }
     ;
 
-anonymousClassBody returns [AnonymousClassBodyNode ret]
+anonymousClassBody returns [NodeUnion<? extends AnonymousClassBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("anonymousClassBody");
@@ -2764,11 +3064,11 @@ anonymousClassBody returns [AnonymousClassBodyNode ret]
         optionalAnonymousClassBodyDeclarations
         '}'
         {
-            $ret = factory.makeAnonymousClassBodyNode($optionalAnonymousClassBodyDeclarations.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnonymousClassBodyNodeWithUnions($optionalAnonymousClassBodyDeclarations.ret));
         }
     ;
 
-interfaceBody returns [InterfaceBodyNode ret]
+interfaceBody returns [NodeUnion<? extends InterfaceBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("interfaceBody");
@@ -2781,11 +3081,11 @@ interfaceBody returns [InterfaceBodyNode ret]
         optionalInterfaceBodyDeclarations 
         '}'
         {
-            $ret = factory.makeInterfaceBodyNode($optionalInterfaceBodyDeclarations.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeInterfaceBodyNodeWithUnions($optionalInterfaceBodyDeclarations.ret));
         }
     ;
 
-initializerBlock returns [InitializerDeclarationNode ret]
+initializerBlock returns [NodeUnion<? extends InitializerDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("initializerBlock");
@@ -2798,48 +3098,59 @@ initializerBlock returns [InitializerDeclarationNode ret]
         staticText='static'?
         block
         {
-            $ret = factory.makeInitializerDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeInitializerDeclarationNodeWithUnions(
                     $staticText!=null,
                     $block.ret,
-                    $optionalMetaAnnotationList.ret);
+                    $optionalMetaAnnotationList.ret));
         }
     ;
 
-classBodyDeclarations returns [ClassMemberListNode ret]
+classBodyDeclarations returns [NodeUnion<? extends ClassMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("classBodyDeclarations");
-            List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
+            List<NodeUnion<? extends ClassMemberNode>> list =
+                    new ArrayList<NodeUnion<? extends ClassMemberNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeClassMemberListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeClassMemberListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=classBodyDeclaration
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "classBodyDeclaration", getSourceLocation($a.stop)));
+            }
         }
         (
             b=classBodyDeclaration
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "classBodyDeclaration", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalClassBodyDeclarations returns [ClassMemberListNode ret]
+optionalClassBodyDeclarations returns [NodeUnion<? extends ClassMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalClassBodyDeclarations");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeClassMemberListNode();
-            }
             ruleStop();
         }
     :
@@ -2848,11 +3159,17 @@ optionalClassBodyDeclarations returns [ClassMemberListNode ret]
             {
                 $ret = $classBodyDeclarations.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeClassMemberListNode());
+            }
+        )
     ;
 
     
-classBodyDeclaration returns [ClassMemberNode ret]
+classBodyDeclaration returns [NodeUnion<? extends ClassMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("classBodyDeclaration");
@@ -2890,41 +3207,52 @@ classBodyDeclaration returns [ClassMemberNode ret]
         }
     ;
 
-anonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
+anonymousClassBodyDeclarations returns [NodeUnion<? extends AnonymousClassMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("anonymousClassBodyDeclarations");
-            List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
+            List<NodeUnion<? extends AnonymousClassMemberNode>> list =
+                    new ArrayList<NodeUnion<? extends AnonymousClassMemberNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeAnonymousClassMemberListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnonymousClassMemberListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=anonymousClassBodyDeclaration
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "anonymousClassBodyDeclaration", getSourceLocation($a.stop)));
+            }
         }
         (
             b=anonymousClassBodyDeclaration
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "anonymousClassBodyDeclaration", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalAnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
+optionalAnonymousClassBodyDeclarations returns [NodeUnion<? extends AnonymousClassMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalAnonymousClassBodyDeclarations");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeAnonymousClassMemberListNode();
-            }
             ruleStop();
         }
     :
@@ -2933,11 +3261,17 @@ optionalAnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret
             {
                 $ret = $anonymousClassBodyDeclarations.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeAnonymousClassMemberListNode());
+            }
+        )
     ;
 
     
-anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
+anonymousClassBodyDeclaration returns [NodeUnion<? extends AnonymousClassMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("anonymousClassBodyDeclaration");
@@ -2967,7 +3301,7 @@ anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
         }
     ;
 
-memberDecl returns [AnonymousClassMemberNode ret]
+memberDecl returns [NodeUnion<? extends AnonymousClassMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("memberDecl");
@@ -2997,7 +3331,7 @@ memberDecl returns [AnonymousClassMemberNode ret]
         }
     ;
 
-methodReturnType returns [TypeNode ret]
+methodReturnType returns [NodeUnion<? extends TypeNode> ret]
         scope Rule;
         @init {
             ruleStart("methodReturnType");
@@ -3013,15 +3347,16 @@ methodReturnType returns [TypeNode ret]
     |
         'void'
         {
-            $ret = factory.makeVoidTypeNode();
+            $ret = factory.makeNormalNodeUnion(factory.makeVoidTypeNode());
         }
     ;
 
-constructorDeclaration returns [ConstructorDeclarationNode ret]
+constructorDeclaration returns [NodeUnion<? extends ConstructorDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("constructorDeclaration");
-            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
+            NodeUnion<? extends UnparameterizedTypeListNode> throwsNode = 
+                    factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeListNode());
         }
         @after {
             ruleStop();
@@ -3039,7 +3374,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         )?
         constructorBody
         {
-            $ret = factory.makeConstructorDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeConstructorDeclarationNodeWithUnions(
                 $identifier.ret,
                 $constructorBody.ret,
                 $constructorModifiers.ret,
@@ -3047,41 +3382,41 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
                 $formalParameters.varargParameter,
                 throwsNode,
                 $optionalTypeParameters.ret,
-                $javadoc.ret);
+                $javadoc.ret));
         }
     ;
 
-constructorBody returns [ConstructorBodyNode ret]
+constructorBody returns [NodeUnion<? extends ConstructorBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("constructorBody");
-            ConstructorInvocationNode constructorInvocationNode = null;
         }
         @after {
             ruleStop();
         }
     :
         '{' 
-        (
-            explicitConstructorInvocation
-            {
-                constructorInvocationNode = $explicitConstructorInvocation.ret;
-            }
-        )?
+        explicitConstructorInvocation?
         optionalBlockStatementList
         '}'
         {
-            $ret = factory.makeConstructorBodyNode(constructorInvocationNode, $optionalBlockStatementList.ret);
+            $ret = factory.makeNormalNodeUnion(
+                        factory.makeConstructorBodyNodeWithUnions(
+                                $explicitConstructorInvocation.ret,
+                                $optionalBlockStatementList.ret));
         }
     ;
 
-methodDeclaration returns [MethodDeclarationNode ret]
+methodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("methodDeclaration");
-            BlockStatementListNode body = null;
-            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
-            TypeNode returnTypeNode = null;
+            NodeUnion<? extends BlockStatementListNode> body = 
+                    factory.makeNormalNodeUnion(factory.makeBlockStatementListNode());
+            NodeUnion<? extends UnparameterizedTypeListNode> throwsNode = 
+                    factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeListNode());
+            NodeUnion<? extends TypeNode> returnTypeNode = 
+                    factory.makeNormalNodeUnion(null);
         }
         @after {
             ruleStop();
@@ -3116,7 +3451,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             ';' 
         )
         {
-            $ret = factory.makeMethodDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeMethodDeclarationNodeWithUnions(
                     body,
                     $methodModifiers.ret,
                     $id.ret,
@@ -3125,11 +3460,11 @@ methodDeclaration returns [MethodDeclarationNode ret]
                     returnTypeNode,
                     throwsNode,
                     $optionalTypeParameters.ret,
-                    $javadoc.ret);
+                    $javadoc.ret));
         }        
     ;
 
-fieldDeclaration returns [FieldDeclarationNode ret]
+fieldDeclaration returns [NodeUnion<? extends FieldDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("fieldDeclaration");
@@ -3143,49 +3478,60 @@ fieldDeclaration returns [FieldDeclarationNode ret]
         variableDeclarators
         ';'
         {
-            $ret = factory.makeFieldDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeFieldDeclarationNodeWithUnions(
                     $fieldModifiers.ret,
                     $type.ret,
                     $variableDeclarators.ret,
-                    $javadoc.ret);
+                    $javadoc.ret));
         }
     ;
     
-interfaceBodyDeclarations returns [InterfaceMemberListNode ret]
+interfaceBodyDeclarations returns [NodeUnion<? extends InterfaceMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("interfaceBodyDeclarations");
-            List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
+            List<NodeUnion<? extends InterfaceMemberNode>> list =
+                    new ArrayList<NodeUnion<? extends InterfaceMemberNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeInterfaceMemberListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeInterfaceMemberListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=interfaceBodyDeclaration
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "interfaceBodyDeclaration", getSourceLocation($a.stop)));
+            }
         }
         (
             b=interfaceBodyDeclaration
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "interfaceBodyDeclaration", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalInterfaceBodyDeclarations returns [InterfaceMemberListNode ret]
+optionalInterfaceBodyDeclarations returns [NodeUnion<? extends InterfaceMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalInterfaceBodyDeclarations");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeInterfaceMemberListNode();
-            }
             ruleStop();
         }
     :
@@ -3194,11 +3540,17 @@ optionalInterfaceBodyDeclarations returns [InterfaceMemberListNode ret]
             {
                 $ret = $interfaceBodyDeclarations.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeInterfaceMemberListNode());
+            }
+        )
     ;
 
     
-interfaceBodyDeclaration returns [InterfaceMemberNode ret]
+interfaceBodyDeclaration returns [NodeUnion<? extends InterfaceMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("interfaceBodyDeclaration");
@@ -3238,12 +3590,14 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
         }
     ;
 
-interfaceMethodDeclaration returns [MethodDeclarationNode ret]
+interfaceMethodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("interfaceMethodDeclaration");
-            TypeNode returnTypeNode = null;
-            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode();
+            NodeUnion<? extends TypeNode> returnTypeNode = 
+                    factory.makeNormalNodeUnion(null);
+            NodeUnion<? extends UnparameterizedTypeListNode> throwsNode = 
+                    factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeListNode());
         }
         @after {
             ruleStop();
@@ -3271,7 +3625,8 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         )?
         ';'
         {
-            $ret = factory.makeMethodDeclarationNode(
+            // TODO: this would be cleaner if we actually had a type for interface methods (like the JLS grammar does)
+            $ret = factory.makeNormalNodeUnion(factory.makeMethodDeclarationNodeWithUnions(
                     null, // No body for interface methods; thus null
                     $methodModifiers.ret,
                     $id.ret,
@@ -3280,11 +3635,11 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                     returnTypeNode,
                     throwsNode,
                     $optionalTypeParameters.ret,
-                    $javadoc.ret);
+                    $javadoc.ret));
         }         
     ;
 
-constantDeclaration returns [ConstantDeclarationNode ret]
+constantDeclaration returns [NodeUnion<? extends ConstantDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("constantDeclaration");
@@ -3298,51 +3653,62 @@ constantDeclaration returns [ConstantDeclarationNode ret]
         variableDeclarators
         ';'
         {
-            $ret = factory.makeConstantDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeConstantDeclarationNodeWithUnions(
                     $constantModifiers.ret,
                     $type.ret,
                     $variableDeclarators.ret,
-                    $javadoc.ret);
+                    $javadoc.ret));
         }
     ;
 
 // Represents a non-empty sequence of variable declarators.
-variableDeclarators returns [VariableDeclaratorListNode ret]
+variableDeclarators returns [NodeUnion<? extends VariableDeclaratorListNode> ret]
         scope Rule;
         @init {
             ruleStart("variableDeclarators");
-            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
+            List<NodeUnion<? extends VariableDeclaratorNode>> list =
+                    new ArrayList<NodeUnion<? extends VariableDeclaratorNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeVariableDeclaratorListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableDeclaratorListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=variableDeclarator
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "variableDeclarator", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=variableDeclarator
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "variableDeclarator", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalVariableDeclarators returns [VariableDeclaratorListNode ret]
+optionalVariableDeclarators returns [NodeUnion<? extends VariableDeclaratorListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalVariableDeclarators");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeVariableDeclaratorListNode();
-            }
             ruleStop();
         }
     :
@@ -3351,30 +3717,31 @@ optionalVariableDeclarators returns [VariableDeclaratorListNode ret]
             {
                 $ret = $variableDeclarators.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeVariableDeclaratorListNode());
+            }
+        )
     ;
 
  
 // Represents the combination of an identifier and an initializer.  This construct is necessary on its own to support
 // the multiple declaration sugar ("int x,y;").
-variableDeclarator returns [VariableDeclaratorNode ret]
+variableDeclarator returns [NodeUnion<? extends VariableDeclaratorNode> ret]
         scope Rule;
         @init {
             ruleStart("variableDeclarator");
             int arrayLevels = 0;
-            VariableInitializerNode initializer = null;
+            NodeUnion<? extends VariableInitializerNode> initializer = 
+                    factory.makeNormalNodeUnion(null);
         }
         @after {
             ruleStop();
         }
     :
         id=identifier
-        {
-            if (logger.isTraceEnabled())
-            {
-                logger.trace("Parsing variable declarator with name " + $id.ret.getIdentifier());
-            }
-        }
         (
             arrayTypeCounter
             {
@@ -3388,11 +3755,11 @@ variableDeclarator returns [VariableDeclaratorNode ret]
             }
         )?
         {
-            $ret = factory.makeVariableDeclaratorNode($id.ret, arrayLevels, initializer);
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableDeclaratorNodeWithUnions($id.ret, arrayLevels, initializer));
         }
     ;
 
-unparameterizedType returns [UnparameterizedTypeNode ret]
+unparameterizedType returns [NodeUnion<? extends UnparameterizedTypeNode> ret]
         scope Rule;
         @init {
             ruleStart("unparameterizedType");
@@ -3403,46 +3770,57 @@ unparameterizedType returns [UnparameterizedTypeNode ret]
     :
         name
         {
-            $ret = factory.makeUnparameterizedTypeNode($name.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeNodeWithUnions($name.ret));
         }
     ;
 
-unparameterizedTypeList returns [UnparameterizedTypeListNode ret]
+unparameterizedTypeList returns [NodeUnion<? extends UnparameterizedTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("unparameterizedTypeList");
-            List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
+            List<NodeUnion<? extends UnparameterizedTypeNode>> list =
+                    new ArrayList<NodeUnion<? extends UnparameterizedTypeNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeUnparameterizedTypeListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=unparameterizedType
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "unparameterizedType", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=unparameterizedType
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "unparameterizedType", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalUnparameterizedTypeList returns [UnparameterizedTypeListNode ret]
+optionalUnparameterizedTypeList returns [NodeUnion<? extends UnparameterizedTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalUnparameterizedTypeList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeUnparameterizedTypeListNode();
-            }
             ruleStop();
         }
     :
@@ -3451,11 +3829,17 @@ optionalUnparameterizedTypeList returns [UnparameterizedTypeListNode ret]
             {
                 $ret = $unparameterizedTypeList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeListNode());
+            }
+        )
     ;
 
 
-throwsClause returns [UnparameterizedTypeListNode ret]
+throwsClause returns [NodeUnion<? extends UnparameterizedTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("throwsClause");
@@ -3471,7 +3855,7 @@ throwsClause returns [UnparameterizedTypeListNode ret]
         }
     ;
 
-referenceType returns [ReferenceTypeNode ret]
+referenceType returns [NodeUnion<? extends ReferenceTypeNode> ret]
         scope Rule;
         @init {
             ruleStart("referenceType");
@@ -3485,7 +3869,7 @@ referenceType returns [ReferenceTypeNode ret]
             $ret = $classOrInterfaceType.ret;
         }
         (
-            arrayTypeIndicator[ret]
+            arrayTypeIndicator[$ret]
             {
                 $ret = $arrayTypeIndicator.ret;
             }
@@ -3505,7 +3889,7 @@ referenceType returns [ReferenceTypeNode ret]
 //     Comparator<String>
 //     Map.Entry<K,V>
 //     List<String>[] (even though this generates a warning later)
-type returns [TypeNode ret]
+type returns [NodeUnion<? extends TypeNode> ret]
         scope Rule;
         @init {
             ruleStart("type");
@@ -3518,29 +3902,17 @@ type returns [TypeNode ret]
             classOrInterfaceType
             {
                 $ret = $classOrInterfaceType.ret;
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("type rule produced " + $ret.toString());
-                }
             }
         |
             primitiveType
             {
                 $ret = $primitiveType.ret;
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("type rule produced " + $ret.toString());
-                }
             }
         )
         (
             arrayTypeIndicator[ret]
             {
                 $ret = $arrayTypeIndicator.ret;
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("type rule produced " + $ret.toString());
-                }
             }
         )?
     ;
@@ -3552,32 +3924,36 @@ type returns [TypeNode ret]
 //     Map.Entry<K,V>
 // Note that the legal types can get pretty complex, as in
 //     A<X,Y>.B.C<Z>.D
-classOrInterfaceType returns [DeclaredTypeNode ret]
+classOrInterfaceType returns [NodeUnion<? extends DeclaredTypeNode> ret]
         scope Rule;
         @init {
             ruleStart("classOrInterfaceType");
-            UnparameterizedTypeNode unparameterizedTypeNode = null;
-            ParameterizedTypeNode parameterizedTypeNode = null;
+            NodeUnion<? extends UnparameterizedTypeNode> unparameterizedTypeNode = 
+                    factory.makeNormalNodeUnion(null);
+            NodeUnion<? extends ParameterizedTypeNode> parameterizedTypeNode = 
+                    factory.makeNormalNodeUnion(null);
         }
         @after {
             ruleStop();
         }
     :
-        name
+        unparameterizedType
         {
-            unparameterizedTypeNode = factory.makeUnparameterizedTypeNode($name.ret);
+            unparameterizedTypeNode = $unparameterizedType.ret;
             $ret = unparameterizedTypeNode;
         }
         (
             typeArguments
             {
-                parameterizedTypeNode = factory.makeParameterizedTypeNode(unparameterizedTypeNode, $typeArguments.ret);
+                parameterizedTypeNode = factory.makeNormalNodeUnion(
+                        factory.makeParameterizedTypeNodeWithUnions(unparameterizedTypeNode, $typeArguments.ret));
                 $ret = parameterizedTypeNode;
             }
             (
                 '.' next=classOrInterfaceType
                 {
-                    $ret = factory.makeParameterizedTypeSelectNode(parameterizedTypeNode, $next.ret);
+                    $ret = factory.makeNormalNodeUnion(
+                            factory.makeParameterizedTypeSelectNodeWithUnions(parameterizedTypeNode, $next.ret));
                 }
             )?
         )?
@@ -3588,15 +3964,15 @@ classOrInterfaceType returns [DeclaredTypeNode ret]
 //     boolean b = true;
 // this rule matches
 //     boolean
-primitiveType returns [PrimitiveTypeNode ret]
+primitiveType returns [NodeUnion<? extends PrimitiveTypeNode> ret]
         scope Rule;
         @init {
             ruleStart("primitiveType");
             PrimitiveType temp = null;
         }
         @after {
-            $ret = factory.makePrimitiveTypeNode(temp);
             ruleStop();
+            $ret = factory.makeNormalNodeUnion(factory.makePrimitiveTypeNode(temp));
         }
     :   
         'boolean'
@@ -3645,44 +4021,55 @@ primitiveType returns [PrimitiveTypeNode ret]
 //     Map.Entry<K,V> entry;
 // this node would parse
 //     <K,V>
-typeArguments returns [TypeArgumentListNode ret]
+typeArguments returns [NodeUnion<? extends TypeArgumentListNode> ret]
         scope Rule;
         @init {
             ruleStart("typeArguments");
-            List<TypeArgumentNode> list = new ArrayList<TypeArgumentNode>();
+            List<NodeUnion<? extends TypeArgumentNode>> list =
+                    new ArrayList<NodeUnion<? extends TypeArgumentNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeTypeArgumentListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeTypeArgumentListNodeWithUnions(list));
             ruleStop();
         }
     :
         '<'
         a=typeArgument
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "typeArgument", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=typeArgument
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "typeArgument", getSourceLocation($b.stop)));
+	            }
             }
         )*
         '>'
     ;
 
-optionalTypeArguments returns [TypeArgumentListNode ret]
+optionalTypeArguments returns [NodeUnion<? extends TypeArgumentListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalTypeArguments");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeTypeArgumentListNode();
-            }
             ruleStop();
         }
     :
@@ -3691,7 +4078,13 @@ optionalTypeArguments returns [TypeArgumentListNode ret]
             {
                 $ret = $typeArguments.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeTypeArgumentListNode());
+            }
+        )
     ;
 
 
@@ -3702,7 +4095,7 @@ optionalTypeArguments returns [TypeArgumentListNode ret]
 //     Foo<? extends Bar>
 // this node would parse
 //     ? extends Bar
-typeArgument returns [TypeArgumentNode ret]
+typeArgument returns [NodeUnion<? extends TypeArgumentNode> ret]
         scope Rule;
         @init {
             ruleStart("typeArgument");
@@ -3722,19 +4115,19 @@ typeArgument returns [TypeArgumentNode ret]
         }
     ;
 
-wildcard returns [WildcardTypeNode ret]
+wildcard returns [NodeUnion<? extends WildcardTypeNode> ret]
         scope Rule;
         @init {
             ruleStart("wildcard");
             boolean upper = false;
-        } 
+        }
         @after {
             ruleStop();
         }
     :
         '?'
         {
-            $ret = factory.makeWildcardTypeNode((ReferenceTypeNode)null, false);
+            $ret = factory.makeNormalNodeUnion(factory.makeWildcardTypeNode((ReferenceTypeNode)null, false));
         }
         (
 	        (
@@ -3744,7 +4137,7 @@ wildcard returns [WildcardTypeNode ret]
 	        )
 	        referenceType
 	        {
-	            $ret = factory.makeWildcardTypeNode($referenceType.ret, upper);
+	            $ret = factory.makeNormalNodeUnion(factory.makeWildcardTypeNodeWithUnions($referenceType.ret, upper));
 	        }
         )?
     ;
@@ -3754,11 +4147,11 @@ wildcard returns [WildcardTypeNode ret]
 //     public void foo(int x, int y)
 // this rule matches
 //     (int x, int y)
-formalParameters returns [VariableListNode parameters, VariableNode varargParameter]
+formalParameters returns [NodeUnion<? extends VariableListNode> parameters, NodeUnion<? extends VariableNode> varargParameter]
         scope Rule;
         @init {
             ruleStart("formalParameters");
-            $parameters = factory.makeVariableListNode();
+            $parameters = factory.makeNormalNodeUnion(factory.makeVariableListNode());
             $varargParameter = null;
         }
         @after {
@@ -3777,55 +4170,106 @@ formalParameters returns [VariableListNode parameters, VariableNode varargParame
     ;
 
 // This rule is expected to produce a list of parameter declarations (multiple results)
-formalParameterDecls returns [VariableListNode parameters, VariableNode varargParameter]
+formalParameterDecls returns [NodeUnion<? extends VariableListNode> parameters, NodeUnion<? extends VariableNode> varargParameter]
         scope Rule;
         @init {
             ruleStart("formalParameterDecls");
-            List<VariableNode> list = new ArrayList<VariableNode>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $parameters = factory.makeVariableListNode(list);
             ruleStop();
         }
     :
+        normalParameterDecls
+        ','
         ellipsisParameterDecl
         {
+            $parameters = $normalParameterDecls.ret;
             $varargParameter = $ellipsisParameterDecl.ret;
         }
     |
-        a=normalParameterDecl
+        normalParameterDecls
         {
-            list.add($a.ret);
-        }
-        (
-            ',' b=normalParameterDecl
-            {
-                list.add($b.ret);
-            }
-        )*
-        {
-            $varargParameter = null;
+            $parameters = $normalParameterDecls.ret;
+            $varargParameter = null;            
         }
     |
-        (
-            normalParameterDecl
-            {
-                list.add($normalParameterDecl.ret);
-            }
-            ','
-        )+
         ellipsisParameterDecl
         {
+            $parameters = factory.makeNormalNodeUnion(factory.makeVariableListNode());
             $varargParameter = $ellipsisParameterDecl.ret;
         }
     ;
 
-normalParameterDecl returns [VariableNode ret]
+normalParameterDecls returns [NodeUnion<? extends VariableListNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("normalParameterDecls");
+            List<NodeUnion<? extends VariableNode>> list =
+                    new ArrayList<NodeUnion<? extends VariableNode>>();
+        }
+        @after {
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableListNodeWithUnions(list));
+            ruleStop();
+        }
+    :
+        a=normalParameterDecl
+        {
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "normalParameterDecl", getSourceLocation($a.stop)));
+            }
+        }
+        (
+            ','
+            b=normalParameterDecl
+            {
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "normalParameterDecl", getSourceLocation($b.stop)));
+	            }
+            }
+        )*
+    ;
+
+optionalNormalParameterDecls returns [NodeUnion<? extends VariableListNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalNormalParameterDecls");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        (
+            normalParameterDecls
+            {
+                $ret = $normalParameterDecls.ret;
+            }
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeVariableListNode());
+            }
+        )
+    ;
+
+
+normalParameterDecl returns [NodeUnion<? extends VariableNode> ret]
         scope Rule;
         @init {
             ruleStart("normalParameterDecl");
-            TypeNode typeNode = null;
+            NodeUnion<? extends TypeNode> typeNode = null;
         }
         @after {
             ruleStop();
@@ -3844,26 +4288,39 @@ normalParameterDecl returns [VariableNode ret]
             }
         )?
         {
-            $ret = factory.makeVariableNode($mod.ret, typeNode, $id.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableNodeWithUnions($mod.ret, typeNode, $id.ret));
         }
     ;
 
-ellipsisParameterDecl returns [VariableNode ret]
+ellipsisParameterDecl returns [NodeUnion<? extends VariableNode> ret]
         scope Rule;
         @init {
             ruleStart("ellipsisParameterDecl");
+            NodeUnion<? extends TypeNode> typeNode = null;
         }
         @after {
             ruleStop();
         }
     :
-        mod=variableModifiers t=type '...' id=identifier
+        mod=variableModifiers
+        t=type
         {
-            $ret = factory.makeVariableNode($mod.ret, $t.ret, $id.ret);
+            typeNode = $t.ret;
+        }
+        '...'
+        id=identifier
+        (
+            arrayTypeIndicator[typeNode]
+            {
+                typeNode = $arrayTypeIndicator.ret;
+            }
+        )?
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableNodeWithUnions($mod.ret, typeNode, $id.ret));
         }
     ;
 
-alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
+alternateConstructorInvocation returns [NodeUnion<? extends AlternateConstructorInvocationNode> ret]
         scope Rule;
         @init {
             ruleStart("alternateConstructorInvocation");
@@ -3872,20 +4329,18 @@ alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
             ruleStop();
         }
     :
-        nonWildcardTypeArguments? 'this' arguments ';'
+        optionalNonWildcardTypeArguments 'this' arguments ';'
         {
-            $ret = factory.makeAlternateConstructorInvocationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeAlternateConstructorInvocationNodeWithUnions(
                         $arguments.ret,
-                        $nonWildcardTypeArguments.ret);
+                        $optionalNonWildcardTypeArguments.ret));
         }
     ;
 
-superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret]
+superclassConstructorInvocation returns [NodeUnion<? extends SuperclassConstructorInvocationNode> ret]
         scope Rule;
         @init {
             ruleStart("superclassConstructorInvocation");
-            PrimaryExpressionNode qualifyingExpression = null;
-            ReferenceTypeListNode typeArgumentsNode = factory.makeReferenceTypeListNode();
         }
         @after {
             ruleStop();
@@ -3893,26 +4348,18 @@ superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret
     :
         (
             primary '.'
-            {
-                qualifyingExpression = $primary.ret;
-            }
         )?
-        (
-            nonWildcardTypeArguments
-            {
-                typeArgumentsNode = $nonWildcardTypeArguments.ret;
-            }
-        )?
+        optionalNonWildcardTypeArguments
         SUPER arguments ';'
         {
-            $ret = factory.makeSuperclassConstructorInvocationNode(
-                        qualifyingExpression,
+            $ret = factory.makeNormalNodeUnion(factory.makeSuperclassConstructorInvocationNodeWithUnions(
+                        $primary.ret,
                         $arguments.ret,
-                        typeArgumentsNode);
+                        $optionalNonWildcardTypeArguments.ret));
         }
     ;
 
-explicitConstructorInvocation returns [ConstructorInvocationNode ret]
+explicitConstructorInvocation returns [NodeUnion<? extends ConstructorInvocationNode> ret]
         scope Rule;
         @init {
             ruleStart("explicitConstructorInvocation");
@@ -3932,41 +4379,52 @@ explicitConstructorInvocation returns [ConstructorInvocationNode ret]
         }
     ;
 
-annotations returns [AnnotationListNode ret]
+annotations returns [NodeUnion<? extends AnnotationListNode> ret]
         scope Rule;
         @init {
             ruleStart("annotations");
-            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
+            List<NodeUnion<? extends AnnotationNode>> list =
+                    new ArrayList<NodeUnion<? extends AnnotationNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeAnnotationListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=annotation
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "annotation", getSourceLocation($a.stop)));
+            }
         }
         (
             b=annotation
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "annotation", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalAnnotations returns [AnnotationListNode ret]
+optionalAnnotations returns [NodeUnion<? extends AnnotationListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalAnnotations");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeAnnotationListNode();
-            }
             ruleStop();
         }
     :
@@ -3975,7 +4433,13 @@ optionalAnnotations returns [AnnotationListNode ret]
             {
                 $ret = $annotations.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeAnnotationListNode());
+            }
+        )
     ;
 
 
@@ -3985,7 +4449,7 @@ optionalAnnotations returns [AnnotationListNode ret]
 //     public void foo() { }
 // This rule would parse
 //     @Test("foo")
-annotation returns [AnnotationNode ret]
+annotation returns [NodeUnion<? extends AnnotationNode> ret]
         scope Rule;
         @init {
             ruleStart("annotation");
@@ -3994,31 +4458,34 @@ annotation returns [AnnotationNode ret]
             ruleStop();
         }
     :   
-        '@' name
-        {
-            $ret = factory.makeNormalAnnotationNode(
-                    factory.makeAnnotationElementListNode(),
-                    factory.makeUnparameterizedTypeNode($name.ret));
-        }
+        '@' unparameterizedType
         (
-            '('   
-            (
-                elementValuePairs
-                {
-                    $ret = factory.makeNormalAnnotationNode(
-                            $elementValuePairs.ret,
-                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
-                }
-            |
-                elementValue
-                {
-                    $ret = factory.makeSingleElementAnnotationNode(
-                            $elementValue.ret,
-                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
-                }
-            )? 
-            ')' 
-        )?
+	        (
+	            '('   
+	            (
+	                optionalElementValuePairs
+	                {
+	                    $ret = factory.makeNormalNodeUnion(factory.makeNormalAnnotationNodeWithUnions(
+	                                    $optionalElementValuePairs.ret,
+	                                    $unparameterizedType.ret));
+	                }
+	            |
+	                elementValue
+	                {
+	                    $ret = factory.makeNormalNodeUnion(factory.makeSingleElementAnnotationNodeWithUnions(
+	                                    $elementValue.ret,
+	                                    $unparameterizedType.ret));
+	                }
+	            )? 
+	            ')' 
+	        )
+	    |
+	        {
+	            $ret = factory.makeNormalNodeUnion(factory.makeNormalAnnotationNodeWithUnions(
+	                            factory.makeNormalNodeUnion(factory.makeAnnotationElementListNode()),
+	                            $unparameterizedType.ret));
+	        }
+	    )        
     ;
 
 // Parses an annotation's element-value pairs.
@@ -4026,42 +4493,53 @@ annotation returns [AnnotationNode ret]
 //     @Foo(bar="baz",happy=5)
 // this rule would parse
 //     bar="baz",happy=5
-elementValuePairs returns [AnnotationElementListNode ret]
+elementValuePairs returns [NodeUnion<? extends AnnotationElementListNode> ret]
         scope Rule;
         @init {
             ruleStart("elementValuePairs");
-            List<AnnotationElementNode> list = new ArrayList<AnnotationElementNode>();
+            List<NodeUnion<? extends AnnotationElementNode>> list =
+                    new ArrayList<NodeUnion<? extends AnnotationElementNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeAnnotationElementListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationElementListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=elementValuePair
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "elementValuePair", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=elementValuePair
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "elementValuePair", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalElementValuePairs returns [AnnotationElementListNode ret]
+optionalElementValuePairs returns [NodeUnion<? extends AnnotationElementListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalElementValuePairs");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeAnnotationElementListNode();
-            }
             ruleStop();
         }
     :
@@ -4070,7 +4548,13 @@ optionalElementValuePairs returns [AnnotationElementListNode ret]
             {
                 $ret = $elementValuePairs.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeAnnotationElementListNode());
+            }
+        )
     ;
 
 
@@ -4081,7 +4565,7 @@ optionalElementValuePairs returns [AnnotationElementListNode ret]
 //     bar="baz"
 // or
 //     happy=5
-elementValuePair returns [AnnotationElementNode ret]
+elementValuePair returns [NodeUnion<? extends AnnotationElementNode> ret]
         scope Rule;
         @init {
             ruleStart("elementValuePair");
@@ -4092,7 +4576,7 @@ elementValuePair returns [AnnotationElementNode ret]
     :
         id=identifier '=' elementValue
         {
-            $ret = factory.makeAnnotationElementNode($id.ret, $elementValue.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationElementNodeWithUnions($id.ret, $elementValue.ret));
         }
     ;
 
@@ -4105,7 +4589,7 @@ elementValuePair returns [AnnotationElementNode ret]
 //    {7,8}
 // or
 //    @Test
-elementValue returns [AnnotationValueNode ret]
+elementValue returns [NodeUnion<? extends AnnotationValueNode> ret]
         scope Rule;
         @init {
             ruleStart("elementValue");
@@ -4116,12 +4600,12 @@ elementValue returns [AnnotationValueNode ret]
     :   
         conditionalExpression
         {
-            $ret = factory.makeAnnotationExpressionValueNode($conditionalExpression.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationExpressionValueNodeWithUnions($conditionalExpression.ret));
         }
     |   
         annotation
         {
-            $ret = factory.makeAnnotationAnnotationValueNode($annotation.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationAnnotationValueNodeWithUnions($annotation.ret));
         }
     |   
         elementValueArrayInitializer
@@ -4131,43 +4615,54 @@ elementValue returns [AnnotationValueNode ret]
     ;
 
 // Parses a non-empty list of annotation element values.
-elementValues returns [AnnotationValueListNode ret]
+elementValues returns [NodeUnion<? extends AnnotationValueListNode> ret]
         scope Rule;
         @init {
             ruleStart("elementValues");
-            List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
+            List<NodeUnion<? extends AnnotationValueNode>> list =
+                    new ArrayList<NodeUnion<? extends AnnotationValueNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeAnnotationValueListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationValueListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=elementValue
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "elementValue", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=elementValue
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "elementValue", getSourceLocation($b.stop)));
+	            }
             }
         )*
         ','?
     ;
 
-optionalElementValues returns [AnnotationValueListNode ret]
+optionalElementValues returns [NodeUnion<? extends AnnotationValueListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalElementValues");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeAnnotationValueListNode();
-            }
             ruleStop();
         }
     :
@@ -4176,7 +4671,13 @@ optionalElementValues returns [AnnotationValueListNode ret]
             {
                 $ret = $elementValues.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeAnnotationValueListNode());
+            }
+        )
     ;
 
     
@@ -4189,7 +4690,7 @@ optionalElementValues returns [AnnotationValueListNode ret]
 //     @Test({1,2,3})
 // this rule would parse
 //     {1,2,3}
-elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
+elementValueArrayInitializer returns [NodeUnion<? extends AnnotationArrayValueNode> ret]
         scope Rule;
         @init {
             ruleStart("elementValueArrayInitializer");
@@ -4202,14 +4703,14 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
         optionalElementValues
         '}'
         {
-            $ret = factory.makeAnnotationArrayValueNode($optionalElementValues.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationArrayValueNodeWithUnions($optionalElementValues.ret));
         }
     ;
 
 /**
  * Annotation declaration.
  */
-annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
+annotationTypeDeclaration returns [NodeUnion<? extends AnnotationDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("annotationTypeDeclaration");
@@ -4223,69 +4724,78 @@ annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
         id=identifier
         annotationTypeBody
         {
-            $ret = factory.makeAnnotationDeclarationNode(
-                $annotationModifiers.ret,
-                $annotationTypeBody.ret,
-                $id.ret,
-                $javadoc.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationDeclarationNodeWithUnions(
+	                $annotationModifiers.ret,
+	                $annotationTypeBody.ret,
+	                $id.ret,
+	                $javadoc.ret));
         }
     ;
 
-annotationTypeBody returns [AnnotationBodyNode ret]
+annotationTypeBody returns [NodeUnion<? extends AnnotationBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("annotationTypeBody");
-            $ret = factory.makeAnnotationBodyNode(factory.makeAnnotationMemberListNode());
         }
         @after {
             ruleStop();
         }
     :   
         '{'
-        (
-            annotationTypeElementDeclarations
-	        {
-	            $ret = factory.makeAnnotationBodyNode($annotationTypeElementDeclarations.ret);
-	        } 
-        )?
+        optionalAnnotationTypeElementDeclarations
         '}'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationBodyNodeWithUnions(
+                        $optionalAnnotationTypeElementDeclarations.ret));
+        }
     ;
     
-annotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
+annotationTypeElementDeclarations returns [NodeUnion<? extends AnnotationMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("annotationTypeElementDeclarations");
-            List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
+            List<NodeUnion<? extends AnnotationMemberNode>> list =
+                    new ArrayList<NodeUnion<? extends AnnotationMemberNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeAnnotationMemberListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationMemberListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=annotationTypeElementDeclaration
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "annotationTypeElementDeclaration", getSourceLocation($a.stop)));
+            }
         }
         (
             b=annotationTypeElementDeclaration
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "annotationTypeElementDeclaration", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalAnnotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
+optionalAnnotationTypeElementDeclarations returns [NodeUnion<? extends AnnotationMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalAnnotationTypeElementDeclarations");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeAnnotationMemberListNode();
-            }
             ruleStop();
         }
     :
@@ -4294,11 +4804,17 @@ optionalAnnotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
             {
                 $ret = $annotationTypeElementDeclarations.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeAnnotationMemberListNode());
+            }
+        )
     ;
 
 
-annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
+annotationTypeElementDeclaration returns [NodeUnion<? extends AnnotationMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("annotationTypeElementDeclaration");
@@ -4348,11 +4864,10 @@ annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
         }
     ;
 
-annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
+annotationMethodDeclaration returns [NodeUnion<? extends AnnotationMethodDeclarationNode> ret]
         scope Rule;
-        @init{
+        @init {
             ruleStart("annotationMethodDeclaration");
-            AnnotationValueNode elementValueNode = null;
         }
         @after {
             ruleStop();
@@ -4365,22 +4880,19 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         (
             'default' 
             elementValue
-            {
-                elementValueNode = $elementValue.ret;
-            }
         )?
         ';'
         {
-            $ret = factory.makeAnnotationMethodDeclarationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationMethodDeclarationNodeWithUnions(
                 $annotationMethodModifiers.ret,
                 $type.ret,
                 $id.ret,
-                elementValueNode,
-                $javadoc.ret);
+                $elementValue.ret,
+                $javadoc.ret));
         }
-        ;
+    ;
 
-block returns [BlockStatementListNode ret]
+block returns [NodeUnion<? extends BlockStatementListNode> ret]
         scope Rule;
         @init {
             ruleStart("block");
@@ -4397,41 +4909,52 @@ block returns [BlockStatementListNode ret]
         }
     ;
 
-blockStatementList returns [BlockStatementListNode ret]
+blockStatementList returns [NodeUnion<? extends BlockStatementListNode> ret]
         scope Rule;
         @init {
             ruleStart("blockStatementList");
-            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
+            List<NodeUnion<? extends BlockStatementNode>> list =
+                    new ArrayList<NodeUnion<? extends BlockStatementNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeBlockStatementListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeBlockStatementListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=blockStatement
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "blockStatement", getSourceLocation($a.stop)));
+            }
         }
         (
             b=blockStatement
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "blockStatement", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalBlockStatementList returns [BlockStatementListNode ret]
+optionalBlockStatementList returns [NodeUnion<? extends BlockStatementListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalBlockStatementList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeBlockStatementListNode();
-            }
             ruleStop();
         }
     :
@@ -4440,12 +4963,18 @@ optionalBlockStatementList returns [BlockStatementListNode ret]
             {
                 $ret = $blockStatementList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeBlockStatementListNode());
+            }
+        )
     ;
 
 
 // Parses a statement from a block of statements.
-blockStatement returns [BlockStatementNode ret]
+blockStatement returns [NodeUnion<? extends BlockStatementNode> ret]
         scope Rule;
         @init {
             ruleStart("blockStatement");
@@ -4478,7 +5007,7 @@ blockStatement returns [BlockStatementNode ret]
 // Parses local variable declaration statement.
 // For example, this rule would match
 //     int x = 5, y;
-localVariableDeclarationStatement returns [LocalVariableDeclarationNode ret]
+localVariableDeclarationStatement returns [NodeUnion<? extends LocalVariableDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("localVariableDeclarationStatement");
@@ -4497,199 +5026,336 @@ localVariableDeclarationStatement returns [LocalVariableDeclarationNode ret]
 // For example, this rule would match
 //     int x = 5, y
 // Note the absence of a semicolon.
-localVariableDeclaration returns [LocalVariableDeclarationNode ret]
+localVariableDeclaration returns [NodeUnion<? extends LocalVariableDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("localVariableDeclaration");
-            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
         }
         @after {
             ruleStop();
         }
     :   
         variableModifiers type
-        a=variableDeclarator
+        variableDeclarators
         {
-            list.add($a.ret); 
-        }
-        (
-            ',' b=variableDeclarator
-            {
-                list.add($b.ret); 
-            }
-        )*
-        {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeLocalVariableDeclarationNode(
-                    $variableModifiers.ret,
-                    $type.ret,
-                    factory.makeVariableDeclaratorListNode(list));
+            $ret = factory.makeNormalNodeUnion(factory.makeLocalVariableDeclarationNodeWithUnions(
+                        $variableModifiers.ret,
+                        $type.ret,
+                        $variableDeclarators.ret));
         }
     ;
-    
-statement returns [StatementNode ret]
+
+statement returns [NodeUnion<? extends StatementNode> ret]
         scope Rule;
-        @init{
+        @init {
             ruleStart("statement");
-            IdentifierNode idNode = null;
-            ExpressionNode expNode = null;
-            StatementNode stmtNode = null;
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        (
+            blockAsStatement
+            {
+                $ret = $blockAsStatement.ret;
+            }
+        |
+            assertStatement
+            {
+                $ret = $assertStatement.ret;
+            }
+        |
+            ifStatement
+            {
+                $ret = $ifStatement.ret;
+            }
+        |
+            forStatement
+            {
+                $ret = $forStatement.ret;
+            }
+        |
+            whileStatement
+            {
+                $ret = $whileStatement.ret;
+            }
+        |
+            doWhileStatement
+            {
+                $ret = $doWhileStatement.ret;
+            }
+        |
+            tryStatement
+            {
+                $ret = $tryStatement.ret;
+            }
+        |
+            switchStatement
+            {
+                $ret = $switchStatement.ret;
+            }
+        |
+            synchronizedStatement
+            {
+                $ret = $synchronizedStatement.ret;
+            }
+        |
+            returnStatement
+            {
+                $ret = $returnStatement.ret;
+            }
+        |
+            throwStatement
+            {
+                $ret = $throwStatement.ret;
+            }
+        |
+            breakStatement
+            {
+                $ret = $breakStatement.ret;
+            }
+        |
+            continueStatement
+            {
+                $ret = $continueStatement.ret;
+            }
+        |
+            expressionStatement
+            {
+                $ret = $expressionStatement.ret;
+            }
+        |
+            labeledStatement
+            {
+                $ret = $labeledStatement.ret;
+            }
+        |
+            noOpStatement
+            {
+                $ret = $noOpStatement.ret;
+            }
+        )
+
+    ;
+
+blockAsStatement returns [NodeUnion<? extends BlockNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("blockAsStatement");
         }
         @after {
             ruleStop();
         }
     :
         optionalMetaAnnotationList
-        javaStatement[$optionalMetaAnnotationList.ret]
+        block
         {
-            $ret = $javaStatement.ret;
+            $ret = factory.makeNormalNodeUnion(factory.makeBlockNodeWithUnions($block.ret, $optionalMetaAnnotationList.ret));
         }
-    ;   
+    ;
 
-javaStatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret]
+assertStatement returns [NodeUnion<? extends AssertStatementNode> ret]
         scope Rule;
-        @init{
-            ruleStart("javaStatement");
-            IdentifierNode idNode = null;
-            ExpressionNode expNode = null;
-            StatementNode stmtNode = null;
+        @init {
+            ruleStart("assertStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'assert' e1=expression 
+        (
+            ':' e2=expression
+        )?
+        ';'   
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeAssertStatementNodeWithUnions(
+                $e1.ret,
+                $e2.ret,
+                $optionalMetaAnnotationList.ret));
+        }        
+    ;
+
+ifStatement returns [NodeUnion<? extends IfNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("ifStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'if' parExpression s1=statement 
+        (
+            'else' s2=statement
+        )?    
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeIfNodeWithUnions(
+                $parExpression.ret,
+                $s1.ret,
+                $s2.ret,
+                $optionalMetaAnnotationList.ret));
+        }   
+    ;
+
+forStatement returns [NodeUnion<? extends StatementNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("forStatement");
         }
         @after {
             ruleStop();
         }
     :   
-        block
-        {
-            $ret = factory.makeBlockNode($block.ret, metaAnnotations);
-        }
-    |   
-        'assert' e1=expression 
         (
-            ':' e2=expression
+            enhancedForStatement
             {
-                expNode = $e2.ret;
+                $ret = $enhancedForStatement.ret;
             }
-        )? ';'   
+        |
+            basicForStatement
+            {
+                $ret = $basicForStatement.ret;
+            }
+        )
+
+    ;
+
+enhancedForStatement returns [NodeUnion<? extends EnhancedForLoopNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("enhancedForStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'for''(' variableModifiers type id=identifier ':' expression ')' statement
         {
-            $ret = factory.makeAssertStatementNode(
-                $e1.ret,
-                expNode,
-                metaAnnotations);
+            $ret = factory.makeNormalNodeUnion(factory.makeEnhancedForLoopNodeWithUnions(
+                    factory.makeNormalNodeUnion(
+	                    factory.makeVariableNodeWithUnions(
+	                            $variableModifiers.ret, 
+	                            $type.ret,
+	                            $id.ret)),
+                    $expression.ret,
+                    $statement.ret,
+                    $optionalMetaAnnotationList.ret));
         }        
-    |   
-        'if' parExpression s1=statement 
-        (
-            'else' s2=statement
-            {
-                stmtNode = $s2.ret;
-            }
-        )?    
-        {
-            $ret = factory.makeIfNode(
-                $parExpression.ret,
-                $s1.ret,
-                stmtNode,
-                metaAnnotations);
-        }   
-    |   
-        forstatement[metaAnnotations]
-        {
-            $ret = $forstatement.ret;
+    ;
+
+basicForStatement returns [NodeUnion<? extends ForLoopNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("basicForStatement");
         }
-    |   
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'for'
+        '(' 
+        forInit?
+        ';' 
+        expression?
+        ';'
+        optionalStatementExpressionList
+        ')'
+        statement
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeForLoopNodeWithUnions(
+                    $forInit.ret, 
+                    $expression.ret,
+                    $optionalStatementExpressionList.ret,
+                    $statement.ret,
+                    $optionalMetaAnnotationList.ret));
+        }                 
+    ;
+
+whileStatement returns [NodeUnion<? extends WhileLoopNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("whileStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
         'while' parExpression s=statement
         {
-            $ret = factory.makeWhileLoopNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeWhileLoopNodeWithUnions(
                 $parExpression.ret,
                 $s.ret,
-                metaAnnotations);
-        }
-    |   
-        'do' s=statement 'while' parExpression ';'
-        {
-            $ret = factory.makeDoWhileLoopNode(
-                $parExpression.ret,
-                $s.ret,
-                metaAnnotations);
-        }
-    |   
-        trystatement[metaAnnotations]
-        {
-            $ret = $trystatement.ret;
-        }
-    |   
-        switchStatement[metaAnnotations]
-        {
-            $ret = $switchStatement.ret;
-        }
-    |   
-        'synchronized' parExpression block
-        {
-            $ret = factory.makeSynchronizedNode(
-                $parExpression.ret,
-                $block.ret,
-                metaAnnotations);
-        }
-    |   
-        'return' 
-        (
-            expression
-            {
-                expNode = $expression.ret;
-            }
-        )? ';'
-        {
-            $ret = factory.makeReturnNode(expNode, metaAnnotations);
-        }
-    |   
-        'throw' expression ';'
-        {
-            $ret = factory.makeThrowNode(
-                $expression.ret, metaAnnotations);
-        }
-    |   
-        'break'
-        (
-            id=identifier
-            {
-                idNode = $id.ret;
-            }
-        )? ';'
-        {
-            $ret = factory.makeBreakNode(idNode, metaAnnotations);
-        }
-    |   
-        'continue' 
-        (
-            id=identifier
-            {
-                idNode = $id.ret;
-            }
-        )? ';'
-        {
-            $ret = factory.makeContinueNode(idNode, metaAnnotations);
-        }
-    |   
-        statementExpression  ';'  
-        {
-            $ret = factory.makeExpressionStatementNode($statementExpression.ret, metaAnnotations);
-        }   
-    |   
-        a=identifier ':' s=statement
-        {
-            $ret = factory.makeLabeledStatementNode(
-                $a.ret,
-                $s.ret,
-                metaAnnotations);
-        }
-    |   
-        ';'
-        {
-            $ret = factory.makeNoOperationNode(metaAnnotations);
+                $optionalMetaAnnotationList.ret));
         }
     ;
 
-switchStatement[MetaAnnotationListNode metaAnnotations] returns [SwitchNode ret]
+doWhileStatement returns [NodeUnion<? extends DoWhileLoopNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("doWhileStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'do' s=statement 'while' parExpression ';'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeDoWhileLoopNodeWithUnions(
+                $parExpression.ret,
+                $s.ret,
+                $optionalMetaAnnotationList.ret));
+        }
+    ;
+
+tryStatement returns [NodeUnion<? extends TryNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("tryStatement");
+            NodeUnion<? extends CatchListNode> catchList = null;
+            NodeUnion<? extends BlockStatementListNode> finallyBlock = null;
+        }
+        @after {
+            ruleStop();
+        }
+    :   
+        optionalMetaAnnotationList
+        'try' b=block
+        (
+            c=catches 'finally' fb=block
+            {
+                catchList = $c.ret;
+                finallyBlock = $fb.ret;
+            }
+        |   
+            c=catches
+            {
+                catchList = $c.ret;
+                finallyBlock = null;
+            }            
+        |   
+            'finally' fb=block
+            {
+                catchList = factory.makeNormalNodeUnion(factory.makeCatchListNode());
+                finallyBlock = $fb.ret;
+            }            
+        )
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeTryNodeWithUnions(
+                    $b.ret,
+                    catchList,
+                    finallyBlock,
+                    $optionalMetaAnnotationList.ret));
+        }        
+    ;
+
+switchStatement returns [NodeUnion<? extends SwitchNode> ret]
         scope Rule;
         @init {
             ruleStart("switchStatement");
@@ -4698,6 +5364,7 @@ switchStatement[MetaAnnotationListNode metaAnnotations] returns [SwitchNode ret]
             ruleStop();
         }
     :
+        optionalMetaAnnotationList
         'switch'
         '('
         expression
@@ -4706,45 +5373,286 @@ switchStatement[MetaAnnotationListNode metaAnnotations] returns [SwitchNode ret]
         optionalSwitchBlockStatementGroups
         '}'
         {
-            $ret = factory.makeSwitchNode($expression.ret, $optionalSwitchBlockStatementGroups.ret, metaAnnotations);
+            $ret = factory.makeNormalNodeUnion(factory.makeSwitchNodeWithUnions(
+                    $expression.ret,
+                    $optionalSwitchBlockStatementGroups.ret,
+                    $optionalMetaAnnotationList.ret));
         }
     ;
 
-switchBlockStatementGroups returns [CaseListNode ret]
+synchronizedStatement returns [NodeUnion<? extends SynchronizedNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("synchronizedStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'synchronized' parExpression block
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeSynchronizedNodeWithUnions(
+                $parExpression.ret,
+                $block.ret,
+                $optionalMetaAnnotationList.ret));
+        }
+    ;
+
+returnStatement returns [NodeUnion<? extends ReturnNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("returnStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'return' 
+        expression?
+        ';'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeReturnNodeWithUnions(
+                    $expression.ret,
+                    $optionalMetaAnnotationList.ret));
+        }
+    ;
+
+throwStatement returns [NodeUnion<? extends ThrowNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("throwStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'throw' expression ';'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeThrowNodeWithUnions(
+                    $expression.ret, $optionalMetaAnnotationList.ret));
+        }
+    ;
+
+breakStatement returns [NodeUnion<? extends BreakNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("breakStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'break' identifier? ';'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeBreakNodeWithUnions(
+                    $identifier.ret,
+                    $optionalMetaAnnotationList.ret));
+        }
+    ;
+
+continueStatement returns [NodeUnion<? extends ContinueNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("continueStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        'continue' identifier? ';'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeContinueNodeWithUnions(
+                    $identifier.ret,
+                    $optionalMetaAnnotationList.ret));
+        }
+    ;
+
+expressionStatement returns [NodeUnion<? extends ExpressionStatementNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("expressionStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        statementExpression  ';'  
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeExpressionStatementNodeWithUnions(
+                    $statementExpression.ret,
+                    $optionalMetaAnnotationList.ret));
+        }   
+    ;
+    
+labeledStatement returns [NodeUnion<? extends LabeledStatementNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("labeledStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        identifier ':' statement
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeLabeledStatementNodeWithUnions(
+                $identifier.ret,
+                $statement.ret,
+                $optionalMetaAnnotationList.ret));
+        }
+    ;
+
+noOpStatement returns [NodeUnion<? extends NoOperationNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("noOpStatement");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        optionalMetaAnnotationList
+        ';'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeNoOperationNodeWithUnions($optionalMetaAnnotationList.ret));
+        }
+    ;
+
+catches returns [NodeUnion<? extends CatchListNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("catches");
+            List<NodeUnion<? extends CatchNode>> list =
+                    new ArrayList<NodeUnion<? extends CatchNode>>();
+        }
+        @after {
+            $ret = factory.makeNormalNodeUnion(factory.makeCatchListNodeWithUnions(list));
+            ruleStop();
+        }
+    :
+        a=catchClause
+        {
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "catchClause", getSourceLocation($a.stop)));
+            }
+        }
+        (
+            b=catchClause
+            {
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "catchClause", getSourceLocation($b.stop)));
+	            }
+            }
+        )*
+    ;
+
+optionalCatches returns [NodeUnion<? extends CatchListNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalCatches");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        (
+            catches
+            {
+                $ret = $catches.ret;
+            }
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeCatchListNode());
+            }
+        )
+    ;
+
+
+catchClause returns [NodeUnion<? extends CatchNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("catchClause");
+        }
+        @after {
+            ruleStop();
+        }
+    :   
+        'catch' '(' formalParameter ')'
+        block
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeCatchNodeWithUnions(
+                    $block.ret,
+                    $formalParameter.ret));
+        }
+    ;
+
+switchBlockStatementGroups returns [NodeUnion<? extends CaseListNode> ret]
         scope Rule;
         @init {
             ruleStart("switchBlockStatementGroups");
-            List<CaseNode> list = new ArrayList<CaseNode>();
+            List<NodeUnion<? extends CaseNode>> list =
+                    new ArrayList<NodeUnion<? extends CaseNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeCaseListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeCaseListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=switchBlockStatementGroup
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "switchBlockStatementGroup", getSourceLocation($a.stop)));
+            }
         }
         (
             b=switchBlockStatementGroup
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "switchBlockStatementGroup", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalSwitchBlockStatementGroups returns [CaseListNode ret]
+optionalSwitchBlockStatementGroups returns [NodeUnion<? extends CaseListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalSwitchBlockStatementGroups");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeCaseListNode();
-            }
             ruleStop();
         }
     :
@@ -4753,33 +5661,33 @@ optionalSwitchBlockStatementGroups returns [CaseListNode ret]
             {
                 $ret = $switchBlockStatementGroups.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeCaseListNode());
+            }
+        )
     ;
 
 
-switchBlockStatementGroup returns [CaseNode ret]
+switchBlockStatementGroup returns [NodeUnion<? extends CaseNode> ret]
         scope Rule;
         @init {
             ruleStart("switchBlockStatementGroup");
-            BlockStatementListNode listNode = null;
-            ExpressionNode label = null;
         }
         @after {
-            $ret = factory.makeCaseNode(label, listNode);
             ruleStop();
         }
     :
         switchLabel
-        {
-            label = $switchLabel.ret;
-        }
         optionalBlockStatementList
         {
-            listNode = $optionalBlockStatementList.ret;
+            $ret = factory.makeNormalNodeUnion(factory.makeCaseNodeWithUnions($switchLabel.ret, $optionalBlockStatementList.ret));
         }
     ;
 
-switchLabel returns [ExpressionNode ret]
+switchLabel returns [NodeUnion<? extends ExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("switchLabel");
@@ -4799,122 +5707,16 @@ switchLabel returns [ExpressionNode ret]
         }
     ;
 
-
-trystatement[MetaAnnotationListNode metaAnnotations] returns [TryNode ret]
-        scope Rule;
-        @init {
-            ruleStart("trystatement");
-            CatchListNode catchList = null;
-            BlockStatementListNode finallyBlock = null;
-        }    
-        @after {
-            ruleStop();
-        }
-    :   
-        'try' b=block
-        (
-            c=catches 'finally' fb=block
-            {
-                catchList = $c.ret;
-                finallyBlock = $fb.ret;
-            }
-        |   
-            c=catches
-            {
-                catchList = $c.ret;
-                finallyBlock = null;
-            }            
-        |   
-            'finally' fb=block
-            {
-                catchList = factory.makeCatchListNode();
-                finallyBlock = $fb.ret;
-            }            
-        )
-        {
-            $ret = factory.makeTryNode(
-                    $b.ret,
-                    catchList,
-                    finallyBlock,
-                    metaAnnotations);
-        }        
-    ;
-
-catches returns [CatchListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("catches");
-            List<CatchNode> list = new ArrayList<CatchNode>();
-        }
-        @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeCatchListNode(list);
-            ruleStop();
-        }
-    :
-        a=catchClause
-        {
-            list.add($a.ret);
-        }
-        (
-            b=catchClause
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
-
-optionalCatches returns [CatchListNode ret]
-        scope Rule;
-        @init {
-            ruleStart("optionalCatches");
-            $ret = null;
-        }
-        @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeCatchListNode();
-            }
-            ruleStop();
-        }
-    :
-        (
-            catches
-            {
-                $ret = $catches.ret;
-            }
-        )?
-    ;
-
-
-catchClause returns [CatchNode ret]
-        scope Rule;
-        @init {
-            ruleStart("catchClause");
-        }
-        @after {
-            ruleStop();
-        }
-    :   
-        'catch' '(' formalParameter ')'
-        block
-        {
-            $ret = factory.makeCatchNode(
-                    $block.ret,
-                    $formalParameter.ret);
-        }
-    ;
-
 // Parses the formal parameter of a catch block.
 // For example, in
 //     try { ... } catch (IOException e) { ... }
 // this rule would match
 //     IOException e
-formalParameter returns [VariableNode ret]
+formalParameter returns [NodeUnion<? extends VariableNode> ret]
         scope Rule;
         @init {
             ruleStart("formalParameter");
-            TypeNode typeNode = null;
+            NodeUnion<? extends TypeNode> typeNode = null;
         }
         @after {
             ruleStop();
@@ -4933,68 +5735,16 @@ formalParameter returns [VariableNode ret]
             }
         )?
         {
-            $ret = factory.makeVariableNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableNodeWithUnions(
                 $variableModifiers.ret, 
                 typeNode,
-                $id.ret);
+                $id.ret));
         }
-    ;
-
-forstatement[MetaAnnotationListNode metaAnnotations] returns [StatementNode ret]
-        scope Rule;
-        @init{
-            ruleStart("forstatement");
-            ForInitializerNode forInitNode = null;
-            ExpressionNode expNode = null;
-        }
-        @after {
-            ruleStop();
-        }
-    :   
-        // enhanced for loop
-        'for' '(' variableModifiers type id=identifier ':' 
-        expression ')' statement
-        {
-            $ret = factory.makeEnhancedForLoopNode(
-                factory.makeVariableNode(
-                    $variableModifiers.ret, 
-                    $type.ret,
-                    $id.ret),
-                $expression.ret,
-                $statement.ret,
-                metaAnnotations);
-        }        
-    |   
-        // normal for loop
-        'for' '(' 
-        (
-            forInit
-            {
-                forInitNode = $forInit.ret;
-            }
-        )? ';' 
-        (
-            expression
-            {
-                expNode = $expression.ret;
-            }
-        )? ';'
-        optionalStatementExpressionList
-        ')'
-        statement
-        {
-            $ret = factory.makeForLoopNode(
-                    forInitNode, 
-                    expNode,
-                    $optionalStatementExpressionList.ret,
-                    $statement.ret,
-                    metaAnnotations);
-        }                 
     ;
 
 // Parses the initializer for a standard for loop.  This may either be a list of variable declarations or a list of
 // initialization expressions.
-forInit returns [ForInitializerNode ret]
+forInit returns [NodeUnion<? extends ForInitializerNode> ret]
         scope Rule;
         @init {
             ruleStart("forInit");
@@ -5005,16 +5755,17 @@ forInit returns [ForInitializerNode ret]
     :   
         localVariableDeclaration
         {
-            $ret = factory.makeForInitializerDeclarationNode($localVariableDeclaration.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeForInitializerDeclarationNodeWithUnions(
+                    $localVariableDeclaration.ret));
         }
     |   
         statementExpressionList
         {
-            $ret = factory.makeForInitializerExpressionNode($statementExpressionList.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeForInitializerExpressionNodeWithUnions($statementExpressionList.ret));
         }
     ;
 
-parExpression returns [ExpressionNode ret]
+parExpression returns [NodeUnion<? extends ExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("parExpression");
@@ -5029,42 +5780,53 @@ parExpression returns [ExpressionNode ret]
         }
     ;
 
-statementExpressionList returns [StatementExpressionListNode ret]
+statementExpressionList returns [NodeUnion<? extends StatementExpressionListNode> ret]
         scope Rule;
         @init {
             ruleStart("statementExpressionList");
-            List<StatementExpressionNode> list = new ArrayList<StatementExpressionNode>();
+            List<NodeUnion<? extends StatementExpressionNode>> list =
+                    new ArrayList<NodeUnion<? extends StatementExpressionNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeStatementExpressionListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeStatementExpressionListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=statementExpression
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "statementExpression", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=statementExpression
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "statementExpression", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalStatementExpressionList returns [StatementExpressionListNode ret]
+optionalStatementExpressionList returns [NodeUnion<? extends StatementExpressionListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalStatementExpressionList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeStatementExpressionListNode();
-            }
             ruleStop();
         }
     :
@@ -5073,46 +5835,63 @@ optionalStatementExpressionList returns [StatementExpressionListNode ret]
             {
                 $ret = $statementExpressionList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeStatementExpressionListNode());
+            }
+        )
     ;
 
 
-expressionList returns [ExpressionListNode ret]
+expressionList returns [NodeUnion<? extends ExpressionListNode> ret]
         scope Rule;
         @init {
             ruleStart("expressionList");
-            List<ExpressionNode> list = new ArrayList<ExpressionNode>();
+            List<NodeUnion<? extends ExpressionNode>> list =
+                    new ArrayList<NodeUnion<? extends ExpressionNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeExpressionListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeExpressionListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=expression
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "expression", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=expression
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "expression", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalExpressionList returns [ExpressionListNode ret]
+optionalExpressionList returns [NodeUnion<? extends ExpressionListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalExpressionList");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeExpressionListNode();
-            }
             ruleStop();
         }
     :
@@ -5121,13 +5900,19 @@ optionalExpressionList returns [ExpressionListNode ret]
             {
                 $ret = $expressionList.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeExpressionListNode());
+            }
+        )
     ;
 
                        
 /* This rule parses a statement expression.  A statement expression is one of those types of expressions which may be
  * used as a statement (such as x++) but not any other kind of expression (such as ~x). */
-statementExpression returns [StatementExpressionNode ret]
+statementExpression returns [NodeUnion<? extends StatementExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("statementExpression");
@@ -5140,19 +5925,19 @@ statementExpression returns [StatementExpressionNode ret]
         // We'll just grab any expression we can.  If it's not a statement expression, we raise a RecognitionException.
         expression
         {
-            if ($expression.ret instanceof StatementExpressionNode)
+            if ($expression.ret != null && $expression.ret.getType().equals(NodeUnion.Type.NORMAL) &&
+                    $expression.ret.getNormalNode() instanceof StatementExpressionNode)
             {
-                $ret = (StatementExpressionNode)($expression.ret);
+                $ret = factory.makeNormalNodeUnion((StatementExpressionNode)($expression.ret.getNormalNode()));
             } else
             {
                 // TODO: replace with BSJ exception
-                throw new FailedPredicateException(input, "statementExpression",
-                        "$expression.ret instanceof StatementExpressionNode ");
+                throw new FailedPredicateException(input, "statementExpression", "$expression.ret.getType().equals(NodeUnion.Type.NORMAL) && $expression.ret.getNormalNode() instanceof StatementExpressionNode");
             }
         }
     ;
 
-expression returns [ExpressionNode ret]
+expression returns [NodeUnion<? extends ExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("expression");
@@ -5169,10 +5954,10 @@ expression returns [ExpressionNode ret]
             assignmentOperator
             e=expression
             {
-                $ret = factory.makeAssignmentNode(
+                $ret = factory.makeNormalNodeUnion(factory.makeAssignmentNodeWithUnions(
                         $ret,
                         $assignmentOperator.ret,
-                        $e.ret);
+                        $e.ret));
             }
         )?
     ;
@@ -5249,7 +6034,7 @@ assignmentOperator returns [AssignmentOperator ret]
     ;
 
 
-conditionalExpression returns [NonAssignmentExpressionNode ret]
+conditionalExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("conditionalExpression");
@@ -5265,15 +6050,15 @@ conditionalExpression returns [NonAssignmentExpressionNode ret]
         (
             '?' e1=expression ':' e2=conditionalExpression
             {
-                $ret = factory.makeConditionalExpressionNode(
+                $ret = factory.makeNormalNodeUnion(factory.makeConditionalExpressionNodeWithUnions(
                     $ret, 
                     $e1.ret, 
-                    $e2.ret);
+                    $e2.ret));
             }
         )?
     ;
 
-conditionalOrExpression returns [NonAssignmentExpressionNode ret]
+conditionalOrExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("conditionalOrExpression");
@@ -5296,13 +6081,13 @@ conditionalOrExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=conditionalAndExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-conditionalAndExpression returns [NonAssignmentExpressionNode ret]
+conditionalAndExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("conditionalAndExpression");
@@ -5325,13 +6110,13 @@ conditionalAndExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=inclusiveOrExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
+inclusiveOrExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("inclusiveOrExpression");
@@ -5354,13 +6139,13 @@ inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=exclusiveOrExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
+exclusiveOrExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("exclusiveOrExpression");
@@ -5383,13 +6168,13 @@ exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=andExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-andExpression returns [NonAssignmentExpressionNode ret]
+andExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("andExpression");
@@ -5412,13 +6197,13 @@ andExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=equalityExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-equalityExpression returns [NonAssignmentExpressionNode ret]
+equalityExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("equalityExpression");
@@ -5446,13 +6231,13 @@ equalityExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=instanceOfExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-instanceOfExpression returns [NonAssignmentExpressionNode ret]
+instanceOfExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("instanceOfExpression");
@@ -5461,21 +6246,21 @@ instanceOfExpression returns [NonAssignmentExpressionNode ret]
             ruleStop();
         }
     :   
-        e1=relationalExpression
+        relationalExpression
         {
-            $ret = $e1.ret;
+            $ret = $relationalExpression.ret;
         }        
         (
-            'instanceof' t1=type
+            'instanceof' type
             {
-                $ret = factory.makeInstanceOfNode(
-                    $ret, 
-                    $t1.ret);
+                $ret = factory.makeNormalNodeUnion(factory.makeInstanceOfNodeWithUnions(
+                    $relationalExpression.ret, 
+                    $type.ret));
             }        
         )?
     ;
 
-relationalExpression returns [NonAssignmentExpressionNode ret]
+relationalExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("relationalExpression");
@@ -5513,13 +6298,13 @@ relationalExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=shiftExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-shiftExpression returns [NonAssignmentExpressionNode ret]
+shiftExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("shiftExpression");
@@ -5552,13 +6337,13 @@ shiftExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=additiveExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-additiveExpression returns [NonAssignmentExpressionNode ret]
+additiveExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("additiveExpression");
@@ -5586,13 +6371,13 @@ additiveExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=multiplicativeExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
 
 
-multiplicativeExpression returns [NonAssignmentExpressionNode ret]
+multiplicativeExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("multiplicativeExpression");
@@ -5625,7 +6410,7 @@ multiplicativeExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=unaryExpression
             {
-                $ret = factory.makeBinaryExpressionNode($ret, $e2.ret, op);
+                $ret = factory.makeNormalNodeUnion(factory.makeBinaryExpressionNodeWithUnions($ret, $e2.ret, op));
             }            
         )*
     ;
@@ -5635,7 +6420,7 @@ multiplicativeExpression returns [NonAssignmentExpressionNode ret]
  * NOTE: for '+' and '-', if the next token is int or long literal, then it's not a unary expression.
  *       it's a literal with signed value. INTLITERAL AND LONG LITERAL are added here for this.
  */
-unaryExpression returns [NonAssignmentExpressionNode ret]
+unaryExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("unaryExpression");
@@ -5646,9 +6431,9 @@ unaryExpression returns [NonAssignmentExpressionNode ret]
     :   
         '+'  e=unaryExpression
         {
-            $ret = factory.makeUnaryExpressionNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeUnaryExpressionNodeWithUnions(
                 $e.ret,
-                UnaryOperator.UNARY_PLUS);
+                UnaryOperator.UNARY_PLUS));
         }        
     |
         '-' intLiteral[true]
@@ -5663,23 +6448,23 @@ unaryExpression returns [NonAssignmentExpressionNode ret]
     |
         '-' e=unaryExpression
         {
-            $ret = factory.makeUnaryExpressionNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeUnaryExpressionNodeWithUnions(
                 $e.ret,
-                UnaryOperator.UNARY_MINUS);
+                UnaryOperator.UNARY_MINUS));
         }        
     |   
         '++' e=unaryExpression
         {
-            $ret = factory.makeUnaryStatementExpressionNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeUnaryStatementExpressionNodeWithUnions(
                 $e.ret,
-                UnaryStatementOperator.PREFIX_INCREMENT);
+                UnaryStatementOperator.PREFIX_INCREMENT));
         }
     |   
         '--' e=unaryExpression
         {
-            $ret = factory.makeUnaryStatementExpressionNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeUnaryStatementExpressionNodeWithUnions(
                 $e.ret,
-                UnaryStatementOperator.PREFIX_DECREMENT);
+                UnaryStatementOperator.PREFIX_DECREMENT));
         }        
     |   
         unaryExpressionNotPlusMinus
@@ -5688,7 +6473,7 @@ unaryExpression returns [NonAssignmentExpressionNode ret]
         }
     ;
 
-unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
+unaryExpressionNotPlusMinus returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("unaryExpressionNotPlusMinus");
@@ -5699,16 +6484,16 @@ unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
     :   
         '~' unaryExpression
         {
-            $ret = factory.makeUnaryExpressionNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeUnaryExpressionNodeWithUnions(
                 $unaryExpression.ret,
-                UnaryOperator.BITWISE_COMPLEMENT);
+                UnaryOperator.BITWISE_COMPLEMENT));
         }        
     |   
         '!' unaryExpression
         {
-            $ret = factory.makeUnaryExpressionNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeUnaryExpressionNodeWithUnions(
                 $unaryExpression.ret,
-                UnaryOperator.LOGICAL_COMPLEMENT);
+                UnaryOperator.LOGICAL_COMPLEMENT));
         }        
     |   
         castExpression
@@ -5722,7 +6507,7 @@ unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
         }
     ;
 
-castExpression returns [TypeCastNode ret]
+castExpression returns [NodeUnion<? extends TypeCastNode> ret]
         scope Rule;
         @init {
             ruleStart("castExpression");
@@ -5733,13 +6518,13 @@ castExpression returns [TypeCastNode ret]
     :   
         '(' type ')' unaryExpressionNotPlusMinus
         {
-            $ret = factory.makeTypeCastNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeTypeCastNodeWithUnions(
                 $unaryExpressionNotPlusMinus.ret,
-                $type.ret);
+                $type.ret));
         }
     ;
 
-postfixExpression returns [NonAssignmentExpressionNode ret]
+postfixExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("postfixExpression");
@@ -5755,21 +6540,23 @@ postfixExpression returns [NonAssignmentExpressionNode ret]
         (
             '++'
             {
-                $ret = factory.makeUnaryStatementExpressionNode($ret, UnaryStatementOperator.POSTFIX_INCREMENT);
+                $ret = factory.makeNormalNodeUnion(factory.makeUnaryStatementExpressionNodeWithUnions(
+                        $ret, UnaryStatementOperator.POSTFIX_INCREMENT));
             }
         |
             '--'
             {
-                $ret = factory.makeUnaryStatementExpressionNode($ret, UnaryStatementOperator.POSTFIX_DECREMENT);
+                $ret = factory.makeNormalNodeUnion(factory.makeUnaryStatementExpressionNodeWithUnions(
+                        $ret, UnaryStatementOperator.POSTFIX_DECREMENT));
             }
         )*
     ;
 
-primary returns [PrimaryExpressionNode ret]
+primary returns [NodeUnion<? extends PrimaryExpressionNode> ret]
         // This rule is complex enough that ANTLR's parameter passing breaks down.  Using scope instead.
         // Note that ANTLR is clever enough to create a new scope for each rule; this recurses appropriately.
         scope {
-            PrimaryExpressionNode result;
+            NodeUnion<? extends PrimaryExpressionNode> result;
         }
         scope Rule;
         @init {
@@ -5801,7 +6588,7 @@ primary returns [PrimaryExpressionNode ret]
         }
     ;
 
-restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
+restrictedPrimary returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("restrictedPrimary");
@@ -5811,80 +6598,67 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
         }
     :
         (
-            // lexical literal
-            lexicalLiteral 
+            lexicalLiteral
             {
                 $ret = $lexicalLiteral.ret;
             }
         |
-            // class literal for primitive types
             primitiveClassLiteral
             {
                 $ret = $primitiveClassLiteral.ret;
-            }            
-        |
-            // class literal for declared types
-            declaredClassLiteral
-            {
-            	$ret = $declaredClassLiteral.ret;
             }
         |
-            // void class literal
-            voidClassLiteral 
+            declaredClassLiteral
+            {
+                $ret = $declaredClassLiteral.ret;
+            }
+        |
+            voidClassLiteral
             {
                 $ret = $voidClassLiteral.ret;
             }
         |
-            // qualified or unqualified this
             thisClause
             {
                 $ret = $thisClause.ret;
             }
         |
-            // parenthesized expression (used as a primary expression)
-            parExpression
+            parenthesizedExpression
             {
-                $ret = factory.makeParenthesizedExpressionNode($parExpression.ret);
+                $ret = $parenthesizedExpression.ret;
             }
         |
-            // unqualified class instantiation
             unqualifiedClassInstantiation
             {
                 $ret = $unqualifiedClassInstantiation.ret;
             }
         |
-            // method invocation from super
-            // this rule must preceed the superFieldAccess rule or it will not be parsed correctly
-            // ideally, backtracking would prevent this... but it doesn't seem to do so
             superMethodInvocation
             {
                 $ret = $superMethodInvocation.ret;
             }
         |
-            // field access from super
             superFieldAccess
             {
                 $ret = $superFieldAccess.ret;
             }
         |
-            // standard method invocation
             methodInvocationByName
             {
                 $ret = $methodInvocationByName.ret;
             }
         |
-            // method invocation against a type with type arguments
             typeQualifiedTypeArgumentMethodInvocation
             {
                 $ret = $typeQualifiedTypeArgumentMethodInvocation.ret;
             }
         |
-            // field access by expression name (such as "x" or "x.y")
             variableAccessByName
             {
                 $ret = $variableAccessByName.ret;
             }
         )
+
         (
             arrayAccess[ret]
             {
@@ -5895,11 +6669,11 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
     
 // ANTLR's parameter passing has broken down by this point due to the complexity of this rule.  Using scope instead;
 // thankfully, we know which rule is calling this one.
-primarySuffix returns [RestrictedPrimaryExpressionNode ret]
+primarySuffix returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("primarySuffix");
-            PrimaryExpressionNode in = $primary::result;
+            NodeUnion<? extends PrimaryExpressionNode> in = $primary::result;
         }
         @after {
             ruleStop();
@@ -5915,7 +6689,7 @@ primarySuffix returns [RestrictedPrimaryExpressionNode ret]
 	        // field access on an expression
 	        '.' identifier
 	        {
-	            $ret = factory.makeVariableAccessNode(in, $identifier.ret);
+	            $ret = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions(in, $identifier.ret));
 	        }
 	    |
 	        // method invocation with type arguments
@@ -5932,31 +6706,40 @@ primarySuffix returns [RestrictedPrimaryExpressionNode ret]
         )?
     ;
 
-thisClause returns [ThisNode ret]
+thisClause returns [NodeUnion<? extends ThisNode> ret]
         scope Rule;
         @init {
             ruleStart("thisClause");
-            UnparameterizedTypeNode qualifyingType = null;
         }
         @after {
-            $ret = factory.makeThisNode(qualifyingType);
             ruleStop();
         }
     :
-        (
-            thisQualifierName=name '.'
-            {
-                qualifyingType = factory.makeUnparameterizedTypeNode($thisQualifierName.ret);
-            }
-        )?
-        THIS
+        (unparameterizedType '.')? THIS
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeThisNodeWithUnions($unparameterizedType.ret));
+        }
     ;
 
-unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
+parenthesizedExpression returns [NodeUnion<? extends ParenthesizedExpressionNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("parenthesizedExpression");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        parExpression
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeParenthesizedExpressionNodeWithUnions($parExpression.ret));
+        }
+    ;
+
+unqualifiedClassInstantiation returns [NodeUnion<? extends UnqualifiedClassInstantiationNode> ret]
         scope Rule;
         @init {
             ruleStart("unqualifiedClassInstantiation");
-            AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
         @after {
             ruleStop();
@@ -5965,18 +6748,13 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
         NEW
         optionalTypeArguments
         classOrInterfaceType arguments
-        (
-            anonymousClassBody
-            {
-                anonymousClassBodyNode = $anonymousClassBody.ret;
-            }
-        )?
+        anonymousClassBody?
         {
-            $ret = factory.makeUnqualifiedClassInstantiationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeUnqualifiedClassInstantiationNodeWithUnions(
                     $classOrInterfaceType.ret,
                     $optionalTypeArguments.ret,
                     $arguments.ret,
-                    anonymousClassBodyNode);
+                    $anonymousClassBody.ret));
         }
     ;
 
@@ -5986,25 +6764,20 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
 //     X.super.x;
 // The latter case is used to specify which enclosing type's supertype should be accessed.  (See the documentation of
 // SuperFieldAccessNode for more information.)
-superFieldAccess returns [SuperFieldAccessNode ret]
+superFieldAccess returns [NodeUnion<? extends SuperFieldAccessNode> ret]
         scope Rule;
         @init {
             ruleStart("superFieldAccess");
-            UnparameterizedTypeNode qualifyingTypeNode = null;
         }
         @after {
             ruleStop();
         }
     :
-        (
-            name '.'
-            {
-                qualifyingTypeNode = factory.makeUnparameterizedTypeNode($name.ret);
-            }
-        )?
-        SUPER '.' identifier
+        (unparameterizedType '.')? SUPER '.' identifier
         {
-            $ret = factory.makeSuperFieldAccessNode(qualifyingTypeNode, $identifier.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeSuperFieldAccessNodeWithUnions(
+                    $unparameterizedType.ret,
+                    $identifier.ret));
         }
     ;
 
@@ -6014,12 +6787,14 @@ superFieldAccess returns [SuperFieldAccessNode ret]
 //     someField.aMethod();
 // or
 //     Utils.stuff();
-methodInvocationByName returns [MethodInvocationNode ret]
+methodInvocationByName returns [NodeUnion<? extends MethodInvocationNode> ret]
         scope Rule;
         @init {
             ruleStart("methodInvocationByName");
-            RestrictedPrimaryExpressionNode qualifier = null;
-            IdentifierNode ident = null;
+            NodeUnion<? extends RestrictedPrimaryExpressionNode> qualifier = 
+                    factory.makeNormalNodeUnion(null);
+            NodeUnion<? extends IdentifierNode> ident = 
+                    factory.makeNormalNodeUnion(null);
         }
         @after {
             ruleStop();
@@ -6032,17 +6807,17 @@ methodInvocationByName returns [MethodInvocationNode ret]
         (
             '.' b=identifier
             {
-                qualifier = factory.makeVariableAccessNode(qualifier, ident);
+                qualifier = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions(qualifier, ident));
                 ident = $b.ret;
             }
         )*
         arguments
         {
-            $ret = factory.makeMethodInvocationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeMethodInvocationNodeWithUnions(
                     qualifier,
                     ident,
                     $arguments.ret,
-                    factory.makeReferenceTypeListNode());
+                    factory.makeNormalNodeUnion(factory.makeReferenceTypeListNode())));
         }
     ;
 
@@ -6052,47 +6827,36 @@ methodInvocationByName returns [MethodInvocationNode ret]
 //     X.super.foo();
 // The latter case is used to specify which enclosing type's supertype should be accessed.  (See the documentation of
 // SuperMethodInvocationNode for more information.)
-superMethodInvocation returns [SuperMethodInvocationNode ret]
+superMethodInvocation returns [NodeUnion<? extends SuperMethodInvocationNode> ret]
         scope Rule;
         @init {
             ruleStart("superMethodInvocation");
-            UnparameterizedTypeNode qualifyingTypeNode = null;
-            ReferenceTypeListNode typeArgumentsNode = factory.makeReferenceTypeListNode();
         }
         @after {
             ruleStop();
         }
     :
-        (
-            name '.'
-            {
-                qualifyingTypeNode = factory.makeUnparameterizedTypeNode($name.ret);
-            }
-        )?
+        (unparameterizedType '.')?
         SUPER '.'
-        (
-            nonWildcardTypeArguments
-            {
-                typeArgumentsNode = $nonWildcardTypeArguments.ret;
-            }
-        )?
+        optionalNonWildcardTypeArguments
         identifier arguments
         {
-            $ret = factory.makeSuperMethodInvocationNode(
-                    qualifyingTypeNode,
+            $ret = factory.makeNormalNodeUnion(factory.makeSuperMethodInvocationNodeWithUnions(
+                    $unparameterizedType.ret,
                     $identifier.ret,
                     $arguments.ret,
-                    typeArgumentsNode);
+                    $optionalNonWildcardTypeArguments.ret));
         }
     ;
 
 // This rule invokes a method against a type while providing type arguments, as in
 //     Collections.<Integer>emptySet();
-typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationNode ret]
+typeQualifiedTypeArgumentMethodInvocation returns [NodeUnion<? extends MethodInvocationNode> ret]
         scope Rule;
         @init {
             ruleStart("typeQualifiedTypeArgumentMethodInvocation");
-            RestrictedPrimaryExpressionNode qualifier = null;
+            NodeUnion<? extends RestrictedPrimaryExpressionNode> qualifier = 
+                    factory.makeNormalNodeUnion(null);
         }
         @after {
             ruleStop();
@@ -6100,68 +6864,50 @@ typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationNode ret]
     :
         a=identifier
         {
-            qualifier = factory.makeVariableAccessNode(null, $a.ret);
+            qualifier = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions(null, $a.ret));
         }
         (
             '.' b=identifier
             {
-                qualifier = factory.makeVariableAccessNode(qualifier, $b.ret);
+                qualifier = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions(qualifier, $b.ret));
             }
         )*
         '.' nonWildcardTypeArguments c=identifier arguments
         {
-            $ret = factory.makeMethodInvocationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeMethodInvocationNodeWithUnions(
                     qualifier,
                     $c.ret,
                     $arguments.ret,
-                    $nonWildcardTypeArguments.ret);
+                    $nonWildcardTypeArguments.ret));
         }
     ;
 
 // This rule instantiates a class using the expression before the suffix as the enclosing instance.
 // For example:
 //     (foo.bar()).new MyClass()
-qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [QualifiedClassInstantiationNode ret]
+qualifiedClassInstantiationPrimarySuffix[NodeUnion<? extends PrimaryExpressionNode> in] returns [NodeUnion<? extends QualifiedClassInstantiationNode> ret]
         scope Rule;
         @init {
             ruleStart("qualifiedClassInstantiationPrimarySuffix");
-            TypeArgumentListNode constructorTypeArgumentsNode = factory.makeTypeArgumentListNode();
-            TypeArgumentListNode classTypeArgumentsNode = factory.makeTypeArgumentListNode();
-            AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
         @after {
             ruleStop();
         }
     :
         '.' NEW
-        (
-            constructorTypeArguments=typeArguments
-            {
-                constructorTypeArgumentsNode = $constructorTypeArguments.ret;
-            }
-        )?
+        constructorTypeArguments=optionalTypeArguments
         identifier
-        (
-            classTypeArguments=typeArguments
-            {
-                classTypeArgumentsNode = $classTypeArguments.ret;
-            }
-        )?
+        classTypeArguments=optionalTypeArguments
         arguments
-        (
-            anonymousClassBody
-            {
-                anonymousClassBodyNode = $anonymousClassBody.ret;
-            }
-        )?
+        anonymousClassBody?
         {
-            $ret = factory.makeQualifiedClassInstantiationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeQualifiedClassInstantiationNodeWithUnions(
                     $in,
                     $identifier.ret,
-                    classTypeArgumentsNode,
-                    constructorTypeArgumentsNode,
+                    $classTypeArguments.ret,
+                    $constructorTypeArguments.ret,
                     $arguments.ret,
-                    $anonymousClassBody.ret);
+                    $anonymousClassBody.ret));
         }
     ;
 
@@ -6169,34 +6915,28 @@ qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [Qual
 //     array[4].toString()
 // or
 //     foo().bar()    
-typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode ret]
+typeArgumentMethodInvocationSuffix[NodeUnion<? extends PrimaryExpressionNode> in] returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("typeArgumentMethodInvocationSuffix");
-            ReferenceTypeListNode typeArgumentsNode = factory.makeReferenceTypeListNode();
         }
         @after {
             ruleStop();
         }
     :
         '.'
-        (
-            nonWildcardTypeArguments
-            {
-                typeArgumentsNode = $nonWildcardTypeArguments.ret;
-            }
-        )?
+        optionalNonWildcardTypeArguments
         identifier arguments
         {
-            $ret = factory.makeMethodInvocationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeMethodInvocationNodeWithUnions(
                     in,
                     $identifier.ret,
                     $arguments.ret,
-                    typeArgumentsNode);
+                    $optionalNonWildcardTypeArguments.ret));
         }
     ;
 
-variableAccessByName returns [VariableAccessNode ret]
+variableAccessByName returns [NodeUnion<? extends VariableAccessNode> ret]
         scope Rule;
         @init {
             ruleStart("variableAccessByName");
@@ -6207,17 +6947,17 @@ variableAccessByName returns [VariableAccessNode ret]
     :
         a=identifier
         {
-            $ret = factory.makeVariableAccessNode(null, $a.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions(null, $a.ret));
         }
         (
             '.' b=identifier
             {
-                $ret = factory.makeVariableAccessNode($ret, $b.ret);
+                $ret = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions($ret, $b.ret));
             }
         )*
     ;
     
-arrayAccess[RestrictedPrimaryExpressionNode in] returns [ArrayAccessNode ret]
+arrayAccess[NodeUnion<? extends RestrictedPrimaryExpressionNode> in] returns [NodeUnion<? extends ArrayAccessNode> ret]
         scope Rule;
         @init {
             ruleStart("arrayAccess");
@@ -6228,30 +6968,29 @@ arrayAccess[RestrictedPrimaryExpressionNode in] returns [ArrayAccessNode ret]
     :
         '[' a=expression ']'
         {
-            $ret = factory.makeArrayAccessNode($in, $a.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeArrayAccessNodeWithUnions($in, $a.ret));
         }
         (
             '[' b=expression ']'
             {
-                $ret = factory.makeArrayAccessNode($ret, $b.ret);
+                $ret = factory.makeNormalNodeUnion(factory.makeArrayAccessNodeWithUnions($ret, $b.ret));
             }
         )*
     ;
 
-declaredClassLiteral returns [ClassLiteralNode ret]
+declaredClassLiteral returns [NodeUnion<? extends ClassLiteralNode> ret]
         scope Rule;
         @init {
-            ruleStart("classLiteralName");
-            LiteralizableTypeNode typeNode = null;
+            ruleStart("declaredClassLiteral");
+            NodeUnion<? extends LiteralizableTypeNode> typeNode = null;
         }
         @after {
-            $ret = factory.makeClassLiteralNode(typeNode);
             ruleStop();
         }
     :
-        name
+        unparameterizedType
         {
-            typeNode = factory.makeUnparameterizedTypeNode($name.ret);
+            typeNode = $unparameterizedType.ret;
         }
         (
             arrayTypeIndicator[typeNode]
@@ -6260,16 +6999,18 @@ declaredClassLiteral returns [ClassLiteralNode ret]
             }
         )?
         '.' 'class'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeClassLiteralNodeWithUnions(typeNode));
+        }
     ;
 
-primitiveClassLiteral returns [ClassLiteralNode ret]
+primitiveClassLiteral returns [NodeUnion<? extends ClassLiteralNode> ret]
         scope Rule;
         @init {
             ruleStart("primitiveClassLiteral");
-            LiteralizableTypeNode typeNode = null;
+            NodeUnion<? extends LiteralizableTypeNode> typeNode = null;
         }
         @after {
-            $ret = factory.makeClassLiteralNode(typeNode);
             ruleStop();
         }
     :
@@ -6284,9 +7025,12 @@ primitiveClassLiteral returns [ClassLiteralNode ret]
             }
         )?
         '.' 'class'
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeClassLiteralNodeWithUnions(typeNode));
+        }
     ;
 
-voidClassLiteral returns [ClassLiteralNode ret]
+voidClassLiteral returns [NodeUnion<? extends ClassLiteralNode> ret]
         scope Rule;
         @init {
             ruleStart("voidClassLiteral");
@@ -6297,7 +7041,8 @@ voidClassLiteral returns [ClassLiteralNode ret]
     :
         'void' '.' 'class'
         {
-            $ret = factory.makeClassLiteralNode(factory.makeVoidTypeNode());
+            $ret = factory.makeNormalNodeUnion(factory.makeClassLiteralNodeWithUnions(
+                    factory.makeNormalNodeUnion(factory.makeVoidTypeNode())));
         }
     ;
 
@@ -6306,17 +7051,39 @@ voidClassLiteral returns [ClassLiteralNode ret]
 //     new int[][]{{1,1},{2,2}};
 // Or:
 //     new int[2][][];
-arrayCreator returns [ArrayCreationNode ret]
+arrayCreator returns [NodeUnion<? extends ArrayCreationNode> ret]
         scope Rule;
-    @init{
+        @init {
             ruleStart("arrayCreator");
-        int levels = 0;
-        List<ExpressionNode> list = new ArrayList<ExpressionNode>();
-    }
+        }
         @after {
             ruleStop();
         }
     :   
+        (
+            arrayInitializerCreator
+            {
+                $ret = $arrayInitializerCreator.ret;
+            }
+        |
+            arrayInstantiatorCreator
+            {
+                $ret = $arrayInstantiatorCreator.ret;
+            }
+        )
+
+    ;
+
+arrayInitializerCreator returns [NodeUnion<? extends ArrayInitializerCreationNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("arrayInitializerCreator");
+            int levels = 0;
+        }
+        @after {
+            ruleStop();
+        }
+    :
         NEW createdName
         '[' ']'
         {
@@ -6330,23 +7097,25 @@ arrayCreator returns [ArrayCreationNode ret]
         )*
         arrayInitializer
         {
-            $ret = factory.makeArrayInitializerCreationNode(
+            $ret = factory.makeNormalNodeUnion(factory.makeArrayInitializerCreationNodeWithUnions(
                 $arrayInitializer.ret,
                 $createdName.ret,
-                levels);
+                levels));
         }
-    |   
+    ;
+
+arrayInstantiatorCreator returns [NodeUnion<? extends ArrayInstantiatorCreationNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("arrayInstantiatorCreator");
+            int levels = 0;
+        }
+        @after {
+            ruleStop();
+        }
+    :
         NEW createdName
-        '[' e1=expression ']'
-        {
-            list.add($e1.ret);
-        }        
-        (   
-            '[' e2=expression ']'
-            {
-                list.add($e2.ret);
-            }            
-        )*
+        arrayInstantiatorExpressionList
         (
             '[' ']'
             {
@@ -6354,15 +7123,93 @@ arrayCreator returns [ArrayCreationNode ret]
             }            
         )*
         {
-            while (list.remove(null)) ; // remove all nulls from the list
-            $ret = factory.makeArrayInstantiatorCreationNode(
-                factory.makeExpressionListNode(list),
+            $ret = factory.makeNormalNodeUnion(factory.makeArrayInstantiatorCreationNodeWithUnions(
+                $arrayInstantiatorExpressionList.ret,
                 $createdName.ret,
-                levels);
+                levels));
         }        
     ;
 
-variableInitializer returns [VariableInitializerNode ret]
+arrayInstantiatorExpressionList returns [NodeUnion<? extends ExpressionListNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("arrayInstantiatorExpressionList");
+            List<NodeUnion<? extends ExpressionNode>> list =
+                    new ArrayList<NodeUnion<? extends ExpressionNode>>();
+        }
+        @after {
+            $ret = factory.makeNormalNodeUnion(factory.makeExpressionListNodeWithUnions(list));
+            ruleStop();
+        }
+    :
+        a=arrayInstantiatorExpression
+        {
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "arrayInstantiatorExpression", getSourceLocation($a.stop)));
+            }
+        }
+        (
+            b=arrayInstantiatorExpression
+            {
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "arrayInstantiatorExpression", getSourceLocation($b.stop)));
+	            }
+            }
+        )*
+    ;
+
+optionalArrayInstantiatorExpressionList returns [NodeUnion<? extends ExpressionListNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalArrayInstantiatorExpressionList");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        (
+            arrayInstantiatorExpressionList
+            {
+                $ret = $arrayInstantiatorExpressionList.ret;
+            }
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeExpressionListNode());
+            }
+        )
+    ;
+
+
+arrayInstantiatorExpression returns [NodeUnion<? extends ExpressionNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("arrayInstantiatorExpression");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        '[' expression ']'
+        {
+            $ret = $expression.ret;
+        }
+    ;
+
+variableInitializer returns [NodeUnion<? extends VariableInitializerNode> ret]
         scope Rule;
         @init {
             ruleStart("variableInitializer");
@@ -6371,53 +7218,67 @@ variableInitializer returns [VariableInitializerNode ret]
             ruleStop();
         }
     :   
-        arrayInitializer
-        {
-            $ret = $arrayInitializer.ret;
-        }        
-    |   
-        expression
-        {
-            $ret = $expression.ret;
-        }
+        (
+            arrayInitializer
+            {
+                $ret = $arrayInitializer.ret;
+            }
+        |
+            expression
+            {
+                $ret = $expression.ret;
+            }
+        )
+
     ;
 
-variableInitializers returns [VariableInitializerListNode ret]
+variableInitializers returns [NodeUnion<? extends VariableInitializerListNode> ret]
         scope Rule;
         @init {
             ruleStart("variableInitializers");
-            List<VariableInitializerNode> list = new ArrayList<VariableInitializerNode>();
+            List<NodeUnion<? extends VariableInitializerNode>> list =
+                    new ArrayList<NodeUnion<? extends VariableInitializerNode>>();
         }
         @after {
-            while (list.remove(null)) ; // remove all nulls from the list - TODO fix w/ error nodes
-            $ret = factory.makeVariableInitializerListNode(list);
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableInitializerListNodeWithUnions(list));
             ruleStop();
         }
     :
         a=variableInitializer
         {
-            list.add($a.ret);
+            // TODO: fix this with error nodes
+            if ($a.ret != null && $a.ret.getNodeValue() != null)
+            {
+                list.add($a.ret);
+            } else
+            {
+                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+                        getSourceLocation($a.start), "variableInitializer", getSourceLocation($a.stop)));
+            }
         }
         (
             ','
             b=variableInitializer
             {
-                list.add($b.ret);
+	            // TODO: fix this with error nodes
+	            if ($b.ret != null && $b.ret.getNodeValue() != null)
+	            {
+	                list.add($b.ret);
+	            } else
+	            {
+	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+	                        getSourceLocation($b.start), "variableInitializer", getSourceLocation($b.stop)));
+	            }
             }
         )*
     ;
 
-optionalVariableInitializers returns [VariableInitializerListNode ret]
+optionalVariableInitializers returns [NodeUnion<? extends VariableInitializerListNode> ret]
         scope Rule;
         @init {
             ruleStart("optionalVariableInitializers");
-            $ret = null;
         }
         @after {
-            if ($ret == null)
-            {
-                $ret = factory.makeVariableInitializerListNode();
-            }
             ruleStop();
         }
     :
@@ -6426,11 +7287,17 @@ optionalVariableInitializers returns [VariableInitializerListNode ret]
             {
                 $ret = $variableInitializers.ret;
             }
-        )?
+        )
+    |
+        (
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeVariableInitializerListNode());
+            }
+        )
     ;
 
 
-arrayInitializer returns [ArrayInitializerNode ret]
+arrayInitializer returns [NodeUnion<? extends ArrayInitializerNode> ret]
         scope Rule;
         @init {
             ruleStart("arrayInitializer");
@@ -6442,14 +7309,14 @@ arrayInitializer returns [ArrayInitializerNode ret]
         '{' 
             optionalVariableInitializers
             ','? 
-        '}'             //Yang's fix, position change.
+        '}'
         {
-            $ret = factory.makeArrayInitializerNode($optionalVariableInitializers.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeArrayInitializerNodeWithUnions($optionalVariableInitializers.ret));
         }
     ;
 
 
-createdName returns [BaseTypeNode ret]
+createdName returns [NodeUnion<? extends BaseTypeNode> ret]
         scope Rule;
         @init {
             ruleStart("createdName");
@@ -6457,19 +7324,41 @@ createdName returns [BaseTypeNode ret]
         @after {
             ruleStop();
         }
-    :   
-        classOrInterfaceType
-        {
-            $ret = $classOrInterfaceType.ret;
-        }
-    |   
-        primitiveType
-        {
-            $ret = $primitiveType.ret;
-        }    
+    :
+        (
+            classOrInterfaceType
+            {
+                $ret = $classOrInterfaceType.ret;
+            }
+        |
+            primitiveType
+            {
+                $ret = $primitiveType.ret;
+            }
+        )
+
     ;
 
-nonWildcardTypeArguments returns [ReferenceTypeListNode ret]
+optionalNonWildcardTypeArguments returns [NodeUnion<? extends ReferenceTypeListNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("optionalNonWildcardTypeArguments");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        nonWildcardTypeArguments
+        {
+            $ret = $nonWildcardTypeArguments.ret;
+        }
+    |
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeReferenceTypeListNode());
+        }
+    ;
+
+nonWildcardTypeArguments returns [NodeUnion<? extends ReferenceTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("nonWildcardTypeArguments");
@@ -6478,14 +7367,15 @@ nonWildcardTypeArguments returns [ReferenceTypeListNode ret]
             ruleStop();
         }
     :   
-        '<' referenceTypeList
+        '<'
+        referenceTypeList
         {
             $ret = $referenceTypeList.ret;
         }
         '>'
     ;
 
-arguments returns [ExpressionListNode ret]
+arguments returns [NodeUnion<? extends ExpressionListNode> ret]
         scope Rule;
         @init {
             ruleStart("arguments");
@@ -6503,46 +7393,52 @@ arguments returns [ExpressionListNode ret]
     ;
 
 // Parses a name chain.
-name returns [NameNode ret]
+name returns [NodeUnion<? extends NameNode> ret]
         scope Rule;
         @init {
             ruleStart("name");
-            List<IdentifierNode> identifierNodes = new ArrayList<IdentifierNode>();
         }
         @after {
-            $ret = null;
-            for (int i=0;i<identifierNodes.size();i++)
-            {
-                if (i==0)
-                {
-                    $ret = factory.makeSimpleNameNode(identifierNodes.get(0));
-                } else
-                {
-	                $ret = factory.makeQualifiedNameNode(
-	                        $ret,
-	                        identifierNodes.get(i));
-                    ruleStop();
-                }
-            }
-            if (logger.isTraceEnabled())
-            {
-                logger.trace("Parsed name " + $ret.toString());
-            }
+            ruleStop();
         }
     :
         a=identifier
         {
-            identifierNodes.add($a.ret);
+            $ret = factory.makeNormalNodeUnion(factory.makeSimpleNameNodeWithUnions($a.ret));
         }
         (
-            '.' b=identifier
+            '.'
+            b=identifier
             {
-                identifierNodes.add($b.ret);
+                $ret = factory.makeNormalNodeUnion(factory.makeQualifiedNameNodeWithUnions($ret, $b.ret));
             }
         )*
     ;
 
-intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
+separatedQualifiedName returns [NodeUnion<? extends NameNode> name, NodeUnion<? extends IdentifierNode> ident]
+        scope Rule;
+        @init {
+            ruleStart("separatedQualifiedName");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        a=identifier b=identifier
+        {
+            $name = factory.makeNormalNodeUnion(factory.makeSimpleNameNodeWithUnions($a.ret));
+            $ident = $b.ret;                            
+        }
+        (
+            c=identifier
+            {
+                $name = factory.makeNormalNodeUnion(factory.makeQualifiedNameNodeWithUnions($name, $ident));
+                $ident = $c.ret;
+            }
+        )*
+    ;
+
+intLiteral[boolean isNegative] returns [NodeUnion<? extends IntLiteralNode> ret]
         scope Rule;
         @init {
             ruleStart("intLiteral");
@@ -6560,11 +7456,11 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
                     getSourceLocation(-1),
                     diagnosticListener,
                     $Rule::name);
-            $ret = factory.makeIntLiteralNode(i);
+            $ret = factory.makeNormalNodeUnion(factory.makeIntLiteralNode(i));
         }
     ;   
     
-longLiteral [boolean isNegative] returns [LiteralNode<?> ret]    
+longLiteral[boolean isNegative] returns [NodeUnion<? extends LongLiteralNode> ret]
         scope Rule;
         @init {
             ruleStart("longLiteral");
@@ -6582,11 +7478,11 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
                     getSourceLocation(-1),
                     diagnosticListener,
                     $Rule::name);
-            $ret = factory.makeLongLiteralNode(l);
+            $ret = factory.makeNormalNodeUnion(factory.makeLongLiteralNode(l));
         }
     ;
 
-lexicalLiteral returns [LiteralNode<?> ret]
+lexicalLiteral returns [NodeUnion<? extends LiteralNode<?>> ret]
         scope Rule;
         @init {
             ruleStart("lexicalLiteral");
@@ -6613,7 +7509,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
                     getSourceLocation(-1),
                     diagnosticListener,
                     $Rule::name);
-            $ret = factory.makeFloatLiteralNode(f);
+            $ret = factory.makeNormalNodeUnion(factory.makeFloatLiteralNode(f));
         }
     |   
         DOUBLELITERAL
@@ -6624,7 +7520,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
                     getSourceLocation(-1),
                     diagnosticListener,
                     $Rule::name);
-            $ret = factory.makeDoubleLiteralNode(d);
+            $ret = factory.makeNormalNodeUnion(factory.makeDoubleLiteralNode(d));
         }
     |   
         CHARLITERAL
@@ -6637,7 +7533,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
                 throw new IllegalStateException("Unescape of \"" + $CHARLITERAL.text + "\" resulted in \"" + s +
                         "\" (length!=1)");
             }
-            $ret = factory.makeCharLiteralNode(s.charAt(0));
+            $ret = factory.makeNormalNodeUnion(factory.makeCharLiteralNode(s.charAt(0)));
         }
     |   
         STRINGLITERAL
@@ -6645,22 +7541,22 @@ lexicalLiteral returns [LiteralNode<?> ret]
             String s = $STRINGLITERAL.text;
             s = s.substring(1,s.length()-1);
             s = BsjAntlrParserUtils.unescape(s);
-            $ret = factory.makeStringLiteralNode(s);
+            $ret = factory.makeNormalNodeUnion(factory.makeStringLiteralNode(s));
         }
     |   
         TRUE
         {
-            $ret = factory.makeBooleanLiteralNode(true);
+            $ret = factory.makeNormalNodeUnion(factory.makeBooleanLiteralNode(true));
         }
     |   
         FALSE
         {
-            $ret = factory.makeBooleanLiteralNode(false);
+            $ret = factory.makeNormalNodeUnion(factory.makeBooleanLiteralNode(false));
         }
     |   
         NULL
         {
-            $ret = factory.makeNullLiteralNode();
+            $ret = factory.makeNormalNodeUnion(factory.makeNullLiteralNode());
         }
     |
         codeLiteral
@@ -6669,7 +7565,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
         }
     ;
 
-identifier returns [IdentifierNode ret]
+identifier returns [NodeUnion<? extends IdentifierNode> ret]
         scope Rule;
         @init {
             ruleStart("identifier");
@@ -6680,13 +7576,23 @@ identifier returns [IdentifierNode ret]
     :
         IDENTIFIER
         {
-            if (logger.isTraceEnabled())
-            {
-                logger.trace("Parsed identifier at " + BsjAntlrParserUtils.getTokenLocation($IDENTIFIER) +
-                        " with text " + $IDENTIFIER.text);
-            }
-            $ret = factory.makeIdentifierNode($IDENTIFIER.text);
+            $ret = factory.makeNormalNodeUnion(factory.makeIdentifierNode($IDENTIFIER.text));
         }
+    ;
+
+unsplicableIdentifier returns [IdentifierNode ret]
+        scope Rule;
+        @init {
+            ruleStart("unsplicableIdentifier");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        IDENTIFIER
+        {
+            $ret = factory.makeIdentifierNode($IDENTIFIER.text);
+        }        
     ;
 
 // The following rules are for performance and error recovery purposes.  They are used as semantic hinting predicates to
@@ -6727,7 +7633,7 @@ localVariableHeader
 
 /* *** BSJ Code Literal Parse Rules *************************************** */
 
-parseRule_AbstractMethodModifiers returns [AnnotationMethodModifiersNode ret]
+parseRule_AbstractMethodModifiers returns [NodeUnion<? extends AnnotationMethodModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AbstractMethodModifiers");
@@ -6743,7 +7649,7 @@ parseRule_AbstractMethodModifiers returns [AnnotationMethodModifiersNode ret]
         }
     ;
 
-parseRule_Annotation returns [AnnotationNode ret]
+parseRule_Annotation returns [NodeUnion<? extends AnnotationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Annotation");
@@ -6759,7 +7665,7 @@ parseRule_Annotation returns [AnnotationNode ret]
         }
     ;
 
-parseRule_Annotations returns [AnnotationListNode ret]
+parseRule_Annotations returns [NodeUnion<? extends AnnotationListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Annotations");
@@ -6775,7 +7681,7 @@ parseRule_Annotations returns [AnnotationListNode ret]
         }
     ;
 
-parseRule_AnnotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
+parseRule_AnnotationMethodDeclaration returns [NodeUnion<? extends AnnotationMethodDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AnnotationMethodDeclaration");
@@ -6791,7 +7697,7 @@ parseRule_AnnotationMethodDeclaration returns [AnnotationMethodDeclarationNode r
         }
     ;
 
-parseRule_AnnotationModifiers returns [AnnotationModifiersNode ret]
+parseRule_AnnotationModifiers returns [NodeUnion<? extends AnnotationModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AnnotationModifiers");
@@ -6807,7 +7713,7 @@ parseRule_AnnotationModifiers returns [AnnotationModifiersNode ret]
         }
     ;
 
-parseRule_AnnotationTypeBody returns [AnnotationBodyNode ret]
+parseRule_AnnotationTypeBody returns [NodeUnion<? extends AnnotationBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AnnotationTypeBody");
@@ -6823,7 +7729,7 @@ parseRule_AnnotationTypeBody returns [AnnotationBodyNode ret]
         }
     ;
 
-parseRule_AnnotationTypeElementDeclarations returns [AnnotationMemberListNode ret]
+parseRule_AnnotationTypeElementDeclarations returns [NodeUnion<? extends AnnotationMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AnnotationTypeElementDeclarations");
@@ -6839,7 +7745,7 @@ parseRule_AnnotationTypeElementDeclarations returns [AnnotationMemberListNode re
         }
     ;
 
-parseRule_AnnotationTypeElementDeclaration returns [AnnotationMemberNode ret]
+parseRule_AnnotationTypeElementDeclaration returns [NodeUnion<? extends AnnotationMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AnnotationTypeElementDeclaration");
@@ -6855,7 +7761,7 @@ parseRule_AnnotationTypeElementDeclaration returns [AnnotationMemberNode ret]
         }
     ;
 
-parseRule_AnonymousClassBody returns [AnonymousClassBodyNode ret]
+parseRule_AnonymousClassBody returns [NodeUnion<? extends AnonymousClassBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AnonymousClassBody");
@@ -6871,7 +7777,7 @@ parseRule_AnonymousClassBody returns [AnonymousClassBodyNode ret]
         }
     ;
 
-parseRule_AnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode ret]
+parseRule_AnonymousClassBodyDeclarations returns [NodeUnion<? extends AnonymousClassMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AnonymousClassBodyDeclarations");
@@ -6887,7 +7793,7 @@ parseRule_AnonymousClassBodyDeclarations returns [AnonymousClassMemberListNode r
         }
     ;
 
-parseRule_AnonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
+parseRule_AnonymousClassBodyDeclaration returns [NodeUnion<? extends AnonymousClassMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_AnonymousClassBodyDeclaration");
@@ -6903,7 +7809,7 @@ parseRule_AnonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
         }
     ;
 
-parseRule_ArgumentList returns [ExpressionListNode ret]
+parseRule_ArgumentList returns [NodeUnion<? extends ExpressionListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ArgumentList");
@@ -6919,7 +7825,7 @@ parseRule_ArgumentList returns [ExpressionListNode ret]
         }
     ;
 
-parseRule_BlockStatement returns [BlockStatementNode ret]
+parseRule_BlockStatement returns [NodeUnion<? extends BlockStatementNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_BlockStatement");
@@ -6935,7 +7841,7 @@ parseRule_BlockStatement returns [BlockStatementNode ret]
         }
     ;
 
-parseRule_BlockStatements returns [BlockStatementListNode ret]
+parseRule_BlockStatements returns [NodeUnion<? extends BlockStatementListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_BlockStatements");
@@ -6951,7 +7857,7 @@ parseRule_BlockStatements returns [BlockStatementListNode ret]
         }
     ;
 
-parseRule_CatchClause returns [CatchNode ret]
+parseRule_CatchClause returns [NodeUnion<? extends CatchNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_CatchClause");
@@ -6967,7 +7873,7 @@ parseRule_CatchClause returns [CatchNode ret]
         }
     ;
 
-parseRule_Catches returns [CatchListNode ret]
+parseRule_Catches returns [NodeUnion<? extends CatchListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Catches");
@@ -6983,7 +7889,7 @@ parseRule_Catches returns [CatchListNode ret]
         }
     ;
 
-parseRule_ClassBody returns [ClassBodyNode ret]
+parseRule_ClassBody returns [NodeUnion<? extends ClassBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ClassBody");
@@ -6999,7 +7905,7 @@ parseRule_ClassBody returns [ClassBodyNode ret]
         }
     ;
 
-parseRule_ClassBodyDeclaration returns [ClassMemberNode ret]
+parseRule_ClassBodyDeclaration returns [NodeUnion<? extends ClassMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ClassBodyDeclaration");
@@ -7015,7 +7921,7 @@ parseRule_ClassBodyDeclaration returns [ClassMemberNode ret]
         }
     ;
 
-parseRule_ClassBodyDeclarations returns [ClassMemberListNode ret]
+parseRule_ClassBodyDeclarations returns [NodeUnion<? extends ClassMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ClassBodyDeclarations");
@@ -7031,7 +7937,7 @@ parseRule_ClassBodyDeclarations returns [ClassMemberListNode ret]
         }
     ;
 
-parseRule_ClassModifiers returns [ClassModifiersNode ret]
+parseRule_ClassModifiers returns [NodeUnion<? extends ClassModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ClassModifiers");
@@ -7047,7 +7953,7 @@ parseRule_ClassModifiers returns [ClassModifiersNode ret]
         }
     ;
 
-parseRule_ClassOrInterfaceTypeList returns [DeclaredTypeListNode ret]
+parseRule_ClassOrInterfaceTypeList returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ClassOrInterfaceTypeList");
@@ -7063,7 +7969,7 @@ parseRule_ClassOrInterfaceTypeList returns [DeclaredTypeListNode ret]
         }
     ;
 
-parseRule_CompilationUnit[String name] returns [CompilationUnitNode ret]
+parseRule_CompilationUnit[String name] returns [NodeUnion<? extends CompilationUnitNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_CompilationUnit");
@@ -7079,7 +7985,7 @@ parseRule_CompilationUnit[String name] returns [CompilationUnitNode ret]
         }
     ;
 
-parseRule_ConstantDeclaration returns [ConstantDeclarationNode ret]
+parseRule_ConstantDeclaration returns [NodeUnion<? extends ConstantDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ConstantDeclaration");
@@ -7095,7 +8001,7 @@ parseRule_ConstantDeclaration returns [ConstantDeclarationNode ret]
         }
     ;
 
-parseRule_ConstantModifiers returns [ConstantModifiersNode ret]
+parseRule_ConstantModifiers returns [NodeUnion<? extends ConstantModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ConstantModifiers");
@@ -7111,7 +8017,7 @@ parseRule_ConstantModifiers returns [ConstantModifiersNode ret]
         }
     ;
 
-parseRule_ConstructorBody returns [ConstructorBodyNode ret]
+parseRule_ConstructorBody returns [NodeUnion<? extends ConstructorBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ConstructorBody");
@@ -7127,7 +8033,7 @@ parseRule_ConstructorBody returns [ConstructorBodyNode ret]
         }
     ;
 
-parseRule_ConstructorDeclaration returns [ConstructorDeclarationNode ret]
+parseRule_ConstructorDeclaration returns [NodeUnion<? extends ConstructorDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ConstructorDeclaration");
@@ -7143,7 +8049,7 @@ parseRule_ConstructorDeclaration returns [ConstructorDeclarationNode ret]
         }
     ;
 
-parseRule_ConstructorModifiers returns [ConstructorModifiersNode ret]
+parseRule_ConstructorModifiers returns [NodeUnion<? extends ConstructorModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ConstructorModifiers");
@@ -7159,7 +8065,7 @@ parseRule_ConstructorModifiers returns [ConstructorModifiersNode ret]
         }
     ;
 
-parseRule_ElementValue returns [AnnotationValueNode ret]
+parseRule_ElementValue returns [NodeUnion<? extends AnnotationValueNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ElementValue");
@@ -7175,7 +8081,7 @@ parseRule_ElementValue returns [AnnotationValueNode ret]
         }
     ;
 
-parseRule_ElementValues returns [AnnotationValueListNode ret]
+parseRule_ElementValues returns [NodeUnion<? extends AnnotationValueListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ElementValues");
@@ -7191,7 +8097,7 @@ parseRule_ElementValues returns [AnnotationValueListNode ret]
         }
     ;
 
-parseRule_ElementValuePair returns [AnnotationElementNode ret]
+parseRule_ElementValuePair returns [NodeUnion<? extends AnnotationElementNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ElementValuePair");
@@ -7207,7 +8113,7 @@ parseRule_ElementValuePair returns [AnnotationElementNode ret]
         }
     ;
 
-parseRule_ElementValuePairs returns [AnnotationElementListNode ret]
+parseRule_ElementValuePairs returns [NodeUnion<? extends AnnotationElementListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ElementValuePairs");
@@ -7223,7 +8129,7 @@ parseRule_ElementValuePairs returns [AnnotationElementListNode ret]
         }
     ;
 
-parseRule_EnumBody returns [EnumBodyNode ret]
+parseRule_EnumBody returns [NodeUnion<? extends EnumBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_EnumBody");
@@ -7239,7 +8145,7 @@ parseRule_EnumBody returns [EnumBodyNode ret]
         }
     ;
 
-parseRule_EnumConstant returns [EnumConstantDeclarationNode ret]
+parseRule_EnumConstant returns [NodeUnion<? extends EnumConstantDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_EnumConstant");
@@ -7255,7 +8161,7 @@ parseRule_EnumConstant returns [EnumConstantDeclarationNode ret]
         }
     ;
 
-parseRule_EnumConstants returns [EnumConstantDeclarationListNode ret]
+parseRule_EnumConstants returns [NodeUnion<? extends EnumConstantDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_EnumConstants");
@@ -7271,7 +8177,7 @@ parseRule_EnumConstants returns [EnumConstantDeclarationListNode ret]
         }
     ;
 
-parseRule_EnumModifiers returns [EnumModifiersNode ret]
+parseRule_EnumModifiers returns [NodeUnion<? extends EnumModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_EnumModifiers");
@@ -7287,7 +8193,7 @@ parseRule_EnumModifiers returns [EnumModifiersNode ret]
         }
     ;
 
-parseRule_ExceptionTypeList returns [UnparameterizedTypeListNode ret]
+parseRule_ExceptionTypeList returns [NodeUnion<? extends UnparameterizedTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ExceptionTypeList");
@@ -7303,7 +8209,7 @@ parseRule_ExceptionTypeList returns [UnparameterizedTypeListNode ret]
         }
     ;
 
-parseRule_ExplicitConstructorInvocation returns [ConstructorInvocationNode ret]
+parseRule_ExplicitConstructorInvocation returns [NodeUnion<? extends ConstructorInvocationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ExplicitConstructorInvocation");
@@ -7319,7 +8225,7 @@ parseRule_ExplicitConstructorInvocation returns [ConstructorInvocationNode ret]
         }
     ;
 
-parseRule_FieldDeclaration returns [FieldDeclarationNode ret]
+parseRule_FieldDeclaration returns [NodeUnion<? extends FieldDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_FieldDeclaration");
@@ -7335,7 +8241,7 @@ parseRule_FieldDeclaration returns [FieldDeclarationNode ret]
         }
     ;
 
-parseRule_FieldModifiers returns [FieldModifiersNode ret]
+parseRule_FieldModifiers returns [NodeUnion<? extends FieldModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_FieldModifiers");
@@ -7351,7 +8257,7 @@ parseRule_FieldModifiers returns [FieldModifiersNode ret]
         }
     ;
 
-parseRule_ForInit returns [ForInitializerNode ret]
+parseRule_ForInit returns [NodeUnion<? extends ForInitializerNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ForInit");
@@ -7367,7 +8273,7 @@ parseRule_ForInit returns [ForInitializerNode ret]
         }
     ;
 
-parseRule_FormalParameter returns [VariableNode ret]
+parseRule_FormalParameter returns [NodeUnion<? extends VariableNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_FormalParameter");
@@ -7383,7 +8289,7 @@ parseRule_FormalParameter returns [VariableNode ret]
         }
     ;
 
-parseRule_Identifier returns [IdentifierNode ret]
+parseRule_Identifier returns [NodeUnion<? extends IdentifierNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Identifier");
@@ -7399,7 +8305,7 @@ parseRule_Identifier returns [IdentifierNode ret]
         }
     ;
 
-parseRule_IdentifierList returns [IdentifierListNode ret]
+parseRule_IdentifierList returns [NodeUnion<? extends IdentifierListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_IdentifierList");
@@ -7415,7 +8321,7 @@ parseRule_IdentifierList returns [IdentifierListNode ret]
         }
     ;
 
-parseRule_ImportDeclaration returns [ImportNode ret]
+parseRule_ImportDeclaration returns [NodeUnion<? extends ImportNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ImportDeclaration");
@@ -7431,7 +8337,7 @@ parseRule_ImportDeclaration returns [ImportNode ret]
         }
     ;
 
-parseRule_ImportDeclarations returns [ImportListNode ret]
+parseRule_ImportDeclarations returns [NodeUnion<? extends ImportListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ImportDeclarations");
@@ -7447,7 +8353,7 @@ parseRule_ImportDeclarations returns [ImportListNode ret]
         }
     ;
 
-parseRule_Initializer returns [InitializerDeclarationNode ret]
+parseRule_Initializer returns [NodeUnion<? extends InitializerDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Initializer");
@@ -7463,7 +8369,7 @@ parseRule_Initializer returns [InitializerDeclarationNode ret]
         }
     ;
 
-parseRule_InterfaceBody returns [InterfaceBodyNode ret]
+parseRule_InterfaceBody returns [NodeUnion<? extends InterfaceBodyNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_InterfaceBody");
@@ -7479,7 +8385,7 @@ parseRule_InterfaceBody returns [InterfaceBodyNode ret]
         }
     ;
 
-parseRule_InterfaceMemberDeclaration returns [InterfaceMemberNode ret]
+parseRule_InterfaceMemberDeclaration returns [NodeUnion<? extends InterfaceMemberNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_InterfaceMemberDeclaration");
@@ -7495,7 +8401,7 @@ parseRule_InterfaceMemberDeclaration returns [InterfaceMemberNode ret]
         }
     ;
 
-parseRule_InterfaceMemberDeclarations returns [InterfaceMemberListNode ret]
+parseRule_InterfaceMemberDeclarations returns [NodeUnion<? extends InterfaceMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_InterfaceMemberDeclarations");
@@ -7511,7 +8417,7 @@ parseRule_InterfaceMemberDeclarations returns [InterfaceMemberListNode ret]
         }
     ;
 
-parseRule_InterfaceModifiers returns [InterfaceModifiersNode ret]
+parseRule_InterfaceModifiers returns [NodeUnion<? extends InterfaceModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_InterfaceModifiers");
@@ -7527,7 +8433,7 @@ parseRule_InterfaceModifiers returns [InterfaceModifiersNode ret]
         }
     ;
 
-parseRule_JavadocComment returns [JavadocNode ret]
+parseRule_JavadocComment returns [NodeUnion<? extends JavadocNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_JavadocComment");
@@ -7540,7 +8446,7 @@ parseRule_JavadocComment returns [JavadocNode ret]
         EOF
     ;
 
-parseRule_LocalClassDeclaration returns [LocalClassDeclarationNode ret]
+parseRule_LocalClassDeclaration returns [NodeUnion<? extends LocalClassDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_LocalClassDeclaration");
@@ -7556,7 +8462,7 @@ parseRule_LocalClassDeclaration returns [LocalClassDeclarationNode ret]
         }
     ;
 
-parseRule_LocalClassModifiers returns [LocalClassModifiersNode ret]
+parseRule_LocalClassModifiers returns [NodeUnion<? extends LocalClassModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_LocalClassModifiers");
@@ -7565,14 +8471,14 @@ parseRule_LocalClassModifiers returns [LocalClassModifiersNode ret]
             ruleStop();
         }
     :
-        inlineClassModifiers
+        localClassModifiers
         EOF
         {
-            $ret = $inlineClassModifiers.ret;
+            $ret = $localClassModifiers.ret;
         }
     ;
 
-parseRule_MetaAnnotation returns [MetaAnnotationNode ret]
+parseRule_MetaAnnotation returns [NodeUnion<? extends MetaAnnotationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaAnnotation");
@@ -7588,7 +8494,7 @@ parseRule_MetaAnnotation returns [MetaAnnotationNode ret]
         }
     ;
 
-parseRule_MetaAnnotationList returns [MetaAnnotationListNode ret]
+parseRule_MetaAnnotationList returns [NodeUnion<? extends MetaAnnotationListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaAnnotationList");
@@ -7604,7 +8510,7 @@ parseRule_MetaAnnotationList returns [MetaAnnotationListNode ret]
         }
     ;
 
-parseRule_MetaAnnotationElement returns [MetaAnnotationElementNode ret]
+parseRule_MetaAnnotationElement returns [NodeUnion<? extends MetaAnnotationElementNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaAnnotationElement");
@@ -7620,7 +8526,7 @@ parseRule_MetaAnnotationElement returns [MetaAnnotationElementNode ret]
         }
     ;
 
-parseRule_MetaAnnotationElements returns [MetaAnnotationElementListNode ret]
+parseRule_MetaAnnotationElements returns [NodeUnion<? extends MetaAnnotationElementListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaAnnotationElements");
@@ -7636,7 +8542,7 @@ parseRule_MetaAnnotationElements returns [MetaAnnotationElementListNode ret]
         }
     ;
 
-parseRule_MetaAnnotationElementValue returns [MetaAnnotationValueNode ret]
+parseRule_MetaAnnotationElementValue returns [NodeUnion<? extends MetaAnnotationValueNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaAnnotationElementValue");
@@ -7652,7 +8558,7 @@ parseRule_MetaAnnotationElementValue returns [MetaAnnotationValueNode ret]
         }
     ;
 
-parseRule_MetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
+parseRule_MetaAnnotationElementValues returns [NodeUnion<? extends MetaAnnotationValueListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaAnnotationElementValues");
@@ -7668,7 +8574,7 @@ parseRule_MetaAnnotationElementValues returns [MetaAnnotationValueListNode ret]
         }
     ;
 
-parseRule_Metaprogram returns [MetaprogramNode ret]
+parseRule_Metaprogram returns [NodeUnion<? extends MetaprogramNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Metaprogram");
@@ -7684,7 +8590,7 @@ parseRule_Metaprogram returns [MetaprogramNode ret]
         }
     ;
 
-parseRule_MetaprogramDependency returns [MetaprogramDependencyNode ret]
+parseRule_MetaprogramDependency returns [NodeUnion<? extends MetaprogramDependencyNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaprogramDependency");
@@ -7700,7 +8606,7 @@ parseRule_MetaprogramDependency returns [MetaprogramDependencyNode ret]
         }
     ;
 
-parseRule_MetaprogramDependencyDeclaration returns [MetaprogramDependencyDeclarationNode ret]
+parseRule_MetaprogramDependencyDeclaration returns [NodeUnion<? extends MetaprogramDependencyDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaprogramDependencyDeclaration");
@@ -7716,7 +8622,7 @@ parseRule_MetaprogramDependencyDeclaration returns [MetaprogramDependencyDeclara
         }
     ;
 
-parseRule_MetaprogramDependencyDeclarationList returns [MetaprogramDependencyDeclarationListNode ret]
+parseRule_MetaprogramDependencyDeclarationList returns [NodeUnion<? extends MetaprogramDependencyDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaprogramDependencyDeclarationList");
@@ -7732,7 +8638,7 @@ parseRule_MetaprogramDependencyDeclarationList returns [MetaprogramDependencyDec
         }
     ;
 
-parseRule_MetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
+parseRule_MetaprogramDependencyList returns [NodeUnion<? extends MetaprogramDependencyListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaprogramDependencyList");
@@ -7748,7 +8654,7 @@ parseRule_MetaprogramDependencyList returns [MetaprogramDependencyListNode ret]
         }
     ;
 
-parseRule_MetaprogramImportDeclaration returns [MetaprogramImportNode ret]
+parseRule_MetaprogramImportDeclaration returns [NodeUnion<? extends MetaprogramImportNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaprogramImportDeclaration");
@@ -7764,7 +8670,7 @@ parseRule_MetaprogramImportDeclaration returns [MetaprogramImportNode ret]
         }
     ;
 
-parseRule_MetaprogramImportDeclarationList returns [MetaprogramImportListNode ret]
+parseRule_MetaprogramImportDeclarationList returns [NodeUnion<? extends MetaprogramImportListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaprogramImportDeclarationList");
@@ -7780,7 +8686,7 @@ parseRule_MetaprogramImportDeclarationList returns [MetaprogramImportListNode re
         }
     ;
 
-parseRule_MetaprogramTargetDeclaration returns [MetaprogramTargetNode ret]
+parseRule_MetaprogramTargetDeclaration returns [NodeUnion<? extends MetaprogramTargetNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaprogramTargetDeclaration");
@@ -7796,7 +8702,7 @@ parseRule_MetaprogramTargetDeclaration returns [MetaprogramTargetNode ret]
         }
     ;
 
-parseRule_MetaprogramTargetDeclarationList returns [MetaprogramTargetListNode ret]
+parseRule_MetaprogramTargetDeclarationList returns [NodeUnion<? extends MetaprogramTargetListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MetaprogramTargetDeclarationList");
@@ -7812,7 +8718,7 @@ parseRule_MetaprogramTargetDeclarationList returns [MetaprogramTargetListNode re
         }
     ;
 
-parseRule_MethodDeclaration returns [MethodDeclarationNode ret]
+parseRule_MethodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MethodDeclaration");
@@ -7828,7 +8734,7 @@ parseRule_MethodDeclaration returns [MethodDeclarationNode ret]
         }
     ;
 
-parseRule_MethodModifiers returns [MethodModifiersNode ret]
+parseRule_MethodModifiers returns [NodeUnion<? extends MethodModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_MethodModifiers");
@@ -7844,7 +8750,7 @@ parseRule_MethodModifiers returns [MethodModifiersNode ret]
         }
     ;
 
-parseRule_Name returns [NameNode ret]
+parseRule_Name returns [NodeUnion<? extends NameNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Name");
@@ -7860,7 +8766,7 @@ parseRule_Name returns [NameNode ret]
         }
     ;
 
-parseRule_PackageDeclaration returns [PackageDeclarationNode ret]
+parseRule_PackageDeclaration returns [NodeUnion<? extends PackageDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_PackageDeclaration");
@@ -7876,7 +8782,7 @@ parseRule_PackageDeclaration returns [PackageDeclarationNode ret]
         }
     ;
 
-parseRule_Preamble returns [MetaprogramPreambleNode ret]
+parseRule_Preamble returns [NodeUnion<? extends MetaprogramPreambleNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Preamble");
@@ -7892,7 +8798,7 @@ parseRule_Preamble returns [MetaprogramPreambleNode ret]
         }
     ;
 
-parseRule_ReferenceTypeList returns [ReferenceTypeListNode ret]
+parseRule_ReferenceTypeList returns [NodeUnion<? extends ReferenceTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_ReferenceTypeList");
@@ -7908,7 +8814,7 @@ parseRule_ReferenceTypeList returns [ReferenceTypeListNode ret]
         }
     ;
 
-parseRule_StatementExpressionList returns [StatementExpressionListNode ret]
+parseRule_StatementExpressionList returns [NodeUnion<? extends StatementExpressionListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_StatementExpressionList");
@@ -7924,7 +8830,7 @@ parseRule_StatementExpressionList returns [StatementExpressionListNode ret]
         }
     ;
 
-parseRule_SwitchBlockStatementGroup returns [CaseNode ret]
+parseRule_SwitchBlockStatementGroup returns [NodeUnion<? extends CaseNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_SwitchBlockStatementGroup");
@@ -7940,7 +8846,7 @@ parseRule_SwitchBlockStatementGroup returns [CaseNode ret]
         }
     ;
 
-parseRule_SwitchBlockStatementGroups returns [CaseListNode ret]
+parseRule_SwitchBlockStatementGroups returns [NodeUnion<? extends CaseListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_SwitchBlockStatementGroups");
@@ -7956,7 +8862,7 @@ parseRule_SwitchBlockStatementGroups returns [CaseListNode ret]
         }
     ;
 
-parseRule_Type returns [TypeNode ret]
+parseRule_Type returns [NodeUnion<? extends TypeNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Type");
@@ -7972,7 +8878,7 @@ parseRule_Type returns [TypeNode ret]
         }
     ;
 
-parseRule_TypeArguments returns [TypeArgumentListNode ret]
+parseRule_TypeArguments returns [NodeUnion<? extends TypeArgumentListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_TypeArguments");
@@ -7988,7 +8894,7 @@ parseRule_TypeArguments returns [TypeArgumentListNode ret]
         }
     ;
 
-parseRule_TypeDeclaration returns [TypeDeclarationNode ret]
+parseRule_TypeDeclaration returns [NodeUnion<? extends TypeDeclarationNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_TypeDeclaration");
@@ -8004,7 +8910,7 @@ parseRule_TypeDeclaration returns [TypeDeclarationNode ret]
         }
     ;
 
-parseRule_TypeDeclarations returns [TypeDeclarationListNode ret]
+parseRule_TypeDeclarations returns [NodeUnion<? extends TypeDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_TypeDeclarations");
@@ -8020,7 +8926,7 @@ parseRule_TypeDeclarations returns [TypeDeclarationListNode ret]
         }
     ;
 
-parseRule_TypeParameter returns [TypeParameterNode ret]
+parseRule_TypeParameter returns [NodeUnion<? extends TypeParameterNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_TypeParameter");
@@ -8036,7 +8942,7 @@ parseRule_TypeParameter returns [TypeParameterNode ret]
         }
     ;
 
-parseRule_TypeParameters returns [TypeParameterListNode ret]
+parseRule_TypeParameters returns [NodeUnion<? extends TypeParameterListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_TypeParameters");
@@ -8052,7 +8958,7 @@ parseRule_TypeParameters returns [TypeParameterListNode ret]
         }
     ;
 
-parseRule_VariableDeclarator returns [VariableDeclaratorNode ret]
+parseRule_VariableDeclarator returns [NodeUnion<? extends VariableDeclaratorNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_VariableDeclarator");
@@ -8068,7 +8974,7 @@ parseRule_VariableDeclarator returns [VariableDeclaratorNode ret]
         }
     ;
 
-parseRule_VariableDeclarators returns [VariableDeclaratorListNode ret]
+parseRule_VariableDeclarators returns [NodeUnion<? extends VariableDeclaratorListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_VariableDeclarators");
@@ -8084,7 +8990,7 @@ parseRule_VariableDeclarators returns [VariableDeclaratorListNode ret]
         }
     ;
 
-parseRule_VariableInitializer returns [VariableInitializerNode ret]
+parseRule_VariableInitializer returns [NodeUnion<? extends VariableInitializerNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_VariableInitializer");
@@ -8100,7 +9006,7 @@ parseRule_VariableInitializer returns [VariableInitializerNode ret]
         }
     ;
 
-parseRule_VariableInitializers returns [VariableInitializerListNode ret]
+parseRule_VariableInitializers returns [NodeUnion<? extends VariableInitializerListNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_VariableInitializers");
@@ -8116,7 +9022,7 @@ parseRule_VariableInitializers returns [VariableInitializerListNode ret]
         }
     ;
 
-parseRule_VariableModifiers returns [VariableModifiersNode ret]
+parseRule_VariableModifiers returns [NodeUnion<? extends VariableModifiersNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_VariableModifiers");
@@ -8132,7 +9038,7 @@ parseRule_VariableModifiers returns [VariableModifiersNode ret]
         }
     ;
 
-parseRule_Wildcard returns [WildcardTypeNode ret]
+parseRule_Wildcard returns [NodeUnion<? extends WildcardTypeNode> ret]
         scope Rule;
         @init {
             ruleStart("parseRule_Wildcard");

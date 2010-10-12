@@ -142,7 +142,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         
         if (constants == null)
         {
-            throw new NullPointerException("Node union for property constants cannot be null.");
+            constants = new NormalNodeUnion<EnumConstantDeclarationListNode>(null);
         }
         if (this.constants != null)
         {
@@ -229,7 +229,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         
         if (members == null)
         {
-            throw new NullPointerException("Node union for property members cannot be null.");
+            members = new NormalNodeUnion<ClassMemberListNode>(null);
         }
         if (this.members != null)
         {
@@ -442,7 +442,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMembers().getType());
         }
-        return factory.makeEnumBodyNode(
+        return factory.makeEnumBodyNodeWithUnions(
                 constantsCopy,
                 membersCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getConstants()) && (after instanceof EnumConstantDeclarationListNode))
+        if (before.equals(this.getUnionForConstants().getNodeValue()))
         {
             setConstants((EnumConstantDeclarationListNode)after);
             return true;
         }
-        if (before.equals(this.getMembers()) && (after instanceof ClassMemberListNode))
+        if (before.equals(this.getUnionForMembers().getNodeValue()))
         {
             setMembers((ClassMemberListNode)after);
             return true;

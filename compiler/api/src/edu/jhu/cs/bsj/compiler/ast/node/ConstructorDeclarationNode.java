@@ -26,7 +26,7 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      * @return The identifier for the name of this constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier for the name of this constructor.
@@ -55,7 +55,7 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      * @return The body of this constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ConstructorBodyNode getBody() throws ClassCastException;
+    public ConstructorBodyNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the body of this constructor.
@@ -84,7 +84,7 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      * @return The modifiers for this constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ConstructorModifiersNode getModifiers() throws ClassCastException;
+    public ConstructorModifiersNode getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this constructor.
@@ -113,7 +113,7 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      * @return The parameters declared by this constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableListNode getParameters() throws ClassCastException;
+    public VariableListNode getParameters()throws ClassCastException;
     
     /**
      * Gets the union object for the parameters declared by this constructor.
@@ -142,7 +142,7 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      * @return The vararg parameter declared by this method.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableNode getVarargParameter() throws ClassCastException;
+    public VariableNode getVarargParameter()throws ClassCastException;
     
     /**
      * Gets the union object for the vararg parameter declared by this method.
@@ -171,7 +171,7 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      * @return The types of exceptions thrown by this constructor.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeListNode getThrowTypes() throws ClassCastException;
+    public UnparameterizedTypeListNode getThrowTypes()throws ClassCastException;
     
     /**
      * Gets the union object for the types of exceptions thrown by this constructor.
@@ -200,7 +200,7 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      * @return This constructor's applicable type parameters.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeParameterListNode getTypeParameters() throws ClassCastException;
+    public TypeParameterListNode getTypeParameters()throws ClassCastException;
     
     /**
      * Gets the union object for this constructor's applicable type parameters.
@@ -229,7 +229,7 @@ public interface ConstructorDeclarationNode extends Node, AbstractInvokableDecla
      * @return The associated javadoc comment for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public JavadocNode getJavadoc() throws ClassCastException;
+    public JavadocNode getJavadoc()throws ClassCastException;
     
     /**
      * Gets the union object for the associated javadoc comment for this node.

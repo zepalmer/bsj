@@ -56,20 +56,21 @@ public interface Node
     public <P1,P2,R> R executeOperation(BsjNodeOperation2Arguments<P1,P2,R> operation, P1 p1, P2 p2);
     
 	/**
-	 * Determines if two nodes are equal.  Two nodes are only equal if they are compatible with each other as defined
-	 * by the factory that created them; furthermore, two node objects are only equal if they represent the same node
-	 * in an AST.  This is not necessarily a comparison by identity as proxies or other such constructs may implement
-	 * equality in a different fashion than their underlying counterparts.
+	 * Determines if two nodes are equal. Two nodes are only equal if they are compatible with each other as defined by
+	 * the factory that created them; furthermore, two node objects are only equal if they represent the same node in an
+	 * AST. This is not necessarily a comparison by identity as proxies or other such constructs may implement equality
+	 * in a different fashion than their underlying counterparts.
+	 * 
 	 * @param object The object being compared for equality.
 	 * @return <code>true</code> if that object is equal to this one; <code>false</code> if it is not.
 	 */
 	public boolean equals(Object object);
-	
+
 	/**
 	 * Calculates a hash code for this node.
 	 */
 	public int hashCode();
-	
+
 	/**
 	 * Causes this node to receive a visitor. Visitors are received by nodes in a depth-first fashion. The order of the
 	 * children receiving the visitor is dependent upon the type of node; however, a superclass's child nodes are always
@@ -123,12 +124,19 @@ public interface Node
 	 * call the appropriate setter directly (such as <tt>getParent().setPackageDeclaration(...)</tt>), but this method
 	 * is convenient in cases in which the caller does not know where in its parent it resides (which is especially the
 	 * case with lists).
+	 * <p/>
+	 * This method does not take into account the union state of the node in question.  That is, regardless of the union
+	 * in which the <tt>before</tt> variable's node is found, the <tt>after</tt> variable's node will be used to replace
+	 * it.  This method does not permit the caller to specify a non-normal node for the <tt>after</tt> variable (such
+	 * as a splice node).
 	 * 
 	 * @param before The node which is to be replaced. <code>null</code> is not a legal value.
 	 * @param after The node with which it is to be replaced.
 	 * @return <code>true</code> if the replacement was successful; <code>false</code> if the specified <tt>before</tt>
 	 *         node was not found.
 	 * @throws IllegalArgumentException If <tt>before</tt> is <code>null</code>.
+	 * @throws ClassCastException If <tt>before</tt> was found but <tt>after</tt> could not be coerced into a type that
+	 *             could replace it.
 	 */
 	public boolean replace(Node before, Node after);
 

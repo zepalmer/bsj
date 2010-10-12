@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
@@ -22,7 +23,7 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
 {
     /** General constructor. */
     public BlockStatementListNodeImpl(
-            List<BlockStatementNode> children,
+            List<NodeUnion<? extends BlockStatementNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
     public boolean getAlwaysOrdered()
     {
         return true;
+    }
+    
+    protected Class<BlockStatementNode> getChildrenElementType()
+    {
+        return BlockStatementNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
     @Override
     public BlockStatementListNode deepCopy(BsjNodeFactory factory)
     {
-        List<BlockStatementNode> childrenCopy = new ArrayList<BlockStatementNode>(getChildren().size());
-        for (BlockStatementNode element : getChildren())
+        List<NodeUnion<? extends BlockStatementNode>> childrenCopy = new ArrayList<NodeUnion<? extends BlockStatementNode>>(getChildren().size());
+        for (NodeUnion<? extends BlockStatementNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends BlockStatementNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeBlockStatementListNode(
+        return factory.makeBlockStatementListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

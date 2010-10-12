@@ -157,7 +157,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.body != null)
         {
@@ -244,7 +244,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         
         if (catches == null)
         {
-            throw new NullPointerException("Node union for property catches cannot be null.");
+            catches = new NormalNodeUnion<CatchListNode>(null);
         }
         if (this.catches != null)
         {
@@ -331,7 +331,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         
         if (finallyBlock == null)
         {
-            throw new NullPointerException("Node union for property finallyBlock cannot be null.");
+            finallyBlock = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.finallyBlock != null)
         {
@@ -418,7 +418,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -702,7 +702,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeTryNode(
+        return factory.makeTryNodeWithUnions(
                 bodyCopy,
                 catchesCopy,
                 finallyBlockCopy,
@@ -722,22 +722,22 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((BlockStatementListNode)after);
             return true;
         }
-        if (before.equals(this.getCatches()) && (after instanceof CatchListNode))
+        if (before.equals(this.getUnionForCatches().getNodeValue()))
         {
             setCatches((CatchListNode)after);
             return true;
         }
-        if (before.equals(this.getFinallyBlock()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForFinallyBlock().getNodeValue()))
         {
             setFinallyBlock((BlockStatementListNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

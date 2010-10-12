@@ -15,19 +15,25 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.NodeList;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnionFilter;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListMissingElementException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.NodeListAdapter;
 import edu.jhu.cs.bsj.compiler.impl.ast.NodeListImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.utils.ConversionList;
+import edu.jhu.cs.bsj.compiler.impl.utils.Converter;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T>
 {
     /** The list of children. */
-    private List<T> children;
+    private List<NodeUnion<? extends T>> children;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -48,7 +54,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     
     /** General constructor. */
     protected ListNodeImpl(
-            List<T> children,
+            List<NodeUnion<? extends T>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -65,14 +71,47 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     public abstract boolean getAlwaysOrdered();
     
     /**
-     * Gets the list of children.
+     * Gets the list of children.  This property's value is assumed to be a list of normal nodes.
      * @return The list of children.
      */
     public List<T> getChildren()
     {
         getAttribute(LocalAttribute.CHILDREN).recordAccess(ReadWriteAttribute.AccessType.READ);
+        if (this.children == null)
+        {
+            return null;
+        } else
+        {
+            return new ConversionList<T, NodeUnion<? extends T>>(this.children, getChildrenElementType(),
+                    new Converter<T, NodeUnion<? extends T>>()
+                    {
+                        @Override
+                        public NodeUnion<? extends T> convert(T t)
+                        {
+                            return new NormalNodeUnion<T>(t);
+                        }
+                    }, new Converter<NodeUnion<? extends T>, T>()
+                    {
+                        @Override
+                        public T convert(NodeUnion<? extends T> t)
+                        {
+                            return t.getNormalNode();
+                        }
+                    });
+        }
+    }
+    
+    /**
+     * Gets the list of children.
+     * @return The list of children.
+     */
+    public List<NodeUnion<? extends T>> getUnionForChildren()
+    {
+        getAttribute(LocalAttribute.CHILDREN).recordAccess(ReadWriteAttribute.AccessType.READ);
         return this.children;
     }
+    
+    protected abstract Class<T> getChildrenElementType();
     
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
@@ -87,9 +126,9 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         super.receiveToChildren(visitor);
         if (this.children != null)
         {
-            for (Node node : this.children)
+            for (NodeUnion<?> nodeUnion : this.children)
             {
-                node.receive(visitor);
+                nodeUnion.getNodeValue().receive(visitor);
             }
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
@@ -115,9 +154,9 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         super.receiveTypedToChildren(visitor);
         if (this.children != null)
         {
-            for (Node node : this.children)
+            for (NodeUnion<?> nodeUnion : this.children)
             {
-                node.receiveTyped(visitor);
+                nodeUnion.getNodeValue().receiveTyped(visitor);
             }
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
@@ -168,7 +207,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -193,15 +232,16 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		list.addAll(this.children);
 		return list;
 	}
-	
+
 	/** The backing node list. */
 	private NodeList<T> nodeList;
-	
+
 	/**
 	 * Retrieves the list to use for this node's list interface.
+	 * 
 	 * @param children The children which should populate that list initially.
 	 */
-	private List<T> getChildrenList(List<T> children)
+	private List<NodeUnion<? extends T>> getChildrenList(List<NodeUnion<? extends T>> children)
 	{
 		this.nodeList = new NodeListImpl<T>(getManager(), this, getAlwaysOrdered(), children);
 		return new NodeListAdapter<T>(nodeList);
@@ -210,188 +250,260 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 	@Override
 	public void add(int index, T element)
 	{
-		this.children.add(index, element);
+		getChildren().add(index, element);
 	}
 
 	@Override
 	public boolean add(T e)
 	{
-		return this.children.add(e);
+		return getChildren().add(e);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c)
 	{
-		return this.children.addAll(c);
+		return getChildren().addAll(c);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c)
 	{
-		return this.children.addAll(index, c);
+		return getChildren().addAll(index, c);
 	}
 
 	@Override
 	public void clear()
 	{
-		this.children.clear();
+		getChildren().clear();
 	}
 
 	@Override
 	public boolean contains(Object o)
 	{
-		return this.children.contains(o);
+		return getChildren().contains(o);
 	}
 
 	@Override
 	public boolean containsAll(Collection<?> c)
 	{
-		return this.children.containsAll(c);
+		return getChildren().containsAll(c);
 	}
 
 	@Override
 	public T get(int index)
 	{
-		return this.children.get(index);
+		return getChildren().get(index);
 	}
 
 	@Override
 	public int indexOf(Object o)
 	{
-		return this.children.indexOf(o);
+		return getChildren().indexOf(o);
 	}
 
 	@Override
 	public boolean isEmpty()
 	{
-		return this.children.isEmpty();
+		return getChildren().isEmpty();
 	}
 
 	@Override
 	public Iterator<T> iterator()
 	{
-		return this.children.iterator();
+		return getChildren().iterator();
 	}
 
 	@Override
 	public int lastIndexOf(Object o)
 	{
-		return this.children.lastIndexOf(o);
+		return getChildren().lastIndexOf(o);
 	}
 
 	@Override
 	public ListIterator<T> listIterator()
 	{
-		return this.children.listIterator();
+		return getChildren().listIterator();
 	}
 
 	@Override
 	public ListIterator<T> listIterator(int index)
 	{
-		return this.children.listIterator(index);
+		return getChildren().listIterator(index);
 	}
 
 	@Override
 	public T remove(int index)
 	{
-		return this.children.remove(index);
+		return getChildren().remove(index);
 	}
 
 	@Override
 	public boolean remove(Object o)
 	{
-		return this.children.remove(o);
+		return getChildren().remove(o);
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c)
 	{
-		return this.children.removeAll(c);
+		return getChildren().removeAll(c);
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c)
 	{
-		return this.children.retainAll(c);
+		return getChildren().retainAll(c);
 	}
 
 	@Override
 	public T set(int index, T element)
 	{
-		return this.children.set(index, element);
+		return getChildren().set(index, element);
 	}
 
 	@Override
 	public int size()
 	{
-		return this.children.size();
+		return getChildren().size();
 	}
 
 	@Override
 	public List<T> subList(int fromIndex, int toIndex)
 	{
-		return this.children.subList(fromIndex, toIndex);
+		return getChildren().subList(fromIndex, toIndex);
 	}
 
 	@Override
 	public Object[] toArray()
 	{
-		return this.children.toArray();
+		return getChildren().toArray();
 	}
 
 	@Override
 	public <E> E[] toArray(E[] a)
 	{
-		return this.children.<E> toArray(a);
+		return getChildren().<E> toArray(a);
 	}
 
+	@Override
 	public void addFirst(T node)
 	{
 		this.nodeList.addFirst(node);
 	}
 
+	@Override
 	public void addLast(T node)
 	{
 		this.nodeList.addLast(node);
 	}
 
+	@Override
 	public void addBefore(T member, T node) throws IllegalArgumentException
 	{
-		this.nodeList.addBefore(member,node);
+		this.nodeList.addBefore(member, node);
 	}
 
+	@Override
 	public void addAfter(T member, T node) throws IllegalArgumentException
 	{
-		this.nodeList.addAfter(member,node);
+		this.nodeList.addAfter(member, node);
 	}
 
+	@Override
 	public boolean remove(T node)
 	{
 		return this.nodeList.remove(node);
 	}
-	
+
+	@Override
 	public T getFirst()
 	{
 		return this.nodeList.getFirst();
 	}
 
+	@Override
 	public T getLast()
 	{
 		return this.nodeList.getLast();
 	}
 
+	@Override
 	public T getBefore(T member) throws IllegalArgumentException
 	{
 		return this.nodeList.getBefore(member);
 	}
 
+	@Override
 	public T getAfter(T member) throws IllegalArgumentException
 	{
 		return this.nodeList.getAfter(member);
 	}
 
+	@Override
 	public Set<T> filter(NodeFilter<? super T> filter)
 	{
 		return this.nodeList.filter(filter);
+	}
+
+	@Override
+	public void addFirstUnion(NodeUnion<? extends T> node)
+	{
+		this.nodeList.addFirstUnion(node);
+	}
+
+	@Override
+	public void addLastUnion(NodeUnion<? extends T> node)
+	{
+		this.nodeList.addLastUnion(node);
+	}
+
+	@Override
+	public void addBeforeUnion(NodeUnion<? extends T> member, NodeUnion<? extends T> node)
+			throws MetaprogramListMissingElementException
+	{
+		this.nodeList.addBeforeUnion(member, node);
+	}
+
+	@Override
+	public void addAfterUnion(NodeUnion<? extends T> member, NodeUnion<? extends T> node)
+			throws MetaprogramListMissingElementException
+	{
+		this.nodeList.addAfterUnion(member, node);
+	}
+
+	@Override
+	public boolean removeUnion(NodeUnion<? extends T> node)
+	{
+		return this.nodeList.removeUnion(node);
+	}
+
+	@Override
+	public NodeUnion<? extends T> getFirstUnion()
+	{
+		return this.nodeList.getFirstUnion();
+	}
+
+	@Override
+	public NodeUnion<? extends T> getLastUnion()
+	{
+		return this.nodeList.getLastUnion();
+	}
+
+	@Override
+	public NodeUnion<? extends T> getBeforeUnion(NodeUnion<? extends T> member)
+	{
+		return this.nodeList.getBeforeUnion(member);
+	}
+
+	@Override
+	public NodeUnion<? extends T> getAfterUnion(NodeUnion<? extends T> member)
+	{
+		return this.nodeList.getAfterUnion(member);
+	}
+
+	@Override
+	public Set<NodeUnion<? extends T>> filterUnions(NodeUnionFilter<? super T> filter)
+	{
+		return this.nodeList.filterUnions(filter);
 	}
 }

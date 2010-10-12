@@ -143,7 +143,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         
         if (preamble == null)
         {
-            throw new NullPointerException("Node union for property preamble cannot be null.");
+            preamble = new NormalNodeUnion<MetaprogramPreambleNode>(null);
         }
         if (this.preamble != null)
         {
@@ -230,7 +230,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.body != null)
         {
@@ -441,7 +441,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForBody().getType());
         }
-        return factory.makeMetaprogramNode(
+        return factory.makeMetaprogramNodeWithUnions(
                 preambleCopy,
                 bodyCopy,
                 getStartLocation(),
@@ -459,12 +459,12 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getPreamble()) && (after instanceof MetaprogramPreambleNode))
+        if (before.equals(this.getUnionForPreamble().getNodeValue()))
         {
             setPreamble((MetaprogramPreambleNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((BlockStatementListNode)after);
             return true;

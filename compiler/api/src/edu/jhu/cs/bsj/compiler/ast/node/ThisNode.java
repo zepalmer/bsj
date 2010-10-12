@@ -33,7 +33,7 @@ public interface ThisNode extends Node, RestrictedPrimaryExpressionNode
      * @return The qualifying type.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public UnparameterizedTypeNode getType() throws ClassCastException;
+    public UnparameterizedTypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the qualifying type.

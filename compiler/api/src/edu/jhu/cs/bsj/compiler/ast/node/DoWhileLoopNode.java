@@ -19,7 +19,7 @@ public interface DoWhileLoopNode extends Node, StatementNode
      * @return The loop's condition.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getCondition() throws ClassCastException;
+    public ExpressionNode getCondition()throws ClassCastException;
     
     /**
      * Gets the union object for the loop's condition.
@@ -48,7 +48,7 @@ public interface DoWhileLoopNode extends Node, StatementNode
      * @return The loop's statement.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementNode getStatement() throws ClassCastException;
+    public StatementNode getStatement()throws ClassCastException;
     
     /**
      * Gets the union object for the loop's statement.

@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.tool.typechecker;
 
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
 
 /**
@@ -13,5 +13,5 @@ public interface RawCodeLiteralParseResult
 	 * Retrieves the selection bag of values obtained from parsing the raw code literal.
 	 * @return The selection bag produced from the code literal.
 	 */
-	public SelectionBag<Node> getSelectionBag();
+	public SelectionBag<NodeUnion<?>> getSelectionBag();
 }

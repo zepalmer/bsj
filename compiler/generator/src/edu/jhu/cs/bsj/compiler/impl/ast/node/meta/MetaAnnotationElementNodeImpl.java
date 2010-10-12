@@ -143,7 +143,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -230,7 +230,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
         
         if (value == null)
         {
-            throw new NullPointerException("Node union for property value cannot be null.");
+            value = new NormalNodeUnion<MetaAnnotationValueNode>(null);
         }
         if (this.value != null)
         {
@@ -441,7 +441,7 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForValue().getType());
         }
-        return factory.makeMetaAnnotationElementNode(
+        return factory.makeMetaAnnotationElementNodeWithUnions(
                 identifierCopy,
                 valueCopy,
                 getStartLocation(),
@@ -459,12 +459,12 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getValue()) && (after instanceof MetaAnnotationValueNode))
+        if (before.equals(this.getUnionForValue().getNodeValue()))
         {
             setValue((MetaAnnotationValueNode)after);
             return true;

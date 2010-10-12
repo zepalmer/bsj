@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
@@ -22,7 +23,7 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
 {
     /** General constructor. */
     public ClassMemberListNodeImpl(
-            List<ClassMemberNode> children,
+            List<NodeUnion<? extends ClassMemberNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
     public boolean getAlwaysOrdered()
     {
         return false;
+    }
+    
+    protected Class<ClassMemberNode> getChildrenElementType()
+    {
+        return ClassMemberNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
     @Override
     public ClassMemberListNode deepCopy(BsjNodeFactory factory)
     {
-        List<ClassMemberNode> childrenCopy = new ArrayList<ClassMemberNode>(getChildren().size());
-        for (ClassMemberNode element : getChildren())
+        List<NodeUnion<? extends ClassMemberNode>> childrenCopy = new ArrayList<NodeUnion<? extends ClassMemberNode>>(getChildren().size());
+        for (NodeUnion<? extends ClassMemberNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends ClassMemberNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeClassMemberListNode(
+        return factory.makeClassMemberListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

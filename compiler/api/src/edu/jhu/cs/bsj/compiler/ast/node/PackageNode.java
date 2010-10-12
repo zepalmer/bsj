@@ -24,7 +24,7 @@ public interface PackageNode extends Node
      * @return The simple name of this package.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getName() throws ClassCastException;
+    public IdentifierNode getName()throws ClassCastException;
     
     /**
      * Gets the union object for the simple name of this package.

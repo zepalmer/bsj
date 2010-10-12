@@ -167,7 +167,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         
         if (imports == null)
         {
-            throw new NullPointerException("Node union for property imports cannot be null.");
+            imports = new NormalNodeUnion<MetaprogramImportListNode>(null);
         }
         if (this.imports != null)
         {
@@ -316,7 +316,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         
         if (targets == null)
         {
-            throw new NullPointerException("Node union for property targets cannot be null.");
+            targets = new NormalNodeUnion<MetaprogramTargetListNode>(null);
         }
         if (this.targets != null)
         {
@@ -403,7 +403,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         
         if (dependencies == null)
         {
-            throw new NullPointerException("Node union for property dependencies cannot be null.");
+            dependencies = new NormalNodeUnion<MetaprogramDependencyDeclarationListNode>(null);
         }
         if (this.dependencies != null)
         {
@@ -658,7 +658,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForDependencies().getType());
         }
-        return factory.makeMetaprogramPreambleNode(
+        return factory.makeMetaprogramPreambleNodeWithUnions(
                 importsCopy,
                 getLocalMode(),
                 getPackageMode(),
@@ -679,17 +679,17 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getImports()) && (after instanceof MetaprogramImportListNode))
+        if (before.equals(this.getUnionForImports().getNodeValue()))
         {
             setImports((MetaprogramImportListNode)after);
             return true;
         }
-        if (before.equals(this.getTargets()) && (after instanceof MetaprogramTargetListNode))
+        if (before.equals(this.getUnionForTargets().getNodeValue()))
         {
             setTargets((MetaprogramTargetListNode)after);
             return true;
         }
-        if (before.equals(this.getDependencies()) && (after instanceof MetaprogramDependencyDeclarationListNode))
+        if (before.equals(this.getUnionForDependencies().getNodeValue()))
         {
             setDependencies((MetaprogramDependencyDeclarationListNode)after);
             return true;

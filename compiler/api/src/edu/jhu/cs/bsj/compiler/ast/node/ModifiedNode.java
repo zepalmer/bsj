@@ -16,7 +16,7 @@ public interface ModifiedNode<T extends ModifiersNode> extends Node
      * @return The modifiers which apply to this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public T getModifiers() throws ClassCastException;
+    public T getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers which apply to this node.

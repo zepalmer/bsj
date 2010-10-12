@@ -142,7 +142,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -229,7 +229,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         
         if (statements == null)
         {
-            throw new NullPointerException("Node union for property statements cannot be null.");
+            statements = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.statements != null)
         {
@@ -440,7 +440,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForStatements().getType());
         }
-        return factory.makeCaseNode(
+        return factory.makeCaseNodeWithUnions(
                 expressionCopy,
                 statementsCopy,
                 getStartLocation(),
@@ -458,12 +458,12 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getStatements()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForStatements().getNodeValue()))
         {
             setStatements((BlockStatementListNode)after);
             return true;

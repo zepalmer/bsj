@@ -158,7 +158,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         
         if (variable == null)
         {
-            throw new NullPointerException("Node union for property variable cannot be null.");
+            variable = new NormalNodeUnion<VariableNode>(null);
         }
         if (this.variable != null)
         {
@@ -245,7 +245,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -332,7 +332,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         
         if (statement == null)
         {
-            throw new NullPointerException("Node union for property statement cannot be null.");
+            statement = new NormalNodeUnion<StatementNode>(null);
         }
         if (this.statement != null)
         {
@@ -419,7 +419,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -703,7 +703,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeEnhancedForLoopNode(
+        return factory.makeEnhancedForLoopNodeWithUnions(
                 variableCopy,
                 expressionCopy,
                 statementCopy,
@@ -723,22 +723,22 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getVariable()) && (after instanceof VariableNode))
+        if (before.equals(this.getUnionForVariable().getNodeValue()))
         {
             setVariable((VariableNode)after);
             return true;
         }
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getStatement()) && (after instanceof StatementNode))
+        if (before.equals(this.getUnionForStatement().getNodeValue()))
         {
             setStatement((StatementNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

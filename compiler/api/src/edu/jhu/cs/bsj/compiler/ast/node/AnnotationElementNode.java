@@ -19,7 +19,7 @@ public interface AnnotationElementNode extends Node
      * @return The identifier.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier.
@@ -48,7 +48,7 @@ public interface AnnotationElementNode extends Node
      * @return The element's value.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationValueNode getValue() throws ClassCastException;
+    public AnnotationValueNode getValue()throws ClassCastException;
     
     /**
      * Gets the union object for the element's value.

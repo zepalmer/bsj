@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListNode;
@@ -22,7 +23,7 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
 {
     /** General constructor. */
     public EnumConstantDeclarationListNodeImpl(
-            List<EnumConstantDeclarationNode> children,
+            List<NodeUnion<? extends EnumConstantDeclarationNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
     public boolean getAlwaysOrdered()
     {
         return true;
+    }
+    
+    protected Class<EnumConstantDeclarationNode> getChildrenElementType()
+    {
+        return EnumConstantDeclarationNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
     @Override
     public EnumConstantDeclarationListNode deepCopy(BsjNodeFactory factory)
     {
-        List<EnumConstantDeclarationNode> childrenCopy = new ArrayList<EnumConstantDeclarationNode>(getChildren().size());
-        for (EnumConstantDeclarationNode element : getChildren())
+        List<NodeUnion<? extends EnumConstantDeclarationNode>> childrenCopy = new ArrayList<NodeUnion<? extends EnumConstantDeclarationNode>>(getChildren().size());
+        for (NodeUnion<? extends EnumConstantDeclarationNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends EnumConstantDeclarationNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeEnumConstantDeclarationListNode(
+        return factory.makeEnumConstantDeclarationListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

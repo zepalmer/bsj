@@ -25,6 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterable;
 import edu.jhu.cs.bsj.compiler.impl.utils.ConcatenatingIterable;
 import edu.jhu.cs.bsj.compiler.impl.utils.MapBuilder;
 import edu.jhu.cs.bsj.compiler.impl.utils.NullOutputStream;
@@ -89,10 +90,10 @@ public class SourceGenerator
 			Arrays.<String> asList()));
 
 	/* @formatter:off */
-	/**
-	 * A comment which is inserted into generated files to warn developers of their status.
-	 */
-	private static final String GENERATION_COMMENT =
+    /**
+     * A comment which is inserted into generated files to warn developers of their status.
+     */
+    private static final String GENERATION_COMMENT =
         "WARNING: THIS FILE IS GENERATED.  Do not make any changes to this file\n" +
         "directly; it was generated from the BSJ source generator project.  If changes\n" +
         "are necessary, changes must be applied either to the source generator\n" +
@@ -418,13 +419,7 @@ public class SourceGenerator
 					}
 					first = false;
 
-					if (nodeUnionTypes && p.isWrappable())
-					{
-						ps.print("NodeUnion<? extends " + p.getFullType() + ">");
-					} else
-					{
-						ps.print(p.getFullType());
-					}
+					ps.print(nodeUnionTypes ? p.getWrappedType() : p.getFullType());
 					ps.print(" " + p.getName());
 				}
 			}
@@ -635,18 +630,24 @@ public class SourceGenerator
 						ps.println("/**");
 						ps.println(" * Gets " + p.getDescription() + ".");
 						ps.println(" * @return " + capFirst(p.getDescription()) + ".");
-						ps.println(" * @throws ClassCastException If the value of this property is a special node.");
+						if (p.isNodeType())
+						{
+							ps.println(" * @throws ClassCastException If the value of this property is a special node.");
+						}
 						ps.println(" */");
-						ps.println("public " + p.getFullType() + " get" + capFirst(p.getName())
-								+ "() throws ClassCastException;");
+						ps.print("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
+						if (p.isNodeType())
+						{
+							ps.print("throws ClassCastException");
+						}
+						ps.println(";"); // one for the method line, the next for the whitespace
 						ps.println();
 
 						ps.println("/**");
 						ps.println(" * Gets the union object for " + p.getDescription() + ".");
 						ps.println(" * @return A union object representing " + capFirst(p.getDescription()) + ".");
 						ps.println(" */");
-						ps.println("public NodeUnion<? extends " + p.getFullType() + "> getUnionFor"
-								+ capFirst(p.getName()) + "();");
+						ps.println("public " + p.getWrappedType() + " getUnionFor" + capFirst(p.getName()) + "();");
 						ps.println();
 					} else
 					{
@@ -1125,12 +1126,35 @@ public class SourceGenerator
 					@Override
 					public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 					{
-						ps.println(p.getFullType() + " " + p.getName() + "Copy = new Array" + p.getFullType() + "(get"
-								+ capFirst(p.getName()) + "().size());");
-						ps.println("for (" + p.getTypeArg() + " element : get" + capFirst(p.getName()) + "())");
+						ps.println(p.getWrappedType() + " " + p.getName() + "Copy = new Array" + p.getWrappedType()
+								+ "(get" + capFirst(p.getName()) + "().size());");
+						String elementType = (p.isWrappable() ? ("NodeUnion<? extends " + p.getTypeArg() + ">")
+								: p.getTypeArg());
+						String getterName = "get" + (p.isWrappable() ? "UnionFor" : "") + capFirst(p.getName());
+						ps.println("for (" + elementType + " element : " + getterName + "())");
 						ps.println("{");
 						ps.incPrependCount();
-						ps.println(p.getName() + "Copy.add(element.deepCopy(factory));");
+						if (p.isWrappable())
+						{
+							ps.println(elementType + " elementCopy;");
+							for (int i = 0; i < UNION_TYPE_COMPONENTS.length; i++)
+							{
+								final String typeComponent = UNION_TYPE_COMPONENTS[i];
+								if (i > 0)
+								{
+									ps.print("else ");
+								}
+								ps.println("if (element.getType().equals(NodeUnion.Type." + typeComponent.toUpperCase()
+										+ "))");
+								ps.println("    elementCopy = factory.make" + typeComponent + "NodeUnion(element.get"
+										+ typeComponent + "Node().deepCopy(factory));");
+							}
+							ps.println("else throw new IllegalStateException(\"Unrecognized union type: \" + element.getType());");
+							ps.println(p.getName() + "Copy.add(elementCopy);");
+						} else
+						{
+							ps.println(p.getName() + "Copy.add(element.deepCopy(factory));");
+						}
 						ps.decPrependCount();
 						ps.println("}");
 						ps.println();
@@ -1175,7 +1199,14 @@ public class SourceGenerator
 					}
 				}, p, ps, def);
 			}
-			ps.println("return factory.make" + def.getBaseName() + "(");
+
+			boolean hasUnions = false;
+			for (ModalPropertyDefinition<?> p : recProps)
+			{
+				hasUnions |= p.isWrappable();
+			}
+
+			ps.println("return factory.make" + def.getBaseName() + (hasUnions ? "WithUnions" : "") + "(");
 			ps.incPrependCount(2);
 			boolean first = true;
 			for (ModalPropertyDefinition<?> p : recProps)
@@ -1302,13 +1333,7 @@ public class SourceGenerator
 			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
 			{
 				ps.println("/** " + capFirst(p.getDescription()) + ". */");
-				if (p.isWrappable())
-				{
-					ps.println("private NodeUnion<? extends " + p.getFullType() + "> " + p.getName() + ";");
-				} else
-				{
-					ps.println("private " + p.getFullType() + " " + p.getName() + ";");
-				}
+				ps.println("private " + p.getWrappedType() + " " + p.getName() + ";");
 				ps.println();
 			}
 
@@ -1413,7 +1438,7 @@ public class SourceGenerator
 			{
 				if (!p.isHide())
 				{
-					if (p.isWrappable())
+					if (p.isWrappable() && p.isNodeType())
 					{
 						ps.println("/**");
 						ps.println(" * Gets " + p.getDescription()
@@ -1457,6 +1482,63 @@ public class SourceGenerator
 						ps.decPrependCount();
 						ps.println("}");
 						ps.println();
+					} else if (p.isWrappable() && p.isNodeListType())
+					{
+						ps.println("/**");
+						ps.println(" * Gets " + p.getDescription()
+								+ ".  This property's value is assumed to be a list of normal nodes.");
+						ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+						ps.println(" */");
+						ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
+						ps.println("{");
+						ps.incPrependCount();
+						ps.println("getAttribute(LocalAttribute."
+								+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
+								+ ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+						ps.println("if (this." + p.getName() + " == null)");
+						ps.println("{");
+						ps.println("    return null;");
+						ps.println("} else");
+						ps.println("{");
+						ps.incPrependCount();
+						ps.println("return new ConversionList<T, NodeUnion<? extends T>>(this." + p.getName() + ", get"
+								+ capFirst(p.getName()) + "ElementType(),");
+						ps.incPrependCount(2);
+						ps.println("new Converter<T, NodeUnion<? extends T>>()");
+						ps.println("{");
+						ps.println("    @Override");
+						ps.println("    public NodeUnion<? extends T> convert(T t)");
+						ps.println("    {");
+						ps.println("        return new NormalNodeUnion<T>(t);");
+						ps.println("    }");
+						ps.println("}, new Converter<NodeUnion<? extends T>, T>()");
+						ps.println("{");
+						ps.println("    @Override");
+						ps.println("    public T convert(NodeUnion<? extends T> t)");
+						ps.println("    {");
+						ps.println("        return t.getNormalNode();");
+						ps.println("    }");
+						ps.println("});");
+						ps.decPrependCount(3);
+						ps.println("}");
+						ps.decPrependCount();
+						ps.println("}");
+						ps.println();
+
+						ps.println("/**");
+						ps.println(" * Gets " + p.getDescription() + ".");
+						ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+						ps.println(" */");
+						ps.println("public " + p.getWrappedType() + " getUnionFor" + capFirst(p.getName()) + "()");
+						ps.println("{");
+						ps.incPrependCount();
+						ps.println("getAttribute(LocalAttribute."
+								+ StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
+								+ ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+						ps.println("return this." + p.getName() + ";");
+						ps.decPrependCount();
+						ps.println("}");
+						ps.println();
 					} else
 					{
 						ps.println("/**");
@@ -1476,14 +1558,14 @@ public class SourceGenerator
 					if (!p.isReadOnly())
 					{
 						// @formatter:off
-						final String checkPermissionsStanza = "if (checkPermissions)\n" +
-							"{\n" +
-							"    getManager().assertMutatable(this);\n" +
-							"    getAttribute(LocalAttribute." +
-								StringUtilities.convertCamelCaseToUpperCase(p.getName()) +
-								").recordAccess(ReadWriteAttribute.AccessType.WRITE);\n" +
-							"}\n";
-						// @formatter:on
+                        final String checkPermissionsStanza = "if (checkPermissions)\n" +
+                            "{\n" +
+                            "    getManager().assertMutatable(this);\n" +
+                            "    getAttribute(LocalAttribute." +
+                                StringUtilities.convertCamelCaseToUpperCase(p.getName()) +
+                                ").recordAccess(ReadWriteAttribute.AccessType.WRITE);\n" +
+                            "}\n";
+                        // @formatter:on
 
 						ps.println("/**");
 						ps.println(" * Changes " + p.getDescription() + ".");
@@ -1548,8 +1630,7 @@ public class SourceGenerator
 							ps.println(checkPermissionsStanza);
 							ps.println("if (" + p.getName() + " == null)");
 							ps.println("{");
-							ps.println("    throw new NullPointerException(\"Node union for property " + p.getName()
-									+ " cannot be null.\");");
+							ps.println("    " + p.getName() + " = new NormalNodeUnion<" + p.getFullType() + ">(null);");
 							ps.println("}");
 							ps.println("if (this." + p.getName() + " != null)");
 							ps.println("{");
@@ -1562,6 +1643,27 @@ public class SourceGenerator
 							ps.println();
 						}
 					}
+				}
+			}
+
+			// add getter and setter support methods from concrete classes
+			for (ModalPropertyDefinition<?> p : def.getRecursiveProperties())
+			{
+				if (p.isWrappable() && p.isNodeListType())
+				{
+					if (def.getMode().equals(TypeDefinition.Mode.CONCRETE))
+					{
+						ps.println("protected Class<" + p.getTypeArg() + "> get" + capFirst(p.getName())
+								+ "ElementType()");
+						ps.println("{");
+						ps.println("    return " + p.getTypeArg() + ".class;");
+						ps.println("}");
+					} else
+					{
+						ps.println("protected abstract Class<" + p.getTypeArg() + "> get" + capFirst(p.getName())
+								+ "ElementType();");
+					}
+					ps.println();
 				}
 			}
 
@@ -1588,10 +1690,25 @@ public class SourceGenerator
 			{
 				if (p.isWrappable())
 				{
-					ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
-					ps.println("{");
-					ps.println("    this." + p.getName() + ".getNodeValue().receive(visitor);");
-					ps.println("}");
+					if (p.isNodeType())
+					{
+						ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
+						ps.println("{");
+						ps.println("    this." + p.getName() + ".getNodeValue().receive(visitor);");
+						ps.println("}");
+					} else if (p.isNodeListType())
+					{
+						ps.println("if (this." + p.getName() + " != null)");
+						ps.println("{");
+						ps.println("    for (NodeUnion<?> nodeUnion : this." + p.getName() + ")");
+						ps.println("    {");
+						ps.println("        nodeUnion.getNodeValue().receive(visitor);");
+						ps.println("    }");
+						ps.println("}");
+					} else
+					{
+						throw new IllegalStateException("Not implemented - now what?");
+					}
 				} else if (p.isNodeType())
 				{
 					ps.println("if (this." + p.getName() + " != null)");
@@ -1648,10 +1765,25 @@ public class SourceGenerator
 			{
 				if (p.isWrappable())
 				{
-					ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
-					ps.println("{");
-					ps.println("    this." + p.getName() + ".getNodeValue().receiveTyped(visitor);");
-					ps.println("}");
+					if (p.isNodeType())
+					{
+						ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
+						ps.println("{");
+						ps.println("    this." + p.getName() + ".getNodeValue().receiveTyped(visitor);");
+						ps.println("}");
+					} else if (p.isNodeListType())
+					{
+						ps.println("if (this." + p.getName() + " != null)");
+						ps.println("{");
+						ps.println("    for (NodeUnion<?> nodeUnion : this." + p.getName() + ")");
+						ps.println("    {");
+						ps.println("        nodeUnion.getNodeValue().receiveTyped(visitor);");
+						ps.println("    }");
+						ps.println("}");
+					} else
+					{
+						throw new IllegalStateException("Don't know how to handle this property: " + p);
+					}
 				} else if (p.isNodeType())
 				{
 					ps.println("if (this." + p.getName() + " != null)");
@@ -1897,11 +2029,16 @@ public class SourceGenerator
 					}
 					String capName = Character.toUpperCase(p.getName().charAt(0)) + p.getName().substring(1);
 					ps.println("    sb.append(\"" + p.getName() + "=\");");
-					if (p.isWrappable())
+					if (p.isWrappable() && p.isNodeType())
 					{
 						ps.println("    sb.append(this.getUnionFor" + capName
 								+ "().getNodeValue() == null? \"null\" : this.getUnionFor" + capName
 								+ "().getNodeValue().getClass().getSimpleName());");
+					} else if (p.isWrappable() && p.isNodeListType())
+					{
+						ps.println("    sb.append(this.getUnionFor" + capName
+								+ "() == null? \"null\" : this.getUnionFor" + capName
+								+ "().getClass().getSimpleName());");
 					} else if (p.isNodeType())
 					{
 						ps.println("    sb.append(this.get" + capName + "() == null? \"null\" : this.get" + capName
@@ -1995,8 +2132,7 @@ public class SourceGenerator
 							throw new IllegalStateException(
 									"Don't know how to handle replacement for parameterized node type "
 											+ p.getBaseType() + "!");
-						ps.println("if (before.equals(this.get" + capFirst(p.getName()) + "()) && (after instanceof "
-								+ p.getBaseType() + "))");
+						ps.println("if (before.equals(this.getUnionFor" + capFirst(p.getName()) + "().getNodeValue()))");
 						ps.println("{");
 						ps.println("    set" + capFirst(p.getName()) + "((" + p.getFullType() + ")after);");
 						ps.println("    return true;");
@@ -2411,22 +2547,26 @@ public class SourceGenerator
 				ps.incPrependCount();
 			}
 
-			if (allowVerbatim)
-			{
-				handleFactoryMethodSet(ips, cps, dps, def, methodDefinition, skipMake, typeName, typeArg, typeParamS,
-						factoryOverrideMap, recProps, argProps, true);
-			}
-
-			// Write a convenience method for nodes which contain only normal children?
+			// Determine if a wrapped node child exists
 			boolean hasWrappedNodeChild = false;
 			for (PropertyDefinition p : argProps)
 			{
 				hasWrappedNodeChild |= p.isWrappable();
 			}
+
+			// If this call permits, write a method using wrapped nodes
+			// If no children are wrappable, this amounts to the most fundamental call
+			if (allowVerbatim)
+			{
+				handleFactoryMethodSet(ips, cps, dps, def, methodDefinition, skipMake, typeName, typeArg, typeParamS,
+						factoryOverrideMap, recProps, argProps, true, hasWrappedNodeChild);
+			}
+
+			// Write a convenience method for nodes which contain only normal children?
 			if (hasWrappedNodeChild || !allowVerbatim)
 			{
 				handleFactoryMethodSet(ips, cps, dps, def, methodDefinition, skipMake, typeName, typeArg, typeParamS,
-						factoryOverrideMap, recProps, argProps, false);
+						factoryOverrideMap, recProps, argProps, false, false);
 			}
 
 			// Special ListNode constructor
@@ -2512,7 +2652,7 @@ public class SourceGenerator
 				PrependablePrintStream dps, TypeDefinition def, FactoryMethodDefinition methodDefinition,
 				boolean skipMake, String typeName, String typeArg, String typeParamS,
 				Map<String, String> factoryOverrideMap, List<PropertyDefinition> recProps,
-				List<PropertyDefinition> argProps, boolean nodeUnionType)
+				List<PropertyDefinition> argProps, boolean nodeUnionType, boolean useUnionName)
 		{
 			// Write documentation
 			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
@@ -2529,15 +2669,17 @@ public class SourceGenerator
 				ps.println(" */");
 			}
 
+			final String methodName = "make" + def.getBaseName() + (nodeUnionType && useUnionName ? "WithUnions" : "");
+
 			// Write interface method description
-			ips.print("public " + typeParamS + typeName + " make" + def.getBaseName());
+			ips.print("public " + typeParamS + typeName + " " + methodName);
 			printParameterList(ips, argProps, skipMake, nodeUnionType);
 			ips.println(";");
 			ips.println();
 
 			// Write backing class implementation
 			cps.println("@Override");
-			cps.print("public " + typeParamS + typeName + " make" + def.getBaseName());
+			cps.print("public " + typeParamS + typeName + " " + methodName);
 			printParameterList(cps, argProps, skipMake, nodeUnionType);
 			cps.println();
 			cps.println("{");
@@ -2553,13 +2695,13 @@ public class SourceGenerator
 
 			// Write decorator implementation
 			dps.println("@Override");
-			dps.print("public " + typeParamS + typeName + " make" + def.getBaseName());
+			dps.print("public " + typeParamS + typeName + " " + methodName);
 			printParameterList(dps, argProps, skipMake, nodeUnionType);
 			dps.println();
 			dps.println("{");
 			dps.incPrependCount();
 			dps.println("this.before();");
-			dps.print(typeName + " node = factory.make" + def.getBaseName());
+			dps.print(typeName + " node = factory." + methodName);
 			printArgumentList(dps, argProps, skipMake);
 			dps.println(";");
 			dps.println("this.after(node);");
@@ -2608,10 +2750,20 @@ public class SourceGenerator
 							+ def.getBaseName() + " with no default.");
 				}
 				if (needToWrapExpression)
-					ps.print("this.<" + p.getFullType() + ">makeNormalNodeUnion(");
+				{
+					if (p.isNodeListType())
+					{
+						ps.print("unionWrapList(");
+					} else
+					{
+						ps.print("this.<" + p.getFullType() + ">makeNormalNodeUnion(");
+					}
+				}
 				ps.print(expressionText);
 				if (needToWrapExpression)
+				{
 					ps.print(")");
+				}
 			}
 			ps.print(")");
 		}
@@ -2742,81 +2894,81 @@ public class SourceGenerator
 				String suffix = strings.suffix;
 
 				// @formatter:off
-				String bsjNodeOperationHeader =
-					"/**\n" +
-					" * This interface specifies an operation to be carried out on a node.  The purpose of this\n" +
-					" * mechanism is effectively to allow the addition of operations to the node hierarchy\n"+
-					" * requiring that the hierarchy itself be modified.  Note that while this interface is\n"+
-					" * similar to that of the visitor pattern (see {@link BsjNodeVisitor}), it does not function\n"+
-					" * the same way.  This mechanism does not abstract node traversal; the implementation is\n"+
-					" * required to do that itself if it wishes to walk the tree.\n"+
-					" *\n";
-				for (int i=1;i<=argCount;i++)
-				{
-					bsjNodeOperationHeader += 
-					" * @param <"+strings.getTypeParameterName(i)+"> A parameter type for all methods to accept.  If no return type is desired, use\n"+
-					" * {@link java.lang.Void}.\n";
-				}
-				bsjNodeOperationHeader +=
-					" * @param <R> A return type for all methods to return.  If no return type is desired, use\n"+
-					" * {@link java.lang.Void}.\n"+
-					" *\n"+
-					" * @author Zachary Palmer\n"+
-					" */\n";
-				
-				String bsjNoOpNodeOperationHeader =
-					"/**\n" +
-					" * This implementation of the BSJ node operation implements every method with a no-op.\n" +
-					" *\n" +
-					" * @author Zachary Palmer\n" +
-					" */\n";
-				
-				String bsjNodeOperationProxyHeader =
-					"/**\n" +
-					" * This implementation of the BSJ node operation decorates every method of a backing\n" +
-					" * operation with a uniform before and after call.  This permits allows proxying, adjusting\n" +
-					" * or logging the parameters and results of calls, or adaptation of the backing operation\n" +
-					" * to a different set of data types.  Note that only the first call is proxied; if the\n" +
-					" * backing operation calls itself, those calls are not intercepted.\n" +
-					" *\n";
-				for (int i=1;i<=argCount;i++)
-				{
-					bsjNodeOperationProxyHeader +=
-						" * @param <" + strings.getParameterName(i) + "Orig> A data parameter type for the original backing operation.\n";
-				}
-				bsjNodeOperationProxyHeader +=
-					" * @param <ROrig> The return type for the original backing operation.\n";
-				for (int i=1;i<=argCount;i++)
-				{
-					bsjNodeOperationProxyHeader +=
-						" * @param <" + strings.getParameterName(i) + "New> A data parameter type for the new decorated operation.\n";
-				}
-				bsjNodeOperationProxyHeader +=
-					" * @param <RNew> The return type for the decorated operation.\n" +
-					" *\n" +
-					" * @author Zachary Palmer\n" +
-					" */\n";
-				
-				String bsjDefaultNodeOperationHeader =
-					"/**\n" +
-					" * This implementation of the BSJ node operation implements every method with a call to a default operation method.  The\n" +
-					" * default operation method is left abstract for the overlying implementation.  This serves as a convenient mechanism\n" +
-					" * for handling most nodes with a default case but labeling some with special handling.  For instance, a node operation\n" +
-					" * which only recognizes a small subset of node types might use the default operation to raise a runtime exception.\n" +
-					" *\n" +
-					" * @author Zachary Palmer\n" +
-					" */\n";
-				
-				String javaNodeOperationHeader =
-					"/**\n" +
-					" * This implementation of the BSJ node operation implements methods which correspond to BSJ-specific node types with a\n" +
-					" * call to a default operation method. The default operation method is left abstract for the overlying implementation.\n" +
-					" * This serves as a convenient mechanism for operating over trees which should be pure Java ASTs; the default method may\n" +
-					" * raise an exception or perform other error reporting operations.\n" +
-					" *\n" + 
-					" * @author Zachary Palmer\n" +
-					" */\n";
-				// @formatter:on
+                String bsjNodeOperationHeader =
+                    "/**\n" +
+                    " * This interface specifies an operation to be carried out on a node.  The purpose of this\n" +
+                    " * mechanism is effectively to allow the addition of operations to the node hierarchy\n"+
+                    " * requiring that the hierarchy itself be modified.  Note that while this interface is\n"+
+                    " * similar to that of the visitor pattern (see {@link BsjNodeVisitor}), it does not function\n"+
+                    " * the same way.  This mechanism does not abstract node traversal; the implementation is\n"+
+                    " * required to do that itself if it wishes to walk the tree.\n"+
+                    " *\n";
+                for (int i=1;i<=argCount;i++)
+                {
+                    bsjNodeOperationHeader += 
+                    " * @param <"+strings.getTypeParameterName(i)+"> A parameter type for all methods to accept.  If no return type is desired, use\n"+
+                    " * {@link java.lang.Void}.\n";
+                }
+                bsjNodeOperationHeader +=
+                    " * @param <R> A return type for all methods to return.  If no return type is desired, use\n"+
+                    " * {@link java.lang.Void}.\n"+
+                    " *\n"+
+                    " * @author Zachary Palmer\n"+
+                    " */\n";
+                
+                String bsjNoOpNodeOperationHeader =
+                    "/**\n" +
+                    " * This implementation of the BSJ node operation implements every method with a no-op.\n" +
+                    " *\n" +
+                    " * @author Zachary Palmer\n" +
+                    " */\n";
+                
+                String bsjNodeOperationProxyHeader =
+                    "/**\n" +
+                    " * This implementation of the BSJ node operation decorates every method of a backing\n" +
+                    " * operation with a uniform before and after call.  This permits allows proxying, adjusting\n" +
+                    " * or logging the parameters and results of calls, or adaptation of the backing operation\n" +
+                    " * to a different set of data types.  Note that only the first call is proxied; if the\n" +
+                    " * backing operation calls itself, those calls are not intercepted.\n" +
+                    " *\n";
+                for (int i=1;i<=argCount;i++)
+                {
+                    bsjNodeOperationProxyHeader +=
+                        " * @param <" + strings.getParameterName(i) + "Orig> A data parameter type for the original backing operation.\n";
+                }
+                bsjNodeOperationProxyHeader +=
+                    " * @param <ROrig> The return type for the original backing operation.\n";
+                for (int i=1;i<=argCount;i++)
+                {
+                    bsjNodeOperationProxyHeader +=
+                        " * @param <" + strings.getParameterName(i) + "New> A data parameter type for the new decorated operation.\n";
+                }
+                bsjNodeOperationProxyHeader +=
+                    " * @param <RNew> The return type for the decorated operation.\n" +
+                    " *\n" +
+                    " * @author Zachary Palmer\n" +
+                    " */\n";
+                
+                String bsjDefaultNodeOperationHeader =
+                    "/**\n" +
+                    " * This implementation of the BSJ node operation implements every method with a call to a default operation method.  The\n" +
+                    " * default operation method is left abstract for the overlying implementation.  This serves as a convenient mechanism\n" +
+                    " * for handling most nodes with a default case but labeling some with special handling.  For instance, a node operation\n" +
+                    " * which only recognizes a small subset of node types might use the default operation to raise a runtime exception.\n" +
+                    " *\n" +
+                    " * @author Zachary Palmer\n" +
+                    " */\n";
+                
+                String javaNodeOperationHeader =
+                    "/**\n" +
+                    " * This implementation of the BSJ node operation implements methods which correspond to BSJ-specific node types with a\n" +
+                    " * call to a default operation method. The default operation method is left abstract for the overlying implementation.\n" +
+                    " * This serves as a convenient mechanism for operating over trees which should be pure Java ASTs; the default method may\n" +
+                    " * raise an exception or perform other error reporting operations.\n" +
+                    " *\n" + 
+                    " * @author Zachary Palmer\n" +
+                    " */\n";
+                // @formatter:on
 
 				PrependablePrintStream ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast",
 						TypeDefinition.Mode.INTERFACE, Project.API, SupplementCategory.GENERAL, "BsjNodeOperation"
@@ -3214,15 +3366,47 @@ public class SourceGenerator
 
 					public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 					{
-						String typeArg = p.getTypeArg();
 						ps.println("List<ExpressionNode> lift" + capFirst(p.getName())
 								+ "List = new ArrayList<ExpressionNode>();");
-						ps.println("for (" + typeArg + " listval : node.get" + capFirst(p.getName()) + "())");
+						final String listElementType;
+						final String getterName;
+						if (p.isWrappable())
+						{
+							listElementType = "NodeUnion<? extends " + p.getTypeArg() + ">";
+							getterName = "getUnionFor" + capFirst(p.getName());
+						} else
+						{
+							listElementType = p.getTypeArg();
+							getterName = "get" + capFirst(p.getName());
+						}
+						ps.println("for (" + listElementType + " listval : node." + getterName + "())");
 						ps.println("{");
-						ps.println("    lift" + capFirst(p.getName()) + "List.add(");
-						ps.println("            listval != null ? ");
-						ps.println("			        listval.executeOperation(this,factoryNode) :");
-						ps.println("                    null);");
+						ps.incPrependCount();
+						ps.println("lift" + capFirst(p.getName()) + "List.add(");
+						ps.incPrependCount(2);
+						ps.println("listval != null ? ");
+						ps.incPrependCount(2);
+						if (p.isWrappable())
+						{
+							ps.print("(");
+							for (String typeComponent : UNION_TYPE_COMPONENTS)
+							{
+								if (typeComponent.equals("Normal"))
+									continue;
+								ps.println("listval.getType() == NodeUnion.Type." + typeComponent.toUpperCase() + " ? ");
+								ps.incPrependCount(2);
+								ps.println("expressionize" + typeComponent + "NodeUnion(listval.get" + typeComponent
+										+ "Node(), factoryNode, \"" + p.getTypeArg() + "\") :");
+								ps.decPrependCount(2);
+							}
+							ps.println("expressionizeNormalNodeUnion(listval.getNormalNode(), factoryNode, \""
+									+ p.getTypeArg() + "\"))");
+						} else
+						{
+							ps.println("listval.executeOperation(this,factoryNode)");
+						}
+						ps.println(": factory.makeNullLiteralNode());");
+						ps.decPrependCount(5);
 						ps.println("}");
 					}
 
@@ -3243,12 +3427,16 @@ public class SourceGenerator
 			ps.println();
 
 			// Generate resulting expression
+			boolean hasUnionProperty = false;
+			for (ModalPropertyDefinition<?> p : recProp)
+				hasUnionProperty |= p.isWrappable();
 			ps.println("ExpressionNode ret =");
 			ps.incPrependCount(2);
 			ps.println("factory.makeMethodInvocationNode(");
 			ps.incPrependCount(2);
 			ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
-			ps.println("factory.makeIdentifierNode(\"make" + def.getBaseName() + "\"),");
+			ps.println("factory.makeIdentifierNode(\"make" + def.getBaseName() + (hasUnionProperty ? "WithUnions" : "")
+					+ "\"),");
 			ps.print("factory.makeExpressionListNode(");
 			ps.incPrependCount(2);
 			boolean first = true;
@@ -3282,29 +3470,55 @@ public class SourceGenerator
 					{
 						ps.println("factory.makeMethodInvocationNode(");
 						ps.incPrependCount(2);
-						ps.println("factory.makeVariableAccessNode(");
-						ps.incPrependCount(2);
-						ps.println("factory.makeVariableAccessNode(");
-						ps.incPrependCount(2);
-						ps.println("factory.makeVariableAccessNode(");
-						ps.incPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"java\")),");
-						ps.decPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"util\")),");
-						ps.decPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"Arrays\")),");
-						ps.decPrependCount(2);
-						ps.println("factory.makeIdentifierNode(\"asList\"),");
-						ps.decPrependCount(2);
+						final String[] typeNameComponents = {"edu", "jhu", "cs", "bsj", "compiler", "impl", "utils", "CollectionUtilities"};
+						for (@SuppressWarnings("unused") String typeNameComponent : typeNameComponents)
+						{
+							ps.println("factory.makeVariableAccessNode(");
+							ps.incPrependCount(2);
+						}
+						for (String typeNameComponent : typeNameComponents)
+						{
+							ps.println("factory.makeIdentifierNode(\""+typeNameComponent+"\")),");
+							ps.decPrependCount(2);
+						}
+						ps.println("factory.makeIdentifierNode(\"listOf\"),");
 						ps.println("factory.makeExpressionListNode(lift" + capFirst(p.getName()) + "List),");
-						ps.println("factory.makeReferenceTypeListNode(");
-						ps.incPrependCount(2);
-						ps.println("factory.makeUnparameterizedTypeNode(");
-						ps.incPrependCount(2);
-						ps.println("factory.makeSimpleNameNode(");
-						ps.incPrependCount(2);
-						ps.print("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\")))))");
-						ps.decPrependCount(6);
+						if (p.isWrappable())
+						{
+							ps.println("factory.makeReferenceTypeListNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeParameterizedTypeNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeUnparameterizedTypeNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeSimpleNameNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeIdentifierNode(\"NodeUnion\"))),");
+							ps.decPrependCount(4);
+							ps.println("factory.makeTypeArgumentListNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeWildcardTypeNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeUnparameterizedTypeNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeSimpleNameNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\"))),");
+							ps.decPrependCount(4);
+							ps.print("true)))))");
+							ps.decPrependCount(8);
+						} else
+						{
+							ps.println("factory.makeReferenceTypeListNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeUnparameterizedTypeNode(");
+							ps.incPrependCount(2);
+							ps.println("factory.makeSimpleNameNode(");
+							ps.incPrependCount(2);
+							ps.print("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\")))))");
+							ps.decPrependCount(6);
+						}
+						ps.decPrependCount(2);
 					}
 
 					public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
@@ -3923,7 +4137,7 @@ public class SourceGenerator
 			protoEnumPs.incPrependCount();
 			parserUtilities.incPrependCount();
 
-			parseFunctionUtility.println("public static <T extends Node> T parseFromAntlr(BsjAntlrParser parser, ParseRule<T> rule, String name)");
+			parseFunctionUtility.println("public static <T extends Node> NodeUnion<? extends T> parseFromAntlr(BsjAntlrParser parser, ParseRule<T> rule, String name)");
 			parseFunctionUtility.println("    throws RecognitionException");
 			parseFunctionUtility.println("{");
 			parseFunctionUtility.incPrependCount();
@@ -4039,8 +4253,9 @@ public class SourceGenerator
 			{
 				args = "";
 			}
-			parseFunctionUtility.println(nodeType + " node = parser.parseRule_" + def.getName() + "(" + args + ");");
-			parseFunctionUtility.println("@SuppressWarnings(\"unchecked\") T ret = (T)node;");
+			parseFunctionUtility.println("NodeUnion<? extends " + nodeType + "> node = parser.parseRule_"
+					+ def.getName() + "(" + args + ");");
+			parseFunctionUtility.println("@SuppressWarnings(\"unchecked\") NodeUnion<? extends T> ret = (NodeUnion<T>)node;");
 			parseFunctionUtility.println("return ret;");
 			parseFunctionUtility.decPrependCount();
 			parseFunctionUtility.println("}");
@@ -4170,14 +4385,26 @@ public class SourceGenerator
 			ps.println();
 
 			ps.println("/**");
+			ps.println(" * Casts the type of the node contained within this union to another type.");
+			ps.println(" * @param factory The factory to use to create the new object.");
+			ps.println(" * @param type The type to which to cast.");
+			ps.println(" * @return The resulting union object.");
+			ps.println(" * @throws ClassCastException If that cast is not legal.");
+			ps.println(" */");
+			ps.println("public <E extends Node> NodeUnion<E> castNodeType(BsjNodeFactory factory, Class<E> type);");
+			ps.println();
+
+			ps.println("/**");
 			ps.println(" * An enumeration listing the types of objects which can be contained in a {@link NodeUnion}.");
 			ps.println(" */");
 			ps.println("public static enum Type");
 			ps.println("{");
+			ps.incPrependCount();
 			for (String typeComponent : UNION_TYPE_COMPONENTS)
 			{
 				ps.println(typeComponent.toUpperCase() + ",");
 			}
+			ps.decPrependCount();
 			ps.println("}");
 			ps.println();
 
@@ -4187,8 +4414,9 @@ public class SourceGenerator
 
 		private void writeImplementation() throws IOException
 		{
-			for (String typeComponent : UNION_TYPE_COMPONENTS)
+			for (int i = 0; i < UNION_TYPE_COMPONENTS.length; i++)
 			{
+				final String typeComponent = UNION_TYPE_COMPONENTS[i];
 				PrependablePrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.ast", Mode.CONCRETE,
 						Project.GENERATOR, SupplementCategory.GENERAL, typeComponent + "NodeUnion<T extends Node>",
 						false, "/**\n * Represents a {@link NodeUnion} containing a " + typeComponent.toLowerCase()
@@ -4212,6 +4440,7 @@ public class SourceGenerator
 				ps.println("    return this.node;");
 				ps.println("}");
 				ps.println();
+
 				for (String typeComponentInner : UNION_TYPE_COMPONENTS)
 				{
 					ps.println("@Override");
@@ -4232,10 +4461,52 @@ public class SourceGenerator
 					ps.println("}");
 					ps.println();
 				}
+
+				ps.println("public <E extends Node> NodeUnion<E> castNodeType(BsjNodeFactory factory, Class<E> type)");
+				ps.println("{");
+				ps.incPrependCount();
+				if (typeComponent.equals("Normal"))
+				{
+					ps.println("return factory.<E>makeNormalNodeUnion(type.cast(this.getNormalNode()));");
+				} else
+				{
+					ps.println("return factory.<E>make" + typeComponent + "NodeUnion(this.get" + typeComponent
+							+ "Node());");
+				}
+				ps.decPrependCount();
+				ps.println("}");
+				ps.println();
+
 				ps.println("@Override");
 				ps.println("public Type getType()");
 				ps.println("{");
 				ps.println("    return Type." + typeComponent.toUpperCase() + ";");
+				ps.println("}");
+				ps.println();
+
+				ps.println("@Override");
+				ps.println("public boolean equals(Object o)");
+				ps.println("{");
+				ps.println("    if (o instanceof " + typeComponent + "NodeUnion<?>)");
+				ps.println("    {");
+				ps.println("        " + typeComponent + "NodeUnion<?> other = (" + typeComponent + "NodeUnion<?>)o;");
+				ps.println("        return (this.get" + typeComponent + "Node().equals(other.get" + typeComponent
+						+ "Node()));");
+				ps.println("    } else");
+				ps.println("    {");
+				ps.println("        return false;");
+				ps.println("    }");
+				ps.println("}");
+				ps.println();
+				ps.println("@Override");
+				ps.println("public int hashCode()");
+				ps.println("{");
+				ps.print("    return this.get" + typeComponent + "Node().hashCode() * 4");
+				if (i % 4 > 0)
+				{
+					ps.print(" + " + (i % 4));
+				}
+				ps.println(";");
 				ps.println("}");
 				ps.println();
 
@@ -4365,6 +4636,12 @@ public class SourceGenerator
 				} else if (match.operation.equals("generateBinaryExpressionRule"))
 				{
 					command = new GenerateBinaryExpressionRuleCommand(match.templateCommand, parameterMap);
+				} else if (match.operation.equals("generateModifierRule"))
+				{
+					command = new GenerateModifiersCommand(match.templateCommand, parameterMap);
+				} else if (match.operation.equals("deferProduction"))
+				{
+					command = new DeferProductionCommand(match.templateCommand, parameterMap);
 				} else
 				{
 					throw new IllegalStateException("Unrecognized operation " + match.operation);
@@ -4703,6 +4980,16 @@ public class SourceGenerator
 				return new Pair<String, Pair<Integer, Integer>>(ruleName, new Pair<Integer, Integer>(startIndex,
 						endIndex));
 			}
+
+			protected boolean isNodeType(String typeName)
+			{
+				int index = typeName.length() - 1;
+				while (index >= 0 && !Character.isLetterOrDigit(typeName.charAt(index)))
+				{
+					index--;
+				}
+				return (index > 3 && typeName.substring(index - 3, index + 1).equals("Node"));
+			}
 		}
 
 		private static class TemplateCommentCommand extends TemplateCommand
@@ -4778,10 +5065,83 @@ public class SourceGenerator
 					afterTerms += "            " + afterTerm + "\n";
 				}
 
+				List<String> initVarTermList = getParameterAsArray("initvar");
+				for (String initVarTerm : initVarTermList)
+				{
+					String[] initVarTermElements = initVarTerm.split(":");
+					String name;
+					String type;
+					if (initVarTermElements.length != 2)
+					{
+						if (initVarTermElements.length == 1)
+						{
+							type = initVarTermElements[0];
+							name = lowerFirst(type);
+						} else
+						{
+							throw error("Illegal init var term: " + initVarTermElements.length + " elements!");
+						}
+					} else
+					{
+						name = initVarTermElements[0];
+						type = initVarTermElements[1];
+					}
+					String initializer;
+					if (type.endsWith("Node"))
+					{
+						if (type.endsWith("ListNode"))
+						{
+							initializer = "factory.make" + type + "()";
+						} else
+						{
+							initializer = "null";
+						}
+					} else
+					{
+						initializer = "null";
+					}
+					if (type.endsWith("Node"))
+					{
+						type = "NodeUnion<? extends " + type + ">";
+						initializer = "factory.makeNormalNodeUnion(" + initializer + ")";
+					}
+					initTerms += "            " + type + " " + name + " = \n";
+					initTerms += "                    " + initializer + ";\n";
+				}
+
+				final String ruleParameters;
+				if (hasParameter("ruleParams"))
+				{
+					ruleParameters = "[" + getParameter("ruleParams") + "]";
+				} else
+				{
+					ruleParameters = "";
+				}
+
+				final boolean nodeDetected = isNodeType(returnTypeName);
+
+				final boolean spliceable;
+				if (hasParameter("spliceable"))
+				{
+					spliceable = getParameterAsBoolean("spliceable");
+				} else
+				{
+					spliceable = nodeDetected;
+				}
+
 				assertAccessedAllParameters();
 
-				Map<String, String> params = new MapBuilder<String, String>().add("rule", ruleName).add("type",
-						returnTypeName).add("initTerms", initTerms).add("afterTerms", afterTerms).getMap();
+				final String type;
+				if (nodeDetected && spliceable)
+				{
+					type = "NodeUnion<? extends " + returnTypeName + ">";
+				} else
+				{
+					type = returnTypeName;
+				}
+
+				Map<String, String> params = new MapBuilder<String, String>().add("rule", ruleName).add("type", type).add(
+						"initTerms", initTerms).add("afterTerms", afterTerms).add("ruleParams", ruleParameters).getMap();
 				final String replacement = fillFragment("standardRuleIntro", params);
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
@@ -4896,13 +5256,22 @@ public class SourceGenerator
 				}
 
 				final String capRuleName = capFirst(ruleName);
+				final String type;
+				if (isNodeType(returnTypeName))
+				{
+					type = "NodeUnion<? extends " + returnTypeName + ">";
+				} else
+				{
+					type = returnTypeName;
+				}
 
 				final String replacement = fillFragment(
 						"generateListRule",
-						new MapBuilder<String, String>().add("rule", ruleName).add("type", returnTypeName).add(
-								"componentType", componentTypeName).add("componentRule", componentRuleName).add(
-								"prefixPart", prefixPart).add("postfixPart", postfixPart).add("separatorPart",
-								separatorPart).add("lastSeparatorPart", lastSeparatorPart).add("capRule", capRuleName).getMap());
+						new MapBuilder<String, String>().add("rule", ruleName).add("returnType", type).add("nodeType",
+								returnTypeName).add("componentType", componentTypeName).add("componentRule",
+								componentRuleName).add("prefixPart", prefixPart).add("postfixPart", postfixPart).add(
+								"separatorPart", separatorPart).add("lastSeparatorPart", lastSeparatorPart).add(
+								"capRule", capRuleName).getMap());
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}
@@ -4932,7 +5301,7 @@ public class SourceGenerator
 				final String parseRuleName = ruleName.substring(10);
 
 				final String antlrRuleName;
-				final String returnTypeName = getParameter("type");
+				final String typeName = getParameter("type");
 
 				if (hasParameter("antlrRuleName"))
 				{
@@ -4947,7 +5316,7 @@ public class SourceGenerator
 				final String replacement = fillFragment(
 						"generateParseRule",
 						new MapBuilder<String, String>().add("rule", parseRuleName).add("antlrRule", antlrRuleName).add(
-								"type", returnTypeName).getMap());
+								"type", typeName).getMap());
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}
@@ -5001,6 +5370,121 @@ public class SourceGenerator
 						"generateBinaryExpressionRule",
 						new MapBuilder<String, String>().add("rule", ruleName).add("chainRule", chainRuleName).add(
 								"operatorPart", operatorPart).getMap());
+
+				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
+			}
+		}
+
+		public static class GenerateModifiersCommand extends TemplateCommand
+		{
+			public GenerateModifiersCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
+			{
+				Pair<String, Pair<Integer, Integer>> replacementMetrics = expectRuleReplacement(grammarTemplate,
+						startIndex, endIndex);
+				startIndex = replacementMetrics.getSecond().getFirst();
+				endIndex = replacementMetrics.getSecond().getSecond();
+				final String ruleName = replacementMetrics.getFirst();
+
+				List<String> mods = getParameterAsArray("mod");
+				List<String> optionalMods = getParameterAsArray("opmod");
+				boolean access = getParameterAsBoolean("access");
+				final String typeName;
+				if (hasParameter("type"))
+				{
+					typeName = getParameter("type");
+				} else
+				{
+					typeName = capFirst(ruleName) + "Node";
+				}
+
+				assertAccessedAllParameters();
+
+				StringBuilder modifiersArguments = new StringBuilder("[" + access);
+				for (String mod : new CompoundIterable<String>(mods, optionalMods))
+				{
+					modifiersArguments.append(", Modifier." + mod);
+				}
+				modifiersArguments.append("]");
+
+				StringBuilder hasPart = new StringBuilder();
+				for (String mod : mods)
+				{
+					hasPart.append("                    $modifiers.modifiers.has(Modifier." + mod + "),\n");
+				}
+
+				final String accessPart;
+				if (access)
+				{
+					accessPart = "                    $modifiers.access,\n";
+				} else
+				{
+					accessPart = "";
+				}
+
+				final String replacement = fillFragment(
+						"generateModifierRule",
+						new MapBuilder<String, String>().add("rule", ruleName).add("modArgs",
+								modifiersArguments.toString()).add("hasPart", hasPart.toString()).add("type", typeName).add(
+								"accessPart", accessPart).getMap());
+
+				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
+			}
+		}
+
+		public static class DeferProductionCommand extends TemplateCommand
+		{
+			public DeferProductionCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
+			{
+				int spaces = 0;
+				while (startIndex > spaces && grammarTemplate.charAt(startIndex - spaces - 1) == ' ')
+				{
+					spaces++;
+				}
+				startIndex -= spaces;
+
+				List<String> rules = getParameterAsArray("rule");
+				if (rules.size() == 0)
+				{
+					throw error("Cannot defer production to zero rules!");
+				}
+
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < spaces; i++)
+				{
+					sb.append(' ');
+				}
+				String prefix = sb.toString();
+
+				sb = new StringBuilder();
+				boolean first = true;
+				sb.append(prefix + "(\n");
+				for (String rule : rules)
+				{
+					if (!first)
+					{
+						sb.append(prefix + "|\n");
+					}
+					sb.append(prefix + "    " + rule + "\n");
+					sb.append(prefix + "    {\n");
+					sb.append(prefix + "        $ret = $" + rule + ".ret;\n");
+					sb.append(prefix + "    }\n");
+					first = false;
+				}
+				sb.append(prefix + ")\n");
+
+				final String replacement = sb.toString();
 
 				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
 			}

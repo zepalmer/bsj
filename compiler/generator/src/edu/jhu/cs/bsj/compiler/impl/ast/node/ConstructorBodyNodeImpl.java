@@ -142,7 +142,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         
         if (constructorInvocation == null)
         {
-            throw new NullPointerException("Node union for property constructorInvocation cannot be null.");
+            constructorInvocation = new NormalNodeUnion<ConstructorInvocationNode>(null);
         }
         if (this.constructorInvocation != null)
         {
@@ -229,7 +229,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         
         if (statements == null)
         {
-            throw new NullPointerException("Node union for property statements cannot be null.");
+            statements = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.statements != null)
         {
@@ -440,7 +440,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForStatements().getType());
         }
-        return factory.makeConstructorBodyNode(
+        return factory.makeConstructorBodyNodeWithUnions(
                 constructorInvocationCopy,
                 statementsCopy,
                 getStartLocation(),
@@ -458,12 +458,12 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getConstructorInvocation()) && (after instanceof ConstructorInvocationNode))
+        if (before.equals(this.getUnionForConstructorInvocation().getNodeValue()))
         {
             setConstructorInvocation((ConstructorInvocationNode)after);
             return true;
         }
-        if (before.equals(this.getStatements()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForStatements().getNodeValue()))
         {
             setStatements((BlockStatementListNode)after);
             return true;

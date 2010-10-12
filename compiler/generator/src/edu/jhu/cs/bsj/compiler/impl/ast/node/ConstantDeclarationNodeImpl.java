@@ -281,7 +281,7 @@ public class ConstantDeclarationNodeImpl extends AbstractMemberVariableDeclarati
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeConstantDeclarationNode(
+        return factory.makeConstantDeclarationNodeWithUnions(
                 modifiersCopy,
                 typeCopy,
                 declaratorsCopy,
@@ -301,22 +301,22 @@ public class ConstantDeclarationNodeImpl extends AbstractMemberVariableDeclarati
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof ConstantModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((ConstantModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getType()) && (after instanceof TypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((TypeNode)after);
             return true;
         }
-        if (before.equals(this.getDeclarators()) && (after instanceof VariableDeclaratorListNode))
+        if (before.equals(this.getUnionForDeclarators().getNodeValue()))
         {
             setDeclarators((VariableDeclaratorListNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

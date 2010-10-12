@@ -16,7 +16,7 @@ public interface VariableNameBindingNode extends Node
      * @return The identifier naming the variable being declared.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier naming the variable being declared.

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
@@ -22,7 +23,7 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
 {
     /** General constructor. */
     public UnparameterizedTypeListNodeImpl(
-            List<UnparameterizedTypeNode> children,
+            List<NodeUnion<? extends UnparameterizedTypeNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
     public boolean getAlwaysOrdered()
     {
         return false;
+    }
+    
+    protected Class<UnparameterizedTypeNode> getChildrenElementType()
+    {
+        return UnparameterizedTypeNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
     @Override
     public UnparameterizedTypeListNode deepCopy(BsjNodeFactory factory)
     {
-        List<UnparameterizedTypeNode> childrenCopy = new ArrayList<UnparameterizedTypeNode>(getChildren().size());
-        for (UnparameterizedTypeNode element : getChildren())
+        List<NodeUnion<? extends UnparameterizedTypeNode>> childrenCopy = new ArrayList<NodeUnion<? extends UnparameterizedTypeNode>>(getChildren().size());
+        for (NodeUnion<? extends UnparameterizedTypeNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends UnparameterizedTypeNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeUnparameterizedTypeListNode(
+        return factory.makeUnparameterizedTypeListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

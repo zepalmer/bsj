@@ -18,7 +18,7 @@ public interface ClassLiteralNode extends Node, LiteralNode<LiteralizableTypeNod
      * @return The type for this literal.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public LiteralizableTypeNode getValue() throws ClassCastException;
+    public LiteralizableTypeNode getValue()throws ClassCastException;
     
     /**
      * Gets the union object for the type for this literal.

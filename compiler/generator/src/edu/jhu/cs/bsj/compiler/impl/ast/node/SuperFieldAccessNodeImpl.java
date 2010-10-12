@@ -142,7 +142,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         
         if (type == null)
         {
-            throw new NullPointerException("Node union for property type cannot be null.");
+            type = new NormalNodeUnion<UnparameterizedTypeNode>(null);
         }
         if (this.type != null)
         {
@@ -229,7 +229,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -442,7 +442,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
         }
-        return factory.makeSuperFieldAccessNode(
+        return factory.makeSuperFieldAccessNodeWithUnions(
                 typeCopy,
                 identifierCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getType()) && (after instanceof UnparameterizedTypeNode))
+        if (before.equals(this.getUnionForType().getNodeValue()))
         {
             setType((UnparameterizedTypeNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;

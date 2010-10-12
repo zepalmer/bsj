@@ -17,7 +17,7 @@ public interface AbstractMemberVariableDeclarationNode<T extends ModifiersNode> 
      * @return The modifiers for this declaration.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public T getModifiers() throws ClassCastException;
+    public T getModifiers()throws ClassCastException;
     
     /**
      * Gets the union object for the modifiers for this declaration.
@@ -46,7 +46,7 @@ public interface AbstractMemberVariableDeclarationNode<T extends ModifiersNode> 
      * @return The type of the declared variables.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public TypeNode getType() throws ClassCastException;
+    public TypeNode getType()throws ClassCastException;
     
     /**
      * Gets the union object for the type of the declared variables.
@@ -75,7 +75,7 @@ public interface AbstractMemberVariableDeclarationNode<T extends ModifiersNode> 
      * @return The variable declarators for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public VariableDeclaratorListNode getDeclarators() throws ClassCastException;
+    public VariableDeclaratorListNode getDeclarators()throws ClassCastException;
     
     /**
      * Gets the union object for the variable declarators for this node.
@@ -104,7 +104,7 @@ public interface AbstractMemberVariableDeclarationNode<T extends ModifiersNode> 
      * @return The associated javadoc comment for this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public JavadocNode getJavadoc() throws ClassCastException;
+    public JavadocNode getJavadoc()throws ClassCastException;
     
     /**
      * Gets the union object for the associated javadoc comment for this node.

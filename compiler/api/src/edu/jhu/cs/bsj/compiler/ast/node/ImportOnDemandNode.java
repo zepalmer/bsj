@@ -16,7 +16,7 @@ public interface ImportOnDemandNode extends Node, ImportNode
      * @return The name of the package to import.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public NameNode getName() throws ClassCastException;
+    public NameNode getName()throws ClassCastException;
     
     /**
      * Gets the union object for the name of the package to import.

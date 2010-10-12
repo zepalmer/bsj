@@ -22,7 +22,7 @@ public interface MetaprogramNode extends Node, BsjSpecificNode
      * @return The preamble for this metaprogram.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaprogramPreambleNode getPreamble() throws ClassCastException;
+    public MetaprogramPreambleNode getPreamble()throws ClassCastException;
     
     /**
      * Gets the union object for the preamble for this metaprogram.
@@ -51,7 +51,7 @@ public interface MetaprogramNode extends Node, BsjSpecificNode
      * @return The list of statements in the metaprogram's body.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getBody() throws ClassCastException;
+    public BlockStatementListNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the list of statements in the metaprogram's body.

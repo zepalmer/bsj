@@ -19,7 +19,7 @@ public interface MetaAnnotationExpressionValueNode extends Node, MetaAnnotationV
      * @return The expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public NonAssignmentExpressionNode getExpression() throws ClassCastException;
+    public NonAssignmentExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression.

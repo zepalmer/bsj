@@ -28,7 +28,7 @@ public interface WildcardTypeNode extends Node, TypeArgumentNode
      * @return The wildcard's bound.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ReferenceTypeNode getBound() throws ClassCastException;
+    public ReferenceTypeNode getBound()throws ClassCastException;
     
     /**
      * Gets the union object for the wildcard's bound.

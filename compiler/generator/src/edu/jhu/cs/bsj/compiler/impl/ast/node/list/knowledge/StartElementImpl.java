@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge;
 
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.StartElement;
 
@@ -24,7 +25,7 @@ public class StartElementImpl<T extends Node> extends AbstractSymbolicElementImp
 	}
 	
 	@Override
-	public T getData()
+	public NodeUnion<? extends T> getData()
 	{
 		return null;
 	}

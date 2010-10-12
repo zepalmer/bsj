@@ -25,7 +25,7 @@ public interface ForLoopNode extends Node, StatementNode
      * @return The initializer used for this for loop.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ForInitializerNode getInitializer() throws ClassCastException;
+    public ForInitializerNode getInitializer()throws ClassCastException;
     
     /**
      * Gets the union object for the initializer used for this for loop.
@@ -54,7 +54,7 @@ public interface ForLoopNode extends Node, StatementNode
      * @return The loop's termination condition.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getCondition() throws ClassCastException;
+    public ExpressionNode getCondition()throws ClassCastException;
     
     /**
      * Gets the union object for the loop's termination condition.
@@ -83,7 +83,7 @@ public interface ForLoopNode extends Node, StatementNode
      * @return The loop's update operation.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementExpressionListNode getUpdate() throws ClassCastException;
+    public StatementExpressionListNode getUpdate()throws ClassCastException;
     
     /**
      * Gets the union object for the loop's update operation.
@@ -112,7 +112,7 @@ public interface ForLoopNode extends Node, StatementNode
      * @return The loop's statement.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementNode getStatement() throws ClassCastException;
+    public StatementNode getStatement()throws ClassCastException;
     
     /**
      * Gets the union object for the loop's statement.

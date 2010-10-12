@@ -21,7 +21,7 @@ public interface ForInitializerDeclarationNode extends Node, ForInitializerNode
      * @return The variables declared in this initializer.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public LocalVariableDeclarationNode getDeclaration() throws ClassCastException;
+    public LocalVariableDeclarationNode getDeclaration()throws ClassCastException;
     
     /**
      * Gets the union object for the variables declared in this initializer.

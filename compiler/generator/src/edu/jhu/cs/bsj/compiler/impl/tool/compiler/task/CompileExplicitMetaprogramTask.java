@@ -364,7 +364,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 		BsjCompiler compiler = toolkit.getCompiler();
 		CountingDiagnosticProxyListener<BsjSourceLocation> wrappingDiagnosticListener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
-				new LocationTranslatingDiagnosticListener(diagnosticListener, nodeMap));
+				new LocationTranslatingDiagnosticListener(diagnosticListener, nodeMap, metaprogramNode.getStartLocation()));
 		compiler.compile(Arrays.asList(metaprogramSourceFile), wrappingDiagnosticListener);
 		if (wrappingDiagnosticListener.getCount(Kind.ERROR) > 0)
 		{

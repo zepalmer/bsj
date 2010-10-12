@@ -138,7 +138,7 @@ public class SingleElementMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl 
         
         if (value == null)
         {
-            throw new NullPointerException("Node union for property value cannot be null.");
+            value = new NormalNodeUnion<MetaAnnotationValueNode>(null);
         }
         if (this.value != null)
         {
@@ -345,7 +345,7 @@ public class SingleElementMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl 
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotationType().getType());
         }
-        return factory.makeSingleElementMetaAnnotationNode(
+        return factory.makeSingleElementMetaAnnotationNodeWithUnions(
                 valueCopy,
                 annotationTypeCopy,
                 getStartLocation(),
@@ -363,12 +363,12 @@ public class SingleElementMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl 
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getValue()) && (after instanceof MetaAnnotationValueNode))
+        if (before.equals(this.getUnionForValue().getNodeValue()))
         {
             setValue((MetaAnnotationValueNode)after);
             return true;
         }
-        if (before.equals(this.getAnnotationType()) && (after instanceof UnparameterizedTypeNode))
+        if (before.equals(this.getUnionForAnnotationType().getNodeValue()))
         {
             setAnnotationType((UnparameterizedTypeNode)after);
             return true;

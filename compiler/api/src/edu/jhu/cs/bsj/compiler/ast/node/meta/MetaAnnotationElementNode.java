@@ -22,7 +22,7 @@ public interface MetaAnnotationElementNode extends Node, BsjSpecificNode
      * @return The identifier.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getIdentifier() throws ClassCastException;
+    public IdentifierNode getIdentifier()throws ClassCastException;
     
     /**
      * Gets the union object for the identifier.
@@ -51,7 +51,7 @@ public interface MetaAnnotationElementNode extends Node, BsjSpecificNode
      * @return The element's value.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public MetaAnnotationValueNode getValue() throws ClassCastException;
+    public MetaAnnotationValueNode getValue()throws ClassCastException;
     
     /**
      * Gets the union object for the element's value.

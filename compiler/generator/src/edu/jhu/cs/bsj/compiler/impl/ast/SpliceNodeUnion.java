@@ -10,6 +10,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
@@ -47,10 +48,34 @@ public class SpliceNodeUnion<T extends Node> implements NodeUnion<T>
         return this.node;
     }
     
+    public <E extends Node> NodeUnion<E> castNodeType(BsjNodeFactory factory, Class<E> type)
+    {
+        return factory.<E>makeSpliceNodeUnion(this.getSpliceNode());
+    }
+    
     @Override
     public Type getType()
     {
         return Type.SPLICE;
+    }
+    
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof SpliceNodeUnion<?>)
+        {
+            SpliceNodeUnion<?> other = (SpliceNodeUnion<?>)o;
+            return (this.getSpliceNode().equals(other.getSpliceNode()));
+        } else
+        {
+            return false;
+        }
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return this.getSpliceNode().hashCode() * 4 + 1;
     }
     
 }

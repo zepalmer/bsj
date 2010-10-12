@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
@@ -22,7 +23,7 @@ public class VariableDeclaratorListNodeImpl extends ListNodeImpl<VariableDeclara
 {
     /** General constructor. */
     public VariableDeclaratorListNodeImpl(
-            List<VariableDeclaratorNode> children,
+            List<NodeUnion<? extends VariableDeclaratorNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class VariableDeclaratorListNodeImpl extends ListNodeImpl<VariableDeclara
     public boolean getAlwaysOrdered()
     {
         return true;
+    }
+    
+    protected Class<VariableDeclaratorNode> getChildrenElementType()
+    {
+        return VariableDeclaratorNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class VariableDeclaratorListNodeImpl extends ListNodeImpl<VariableDeclara
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class VariableDeclaratorListNodeImpl extends ListNodeImpl<VariableDeclara
     @Override
     public VariableDeclaratorListNode deepCopy(BsjNodeFactory factory)
     {
-        List<VariableDeclaratorNode> childrenCopy = new ArrayList<VariableDeclaratorNode>(getChildren().size());
-        for (VariableDeclaratorNode element : getChildren())
+        List<NodeUnion<? extends VariableDeclaratorNode>> childrenCopy = new ArrayList<NodeUnion<? extends VariableDeclaratorNode>>(getChildren().size());
+        for (NodeUnion<? extends VariableDeclaratorNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends VariableDeclaratorNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeVariableDeclaratorListNode(
+        return factory.makeVariableDeclaratorListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

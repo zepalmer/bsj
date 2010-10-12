@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.NodeList;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnionFilter;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListMissingElementException;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -68,7 +70,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	/** The node manager for this list. */
 	private BsjNodeManager manager;
 	/** The backing list that actually contains the data. */
-	private List<T> backing;
+	private List<NodeUnion<? extends T>> backing;
 	/** The current knowledge base. */
 	private Set<SingleMetaprogramListKnowledge<T>> base;
 	/** The node which should be marked as the parent of any node entering this list. */
@@ -82,45 +84,45 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	 */
 	private boolean initializing;
 
-	public NodeListImpl(BsjNodeManager manager, Node parent, boolean orderDepedent, List<T> initial)
+	public NodeListImpl(BsjNodeManager manager, Node parent, boolean orderDepedent, List<NodeUnion<? extends T>> initial)
 	{
 		super();
 		this.manager = manager;
 		this.parent = parent;
 		this.orderDependent = orderDepedent;
-		this.backing = new ProxyList<T>(new ArrayList<T>())
+		this.backing = new ProxyList<NodeUnion<? extends T>>(new ArrayList<NodeUnion<? extends T>>())
 		{
 
 			@Override
-			protected void elementAdded(int index, T element, boolean replaced)
+			protected void elementAdded(int index, NodeUnion<? extends T> element, boolean replaced)
 			{
 				if (!NodeListImpl.this.initializing)
 				{
 					NodeListImpl.this.manager.assertInsertable(NodeListImpl.this.parent);
 				}
-				if (element instanceof NodeImpl)
+				if (element.getNodeValue() instanceof NodeImpl)
 				{
-					((NodeImpl) element).setParent(NodeListImpl.this.parent);
+					((NodeImpl) element.getNodeValue()).setParent(NodeListImpl.this.parent);
 				}
 				NodeListImpl.this.manager.notifyChange(NodeListImpl.this.parent);
 			}
 
 			@Override
-			protected void elementRemoved(int index, T element, boolean replaced)
+			protected void elementRemoved(int index, NodeUnion<? extends T> element, boolean replaced)
 			{
 				if (!NodeListImpl.this.initializing)
 				{
 					NodeListImpl.this.manager.assertMutatable(NodeListImpl.this.parent);
 				}
-				if (element instanceof NodeImpl)
+				if (element.getNodeValue() instanceof NodeImpl)
 				{
-					((NodeImpl) element).setParent(null);
+					((NodeImpl) element.getNodeValue()).setParent(null);
 				}
 				NodeListImpl.this.manager.notifyChange(NodeListImpl.this.parent);
 			}
 
 			@Override
-			protected void elementRetrieved(int index, T element)
+			protected void elementRetrieved(int index, NodeUnion<? extends T> element)
 			{
 			}
 
@@ -133,9 +135,9 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 
 		// initialize the list
 		this.initializing = true;
-		for (T t : initial)
+		for (NodeUnion<? extends T> t : initial)
 		{
-			addLast(t);
+			addLastUnion(t);
 		}
 		this.initializing = false;
 	}
@@ -153,16 +155,95 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
+	public void addFirst(T node)
+	{
+		addFirstUnion(new NormalNodeUnion<T>(node));
+	}
+
+	@Override
+	public void addLast(T node)
+	{
+		addLastUnion(new NormalNodeUnion<T>(node));
+	}
+
+	@Override
+	public void addBefore(T member, T node) throws MetaprogramListMissingElementException
+	{
+		addBeforeUnion(new NormalNodeUnion<T>(member), new NormalNodeUnion<T>(node));
+	}
+
+	@Override
 	public void addAfter(T member, T node) throws MetaprogramListMissingElementException
+	{
+		addAfterUnion(new NormalNodeUnion<T>(member), new NormalNodeUnion<T>(node));
+	}
+
+	@Override
+	public boolean remove(T node)
+	{
+		return removeUnion(new NormalNodeUnion<T>(node));
+	}
+
+	@Override
+	public T getFirst()
+	{
+		NodeUnion<? extends T> union = getFirstUnion();
+		return (union == null) ? null : union.getNormalNode();
+	}
+
+	@Override
+	public T getLast()
+	{
+		NodeUnion<? extends T> union = getLastUnion();
+		return (union == null) ? null : union.getNormalNode();
+	}
+
+	@Override
+	public T getBefore(T member) throws MetaprogramListMissingElementException
+	{
+		NodeUnion<? extends T> union = getBeforeUnion(new NormalNodeUnion<T>(member));
+		return (union == null) ? null : union.getNormalNode();
+	}
+
+	@Override
+	public T getAfter(T member) throws MetaprogramListMissingElementException
+	{
+		NodeUnion<? extends T> union = getAfterUnion(new NormalNodeUnion<T>(member));
+		return (union == null) ? null : union.getNormalNode();
+	}
+
+	@Override
+	public Set<T> filter(final NodeFilter<? super T> filter)
+	{
+		Set<T> set = new HashSet<T>();
+		NodeUnionFilter<T> unionFilter = new NodeUnionFilter<T>()
+		{
+			@Override
+			public boolean filter(NodeUnion<? extends T> node)
+			{
+				return filter.filter(node.getNormalNode());
+			}
+		};
+		Set<NodeUnion<? extends T>> unionSet = filterUnions(unionFilter);
+		for (NodeUnion<? extends T> union : unionSet)
+		{
+			set.add(union.getNormalNode());
+		}
+		return set;
+	}
+
+	@Override
+	public void addAfterUnion(NodeUnion<? extends T> member, NodeUnion<? extends T> node)
+			throws MetaprogramListMissingElementException
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".addAfter(" + member + "," + node + ")");
 		}
 
-		if (member == null)
+		if (member == null || member.getNodeValue() == null)
 			throw new NullPointerException();
-		if (node == null)
+		if (node == null || node.getNodeValue() == null)
 			throw new NullPointerException();
 		int index = this.backing.indexOf(member);
 		if (index == -1)
@@ -184,16 +265,17 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public void addBefore(T member, T node) throws MetaprogramListMissingElementException
+	public void addBeforeUnion(NodeUnion<? extends T> member, NodeUnion<? extends T> node)
+			throws MetaprogramListMissingElementException
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".addBefore(" + member + "," + node + ")");
 		}
 
-		if (member == null)
+		if (member == null || member.getNodeValue() == null)
 			throw new NullPointerException();
-		if (node == null)
+		if (node == null || node.getNodeValue() == null)
 			throw new NullPointerException();
 		int index = this.backing.indexOf(member);
 		if (index == -1)
@@ -215,14 +297,14 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public void addFirst(T node)
+	public void addFirstUnion(NodeUnion<? extends T> node)
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".addFirst(" + node + ")");
 		}
 
-		if (node == null)
+		if (node == null || node.getNodeValue() == null)
 			throw new NullPointerException();
 		this.backing.add(0, node);
 		if (isRecordingKnowledge())
@@ -238,14 +320,14 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public void addLast(T node)
+	public void addLastUnion(NodeUnion<? extends T> node)
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".addLast(" + node + ")");
 		}
 
-		if (node == null)
+		if (node == null || node.getNodeValue() == null)
 			throw new NullPointerException();
 		this.backing.add(node);
 		if (isRecordingKnowledge())
@@ -261,7 +343,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public Set<T> filter(NodeFilter<? super T> filter)
+	public Set<NodeUnion<? extends T>> filterUnions(NodeUnionFilter<? super T> filter)
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
@@ -271,12 +353,12 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 		PermissionPolicyManager permissionPolicyManager = new PermissionPolicyManager(this.parent.getFurthestAncestor());
 		this.manager.pushPermissionPolicyManager(permissionPolicyManager);
 
-		Set<T> ret = new HashSet<T>();
-		for (T t : this.backing)
+		Set<NodeUnion<? extends T>> ret = new HashSet<NodeUnion<? extends T>>();
+		for (NodeUnion<? extends T> t : this.backing)
 		{
 			// TODO: catch the permission exceptions that fall out of this call and translate to a more contextual
 			// error. (Instead of "no permission on node X", we should have "predicate P tried to modify node X".)
-			boolean use = filter.filter(t);
+			boolean use = filter.filter(t); // TODO need NodeUnionFilter
 			if (use)
 			{
 				ret.add(t);
@@ -295,16 +377,17 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public T getAfter(T member) throws MetaprogramListMissingElementException
+	public NodeUnion<? extends T> getAfterUnion(NodeUnion<? extends T> member)
+			throws MetaprogramListMissingElementException
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".getAfter(" + member + ")");
 		}
 
-		if (member == null)
+		if (member == null || member.getNodeValue() == null)
 			throw new NullPointerException();
-		T ret;
+		NodeUnion<? extends T> ret;
 		SymbolicElement<T> retElement;
 		int index = this.backing.indexOf(member);
 		if (index == -1)
@@ -334,16 +417,17 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public T getBefore(T member) throws MetaprogramListMissingElementException
+	public NodeUnion<? extends T> getBeforeUnion(NodeUnion<? extends T> member)
+			throws MetaprogramListMissingElementException
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".getBefore(" + member + ")");
 		}
 
-		if (member == null)
+		if (member == null || member.getNodeValue() == null)
 			throw new NullPointerException();
-		T ret;
+		NodeUnion<? extends T> ret;
 		SymbolicElement<T> retElement;
 		int index = this.backing.indexOf(member);
 		if (index == -1)
@@ -373,14 +457,14 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public T getFirst()
+	public NodeUnion<? extends T> getFirstUnion()
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".getFirst()");
 		}
 
-		T ret;
+		NodeUnion<? extends T> ret;
 		SymbolicElement<T> retElement;
 		if (this.backing.size() > 0)
 		{
@@ -404,14 +488,14 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public T getLast()
+	public NodeUnion<? extends T> getLastUnion()
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".getLast()");
 		}
 
-		T ret;
+		NodeUnion<? extends T> ret;
 		SymbolicElement<T> retElement;
 		if (this.backing.size() > 0)
 		{
@@ -435,12 +519,15 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	}
 
 	@Override
-	public boolean remove(T node)
+	public boolean removeUnion(NodeUnion<? extends T> node)
 	{
 		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
 		{
 			LOGGER.trace(uid + ".remove(" + node + ")");
 		}
+
+		if (node == null || node.getNodeValue() == null)
+			throw new NullPointerException();
 
 		boolean ret = this.backing.remove(node);
 		if (isRecordingKnowledge())
@@ -459,9 +546,18 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	 * @param node The node to check.
 	 * @return <code>true</code> if that node is order dependent; <code>false</code> otherwise.
 	 */
-	private boolean isOrderDependent(T node)
+	private boolean isOrderDependent(NodeUnion<? extends T> nodeUnion)
 	{
-		return this.orderDependent || (node instanceof InitializerDeclarationNode);
+		if (this.orderDependent)
+			return true;
+
+		if (!nodeUnion.getType().equals(NodeUnion.Type.NORMAL))
+			return false;
+
+		if (nodeUnion.getNormalNode() instanceof InitializerDeclarationNode)
+			return true;
+
+		return false;
 	}
 
 	/**

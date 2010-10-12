@@ -19,7 +19,7 @@ public interface AnonymousClassBodyNode extends Node, TypeBodyNode<AnonymousClas
      * @return The members of this anonymous class body.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnonymousClassMemberListNode getMembers() throws ClassCastException;
+    public AnonymousClassMemberListNode getMembers()throws ClassCastException;
     
     /**
      * Gets the union object for the members of this anonymous class body.

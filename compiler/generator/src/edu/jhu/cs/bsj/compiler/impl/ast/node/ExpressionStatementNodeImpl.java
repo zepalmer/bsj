@@ -142,7 +142,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<StatementExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -229,7 +229,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -441,7 +441,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeExpressionStatementNode(
+        return factory.makeExpressionStatementNodeWithUnions(
                 expressionCopy,
                 metaAnnotationsCopy,
                 getStartLocation(),
@@ -459,12 +459,12 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof StatementExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((StatementExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

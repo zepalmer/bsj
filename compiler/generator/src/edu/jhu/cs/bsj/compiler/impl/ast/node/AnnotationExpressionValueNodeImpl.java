@@ -134,7 +134,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<NonAssignmentExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -311,7 +311,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
         }
-        return factory.makeAnnotationExpressionValueNode(
+        return factory.makeAnnotationExpressionValueNodeWithUnions(
                 expressionCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof NonAssignmentExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((NonAssignmentExpressionNode)after);
             return true;

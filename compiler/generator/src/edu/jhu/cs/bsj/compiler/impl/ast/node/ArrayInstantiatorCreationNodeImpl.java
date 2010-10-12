@@ -137,7 +137,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         
         if (dimExpressions == null)
         {
-            throw new NullPointerException("Node union for property dimExpressions cannot be null.");
+            dimExpressions = new NormalNodeUnion<ExpressionListNode>(null);
         }
         if (this.dimExpressions != null)
         {
@@ -343,7 +343,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForBaseType().getType());
         }
-        return factory.makeArrayInstantiatorCreationNode(
+        return factory.makeArrayInstantiatorCreationNodeWithUnions(
                 dimExpressionsCopy,
                 baseTypeCopy,
                 getArrayLevels(),
@@ -362,12 +362,12 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getDimExpressions()) && (after instanceof ExpressionListNode))
+        if (before.equals(this.getUnionForDimExpressions().getNodeValue()))
         {
             setDimExpressions((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getBaseType()) && (after instanceof BaseTypeNode))
+        if (before.equals(this.getUnionForBaseType().getNodeValue()))
         {
             setBaseType((BaseTypeNode)after);
             return true;

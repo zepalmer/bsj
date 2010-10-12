@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
@@ -22,7 +23,7 @@ public class CaseListNodeImpl extends ListNodeImpl<CaseNode> implements CaseList
 {
     /** General constructor. */
     public CaseListNodeImpl(
-            List<CaseNode> children,
+            List<NodeUnion<? extends CaseNode>> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -38,6 +39,11 @@ public class CaseListNodeImpl extends ListNodeImpl<CaseNode> implements CaseList
     public boolean getAlwaysOrdered()
     {
         return true;
+    }
+    
+    protected Class<CaseNode> getChildrenElementType()
+    {
+        return CaseNode.class;
     }
     
     /**
@@ -132,7 +138,7 @@ public class CaseListNodeImpl extends ListNodeImpl<CaseNode> implements CaseList
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -176,13 +182,19 @@ public class CaseListNodeImpl extends ListNodeImpl<CaseNode> implements CaseList
     @Override
     public CaseListNode deepCopy(BsjNodeFactory factory)
     {
-        List<CaseNode> childrenCopy = new ArrayList<CaseNode>(getChildren().size());
-        for (CaseNode element : getChildren())
+        List<NodeUnion<? extends CaseNode>> childrenCopy = new ArrayList<NodeUnion<? extends CaseNode>>(getChildren().size());
+        for (NodeUnion<? extends CaseNode> element : getUnionForChildren())
         {
-            childrenCopy.add(element.deepCopy(factory));
+            NodeUnion<? extends CaseNode> elementCopy;
+            if (element.getType().equals(NodeUnion.Type.NORMAL))
+                elementCopy = factory.makeNormalNodeUnion(element.getNormalNode().deepCopy(factory));
+            else if (element.getType().equals(NodeUnion.Type.SPLICE))
+                elementCopy = factory.makeSpliceNodeUnion(element.getSpliceNode().deepCopy(factory));
+            else throw new IllegalStateException("Unrecognized union type: " + element.getType());
+            childrenCopy.add(elementCopy);
         }
         
-        return factory.makeCaseListNode(
+        return factory.makeCaseListNodeWithUnions(
                 childrenCopy,
                 getStartLocation(),
                 getStopLocation());

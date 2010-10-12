@@ -134,7 +134,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         
         if (declaration == null)
         {
-            throw new NullPointerException("Node union for property declaration cannot be null.");
+            declaration = new NormalNodeUnion<LocalVariableDeclarationNode>(null);
         }
         if (this.declaration != null)
         {
@@ -311,7 +311,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForDeclaration().getType());
         }
-        return factory.makeForInitializerDeclarationNode(
+        return factory.makeForInitializerDeclarationNodeWithUnions(
                 declarationCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getDeclaration()) && (after instanceof LocalVariableDeclarationNode))
+        if (before.equals(this.getUnionForDeclaration().getNodeValue()))
         {
             setDeclaration((LocalVariableDeclarationNode)after);
             return true;

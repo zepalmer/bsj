@@ -150,7 +150,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -237,7 +237,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         
         if (cases == null)
         {
-            throw new NullPointerException("Node union for property cases cannot be null.");
+            cases = new NormalNodeUnion<CaseListNode>(null);
         }
         if (this.cases != null)
         {
@@ -324,7 +324,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -572,7 +572,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeSwitchNode(
+        return factory.makeSwitchNodeWithUnions(
                 expressionCopy,
                 casesCopy,
                 metaAnnotationsCopy,
@@ -591,17 +591,17 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getCases()) && (after instanceof CaseListNode))
+        if (before.equals(this.getUnionForCases().getNodeValue()))
         {
             setCases((CaseListNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

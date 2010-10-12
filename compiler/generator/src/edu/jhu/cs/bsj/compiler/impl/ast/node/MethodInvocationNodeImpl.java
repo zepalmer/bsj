@@ -158,7 +158,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<PrimaryExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -245,7 +245,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -332,7 +332,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
         
         if (arguments == null)
         {
-            throw new NullPointerException("Node union for property arguments cannot be null.");
+            arguments = new NormalNodeUnion<ExpressionListNode>(null);
         }
         if (this.arguments != null)
         {
@@ -419,7 +419,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
         
         if (typeArguments == null)
         {
-            throw new NullPointerException("Node union for property typeArguments cannot be null.");
+            typeArguments = new NormalNodeUnion<ReferenceTypeListNode>(null);
         }
         if (this.typeArguments != null)
         {
@@ -706,7 +706,7 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForTypeArguments().getType());
         }
-        return factory.makeMethodInvocationNode(
+        return factory.makeMethodInvocationNodeWithUnions(
                 expressionCopy,
                 identifierCopy,
                 argumentsCopy,
@@ -726,22 +726,22 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof PrimaryExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((PrimaryExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
+        if (before.equals(this.getUnionForArguments().getNodeValue()))
         {
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
+        if (before.equals(this.getUnionForTypeArguments().getNodeValue()))
         {
             setTypeArguments((ReferenceTypeListNode)after);
             return true;

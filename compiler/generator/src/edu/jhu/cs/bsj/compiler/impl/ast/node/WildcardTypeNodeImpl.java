@@ -141,7 +141,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         
         if (bound == null)
         {
-            throw new NullPointerException("Node union for property bound cannot be null.");
+            bound = new NormalNodeUnion<ReferenceTypeNode>(null);
         }
         if (this.bound != null)
         {
@@ -352,7 +352,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForBound().getType());
         }
-        return factory.makeWildcardTypeNode(
+        return factory.makeWildcardTypeNodeWithUnions(
                 boundCopy,
                 getUpperBound(),
                 getStartLocation(),
@@ -370,7 +370,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBound()) && (after instanceof ReferenceTypeNode))
+        if (before.equals(this.getUnionForBound().getNodeValue()))
         {
             setBound((ReferenceTypeNode)after);
             return true;

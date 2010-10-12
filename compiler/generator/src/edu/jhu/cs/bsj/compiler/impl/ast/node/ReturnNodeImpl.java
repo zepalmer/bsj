@@ -142,7 +142,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -229,7 +229,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -441,7 +441,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeReturnNode(
+        return factory.makeReturnNodeWithUnions(
                 expressionCopy,
                 metaAnnotationsCopy,
                 getStartLocation(),
@@ -459,12 +459,12 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

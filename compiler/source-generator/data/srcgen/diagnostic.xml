@@ -130,6 +130,17 @@
                     A diagnostic representing a missing token.
                 ]]></doc>
             </diagnostic>
+            
+            <diagnostic name="RuleParseFailureDiagnostic" code="bsj.parser.error.ruleParseFailure"
+                super="BsjParserDiagnostic">
+                <prop name="endSource" type="BsjSourceLocation" desc="the location where the parse failure stopped" />
+                <doc><![CDATA[
+                    A diagnostic representing a failure to parse a specific rule.  In this case, the particular rule
+                    which did not parse is known and the tokens which were not parsed correctly are identified but the
+                    specific problem cannot be determined.  <tt>source</tt> represents the location of the first failed
+                    token; <tt>endSource</tt> represents the location of the last failed token.
+                ]]></doc>
+            </diagnostic>
 
             <diagnostic name="UnexpectedTokenDiagnostic" code="bsj.parser.error.unexpectedToken"
                 super="BsjParserDiagnostic">
@@ -446,7 +457,7 @@
                 <prop name="anchor" type="MetaprogramAnchorNode&lt;?&gt;" desc="the metaprogram which performed the illegal operation" />
                 <prop name="metaprogram" type="BsjSourceLocation"
                     desc="the location of the metaprogram which performed the illegal operation" />
-                <prop name="element" type="Node"
+                <prop name="element" type="NodeUnion&lt;?&gt;"
                     desc="the element which was used as a base in the list which did not contain it" />
                 <doc><![CDATA[
                     Indicates that a list operation occurred on an AST node using a base element which was not contained

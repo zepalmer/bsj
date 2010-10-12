@@ -19,7 +19,7 @@ public interface BreakNode extends Node, StatementNode
      * @return The break label.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public IdentifierNode getLabel() throws ClassCastException;
+    public IdentifierNode getLabel()throws ClassCastException;
     
     /**
      * Gets the union object for the break label.

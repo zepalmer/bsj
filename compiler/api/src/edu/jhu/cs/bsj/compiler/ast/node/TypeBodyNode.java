@@ -17,7 +17,7 @@ public interface TypeBodyNode<T extends Node> extends Node
      * @return The members of this type declaration body.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ListNode<? extends T> getMembers() throws ClassCastException;
+    public ListNode<? extends T> getMembers()throws ClassCastException;
     
     /**
      * Gets the union object for the members of this type declaration body.

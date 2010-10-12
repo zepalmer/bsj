@@ -20,7 +20,7 @@ public interface AnnotationAnnotationValueNode extends Node, AnnotationValueNode
      * @return The annotation.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public AnnotationNode getAnnotation() throws ClassCastException;
+    public AnnotationNode getAnnotation()throws ClassCastException;
     
     /**
      * Gets the union object for the annotation.

@@ -23,7 +23,7 @@ public interface AssertStatementNode extends Node, StatementNode
      * @return The assertion's test expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getTestExpression() throws ClassCastException;
+    public ExpressionNode getTestExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the assertion's test expression.
@@ -52,7 +52,7 @@ public interface AssertStatementNode extends Node, StatementNode
      * @return The assertion's message expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getMessageExpression() throws ClassCastException;
+    public ExpressionNode getMessageExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the assertion's message expression.

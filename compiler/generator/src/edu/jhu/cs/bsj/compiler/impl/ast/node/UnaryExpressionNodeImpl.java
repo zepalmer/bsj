@@ -142,7 +142,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -354,7 +354,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
         }
-        return factory.makeUnaryExpressionNode(
+        return factory.makeUnaryExpressionNodeWithUnions(
                 expressionCopy,
                 getOperator(),
                 getStartLocation(),
@@ -372,7 +372,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;

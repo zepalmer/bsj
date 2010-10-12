@@ -31,7 +31,7 @@ public interface TryNode extends Node, StatementNode
      * @return The block statements to try.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getBody() throws ClassCastException;
+    public BlockStatementListNode getBody()throws ClassCastException;
     
     /**
      * Gets the union object for the block statements to try.
@@ -60,7 +60,7 @@ public interface TryNode extends Node, StatementNode
      * @return The catch conditions.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public CatchListNode getCatches() throws ClassCastException;
+    public CatchListNode getCatches()throws ClassCastException;
     
     /**
      * Gets the union object for the catch conditions.
@@ -89,7 +89,7 @@ public interface TryNode extends Node, StatementNode
      * @return The finally block.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public BlockStatementListNode getFinallyBlock() throws ClassCastException;
+    public BlockStatementListNode getFinallyBlock()throws ClassCastException;
     
     /**
      * Gets the union object for the finally block.

@@ -25,7 +25,7 @@ public interface ExpressionStatementNode extends Node, StatementNode
      * @return This statement's expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public StatementExpressionNode getExpression() throws ClassCastException;
+    public StatementExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for this statement's expression.

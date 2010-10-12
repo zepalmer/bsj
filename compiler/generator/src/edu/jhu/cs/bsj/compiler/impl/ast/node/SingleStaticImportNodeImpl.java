@@ -142,7 +142,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         
         if (name == null)
         {
-            throw new NullPointerException("Node union for property name cannot be null.");
+            name = new NormalNodeUnion<NameNode>(null);
         }
         if (this.name != null)
         {
@@ -229,7 +229,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         
         if (identifier == null)
         {
-            throw new NullPointerException("Node union for property identifier cannot be null.");
+            identifier = new NormalNodeUnion<IdentifierNode>(null);
         }
         if (this.identifier != null)
         {
@@ -442,7 +442,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForIdentifier().getType());
         }
-        return factory.makeSingleStaticImportNode(
+        return factory.makeSingleStaticImportNodeWithUnions(
                 nameCopy,
                 identifierCopy,
                 getStartLocation(),
@@ -460,12 +460,12 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getName()) && (after instanceof NameNode))
+        if (before.equals(this.getUnionForName().getNodeValue()))
         {
             setName((NameNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;

@@ -24,7 +24,7 @@ public interface ParenthesizedExpressionNode extends Node, RestrictedPrimaryExpr
      * @return The expression contained in this node.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getExpression() throws ClassCastException;
+    public ExpressionNode getExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the expression contained in this node.

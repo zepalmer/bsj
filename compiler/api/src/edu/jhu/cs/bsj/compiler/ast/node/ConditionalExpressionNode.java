@@ -19,7 +19,7 @@ public interface ConditionalExpressionNode extends Node, NonAssignmentExpression
      * @return The condition of the expression.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getCondition() throws ClassCastException;
+    public ExpressionNode getCondition()throws ClassCastException;
     
     /**
      * Gets the union object for the condition of the expression.
@@ -48,7 +48,7 @@ public interface ConditionalExpressionNode extends Node, NonAssignmentExpression
      * @return The value of this expression when the condition is true.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getTrueExpression() throws ClassCastException;
+    public ExpressionNode getTrueExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the value of this expression when the condition is true.
@@ -77,7 +77,7 @@ public interface ConditionalExpressionNode extends Node, NonAssignmentExpression
      * @return The value of this expression when the condition is false.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getFalseExpression() throws ClassCastException;
+    public ExpressionNode getFalseExpression()throws ClassCastException;
     
     /**
      * Gets the union object for the value of this expression when the condition is false.

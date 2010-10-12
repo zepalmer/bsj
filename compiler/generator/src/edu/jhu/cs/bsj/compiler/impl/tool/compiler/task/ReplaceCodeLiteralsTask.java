@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
@@ -80,22 +81,26 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 
 	/**
 	 * Obtains an AST node representing the body of the specified code literal.
+	 * 
 	 * @param context The metacompilation context to use.
 	 * @param node The raw code literal to use.
 	 * @param metadata The metadata from typechecking.
 	 * @return The code literal to use.
 	 */
-	private Node interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node, TypecheckerMetadata metadata)
+	private NodeUnion<?> interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node,
+			TypecheckerMetadata metadata)
 	{
 		BsjType inContextType;
 		if (metadata.getInContextType(node) == null)
 		{
-			throw new IllegalStateException("No in-context type established for code literal at " + node.getStartLocation());
+			throw new IllegalStateException("No in-context type established for code literal at "
+					+ node.getStartLocation());
 		} else
 		{
 			inContextType = metadata.getInContextType(node);
 		}
-		Collection<? extends Node> results = metadata.getParseResult(node).getSelectionBag().selectAll(inContextType);
+		Collection<? extends NodeUnion<?>> results = metadata.getParseResult(node).getSelectionBag().selectAll(
+				inContextType);
 		if (results.size() == 0)
 		{
 			// Then this code literal is unparseable.
@@ -115,6 +120,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 
 	/**
 	 * Performs the lifting of an AST node for this task.
+	 * 
 	 * @param context The context to use.
 	 * @param value The AST node to lift.
 	 * @return The lifted AST.
@@ -204,7 +210,8 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 			levels--;
 			if (levels == 0 && node.getParent() != null)
 			{
-				nodeReplacementMap.put(node, liftNode(context, interpretRawCodeLiteral(context, node, metadata)));
+				nodeReplacementMap.put(node,
+						liftNode(context, interpretRawCodeLiteral(context, node, metadata).getNodeValue()));
 			}
 		}
 	}

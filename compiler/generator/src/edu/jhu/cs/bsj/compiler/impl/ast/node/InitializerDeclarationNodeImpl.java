@@ -180,7 +180,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         
         if (body == null)
         {
-            throw new NullPointerException("Node union for property body cannot be null.");
+            body = new NormalNodeUnion<BlockStatementListNode>(null);
         }
         if (this.body != null)
         {
@@ -267,7 +267,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         
         if (metaAnnotations == null)
         {
-            throw new NullPointerException("Node union for property metaAnnotations cannot be null.");
+            metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
         }
         if (this.metaAnnotations != null)
         {
@@ -488,7 +488,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForMetaAnnotations().getType());
         }
-        return factory.makeInitializerDeclarationNode(
+        return factory.makeInitializerDeclarationNodeWithUnions(
                 getStaticInitializer(),
                 bodyCopy,
                 metaAnnotationsCopy,
@@ -507,12 +507,12 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getBody()) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((BlockStatementListNode)after);
             return true;
         }
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getUnionForMetaAnnotations().getNodeValue()))
         {
             setMetaAnnotations((MetaAnnotationListNode)after);
             return true;

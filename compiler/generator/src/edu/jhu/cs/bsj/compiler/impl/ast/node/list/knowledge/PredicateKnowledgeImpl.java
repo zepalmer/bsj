@@ -4,7 +4,7 @@ import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtil
 import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.INVARIANT_RIGHT;
 import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.METAPROG_PREFIX;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnionFilter;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.PredicateKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.source.KnowledgeSource;
@@ -13,10 +13,10 @@ public class PredicateKnowledgeImpl<T extends Node> extends AbstractSingleMetapr
 		PredicateKnowledge<T>
 {
 	/** The predicate which was used. */
-	private NodeFilter<? super T> filter;
+	private NodeUnionFilter<? super T> filter;
 
 	public PredicateKnowledgeImpl(int metaprogramId, BsjSourceLocation metaprogramSourceLocation,
-			KnowledgeSource<T> knowledgeSource, NodeFilter<? super T> filter)
+			KnowledgeSource<T> knowledgeSource, NodeUnionFilter<? super T> filter)
 	{
 		super(metaprogramId, metaprogramSourceLocation, knowledgeSource);
 		this.filter = filter;
@@ -29,7 +29,7 @@ public class PredicateKnowledgeImpl<T extends Node> extends AbstractSingleMetapr
 	}
 
 	@Override
-	public NodeFilter<? super T> getPredicate()
+	public NodeUnionFilter<? super T> getPredicate()
 	{
 		return this.filter;
 	}

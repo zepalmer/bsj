@@ -366,7 +366,7 @@ public class LocalClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDecl
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForJavadoc().getType());
         }
-        return factory.makeLocalClassDeclarationNode(
+        return factory.makeLocalClassDeclarationNodeWithUnions(
                 modifiersCopy,
                 extendsClauseCopy,
                 implementsClauseCopy,
@@ -389,37 +389,37 @@ public class LocalClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDecl
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getModifiers()) && (after instanceof LocalClassModifiersNode))
+        if (before.equals(this.getUnionForModifiers().getNodeValue()))
         {
             setModifiers((LocalClassModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getExtendsClause()) && (after instanceof DeclaredTypeNode))
+        if (before.equals(this.getUnionForExtendsClause().getNodeValue()))
         {
             setExtendsClause((DeclaredTypeNode)after);
             return true;
         }
-        if (before.equals(this.getImplementsClause()) && (after instanceof DeclaredTypeListNode))
+        if (before.equals(this.getUnionForImplementsClause().getNodeValue()))
         {
             setImplementsClause((DeclaredTypeListNode)after);
             return true;
         }
-        if (before.equals(this.getBody()) && (after instanceof ClassBodyNode))
+        if (before.equals(this.getUnionForBody().getNodeValue()))
         {
             setBody((ClassBodyNode)after);
             return true;
         }
-        if (before.equals(this.getTypeParameters()) && (after instanceof TypeParameterListNode))
+        if (before.equals(this.getUnionForTypeParameters().getNodeValue()))
         {
             setTypeParameters((TypeParameterListNode)after);
             return true;
         }
-        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        if (before.equals(this.getUnionForIdentifier().getNodeValue()))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        if (before.equals(this.getUnionForJavadoc().getNodeValue()))
         {
             setJavadoc((JavadocNode)after);
             return true;

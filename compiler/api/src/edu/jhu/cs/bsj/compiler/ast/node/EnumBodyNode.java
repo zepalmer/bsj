@@ -18,7 +18,7 @@ public interface EnumBodyNode extends Node, TypeBodyNode<ClassMemberNode>
      * @return The enumeration constants.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public EnumConstantDeclarationListNode getConstants() throws ClassCastException;
+    public EnumConstantDeclarationListNode getConstants()throws ClassCastException;
     
     /**
      * Gets the union object for the enumeration constants.
@@ -47,7 +47,7 @@ public interface EnumBodyNode extends Node, TypeBodyNode<ClassMemberNode>
      * @return The members of the class body part.
      * @throws ClassCastException If the value of this property is a special node.
      */
-    public ClassMemberListNode getMembers() throws ClassCastException;
+    public ClassMemberListNode getMembers()throws ClassCastException;
     
     /**
      * Gets the union object for the members of the class body part.

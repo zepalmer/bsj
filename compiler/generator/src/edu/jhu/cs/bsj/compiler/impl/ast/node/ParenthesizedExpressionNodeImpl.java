@@ -134,7 +134,7 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
         
         if (expression == null)
         {
-            throw new NullPointerException("Node union for property expression cannot be null.");
+            expression = new NormalNodeUnion<ExpressionNode>(null);
         }
         if (this.expression != null)
         {
@@ -311,7 +311,7 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForExpression().getType());
         }
-        return factory.makeParenthesizedExpressionNode(
+        return factory.makeParenthesizedExpressionNodeWithUnions(
                 expressionCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -328,7 +328,7 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
+        if (before.equals(this.getUnionForExpression().getNodeValue()))
         {
             setExpression((ExpressionNode)after);
             return true;

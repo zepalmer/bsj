@@ -11,8 +11,8 @@ package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListMissingElementException;
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 /**
  * Indicates that a list operation occurred on an AST node using a base element which was not contained
@@ -40,6 +40,6 @@ public interface MetaprogramListMissingElementDiagnostic extends MetaprogramDete
      * Retrieves the element which was used as a base in the list which did not contain it.
      * @return The element which was used as a base in the list which did not contain it.
      */
-    public Node getElement();
+    public NodeUnion<?> getElement();
     
 }
