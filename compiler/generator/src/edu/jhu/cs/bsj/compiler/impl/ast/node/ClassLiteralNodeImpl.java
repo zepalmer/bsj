@@ -219,7 +219,7 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getValue());
+        list.add(getUnionForValue());
         return list;
     }
     

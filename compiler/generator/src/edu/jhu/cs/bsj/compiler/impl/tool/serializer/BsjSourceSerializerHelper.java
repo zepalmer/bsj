@@ -4,6 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
@@ -78,7 +79,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, PrependablePrintStream p)
 	{
-		node.getAnnotation().executeOperation(this, p);
+		node.getUnionForAnnotation().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -103,16 +104,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.print("\n");
 		}
-		node.getModifiers().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
 		p.print("@interface ");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		p.print("\n{\n");
 		if (node.getBody() != null)
 		{
-			node.getBody().executeOperation(this, p);
+			node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		}
 		p.print("}");
 		return null;
@@ -128,16 +129,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAnnotationElementNode(AnnotationElementNode node, PrependablePrintStream p)
 	{
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		p.print(" = ");
-		node.getValue().executeOperation(this, p);
+		node.getUnionForValue().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
 	@Override
 	public Void executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, PrependablePrintStream p)
 	{
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -153,18 +154,18 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.print("\n");
 		}
-		node.getModifiers().executeOperation(this, p);
-		node.getType().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
+		node.getUnionForType().getNodeValue().executeOperation(this, p);
 		p.print(" ");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		p.print("()");
 		if (node.getDefaultValue() != null)
 		{
 			p.print(" default ");
-			node.getDefaultValue().executeOperation(this, p);
+			node.getUnionForDefaultValue().getNodeValue().executeOperation(this, p);
 		}
 		return null;
 	}
@@ -232,11 +233,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeArrayAccessNode(ArrayAccessNode node, PrependablePrintStream p)
 	{
-		node.getArrayExpression().executeOperation(this, p);
+		node.getUnionForArrayExpression().getNodeValue().executeOperation(this, p);
 		p.print("[");
 		if (node.getIndexExpression() != null)
 		{
-			node.getIndexExpression().executeOperation(this, p);
+			node.getUnionForIndexExpression().getNodeValue().executeOperation(this, p);
 		}
 		p.print("]");
 		return null;
@@ -246,14 +247,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, PrependablePrintStream p)
 	{
 		p.print("new ");
-		node.getBaseType().executeOperation(this, p);
+		node.getUnionForBaseType().getNodeValue().executeOperation(this, p);
 		for (int i = 0; i < node.getArrayLevels(); i++)
 		{
 			p.print("[]");
 		}
 		if (node.getInitializer() != null)
 		{
-			node.getInitializer().executeOperation(this, p);
+			node.getUnionForInitializer().getNodeValue().executeOperation(this, p);
 		}
 		return null;
 	}
@@ -269,7 +270,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, PrependablePrintStream p)
 	{
 		p.print("new ");
-		node.getBaseType().executeOperation(this, p);
+		node.getUnionForBaseType().getNodeValue().executeOperation(this, p);
 		for (ExpressionNode exp : node.getDimExpressions().getChildren())
 		{
 			p.print("[");
@@ -286,7 +287,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeArrayTypeNode(ArrayTypeNode node, PrependablePrintStream p)
 	{
-		node.getType().executeOperation(this, p);
+		node.getUnionForType().getNodeValue().executeOperation(this, p);
 		p.print("[]");
 		return null;
 	}
@@ -294,13 +295,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAssertStatementNode(AssertStatementNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("assert ");
-		node.getTestExpression().executeOperation(this, p);
+		node.getUnionForTestExpression().getNodeValue().executeOperation(this, p);
 		if (node.getMessageExpression() != null)
 		{
 			p.print(": ");
-			node.getMessageExpression().executeOperation(this, p);
+			node.getUnionForMessageExpression().getNodeValue().executeOperation(this, p);
 		}
 		p.print(";");
 		return null;
@@ -309,11 +310,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAssignmentNode(AssignmentNode node, PrependablePrintStream p)
 	{
-		node.getVariable().executeOperation(this, p);
+		node.getUnionForVariable().getNodeValue().executeOperation(this, p);
 		p.print(" ");
 		p.print(assignmentOperatorToString(node.getOperator()));
 		p.print(" ");
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -329,7 +330,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.print("(");
 		}
-		node.getLeftOperand().executeOperation(this, p);
+		node.getUnionForLeftOperand().getNodeValue().executeOperation(this, p);
 		if (parenLeft)
 		{
 			p.print(")");
@@ -345,7 +346,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.print("(");
 		}
-		node.getRightOperand().executeOperation(this, p);
+		node.getUnionForRightOperand().getNodeValue().executeOperation(this, p);
 		if (parenRight)
 		{
 			p.print(")");
@@ -356,10 +357,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeBlockNode(BlockNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("{\n");
 		p.incPrependCount();
-		node.getStatements().executeOperation(this, p);
+		node.getUnionForStatements().getNodeValue().executeOperation(this, p);
 		p.decPrependCount();
 		p.print("}");
 		return null;
@@ -382,12 +383,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeBreakNode(BreakNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("break");
 		if (node.getLabel() != null)
 		{
 			p.print(" ");
-			node.getLabel().executeOperation(this, p);
+			node.getUnionForLabel().getNodeValue().executeOperation(this, p);
 		}
 		p.print(";");
 		return null;
@@ -409,7 +410,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		} else
 		{
 			p.print("case ");
-			node.getExpression().executeOperation(this, p);
+			node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 			p.print(":\n");
 		}
 		p.incPrependCount();
@@ -429,11 +430,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeCatchNode(CatchNode node, PrependablePrintStream p)
 	{
 		p.print(" catch (");
-		node.getParameter().executeOperation(this, p);
+		node.getUnionForParameter().getNodeValue().executeOperation(this, p);
 		p.print(")\n");
 		p.print("{\n");
 		p.incPrependCount();
-		node.getBody().executeOperation(this, p);
+		node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		p.decPrependCount();
 		p.print("}");
 		return null;
@@ -469,7 +470,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeClassLiteralNode(ClassLiteralNode node, PrependablePrintStream p)
 	{
-		node.getValue().executeOperation(this, p);
+		node.getUnionForValue().getNodeValue().executeOperation(this, p);
 		p.print(".class");
 		return null;
 	}
@@ -515,7 +516,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeCodeLiteralNode(CodeLiteralNode node, PrependablePrintStream p)
 	{
 		p.print("<:");
-		node.getValue().executeOperation(this, p);
+		node.getUnionForValue().getNodeValue().executeOperation(this, p);
 		p.print(":>");
 		return null;
 	}
@@ -525,7 +526,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getPackageDeclaration() != null)
 		{
-			node.getPackageDeclaration().executeOperation(this, p);
+			node.getUnionForPackageDeclaration().getNodeValue().executeOperation(this, p);
 			p.print("\n\n");
 		}
 		handleListNode(node.getImports(), "", "\n", "\n", p, true);
@@ -546,7 +547,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.print("(");
 		}
-		node.getCondition().executeOperation(this, p);
+		node.getUnionForCondition().getNodeValue().executeOperation(this, p);
 		if (parenCondition)
 		{
 			p.print(")");
@@ -558,7 +559,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.print("(");
 		}
-		node.getTrueExpression().executeOperation(this, p);
+		node.getUnionForTrueExpression().getNodeValue().executeOperation(this, p);
 		if (parenTrue)
 		{
 			p.print(")");
@@ -570,7 +571,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.print("(");
 		}
-		node.getFalseExpression().executeOperation(this, p);
+		node.getUnionForFalseExpression().getNodeValue().executeOperation(this, p);
 		if (parenFalse)
 		{
 			p.print(")");
@@ -602,7 +603,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.incPrependCount();
 		if (node.getConstructorInvocation() != null)
 		{
-			node.getConstructorInvocation().executeOperation(this, p);
+			node.getUnionForConstructorInvocation().getNodeValue().executeOperation(this, p);
 			p.print(";\n");
 		}
 		handleListNode(node.getStatements(), "", "\n", "\n", p, true);
@@ -616,12 +617,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.print("\n");
 		}
-		node.getModifiers().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getTypeParameters(), "<", ", ", "> ", p, true);
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getParameters(), "(", ", ", "", p, false);
 		if (node.getVarargParameter() != null)
 		{
@@ -638,7 +639,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		if (node.getBody() != null)
 		{
 			p.print("\n");
-			node.getBody().executeOperation(this, p);
+			node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		} else
 		{
 			p.print(";");
@@ -658,12 +659,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeContinueNode(ContinueNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("continue");
 		if (node.getLabel() != null)
 		{
 			p.print(" ");
-			node.getLabel().executeOperation(this, p);
+			node.getUnionForLabel().getNodeValue().executeOperation(this, p);
 		}
 		p.print(";");
 		return null;
@@ -679,11 +680,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeDoWhileLoopNode(DoWhileLoopNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("do\n");
-		node.getStatement().executeOperation(this, p);
+		node.getUnionForStatement().getNodeValue().executeOperation(this, p);
 		p.print("while (");
-		node.getCondition().executeOperation(this, p);
+		node.getUnionForCondition().getNodeValue().executeOperation(this, p);
 		p.print(");");
 		return null;
 	}
@@ -698,13 +699,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeEnhancedForLoopNode(EnhancedForLoopNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("for (");
-		node.getVariable().executeOperation(this, p);
+		node.getUnionForVariable().getNodeValue().executeOperation(this, p);
 		p.print(" : ");
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		p.print(")\n");
-		node.getStatement().executeOperation(this, p);
+		node.getUnionForStatement().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -732,16 +733,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.print("\n");
 		}
-		node.getModifiers().executeOperation(this, p);
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getArguments(), "(", ", ", ")", p, true);
 		if (node.getBody() != null)
 		{
 			p.print("\n");
-			node.getBody().executeOperation(this, p);
+			node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		}
 		return null;
 	}
@@ -759,15 +760,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.print("\n");
 		}
-		node.getModifiers().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
 		p.print("enum ");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getImplementsClause(), " implements ", ", ", "", p, true);
 		p.print("\n");
-		node.getBody().executeOperation(this, p);
+		node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -794,10 +795,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeExpressionStatementNode(ExpressionStatementNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		if (node.getExpression() != null)
 		{
-			node.getExpression().executeOperation(this, p);
+			node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		}
 		p.print(";");
 		return null;
@@ -850,7 +851,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, PrependablePrintStream p)
 	{
-		node.getDeclaration().executeOperation(this, p);
+		node.getUnionForDeclaration().getNodeValue().executeOperation(this, p);
 
 		return null;
 	}
@@ -865,11 +866,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeForLoopNode(ForLoopNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("for (");
 		if (node.getInitializer() != null)
 		{
-			node.getInitializer().executeOperation(this, p);
+			node.getUnionForInitializer().getNodeValue().executeOperation(this, p);
 			// (the initializer prints its own ';')
 		} else
 		{
@@ -878,12 +879,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print(" ");
 		if (node.getCondition() != null)
 		{
-			node.getCondition().executeOperation(this, p);
+			node.getUnionForCondition().getNodeValue().executeOperation(this, p);
 		}
 		p.print("; ");
 		handleListNode(node.getUpdate(), "", ", ", "", p, true);
 		p.print(")\n");
-		node.getStatement().executeOperation(this, p);
+		node.getUnionForStatement().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -904,9 +905,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeIfNode(IfNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("if (");
-		node.getCondition().executeOperation(this, p);
+		node.getUnionForCondition().getNodeValue().executeOperation(this, p);
 		p.print(")\n");
 		// Special grouping case - if the immediate child statement is also an if node, the child does not have an
 		// else clause, and we do then we must introduce a block to make sure that the dangling else works correctly
@@ -920,7 +921,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.incPrependCount();
 		}
-		node.getThenStatement().executeOperation(this, p);
+		node.getUnionForThenStatement().getNodeValue().executeOperation(this, p);
 		if (!dangingElse && !(node.getThenStatement() instanceof BlockNode))
 		{
 			p.decPrependCount();
@@ -933,7 +934,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		if (node.getElseStatement() != null)
 		{
 			p.print(" else\n");
-			node.getElseStatement().executeOperation(this, p);
+			node.getUnionForElseStatement().getNodeValue().executeOperation(this, p);
 		}
 		return null;
 	}
@@ -949,7 +950,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeImportOnDemandNode(ImportOnDemandNode node, PrependablePrintStream p)
 	{
 		p.print("import ");
-		node.getName().executeOperation(this, p);
+		node.getUnionForName().getNodeValue().executeOperation(this, p);
 		p.print(".*;");
 		return null;
 	}
@@ -958,7 +959,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeImportSingleTypeNode(ImportSingleTypeNode node, PrependablePrintStream p)
 	{
 		p.print("import ");
-		node.getName().executeOperation(this, p);
+		node.getUnionForName().getNodeValue().executeOperation(this, p);
 		p.print(";");
 		return null;
 	}
@@ -972,7 +973,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		}
 		p.println("{");
 		p.incPrependCount();
-		node.getBody().executeOperation(this, p);
+		node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		p.decPrependCount();
 		p.println("}");
 		return null;
@@ -981,9 +982,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeInstanceOfNode(InstanceOfNode node, PrependablePrintStream p)
 	{
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		p.print(" instanceof ");
-		node.getType().executeOperation(this, p);
+		node.getUnionForType().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1010,16 +1011,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.print("\n");
 		}
-		node.getModifiers().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
 		p.print("interface ");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getTypeParameters(), "<", ", ", ">", p, true);
 		handleListNode(node.getExtendsClause(), " extends ", ", ", "", p, true);
 		p.print("\n");
-		node.getBody().executeOperation(this, p);
+		node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1059,10 +1060,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeLabeledStatementNode(LabeledStatementNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
-		node.getLabel().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
+		node.getUnionForLabel().getNodeValue().executeOperation(this, p);
 		p.print(": ");
-		node.getStatement().executeOperation(this, p);
+		node.getUnionForStatement().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1100,13 +1101,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeLocalVariableDeclarationNode(LocalVariableDeclarationNode node, PrependablePrintStream p)
 	{
-		node.getModifiers().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
 		if (node.getModifiers().getFinalFlag() || node.getModifiers().getAnnotations().size() > 0
 				|| node.getModifiers().getMetaAnnotations().size() > 0)
 		{
 			p.print(' ');
 		}
-		node.getType().executeOperation(this, p);
+		node.getUnionForType().getNodeValue().executeOperation(this, p);
 		p.print(' ');
 
 		boolean first = true;
@@ -1138,14 +1139,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.print("\n");
 		}
-		node.getModifiers().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getTypeParameters(), "<", ", ", "> ", p, true);
-		node.getReturnType().executeOperation(this, p);
+		node.getUnionForReturnType().getNodeValue().executeOperation(this, p);
 		p.print(" ");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getParameters(), "(", ", ", "", p, false);
 		if (node.getVarargParameter() != null)
 		{
@@ -1164,7 +1165,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print("\n");
 			p.println("{");
 			p.incPrependCount();
-			node.getBody().executeOperation(this, p);
+			node.getUnionForBody().getNodeValue().executeOperation(this, p);
 			p.decPrependCount();
 			p.println("}");
 		} else
@@ -1174,17 +1175,17 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print("\n");
 		return null;
 	}
-	
+
 	@Override
 	public Void executeMethodInvocationNode(MethodInvocationNode node, PrependablePrintStream p)
 	{
 		if (node.getExpression() != null)
 		{
-			node.getExpression().executeOperation(this, p);
+			node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 			p.print(".");
 		}
 		handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getArguments(), "(", ", ", ")", p, false);
 		return null;
 	}
@@ -1232,7 +1233,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeNoOperationNode(NoOperationNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print(";");
 		return null;
 	}
@@ -1241,7 +1242,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeNormalAnnotationNode(NormalAnnotationNode node, PrependablePrintStream p)
 	{
 		p.print("@");
-		node.getAnnotationType().executeOperation(this, p);
+		node.getUnionForAnnotationType().getNodeValue().executeOperation(this, p);
 		if (!(node.getArguments().getChildren().isEmpty()))
 		{
 			p.print("(\n");
@@ -1277,7 +1278,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print("package ");
-		node.getName().executeOperation(this, p);
+		node.getUnionForName().getNodeValue().executeOperation(this, p);
 		p.print(";");
 		return null;
 	}
@@ -1292,7 +1293,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeParameterizedTypeNode(ParameterizedTypeNode node, PrependablePrintStream p)
 	{
-		node.getBaseType().executeOperation(this, p);
+		node.getUnionForBaseType().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
 		return null;
 	}
@@ -1300,9 +1301,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, PrependablePrintStream p)
 	{
-		node.getBase().executeOperation(this, p);
+		node.getUnionForBase().getNodeValue().executeOperation(this, p);
 		p.print(".");
-		node.getSelect().executeOperation(this, p);
+		node.getUnionForSelect().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1310,7 +1311,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, PrependablePrintStream p)
 	{
 		p.print("(");
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		p.print(")");
 		return null;
 	}
@@ -1325,14 +1326,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, PrependablePrintStream p)
 	{
-		node.getEnclosingExpression().executeOperation(this, p);
+		node.getUnionForEnclosingExpression().getNodeValue().executeOperation(this, p);
 		p.print(".new ");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
 		handleListNode(node.getArguments(), "(", ", ", ")", p, false);
 		if (node.getBody() != null)
 		{
-			node.getBody().executeOperation(this, p);
+			node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		}
 		return null;
 	}
@@ -1340,9 +1341,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeQualifiedNameNode(QualifiedNameNode node, PrependablePrintStream p)
 	{
-		node.getBase().executeOperation(this, p);
+		node.getUnionForBase().getNodeValue().executeOperation(this, p);
 		p.print('.');
-		executeIdentifierNode(node.getIdentifier(), p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1356,12 +1357,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeReturnNode(ReturnNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("return");
 		if (node.getExpression() != null)
 		{
 			p.print(" ");
-			node.getExpression().executeOperation(this, p);
+			node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		}
 		p.print(";");
 		return null;
@@ -1370,7 +1371,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeSimpleNameNode(SimpleNameNode node, PrependablePrintStream p)
 	{
-		executeIdentifierNode(node.getIdentifier(), p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1378,9 +1379,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeSingleElementAnnotationNode(SingleElementAnnotationNode node, PrependablePrintStream p)
 	{
 		p.print("@");
-		node.getAnnotationType().executeOperation(this, p);
+		node.getUnionForAnnotationType().getNodeValue().executeOperation(this, p);
 		p.print("(");
-		node.getValue().executeOperation(this, p);
+		node.getUnionForValue().getNodeValue().executeOperation(this, p);
 		p.print(")");
 		return null;
 	}
@@ -1389,9 +1390,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeSingleStaticImportNode(SingleStaticImportNode node, PrependablePrintStream p)
 	{
 		p.print("import static ");
-		node.getName().executeOperation(this, p);
+		node.getUnionForName().getNodeValue().executeOperation(this, p);
 		p.print(".");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		p.print(";");
 		return null;
 	}
@@ -1407,7 +1408,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeStaticImportOnDemandNode(StaticImportOnDemandNode node, PrependablePrintStream p)
 	{
 		p.print("import static ");
-		node.getName().executeOperation(this, p);
+		node.getUnionForName().getNodeValue().executeOperation(this, p);
 		p.print(".*;");
 		return null;
 	}
@@ -1426,11 +1427,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getType() != null)
 		{
-			node.getType().executeOperation(this, p);
+			node.getUnionForType().getNodeValue().executeOperation(this, p);
 			p.print(".");
 		}
 		p.print("super.");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1439,12 +1440,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getType() != null)
 		{
-			node.getType().executeOperation(this, p);
+			node.getUnionForType().getNodeValue().executeOperation(this, p);
 			p.print(".");
 		}
 		p.print("super.");
 		handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getArguments(), "(", ", ", ")", p, false);
 		return null;
 	}
@@ -1455,7 +1456,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getQualifyingExpression() != null)
 		{
-			node.getQualifyingExpression().executeOperation(this, p);
+			node.getUnionForQualifyingExpression().getNodeValue().executeOperation(this, p);
 			p.print(".");
 		}
 		handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
@@ -1467,9 +1468,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeSwitchNode(SwitchNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("switch (");
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		p.print(")\n{\n");
 		p.incPrependCount();
 		handleListNode(node.getCases(), "", "", "", p, true);
@@ -1481,13 +1482,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeSynchronizedNode(SynchronizedNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("synchronized (");
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		p.print(")\n");
 		p.println("{");
 		p.incPrependCount();
-		node.getBody().executeOperation(this, p);
+		node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		p.decPrependCount();
 		p.println("}");
 		return null;
@@ -1498,7 +1499,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getType() != null)
 		{
-			node.getType().executeOperation(this, p);
+			node.getUnionForType().getNodeValue().executeOperation(this, p);
 			p.print(".");
 		}
 		p.print("this");
@@ -1508,9 +1509,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeThrowNode(ThrowNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("throw ");
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		p.print(";");
 		return null;
 	}
@@ -1518,11 +1519,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeTryNode(TryNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("try\n");
 		p.print("{\n");
 		p.incPrependCount();
-		node.getBody().executeOperation(this, p);
+		node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		p.decPrependCount();
 		p.print("} ");
 		handleListNode(node.getCatches(), "", "", "", p, true);
@@ -1531,7 +1532,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print("finally\n");
 			p.print("{\n");
 			p.incPrependCount();
-			node.getFinallyBlock().executeOperation(this, p);
+			node.getUnionForFinallyBlock().getNodeValue().executeOperation(this, p);
 			p.decPrependCount();
 			p.print("}\n");
 		}
@@ -1549,9 +1550,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeTypeCastNode(TypeCastNode node, PrependablePrintStream p)
 	{
 		p.print("(");
-		node.getType().executeOperation(this, p);
+		node.getUnionForType().getNodeValue().executeOperation(this, p);
 		p.print(") ");
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1572,7 +1573,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeTypeParameterNode(TypeParameterNode node, PrependablePrintStream p)
 	{
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		if (!node.getBounds().getChildren().isEmpty())
 		{
 			p.print(" extends ");
@@ -1585,7 +1586,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeUnaryExpressionNode(UnaryExpressionNode node, PrependablePrintStream p)
 	{
 		p.print(unaryOperatorToString(node.getOperator()));
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1600,20 +1601,20 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		switch (node.getOperator())
 		{
 			case POSTFIX_DECREMENT: // x--
-				node.getExpression().executeOperation(this, p);
+				node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 				p.print("--");
 				break;
 			case POSTFIX_INCREMENT: // x++
-				node.getExpression().executeOperation(this, p);
+				node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 				p.print("++");
 				break;
 			case PREFIX_DECREMENT: // --x
 				p.print("--");
-				node.getExpression().executeOperation(this, p);
+				node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 				break;
 			case PREFIX_INCREMENT: // ++x
 				p.print("++");
-				node.getExpression().executeOperation(this, p);
+				node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 				break;
 		}
 		return null;
@@ -1629,7 +1630,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeUnparameterizedTypeNode(UnparameterizedTypeNode node, PrependablePrintStream p)
 	{
-		node.getName().executeOperation(this, p);
+		node.getUnionForName().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1638,11 +1639,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			PrependablePrintStream p)
 	{
 		p.print("new ");
-		node.getType().executeOperation(this, p);
+		node.getUnionForType().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getArguments(), "(", ", ", ")", p, false);
 		if (node.getBody() != null)
 		{
-			node.getBody().executeOperation(this, p);
+			node.getUnionForBody().getNodeValue().executeOperation(this, p);
 		}
 		return null;
 	}
@@ -1652,10 +1653,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getExpression() != null)
 		{
-			node.getExpression().executeOperation(this, p);
+			node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 			p.print(".");
 		}
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1669,7 +1670,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, PrependablePrintStream p)
 	{
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		for (int i = 0; i < node.getArrayLevels(); i++)
 		{
 			p.print("[]");
@@ -1677,7 +1678,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		if (node.getInitializer() != null)
 		{
 			p.print(" = ");
-			node.getInitializer().executeOperation(this, p);
+			node.getUnionForInitializer().getNodeValue().executeOperation(this, p);
 		}
 		return null;
 	}
@@ -1709,10 +1710,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeVariableNode(VariableNode node, PrependablePrintStream p)
 	{
-		node.getModifiers().executeOperation(this, p);
-		node.getType().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
+		node.getUnionForType().getNodeValue().executeOperation(this, p);
 		p.print(" ");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1726,11 +1727,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeWhileLoopNode(WhileLoopNode node, PrependablePrintStream p)
 	{
-		node.getMetaAnnotations().executeOperation(this, p);
+		node.getUnionForMetaAnnotations().getNodeValue().executeOperation(this, p);
 		p.print("while (");
-		node.getCondition().executeOperation(this, p);
+		node.getUnionForCondition().getNodeValue().executeOperation(this, p);
 		p.print(")\n");
-		node.getStatement().executeOperation(this, p);
+		node.getUnionForStatement().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1747,7 +1748,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			{
 				p.print(" super ");
 			}
-			node.getBound().executeOperation(this, p);
+			node.getUnionForBound().getNodeValue().executeOperation(this, p);
 		}
 		return null;
 	}
@@ -1760,7 +1761,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
-		executeMetaprogramNode(node.getMetaprogram(), p);
+		handleMetaprogramUnion(node.getUnionForMetaprogram(), p);
 		return null;
 	}
 
@@ -1768,7 +1769,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
-		executeMetaprogramNode(node.getMetaprogram(), p);
+		handleMetaprogramUnion(node.getUnionForMetaprogram(), p);
 		return null;
 	}
 
@@ -1776,14 +1777,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
-		executeMetaprogramNode(node.getMetaprogram(), p);
+		handleMetaprogramUnion(node.getUnionForMetaprogram(), p);
 		return null;
 	}
 
 	@Override
 	public Void executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, PrependablePrintStream p)
 	{
-		executeMetaprogramNode(node.getMetaprogram(), p);
+		handleMetaprogramUnion(node.getUnionForMetaprogram(), p);
 		return null;
 	}
 
@@ -1800,7 +1801,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
-		executeMetaprogramNode(node.getMetaprogram(), p);
+		handleMetaprogramUnion(node.getUnionForMetaprogram(), p);
 		return null;
 	}
 
@@ -1821,9 +1822,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeMetaAnnotationElementNode(MetaAnnotationElementNode node, PrependablePrintStream p)
 	{
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		p.print(" = ");
-		node.getValue().executeOperation(this, p);
+		node.getUnionForValue().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1838,7 +1839,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node,
 			PrependablePrintStream p)
 	{
-		node.getAnnotation().executeOperation(this, p);
+		node.getUnionForAnnotation().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1861,7 +1862,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node,
 			PrependablePrintStream p)
 	{
-		node.getExpression().executeOperation(this, p);
+		node.getUnionForExpression().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1878,7 +1879,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			PrependablePrintStream p)
 	{
 		p.print("#depends ");
-		node.getTargets().executeOperation(this, p);
+		node.getUnionForTargets().getNodeValue().executeOperation(this, p);
 		p.println(";");
 		return null;
 	}
@@ -1897,7 +1898,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.print("#weak ");
 		}
-		node.getTargetName().executeOperation(this, p);
+		node.getUnionForTargetName().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1912,7 +1913,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeMetaprogramImportNode(MetaprogramImportNode node, PrependablePrintStream p)
 	{
 		p.print("#");
-		node.getImportNode().executeOperation(this, p);
+		node.getUnionForImportNode().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1937,8 +1938,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeMetaprogramPreambleNode(MetaprogramPreambleNode node, PrependablePrintStream p)
 	{
 		handleListNode(node.getImports(), "", "\n", "\n", p, true);
-		node.getTargets().executeOperation(this, p);
-		node.getDependencies().executeOperation(this, p);
+		node.getUnionForTargets().getNodeValue().executeOperation(this, p);
+		node.getUnionForDependencies().getNodeValue().executeOperation(this, p);
 		return null;
 	}
 
@@ -1962,7 +1963,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, PrependablePrintStream p)
 	{
 		p.print("@@");
-		node.getAnnotationType().executeOperation(this, p);
+		node.getUnionForAnnotationType().getNodeValue().executeOperation(this, p);
 		if (!(node.getArguments().getChildren().isEmpty()))
 		{
 			p.print("(\n");
@@ -1989,9 +1990,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, PrependablePrintStream p)
 	{
 		p.print("@@");
-		node.getAnnotationType().executeOperation(this, p);
+		node.getUnionForAnnotationType().getNodeValue().executeOperation(this, p);
 		p.print("(");
-		node.getValue().executeOperation(this, p);
+		node.getUnionForValue().getNodeValue().executeOperation(this, p);
 		p.print(")");
 		return null;
 	}
@@ -2009,7 +2010,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
-		executeMetaprogramNode(node.getMetaprogram(), p);
+		handleMetaprogramUnion(node.getUnionForMetaprogram(), p);
 		return null;
 	}
 
@@ -2017,14 +2018,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	// ============================ Utility Methods ===========================
 	// ========================================================================
 
-	protected <T extends Node> Void executeListNode(ListNode<T> node, PrependablePrintStream p)
+	private <T extends Node> Void executeListNode(ListNode<T> node, PrependablePrintStream p)
 	{
 		// just call the utility method with some defaults
 		handleListNode(node, "", ",", "\n", p, false);
 		return null;
 	}
 
-	protected void handleListNode(ListNode<? extends Node> node, String begin, String separator, String end,
+	private void handleListNode(ListNode<? extends Node> node, String begin, String separator, String end,
 			PrependablePrintStream p, boolean doNothingIfEmpty)
 	{
 		if (node == null || (doNothingIfEmpty && node.getChildren().isEmpty()))
@@ -2055,21 +2056,21 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.print("\n");
 		}
-		node.getModifiers().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
 		p.print("class ");
-		node.getIdentifier().executeOperation(this, p);
+		node.getUnionForIdentifier().getNodeValue().executeOperation(this, p);
 		handleListNode(node.getTypeParameters(), "<", ", ", ">", p, true);
 		if (node.getExtendsClause() != null)
 		{
 			p.print(" extends ");
-			node.getExtendsClause().executeOperation(this, p);
+			node.getUnionForExtendsClause().getNodeValue().executeOperation(this, p);
 		}
 		handleListNode(node.getImplementsClause(), " implements ", ", ", "", p, true);
 		p.print("\n");
-		node.getBody().executeOperation(this, p);
+		node.getUnionForBody().getNodeValue().executeOperation(this, p);
 	}
 
 	private void handleAbstractMemberVariableDeclarationNode(AbstractMemberVariableDeclarationNode<?> node,
@@ -2077,17 +2078,17 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		if (node.getJavadoc() != null)
 		{
-			node.getJavadoc().executeOperation(this, p);
+			node.getUnionForJavadoc().getNodeValue().executeOperation(this, p);
 			p.println();
 		}
-		node.getModifiers().executeOperation(this, p);
-		node.getType().executeOperation(this, p);
+		node.getUnionForModifiers().getNodeValue().executeOperation(this, p);
+		node.getUnionForType().getNodeValue().executeOperation(this, p);
 		p.print(' ');
-		node.getDeclarators().executeOperation(this, p);
+		node.getUnionForDeclarators().getNodeValue().executeOperation(this, p);
 		p.println(";");
 	}
 
-	protected String accessModifierToString(AccessModifier modifier)
+	private String accessModifierToString(AccessModifier modifier)
 	{
 		if (modifier == null)
 		{
@@ -2109,7 +2110,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		}
 	}
 
-	protected String assignmentOperatorToString(AssignmentOperator operator)
+	private String assignmentOperatorToString(AssignmentOperator operator)
 	{
 		if (operator == null)
 		{
@@ -2147,7 +2148,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		}
 	}
 
-	protected String primitiveTypeToString(PrimitiveType type)
+	private String primitiveTypeToString(PrimitiveType type)
 	{
 		if (type == null)
 		{
@@ -2177,7 +2178,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		}
 	}
 
-	protected String unaryOperatorToString(UnaryOperator operator)
+	private String unaryOperatorToString(UnaryOperator operator)
 	{
 		if (operator == null)
 		{
@@ -2199,7 +2200,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		}
 	}
 
-	protected String binaryOperatorToString(BinaryOperator operator)
+	private String binaryOperatorToString(BinaryOperator operator)
 	{
 		if (operator == null)
 		{
@@ -2252,7 +2253,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		}
 	}
 
-	public boolean checkForLowerPrecedence(ExpressionNode childNode, BinaryOperator operator)
+	private boolean checkForLowerPrecedence(ExpressionNode childNode, BinaryOperator operator)
 	{
 		// assignment and conditionals have a lower precedence than binary operations
 		if (childNode instanceof AssignmentNode || childNode instanceof ConditionalExpressionNode)
@@ -2283,7 +2284,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	 * @param input the stored javadoc, lines separated by returns.
 	 * @return the formatted javadoc.
 	 */
-	public static String buildJavadoc(String input)
+	private static String buildJavadoc(String input)
 	{
 		// rebuild formatting from individual lines
 		String tokens[] = input.split("\n");
@@ -2303,7 +2304,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	 * @param string The string to escape.
 	 * @return The escaped string.
 	 */
-	public static final String escape(String string)
+	private static final String escape(String string)
 	{
 		StringBuilder sb = new StringBuilder();
 		for (char c : string.toCharArray())
@@ -2340,5 +2341,17 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			}
 		}
 		return sb.toString();
+	}
+
+	private void handleMetaprogramUnion(NodeUnion<? extends MetaprogramNode> unionForMetaprogram,
+			PrependablePrintStream p)
+	{
+		if (unionForMetaprogram.getType().equals(NodeUnion.Type.NORMAL))
+		{
+			executeMetaprogramNode(unionForMetaprogram.getNormalNode(), p);
+		} else
+		{
+			unionForMetaprogram.getNodeValue().executeOperation(this, p);
+		}
 	}
 }

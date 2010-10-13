@@ -5127,9 +5127,9 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     public ExpressionNode executeSpliceNode(SpliceNode node, ExpressionNode factoryNode)
     {
         ExpressionNode liftSpliceExpression = 
-                node.getUnionForSpliceExpression().getType() == NodeUnion.Type.SPLICE ? 
-                        expressionizeSpliceNodeUnion(node.getUnionForSpliceExpression().getSpliceNode(), factoryNode, "ExpressionNode") :
-                expressionizeNormalNodeUnion(node.getSpliceExpression(), factoryNode, "ExpressionNode");
+                node.getSpliceExpression() != null ?
+                        node.getSpliceExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
         BsjSourceLocation liftStartLocationValue = 
                 node.getStartLocation();
         BsjSourceLocation liftStopLocationValue = 
@@ -5138,7 +5138,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         ExpressionNode ret =
                 factory.makeMethodInvocationNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeSpliceNodeWithUnions"),
+                        factory.makeIdentifierNode("makeSpliceNode"),
                         factory.makeExpressionListNode(
                                 liftSpliceExpression,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),

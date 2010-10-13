@@ -23,7 +23,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
@@ -1445,19 +1444,6 @@ public class NodeMappingSerializationOperation extends
 			try
 			{
 				return super.executeLabeledStatementNode(node, p);
-			} finally
-			{
-				after(node);
-			}
-		}
-
-		@Override
-		protected <T extends Node> Void executeListNode(ListNode<T> node, PrependablePrintStream p)
-		{
-			before(node);
-			try
-			{
-				return super.executeListNode(node, p);
 			} finally
 			{
 				after(node);

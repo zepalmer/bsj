@@ -360,8 +360,8 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getLeftOperand());
-        list.add(getRightOperand());
+        list.add(getUnionForLeftOperand());
+        list.add(getUnionForRightOperand());
         list.add(getOperator());
         return list;
     }

@@ -502,11 +502,11 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getImports());
+        list.add(getUnionForImports());
         list.add(getLocalMode());
         list.add(getPackageMode());
-        list.add(getTargets());
-        list.add(getDependencies());
+        list.add(getUnionForTargets());
+        list.add(getUnionForDependencies());
         return list;
     }
     

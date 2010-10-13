@@ -360,9 +360,9 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getVariable());
+        list.add(getUnionForVariable());
         list.add(getOperator());
-        list.add(getExpression());
+        list.add(getUnionForExpression());
         return list;
     }
     

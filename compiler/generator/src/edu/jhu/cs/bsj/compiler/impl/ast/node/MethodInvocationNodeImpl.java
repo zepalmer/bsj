@@ -530,10 +530,10 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
-        list.add(getIdentifier());
-        list.add(getArguments());
-        list.add(getTypeArguments());
+        list.add(getUnionForExpression());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForArguments());
+        list.add(getUnionForTypeArguments());
         return list;
     }
     

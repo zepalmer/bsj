@@ -5864,24 +5864,8 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node);
      * Creates a SpliceNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public SpliceNode makeSpliceNodeWithUnions(
-            NodeUnion<? extends ExpressionNode> spliceExpression);
-    
-    /**
-     * Creates a SpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
     public SpliceNode makeSpliceNode(
             ExpressionNode spliceExpression);
-    
-    /**
-     * Creates a SpliceNode.
-     * The specified start and stop locations are used.
-     */
-    public SpliceNode makeSpliceNodeWithUnions(
-            NodeUnion<? extends ExpressionNode> spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
     
     /**
      * Creates a SpliceNode.

@@ -527,9 +527,10 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getCondition());
-        list.add(getThenStatement());
-        list.add(getElseStatement());
+        list.add(getUnionForCondition());
+        list.add(getUnionForThenStatement());
+        list.add(getUnionForElseStatement());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

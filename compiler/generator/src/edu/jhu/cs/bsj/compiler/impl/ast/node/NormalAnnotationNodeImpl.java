@@ -221,7 +221,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getArguments());
+        list.add(getUnionForArguments());
         return list;
     }
     

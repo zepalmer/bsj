@@ -223,7 +223,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getArguments());
+        list.add(getUnionForArguments());
         return list;
     }
     

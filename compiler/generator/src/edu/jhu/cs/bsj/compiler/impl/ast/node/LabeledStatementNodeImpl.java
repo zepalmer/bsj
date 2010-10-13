@@ -425,8 +425,9 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getLabel());
-        list.add(getStatement());
+        list.add(getUnionForLabel());
+        list.add(getUnionForStatement());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

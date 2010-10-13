@@ -526,10 +526,10 @@ public abstract class AbstractMemberVariableDeclarationNodeImpl<T extends Modifi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getType());
-        list.add(getDeclarators());
-        list.add(getJavadoc());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForJavadoc());
+        list.add(getUnionForType());
+        list.add(getUnionForDeclarators());
         return list;
     }
     

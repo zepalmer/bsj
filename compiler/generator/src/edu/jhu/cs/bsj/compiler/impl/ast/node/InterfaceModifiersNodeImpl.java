@@ -236,9 +236,9 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getAccess());
         list.add(getStaticFlag());
         list.add(getStrictfpFlag());
+        list.add(getAccess());
         return list;
     }
     

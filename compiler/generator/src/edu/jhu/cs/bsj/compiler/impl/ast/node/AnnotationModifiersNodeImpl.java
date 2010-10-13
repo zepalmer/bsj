@@ -236,9 +236,9 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getAccess());
         list.add(getStaticFlag());
         list.add(getStrictfpFlag());
+        list.add(getAccess());
         return list;
     }
     

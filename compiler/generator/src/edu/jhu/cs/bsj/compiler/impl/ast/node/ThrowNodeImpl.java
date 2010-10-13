@@ -322,7 +322,8 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
+        list.add(getUnionForExpression());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

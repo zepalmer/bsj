@@ -740,10 +740,12 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getExtendsClause());
-        list.add(getBody());
-        list.add(getTypeParameters());
+        list.add(getUnionForExtendsClause());
+        list.add(getUnionForTypeParameters());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForJavadoc());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForBody());
         return list;
     }
     

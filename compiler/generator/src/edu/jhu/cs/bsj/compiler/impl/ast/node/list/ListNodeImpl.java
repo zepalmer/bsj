@@ -193,7 +193,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getChildren());
+        list.add(getUnionForChildren());
         return list;
     }
     */

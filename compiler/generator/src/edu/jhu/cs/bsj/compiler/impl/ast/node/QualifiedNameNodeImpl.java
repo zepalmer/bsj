@@ -221,7 +221,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getBase());
+        list.add(getUnionForBase());
         return list;
     }
     

@@ -318,8 +318,8 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getMetaAnnotations());
-        list.add(getAnnotations());
+        list.add(getUnionForAnnotations());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

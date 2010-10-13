@@ -152,6 +152,7 @@ public class IntLiteralNodeImpl extends NodeImpl implements IntLiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

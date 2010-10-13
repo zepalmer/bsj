@@ -152,6 +152,7 @@ public class BooleanLiteralNodeImpl extends NodeImpl implements BooleanLiteralNo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

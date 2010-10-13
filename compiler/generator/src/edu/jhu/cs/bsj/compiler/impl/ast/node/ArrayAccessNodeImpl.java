@@ -322,8 +322,8 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getArrayExpression());
-        list.add(getIndexExpression());
+        list.add(getUnionForArrayExpression());
+        list.add(getUnionForIndexExpression());
         return list;
     }
     

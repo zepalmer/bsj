@@ -223,7 +223,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getQualifyingExpression());
+        list.add(getUnionForQualifyingExpression());
         return list;
     }
     

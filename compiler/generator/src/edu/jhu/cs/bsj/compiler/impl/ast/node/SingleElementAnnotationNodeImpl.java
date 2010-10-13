@@ -221,7 +221,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getValue());
+        list.add(getUnionForValue());
         return list;
     }
     

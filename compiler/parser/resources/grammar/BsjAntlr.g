@@ -320,43 +320,43 @@ scope Rule {
             {
                 if (!factorySourceLocationOverride)
                 {
-	                BsjSourceLocation start = 
-	                        new BsjSourceLocation(getResourceName(), $Rule::firstToken.getLine(),
-	                                $Rule::firstToken.getCharPositionInLine() + 1);
-	                setStartSourceLocation(start);
-	                
-	                BsjSourceLocation stop;
-	                Token token = input.LT(-1);
-	                if (token == null)
-	                {
-	                    stop = new BsjSourceLocation(getResourceName(), BsjSourceLocation.NOPOS, BsjSourceLocation.NOPOS);
-	                } else
-	                {
-	                    stop = new BsjSourceLocation(getResourceName(), token.getLine(),
-	                            token.getCharPositionInLine() + token.getText().length() + 1);
-	                }
-	                
-	                // If the start location is greater than the stop location, then the last token consumed appears
-	                // before the next token when the rule started.  In other words, the rule consumed no tokens.
-	                // Therefore, we give the stop location as matching the start location.
-	                if (start.compareTo(stop) > 0)
-	                {
-	                    stop = start;
-	                }
-	                setStopSourceLocation(stop);
-	                
-	                if (logger.isTraceEnabled())
-	                {
-	                    logger.trace("Created node while parsing rule " + $Rule::name);
-	                    logger.trace("First token = " +
-	                            (($Rule::firstToken==null)?
-	                            "null" : ($Rule::firstToken.getText())) +
-	                            " at " + start);
-	                    logger.trace("Last token = " +
-	                            ((token==null)?
-	                            "null" : (token.getText())) +
-	                        " at " + stop);
-	                }
+                    BsjSourceLocation start = 
+                            new BsjSourceLocation(getResourceName(), $Rule::firstToken.getLine(),
+                                    $Rule::firstToken.getCharPositionInLine() + 1);
+                    setStartSourceLocation(start);
+                    
+                    BsjSourceLocation stop;
+                    Token token = input.LT(-1);
+                    if (token == null)
+                    {
+                        stop = new BsjSourceLocation(getResourceName(), BsjSourceLocation.NOPOS, BsjSourceLocation.NOPOS);
+                    } else
+                    {
+                        stop = new BsjSourceLocation(getResourceName(), token.getLine(),
+                                token.getCharPositionInLine() + token.getText().length() + 1);
+                    }
+                    
+                    // If the start location is greater than the stop location, then the last token consumed appears
+                    // before the next token when the rule started.  In other words, the rule consumed no tokens.
+                    // Therefore, we give the stop location as matching the start location.
+                    if (start.compareTo(stop) > 0)
+                    {
+                        stop = start;
+                    }
+                    setStopSourceLocation(stop);
+                    
+                    if (logger.isTraceEnabled())
+                    {
+                        logger.trace("Created node while parsing rule " + $Rule::name);
+                        logger.trace("First token = " +
+                                (($Rule::firstToken==null)?
+                                "null" : ($Rule::firstToken.getText())) +
+                                " at " + start);
+                        logger.trace("Last token = " +
+                                ((token==null)?
+                                "null" : (token.getText())) +
+                            " at " + stop);
+                    }
                 }
             }
             
@@ -376,17 +376,17 @@ scope Rule {
     // *** SUPPORT FOR MODIFIER PARSING ***************************************
     enum Modifier // does not cover access modifiers
     {
-	    ABSTRACT, 
-	    FINAL,
-	    NATIVE,
-	    PRIVATE,
-	    PROTECTED,
-	    PUBLIC,
-	    STATIC,
-	    STRICTFP,
-	    SYNCHRONIZED,
-	    TRANSIENT,
-	    VOLATILE
+        ABSTRACT, 
+        FINAL,
+        NATIVE,
+        PRIVATE,
+        PROTECTED,
+        PUBLIC,
+        STATIC,
+        STRICTFP,
+        SYNCHRONIZED,
+        TRANSIENT,
+        VOLATILE
     }
     enum ModifierState
     {
@@ -556,34 +556,44 @@ scope Rule {
         reportDiagnostic(diagnostic);
     }
     
+    // *** PARSING ACTION SUPPORT *********************************************
     // Extracts the content of a javadoc comment into a string.
     public static String parseJavadoc(String input)
     {
-		   // verify that this is a stored javadoc
-		   input = input.trim();
-		   if (!(input.startsWith("/**") && input.endsWith("*/")))
-		   {
-		     throw new IllegalStateException("Invalid javadoc comment");
-		   }
-		   
-		   // remove /** and */
-		   input = input.substring(3, input.length()-2);
-		   
-		   // parse out individual lines
-		   String tokens[] = input.split("\n");
-		   StringBuilder ret = new StringBuilder();
-		   for (String temp : tokens)
-		   {
-		     temp = temp.trim();
-		     if (!temp.isEmpty() && temp.charAt(0) == '*')
-		     {
-		       temp = temp.replaceFirst("\\*", "");
-		     }
-		     ret.append(temp.trim()).append("\n");
-		   }
-		   
-		   return ret.toString().trim();
-		}
+       // verify that this is a stored javadoc
+       input = input.trim();
+       if (!(input.startsWith("/**") && input.endsWith("*/")))
+       {
+         throw new IllegalStateException("Invalid javadoc comment");
+       }
+       
+       // remove /** and */
+       input = input.substring(3, input.length()-2);
+       
+       // parse out individual lines
+       String tokens[] = input.split("\n");
+       StringBuilder ret = new StringBuilder();
+       for (String temp : tokens)
+       {
+         temp = temp.trim();
+         if (!temp.isEmpty() && temp.charAt(0) == '*')
+         {
+           temp = temp.replaceFirst("\\*", "");
+         }
+         ret.append(temp.trim()).append("\n");
+       }
+       
+       return ret.toString().trim();
+    }
+    
+    /**
+     * Creates a splice node given the specified expression.  This method is parameterized so as to select the type
+     * of created splice node based on the type of the provided class.
+     */ 
+    private <T extends Node> NodeUnion<T> createSpliceNodeUnion(Class<T> expectedType, ExpressionNode expr)
+    {
+       return factory.<T>makeSpliceNodeUnion(factory.makeSpliceNode(expr));
+    }
     
     // *** RULE AOP METHODS ***************************************************
     private void ruleStart(String ruleName)
@@ -593,7 +603,23 @@ scope Rule {
         if (logger.isTraceEnabled())
         {
             logger.trace("Rule started: " + ruleName);
-            logger.trace("    state.backtracking = " + state.backtracking);
+            logger.trace("    currently at " + getSourceLocation(1) + " with token text '" + input.LT(1).getText() +
+                    "' and backtracking = " + state.backtracking);
+            StringBuilder sb = new StringBuilder("    Rule stack: ");
+            boolean first = true;
+            List<Rule_scope> rules = new java.util.LinkedList<Rule_scope>();
+            for (Object ruleObj : Rule_stack)
+            {
+                rules.add(0, (Rule_scope)ruleObj);
+            }
+            for (Rule_scope rule : rules)
+            {
+                if (!first)
+                    sb.append(" << ");
+                sb.append(rule.name);
+                first = false;
+            }
+            logger.trace(sb.toString());
         }
     }
     
@@ -605,8 +631,6 @@ scope Rule {
         }
     }
 }
-
-
 
 /********************************************************************************************
                           Parser section
@@ -1270,36 +1294,36 @@ metaAnnotation returns [NodeUnion<? extends MetaAnnotationNode> ret]
     :   
         {configuration.getMetaAnnotationsSupported()}?=>
         (
-	        '@' '@' unparameterizedType
-	        (
-		        (
-		            '('   
-		            (
-		                optionalMetaAnnotationElementValuePairs
-		                {
-		                    $ret = factory.makeNormalNodeUnion(
-		                               factory.makeNormalMetaAnnotationNodeWithUnions(
-		                                       $optionalMetaAnnotationElementValuePairs.ret,
-		                                       $unparameterizedType.ret));
-		                }
-		            |
-		                metaAnnotationElementValue
-		                {
-		                    $ret = factory.makeNormalNodeUnion(
-		                               factory.makeSingleElementMetaAnnotationNodeWithUnions(
-		                                   $metaAnnotationElementValue.ret,
-		                                   $unparameterizedType.ret));
-		                }
-		            )? 
-		            ')' 
-	            )
+            '@' '@' unparameterizedType
+            (
+                (
+                    '('   
+                    (
+                        optionalMetaAnnotationElementValuePairs
+                        {
+                            $ret = factory.makeNormalNodeUnion(
+                                       factory.makeNormalMetaAnnotationNodeWithUnions(
+                                               $optionalMetaAnnotationElementValuePairs.ret,
+                                               $unparameterizedType.ret));
+                        }
+                    |
+                        metaAnnotationElementValue
+                        {
+                            $ret = factory.makeNormalNodeUnion(
+                                       factory.makeSingleElementMetaAnnotationNodeWithUnions(
+                                           $metaAnnotationElementValue.ret,
+                                           $unparameterizedType.ret));
+                        }
+                    )? 
+                    ')' 
+                )
             |
-	            {
-	                $ret = factory.makeNormalNodeUnion(
-	                           factory.makeNormalMetaAnnotationNodeWithUnions(
-	                               factory.makeNormalNodeUnion(factory.makeMetaAnnotationElementListNode()),
-	                               $unparameterizedType.ret));
-	            }            
+                {
+                    $ret = factory.makeNormalNodeUnion(
+                               factory.makeNormalMetaAnnotationNodeWithUnions(
+                                   factory.makeNormalNodeUnion(factory.makeMetaAnnotationElementListNode()),
+                                   $unparameterizedType.ret));
+                }            
             )
         )
     ;
@@ -1543,14 +1567,17 @@ codeLiteral returns [NodeUnion<? extends RawCodeLiteralNode> ret]
             ruleStop();
         }
     :
-        '<:'
-        codeLiteralBody
-        ':>'
-        {
-            $ret = factory.makeNormalNodeUnion(factory.makeRawCodeLiteralNode(new BsjRawCodeLiteralPayloadAntlrImpl(
-	                getResourceName(),
-	                $codeLiteralBody.ret)));
-        }
+        {configuration.getCodeLiteralsSupported()}?=>
+        (
+            '<:'
+            codeLiteralBody
+            ':>'
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeRawCodeLiteralNode(new BsjRawCodeLiteralPayloadAntlrImpl(
+                        getResourceName(),
+                        $codeLiteralBody.ret)));
+            }
+        )
     ;
 
 // Parses the body of a raw code literal
@@ -1599,6 +1626,34 @@ anyNonCodeLiteralToken returns [BsjTokenImpl ret]
         {
             $ret = new BsjTokenImpl(input.get(input.index()-1));
         }
+    ;
+
+// This rule matches a code splice.  The output type is "Node" because any grammar rule may call this routine; the
+// type parameter of the union does not represent a splice but instead represents the value that would be present
+// normally.  The caller of this grammar rule must perform a runtime-checked cast of the resulting union to get the
+// desired result (which will always be safe if the cast uses the expected type provided here).
+splice[Class<? extends Node> expectedType] returns [NodeUnion<? extends Node> ret]
+        scope Rule;
+        @init {
+            ruleStart("splice");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        {configuration.getCodeSplicingSupported()}?=>
+        (
+            '~:'
+            expression
+            {
+                // TODO: typecheck the expression
+                // TODO: ensure that the expression is a normal node - no other case is legitimate (or can be typechecked)
+            }
+            ':~'
+            {
+                $ret = createSpliceNodeUnion(expectedType, $expression.ret.getNormalNode());
+            }
+        )
     ;
 
 /* ===========================================================================
@@ -1910,10 +1965,10 @@ javadoc returns [NodeUnion<JavadocNode> ret] // TODO: parse out Javadoc contents
                     factorySourceLocationOverride = false;
                     break;
                 }
-	            else if  (input.get(index).getChannel() == org.antlr.runtime.Token.DEFAULT_CHANNEL)
-	            {
-	                break;
-	            }       
+                else if  (input.get(index).getChannel() == org.antlr.runtime.Token.DEFAULT_CHANNEL)
+                {
+                    break;
+                }       
             }
         }
         @after {
@@ -2481,10 +2536,10 @@ normalClassDeclaration returns [NodeUnion<? extends ClassDeclarationNode> ret]
         }
     ;
 
-inlineClassDeclaration returns [NodeUnion<? extends LocalClassDeclarationNode> ret]
+localClassDeclaration returns [NodeUnion<? extends LocalClassDeclarationNode> ret]
         scope Rule;
         @init {
-            ruleStart("inlineClassDeclaration");
+            ruleStart("localClassDeclaration");
             NodeUnion<? extends DeclaredTypeListNode> declaredTypeListNode = 
                     factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNode());
         }
@@ -2701,7 +2756,6 @@ enumDeclaration returns [NodeUnion<? extends EnumDeclarationNode> ret]
         }
     ;
 
-
 enumBody returns [NodeUnion<? extends EnumBodyNode> ret]
         scope Rule;
         @init {
@@ -2850,7 +2904,6 @@ enumBodyDeclarations returns [NodeUnion<? extends ClassMemberListNode> ret]
             $ret = $optionalClassBodyDeclarations.ret;
         }
     ;
-
 
 interfaceDeclaration returns [NodeUnion<? extends TypeDeclarationNode> ret]
         scope Rule;
@@ -4130,15 +4183,15 @@ wildcard returns [NodeUnion<? extends WildcardTypeNode> ret]
             $ret = factory.makeNormalNodeUnion(factory.makeWildcardTypeNode((ReferenceTypeNode)null, false));
         }
         (
-	        (
-	            EXTENDS { upper = true; }
-	        |
-	            SUPER { upper = false; }
-	        )
-	        referenceType
-	        {
-	            $ret = factory.makeNormalNodeUnion(factory.makeWildcardTypeNodeWithUnions($referenceType.ret, upper));
-	        }
+            (
+                EXTENDS { upper = true; }
+            |
+                SUPER { upper = false; }
+            )
+            referenceType
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeWildcardTypeNodeWithUnions($referenceType.ret, upper));
+            }
         )?
     ;
 
@@ -4460,32 +4513,32 @@ annotation returns [NodeUnion<? extends AnnotationNode> ret]
     :   
         '@' unparameterizedType
         (
-	        (
-	            '('   
-	            (
-	                optionalElementValuePairs
-	                {
-	                    $ret = factory.makeNormalNodeUnion(factory.makeNormalAnnotationNodeWithUnions(
-	                                    $optionalElementValuePairs.ret,
-	                                    $unparameterizedType.ret));
-	                }
-	            |
-	                elementValue
-	                {
-	                    $ret = factory.makeNormalNodeUnion(factory.makeSingleElementAnnotationNodeWithUnions(
-	                                    $elementValue.ret,
-	                                    $unparameterizedType.ret));
-	                }
-	            )? 
-	            ')' 
-	        )
-	    |
-	        {
-	            $ret = factory.makeNormalNodeUnion(factory.makeNormalAnnotationNodeWithUnions(
-	                            factory.makeNormalNodeUnion(factory.makeAnnotationElementListNode()),
-	                            $unparameterizedType.ret));
-	        }
-	    )        
+            (
+                '('   
+                (
+                    optionalElementValuePairs
+                    {
+                        $ret = factory.makeNormalNodeUnion(factory.makeNormalAnnotationNodeWithUnions(
+                                        $optionalElementValuePairs.ret,
+                                        $unparameterizedType.ret));
+                    }
+                |
+                    elementValue
+                    {
+                        $ret = factory.makeNormalNodeUnion(factory.makeSingleElementAnnotationNodeWithUnions(
+                                        $elementValue.ret,
+                                        $unparameterizedType.ret));
+                    }
+                )? 
+                ')' 
+            )
+        |
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeNormalAnnotationNodeWithUnions(
+                                factory.makeNormalNodeUnion(factory.makeAnnotationElementListNode()),
+                                $unparameterizedType.ret));
+            }
+        )        
     ;
 
 // Parses an annotation's element-value pairs.
@@ -4725,10 +4778,10 @@ annotationTypeDeclaration returns [NodeUnion<? extends AnnotationDeclarationNode
         annotationTypeBody
         {
             $ret = factory.makeNormalNodeUnion(factory.makeAnnotationDeclarationNodeWithUnions(
-	                $annotationModifiers.ret,
-	                $annotationTypeBody.ret,
-	                $id.ret,
-	                $javadoc.ret));
+                    $annotationModifiers.ret,
+                    $annotationTypeBody.ret,
+                    $id.ret,
+                    $javadoc.ret));
         }
     ;
 
@@ -4988,9 +5041,9 @@ blockStatement returns [NodeUnion<? extends BlockStatementNode> ret]
             $ret = $localVariableDeclarationStatement.ret;
         }
     |   
-        (typeHeader)=>inlineClassDeclaration
+        (typeHeader)=>localClassDeclaration
         {
-            $ret = $inlineClassDeclaration.ret;
+            $ret = $localClassDeclaration.ret;
         }
     |   
         statement
@@ -5237,10 +5290,10 @@ enhancedForStatement returns [NodeUnion<? extends EnhancedForLoopNode> ret]
         {
             $ret = factory.makeNormalNodeUnion(factory.makeEnhancedForLoopNodeWithUnions(
                     factory.makeNormalNodeUnion(
-	                    factory.makeVariableNodeWithUnions(
-	                            $variableModifiers.ret, 
-	                            $type.ret,
-	                            $id.ret)),
+                        factory.makeVariableNodeWithUnions(
+                                $variableModifiers.ret, 
+                                $type.ret,
+                                $id.ret)),
                     $expression.ret,
                     $statement.ret,
                     $optionalMetaAnnotationList.ret));
@@ -5962,7 +6015,6 @@ expression returns [NodeUnion<? extends ExpressionNode> ret]
         )?
     ;
 
-
 assignmentOperator returns [AssignmentOperator ret]
         scope Rule;
         @init {
@@ -6032,7 +6084,6 @@ assignmentOperator returns [AssignmentOperator ret]
             $ret = AssignmentOperator.RIGHT_SHIFT_ASSIGNMENT;
         }         
     ;
-
 
 conditionalExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         scope Rule;
@@ -6673,30 +6724,29 @@ primarySuffix returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("primarySuffix");
-            NodeUnion<? extends PrimaryExpressionNode> in = $primary::result;
         }
         @after {
             ruleStop();
         }
     :
         (
-	        // qualified class instantiation
-	        qualifiedClassInstantiationPrimarySuffix[in]
-	        {
-	            $ret = $qualifiedClassInstantiationPrimarySuffix.ret;
-	        }
-	    |
-	        // field access on an expression
-	        '.' identifier
-	        {
-	            $ret = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions(in, $identifier.ret));
-	        }
-	    |
-	        // method invocation with type arguments
-	        typeArgumentMethodInvocationSuffix[in]
-	        {
-	            $ret = $typeArgumentMethodInvocationSuffix.ret;
-	        }
+            // qualified class instantiation
+            qualifiedClassInstantiationPrimarySuffix
+            {
+                $ret = $qualifiedClassInstantiationPrimarySuffix.ret;
+            }
+        |
+            // method invocation with type arguments
+            typeArgumentMethodInvocationSuffix
+            {
+                $ret = $typeArgumentMethodInvocationSuffix.ret;
+            }
+        |
+            // field access on an expression
+            fieldAccessPrimarySuffix
+            {
+                $ret = $fieldAccessPrimarySuffix.ret;
+            }
         )
         (
             arrayAccess[ret]
@@ -6885,7 +6935,7 @@ typeQualifiedTypeArgumentMethodInvocation returns [NodeUnion<? extends MethodInv
 // This rule instantiates a class using the expression before the suffix as the enclosing instance.
 // For example:
 //     (foo.bar()).new MyClass()
-qualifiedClassInstantiationPrimarySuffix[NodeUnion<? extends PrimaryExpressionNode> in] returns [NodeUnion<? extends QualifiedClassInstantiationNode> ret]
+qualifiedClassInstantiationPrimarySuffix returns [NodeUnion<? extends QualifiedClassInstantiationNode> ret]
         scope Rule;
         @init {
             ruleStart("qualifiedClassInstantiationPrimarySuffix");
@@ -6902,7 +6952,7 @@ qualifiedClassInstantiationPrimarySuffix[NodeUnion<? extends PrimaryExpressionNo
         anonymousClassBody?
         {
             $ret = factory.makeNormalNodeUnion(factory.makeQualifiedClassInstantiationNodeWithUnions(
-                    $in,
+                    $primary::result,
                     $identifier.ret,
                     $classTypeArguments.ret,
                     $constructorTypeArguments.ret,
@@ -6911,11 +6961,29 @@ qualifiedClassInstantiationPrimarySuffix[NodeUnion<? extends PrimaryExpressionNo
         }
     ;
 
+// Parses a field access based on an expression, such as
+//     (new int[5]).length
+fieldAccessPrimarySuffix returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("fieldAccessPrimarySuffix");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        '.' identifier
+        {
+            $ret = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions(
+                        $primary::result, $identifier.ret));
+        }
+    ;
+
 // Parses a method invocation based on an expression, such as
 //     array[4].toString()
 // or
 //     foo().bar()    
-typeArgumentMethodInvocationSuffix[NodeUnion<? extends PrimaryExpressionNode> in] returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> ret]
+typeArgumentMethodInvocationSuffix returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> ret]
         scope Rule;
         @init {
             ruleStart("typeArgumentMethodInvocationSuffix");
@@ -6929,7 +6997,7 @@ typeArgumentMethodInvocationSuffix[NodeUnion<? extends PrimaryExpressionNode> in
         identifier arguments
         {
             $ret = factory.makeNormalNodeUnion(factory.makeMethodInvocationNodeWithUnions(
-                    in,
+                    $primary::result,
                     $identifier.ret,
                     $arguments.ret,
                     $optionalNonWildcardTypeArguments.ret));
@@ -7315,7 +7383,6 @@ arrayInitializer returns [NodeUnion<? extends ArrayInitializerNode> ret]
         }
     ;
 
-
 createdName returns [NodeUnion<? extends BaseTypeNode> ret]
         scope Rule;
         @init {
@@ -7574,10 +7641,16 @@ identifier returns [NodeUnion<? extends IdentifierNode> ret]
             ruleStop();
         }
     :
+        // TODO: replace with more general splicing logic based on standardRuleIntro
         IDENTIFIER
         {
             $ret = factory.makeNormalNodeUnion(factory.makeIdentifierNode($IDENTIFIER.text));
         }
+    |
+    	splice[IdentifierNode.class]
+    	{
+    	    $ret = $splice.ret.castNodeType(factory, IdentifierNode.class);
+    	}
     ;
 
 unsplicableIdentifier returns [IdentifierNode ret]
@@ -7600,35 +7673,35 @@ unsplicableIdentifier returns [IdentifierNode ret]
 // of the class rather than claiming that "class" should be an "@" for an annotation declaration).
 
 classHeader 
-    :   classModifiers 'class' IDENTIFIER
+    :   classModifiers 'class' identifier
     ;
 
 enumHeader 
-    :   enumModifiers ('enum'|IDENTIFIER) IDENTIFIER
+    :   enumModifiers ('enum'|identifier) identifier
     ;
 
 interfaceHeader 
-    :   interfaceModifiers 'interface' IDENTIFIER
+    :   interfaceModifiers 'interface' identifier
     ;
 
 annotationHeader 
-    :   annotationModifiers '@' 'interface' IDENTIFIER
+    :   annotationModifiers '@' 'interface' identifier
     ;
 
 typeHeader
-    :   (classModifiers | enumModifiers | interfaceModifiers | annotationModifiers) ('class'|'enum'|('@' ? 'interface')) IDENTIFIER
+    :   (classModifiers | enumModifiers | interfaceModifiers | annotationModifiers) ('class'|'enum'|('@' ? 'interface')) identifier
     ;
 
 methodHeader 
-    :   methodModifiers typeParameters? (type|'void')? IDENTIFIER '('
+    :   methodModifiers typeParameters? (type|'void')? identifier '('
     ;
 
 fieldHeader 
-    :   fieldModifiers type IDENTIFIER ('['']')* ('='|','|';')
+    :   fieldModifiers type identifier ('['']')* ('='|','|';')
     ;
 
 localVariableHeader 
-    :   variableModifiers type IDENTIFIER ('['']')* ('='|','|';')
+    :   variableModifiers type identifier ('['']')* ('='|','|';')
     ;
 
 /* *** BSJ Code Literal Parse Rules *************************************** */
@@ -8455,10 +8528,10 @@ parseRule_LocalClassDeclaration returns [NodeUnion<? extends LocalClassDeclarati
             ruleStop();
         }
     :
-        inlineClassDeclaration
+        localClassDeclaration
         EOF
         {
-            $ret = $inlineClassDeclaration.ret;
+            $ret = $localClassDeclaration.ret;
         }
     ;
 
@@ -9126,7 +9199,6 @@ fragment
 LongSuffix
     :   'l' | 'L'
     ;
-
 
 fragment
 NonIntegerNumber

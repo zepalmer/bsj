@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.BsjSpecificNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -22,31 +21,14 @@ public interface SpliceNode extends Node, BsjSpecificNode
     /**
      * Gets the expression which will replace this splice upon lifting.
      * @return The expression which will replace this splice upon lifting.
-     * @throws ClassCastException If the value of this property is a special node.
      */
-    public ExpressionNode getSpliceExpression()throws ClassCastException;
-    
-    /**
-     * Gets the union object for the expression which will replace this splice upon lifting.
-     * @return A union object representing The expression which will replace this splice upon lifting.
-     */
-    public NodeUnion<? extends ExpressionNode> getUnionForSpliceExpression();
+    public ExpressionNode getSpliceExpression();
     
     /**
      * Changes the expression which will replace this splice upon lifting.
      * @param spliceExpression The expression which will replace this splice upon lifting.
      */
     public void setSpliceExpression(ExpressionNode spliceExpression);
-    
-    /**
-     * Changes the expression which will replace this splice upon lifting.
-     * @param spliceExpression The expression which will replace this splice upon lifting.
-     * @throws NullPointerException If the provided value is <code>null</code>.
-     *                              Node union values may have <code>null</code>
-     *                              contents but are never <code>null</code>
-     *                              themselves.
-     */
-    public void setUnionForSpliceExpression(NodeUnion<? extends ExpressionNode> spliceExpression) throws NullPointerException;
     
     /**
      * Generates a deep copy of this node.

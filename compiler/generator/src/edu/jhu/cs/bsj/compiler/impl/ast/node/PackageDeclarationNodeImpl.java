@@ -427,9 +427,9 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getName());
-        list.add(getMetaAnnotations());
-        list.add(getAnnotations());
+        list.add(getUnionForName());
+        list.add(getUnionForAnnotations());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

@@ -258,7 +258,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
+        list.add(getUnionForExpression());
         list.add(getOperator());
         return list;
     }

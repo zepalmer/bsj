@@ -637,11 +637,11 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getType());
-        list.add(getIdentifier());
-        list.add(getDefaultValue());
-        list.add(getJavadoc());
+        list.add(getUnionForType());
+        list.add(getUnionForDefaultValue());
+        list.add(getUnionForJavadoc());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForIdentifier());
         return list;
     }
     

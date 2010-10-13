@@ -75,7 +75,8 @@ public class NormalNodeUnion<T extends Node> implements NodeUnion<T>
     @Override
     public int hashCode()
     {
-        return this.getNormalNode().hashCode() * 4;
+        Node n = this.getNormalNode();
+        return (n == null ? 0 : n.hashCode()) * 4;
     }
     
 }

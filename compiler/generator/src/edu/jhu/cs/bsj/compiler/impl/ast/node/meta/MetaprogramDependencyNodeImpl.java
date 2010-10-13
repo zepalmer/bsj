@@ -256,7 +256,7 @@ public class MetaprogramDependencyNodeImpl extends NodeImpl implements Metaprogr
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getTargetName());
+        list.add(getUnionForTargetName());
         list.add(getWeak());
         return list;
     }

@@ -218,7 +218,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getImportNode());
+        list.add(getUnionForImportNode());
         return list;
     }
     

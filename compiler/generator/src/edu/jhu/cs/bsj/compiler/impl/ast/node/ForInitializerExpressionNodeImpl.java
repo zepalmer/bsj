@@ -219,7 +219,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpressions());
+        list.add(getUnionForExpressions());
         return list;
     }
     

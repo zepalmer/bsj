@@ -152,6 +152,7 @@ public class CharLiteralNodeImpl extends NodeImpl implements CharLiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

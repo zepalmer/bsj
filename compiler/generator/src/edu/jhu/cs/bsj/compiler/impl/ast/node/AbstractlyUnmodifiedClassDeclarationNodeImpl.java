@@ -839,11 +839,13 @@ public abstract class AbstractlyUnmodifiedClassDeclarationNodeImpl<T extends Mod
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getExtendsClause());
-        list.add(getImplementsClause());
-        list.add(getBody());
-        list.add(getTypeParameters());
+        list.add(getUnionForExtendsClause());
+        list.add(getUnionForImplementsClause());
+        list.add(getUnionForTypeParameters());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForJavadoc());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForBody());
         return list;
     }
     

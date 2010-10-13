@@ -544,10 +544,10 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         List<Object> list = super.getChildObjects();
         list.add(getName());
-        list.add(getPackageDeclaration());
-        list.add(getMetaimports());
-        list.add(getImports());
-        list.add(getTypeDecls());
+        list.add(getUnionForPackageDeclaration());
+        list.add(getUnionForMetaimports());
+        list.add(getUnionForImports());
+        list.add(getUnionForTypeDecls());
         return list;
     }
     

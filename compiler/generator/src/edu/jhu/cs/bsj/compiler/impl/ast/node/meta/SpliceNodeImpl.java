@@ -14,12 +14,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -27,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 public class SpliceNodeImpl extends NodeImpl implements SpliceNode
 {
     /** The expression which will replace this splice upon lifting. */
-    private NodeUnion<? extends ExpressionNode> spliceExpression;
+    private ExpressionNode spliceExpression;
     
     private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
     private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
@@ -48,44 +46,23 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     
     /** General constructor. */
     public SpliceNodeImpl(
-            NodeUnion<? extends ExpressionNode> spliceExpression,
+            ExpressionNode spliceExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForSpliceExpression(spliceExpression, false);
-    }
-    
-    /**
-     * Gets the expression which will replace this splice upon lifting.  This property's value is assumed to be a normal node.
-     * @return The expression which will replace this splice upon lifting.
-     * @throws ClassCastException If this property's value is not a normal node.
-     */
-    public ExpressionNode getSpliceExpression()
-    {
-        getAttribute(LocalAttribute.SPLICE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
-        if (this.spliceExpression == null)
-        {
-            return null;
-        } else
-        {
-            return this.spliceExpression.getNormalNode();
-        }
+        this.spliceExpression = spliceExpression;
     }
     
     /**
      * Gets the expression which will replace this splice upon lifting.
      * @return The expression which will replace this splice upon lifting.
      */
-    public NodeUnion<? extends ExpressionNode> getUnionForSpliceExpression()
+    public ExpressionNode getSpliceExpression()
     {
         getAttribute(LocalAttribute.SPLICE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
-        if (this.spliceExpression == null)
-        {
-            this.spliceExpression = new NormalNodeUnion<ExpressionNode>(null);
-        }
         return this.spliceExpression;
     }
     
@@ -107,42 +84,7 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
             getAttribute(LocalAttribute.SPLICE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
         }
         
-        if (this.spliceExpression != null)
-        {
-            setAsChild(this.spliceExpression.getNodeValue(), false);
-        }
-        this.spliceExpression = new NormalNodeUnion<ExpressionNode>(spliceExpression);
-        setAsChild(spliceExpression, true);
-    }
-    
-    /**
-     * Changes the expression which will replace this splice upon lifting.
-     * @param spliceExpression The expression which will replace this splice upon lifting.
-     */
-    public void setUnionForSpliceExpression(NodeUnion<? extends ExpressionNode> spliceExpression)
-    {
-            setUnionForSpliceExpression(spliceExpression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setUnionForSpliceExpression(NodeUnion<? extends ExpressionNode> spliceExpression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.SPLICE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (spliceExpression == null)
-        {
-            spliceExpression = new NormalNodeUnion<ExpressionNode>(null);
-        }
-        if (this.spliceExpression != null)
-        {
-            setAsChild(this.spliceExpression.getNodeValue(), false);
-        }
         this.spliceExpression = spliceExpression;
-        setAsChild(spliceExpression.getNodeValue(), true);
     }
     
     /**
@@ -156,9 +98,9 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.spliceExpression.getNodeValue() != null)
+        if (this.spliceExpression != null)
         {
-            this.spliceExpression.getNodeValue().receive(visitor);
+            this.spliceExpression.receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +123,9 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.spliceExpression.getNodeValue() != null)
+        if (this.spliceExpression != null)
         {
-            this.spliceExpression.getNodeValue().receiveTyped(visitor);
+            this.spliceExpression.receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -229,7 +171,7 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     @Override
     public Iterable<? extends Node> getChildIterable()
     {
-        return Arrays.asList(new Node[]{getUnionForSpliceExpression().getNodeValue()});
+        return Arrays.asList(new Node[]{getSpliceExpression()});
     }
     
     /**
@@ -242,7 +184,7 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("spliceExpression=");
-        sb.append(this.getUnionForSpliceExpression().getNodeValue() == null? "null" : this.getUnionForSpliceExpression().getNodeValue().getClass().getSimpleName());
+        sb.append(this.getSpliceExpression() == null? "null" : this.getSpliceExpression().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -286,31 +228,10 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     @Override
     public SpliceNode deepCopy(BsjNodeFactory factory)
     {
-        NodeUnion<? extends ExpressionNode> spliceExpressionCopy;
-        switch (getUnionForSpliceExpression().getType())
-        {
-            case NORMAL:
-                if (getUnionForSpliceExpression().getNormalNode() == null)
-                {
-                    spliceExpressionCopy = factory.<ExpressionNode>makeNormalNodeUnion(null);
-                } else
-                {
-                    spliceExpressionCopy = factory.makeNormalNodeUnion(getUnionForSpliceExpression().getNormalNode().deepCopy(factory));
-                }
-                break;
-            case SPLICE:
-                if (getUnionForSpliceExpression().getSpliceNode() == null)
-                {
-                    spliceExpressionCopy = factory.<ExpressionNode>makeSpliceNodeUnion(null);
-                } else
-                {
-                    spliceExpressionCopy = factory.makeSpliceNodeUnion(getUnionForSpliceExpression().getSpliceNode().deepCopy(factory));
-                }
-                break;
-            default:
-                throw new IllegalStateException("Unrecognized union component type: " + getUnionForSpliceExpression().getType());
-        }
-        return factory.makeSpliceNodeWithUnions(
+        ExpressionNode spliceExpressionCopy = getSpliceExpression();
+        if (spliceExpressionCopy != null)
+            spliceExpressionCopy = spliceExpressionCopy.deepCopy(factory);
+        return factory.makeSpliceNode(
                 spliceExpressionCopy,
                 getStartLocation(),
                 getStopLocation());
@@ -327,7 +248,7 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getUnionForSpliceExpression().getNodeValue()))
+        if (before.equals(this.getSpliceExpression()))
         {
             setSpliceExpression((ExpressionNode)after);
             return true;

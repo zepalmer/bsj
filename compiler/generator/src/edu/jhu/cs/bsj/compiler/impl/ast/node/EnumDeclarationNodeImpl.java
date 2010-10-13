@@ -635,9 +635,11 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getImplementsClause());
-        list.add(getBody());
+        list.add(getUnionForImplementsClause());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForJavadoc());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForBody());
         return list;
     }
     

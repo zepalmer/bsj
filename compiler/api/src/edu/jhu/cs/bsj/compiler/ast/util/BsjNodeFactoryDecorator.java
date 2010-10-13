@@ -10257,41 +10257,11 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public SpliceNode makeSpliceNodeWithUnions(
-            NodeUnion<? extends ExpressionNode> spliceExpression)
-    {
-        this.before();
-        SpliceNode node = factory.makeSpliceNodeWithUnions(spliceExpression);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a SpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
     public SpliceNode makeSpliceNode(
             ExpressionNode spliceExpression)
     {
         this.before();
         SpliceNode node = factory.makeSpliceNode(spliceExpression);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a SpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public SpliceNode makeSpliceNodeWithUnions(
-            NodeUnion<? extends ExpressionNode> spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        SpliceNode node = factory.makeSpliceNodeWithUnions(spliceExpression, startLocation, stopLocation);
         this.after(node);
         return node;
     }

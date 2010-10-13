@@ -322,7 +322,8 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getStatements());
+        list.add(getUnionForStatements());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

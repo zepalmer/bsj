@@ -219,7 +219,7 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
+        list.add(getUnionForExpression());
         return list;
     }
     

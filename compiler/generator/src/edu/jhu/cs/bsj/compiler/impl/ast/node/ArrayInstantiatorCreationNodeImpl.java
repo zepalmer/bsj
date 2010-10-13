@@ -222,7 +222,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getDimExpressions());
+        list.add(getUnionForDimExpressions());
         return list;
     }
     

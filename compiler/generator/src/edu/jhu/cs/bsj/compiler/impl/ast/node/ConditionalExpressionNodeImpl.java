@@ -423,9 +423,9 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getCondition());
-        list.add(getTrueExpression());
-        list.add(getFalseExpression());
+        list.add(getUnionForCondition());
+        list.add(getUnionForTrueExpression());
+        list.add(getUnionForFalseExpression());
         return list;
     }
     

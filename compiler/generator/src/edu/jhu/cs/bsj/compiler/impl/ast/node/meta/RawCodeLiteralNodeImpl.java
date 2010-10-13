@@ -154,6 +154,7 @@ public class RawCodeLiteralNodeImpl extends NodeImpl implements RawCodeLiteralNo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

@@ -220,7 +220,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getValues());
+        list.add(getUnionForValues());
         return list;
     }
     

@@ -1049,15 +1049,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getBody());
-        list.add(getModifiers());
-        list.add(getIdentifier());
-        list.add(getParameters());
-        list.add(getVarargParameter());
-        list.add(getReturnType());
-        list.add(getThrowTypes());
-        list.add(getTypeParameters());
-        list.add(getJavadoc());
+        list.add(getUnionForBody());
+        list.add(getUnionForReturnType());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForParameters());
+        list.add(getUnionForVarargParameter());
+        list.add(getUnionForThrowTypes());
+        list.add(getUnionForTypeParameters());
+        list.add(getUnionForJavadoc());
+        list.add(getUnionForModifiers());
         return list;
     }
     

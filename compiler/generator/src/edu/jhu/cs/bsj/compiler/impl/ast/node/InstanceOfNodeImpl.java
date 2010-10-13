@@ -322,8 +322,8 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
-        list.add(getType());
+        list.add(getUnionForExpression());
+        list.add(getUnionForType());
         return list;
     }
     

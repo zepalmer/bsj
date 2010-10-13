@@ -430,9 +430,9 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getEnclosingExpression());
-        list.add(getIdentifier());
-        list.add(getTypeArguments());
+        list.add(getUnionForEnclosingExpression());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForTypeArguments());
         return list;
     }
     

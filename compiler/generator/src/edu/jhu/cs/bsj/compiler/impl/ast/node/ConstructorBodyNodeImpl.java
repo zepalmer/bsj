@@ -320,8 +320,8 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getConstructorInvocation());
-        list.add(getStatements());
+        list.add(getUnionForConstructorInvocation());
+        list.add(getUnionForStatements());
         return list;
     }
     

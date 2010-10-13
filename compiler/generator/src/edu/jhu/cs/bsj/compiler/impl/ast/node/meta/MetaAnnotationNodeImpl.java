@@ -243,7 +243,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getAnnotationType());
+        list.add(getUnionForAnnotationType());
         list.add(getMetaprogramAnchor());
         return list;
     }

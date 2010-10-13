@@ -219,7 +219,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getType());
+        list.add(getUnionForType());
         return list;
     }
     

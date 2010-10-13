@@ -321,8 +321,8 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getIdentifier());
-        list.add(getValue());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForValue());
         return list;
     }
     

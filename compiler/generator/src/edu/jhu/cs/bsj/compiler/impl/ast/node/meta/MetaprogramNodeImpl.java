@@ -321,8 +321,8 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getPreamble());
-        list.add(getBody());
+        list.add(getUnionForPreamble());
+        list.add(getUnionForBody());
         return list;
     }
     

@@ -528,9 +528,10 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getVariable());
-        list.add(getExpression());
-        list.add(getStatement());
+        list.add(getUnionForVariable());
+        list.add(getUnionForExpression());
+        list.add(getUnionForStatement());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

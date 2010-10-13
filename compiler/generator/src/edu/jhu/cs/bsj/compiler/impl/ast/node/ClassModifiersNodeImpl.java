@@ -312,11 +312,11 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getAccess());
         list.add(getAbstractFlag());
         list.add(getStaticFlag());
         list.add(getFinalFlag());
         list.add(getStrictfpFlag());
+        list.add(getAccess());
         return list;
     }
     

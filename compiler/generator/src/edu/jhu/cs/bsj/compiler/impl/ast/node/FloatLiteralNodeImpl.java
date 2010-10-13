@@ -152,6 +152,7 @@ public class FloatLiteralNodeImpl extends NodeImpl implements FloatLiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

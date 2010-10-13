@@ -257,7 +257,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getBound());
+        list.add(getUnionForBound());
         list.add(getUpperBound());
         return list;
     }

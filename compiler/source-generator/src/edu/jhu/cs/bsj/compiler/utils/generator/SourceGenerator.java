@@ -1163,34 +1163,43 @@ public class SourceGenerator
 					@Override
 					public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 					{
-						ps.println("NodeUnion<? extends " + p.getFullType() + "> " + p.getName() + "Copy;");
-						ps.println("switch (getUnionFor" + capFirst(p.getName()) + "().getType())");
-						ps.println("{");
-						ps.incPrependCount();
-						for (String typeComponent : UNION_TYPE_COMPONENTS)
+						if (p.isWrappable())
 						{
-							ps.println("case " + typeComponent.toUpperCase() + ":");
+							ps.println("NodeUnion<? extends " + p.getFullType() + "> " + p.getName() + "Copy;");
+							ps.println("switch (getUnionFor" + capFirst(p.getName()) + "().getType())");
+							ps.println("{");
 							ps.incPrependCount();
-							ps.println("if (getUnionFor" + capFirst(p.getName()) + "().get" + typeComponent
-									+ "Node() == null)");
-							ps.println("{");
-							ps.println("    " + p.getName() + "Copy = factory.<" + p.getFullType() + ">make"
-									+ typeComponent + "NodeUnion(null);");
-							ps.println("} else");
-							ps.println("{");
-							ps.println("    " + p.getName() + "Copy = factory.make" + typeComponent
-									+ "NodeUnion(getUnionFor" + capFirst(p.getName()) + "().get" + typeComponent
-									+ "Node().deepCopy(factory));");
+							for (String typeComponent : UNION_TYPE_COMPONENTS)
+							{
+								ps.println("case " + typeComponent.toUpperCase() + ":");
+								ps.incPrependCount();
+								ps.println("if (getUnionFor" + capFirst(p.getName()) + "().get" + typeComponent
+										+ "Node() == null)");
+								ps.println("{");
+								ps.println("    " + p.getName() + "Copy = factory.<" + p.getFullType() + ">make"
+										+ typeComponent + "NodeUnion(null);");
+								ps.println("} else");
+								ps.println("{");
+								ps.println("    " + p.getName() + "Copy = factory.make" + typeComponent
+										+ "NodeUnion(getUnionFor" + capFirst(p.getName()) + "().get" + typeComponent
+										+ "Node().deepCopy(factory));");
+								ps.println("}");
+								ps.println("break;");
+								ps.decPrependCount();
+							}
+							ps.println("default:");
+							ps.incPrependCount();
+							ps.println("throw new IllegalStateException(\"Unrecognized union component type: \" + getUnionFor"
+									+ capFirst(p.getName()) + "().getType());");
+							ps.decPrependCount(2);
 							ps.println("}");
-							ps.println("break;");
-							ps.decPrependCount();
+						} else
+						{
+							ps.println(p.getFullType() + " " + p.getName() + "Copy = get" + capFirst(p.getName())
+									+ "();");
+							ps.println("if (" + p.getName() + "Copy != null)");
+							ps.println("    " + p.getName() + "Copy = " + p.getName() + "Copy.deepCopy(factory);");
 						}
-						ps.println("default:");
-						ps.incPrependCount();
-						ps.println("throw new IllegalStateException(\"Unrecognized union component type: \" + getUnionFor"
-								+ capFirst(p.getName()) + "().getType());");
-						ps.decPrependCount(2);
-						ps.println("}");
 					}
 
 					@Override
@@ -1906,7 +1915,7 @@ public class SourceGenerator
 			ps.println("{");
 			ps.println("    List<Object> list = "
 					+ (def.getBaseSuperName() == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
-			for (ModalPropertyDefinition<?> p : def.getProperties())
+			for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(true))
 			{
 				// special handling for startLocation and stopLocation
 				if (p.getName().equals("startLocation"))
@@ -1917,8 +1926,15 @@ public class SourceGenerator
 					// intentionally doing nothing - handling for startLocation covers this one as well
 				} else if (!p.isHide())
 				{
-					ps.println("    list.add(get" + Character.toUpperCase(p.getName().charAt(0))
-							+ p.getName().substring(1) + "());");
+					if (p.isWrappable())
+					{
+						ps.println("    list.add(getUnionFor" + Character.toUpperCase(p.getName().charAt(0))
+								+ p.getName().substring(1) + "());");
+					} else
+					{
+						ps.println("    list.add(get" + Character.toUpperCase(p.getName().charAt(0))
+								+ p.getName().substring(1) + "());");
+					}
 				}
 			}
 			ps.println("    return list;");
@@ -2124,7 +2140,7 @@ public class SourceGenerator
 				ps.println();
 				for (ModalPropertyDefinition<?> p : def.getRecursiveProperties())
 				{
-					if (propInstanceOf(p.getBaseType(), "Node", def))
+					if (p.isNodeType())
 					{
 						if (p.isReadOnly())
 							continue;
@@ -2132,7 +2148,15 @@ public class SourceGenerator
 							throw new IllegalStateException(
 									"Don't know how to handle replacement for parameterized node type "
 											+ p.getBaseType() + "!");
-						ps.println("if (before.equals(this.getUnionFor" + capFirst(p.getName()) + "().getNodeValue()))");
+						final String getOp;
+						if (p.isWrappable())
+						{
+							getOp = "getUnionFor" + capFirst(p.getName()) + "().getNodeValue()";
+						} else
+						{
+							getOp = "get" + capFirst(p.getName()) + "()";
+						}
+						ps.println("if (before.equals(this." + getOp + "))");
 						ps.println("{");
 						ps.println("    set" + capFirst(p.getName()) + "((" + p.getFullType() + ")after);");
 						ps.println("    return true;");
@@ -3470,15 +3494,17 @@ public class SourceGenerator
 					{
 						ps.println("factory.makeMethodInvocationNode(");
 						ps.incPrependCount(2);
-						final String[] typeNameComponents = {"edu", "jhu", "cs", "bsj", "compiler", "impl", "utils", "CollectionUtilities"};
-						for (@SuppressWarnings("unused") String typeNameComponent : typeNameComponents)
+						final String[] typeNameComponents = { "edu", "jhu", "cs", "bsj", "compiler", "impl", "utils",
+								"CollectionUtilities" };
+						for (@SuppressWarnings("unused")
+						String typeNameComponent : typeNameComponents)
 						{
 							ps.println("factory.makeVariableAccessNode(");
 							ps.incPrependCount(2);
 						}
 						for (String typeNameComponent : typeNameComponents)
 						{
-							ps.println("factory.makeIdentifierNode(\""+typeNameComponent+"\")),");
+							ps.println("factory.makeIdentifierNode(\"" + typeNameComponent + "\")),");
 							ps.decPrependCount(2);
 						}
 						ps.println("factory.makeIdentifierNode(\"listOf\"),");
@@ -4501,7 +4527,8 @@ public class SourceGenerator
 				ps.println("@Override");
 				ps.println("public int hashCode()");
 				ps.println("{");
-				ps.print("    return this.get" + typeComponent + "Node().hashCode() * 4");
+				ps.println("    Node n = this.get" + typeComponent + "Node();");
+				ps.print("    return (n == null ? 0 : n.hashCode()) * 4");
 				if (i % 4 > 0)
 				{
 					ps.print(" + " + (i % 4));
@@ -4642,6 +4669,9 @@ public class SourceGenerator
 				} else if (match.operation.equals("deferProduction"))
 				{
 					command = new DeferProductionCommand(match.templateCommand, parameterMap);
+				} else if (match.operation.equals("spliceClause"))
+				{
+					command = new SpliceClauseCommand(match.templateCommand, parameterMap);
 				} else
 				{
 					throw new IllegalStateException("Unrecognized operation " + match.operation);
@@ -4988,7 +5018,7 @@ public class SourceGenerator
 				{
 					index--;
 				}
-				return (index > 3 && typeName.substring(index - 3, index + 1).equals("Node"));
+				return (index >= 3 && typeName.substring(index - 3, index + 1).equals("Node"));
 			}
 		}
 
@@ -5460,6 +5490,8 @@ public class SourceGenerator
 					throw error("Cannot defer production to zero rules!");
 				}
 
+				assertAccessedAllParameters();
+
 				StringBuilder sb = new StringBuilder();
 				for (int i = 0; i < spaces; i++)
 				{
@@ -5483,6 +5515,50 @@ public class SourceGenerator
 					first = false;
 				}
 				sb.append(prefix + ")\n");
+
+				final String replacement = sb.toString();
+
+				return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
+			}
+		}
+
+		public static class SpliceClauseCommand extends TemplateCommand
+		{
+			public SpliceClauseCommand(String templateCommand, Map<String, String> parameters)
+			{
+				super(templateCommand, parameters);
+			}
+
+			@Override
+			protected String executeCommand(String grammarTemplate, int startIndex, int endIndex) throws IOException
+			{
+				int spaces = 0;
+				while (startIndex > spaces && grammarTemplate.charAt(startIndex - spaces - 1) == ' ')
+				{
+					spaces++;
+				}
+				startIndex -= spaces;
+				spaces = Math.max(0, spaces - 4);
+
+				String type = getParameter("type");
+				assertAccessedAllParameters();
+
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < spaces; i++)
+				{
+					sb.append(' ');
+				}
+				String prefix = sb.toString();
+
+				sb = new StringBuilder();
+				for (String line : fillFragment("spliceClause",
+						new MapBuilder<String, String>().add("type", type).getMap()).split("\n"))
+				{
+					sb.append(prefix);
+					sb.append(line);
+					sb.append("\n");
+				}
+				sb.delete(sb.length() - 1, sb.length());
 
 				final String replacement = sb.toString();
 

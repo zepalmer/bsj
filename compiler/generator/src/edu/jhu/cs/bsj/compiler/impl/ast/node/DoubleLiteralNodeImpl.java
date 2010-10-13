@@ -152,6 +152,7 @@ public class DoubleLiteralNodeImpl extends NodeImpl implements DoubleLiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

@@ -424,8 +424,9 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getTestExpression());
-        list.add(getMessageExpression());
+        list.add(getUnionForTestExpression());
+        list.add(getUnionForMessageExpression());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

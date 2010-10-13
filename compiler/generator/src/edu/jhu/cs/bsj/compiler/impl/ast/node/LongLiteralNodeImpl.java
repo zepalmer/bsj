@@ -152,6 +152,7 @@ public class LongLiteralNodeImpl extends NodeImpl implements LongLiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

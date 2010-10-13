@@ -219,7 +219,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getMembers());
+        list.add(getUnionForMembers());
         return list;
     }
     

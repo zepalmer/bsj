@@ -75,7 +75,8 @@ public class SpliceNodeUnion<T extends Node> implements NodeUnion<T>
     @Override
     public int hashCode()
     {
-        return this.getSpliceNode().hashCode() * 4 + 1;
+        Node n = this.getSpliceNode();
+        return (n == null ? 0 : n.hashCode()) * 4 + 1;
     }
     
 }

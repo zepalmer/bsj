@@ -425,8 +425,9 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
-        list.add(getCases());
+        list.add(getUnionForExpression());
+        list.add(getUnionForCases());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

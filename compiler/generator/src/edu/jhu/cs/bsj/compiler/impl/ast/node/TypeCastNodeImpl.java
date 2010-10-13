@@ -322,8 +322,8 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
-        list.add(getType());
+        list.add(getUnionForExpression());
+        list.add(getUnionForType());
         return list;
     }
     

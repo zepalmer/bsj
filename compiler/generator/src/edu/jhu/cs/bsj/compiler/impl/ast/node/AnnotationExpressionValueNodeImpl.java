@@ -219,7 +219,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
+        list.add(getUnionForExpression());
         return list;
     }
     

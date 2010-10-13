@@ -425,8 +425,9 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
-        list.add(getBody());
+        list.add(getUnionForExpression());
+        list.add(getUnionForBody());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

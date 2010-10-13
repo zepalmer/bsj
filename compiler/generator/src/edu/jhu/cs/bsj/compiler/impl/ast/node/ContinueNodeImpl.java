@@ -322,7 +322,8 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getLabel());
+        list.add(getUnionForLabel());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

@@ -423,9 +423,9 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getConstructorTypeArguments());
-        list.add(getArguments());
-        list.add(getBody());
+        list.add(getUnionForConstructorTypeArguments());
+        list.add(getUnionForArguments());
+        list.add(getUnionForBody());
         return list;
     }
     

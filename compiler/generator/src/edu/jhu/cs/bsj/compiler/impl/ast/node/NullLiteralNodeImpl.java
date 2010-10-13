@@ -152,6 +152,7 @@ public class NullLiteralNodeImpl extends NodeImpl implements NullLiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

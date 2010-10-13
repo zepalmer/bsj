@@ -9112,34 +9112,8 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public SpliceNode makeSpliceNodeWithUnions(
-            NodeUnion<? extends ExpressionNode> spliceExpression)
-    {
-        SpliceNode ret = new SpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a SpliceNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
     public SpliceNode makeSpliceNode(
             ExpressionNode spliceExpression)
-    {
-        SpliceNode ret = new SpliceNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(spliceExpression), startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a SpliceNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public SpliceNode makeSpliceNodeWithUnions(
-            NodeUnion<? extends ExpressionNode> spliceExpression,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
     {
         SpliceNode ret = new SpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
         return ret;
@@ -9155,7 +9129,7 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SpliceNode ret = new SpliceNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(spliceExpression), startLocation, stopLocation, manager, binary);
+        SpliceNode ret = new SpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

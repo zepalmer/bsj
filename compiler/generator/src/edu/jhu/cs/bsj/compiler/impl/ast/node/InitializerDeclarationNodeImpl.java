@@ -367,7 +367,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         List<Object> list = super.getChildObjects();
         list.add(getStaticInitializer());
-        list.add(getBody());
+        list.add(getUnionForBody());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

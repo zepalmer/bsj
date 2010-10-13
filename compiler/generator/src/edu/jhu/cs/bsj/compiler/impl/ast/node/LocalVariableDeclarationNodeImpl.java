@@ -431,9 +431,9 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getType());
-        list.add(getDeclarators());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForType());
+        list.add(getUnionForDeclarators());
         return list;
     }
     

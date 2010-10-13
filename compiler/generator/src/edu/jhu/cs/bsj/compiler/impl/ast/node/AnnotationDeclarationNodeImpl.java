@@ -532,8 +532,10 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getBody());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForJavadoc());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForBody());
         return list;
     }
     

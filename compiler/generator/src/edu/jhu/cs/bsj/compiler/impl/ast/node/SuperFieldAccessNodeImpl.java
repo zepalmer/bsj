@@ -322,8 +322,8 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getType());
-        list.add(getIdentifier());
+        list.add(getUnionForType());
+        list.add(getUnionForIdentifier());
         return list;
     }
     

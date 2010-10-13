@@ -322,7 +322,8 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
+        list.add(getUnionForExpression());
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

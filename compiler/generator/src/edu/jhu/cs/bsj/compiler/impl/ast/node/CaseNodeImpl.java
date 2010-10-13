@@ -320,8 +320,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
-        list.add(getStatements());
+        list.add(getUnionForExpression());
+        list.add(getUnionForStatements());
         return list;
     }
     

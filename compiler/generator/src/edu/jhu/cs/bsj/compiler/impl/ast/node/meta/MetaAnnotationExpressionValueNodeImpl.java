@@ -220,7 +220,7 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
+        list.add(getUnionForExpression());
         return list;
     }
     

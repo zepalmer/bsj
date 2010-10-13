@@ -215,7 +215,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getIdentifier());
+        list.add(getUnionForIdentifier());
         return list;
     }
     

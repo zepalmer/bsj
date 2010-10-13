@@ -322,8 +322,8 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getIdentifier());
-        list.add(getBounds());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForBounds());
         return list;
     }
     

@@ -322,8 +322,8 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getName());
-        list.add(getIdentifier());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForName());
         return list;
     }
     

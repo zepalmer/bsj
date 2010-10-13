@@ -427,9 +427,9 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getType());
-        list.add(getIdentifier());
+        list.add(getUnionForType());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForIdentifier());
         return list;
     }
     

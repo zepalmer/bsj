@@ -2740,7 +2740,7 @@
         </type>
 
         <type name="SpliceNode" super="Node" mode="concrete">
-            <prop name="spliceExpression" type="ExpressionNode"
+            <prop name="spliceExpression" type="ExpressionNode" allowUnion="false"
                 desc="the expression which will replace this splice upon lifting" />
             <doc><![CDATA[
                 This AST node interface is meant to tag nodes which represent BSJ AST splices.  Code splices are used

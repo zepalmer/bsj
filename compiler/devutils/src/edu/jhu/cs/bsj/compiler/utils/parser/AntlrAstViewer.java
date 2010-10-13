@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -43,6 +44,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
@@ -64,6 +66,7 @@ public class AntlrAstViewer
 		{
 			this.parent = parent;
 			this.children = new ArrayList<SwingCommonTreeNode>();
+			this.string = String.valueOf(backer);
 			if (backer instanceof Node)
 			{
 				List<Object> nodeChildren = ((Node) backer).getChildObjects();
@@ -71,8 +74,24 @@ public class AntlrAstViewer
 				{
 					this.children.add(new SwingCommonTreeNode(this, child));
 				}
+			} else if (backer instanceof NodeUnion<?>)
+			{
+				NodeUnion<?> union = (NodeUnion<?>) backer;
+				List<Object> nodeChildren;
+				if (union.getNodeValue() == null)
+				{
+					nodeChildren = Collections.emptyList();
+				} else
+				{
+					nodeChildren = union.getNodeValue().getChildObjects();
+				}
+				for (Object child : nodeChildren)
+				{
+					this.children.add(new SwingCommonTreeNode(this, child));
+				}
+				this.string = union.getType().toString().toUpperCase().substring(0, 1) + ":"
+						+ String.valueOf(union.getNodeValue());
 			}
-			this.string = String.valueOf(backer);
 		}
 
 		public Enumeration<SwingCommonTreeNode> children()

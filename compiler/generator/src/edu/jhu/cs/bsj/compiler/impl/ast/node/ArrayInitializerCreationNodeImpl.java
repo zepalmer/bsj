@@ -222,7 +222,7 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getInitializer());
+        list.add(getUnionForInitializer());
         return list;
     }
     

@@ -219,7 +219,7 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getName());
+        list.add(getUnionForName());
         return list;
     }
     

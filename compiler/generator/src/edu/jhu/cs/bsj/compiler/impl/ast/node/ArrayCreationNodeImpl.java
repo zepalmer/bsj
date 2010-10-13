@@ -253,7 +253,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getBaseType());
+        list.add(getUnionForBaseType());
         list.add(getArrayLevels());
         return list;
     }

@@ -322,8 +322,8 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getBaseType());
-        list.add(getTypeArguments());
+        list.add(getUnionForBaseType());
+        list.add(getUnionForTypeArguments());
         return list;
     }
     

@@ -316,8 +316,8 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getArguments());
-        list.add(getTypeArguments());
+        list.add(getUnionForArguments());
+        list.add(getUnionForTypeArguments());
         return list;
     }
     

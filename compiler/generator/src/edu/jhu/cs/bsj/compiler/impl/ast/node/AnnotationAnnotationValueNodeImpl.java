@@ -219,7 +219,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getAnnotation());
+        list.add(getUnionForAnnotation());
         return list;
     }
     

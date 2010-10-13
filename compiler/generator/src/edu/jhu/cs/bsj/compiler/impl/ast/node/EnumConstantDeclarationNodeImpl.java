@@ -635,11 +635,11 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getModifiers());
-        list.add(getIdentifier());
-        list.add(getArguments());
-        list.add(getBody());
-        list.add(getJavadoc());
+        list.add(getUnionForArguments());
+        list.add(getUnionForBody());
+        list.add(getUnionForJavadoc());
+        list.add(getUnionForModifiers());
+        list.add(getUnionForIdentifier());
         return list;
     }
     

@@ -218,7 +218,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getTargets());
+        list.add(getUnionForTargets());
         return list;
     }
     

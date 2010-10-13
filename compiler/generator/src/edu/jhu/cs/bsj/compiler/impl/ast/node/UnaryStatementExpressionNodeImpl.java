@@ -260,7 +260,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
+        list.add(getUnionForExpression());
         list.add(getOperator());
         return list;
     }

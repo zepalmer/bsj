@@ -215,7 +215,7 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getMetaprogram());
+        list.add(getUnionForMetaprogram());
         return list;
     }
     

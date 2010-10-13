@@ -221,6 +221,7 @@ public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getUnionForMetaAnnotations());
         return list;
     }
     

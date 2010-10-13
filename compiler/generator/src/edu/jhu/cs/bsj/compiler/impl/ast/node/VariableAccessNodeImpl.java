@@ -322,8 +322,8 @@ public class VariableAccessNodeImpl extends NodeImpl implements VariableAccessNo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getExpression());
-        list.add(getIdentifier());
+        list.add(getUnionForExpression());
+        list.add(getUnionForIdentifier());
         return list;
     }
     

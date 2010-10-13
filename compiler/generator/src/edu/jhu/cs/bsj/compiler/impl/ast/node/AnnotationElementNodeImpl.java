@@ -320,8 +320,8 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getIdentifier());
-        list.add(getValue());
+        list.add(getUnionForIdentifier());
+        list.add(getUnionForValue());
         return list;
     }
     

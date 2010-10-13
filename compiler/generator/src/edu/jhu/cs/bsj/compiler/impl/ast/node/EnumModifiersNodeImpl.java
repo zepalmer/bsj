@@ -198,8 +198,8 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getAccess());
         list.add(getStrictfpFlag());
+        list.add(getAccess());
         return list;
     }
     

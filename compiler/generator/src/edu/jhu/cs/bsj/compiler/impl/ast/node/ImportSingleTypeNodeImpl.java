@@ -219,7 +219,7 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getName());
+        list.add(getUnionForName());
         return list;
     }
     

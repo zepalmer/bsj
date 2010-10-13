@@ -152,6 +152,7 @@ public class StringLiteralNodeImpl extends NodeImpl implements StringLiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
     

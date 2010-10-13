@@ -219,7 +219,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getMembers());
+        list.add(getUnionForMembers());
         return list;
     }
     
