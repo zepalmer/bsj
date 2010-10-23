@@ -5150,19 +5150,19 @@ public class SourceGenerator
 
 				final boolean nodeDetected = isNodeType(returnTypeName);
 
-				final boolean spliceable;
-				if (hasParameter("spliceable"))
+				final boolean unioned;
+				if (hasParameter("unioned"))
 				{
-					spliceable = getParameterAsBoolean("spliceable");
+					unioned = getParameterAsBoolean("unioned");
 				} else
 				{
-					spliceable = nodeDetected;
+					unioned = nodeDetected;
 				}
 
 				assertAccessedAllParameters();
 
 				final String type;
-				if (nodeDetected && spliceable)
+				if (nodeDetected && unioned)
 				{
 					type = "NodeUnion<? extends " + returnTypeName + ">";
 				} else
@@ -5538,12 +5538,23 @@ public class SourceGenerator
 					spaces++;
 				}
 				startIndex -= spaces;
-				spaces = Math.max(0, spaces - 4);
 
 				String type = getParameter("type");
+				List<String> nontypes = getParameterAsArray("nontype");
+				final boolean nocond = hasParameter("nocond") ? getParameterAsBoolean("nocond") : false;
+				List<String> actionLines = getParameterAsArray("action");
 				assertAccessedAllParameters();
 
 				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < nontypes.size(); i++)
+				{
+					if (i > 0)
+						sb.append(", ");
+					sb.append(nontypes.get(i) + ".class");
+				}
+				final String nontypesPart = "Arrays.<Class<? extends Node>>asList(" + sb.toString() + ")";
+
+				sb = new StringBuilder();
 				for (int i = 0; i < spaces; i++)
 				{
 					sb.append(' ');
@@ -5551,12 +5562,28 @@ public class SourceGenerator
 				String prefix = sb.toString();
 
 				sb = new StringBuilder();
-				for (String line : fillFragment("spliceClause",
-						new MapBuilder<String, String>().add("type", type).getMap()).split("\n"))
+				for (String line : actionLines)
+				{
+					sb.append("    ");
+					sb.append(line);
+					sb.append("\n");
+				}
+				final String actionPart = sb.toString();
+
+				sb = new StringBuilder();
+				for (String line : fillFragment(
+						"spliceClause",
+						new MapBuilder<String, String>().add("type", type).add("nontypesPart", nontypesPart).add(
+								"actionPart", actionPart).getMap()).split("\n"))
 				{
 					sb.append(prefix);
 					sb.append(line);
 					sb.append("\n");
+				}
+				if (!nocond)
+				{
+					sb.append(prefix.substring(0, prefix.length() - 4));
+					sb.append("|\n");
 				}
 				sb.delete(sb.length() - 1, sb.length());
 

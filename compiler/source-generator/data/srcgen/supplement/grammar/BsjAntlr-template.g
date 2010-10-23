@@ -663,6 +663,25 @@ scope Rule {
        return factory.<T>makeSpliceNodeUnion(factory.makeSpliceNode(expr));
     }
     
+    /**
+     * Performs type wrapping for a counted array type.
+     * @param type The node representing the type which is wrapped in array levels.
+     * @param levels The number of levels to wrap.
+     * @return The resulting type.
+     */
+    private NodeUnion<? extends ArrayTypeNode> wrapArrayLevels(NodeUnion<? extends TypeNode> type, int levels)
+    {
+        if (levels < 1)
+            throw new IllegalArgumentException("Invalid number of array levels: " + levels);
+        
+        NodeUnion<? extends ArrayTypeNode> ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions(type));
+        for (int i=1;i<levels;i++)
+        {
+            ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions(ret));
+        }        
+        return ret;
+    }
+    
     // *** RULE AOP METHODS ***************************************************
     private void ruleStart(String ruleName)
     {
@@ -734,19 +753,6 @@ arrayTypeCounter returns [int ret]
         )*
     ;
 
-// Performs type wrapping for a counted array type
-arrayTypeIndicator /*%% standardRuleIntro= ruleParams="""NodeUnion<? extends TypeNode> inType""" type=ArrayTypeNode %%*/
-    :
-        arrayTypeCounter
-        {
-            $ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions(inType));
-            for (int i=1;i<$arrayTypeCounter.ret;i++)
-            {
-                $ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions($ret));
-            }
-        }
-    ;
-
 /* ===========================================================================
  * These are the BSJ grammar rules.
  * ===========================================================================
@@ -755,6 +761,7 @@ arrayTypeIndicator /*%% standardRuleIntro= ruleParams="""NodeUnion<? extends Typ
 /* This rule parses a BSJ metaprogram. */
 bsjMetaprogram /*%% standardRuleIntro= type=MetaprogramNode %%*/
     :
+        /*%% spliceClause= type=MetaprogramNode %%*/
         '[:'
         preamble
         optionalBlockStatementList
@@ -770,6 +777,7 @@ preamble /*%% standardRuleIntro= type=MetaprogramPreambleNode
                   init0="""MetaprogramPackageMode packageMode = MetaprogramPackageMode.READ_ONLY;"""
                   init1="""MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;""" %%*/
     :
+        /*%% spliceClause= type=MetaprogramPreambleNode %%*/
         optionalMetaImportDeclarations
         (
             metaprogramMode
@@ -789,12 +797,22 @@ preamble /*%% standardRuleIntro= type=MetaprogramPreambleNode
 
 metaprogramImport /*%% standardRuleIntro= type=MetaprogramImportNode %%*/
     :   
+        /*%% spliceClause= type=MetaprogramImportNode %%*/
         '#import'
-        importBody
+        metaprogramImportBody
         ';'
         {
             $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramImportNodeWithUnions(
-                    $importBody.ret));
+                    $metaprogramImportBody.ret));
+        }
+    ;
+
+metaprogramImportBody /*%% standardRuleIntro= type=ImportNode %%*/
+    :
+        /*%% spliceClause= type=ImportNode %%*/
+        importBody
+        {
+            $ret = $importBody.ret;
         }
     ;
     
@@ -832,6 +850,7 @@ metaprogramDependencyDeclarationList /*%% generateListRule= type=MetaprogramDepe
 
 metaprogramDependencyDeclaration /*%% standardRuleIntro= type=MetaprogramDependencyDeclarationNode %%*/
     :   
+        /*%% spliceClause= type=MetaprogramDependencyDeclarationNode %%*/
         '#depends'
         metaprogramDependencyList
         ';'
@@ -847,6 +866,7 @@ metaprogramDependencyList /*%% generateListRule= type=MetaprogramDependencyListN
 metaprogramDependency /*%% standardRuleIntro: type:MetaprogramDependencyNode
                                init0:"""boolean weak = false;""" %%*/ 
     :
+        /*%% spliceClause= type=MetaprogramDependencyNode %%*/
         (
             '#weak'
             {
@@ -862,7 +882,8 @@ metaprogramDependency /*%% standardRuleIntro: type:MetaprogramDependencyNode
 metaprogramTargetList /*%% generateListRule= type=MetaprogramTargetListNode %%*/ :;
 
 metaprogramTarget /*%% standardRuleIntro= type=MetaprogramTargetNode %%*/
-    :   
+    :
+        /*%% spliceClause= type=MetaprogramTargetNode %%*/   
         '#target'
         identifierList
         ';'
@@ -945,6 +966,7 @@ metaAnnotation /*%% standardRuleIntro= type=MetaAnnotationNode %%*/
     :   
         {configuration.getMetaAnnotationsSupported()}?=>
         (
+            /*%% spliceClause= type=MetaAnnotationNode %%*/
             '@' '@' unparameterizedType
             (
                 (
@@ -997,6 +1019,7 @@ metaAnnotationElementValuePairs /*%% generateListRule= type=MetaAnnotationElemen
 //     happy=5
 metaAnnotationElementValuePair /*%% standardRuleIntro= type=MetaAnnotationElementNode %%*/
     :
+        /*%% spliceClause= type=MetaAnnotationElementNode %%*/
         id=identifier '=' metaAnnotationElementValue
         {
             $ret = factory.makeNormalNodeUnion(
@@ -1014,7 +1037,8 @@ metaAnnotationElementValuePair /*%% standardRuleIntro= type=MetaAnnotationElemen
 // or
 //    @@Test
 metaAnnotationElementValue /*%% standardRuleIntro= type=MetaAnnotationValueNode %%*/
-    :   
+    :
+        /*%% spliceClause= type=MetaAnnotationValueNode nontype0=MetaAnnotationArrayValueNode %%*/   
         conditionalExpression
         {
             $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationExpressionValueNodeWithUnions($conditionalExpression.ret));
@@ -1055,6 +1079,7 @@ metaAnnotationElementValues /*%% generateListRule= type=MetaAnnotationValueListN
 //     {1,2,3}
 metaAnnotationElementValueArrayInitializer /*%% standardRuleIntro= type=MetaAnnotationArrayValueNode %%*/
     :   
+        /*%% spliceClause= type=MetaAnnotationArrayValueNode %%*/
         '{'
         optionalMetaAnnotationElementValues
         {
@@ -1070,6 +1095,7 @@ codeLiteral /*%% standardRuleIntro= type=RawCodeLiteralNode %%*/
     :
         {configuration.getCodeLiteralsSupported()}?=>
         (
+            /*%% spliceClause= type=RawCodeLiteralNode %%*/
             '<:'
             codeLiteralBody
             ':>'
@@ -1126,7 +1152,8 @@ anyNonCodeLiteralToken /*%% standardRuleIntro= type=BsjTokenImpl %%*/
 // type parameter of the union does not represent a splice but instead represents the value that would be present
 // normally.  The caller of this grammar rule must perform a runtime-checked cast of the resulting union to get the
 // desired result (which will always be safe if the cast uses the expected type provided here).
-splice /*%% standardRuleIntro= ruleParams="""Class<? extends Node> expectedType""" type=Node %%*/
+splice /*%% standardRuleIntro= ruleParams="""Class<? extends Node> expectedType, List<Class<? extends Node>> nontypes"""
+            type=Node %%*/
     :
         {configuration.getCodeSplicingSupported()}?=>
         (
@@ -1150,6 +1177,7 @@ splice /*%% standardRuleIntro= ruleParams="""Class<? extends Node> expectedType"
 
 compilationUnit /*%% standardRuleIntro= ruleParams="""String name""" type=CompilationUnitNode %%*/
     :
+        /*%% spliceClause= type=CompilationUnitNode %%*/
         packageDeclaration?
         optionalMetaImportDeclarations
         optionalImportDeclarations
@@ -1167,6 +1195,7 @@ compilationUnit /*%% standardRuleIntro= ruleParams="""String name""" type=Compil
 
 packageDeclaration /*%% standardRuleIntro= type=PackageDeclarationNode %%*/
     :
+        /*%% spliceClause= type=PackageDeclarationNode %%*/
         modifiers[false]
         'package' name ';'
         {
@@ -1225,7 +1254,8 @@ importSingleBody /*%% standardRuleIntro= type=ImportSingleTypeNode %%*/
     ;
 
 importDeclaration /*%% standardRuleIntro= type=ImportNode %%*/
-    :   
+    :
+        /*%% spliceClause= type=ImportNode %%*/
         'import'
         importBody
         ';'
@@ -1273,6 +1303,12 @@ typeDeclarations /*%% generateListRule= type=TypeDeclarationListNode
 
 typeDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
     :
+        /*%% spliceClause= type=TypeDeclarationNode
+                           nontype0=ClassDeclarationNode
+                           nontype1=EnumDeclarationNode
+                           nontype2=InterfaceDeclarationNode
+                           nontype3=AnnotationDeclarationNode
+                           nontype4=NoOperationNode %%*/
         classOrInterfaceDeclaration
         {
             $ret = $classOrInterfaceDeclaration.ret;
@@ -1291,6 +1327,7 @@ typeDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
 
 noOp /*%% standardRuleIntro= type=NoOperationNode %%*/
     :
+        /*%% spliceClause= type=NoOperationNode %%*/
         optionalMetaAnnotationList
         ';'
         {
@@ -1485,6 +1522,7 @@ classDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
 
 normalClassDeclaration /*%% standardRuleIntro= type=ClassDeclarationNode initvar0=DeclaredTypeListNode %%*/
     :   
+        /*%% spliceClause= type=ClassDeclarationNode %%*/
         javadoc classModifiers
         'class' id=identifier
         optionalTypeParameters
@@ -1510,6 +1548,7 @@ normalClassDeclaration /*%% standardRuleIntro= type=ClassDeclarationNode initvar
 
 localClassDeclaration /*%% standardRuleIntro= type=LocalClassDeclarationNode initvar0=DeclaredTypeListNode %%*/
     :   
+        /*%% spliceClause= type=LocalClassDeclarationNode %%*/
         javadoc localClassModifiers
         'class' id=identifier
         optionalTypeParameters
@@ -1538,7 +1577,8 @@ typeParameters /*%% generateListRule= type=TypeParameterListNode
                       prefix='<' postfix='>' %%*/ :;
 
 typeParameter /*%% standardRuleIntro= type=TypeParameterNode initvar0=typeBoundNode:DeclaredTypeListNode %%*/
-    :   
+    :
+        /*%% spliceClause= type=TypeParameterNode %%*/
         id=identifier
         (
             'extends' typeBound
@@ -1556,6 +1596,7 @@ typeBound /*%% generateListRule= type=DeclaredTypeListNode
 
 enumDeclaration /*%% standardRuleIntro= type=EnumDeclarationNode initvar0=declaredTypeListNode:DeclaredTypeListNode %%*/
     :   
+        /*%% spliceClause= type=EnumDeclarationNode %%*/
         javadoc enumModifiers
         'enum' 
         id=identifier
@@ -1578,6 +1619,7 @@ enumDeclaration /*%% standardRuleIntro= type=EnumDeclarationNode initvar0=declar
 
 enumBody /*%% standardRuleIntro= type=EnumBodyNode initvar0=enumBodyDeclarationsNode:ClassMemberListNode %%*/
     :   
+        /*%% spliceClause= type=EnumBodyNode %%*/
         '{'
         optionalEnumConstants
         ','?
@@ -1603,6 +1645,7 @@ enumConstant /*%% standardRuleIntro= type=EnumConstantDeclarationNode
                       initvar2=argumentsNode:ExpressionListNode
                       initvar3=AnonymousClassBodyNode %%*/
     :   
+        /*%% spliceClause= type=EnumConstantDeclarationNode %%*/
         javadoc enumConstantModifiers
         id=identifier
         (
@@ -1651,6 +1694,7 @@ interfaceDeclaration /*%% standardRuleIntro= type=TypeDeclarationNode %%*/
     
 normalInterfaceDeclaration /*%% standardRuleIntro= type=InterfaceDeclarationNode initvar0=declaredTypeListNode:DeclaredTypeListNode %%*/
     :   
+        /*%% spliceClause= type=InterfaceDeclarationNode %%*/
         javadoc interfaceModifiers
         'interface' id=identifier
         optionalTypeParameters
@@ -1679,7 +1723,8 @@ referenceTypeList /*%% generateListRule= type=ReferenceTypeListNode
                        componentName=referenceType separator=',' %%*/ :;
 
 classBody /*%% standardRuleIntro= type=ClassBodyNode %%*/
-    :   
+    :
+        /*%% spliceClause= type=ClassBodyNode %%*/
         '{'
         optionalClassBodyDeclarations
         '}'
@@ -1690,6 +1735,7 @@ classBody /*%% standardRuleIntro= type=ClassBodyNode %%*/
 
 anonymousClassBody /*%% standardRuleIntro= type=AnonymousClassBodyNode %%*/
     :   
+        /*%% spliceClause= type=AnonymousClassBodyNode %%*/
         '{' 
         optionalAnonymousClassBodyDeclarations
         '}'
@@ -1699,7 +1745,8 @@ anonymousClassBody /*%% standardRuleIntro= type=AnonymousClassBodyNode %%*/
     ;
 
 interfaceBody /*%% standardRuleIntro= type=InterfaceBodyNode %%*/
-    :   
+    :
+        /*%% spliceClause= type=InterfaceBodyNode %%*/   
         '{'
         optionalInterfaceBodyDeclarations 
         '}'
@@ -1710,6 +1757,7 @@ interfaceBody /*%% standardRuleIntro= type=InterfaceBodyNode %%*/
 
 initializerBlock /*%% standardRuleIntro= type=InitializerDeclarationNode %%*/
     :
+        /*%% spliceClause= type=InitializerDeclarationNode %%*/
         optionalMetaAnnotationList
         staticText='static'?
         block
@@ -1726,6 +1774,16 @@ classBodyDeclarations /*%% generateListRule= type=ClassMemberListNode
     
 classBodyDeclaration /*%% standardRuleIntro= type=ClassMemberNode %%*/
     :
+        /*%% spliceClause= type=ClassMemberNode
+                           nontype0=InitializerDeclarationNode
+                           nontype1=ConstructorDeclarationNode
+                           nontype2=FieldDeclarationNode
+                           nontype3=MethodDeclarationNode
+                           nontype4=ClassDeclarationNode
+                           nontype5=EnumDeclarationNode
+                           nontype6=InterfaceDeclarationNode
+                           nontype7=AnnotationDeclarationNode
+                           nontype8=NoOperationNode %%*/
         /* This has to go at the top so it overrides the anonymousClassMemberBsjMetaprogramAnchor
          * Otherwise, it would be impossible to create a metaprogram that could replace itself with an initializer or
          * a constructor. */
@@ -1760,6 +1818,15 @@ anonymousClassBodyDeclarations /*%% generateListRule= type=AnonymousClassMemberL
     
 anonymousClassBodyDeclaration /*%% standardRuleIntro= type=AnonymousClassMemberNode %%*/
     :
+        /*%% spliceClause= type=AnonymousClassMemberNode
+                           nontype0=InitializerDeclarationNode
+                           nontype1=FieldDeclarationNode
+                           nontype2=MethodDeclarationNode
+                           nontype3=ClassDeclarationNode
+                           nontype4=EnumDeclarationNode
+                           nontype5=InterfaceDeclarationNode
+                           nontype6=AnnotationDeclarationNode
+                           nontype7=NoOperationNode %%*/
         noOp
         {
             $ret = $noOp.ret;
@@ -1806,6 +1873,7 @@ memberDecl /*%% standardRuleIntro= type=AnonymousClassMemberNode %%*/
 
 methodReturnType /*%% standardRuleIntro= type=TypeNode %%*/
     :
+        /*%% spliceClause= type=VoidTypeNode %%*/
         type
         {
             $ret = $type.ret;
@@ -1819,6 +1887,7 @@ methodReturnType /*%% standardRuleIntro= type=TypeNode %%*/
 
 constructorDeclaration /*%% standardRuleIntro= type=ConstructorDeclarationNode initvar0=throwsNode:UnparameterizedTypeListNode %%*/
     :
+        /*%% spliceClause= type=ConstructorDeclarationNode %%*/
         javadoc constructorModifiers
         optionalTypeParameters
         identifier
@@ -1845,6 +1914,7 @@ constructorDeclaration /*%% standardRuleIntro= type=ConstructorDeclarationNode i
 
 constructorBody /*%% standardRuleIntro= type=ConstructorBodyNode %%*/
     :
+        /*%% spliceClause= type=ConstructorBodyNode %%*/
         '{' 
         explicitConstructorInvocation?
         optionalBlockStatementList
@@ -1862,6 +1932,7 @@ methodDeclaration /*%% standardRuleIntro= type=MethodDeclarationNode
                            initvar1=throwsNode:UnparameterizedTypeListNode
                            initvar2=returnTypeNode:TypeNode %%*/
     :
+        /*%% spliceClause= type=MethodDeclarationNode %%*/
         javadoc methodModifiers
         optionalTypeParameters
         methodReturnType
@@ -1871,9 +1942,9 @@ methodDeclaration /*%% standardRuleIntro= type=MethodDeclarationNode
         id=identifier
         formalParameters
         (
-            arrayTypeIndicator[returnTypeNode]
+            arrayTypeCounter
             {
-                returnTypeNode = $arrayTypeIndicator.ret;
+                returnTypeNode = wrapArrayLevels(returnTypeNode, $arrayTypeCounter.ret);
             }
         )?
         (
@@ -1906,6 +1977,7 @@ methodDeclaration /*%% standardRuleIntro= type=MethodDeclarationNode
 
 fieldDeclaration /*%% standardRuleIntro= type=FieldDeclarationNode %%*/
     :   
+        /*%% spliceClause= type=FieldDeclarationNode %%*/
         javadoc fieldModifiers
         type
         variableDeclarators
@@ -1924,6 +1996,14 @@ interfaceBodyDeclarations /*%% generateListRule= type=InterfaceMemberListNode
     
 interfaceBodyDeclaration /*%% standardRuleIntro= type=InterfaceMemberNode %%*/
     :
+        /*%% spliceClause= type=InterfaceMemberNode
+                           nontype0=ConstantDeclarationNode
+                           nontype1=MethodDeclarationNode
+                           nontype2=ClassDeclarationNode
+                           nontype3=EnumDeclarationNode
+                           nontype4=InterfaceDeclarationNode
+                           nontype5=AnnotationDeclarationNode
+                           nontype6=NoOperationNode %%*/
         constantDeclaration
         {
             $ret = $constantDeclaration.ret;
@@ -1959,6 +2039,8 @@ interfaceMethodDeclaration /*%% standardRuleIntro= type=MethodDeclarationNode
                                     initvar0=returnTypeNode:TypeNode
                                     initvar1=throwsNode:UnparameterizedTypeListNode %%*/
     :   
+        // TODO: replace with an interface-specific node type
+        /*%% spliceClause= type=MethodDeclarationNode %%*/
         javadoc methodModifiers
         optionalTypeParameters
         methodReturnType
@@ -1968,9 +2050,9 @@ interfaceMethodDeclaration /*%% standardRuleIntro= type=MethodDeclarationNode
         id=identifier
         formalParameters
         (
-            arrayTypeIndicator[returnTypeNode]
+            arrayTypeCounter
             {
-                returnTypeNode = $arrayTypeIndicator.ret;
+                returnTypeNode = wrapArrayLevels(returnTypeNode, $arrayTypeCounter.ret);
             }
         )?
         (
@@ -1997,6 +2079,7 @@ interfaceMethodDeclaration /*%% standardRuleIntro= type=MethodDeclarationNode
 
 constantDeclaration /*%% standardRuleIntro= type=ConstantDeclarationNode %%*/
     :   
+        /*%% spliceClause= type=ConstantDeclarationNode %%*/
         javadoc constantModifiers
         type
         variableDeclarators
@@ -2020,6 +2103,7 @@ variableDeclarator /*%% standardRuleIntro= type=VariableDeclaratorNode
                             init0="""int arrayLevels = 0;"""
                             initvar0=initializer:VariableInitializerNode %%*/
     :
+        /*%% spliceClause= type=VariableDeclaratorNode %%*/
         id=identifier
         (
             arrayTypeCounter
@@ -2040,6 +2124,7 @@ variableDeclarator /*%% standardRuleIntro= type=VariableDeclaratorNode
 
 unparameterizedType /*%% standardRuleIntro= type=UnparameterizedTypeNode %%*/
     :
+        /*%% spliceClause= type=UnparameterizedTypeNode %%*/   
         name
         {
             $ret = factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeNodeWithUnions($name.ret));
@@ -2064,15 +2149,15 @@ referenceType /*%% standardRuleIntro= type=ReferenceTypeNode %%*/
             $ret = $classOrInterfaceType.ret;
         }
         (
-            arrayTypeIndicator[$ret]
+            arrayTypeCounter
             {
-                $ret = $arrayTypeIndicator.ret;
+                $ret = wrapArrayLevels($ret, $arrayTypeCounter.ret);
             }
         )?
     |
-        primitiveType arrayTypeIndicator[$primitiveType.ret]
+        primitiveType arrayTypeCounter
         {
-            $ret = $arrayTypeIndicator.ret;
+            $ret = wrapArrayLevels($primitiveType.ret, $arrayTypeCounter.ret);
         }
     ;
 
@@ -2085,22 +2170,28 @@ referenceType /*%% standardRuleIntro= type=ReferenceTypeNode %%*/
 //     Map.Entry<K,V>
 //     List<String>[] (even though this generates a warning later)
 type /*%% standardRuleIntro= type=TypeNode %%*/
-    :   
+    :
         (
-            classOrInterfaceType
-            {
-                $ret = $classOrInterfaceType.ret;
-            }
-        |
-            primitiveType
-            {
-                $ret = $primitiveType.ret;
-            }
+            /*%% spliceClause= type=TypeNode
+                               nontype0=PrimitiveTypeNode
+                               nontype1=DeclaredTypeNode
+                               nontype2=VoidTypeNode %%*/   
+            (
+                classOrInterfaceType
+                {
+                    $ret = $classOrInterfaceType.ret;
+                }
+            |
+                primitiveType
+                {
+                    $ret = $primitiveType.ret;
+                }
+            )
         )
         (
-            arrayTypeIndicator[ret]
+            arrayTypeCounter
             {
-                $ret = $arrayTypeIndicator.ret;
+                $ret = wrapArrayLevels($ret, $arrayTypeCounter.ret);
             }
         )?
     ;
@@ -2136,6 +2227,21 @@ classOrInterfaceType /*%% standardRuleIntro= type=DeclaredTypeNode
                 }
             )?
         )?
+    |
+        /*%% spliceClause= type=ParameterizedTypeNode nocond=true
+                           action0="""parameterizedTypeNode = $ret.castNodeType(factory, ParameterizedTypeNode.class);"""
+                           %%*/
+        (
+            '.' next=classOrInterfaceType
+            {
+                $ret = factory.makeNormalNodeUnion(
+                        factory.makeParameterizedTypeSelectNodeWithUnions(parameterizedTypeNode, $next.ret));
+            }
+        )?
+    |
+        /*%% spliceClause= type=DeclaredTypeNode nocond=true
+                           nontype0=UnparameterizedTypeNode
+                           nontype1=ParameterizedTypeNode %%*/
     ;
 
 // Parses a primitive type.
@@ -2147,6 +2253,7 @@ primitiveType /*%% standardRuleIntro= type=PrimitiveTypeNode
                        init0="""PrimitiveType temp = null;"""
                        after0="""$ret = factory.makeNormalNodeUnion(factory.makePrimitiveTypeNode(temp));""" %%*/
     :   
+        /*%% spliceClause= type=PrimitiveTypeNode %%*/   
         'boolean'
         {
             temp = PrimitiveType.BOOLEAN;
@@ -2191,7 +2298,7 @@ primitiveType /*%% standardRuleIntro= type=PrimitiveTypeNode
 // Parses type arguments for a declared type.
 // For example, in
 //     Map.Entry<K,V> entry;
-// this node would parse
+// this rule would parse
 //     <K,V>
 typeArguments /*%% generateListRule= type=TypeArgumentListNode
                        componentName=typeArgument separator=',' prefix='<' postfix='>' %%*/ :;
@@ -2199,12 +2306,15 @@ typeArguments /*%% generateListRule= type=TypeArgumentListNode
 // Parses a single type argument for a declared type.
 // For example, in
 //     Map.Entry<K,V> entry;
-// this node would parse either K or V.  Also, in
+// this rule would parse either K or V.  Also, in
 //     Foo<? extends Bar>
-// this node would parse
+// this rule would parse
 //     ? extends Bar
 typeArgument /*%% standardRuleIntro= type=TypeArgumentNode %%*/
     :
+        /*%% spliceClause= type=TypeArgumentNode
+                           nontype0=ReferenceTypeNode
+                           nontype1=WildcardTypeNode %%*/
         referenceType
         {
             $ret = $referenceType.ret;
@@ -2218,6 +2328,7 @@ typeArgument /*%% standardRuleIntro= type=TypeArgumentNode %%*/
 
 wildcard /*%% standardRuleIntro= type=WildcardTypeNode init0="""boolean upper = false;""" %%*/
     :
+        /*%% spliceClause= type=WildcardTypeNode %%*/
         '?'
         {
             $ret = factory.makeNormalNodeUnion(factory.makeWildcardTypeNode((ReferenceTypeNode)null, false));
@@ -2299,6 +2410,7 @@ normalParameterDecls /*%% generateListRule= type=VariableListNode componentName=
 normalParameterDecl /*%% standardRuleIntro= type=VariableNode
                              init0="""NodeUnion<? extends TypeNode> typeNode = null;""" %%*/ 
     :
+        /*%% spliceClause= type=VariableNode %%*/
         mod=variableModifiers
         t=type
         {
@@ -2306,9 +2418,9 @@ normalParameterDecl /*%% standardRuleIntro= type=VariableNode
         }
         id=identifier
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         {
@@ -2327,9 +2439,9 @@ ellipsisParameterDecl /*%% standardRuleIntro= type=VariableNode
         '...'
         id=identifier
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         {
@@ -2364,6 +2476,7 @@ superclassConstructorInvocation /*%% standardRuleIntro= type=SuperclassConstruct
 
 explicitConstructorInvocation /*%% standardRuleIntro= type=ConstructorInvocationNode %%*/
     :
+        /*%% spliceClause= type=ConstructorInvocationNode %%*/
         alternateConstructorInvocation
         {
             $ret = $alternateConstructorInvocation.ret;
@@ -2384,7 +2497,8 @@ annotations /*%% generateListRule= type=AnnotationListNode componentName=annotat
 // This rule would parse
 //     @Test("foo")
 annotation /*%% standardRuleIntro= type=AnnotationNode %%*/
-    :   
+    :
+        /*%% spliceClause= type=AnnotationNode %%*/
         '@' unparameterizedType
         (
             (
@@ -2432,6 +2546,7 @@ elementValuePairs /*%% generateListRule= type=AnnotationElementListNode
 //     happy=5
 elementValuePair /*%% standardRuleIntro= type=AnnotationElementNode %%*/
     :
+        /*%% spliceClause= type=AnnotationElementNode %%*/
         id=identifier '=' elementValue
         {
             $ret = factory.makeNormalNodeUnion(factory.makeAnnotationElementNodeWithUnions($id.ret, $elementValue.ret));
@@ -2449,6 +2564,7 @@ elementValuePair /*%% standardRuleIntro= type=AnnotationElementNode %%*/
 //    @Test
 elementValue /*%% standardRuleIntro= type=AnnotationValueNode %%*/
     :   
+        /*%% spliceClause= type=AnnotationValueNode nontype0=AnnotationArrayValueNode %%*/
         conditionalExpression
         {
             $ret = factory.makeNormalNodeUnion(factory.makeAnnotationExpressionValueNodeWithUnions($conditionalExpression.ret));
@@ -2480,6 +2596,7 @@ elementValues /*%% generateListRule= type=AnnotationValueListNode
 //     {1,2,3}
 elementValueArrayInitializer /*%% standardRuleIntro= type=AnnotationArrayValueNode %%*/
     :   
+        /*%% spliceClause= type=AnnotationArrayValueNode %%*/
         '{'
         optionalElementValues
         '}'
@@ -2493,6 +2610,7 @@ elementValueArrayInitializer /*%% standardRuleIntro= type=AnnotationArrayValueNo
  */
 annotationTypeDeclaration /*%% standardRuleIntro= type=AnnotationDeclarationNode %%*/
     :   
+        /*%% spliceClause= type=AnnotationDeclarationNode %%*/
         javadoc annotationModifiers '@'
         'interface'
         id=identifier
@@ -2508,6 +2626,7 @@ annotationTypeDeclaration /*%% standardRuleIntro= type=AnnotationDeclarationNode
 
 annotationTypeBody /*%% standardRuleIntro= type=AnnotationBodyNode %%*/
     :   
+        /*%% spliceClause= type=AnnotationBodyNode %%*/
         '{'
         optionalAnnotationTypeElementDeclarations
         '}'
@@ -2565,6 +2684,7 @@ annotationTypeElementDeclaration /*%% standardRuleIntro= type=AnnotationMemberNo
 
 annotationMethodDeclaration /*%% standardRuleIntro= type=AnnotationMethodDeclarationNode %%*/
     :   
+        /*%% spliceClause= type=AnnotationMethodDeclarationNode %%*/
         javadoc annotationMethodModifiers
         type
         id=identifier
@@ -2599,6 +2719,10 @@ blockStatementList /*%% generateListRule= type=BlockStatementListNode %%*/ :;
 // Parses a statement from a block of statements.
 blockStatement /*%% standardRuleIntro= type=BlockStatementNode %%*/
     :   
+        /*%% spliceClause= type=BlockStatementNode
+                           nontype0=LocalVariableDeclarationNode
+                           nontype1=LocalClassDeclarationNode
+                           nontype2=StatementNode %%*/
         (localVariableHeader)=>localVariableDeclarationStatement
         {
             $ret = $localVariableDeclarationStatement.ret;
@@ -2625,6 +2749,7 @@ blockStatement /*%% standardRuleIntro= type=BlockStatementNode %%*/
 //     int x = 5, y;
 localVariableDeclarationStatement /*%% standardRuleIntro= type=LocalVariableDeclarationNode %%*/
     :
+        /*%% spliceClause= type=LocalVariableDeclarationNode %%*/
         localVariableDeclaration ';'
         {
             $ret = $localVariableDeclaration.ret;
@@ -2649,6 +2774,7 @@ localVariableDeclaration /*%% standardRuleIntro= type=LocalVariableDeclarationNo
 
 statement /*%% standardRuleIntro= type=StatementNode %%*/
     :
+        /*%% spliceClause= type=StatementNode %%*/
         /*%% deferProduction= rule0=blockAsStatement
                               rule1=assertStatement
                               rule2=ifStatement
@@ -2818,13 +2944,11 @@ switchStatement /*%% standardRuleIntro= type=SwitchNode %%*/
         '('
         expression
         ')'
-        '{'
-        optionalSwitchBlockStatementGroups
-        '}'
+        switchBlock
         {
             $ret = factory.makeNormalNodeUnion(factory.makeSwitchNodeWithUnions(
                     $expression.ret,
-                    $optionalSwitchBlockStatementGroups.ret,
+                    $switchBlock.ret,
                     $optionalMetaAnnotationList.ret));
         }
     ;
@@ -2922,6 +3046,7 @@ catches /*%% generateListRule= type=CatchListNode componentName=catchClause %%*/
 
 catchClause /*%% standardRuleIntro= type=CatchNode %%*/
     :   
+        /*%% spliceClause= type=CatchNode %%*/
         'catch' '(' formalParameter ')'
         block
         {
@@ -2931,11 +3056,21 @@ catchClause /*%% standardRuleIntro= type=CatchNode %%*/
         }
     ;
 
-switchBlockStatementGroups /*%% generateListRule= type=CaseListNode
-                       componentName=switchBlockStatementGroup %%*/ :;
+switchBlock /*%% standardRuleIntro= type=CaseListNode %%*/
+    :
+        '{'
+        optionalSwitchBlockStatementGroups
+        '}'
+        {
+            $ret = $optionalSwitchBlockStatementGroups.ret;
+        }
+    ;
+
+switchBlockStatementGroups /*%% generateListRule= type=CaseListNode componentName=switchBlockStatementGroup %%*/ :;
 
 switchBlockStatementGroup /*%% standardRuleIntro= type=CaseNode %%*/
     :
+        /*%% spliceClause= type=CaseNode %%*/
         switchLabel
         optionalBlockStatementList
         {
@@ -2971,9 +3106,9 @@ formalParameter /*%% standardRuleIntro= type=VariableNode
         }
         id=identifier
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         {
@@ -2988,6 +3123,7 @@ formalParameter /*%% standardRuleIntro= type=VariableNode
 // initialization expressions.
 forInit /*%% standardRuleIntro= type=ForInitializerNode %%*/
     :   
+        /*%% spliceClause= type=ForInitializerNode %%*/
         localVariableDeclaration
         {
             $ret = factory.makeNormalNodeUnion(factory.makeForInitializerDeclarationNodeWithUnions(
@@ -3016,8 +3152,29 @@ expressionList /*%% generateListRule= type=ExpressionListNode separator=',' %%*/
  * used as a statement (such as x++) but not any other kind of expression (such as ~x). */
 statementExpression /*%% standardRuleIntro= type=StatementExpressionNode %%*/
     :
+        /*%% spliceClause= type=StatementExpressionNode
+                           nontype0=AssignmentNode
+                           nontype1=MethodInvocationNode
+                           nontype2=SuperMethodInvocationNode
+                           nontype3=ClassInstantiationNode %%*/
         // Okay, this is a bit hacky but seriously reduces duplication as well as maintenance.
         // We'll just grab any expression we can.  If it's not a statement expression, we raise a RecognitionException.
+        /*
+            Note: at this point, we should be able to write the following (according to The Definitive ANTLR Handbook):
+                expression
+                {
+                    ($expression.ret != null && $expression.ret.getType().equals(NodeUnion.Type.NORMAL) &&
+                        $expression.ret.getNormalNode() instanceof StatementExpressionNode)
+                }?
+                {
+                    $ret = factory.makeNormalNodeUnion((StatementExpressionNode)($expression.ret.getNormalNode()));
+                }
+            The first brace block acts as a semantic guard, forcing the expression not to match under the specified
+            condition.  The second brace block acts as an action for the matched parse operation.  However, this syntax,
+            despite its being compliant with the ANTLR spec, does not appear to work in ANTLR 3.1.3.  For now, we'll
+            just raise the exception on our own.
+            TODO: investigate this problem and submit a but report. 
+        */
         expression
         {
             if ($expression.ret != null && $expression.ret.getType().equals(NodeUnion.Type.NORMAL) &&
@@ -3034,10 +3191,13 @@ statementExpression /*%% standardRuleIntro= type=StatementExpressionNode %%*/
 
 expression /*%% standardRuleIntro= type=ExpressionNode %%*/
     :   
-        conditionalExpression
-        {
-            $ret = $conditionalExpression.ret;
-        }
+        (
+            /*%% spliceClause= type=ExpressionNode nontype0=NonAssignmentExpressionNode %%*/
+            conditionalExpression
+            {
+                $ret = $conditionalExpression.ret;
+            }
+        )
         (
             assignmentOperator
             e=expression
@@ -3274,10 +3434,13 @@ castExpression /*%% standardRuleIntro= type=TypeCastNode %%*/
 
 postfixExpression /*%% standardRuleIntro= type=NonAssignmentExpressionNode %%*/
     :
-        primary
-        {
-            $ret = $primary.ret;
-        }
+        (
+            /*%% spliceClause= type=NonAssignmentExpressionNode nontype0=PrimaryExpressionNode %%*/
+            primary
+            {
+                $ret = $primary.ret;
+            }
+        )
         (
             '++'
             {
@@ -3308,6 +3471,9 @@ primary returns [NodeUnion<? extends PrimaryExpressionNode> ret]
         }
     :
         (
+            /*%% spliceClause= type=PrimaryExpressionNode
+                               nontype0=RestrictedPrimaryExpressionNode
+                               nontype1=ArrayCreationNode %%*/
             arrayCreator
             {
                 $primary::result = $arrayCreator.ret;
@@ -3331,6 +3497,10 @@ primary returns [NodeUnion<? extends PrimaryExpressionNode> ret]
 
 restrictedPrimary /*%% standardRuleIntro= type=RestrictedPrimaryExpressionNode %%*/
     :
+        /*%% spliceClause= type=RestrictedPrimaryExpressionNode
+                           nontype0=UnqualifiedClassInstantiationNode
+                           nontype1=SuperFieldAccessNode
+                           nontype2=SuperMethodInvocationNode %%*/
         /*%% templateComment= value="""
                  NOTE: in the following production deference, the superMethodInvocation rule MUST preceed the
                        superFieldAccess rule; otherwise, ANTLR's backtracking prioritization will mess up the parse
@@ -3404,6 +3574,7 @@ parenthesizedExpression /*%% standardRuleIntro= type=ParenthesizedExpressionNode
 
 unqualifiedClassInstantiation /*%% standardRuleIntro= type=UnqualifiedClassInstantiationNode %%*/
     :
+        /*%% spliceClause= type=UnqualifiedClassInstantiationNode %%*/
         NEW
         optionalTypeArguments
         classOrInterfaceType arguments
@@ -3425,6 +3596,7 @@ unqualifiedClassInstantiation /*%% standardRuleIntro= type=UnqualifiedClassInsta
 // SuperFieldAccessNode for more information.)
 superFieldAccess /*%% standardRuleIntro= type=SuperFieldAccessNode %%*/
     :
+        /*%% spliceClause= type=SuperFieldAccessNode %%*/
         (unparameterizedType '.')? SUPER '.' identifier
         {
             $ret = factory.makeNormalNodeUnion(factory.makeSuperFieldAccessNodeWithUnions(
@@ -3472,6 +3644,7 @@ methodInvocationByName /*%% standardRuleIntro= type=MethodInvocationNode
 // SuperMethodInvocationNode for more information.)
 superMethodInvocation /*%% standardRuleIntro= type=SuperMethodInvocationNode %%*/
     :
+        /*%% spliceClause= type=SuperMethodInvocationNode %%*/
         (unparameterizedType '.')?
         SUPER '.'
         optionalNonWildcardTypeArguments
@@ -3598,9 +3771,9 @@ declaredClassLiteral /*%% standardRuleIntro= type=ClassLiteralNode
             typeNode = $unparameterizedType.ret;
         }
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         '.' 'class'
@@ -3617,9 +3790,9 @@ primitiveClassLiteral /*%% standardRuleIntro= type=ClassLiteralNode
             typeNode = $primitiveType.ret;
         }
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         '.' 'class'
@@ -3644,6 +3817,7 @@ voidClassLiteral /*%% standardRuleIntro= type=ClassLiteralNode %%*/
 //     new int[2][][];
 arrayCreator /*%% standardRuleIntro= type=ArrayCreationNode %%*/
     :   
+        /*%% spliceClause= type=ArrayCreationNode %%*/
         /*%% deferProduction= rule0=arrayInitializerCreator rule1=arrayInstantiatorCreator %%*/
     ;
 
@@ -3700,14 +3874,16 @@ arrayInstantiatorExpression /*%% standardRuleIntro= type=ExpressionNode %%*/
 
 variableInitializer /*%% standardRuleIntro= type=VariableInitializerNode %%*/
     :   
+        /*%% spliceClause= type=VariableInitializerNode nontype0=ArrayInitializerNode nontype1=ExpressionNode %%*/   
         /*%% deferProduction= rule0=arrayInitializer rule1=expression %%*/
     ;
 
 variableInitializers /*%% generateListRule= type=VariableInitializerListNode
-                       componentName=variableInitializer separator=',' %%*/ :;
+                          componentName=variableInitializer separator=',' %%*/ :;
 
 arrayInitializer /*%% standardRuleIntro= type=ArrayInitializerNode %%*/
-    :   
+    :
+        /*%% spliceClause= type=ArrayInitializerNode %%*/   
         '{' 
             optionalVariableInitializers
             ','? 
@@ -3757,10 +3933,13 @@ arguments /*%% standardRuleIntro= type=ExpressionListNode %%*/
 // Parses a name chain.
 name /*%% standardRuleIntro= type=NameNode %%*/
     :
-        a=identifier
-        {
-            $ret = factory.makeNormalNodeUnion(factory.makeSimpleNameNodeWithUnions($a.ret));
-        }
+        (
+            /*%% spliceClause= type=NameNode %%*/
+            a=identifier
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeSimpleNameNodeWithUnions($a.ret));
+            }
+        )
         (
             '.'
             b=identifier
@@ -3901,16 +4080,14 @@ lexicalLiteral /*%% standardRuleIntro= type=LiteralNode<?> %%*/
 
 identifier /*%% standardRuleIntro= type=IdentifierNode %%*/
     :
-        // TODO: replace with more general splicing logic based on standardRuleIntro
+        /*%% spliceClause= type=IdentifierNode %%*/
         IDENTIFIER
         {
             $ret = factory.makeNormalNodeUnion(factory.makeIdentifierNode($IDENTIFIER.text));
         }
-    |
-        /*%% spliceClause= type=IdentifierNode %%*/
     ;
 
-unsplicableIdentifier /*%% standardRuleIntro= type=IdentifierNode spliceable=false %%*/
+unsplicableIdentifier /*%% standardRuleIntro= type=IdentifierNode unioned=false %%*/
     :
         IDENTIFIER
         {

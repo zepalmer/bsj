@@ -595,6 +595,25 @@ scope Rule {
        return factory.<T>makeSpliceNodeUnion(factory.makeSpliceNode(expr));
     }
     
+    /**
+     * Performs type wrapping for a counted array type.
+     * @param type The node representing the type which is wrapped in array levels.
+     * @param levels The number of levels to wrap.
+     * @return The resulting type.
+     */
+    private NodeUnion<? extends ArrayTypeNode> wrapArrayLevels(NodeUnion<? extends TypeNode> type, int levels)
+    {
+        if (levels < 1)
+            throw new IllegalArgumentException("Invalid number of array levels: " + levels);
+        
+        NodeUnion<? extends ArrayTypeNode> ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions(type));
+        for (int i=1;i<levels;i++)
+        {
+            ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions(ret));
+        }        
+        return ret;
+    }
+    
     // *** RULE AOP METHODS ***************************************************
     private void ruleStart(String ruleName)
     {
@@ -666,26 +685,6 @@ arrayTypeCounter returns [int ret]
         )*
     ;
 
-// Performs type wrapping for a counted array type
-arrayTypeIndicator[NodeUnion<? extends TypeNode> inType] returns [NodeUnion<? extends ArrayTypeNode> ret]
-        scope Rule;
-        @init {
-            ruleStart("arrayTypeIndicator");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        arrayTypeCounter
-        {
-            $ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions(inType));
-            for (int i=1;i<$arrayTypeCounter.ret;i++)
-            {
-                $ret = factory.makeNormalNodeUnion(factory.makeArrayTypeNodeWithUnions($ret));
-            }
-        }
-    ;
-
 /* ===========================================================================
  * These are the BSJ grammar rules.
  * ===========================================================================
@@ -701,6 +700,11 @@ bsjMetaprogram returns [NodeUnion<? extends MetaprogramNode> ret]
             ruleStop();
         }
     :
+        splice[MetaprogramNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaprogramNode.class);
+        }
+    |
         '[:'
         preamble
         optionalBlockStatementList
@@ -723,6 +727,11 @@ preamble returns [NodeUnion<? extends MetaprogramPreambleNode> ret]
             ruleStop();
         }
     :
+        splice[MetaprogramPreambleNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaprogramPreambleNode.class);
+        }
+    |
         optionalMetaImportDeclarations
         (
             metaprogramMode
@@ -749,12 +758,37 @@ metaprogramImport returns [NodeUnion<? extends MetaprogramImportNode> ret]
             ruleStop();
         }
     :   
+        splice[MetaprogramImportNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaprogramImportNode.class);
+        }
+    |
         '#import'
-        importBody
+        metaprogramImportBody
         ';'
         {
             $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramImportNodeWithUnions(
-                    $importBody.ret));
+                    $metaprogramImportBody.ret));
+        }
+    ;
+
+metaprogramImportBody returns [NodeUnion<? extends ImportNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramImportBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        splice[ImportNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ImportNode.class);
+        }
+    |
+        importBody
+        {
+            $ret = $importBody.ret;
         }
     ;
     
@@ -861,6 +895,11 @@ metaprogramDependencyDeclaration returns [NodeUnion<? extends MetaprogramDepende
             ruleStop();
         }
     :   
+        splice[MetaprogramDependencyDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaprogramDependencyDeclarationNode.class);
+        }
+    |
         '#depends'
         metaprogramDependencyList
         ';'
@@ -946,6 +985,11 @@ metaprogramDependency returns [NodeUnion<? extends MetaprogramDependencyNode> re
             ruleStop();
         }
     :
+        splice[MetaprogramDependencyNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaprogramDependencyNode.class);
+        }
+    |
         (
             '#weak'
             {
@@ -1030,7 +1074,12 @@ metaprogramTarget returns [NodeUnion<? extends MetaprogramTargetNode> ret]
         @after {
             ruleStop();
         }
-    :   
+    :
+        splice[MetaprogramTargetNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaprogramTargetNode.class);
+        }
+    |   
         '#target'
         identifierList
         ';'
@@ -1294,6 +1343,11 @@ metaAnnotation returns [NodeUnion<? extends MetaAnnotationNode> ret]
     :   
         {configuration.getMetaAnnotationsSupported()}?=>
         (
+            splice[MetaAnnotationNode.class, Arrays.<Class<? extends Node>>asList()]
+            {
+                $ret = $splice.ret.castNodeType(factory, MetaAnnotationNode.class);
+            }
+        |
             '@' '@' unparameterizedType
             (
                 (
@@ -1414,6 +1468,11 @@ metaAnnotationElementValuePair returns [NodeUnion<? extends MetaAnnotationElemen
             ruleStop();
         }
     :
+        splice[MetaAnnotationElementNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaAnnotationElementNode.class);
+        }
+    |
         id=identifier '=' metaAnnotationElementValue
         {
             $ret = factory.makeNormalNodeUnion(
@@ -1438,7 +1497,12 @@ metaAnnotationElementValue returns [NodeUnion<? extends MetaAnnotationValueNode>
         @after {
             ruleStop();
         }
-    :   
+    :
+        splice[MetaAnnotationValueNode.class, Arrays.<Class<? extends Node>>asList(MetaAnnotationArrayValueNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaAnnotationValueNode.class);
+        }
+    |   
         conditionalExpression
         {
             $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationExpressionValueNodeWithUnions($conditionalExpression.ret));
@@ -1547,6 +1611,11 @@ metaAnnotationElementValueArrayInitializer returns [NodeUnion<? extends MetaAnno
             ruleStop();
         }
     :   
+        splice[MetaAnnotationArrayValueNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MetaAnnotationArrayValueNode.class);
+        }
+    |
         '{'
         optionalMetaAnnotationElementValues
         {
@@ -1569,6 +1638,11 @@ codeLiteral returns [NodeUnion<? extends RawCodeLiteralNode> ret]
     :
         {configuration.getCodeLiteralsSupported()}?=>
         (
+            splice[RawCodeLiteralNode.class, Arrays.<Class<? extends Node>>asList()]
+            {
+                $ret = $splice.ret.castNodeType(factory, RawCodeLiteralNode.class);
+            }
+        |
             '<:'
             codeLiteralBody
             ':>'
@@ -1632,7 +1706,7 @@ anyNonCodeLiteralToken returns [BsjTokenImpl ret]
 // type parameter of the union does not represent a splice but instead represents the value that would be present
 // normally.  The caller of this grammar rule must perform a runtime-checked cast of the resulting union to get the
 // desired result (which will always be safe if the cast uses the expected type provided here).
-splice[Class<? extends Node> expectedType] returns [NodeUnion<? extends Node> ret]
+splice[Class<? extends Node> expectedType, List<Class<? extends Node>> nontypes] returns [NodeUnion<? extends Node> ret]
         scope Rule;
         @init {
             ruleStart("splice");
@@ -1670,6 +1744,11 @@ compilationUnit[String name] returns [NodeUnion<? extends CompilationUnitNode> r
             ruleStop();
         }
     :
+        splice[CompilationUnitNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, CompilationUnitNode.class);
+        }
+    |
         packageDeclaration?
         optionalMetaImportDeclarations
         optionalImportDeclarations
@@ -1694,6 +1773,11 @@ packageDeclaration returns [NodeUnion<? extends PackageDeclarationNode> ret]
             ruleStop();
         }
     :
+        splice[PackageDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, PackageDeclarationNode.class);
+        }
+    |
         modifiers[false]
         'package' name ';'
         {
@@ -1934,7 +2018,12 @@ importDeclaration returns [NodeUnion<? extends ImportNode> ret]
         @after {
             ruleStop();
         }
-    :   
+    :
+        splice[ImportNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ImportNode.class);
+        }
+    |
         'import'
         importBody
         ';'
@@ -2050,6 +2139,11 @@ typeDeclaration returns [NodeUnion<? extends TypeDeclarationNode> ret]
             ruleStop();
         }
     :
+        splice[TypeDeclarationNode.class, Arrays.<Class<? extends Node>>asList(ClassDeclarationNode.class, EnumDeclarationNode.class, InterfaceDeclarationNode.class, AnnotationDeclarationNode.class, NoOperationNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, TypeDeclarationNode.class);
+        }
+    |
         classOrInterfaceDeclaration
         {
             $ret = $classOrInterfaceDeclaration.ret;
@@ -2075,6 +2169,11 @@ noOp returns [NodeUnion<? extends NoOperationNode> ret]
             ruleStop();
         }
     :
+        splice[NoOperationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, NoOperationNode.class);
+        }
+    |
         optionalMetaAnnotationList
         ';'
         {
@@ -2513,6 +2612,11 @@ normalClassDeclaration returns [NodeUnion<? extends ClassDeclarationNode> ret]
             ruleStop();
         }
     :   
+        splice[ClassDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ClassDeclarationNode.class);
+        }
+    |
         javadoc classModifiers
         'class' id=identifier
         optionalTypeParameters
@@ -2547,6 +2651,11 @@ localClassDeclaration returns [NodeUnion<? extends LocalClassDeclarationNode> re
             ruleStop();
         }
     :   
+        splice[LocalClassDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, LocalClassDeclarationNode.class);
+        }
+    |
         javadoc localClassModifiers
         'class' id=identifier
         optionalTypeParameters
@@ -2647,7 +2756,12 @@ typeParameter returns [NodeUnion<? extends TypeParameterNode> ret]
         @after {
             ruleStop();
         }
-    :   
+    :
+        splice[TypeParameterNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, TypeParameterNode.class);
+        }
+    |
         id=identifier
         (
             'extends' typeBound
@@ -2736,6 +2850,11 @@ enumDeclaration returns [NodeUnion<? extends EnumDeclarationNode> ret]
             ruleStop();
         }
     :   
+        splice[EnumDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, EnumDeclarationNode.class);
+        }
+    |
         javadoc enumModifiers
         'enum' 
         id=identifier
@@ -2767,6 +2886,11 @@ enumBody returns [NodeUnion<? extends EnumBodyNode> ret]
             ruleStop();
         }
     :   
+        splice[EnumBodyNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, EnumBodyNode.class);
+        }
+    |
         '{'
         optionalEnumConstants
         ','?
@@ -2865,6 +2989,11 @@ enumConstant returns [NodeUnion<? extends EnumConstantDeclarationNode> ret]
             ruleStop();
         }
     :   
+        splice[EnumConstantDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, EnumConstantDeclarationNode.class);
+        }
+    |
         javadoc enumConstantModifiers
         id=identifier
         (
@@ -2936,6 +3065,11 @@ normalInterfaceDeclaration returns [NodeUnion<? extends InterfaceDeclarationNode
             ruleStop();
         }
     :   
+        splice[InterfaceDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, InterfaceDeclarationNode.class);
+        }
+    |
         javadoc interfaceModifiers
         'interface' id=identifier
         optionalTypeParameters
@@ -3095,7 +3229,12 @@ classBody returns [NodeUnion<? extends ClassBodyNode> ret]
         @after {
             ruleStop();
         }
-    :   
+    :
+        splice[ClassBodyNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ClassBodyNode.class);
+        }
+    |
         '{'
         optionalClassBodyDeclarations
         '}'
@@ -3113,6 +3252,11 @@ anonymousClassBody returns [NodeUnion<? extends AnonymousClassBodyNode> ret]
             ruleStop();
         }
     :   
+        splice[AnonymousClassBodyNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnonymousClassBodyNode.class);
+        }
+    |
         '{' 
         optionalAnonymousClassBodyDeclarations
         '}'
@@ -3129,7 +3273,12 @@ interfaceBody returns [NodeUnion<? extends InterfaceBodyNode> ret]
         @after {
             ruleStop();
         }
-    :   
+    :
+        splice[InterfaceBodyNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, InterfaceBodyNode.class);
+        }
+    |   
         '{'
         optionalInterfaceBodyDeclarations 
         '}'
@@ -3147,6 +3296,11 @@ initializerBlock returns [NodeUnion<? extends InitializerDeclarationNode> ret]
             ruleStop();
         }
     :
+        splice[InitializerDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, InitializerDeclarationNode.class);
+        }
+    |
         optionalMetaAnnotationList
         staticText='static'?
         block
@@ -3231,6 +3385,11 @@ classBodyDeclaration returns [NodeUnion<? extends ClassMemberNode> ret]
             ruleStop();
         }
     :
+        splice[ClassMemberNode.class, Arrays.<Class<? extends Node>>asList(InitializerDeclarationNode.class, ConstructorDeclarationNode.class, FieldDeclarationNode.class, MethodDeclarationNode.class, ClassDeclarationNode.class, EnumDeclarationNode.class, InterfaceDeclarationNode.class, AnnotationDeclarationNode.class, NoOperationNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, ClassMemberNode.class);
+        }
+    |
         /* This has to go at the top so it overrides the anonymousClassMemberBsjMetaprogramAnchor
          * Otherwise, it would be impossible to create a metaprogram that could replace itself with an initializer or
          * a constructor. */
@@ -3333,6 +3492,11 @@ anonymousClassBodyDeclaration returns [NodeUnion<? extends AnonymousClassMemberN
             ruleStop();
         }
     :
+        splice[AnonymousClassMemberNode.class, Arrays.<Class<? extends Node>>asList(InitializerDeclarationNode.class, FieldDeclarationNode.class, MethodDeclarationNode.class, ClassDeclarationNode.class, EnumDeclarationNode.class, InterfaceDeclarationNode.class, AnnotationDeclarationNode.class, NoOperationNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnonymousClassMemberNode.class);
+        }
+    |
         noOp
         {
             $ret = $noOp.ret;
@@ -3393,6 +3557,11 @@ methodReturnType returns [NodeUnion<? extends TypeNode> ret]
             ruleStop();
         }
     :
+        splice[VoidTypeNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, VoidTypeNode.class);
+        }
+    |
         type
         {
             $ret = $type.ret;
@@ -3415,6 +3584,11 @@ constructorDeclaration returns [NodeUnion<? extends ConstructorDeclarationNode> 
             ruleStop();
         }
     :
+        splice[ConstructorDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ConstructorDeclarationNode.class);
+        }
+    |
         javadoc constructorModifiers
         optionalTypeParameters
         identifier
@@ -3448,6 +3622,11 @@ constructorBody returns [NodeUnion<? extends ConstructorBodyNode> ret]
             ruleStop();
         }
     :
+        splice[ConstructorBodyNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ConstructorBodyNode.class);
+        }
+    |
         '{' 
         explicitConstructorInvocation?
         optionalBlockStatementList
@@ -3475,6 +3654,11 @@ methodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> ret]
             ruleStop();
         }
     :
+        splice[MethodDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MethodDeclarationNode.class);
+        }
+    |
         javadoc methodModifiers
         optionalTypeParameters
         methodReturnType
@@ -3484,9 +3668,9 @@ methodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> ret]
         id=identifier
         formalParameters
         (
-            arrayTypeIndicator[returnTypeNode]
+            arrayTypeCounter
             {
-                returnTypeNode = $arrayTypeIndicator.ret;
+                returnTypeNode = wrapArrayLevels(returnTypeNode, $arrayTypeCounter.ret);
             }
         )?
         (
@@ -3526,6 +3710,11 @@ fieldDeclaration returns [NodeUnion<? extends FieldDeclarationNode> ret]
             ruleStop();
         }
     :   
+        splice[FieldDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, FieldDeclarationNode.class);
+        }
+    |
         javadoc fieldModifiers
         type
         variableDeclarators
@@ -3612,6 +3801,11 @@ interfaceBodyDeclaration returns [NodeUnion<? extends InterfaceMemberNode> ret]
             ruleStop();
         }
     :
+        splice[InterfaceMemberNode.class, Arrays.<Class<? extends Node>>asList(ConstantDeclarationNode.class, MethodDeclarationNode.class, ClassDeclarationNode.class, EnumDeclarationNode.class, InterfaceDeclarationNode.class, AnnotationDeclarationNode.class, NoOperationNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, InterfaceMemberNode.class);
+        }
+    |
         constantDeclaration
         {
             $ret = $constantDeclaration.ret;
@@ -3656,6 +3850,12 @@ interfaceMethodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> r
             ruleStop();
         }
     :   
+        // TODO: replace with an interface-specific node type
+        splice[MethodDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, MethodDeclarationNode.class);
+        }
+    |
         javadoc methodModifiers
         optionalTypeParameters
         methodReturnType
@@ -3665,9 +3865,9 @@ interfaceMethodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> r
         id=identifier
         formalParameters
         (
-            arrayTypeIndicator[returnTypeNode]
+            arrayTypeCounter
             {
-                returnTypeNode = $arrayTypeIndicator.ret;
+                returnTypeNode = wrapArrayLevels(returnTypeNode, $arrayTypeCounter.ret);
             }
         )?
         (
@@ -3701,6 +3901,11 @@ constantDeclaration returns [NodeUnion<? extends ConstantDeclarationNode> ret]
             ruleStop();
         }
     :   
+        splice[ConstantDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ConstantDeclarationNode.class);
+        }
+    |
         javadoc constantModifiers
         type
         variableDeclarators
@@ -3794,6 +3999,11 @@ variableDeclarator returns [NodeUnion<? extends VariableDeclaratorNode> ret]
             ruleStop();
         }
     :
+        splice[VariableDeclaratorNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, VariableDeclaratorNode.class);
+        }
+    |
         id=identifier
         (
             arrayTypeCounter
@@ -3821,6 +4031,11 @@ unparameterizedType returns [NodeUnion<? extends UnparameterizedTypeNode> ret]
             ruleStop();
         }
     :
+        splice[UnparameterizedTypeNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, UnparameterizedTypeNode.class);
+        }
+    |   
         name
         {
             $ret = factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeNodeWithUnions($name.ret));
@@ -3922,15 +4137,15 @@ referenceType returns [NodeUnion<? extends ReferenceTypeNode> ret]
             $ret = $classOrInterfaceType.ret;
         }
         (
-            arrayTypeIndicator[$ret]
+            arrayTypeCounter
             {
-                $ret = $arrayTypeIndicator.ret;
+                $ret = wrapArrayLevels($ret, $arrayTypeCounter.ret);
             }
         )?
     |
-        primitiveType arrayTypeIndicator[$primitiveType.ret]
+        primitiveType arrayTypeCounter
         {
-            $ret = $arrayTypeIndicator.ret;
+            $ret = wrapArrayLevels($primitiveType.ret, $arrayTypeCounter.ret);
         }
     ;
 
@@ -3950,22 +4165,29 @@ type returns [NodeUnion<? extends TypeNode> ret]
         @after {
             ruleStop();
         }
-    :   
+    :
         (
-            classOrInterfaceType
+            splice[TypeNode.class, Arrays.<Class<? extends Node>>asList(PrimitiveTypeNode.class, DeclaredTypeNode.class, VoidTypeNode.class)]
             {
-                $ret = $classOrInterfaceType.ret;
+                $ret = $splice.ret.castNodeType(factory, TypeNode.class);
             }
-        |
-            primitiveType
-            {
-                $ret = $primitiveType.ret;
-            }
+        |   
+            (
+                classOrInterfaceType
+                {
+                    $ret = $classOrInterfaceType.ret;
+                }
+            |
+                primitiveType
+                {
+                    $ret = $primitiveType.ret;
+                }
+            )
         )
         (
-            arrayTypeIndicator[ret]
+            arrayTypeCounter
             {
-                $ret = $arrayTypeIndicator.ret;
+                $ret = wrapArrayLevels($ret, $arrayTypeCounter.ret);
             }
         )?
     ;
@@ -4010,6 +4232,24 @@ classOrInterfaceType returns [NodeUnion<? extends DeclaredTypeNode> ret]
                 }
             )?
         )?
+    |
+        splice[ParameterizedTypeNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ParameterizedTypeNode.class);
+            parameterizedTypeNode = $ret.castNodeType(factory, ParameterizedTypeNode.class);
+        }
+        (
+            '.' next=classOrInterfaceType
+            {
+                $ret = factory.makeNormalNodeUnion(
+                        factory.makeParameterizedTypeSelectNodeWithUnions(parameterizedTypeNode, $next.ret));
+            }
+        )?
+    |
+        splice[DeclaredTypeNode.class, Arrays.<Class<? extends Node>>asList(UnparameterizedTypeNode.class, ParameterizedTypeNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, DeclaredTypeNode.class);
+        }
     ;
 
 // Parses a primitive type.
@@ -4028,6 +4268,11 @@ primitiveType returns [NodeUnion<? extends PrimitiveTypeNode> ret]
             $ret = factory.makeNormalNodeUnion(factory.makePrimitiveTypeNode(temp));
         }
     :   
+        splice[PrimitiveTypeNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, PrimitiveTypeNode.class);
+        }
+    |   
         'boolean'
         {
             temp = PrimitiveType.BOOLEAN;
@@ -4072,7 +4317,7 @@ primitiveType returns [NodeUnion<? extends PrimitiveTypeNode> ret]
 // Parses type arguments for a declared type.
 // For example, in
 //     Map.Entry<K,V> entry;
-// this node would parse
+// this rule would parse
 //     <K,V>
 typeArguments returns [NodeUnion<? extends TypeArgumentListNode> ret]
         scope Rule;
@@ -4144,9 +4389,9 @@ optionalTypeArguments returns [NodeUnion<? extends TypeArgumentListNode> ret]
 // Parses a single type argument for a declared type.
 // For example, in
 //     Map.Entry<K,V> entry;
-// this node would parse either K or V.  Also, in
+// this rule would parse either K or V.  Also, in
 //     Foo<? extends Bar>
-// this node would parse
+// this rule would parse
 //     ? extends Bar
 typeArgument returns [NodeUnion<? extends TypeArgumentNode> ret]
         scope Rule;
@@ -4157,6 +4402,11 @@ typeArgument returns [NodeUnion<? extends TypeArgumentNode> ret]
             ruleStop();
         }
     :
+        splice[TypeArgumentNode.class, Arrays.<Class<? extends Node>>asList(ReferenceTypeNode.class, WildcardTypeNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, TypeArgumentNode.class);
+        }
+    |
         referenceType
         {
             $ret = $referenceType.ret;
@@ -4178,6 +4428,11 @@ wildcard returns [NodeUnion<? extends WildcardTypeNode> ret]
             ruleStop();
         }
     :
+        splice[WildcardTypeNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, WildcardTypeNode.class);
+        }
+    |
         '?'
         {
             $ret = factory.makeNormalNodeUnion(factory.makeWildcardTypeNode((ReferenceTypeNode)null, false));
@@ -4328,6 +4583,11 @@ normalParameterDecl returns [NodeUnion<? extends VariableNode> ret]
             ruleStop();
         }
     :
+        splice[VariableNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, VariableNode.class);
+        }
+    |
         mod=variableModifiers
         t=type
         {
@@ -4335,9 +4595,9 @@ normalParameterDecl returns [NodeUnion<? extends VariableNode> ret]
         }
         id=identifier
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         {
@@ -4363,9 +4623,9 @@ ellipsisParameterDecl returns [NodeUnion<? extends VariableNode> ret]
         '...'
         id=identifier
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         {
@@ -4421,6 +4681,11 @@ explicitConstructorInvocation returns [NodeUnion<? extends ConstructorInvocation
             ruleStop();
         }
     :
+        splice[ConstructorInvocationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ConstructorInvocationNode.class);
+        }
+    |
         alternateConstructorInvocation
         {
             $ret = $alternateConstructorInvocation.ret;
@@ -4510,7 +4775,12 @@ annotation returns [NodeUnion<? extends AnnotationNode> ret]
         @after {
             ruleStop();
         }
-    :   
+    :
+        splice[AnnotationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnnotationNode.class);
+        }
+    |
         '@' unparameterizedType
         (
             (
@@ -4627,6 +4897,11 @@ elementValuePair returns [NodeUnion<? extends AnnotationElementNode> ret]
             ruleStop();
         }
     :
+        splice[AnnotationElementNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnnotationElementNode.class);
+        }
+    |
         id=identifier '=' elementValue
         {
             $ret = factory.makeNormalNodeUnion(factory.makeAnnotationElementNodeWithUnions($id.ret, $elementValue.ret));
@@ -4651,6 +4926,11 @@ elementValue returns [NodeUnion<? extends AnnotationValueNode> ret]
             ruleStop();
         }
     :   
+        splice[AnnotationValueNode.class, Arrays.<Class<? extends Node>>asList(AnnotationArrayValueNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnnotationValueNode.class);
+        }
+    |
         conditionalExpression
         {
             $ret = factory.makeNormalNodeUnion(factory.makeAnnotationExpressionValueNodeWithUnions($conditionalExpression.ret));
@@ -4752,6 +5032,11 @@ elementValueArrayInitializer returns [NodeUnion<? extends AnnotationArrayValueNo
             ruleStop();
         }
     :   
+        splice[AnnotationArrayValueNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnnotationArrayValueNode.class);
+        }
+    |
         '{'
         optionalElementValues
         '}'
@@ -4772,6 +5057,11 @@ annotationTypeDeclaration returns [NodeUnion<? extends AnnotationDeclarationNode
             ruleStop();
         }
     :   
+        splice[AnnotationDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnnotationDeclarationNode.class);
+        }
+    |
         javadoc annotationModifiers '@'
         'interface'
         id=identifier
@@ -4794,6 +5084,11 @@ annotationTypeBody returns [NodeUnion<? extends AnnotationBodyNode> ret]
             ruleStop();
         }
     :   
+        splice[AnnotationBodyNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnnotationBodyNode.class);
+        }
+    |
         '{'
         optionalAnnotationTypeElementDeclarations
         '}'
@@ -4926,6 +5221,11 @@ annotationMethodDeclaration returns [NodeUnion<? extends AnnotationMethodDeclara
             ruleStop();
         }
     :   
+        splice[AnnotationMethodDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, AnnotationMethodDeclarationNode.class);
+        }
+    |
         javadoc annotationMethodModifiers
         type
         id=identifier
@@ -5036,6 +5336,11 @@ blockStatement returns [NodeUnion<? extends BlockStatementNode> ret]
             ruleStop();
         }
     :   
+        splice[BlockStatementNode.class, Arrays.<Class<? extends Node>>asList(LocalVariableDeclarationNode.class, LocalClassDeclarationNode.class, StatementNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, BlockStatementNode.class);
+        }
+    |
         (localVariableHeader)=>localVariableDeclarationStatement
         {
             $ret = $localVariableDeclarationStatement.ret;
@@ -5069,6 +5374,11 @@ localVariableDeclarationStatement returns [NodeUnion<? extends LocalVariableDecl
             ruleStop();
         }
     :
+        splice[LocalVariableDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, LocalVariableDeclarationNode.class);
+        }
+    |
         localVariableDeclaration ';'
         {
             $ret = $localVariableDeclaration.ret;
@@ -5107,6 +5417,11 @@ statement returns [NodeUnion<? extends StatementNode> ret]
             ruleStop();
         }
     :
+        splice[StatementNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, StatementNode.class);
+        }
+    |
         (
             blockAsStatement
             {
@@ -5422,13 +5737,11 @@ switchStatement returns [NodeUnion<? extends SwitchNode> ret]
         '('
         expression
         ')'
-        '{'
-        optionalSwitchBlockStatementGroups
-        '}'
+        switchBlock
         {
             $ret = factory.makeNormalNodeUnion(factory.makeSwitchNodeWithUnions(
                     $expression.ret,
-                    $optionalSwitchBlockStatementGroups.ret,
+                    $switchBlock.ret,
                     $optionalMetaAnnotationList.ret));
         }
     ;
@@ -5651,12 +5964,34 @@ catchClause returns [NodeUnion<? extends CatchNode> ret]
             ruleStop();
         }
     :   
+        splice[CatchNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, CatchNode.class);
+        }
+    |
         'catch' '(' formalParameter ')'
         block
         {
             $ret = factory.makeNormalNodeUnion(factory.makeCatchNodeWithUnions(
                     $block.ret,
                     $formalParameter.ret));
+        }
+    ;
+
+switchBlock returns [NodeUnion<? extends CaseListNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("switchBlock");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        '{'
+        optionalSwitchBlockStatementGroups
+        '}'
+        {
+            $ret = $optionalSwitchBlockStatementGroups.ret;
         }
     ;
 
@@ -5733,6 +6068,11 @@ switchBlockStatementGroup returns [NodeUnion<? extends CaseNode> ret]
             ruleStop();
         }
     :
+        splice[CaseNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, CaseNode.class);
+        }
+    |
         switchLabel
         optionalBlockStatementList
         {
@@ -5782,9 +6122,9 @@ formalParameter returns [NodeUnion<? extends VariableNode> ret]
         }
         id=identifier
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         {
@@ -5806,6 +6146,11 @@ forInit returns [NodeUnion<? extends ForInitializerNode> ret]
             ruleStop();
         }
     :   
+        splice[ForInitializerNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ForInitializerNode.class);
+        }
+    |
         localVariableDeclaration
         {
             $ret = factory.makeNormalNodeUnion(factory.makeForInitializerDeclarationNodeWithUnions(
@@ -5974,8 +6319,29 @@ statementExpression returns [NodeUnion<? extends StatementExpressionNode> ret]
             ruleStop();
         }
     :
+        splice[StatementExpressionNode.class, Arrays.<Class<? extends Node>>asList(AssignmentNode.class, MethodInvocationNode.class, SuperMethodInvocationNode.class, ClassInstantiationNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, StatementExpressionNode.class);
+        }
+    |
         // Okay, this is a bit hacky but seriously reduces duplication as well as maintenance.
         // We'll just grab any expression we can.  If it's not a statement expression, we raise a RecognitionException.
+        /*
+            Note: at this point, we should be able to write the following (according to The Definitive ANTLR Handbook):
+                expression
+                {
+                    ($expression.ret != null && $expression.ret.getType().equals(NodeUnion.Type.NORMAL) &&
+                        $expression.ret.getNormalNode() instanceof StatementExpressionNode)
+                }?
+                {
+                    $ret = factory.makeNormalNodeUnion((StatementExpressionNode)($expression.ret.getNormalNode()));
+                }
+            The first brace block acts as a semantic guard, forcing the expression not to match under the specified
+            condition.  The second brace block acts as an action for the matched parse operation.  However, this syntax,
+            despite its being compliant with the ANTLR spec, does not appear to work in ANTLR 3.1.3.  For now, we'll
+            just raise the exception on our own.
+            TODO: investigate this problem and submit a but report. 
+        */
         expression
         {
             if ($expression.ret != null && $expression.ret.getType().equals(NodeUnion.Type.NORMAL) &&
@@ -5999,10 +6365,17 @@ expression returns [NodeUnion<? extends ExpressionNode> ret]
             ruleStop();
         }
     :   
-        conditionalExpression
-        {
-            $ret = $conditionalExpression.ret;
-        }
+        (
+            splice[ExpressionNode.class, Arrays.<Class<? extends Node>>asList(NonAssignmentExpressionNode.class)]
+            {
+                $ret = $splice.ret.castNodeType(factory, ExpressionNode.class);
+            }
+        |
+            conditionalExpression
+            {
+                $ret = $conditionalExpression.ret;
+            }
+        )
         (
             assignmentOperator
             e=expression
@@ -6584,10 +6957,17 @@ postfixExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
             ruleStop();
         }
     :
-        primary
-        {
-            $ret = $primary.ret;
-        }
+        (
+            splice[NonAssignmentExpressionNode.class, Arrays.<Class<? extends Node>>asList(PrimaryExpressionNode.class)]
+            {
+                $ret = $splice.ret.castNodeType(factory, NonAssignmentExpressionNode.class);
+            }
+        |
+            primary
+            {
+                $ret = $primary.ret;
+            }
+        )
         (
             '++'
             {
@@ -6618,6 +6998,11 @@ primary returns [NodeUnion<? extends PrimaryExpressionNode> ret]
         }
     :
         (
+            splice[PrimaryExpressionNode.class, Arrays.<Class<? extends Node>>asList(RestrictedPrimaryExpressionNode.class, ArrayCreationNode.class)]
+            {
+                $ret = $splice.ret.castNodeType(factory, PrimaryExpressionNode.class);
+            }
+        |
             arrayCreator
             {
                 $primary::result = $arrayCreator.ret;
@@ -6648,6 +7033,11 @@ restrictedPrimary returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> 
             ruleStop();
         }
     :
+        splice[RestrictedPrimaryExpressionNode.class, Arrays.<Class<? extends Node>>asList(UnqualifiedClassInstantiationNode.class, SuperFieldAccessNode.class, SuperMethodInvocationNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, RestrictedPrimaryExpressionNode.class);
+        }
+    |
         (
             lexicalLiteral
             {
@@ -6795,6 +7185,11 @@ unqualifiedClassInstantiation returns [NodeUnion<? extends UnqualifiedClassInsta
             ruleStop();
         }
     :
+        splice[UnqualifiedClassInstantiationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, UnqualifiedClassInstantiationNode.class);
+        }
+    |
         NEW
         optionalTypeArguments
         classOrInterfaceType arguments
@@ -6823,6 +7218,11 @@ superFieldAccess returns [NodeUnion<? extends SuperFieldAccessNode> ret]
             ruleStop();
         }
     :
+        splice[SuperFieldAccessNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, SuperFieldAccessNode.class);
+        }
+    |
         (unparameterizedType '.')? SUPER '.' identifier
         {
             $ret = factory.makeNormalNodeUnion(factory.makeSuperFieldAccessNodeWithUnions(
@@ -6886,6 +7286,11 @@ superMethodInvocation returns [NodeUnion<? extends SuperMethodInvocationNode> re
             ruleStop();
         }
     :
+        splice[SuperMethodInvocationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, SuperMethodInvocationNode.class);
+        }
+    |
         (unparameterizedType '.')?
         SUPER '.'
         optionalNonWildcardTypeArguments
@@ -7061,9 +7466,9 @@ declaredClassLiteral returns [NodeUnion<? extends ClassLiteralNode> ret]
             typeNode = $unparameterizedType.ret;
         }
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         '.' 'class'
@@ -7087,9 +7492,9 @@ primitiveClassLiteral returns [NodeUnion<? extends ClassLiteralNode> ret]
             typeNode = $primitiveType.ret;
         }
         (
-            arrayTypeIndicator[typeNode]
+            arrayTypeCounter
             {
-                typeNode = $arrayTypeIndicator.ret;
+                typeNode = wrapArrayLevels(typeNode, $arrayTypeCounter.ret);
             }
         )?
         '.' 'class'
@@ -7128,6 +7533,11 @@ arrayCreator returns [NodeUnion<? extends ArrayCreationNode> ret]
             ruleStop();
         }
     :   
+        splice[ArrayCreationNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ArrayCreationNode.class);
+        }
+    |
         (
             arrayInitializerCreator
             {
@@ -7286,6 +7696,11 @@ variableInitializer returns [NodeUnion<? extends VariableInitializerNode> ret]
             ruleStop();
         }
     :   
+        splice[VariableInitializerNode.class, Arrays.<Class<? extends Node>>asList(ArrayInitializerNode.class, ExpressionNode.class)]
+        {
+            $ret = $splice.ret.castNodeType(factory, VariableInitializerNode.class);
+        }
+    |   
         (
             arrayInitializer
             {
@@ -7373,7 +7788,12 @@ arrayInitializer returns [NodeUnion<? extends ArrayInitializerNode> ret]
         @after {
             ruleStop();
         }
-    :   
+    :
+        splice[ArrayInitializerNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, ArrayInitializerNode.class);
+        }
+    |   
         '{' 
             optionalVariableInitializers
             ','? 
@@ -7469,10 +7889,17 @@ name returns [NodeUnion<? extends NameNode> ret]
             ruleStop();
         }
     :
-        a=identifier
-        {
-            $ret = factory.makeNormalNodeUnion(factory.makeSimpleNameNodeWithUnions($a.ret));
-        }
+        (
+            splice[NameNode.class, Arrays.<Class<? extends Node>>asList()]
+            {
+                $ret = $splice.ret.castNodeType(factory, NameNode.class);
+            }
+        |
+            a=identifier
+            {
+                $ret = factory.makeNormalNodeUnion(factory.makeSimpleNameNodeWithUnions($a.ret));
+            }
+        )
         (
             '.'
             b=identifier
@@ -7641,16 +8068,15 @@ identifier returns [NodeUnion<? extends IdentifierNode> ret]
             ruleStop();
         }
     :
-        // TODO: replace with more general splicing logic based on standardRuleIntro
+        splice[IdentifierNode.class, Arrays.<Class<? extends Node>>asList()]
+        {
+            $ret = $splice.ret.castNodeType(factory, IdentifierNode.class);
+        }
+    |
         IDENTIFIER
         {
             $ret = factory.makeNormalNodeUnion(factory.makeIdentifierNode($IDENTIFIER.text));
         }
-    |
-    	splice[IdentifierNode.class]
-    	{
-    	    $ret = $splice.ret.castNodeType(factory, IdentifierNode.class);
-    	}
     ;
 
 unsplicableIdentifier returns [IdentifierNode ret]
