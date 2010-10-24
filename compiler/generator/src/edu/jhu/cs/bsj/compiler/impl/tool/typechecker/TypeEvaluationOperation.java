@@ -114,6 +114,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
 import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
 import edu.jhu.cs.bsj.compiler.utils.Bag;
 
 /**
@@ -491,7 +492,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		if (variableType instanceof BsjErrorType)
 			return new TypecheckerResultImpl(variableType, metadata);
 
-		BsjType expressionType = executeComposingMetadata(node.getExpression(), env, metadata);
+		TypecheckerEnvironment expressionEnvironment = env.deriveWithExpectedType(variableType);
+		BsjType expressionType = executeComposingMetadata(node.getExpression(), expressionEnvironment, metadata);
 		if (expressionType instanceof BsjErrorType)
 			return new TypecheckerResultImpl(expressionType, metadata);
 
@@ -1528,7 +1530,10 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
 		{
 			CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
 					new NoOperationDiagnosticListener<BsjSourceLocation>());
-			NodeUnion<?> result = this.parser.parse(node.getValue(), rule, listener);
+			final BsjTypechecker typechecker = this.manager.getTypechecker();
+			final Node typecheckingContextNode = node;
+			NodeUnion<?> result = this.parser.parse(node.getValue(), rule, typechecker, typecheckingContextNode,
+					listener);
 			if (listener.getCount(Kind.ERROR) > 0)
 			{
 				// TODO: perhaps preserve these diagnostics for use later?

@@ -3585,7 +3585,19 @@ public class SourceGenerator
 				if (typeComponent.equals("Splice"))
 				{
 					// special case - splices, when lifted, just use their expressions in their place
-					ps.println("return node.getSpliceExpression().deepCopy(factory);");
+				    // factory.<T>makeNormalNodeUnion(>>deep-copy-of-splice-expression<<)
+                    ps.println("return factory.makeMethodInvocationNode(");
+                    ps.incPrependCount(2);
+                    ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
+                    ps.println("factory.makeIdentifierNode(\"makeNormalNodeUnion\"),");
+                    ps.println("factory.makeExpressionListNode(");
+                    ps.incPrependCount(2);
+                    ps.println("node.getSpliceExpression() == null ? factory.makeNullLiteralNode() : node.getSpliceExpression().deepCopy(factory)");
+                    ps.println("),");
+                    ps.decPrependCount(2);
+                    ps.println("factory.makeReferenceTypeListNode(factory.makeUnparameterizedTypeNode(");
+                    ps.println("        factory.makeSimpleNameNode(factory.makeIdentifierNode(typeParameterName)))));");
+                    ps.decPrependCount(2);
 				} else
 				{
 					// factory.<T>makeFooNodeUnion(>>node<<)

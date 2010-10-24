@@ -1,4 +1,5 @@
 splice[$$$type$$$.class, $$$nontypesPart$$$]
 {
-    $ret = $splice.ret.castNodeType(factory, $$$type$$$.class);
+    if ($splice.ret != null)
+        $ret = $splice.ret.castNodeType(factory, $$$type$$$.class);
 $$$actionPart$$$}

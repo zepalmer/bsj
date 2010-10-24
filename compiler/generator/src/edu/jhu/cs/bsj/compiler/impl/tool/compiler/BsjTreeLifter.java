@@ -6380,7 +6380,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     
     public ExpressionNode expressionizeSpliceNodeUnion(SpliceNode node, ExpressionNode factoryNode, String typeParameterName)
     {
-        return node.getSpliceExpression().deepCopy(factory);
+        return factory.makeMethodInvocationNode(
+                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                factory.makeIdentifierNode("makeNormalNodeUnion"),
+                factory.makeExpressionListNode(
+                        node.getSpliceExpression() == null ? factory.makeNullLiteralNode() : node.getSpliceExpression().deepCopy(factory)
+                        ),
+                factory.makeReferenceTypeListNode(factory.makeUnparameterizedTypeNode(
+                        factory.makeSimpleNameNode(factory.makeIdentifierNode(typeParameterName)))));
     }
     
 }

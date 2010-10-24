@@ -30,6 +30,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjRawCodeLiteralPayloadAntlrImpl;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
 
 /**
  * This class contains the functionality necessary to parse BSJ source files into BSJ heterogeneous ASTs. It relies on a
@@ -80,11 +81,12 @@ public class BsjParserImpl implements BsjParser
 		// TODO: if we are given a compilation unit to parse which consists of a single splice, handle it gracefully
 		// by logging a diagnostic or something.
 
-		return parse(name, new TokenRewriteStream(lexer), ParseRule.COMPILATION_UNIT, diagnosticListener).getNormalNode();
+		return parse(name, new TokenRewriteStream(lexer), null, null, ParseRule.COMPILATION_UNIT, diagnosticListener).getNormalNode();
 	}
 
 	@Override
 	public <T extends Node> NodeUnion<? extends T> parse(BsjRawCodeLiteralPayload payload, ParseRule<T> rule,
+			BsjTypechecker typechecker, Node typecheckingContextNode,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IllegalArgumentException
 	{
 		if (!(payload instanceof BsjRawCodeLiteralPayloadAntlrImpl))
@@ -135,16 +137,18 @@ public class BsjParserImpl implements BsjParser
 			}
 		});
 
-		return parse(resourceName, tokenStream, rule, diagnosticListener);
+		return parse(resourceName, tokenStream, typechecker, typecheckingContextNode, rule, diagnosticListener);
 	}
 
-	private <T extends Node> NodeUnion<? extends T> parse(String name, TokenStream tokenStream, ParseRule<T> rule,
+	private <T extends Node> NodeUnion<? extends T> parse(String name, TokenStream tokenStream,
+			BsjTypechecker typechecker, Node typecheckingContextNode, ParseRule<T> rule,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		BsjAntlrParser parser = new BsjAntlrParser(tokenStream);
 		parser.setDiagnosticListener(diagnosticListener);
 		parser.setResourceName(name);
 		parser.setFactory(factory);
+		parser.setTypecheckingContext(typechecker, typecheckingContextNode);
 
 		String compilationUnitName = (name != null && name.contains(".") ? name.substring(0, name.indexOf('.')) : name);
 

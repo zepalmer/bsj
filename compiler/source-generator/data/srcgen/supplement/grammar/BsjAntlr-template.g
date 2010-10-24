@@ -276,6 +276,8 @@ scope Rule {
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.*;
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjParserConfiguration;
+
+    import edu.jhu.cs.bsj.compiler.tool.typechecker.*;
 }
 
 @parser::members {
@@ -592,6 +594,32 @@ scope Rule {
                         $Rule::name,
                         id));
             }
+        }
+    }
+    
+    // *** SUPPORT FOR TYPECHECKING SPLICES ***********************************
+    /**
+     * The current typechecker to use when typechecking splice expressions.  If <code>null</code>, splice expressions
+     * are forbidden.
+     */
+    private BsjTypechecker spliceTypechecker;
+    /**
+     * The AST node that should be used for a typechecking context when typechecking splices.
+     */
+    private Node spliceContext;
+    /**
+     * Sets up the typechecking context for this parser.
+     * @param spliceTypechecker The typechecker to use when checking splices or <code>null</code> if splices are not
+     *                          allowed.
+     * @param spliceContext The AST node that should be used for a typechecking context when typechecking splices.  If
+     *                      <code>spliceTypechecker</code> is <code>null</code>, this value is ignored.
+     */
+    public void setTypecheckingContext(BsjTypechecker spliceTypechecker, Node spliceContext)
+    {
+        this.spliceTypechecker = spliceTypechecker;
+        if (spliceTypechecker != null)
+        {
+            this.spliceContext = spliceContext;
         }
     }
     
@@ -1152,18 +1180,31 @@ anyNonCodeLiteralToken /*%% standardRuleIntro= type=BsjTokenImpl %%*/
 // type parameter of the union does not represent a splice but instead represents the value that would be present
 // normally.  The caller of this grammar rule must perform a runtime-checked cast of the resulting union to get the
 // desired result (which will always be safe if the cast uses the expected type provided here).
-splice /*%% standardRuleIntro= ruleParams="""Class<? extends Node> expectedType, List<Class<? extends Node>> nontypes"""
-            type=Node %%*/
+splice /*%% standardRuleIntro= ruleParams="""Class<? extends Node> expectedType, List<Class<? extends Node>> forbiddenTypes"""
+            type=Node initvar0=BsjTypechecker %%*/
     :
         {configuration.getCodeSplicingSupported()}?=>
         (
             '~:'
+            {
+                this.spliceTypechecker != null// are splices allowed right now?
+            }?
+            {
+                // Disable the typechecker while parsing the following splice expression (so that it does not contain
+                // splices)
+                bsjTypechecker = this.spliceTypechecker;
+                this.spliceTypechecker = null;
+            }
             expression
             {
-                // TODO: typecheck the expression
-                // TODO: ensure that the expression is a normal node - no other case is legitimate (or can be typechecked)
+                // Now put the splice typechecker back
+                this.spliceTypechecker = bsjTypechecker;
             }
             ':~'
+            {
+                BsjAntlrParserUtils.isValidExpressionType("splice", this.spliceTypechecker, this.spliceContext,
+                        $expression.ret, expectedType, forbiddenTypes, input)
+            }?
             {
                 $ret = createSpliceNodeUnion(expectedType, $expression.ret.getNormalNode());
             }
@@ -3158,7 +3199,7 @@ statementExpression /*%% standardRuleIntro= type=StatementExpressionNode %%*/
                            nontype2=SuperMethodInvocationNode
                            nontype3=ClassInstantiationNode %%*/
         // Okay, this is a bit hacky but seriously reduces duplication as well as maintenance.
-        // We'll just grab any expression we can.  If it's not a statement expression, we raise a RecognitionException.
+        // We'll just grab any expression we can.  If it's not a statement expression, we raise an exception.
         /*
             Note: at this point, we should be able to write the following (according to The Definitive ANTLR Handbook):
                 expression

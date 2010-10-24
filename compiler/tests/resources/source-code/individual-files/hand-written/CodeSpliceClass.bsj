@@ -1,0 +1,29 @@
+public class CodeSpliceClass
+{
+	[:
+		ClassMemberListNode members = context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class);
+	
+		IdentifierNode ident = <: A :> ;
+		EnumDeclarationNode enumDecl = <: private static enum E { ~:ident:~, B } :> ;
+		members.addFirst(enumDecl);
+		/*
+		ident = <: I :>;
+		ClassDeclarationNode classDecl = <: private static class C1 implements ~:ident:~ { } :>;
+		members.addFirst(classDecl);
+		
+		NameNode name = <: I :>;
+		classDecl = <: private static class C2 implements ~:name:~ { } :>;
+		members.addFirst(classDecl);
+		*/
+		
+	:]
+	
+	private static interface I
+	{
+	}
+	
+	public static void main(String[] arg)
+	{
+		E e = E.A;
+	}
+}

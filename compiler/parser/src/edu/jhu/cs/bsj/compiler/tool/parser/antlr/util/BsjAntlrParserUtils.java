@@ -1,7 +1,12 @@
 package edu.jhu.cs.bsj.compiler.tool.parser.antlr.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.tools.DiagnosticListener;
 
+import org.antlr.runtime.FailedPredicateException;
+import org.antlr.runtime.IntStream;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.MissingTokenException;
 import org.antlr.runtime.RecognitionException;
@@ -9,6 +14,9 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.UnwantedTokenException;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.diagnostic.lexer.BsjLexerDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.BsjParserDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.lexer.GeneralLexerFailureDiagnosticImpl;
@@ -19,6 +27,9 @@ import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.GeneralParseFailureDiagnos
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.InvalidIntegerLiteralDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.MissingTokenDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.UnexpectedTokenDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckerResult;
 
 public class BsjAntlrParserUtils
 {
@@ -420,5 +431,130 @@ public class BsjAntlrParserUtils
 	{
 		// TODO: can we be more specific?
 		return new GeneralLexerFailureDiagnosticImpl(location, last);
+	}
+
+	/**
+	 * Validates a splice expression's type.
+	 * 
+	 * @param ruleName The name of the rule for which validation is occurring.
+	 * @param spliceTypechecker The typechecker to use when typechecking.
+	 * @param spliceContext The context from which to begin typechecking.
+	 * @param expressionUnion The union of the expression which was spliced.
+	 * @param expectedClass The expected class of the expression's node.
+	 * @param forbiddenClasses The classes for which the expression's node should not be a subclass (to prevent
+	 *            ambiguity).
+	 * @param input The current token type input source.
+	 * @throws FailedPredicateException If something goes wrong. TODO: make these exceptions more meaningful
+	 */
+	public static void validateExpressionType(String ruleName, BsjTypechecker spliceTypechecker, Node spliceContext,
+			NodeUnion<? extends ExpressionNode> expressionUnion, Class<? extends Node> expectedClass,
+			Iterable<Class<? extends Node>> forbiddenClasses, IntStream input) throws FailedPredicateException
+	{
+		// Ensure that the expression is a normal node - no other case can be typechecked properly
+		if (!expressionUnion.getType().equals(NodeUnion.Type.NORMAL))
+		{
+			// TODO: throw a BSJ-specific exception that carries enough info to provide a decent error
+			throw new FailedPredicateException(input, ruleName,
+					"$expression.ret.getType().equals(NodeUnion.Type.NORMAL)");
+		}
+		ExpressionNode expr = expressionUnion.getNormalNode();
+
+		// Typecheck the expression
+		TypecheckerResult result = spliceTypechecker.typecheck(expr, spliceContext);
+		BsjType exprType = result.getType();
+		// TODO: produce a semantically meaningful message here if the result type is an error
+		BsjType expectedExprType = spliceTypechecker.getModelingFactory().makeMetaprogramClasspathType(expectedClass);
+		if (!exprType.isMethodInvocationCompatibleWith(expectedExprType))
+		{
+			// TODO: throw a BSJ-specific exception that carries enough info to provide a decent error
+			throw new FailedPredicateException(input, ruleName, exprType + " --m-> " + expectedExprType);
+		}
+
+		// Ensure that this expression is not among the types which are handled by other rules
+		List<BsjType> isForbiddenTypes = new ArrayList<BsjType>();
+		for (Class<? extends Node> forbiddenType : forbiddenClasses)
+		{
+			BsjType exprForbiddenType = spliceTypechecker.getModelingFactory().makeMetaprogramClasspathType(forbiddenType);
+			if (exprType.isMethodInvocationCompatibleWith(exprForbiddenType))
+			{
+				isForbiddenTypes.add(exprForbiddenType);
+			}
+		}
+		
+		// If this type is simultaneously two or more of the forbidden types, that means that the node type in question is
+		// ambiguous.  This might happen for the splice of a Type rule if the expression's type is some class which is
+		// both a PrimitiveTypeNode and a ReferenceTypeNode.  One example is ~:null:~.
+		if (isForbiddenTypes.size() > 1)
+		{
+			// TODO: make a more informative exception out of this!
+			throw new IllegalStateException("Bad splice: should only have one of these types: " + isForbiddenTypes);
+		}
+		
+		// If the type is exactly one of the forbidden types, we simply fail to match this rule and carry on.
+		if (isForbiddenTypes.size() == 1)
+		{
+			throw new FailedPredicateException(input, ruleName, exprType + " -!m-> " + isForbiddenTypes.get(0));
+		}
+		
+		// Otherwise, this expression's type matches; use it!
+	}
+
+	public static boolean isValidExpressionType(String ruleName, BsjTypechecker spliceTypechecker, Node spliceContext,
+			NodeUnion<? extends ExpressionNode> expressionUnion, Class<? extends Node> expectedClass,
+			Iterable<Class<? extends Node>> forbiddenClasses, IntStream input)
+	{
+		if (expressionUnion == null)
+		{
+			return false;
+		}
+		
+		// Ensure that the expression is a normal node - no other case can be typechecked properly
+		if (!expressionUnion.getType().equals(NodeUnion.Type.NORMAL))
+		{
+			// TODO: need to provide more information
+			return false;
+		}
+		ExpressionNode expr = expressionUnion.getNormalNode();
+
+		// Typecheck the expression
+		TypecheckerResult result = spliceTypechecker.typecheck(expr, spliceContext);
+		BsjType exprType = result.getType();
+		// TODO: produce a semantically meaningful message here if the result type is an error
+		BsjType expectedExprType = spliceTypechecker.getModelingFactory().makeMetaprogramClasspathType(expectedClass);
+		if (!exprType.isMethodInvocationCompatibleWith(expectedExprType))
+		{
+			// TODO: need to provide more information
+			return false;
+		}
+
+		// Ensure that this expression is not among the types which are handled by other rules
+		List<BsjType> isForbiddenTypes = new ArrayList<BsjType>();
+		for (Class<? extends Node> forbiddenType : forbiddenClasses)
+		{
+			BsjType exprForbiddenType = spliceTypechecker.getModelingFactory().makeMetaprogramClasspathType(forbiddenType);
+			if (exprType.isMethodInvocationCompatibleWith(exprForbiddenType))
+			{
+				isForbiddenTypes.add(exprForbiddenType);
+			}
+		}
+		
+		// If this type is simultaneously two or more of the forbidden types, that means that the node type in question is
+		// ambiguous.  This might happen for the splice of a Type rule if the expression's type is some class which is
+		// both a PrimitiveTypeNode and a ReferenceTypeNode.  One example is ~:null:~.
+		if (isForbiddenTypes.size() > 1)
+		{
+			// TODO: need to provide more information
+			return false;
+		}
+		
+		// If the type is exactly one of the forbidden types, we simply fail to match this rule and carry on.
+		if (isForbiddenTypes.size() == 1)
+		{
+			// TODO: need to provide more information
+			return false;
+		}
+		
+		// Otherwise, this expression's type matches; use it!
+		return true;
 	}
 }
