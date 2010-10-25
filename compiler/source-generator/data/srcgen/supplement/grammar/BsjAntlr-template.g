@@ -134,7 +134,6 @@ grammar BsjAntlr;
 options {
     language=Java;
     backtrack=true;
-    memoize=true;
 }
 
 // this scope tracks information about the rule on top of the call stack
@@ -225,7 +224,20 @@ scope Rule {
     /** Reports a diagnostic. */
     private void reportDiagnostic(BsjDiagnostic diagnostic)
     {
-        this.diagnosticListener.report(diagnostic);
+        reportDiagnostic(diagnostic, false);
+    }
+    
+    /** Reports a diagnostic. */
+    private void reportDiagnostic(BsjDiagnostic diagnostic, boolean force)
+    {
+        if (logger.isTraceEnabled())
+        {
+            logger.trace("Received diagnostic (force="+force+",bt="+state.backtracking+"): "+diagnostic.getMessage(null));
+        }
+        if (state.backtracking == 0 || force)
+        {
+            this.diagnosticListener.report(diagnostic);
+        }
     }
     
     /**
@@ -239,7 +251,7 @@ scope Rule {
         int character = input.LT(1);
         BsjLexerDiagnostic diagnostic = BsjAntlrParserUtils.convertFromLexer(
                 e, tokenNames, getSourceLocation(), character);
-        reportDiagnostic(diagnostic);
+        reportDiagnostic(diagnostic, true);
     }
 }
 
@@ -636,9 +648,22 @@ scope Rule {
     /** Reports a diagnostic. */
     private void reportDiagnostic(BsjDiagnostic diagnostic)
     {
-        this.diagnosticListener.report(diagnostic);
+        reportDiagnostic(diagnostic, false);
     }
     
+    /** Reports a diagnostic. */
+    private void reportDiagnostic(BsjDiagnostic diagnostic, boolean force)
+    {
+        if (logger.isTraceEnabled())
+        {
+            logger.trace("Received diagnostic (force="+force+",bt="+state.backtracking+"): "+diagnostic.getMessage(null));
+        }
+        if (state.backtracking == 0 || force)
+        {
+            this.diagnosticListener.report(diagnostic);
+        }
+    }
+        
     /**
      * Overrides the mechanism for displaying recognition errors.  While it is possible to do something very similar by
      * overriding emitErrorMessage, this method is extracted instead in order to allow the exception itself to be
@@ -649,7 +674,7 @@ scope Rule {
     {
         BsjDiagnostic diagnostic =
                 BsjAntlrParserUtils.convertFromParser(e, tokenNames, getSourceLocation(1), input.LT(1), $Rule::name);
-        reportDiagnostic(diagnostic);
+        reportDiagnostic(diagnostic, true);
     }
     
     // *** PARSING ACTION SUPPORT *********************************************
@@ -689,6 +714,25 @@ scope Rule {
     private <T extends Node> NodeUnion<T> createSpliceNodeUnion(Class<T> expectedType, ExpressionNode expr)
     {
        return factory.<T>makeSpliceNodeUnion(factory.makeSpliceNode(expr));
+    }
+    
+    /**
+     * Creates a duplicate copy of the provided node's union.  Casts that copy to the provided type.
+     * @param union The union to copy.
+     * @param type The type of the node in the union.
+     * @return The copied union.
+     */
+    private <T extends Node> NodeUnion<T> deepCopyUnion(NodeUnion<? extends T> union, Class<T> type)
+    {
+        switch (union.getType())
+        {
+            case NORMAL:
+                return factory.<Node>makeNormalNodeUnion(union.getNormalNode().deepCopy(factory)).castNodeType(factory, type);
+            case SPLICE:
+                return factory.<T>makeSpliceNodeUnion(union.getSpliceNode());
+            default:
+                throw new IllegalStateException("Unknown union type: " + union.getType());
+        }
     }
     
     /**
@@ -746,6 +790,8 @@ scope Rule {
         }
     }
 }
+
+@synpredgate { true }
 
 /********************************************************************************************
                           Parser section
@@ -1181,7 +1227,7 @@ anyNonCodeLiteralToken /*%% standardRuleIntro= type=BsjTokenImpl %%*/
 // normally.  The caller of this grammar rule must perform a runtime-checked cast of the resulting union to get the
 // desired result (which will always be safe if the cast uses the expected type provided here).
 splice /*%% standardRuleIntro= ruleParams="""Class<? extends Node> expectedType, List<Class<? extends Node>> forbiddenTypes"""
-            type=Node initvar0=BsjTypechecker %%*/
+            type=Node initvar0=BsjTypechecker option0="""memoize=false;""" %%*/
     :
         {configuration.getCodeSplicingSupported()}?=>
         (
@@ -3193,44 +3239,28 @@ expressionList /*%% generateListRule= type=ExpressionListNode separator=',' %%*/
  * used as a statement (such as x++) but not any other kind of expression (such as ~x). */
 statementExpression /*%% standardRuleIntro= type=StatementExpressionNode %%*/
     :
-        /*%% spliceClause= type=StatementExpressionNode
-                           nontype0=AssignmentNode
-                           nontype1=MethodInvocationNode
-                           nontype2=SuperMethodInvocationNode
-                           nontype3=ClassInstantiationNode %%*/
         // Okay, this is a bit hacky but seriously reduces duplication as well as maintenance.
         // We'll just grab any expression we can.  If it's not a statement expression, we raise an exception.
-        /*
-            Note: at this point, we should be able to write the following (according to The Definitive ANTLR Handbook):
-                expression
-                {
-                    ($expression.ret != null && $expression.ret.getType().equals(NodeUnion.Type.NORMAL) &&
-                        $expression.ret.getNormalNode() instanceof StatementExpressionNode)
-                }?
-                {
-                    $ret = factory.makeNormalNodeUnion((StatementExpressionNode)($expression.ret.getNormalNode()));
-                }
-            The first brace block acts as a semantic guard, forcing the expression not to match under the specified
-            condition.  The second brace block acts as an action for the matched parse operation.  However, this syntax,
-            despite its being compliant with the ANTLR spec, does not appear to work in ANTLR 3.1.3.  For now, we'll
-            just raise the exception on our own.
-            TODO: investigate this problem and submit a but report. 
-        */
         expression
         {
-            if ($expression.ret != null && $expression.ret.getType().equals(NodeUnion.Type.NORMAL) &&
-                    $expression.ret.getNormalNode() instanceof StatementExpressionNode)
-            {
-                $ret = factory.makeNormalNodeUnion((StatementExpressionNode)($expression.ret.getNormalNode()));
-            } else
-            {
-                // TODO: replace with BSJ exception
-                throw new FailedPredicateException(input, "statementExpression", "$expression.ret.getType().equals(NodeUnion.Type.NORMAL) && $expression.ret.getNormalNode() instanceof StatementExpressionNode");
-            }
+            ($expression.ret != null && $expression.ret.getType().equals(NodeUnion.Type.NORMAL) &&
+                        $expression.ret.getNormalNode() instanceof StatementExpressionNode)
+            // TODO: permit splices of statement expressions!
+        }?
+        {
+            $ret = factory.makeNormalNodeUnion((StatementExpressionNode)($expression.ret.getNormalNode()));
         }
     ;
 
 expression /*%% standardRuleIntro= type=ExpressionNode %%*/
+    :
+        assignmentExpression
+        {
+            $ret = $assignmentExpression.ret;
+        }
+    ;
+
+assignmentExpression /*%% standardRuleIntro= type=ExpressionNode %%*/
     :   
         (
             /*%% spliceClause= type=ExpressionNode nontype0=NonAssignmentExpressionNode %%*/
@@ -3737,7 +3767,7 @@ qualifiedClassInstantiationPrimarySuffix /*%% standardRuleIntro= type=QualifiedC
         anonymousClassBody?
         {
             $ret = factory.makeNormalNodeUnion(factory.makeQualifiedClassInstantiationNodeWithUnions(
-                    $primary::result,
+                    deepCopyUnion($primary::result, PrimaryExpressionNode.class),
                     $identifier.ret,
                     $classTypeArguments.ret,
                     $constructorTypeArguments.ret,
@@ -3753,7 +3783,7 @@ fieldAccessPrimarySuffix /*%% standardRuleIntro= type=RestrictedPrimaryExpressio
         '.' identifier
         {
             $ret = factory.makeNormalNodeUnion(factory.makeVariableAccessNodeWithUnions(
-                        $primary::result, $identifier.ret));
+                        deepCopyUnion($primary::result, PrimaryExpressionNode.class), $identifier.ret));
         }
     ;
 
@@ -3768,7 +3798,7 @@ typeArgumentMethodInvocationSuffix /*%% standardRuleIntro= type=RestrictedPrimar
         identifier arguments
         {
             $ret = factory.makeNormalNodeUnion(factory.makeMethodInvocationNodeWithUnions(
-                    $primary::result,
+                    deepCopyUnion($primary::result, PrimaryExpressionNode.class),
                     $identifier.ret,
                     $arguments.ret,
                     $optionalNonWildcardTypeArguments.ret));

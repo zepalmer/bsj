@@ -1,5 +1,5 @@
 $$$rule$$$$$$ruleParams$$$ returns [$$$type$$$ ret]
-        scope Rule;
+$$$optionPart$$$        scope Rule;
         @init {
             ruleStart("$$$rule$$$");
 $$$initTerms$$$        }
