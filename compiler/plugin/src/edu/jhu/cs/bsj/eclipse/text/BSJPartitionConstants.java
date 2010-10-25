@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.text;
+package edu.jhu.cs.bsj.eclipse.text;
 
 /**
  * All the bsj partition constants

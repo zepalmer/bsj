@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.util;
+package edu.jhu.cs.bsj.eclipse.util;
 
 import java.util.HashMap;
 import java.util.Map;

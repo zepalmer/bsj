@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package edu.jhu.cs.bsj.plugin.eclipse.text;
+package edu.jhu.cs.bsj.eclipse.text;
 
 
 import org.eclipse.jface.text.rules.IWhitespaceDetector;

@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.editor;
+package edu.jhu.cs.bsj.eclipse.editor;
 
 
 public class TestBuiltInJavaPartitioner {

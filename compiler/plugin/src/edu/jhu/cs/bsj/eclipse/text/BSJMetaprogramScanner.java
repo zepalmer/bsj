@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.text;
+package edu.jhu.cs.bsj.eclipse.text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 
-import edu.jhu.cs.bsj.plugin.eclipse.util.ColorManager;
+import edu.jhu.cs.bsj.eclipse.util.ColorManager;
 
 public class BSJMetaprogramScanner extends RuleBasedScanner {
 	

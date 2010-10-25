@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.editor;
+package edu.jhu.cs.bsj.eclipse.text;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -16,14 +16,38 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-import edu.jhu.cs.bsj.plugin.eclipse.text.BSJMetaprogramScanner;
-import edu.jhu.cs.bsj.plugin.eclipse.text.BSJPartitionConstants;
-import edu.jhu.cs.bsj.plugin.eclipse.text.JavaCodeScanner;
-import edu.jhu.cs.bsj.plugin.eclipse.util.ColorManager;
+import edu.jhu.cs.bsj.eclipse.text.scanners.AbstractBSJScanner;
+import edu.jhu.cs.bsj.eclipse.util.ColorManager;
 
 public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	
+	private AbstractBSJScanner codeScanner;
+	private AbstractBSJScanner multiLineCommentScanner;
+	private AbstractBSJScanner singleLineCommentScanner;
+	private AbstractBSJScanner stringScanner;
+	private AbstractBSJScanner javadocScanner;
+	
 	public BSJSourceViewerConfiguration() {
+	}
+	
+	protected AbstractBSJScanner getCodeScanner() {
+		return codeScanner;
+	}
+
+	protected AbstractBSJScanner getMultiLineCommentScanner() {
+		return multiLineCommentScanner;
+	}
+
+	protected AbstractBSJScanner getSingleLineCommentScanner() {
+		return singleLineCommentScanner;
+	}
+
+	protected AbstractBSJScanner getStringScanner() {
+		return stringScanner;
+	}
+
+	protected AbstractBSJScanner getJavadocScanner() {
+		return javadocScanner;
 	}
 	
 	private static class SingleTokenScanner extends BufferedRuleBasedScanner {

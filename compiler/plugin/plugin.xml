@@ -4,12 +4,52 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="edu.jhu.cs.bsj.plugin.eclipse.editor.BSJEditor"
+            class="edu.jhu.cs.bsj.eclipse.editor.BSJEditor"
             default="true"
             extensions="bsj"
-            id="edu.jhu.bsj.plugin.eclipse.editor.bsjeditor"
+            id="edu.jhu.cs.bsj.eclipse.editor.BSJEditor"
             name="BSJ Editor">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="edu.jhu.cs.bsj.eclipse.perspective.BSJPerspectiveFactory"
+            id="edu.jhu.cs.bsj.eclipse.perspective.BSJPerspectiveFactory"
+            name="BSJ">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="edu.jhu.cs.bsj.eclipse.preference.BSJPreferencePage"
+            id="edu.jhu.cs.bsj.eclipse.preferences.BSJPreferencePage"
+            name="BSJ">
+      </page>
+      <page
+            category="edu.jhu.cs.bsj.eclipse.preferences.BSJPreferencePage"
+            class="edu.jhu.cs.bsj.eclipse.preference.BuildPathPreferencePage"
+            id="edu.jhu.cs.bsj.eclipse.preferences.BuildPathPreferencePage"
+            name="Build Path">
+      </page>
+      <page
+            category="edu.jhu.cs.bsj.eclipse.preferences.BSJPreferencePage"
+            class="edu.jhu.cs.bsj.eclipse.preference.CompilerPreferencePage"
+            id="edu.jhu.cs.bsj.eclipse.preferences.CompilerPreferencePage"
+            name="Compiler">
+      </page>
+      <page
+            category="edu.jhu.cs.bsj.eclipse.preferences.BSJPreferencePage"
+            class="edu.jhu.cs.bsj.eclipse.preference.DebugPreferencePage"
+            id="edu.jhu.cs.bsj.eclipse.preferences.DebugPreferencePage"
+            name="Debug">
+      </page>
+      <page
+            category="edu.jhu.cs.bsj.eclipse.preferences.BSJPreferencePage"
+            class="edu.jhu.cs.bsj.eclipse.preference.EditorPreferencePage"
+            id="edu.jhu.cs.bsj.eclipse.preferences.EditorPreferencePage"
+            name="Editor">
+      </page>
    </extension>
    
 </plugin>

@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.editor;
+package edu.jhu.cs.bsj.eclipse.editor;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -6,18 +6,17 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
-import edu.jhu.cs.bsj.plugin.eclipse.text.BSJPartitionScanner;
+import edu.jhu.cs.bsj.eclipse.text.BSJPartitionScanner;
 
 /**
  * Creates the BSJ Document Model
  */
 public class BSJDocumentProvider extends FileDocumentProvider{
-	/**
-	 * Set up the code partitioner
-	 */
+	
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
 		
+		// Set up the code partitioner
 		if (document != null) {
 			IDocumentPartitioner partitioner =
 				new FastPartitioner(

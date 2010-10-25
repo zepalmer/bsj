@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.plugin.eclipse.text;
+package edu.jhu.cs.bsj.eclipse.text;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,8 @@
-package edu.jhu.cs.bsj.plugin.eclipse.editor;
+package edu.jhu.cs.bsj.eclipse.editor;
 
 import org.eclipse.ui.editors.text.TextEditor;
+
+import edu.jhu.cs.bsj.eclipse.text.BSJSourceViewerConfiguration;
 
 public class BSJEditor extends TextEditor {
 	

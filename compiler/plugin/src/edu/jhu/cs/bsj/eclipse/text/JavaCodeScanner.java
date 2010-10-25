@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package edu.jhu.cs.bsj.plugin.eclipse.text;
+package edu.jhu.cs.bsj.eclipse.text;
 
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 
-import edu.jhu.cs.bsj.plugin.eclipse.util.ColorManager;
+import edu.jhu.cs.bsj.eclipse.util.ColorManager;
 
 /**
  * A Java code scanner.
