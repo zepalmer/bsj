@@ -5310,18 +5310,10 @@ public class SourceGenerator
                 }
 
                 final String capRuleName = capFirst(ruleName);
-                final String type;
-                if (isNodeType(returnTypeName))
-                {
-                    type = "NodeUnion<? extends " + returnTypeName + ">";
-                } else
-                {
-                    type = returnTypeName;
-                }
 
                 final String replacement = fillFragment(
                         "generateListRule",
-                        new MapBuilder<String, String>().add("rule", ruleName).add("returnType", type).add("nodeType",
+                        new MapBuilder<String, String>().add("rule", ruleName).add("nodeType",
                                 returnTypeName).add("componentType", componentTypeName).add("componentRule",
                                 componentRuleName).add("prefixPart", prefixPart).add("postfixPart", postfixPart).add(
                                 "separatorPart", separatorPart).add("lastSeparatorPart", lastSeparatorPart).add(

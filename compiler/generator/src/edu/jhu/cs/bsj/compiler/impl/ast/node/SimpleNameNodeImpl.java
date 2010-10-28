@@ -119,12 +119,19 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        if (getIdentifier() == null)
+        NodeUnion<? extends IdentifierNode> union = getUnionForIdentifier();
+        if (union.getType() == NodeUnion.Type.NORMAL)
         {
-            sb.append("[null]");
+            if (union.getNormalNode() == null)
+            {
+                sb.append("[null]");
+            } else
+            {
+                sb.append(union.getNormalNode().getIdentifier());
+            }
         } else
         {
-            sb.append(getIdentifier().getIdentifier());
+            sb.append(union.toString());
         }
         return sb.toString();
     }

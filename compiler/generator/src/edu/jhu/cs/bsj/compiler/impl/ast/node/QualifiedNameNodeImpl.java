@@ -247,15 +247,29 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             sb.append("[null]");
         } else
         {
-            sb.append(this.base.toString());
+            NodeUnion<? extends NameNode> union = getUnionForBase();
+            if (union.getType() == NodeUnion.Type.NORMAL)
+            {
+                sb.append(union.getNormalNode().toString());
+            } else
+            {
+                sb.append(union.toString());
+            }
         }
         sb.append('.');
-        if (getIdentifier() == null)
+        NodeUnion<? extends IdentifierNode> union = getUnionForIdentifier();
+        if (union.getType() == NodeUnion.Type.NORMAL)
         {
-            sb.append("[null]");
+            if (union.getNormalNode() == null)
+            {
+                sb.append("[null]");
+            } else
+            {
+                sb.append(union.getNormalNode().getIdentifier());
+            }
         } else
         {
-            sb.append(getIdentifier().getIdentifier());
+            sb.append(union.toString());
         }
         return sb.toString();
     }

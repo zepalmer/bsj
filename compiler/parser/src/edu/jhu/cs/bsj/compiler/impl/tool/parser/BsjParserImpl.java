@@ -41,127 +41,129 @@ import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
  */
 public class BsjParserImpl implements BsjParser
 {
-	/** The logger for this class. */
-	private static final Logger LOGGER = Logger.getLogger(BsjParserImpl.class);
+    /** The logger for this class. */
+    private static final Logger LOGGER = Logger.getLogger(BsjParserImpl.class);
 
-	/**
-	 * The factory that this parser will use to construct AST nodes.
-	 */
-	private BsjNodeFactory factory;
+    /**
+     * The factory that this parser will use to construct AST nodes.
+     */
+    private BsjNodeFactory factory;
 
-	/**
-	 * General constructor.
-	 * 
-	 * @param factory The factory that this parser should use to construct AST nodes.
-	 */
-	public BsjParserImpl(BsjNodeFactory factory)
-	{
-		super();
-		this.factory = factory;
-	}
+    /**
+     * General constructor.
+     * 
+     * @param factory The factory that this parser should use to construct AST nodes.
+     */
+    public BsjParserImpl(BsjNodeFactory factory)
+    {
+        super();
+        this.factory = factory;
+    }
 
-	@Override
-	public CompilationUnitNode parse(String name, Reader reader,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException
-	{
-		if (LOGGER.isDebugEnabled())
-		{
-			LOGGER.debug("Parsing compilation unit with name " + name);
-		}
+    @Override
+    public CompilationUnitNode parse(String name, Reader reader,
+            DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException
+    {
+        if (LOGGER.isDebugEnabled())
+        {
+            LOGGER.debug("Parsing compilation unit with name " + name);
+        }
 
-		if (diagnosticListener == null)
-		{
-			diagnosticListener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
-		}
+        if (diagnosticListener == null)
+        {
+            diagnosticListener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
+        }
 
-		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRReaderStream(new JavaUnicodeEscapeReader(reader)));
-		lexer.setDiagnosticListener(diagnosticListener);
-		lexer.setResourceName(name);
+        BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRReaderStream(new JavaUnicodeEscapeReader(reader)));
+        lexer.setDiagnosticListener(diagnosticListener);
+        lexer.setResourceName(name);
 
-		// TODO: if we are given a compilation unit to parse which consists of a single splice, handle it gracefully
-		// by logging a diagnostic or something.
+        // TODO: if we are given a compilation unit to parse which consists of a single splice, handle it gracefully
+        // by logging a diagnostic or something.
 
-		return parse(name, new TokenRewriteStream(lexer), null, null, ParseRule.COMPILATION_UNIT, diagnosticListener).getNormalNode();
-	}
+        NodeUnion<? extends CompilationUnitNode> union = parse(name, new TokenRewriteStream(lexer), null, null,
+                ParseRule.COMPILATION_UNIT, diagnosticListener);
+        return (union == null) ? null : union.getNormalNode();
+    }
 
-	@Override
-	public <T extends Node> NodeUnion<? extends T> parse(BsjRawCodeLiteralPayload payload, ParseRule<T> rule,
-			BsjTypechecker typechecker, Node typecheckingContextNode,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IllegalArgumentException
-	{
-		if (!(payload instanceof BsjRawCodeLiteralPayloadAntlrImpl))
-		{
-			throw new IllegalStateException("Invalid payload type " + payload.getClass());
-		}
+    @Override
+    public <T extends Node> NodeUnion<? extends T> parse(BsjRawCodeLiteralPayload payload, ParseRule<T> rule,
+            BsjTypechecker typechecker, Node typecheckingContextNode,
+            DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IllegalArgumentException
+    {
+        if (!(payload instanceof BsjRawCodeLiteralPayloadAntlrImpl))
+        {
+            throw new IllegalStateException("Invalid payload type " + payload.getClass());
+        }
 
-		final String resourceName = ((BsjRawCodeLiteralPayloadAntlrImpl) payload).getResourceName();
-		final List<? extends Token> tokens = ((BsjRawCodeLiteralPayloadAntlrImpl) payload).getTokens();
+        final String resourceName = ((BsjRawCodeLiteralPayloadAntlrImpl) payload).getResourceName();
+        final List<? extends Token> tokens = ((BsjRawCodeLiteralPayloadAntlrImpl) payload).getTokens();
 
-		if (tokens.size() == 0)
-		{
-			throw new IllegalArgumentException("Cannot parse empty token stream");
-		}
+        if (tokens.size() == 0)
+        {
+            throw new IllegalArgumentException("Cannot parse empty token stream");
+        }
 
-		if (LOGGER.isTraceEnabled())
-		{
-			LOGGER.debug("Parsing code fragment using rule " + rule.getName());
-			StringBuilder sb = new StringBuilder("    ");
-			for (Token token : tokens)
-			{
-				sb.append(token.getText());
-				sb.append(' ');
-			}
-			LOGGER.trace("Code fragment consists of the following tokens: " + sb.toString());
-		}
+        if (LOGGER.isTraceEnabled())
+        {
+            LOGGER.debug("Parsing code fragment using rule " + rule.getName());
+            StringBuilder sb = new StringBuilder("    ");
+            for (Token token : tokens)
+            {
+                sb.append(token.getText());
+                sb.append(' ');
+            }
+            LOGGER.trace("Code fragment consists of the following tokens: " + sb.toString());
+        }
 
-		TokenStream tokenStream = new CommonTokenStream(new TokenSource()
-		{
-			private Iterator<? extends Token> it = tokens.iterator();
+        TokenStream tokenStream = new CommonTokenStream(new TokenSource()
+        {
+            private Iterator<? extends Token> it = tokens.iterator();
 
-			@Override
-			public String getSourceName()
-			{
-				return resourceName;
-			}
+            @Override
+            public String getSourceName()
+            {
+                return resourceName;
+            }
 
-			@Override
-			public Token nextToken()
-			{
-				if (it.hasNext())
-				{
-					return new CommonToken(it.next());
-				} else
-				{
-					return Token.EOF_TOKEN;
-				}
-			}
-		});
+            @Override
+            public Token nextToken()
+            {
+                if (it.hasNext())
+                {
+                    return new CommonToken(it.next());
+                } else
+                {
+                    return Token.EOF_TOKEN;
+                }
+            }
+        });
 
-		return parse(resourceName, tokenStream, typechecker, typecheckingContextNode, rule, diagnosticListener);
-	}
+        return parse(resourceName, tokenStream, typechecker, typecheckingContextNode, rule, diagnosticListener);
+    }
 
-	private <T extends Node> NodeUnion<? extends T> parse(String name, TokenStream tokenStream,
-			BsjTypechecker typechecker, Node typecheckingContextNode, ParseRule<T> rule,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener)
-	{
-		BsjAntlrParser parser = new BsjAntlrParser(tokenStream);
-		parser.setDiagnosticListener(diagnosticListener);
-		parser.setResourceName(name);
-		parser.setFactory(factory);
-		parser.setTypecheckingContext(typechecker, typecheckingContextNode);
+    private <T extends Node> NodeUnion<? extends T> parse(String name, TokenStream tokenStream,
+            BsjTypechecker typechecker, Node typecheckingContextNode, ParseRule<T> rule,
+            DiagnosticListener<BsjSourceLocation> diagnosticListener)
+    {
+        BsjAntlrParser parser = new BsjAntlrParser(tokenStream);
+        parser.setDiagnosticListener(diagnosticListener);
+        parser.setResourceName(name);
+        parser.setFactory(factory);
+        parser.setTypecheckingContext(typechecker, typecheckingContextNode);
 
-		String compilationUnitName = (name != null && name.contains(".") ? name.substring(0, name.indexOf('.')) : name);
+        String compilationUnitName = (name != null && name.contains(".") ? name.substring(0, name.indexOf('.')) : name);
 
-		NodeUnion<? extends T> node;
-		try
-		{
-			node = ParserGeneratedUtilities.parseFromAntlr(parser, rule, compilationUnitName);
-		} catch (RecognitionException re)
-		{
-			throw new RuntimeException(re); // TODO: throw an exception of our own instead (to avoid passing ANTLR deps)
-		}
+        NodeUnion<? extends T> node;
+        try
+        {
+            node = ParserGeneratedUtilities.parseFromAntlr(parser, rule, compilationUnitName);
+        } catch (RecognitionException re)
+        {
+            throw new RuntimeException(re); // TODO: throw an exception of our own instead (to avoid passing ANTLR deps)
+        }
 
-		return node;
-	}
+        return node;
+    }
 
 }

@@ -904,40 +904,54 @@ metaprogramDependencyDeclarationList returns [NodeUnion<? extends MetaprogramDep
         scope Rule;
         @init {
             ruleStart("metaprogramDependencyDeclarationList");
-            List<NodeUnion<? extends MetaprogramDependencyDeclarationNode>> list =
-                    new ArrayList<NodeUnion<? extends MetaprogramDependencyDeclarationNode>>();
+            List<NodeUnion<? extends MetaprogramDependencyDeclarationNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyDeclarationListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=metaprogramDependencyDeclaration
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "metaprogramDependencyDeclaration", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=metaprogramDependencyDeclaration
+            splice[MetaprogramDependencyDeclarationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "metaprogramDependencyDeclaration", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, MetaprogramDependencyDeclarationListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends MetaprogramDependencyDeclarationNode>>();
+                }
+		        a=metaprogramDependencyDeclaration
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "metaprogramDependencyDeclaration", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=metaprogramDependencyDeclaration
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "metaprogramDependencyDeclaration", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyDeclarationListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalMetaprogramDependencyDeclarationList returns [NodeUnion<? extends MetaprogramDependencyDeclarationListNode> ret]
@@ -992,42 +1006,56 @@ metaprogramDependencyList returns [NodeUnion<? extends MetaprogramDependencyList
         scope Rule;
         @init {
             ruleStart("metaprogramDependencyList");
-            List<NodeUnion<? extends MetaprogramDependencyNode>> list =
-                    new ArrayList<NodeUnion<? extends MetaprogramDependencyNode>>();
+            List<NodeUnion<? extends MetaprogramDependencyNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=metaprogramDependency
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "metaprogramDependency", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=metaprogramDependency
+            splice[MetaprogramDependencyListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "metaprogramDependency", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, MetaprogramDependencyListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends MetaprogramDependencyNode>>();
+                }
+		        a=metaprogramDependency
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "metaprogramDependency", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=metaprogramDependency
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "metaprogramDependency", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramDependencyListNodeWithUnions(list));
+		        }
+            )
         ','?
+        )
     ;
 
 optionalMetaprogramDependencyList returns [NodeUnion<? extends MetaprogramDependencyListNode> ret]
@@ -1086,40 +1114,54 @@ metaprogramTargetList returns [NodeUnion<? extends MetaprogramTargetListNode> re
         scope Rule;
         @init {
             ruleStart("metaprogramTargetList");
-            List<NodeUnion<? extends MetaprogramTargetNode>> list =
-                    new ArrayList<NodeUnion<? extends MetaprogramTargetNode>>();
+            List<NodeUnion<? extends MetaprogramTargetNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramTargetListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=metaprogramTarget
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "metaprogramTarget", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=metaprogramTarget
+            splice[MetaprogramTargetListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "metaprogramTarget", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, MetaprogramTargetListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends MetaprogramTargetNode>>();
+                }
+		        a=metaprogramTarget
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "metaprogramTarget", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=metaprogramTarget
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "metaprogramTarget", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramTargetListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalMetaprogramTargetList returns [NodeUnion<? extends MetaprogramTargetListNode> ret]
@@ -1188,42 +1230,56 @@ identifierList returns [NodeUnion<? extends IdentifierListNode> ret]
         scope Rule;
         @init {
             ruleStart("identifierList");
-            List<NodeUnion<? extends IdentifierNode>> list =
-                    new ArrayList<NodeUnion<? extends IdentifierNode>>();
+            List<NodeUnion<? extends IdentifierNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeIdentifierListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=identifier
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "identifier", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=identifier
+            splice[IdentifierListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "identifier", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, IdentifierListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends IdentifierNode>>();
+                }
+		        a=identifier
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "identifier", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=identifier
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "identifier", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeIdentifierListNodeWithUnions(list));
+		        }
+            )
         ','?
+        )
     ;
 
 optionalIdentifierList returns [NodeUnion<? extends IdentifierListNode> ret]
@@ -1347,40 +1403,54 @@ metaAnnotationList returns [NodeUnion<? extends MetaAnnotationListNode> ret]
         scope Rule;
         @init {
             ruleStart("metaAnnotationList");
-            List<NodeUnion<? extends MetaAnnotationNode>> list =
-                    new ArrayList<NodeUnion<? extends MetaAnnotationNode>>();
+            List<NodeUnion<? extends MetaAnnotationNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=metaAnnotation
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "metaAnnotation", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=metaAnnotation
+            splice[MetaAnnotationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "metaAnnotation", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, MetaAnnotationListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends MetaAnnotationNode>>();
+                }
+		        a=metaAnnotation
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "metaAnnotation", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=metaAnnotation
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "metaAnnotation", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalMetaAnnotationList returns [NodeUnion<? extends MetaAnnotationListNode> ret]
@@ -1473,41 +1543,55 @@ metaAnnotationElementValuePairs returns [NodeUnion<? extends MetaAnnotationEleme
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValuePairs");
-            List<NodeUnion<? extends MetaAnnotationElementNode>> list =
-                    new ArrayList<NodeUnion<? extends MetaAnnotationElementNode>>();
+            List<NodeUnion<? extends MetaAnnotationElementNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationElementListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=metaAnnotationElementValuePair
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "metaAnnotationElementValuePair", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=metaAnnotationElementValuePair
+            splice[MetaAnnotationElementListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "metaAnnotationElementValuePair", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, MetaAnnotationElementListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends MetaAnnotationElementNode>>();
+                }
+		        a=metaAnnotationElementValuePair
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "metaAnnotationElementValuePair", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=metaAnnotationElementValuePair
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "metaAnnotationElementValuePair", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationElementListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalMetaAnnotationElementValuePairs returns [NodeUnion<? extends MetaAnnotationElementListNode> ret]
@@ -1616,41 +1700,55 @@ metaAnnotationElementValues returns [NodeUnion<? extends MetaAnnotationValueList
         scope Rule;
         @init {
             ruleStart("metaAnnotationElementValues");
-            List<NodeUnion<? extends MetaAnnotationValueNode>> list =
-                    new ArrayList<NodeUnion<? extends MetaAnnotationValueNode>>();
+            List<NodeUnion<? extends MetaAnnotationValueNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationValueListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=metaAnnotationElementValue
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "metaAnnotationElementValue", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=metaAnnotationElementValue
+            splice[MetaAnnotationValueListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "metaAnnotationElementValue", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, MetaAnnotationValueListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends MetaAnnotationValueNode>>();
+                }
+		        a=metaAnnotationElementValue
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "metaAnnotationElementValue", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=metaAnnotationElementValue
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "metaAnnotationElementValue", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeMetaAnnotationValueListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalMetaAnnotationElementValues returns [NodeUnion<? extends MetaAnnotationValueListNode> ret]
@@ -1897,40 +1995,54 @@ metaImportDeclarations returns [NodeUnion<? extends MetaprogramImportListNode> r
         scope Rule;
         @init {
             ruleStart("metaImportDeclarations");
-            List<NodeUnion<? extends MetaprogramImportNode>> list =
-                    new ArrayList<NodeUnion<? extends MetaprogramImportNode>>();
+            List<NodeUnion<? extends MetaprogramImportNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramImportListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=metaprogramImport
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "metaprogramImport", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=metaprogramImport
+            splice[MetaprogramImportListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "metaprogramImport", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, MetaprogramImportListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends MetaprogramImportNode>>();
+                }
+		        a=metaprogramImport
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "metaprogramImport", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=metaprogramImport
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "metaprogramImport", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeMetaprogramImportListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalMetaImportDeclarations returns [NodeUnion<? extends MetaprogramImportListNode> ret]
@@ -1961,40 +2073,54 @@ importDeclarations returns [NodeUnion<? extends ImportListNode> ret]
         scope Rule;
         @init {
             ruleStart("importDeclarations");
-            List<NodeUnion<? extends ImportNode>> list =
-                    new ArrayList<NodeUnion<? extends ImportNode>>();
+            List<NodeUnion<? extends ImportNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeImportListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=importDeclaration
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "importDeclaration", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=importDeclaration
+            splice[ImportListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "importDeclaration", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, ImportListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends ImportNode>>();
+                }
+		        a=importDeclaration
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "importDeclaration", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=importDeclaration
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "importDeclaration", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeImportListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalImportDeclarations returns [NodeUnion<? extends ImportListNode> ret]
@@ -2176,40 +2302,54 @@ typeDeclarations returns [NodeUnion<? extends TypeDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("typeDeclarations");
-            List<NodeUnion<? extends TypeDeclarationNode>> list =
-                    new ArrayList<NodeUnion<? extends TypeDeclarationNode>>();
+            List<NodeUnion<? extends TypeDeclarationNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeTypeDeclarationListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=typeDeclaration
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "typeDeclaration", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=typeDeclaration
+            splice[TypeDeclarationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "typeDeclaration", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, TypeDeclarationListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends TypeDeclarationNode>>();
+                }
+		        a=typeDeclaration
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "typeDeclaration", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=typeDeclaration
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "typeDeclaration", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeTypeDeclarationListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalTypeDeclarations returns [NodeUnion<? extends TypeDeclarationListNode> ret]
@@ -2793,42 +2933,56 @@ typeParameters returns [NodeUnion<? extends TypeParameterListNode> ret]
         scope Rule;
         @init {
             ruleStart("typeParameters");
-            List<NodeUnion<? extends TypeParameterNode>> list =
-                    new ArrayList<NodeUnion<? extends TypeParameterNode>>();
+            List<NodeUnion<? extends TypeParameterNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeTypeParameterListNodeWithUnions(list));
             ruleStop();
         }
     :
         '<'
-        a=typeParameter
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "typeParameter", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=typeParameter
+            splice[TypeParameterListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "typeParameter", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, TypeParameterListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends TypeParameterNode>>();
+                }
+		        a=typeParameter
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "typeParameter", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=typeParameter
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "typeParameter", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeTypeParameterListNodeWithUnions(list));
+		        }
+            )
+        )
         '>'
     ;
 
@@ -2889,41 +3043,55 @@ typeBound returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("typeBound");
-            List<NodeUnion<? extends DeclaredTypeNode>> list =
-                    new ArrayList<NodeUnion<? extends DeclaredTypeNode>>();
+            List<NodeUnion<? extends DeclaredTypeNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=classOrInterfaceType
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "classOrInterfaceType", getSourceLocation($a.stop)));
-            }
-        }
         (
-            '&'
-            b=classOrInterfaceType
+            splice[DeclaredTypeListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "classOrInterfaceType", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, DeclaredTypeListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends DeclaredTypeNode>>();
+                }
+		        a=classOrInterfaceType
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "classOrInterfaceType", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            '&'
+                    b=classOrInterfaceType
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "classOrInterfaceType", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalTypeBound returns [NodeUnion<? extends DeclaredTypeListNode> ret]
@@ -3024,41 +3192,55 @@ enumConstants returns [NodeUnion<? extends EnumConstantDeclarationListNode> ret]
         scope Rule;
         @init {
             ruleStart("enumConstants");
-            List<NodeUnion<? extends EnumConstantDeclarationNode>> list =
-                    new ArrayList<NodeUnion<? extends EnumConstantDeclarationNode>>();
+            List<NodeUnion<? extends EnumConstantDeclarationNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeEnumConstantDeclarationListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=enumConstant
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "enumConstant", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=enumConstant
+            splice[EnumConstantDeclarationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "enumConstant", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, EnumConstantDeclarationListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends EnumConstantDeclarationNode>>();
+                }
+		        a=enumConstant
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "enumConstant", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=enumConstant
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "enumConstant", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeEnumConstantDeclarationListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalEnumConstants returns [NodeUnion<? extends EnumConstantDeclarationListNode> ret]
@@ -3210,41 +3392,55 @@ declaredTypeList returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("declaredTypeList");
-            List<NodeUnion<? extends DeclaredTypeNode>> list =
-                    new ArrayList<NodeUnion<? extends DeclaredTypeNode>>();
+            List<NodeUnion<? extends DeclaredTypeNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=classOrInterfaceType
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "classOrInterfaceType", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=classOrInterfaceType
+            splice[DeclaredTypeListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "classOrInterfaceType", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, DeclaredTypeListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends DeclaredTypeNode>>();
+                }
+		        a=classOrInterfaceType
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "classOrInterfaceType", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=classOrInterfaceType
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "classOrInterfaceType", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeDeclaredTypeListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalDeclaredTypeList returns [NodeUnion<? extends DeclaredTypeListNode> ret]
@@ -3275,41 +3471,55 @@ referenceTypeList returns [NodeUnion<? extends ReferenceTypeListNode> ret]
         scope Rule;
         @init {
             ruleStart("referenceTypeList");
-            List<NodeUnion<? extends ReferenceTypeNode>> list =
-                    new ArrayList<NodeUnion<? extends ReferenceTypeNode>>();
+            List<NodeUnion<? extends ReferenceTypeNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeReferenceTypeListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=referenceType
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "referenceType", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=referenceType
+            splice[ReferenceTypeListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "referenceType", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, ReferenceTypeListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends ReferenceTypeNode>>();
+                }
+		        a=referenceType
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "referenceType", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=referenceType
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "referenceType", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeReferenceTypeListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalReferenceTypeList returns [NodeUnion<? extends ReferenceTypeListNode> ret]
@@ -3435,40 +3645,54 @@ classBodyDeclarations returns [NodeUnion<? extends ClassMemberListNode> ret]
         scope Rule;
         @init {
             ruleStart("classBodyDeclarations");
-            List<NodeUnion<? extends ClassMemberNode>> list =
-                    new ArrayList<NodeUnion<? extends ClassMemberNode>>();
+            List<NodeUnion<? extends ClassMemberNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeClassMemberListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=classBodyDeclaration
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "classBodyDeclaration", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=classBodyDeclaration
+            splice[ClassMemberListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "classBodyDeclaration", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, ClassMemberListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends ClassMemberNode>>();
+                }
+		        a=classBodyDeclaration
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "classBodyDeclaration", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=classBodyDeclaration
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "classBodyDeclaration", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeClassMemberListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalClassBodyDeclarations returns [NodeUnion<? extends ClassMemberListNode> ret]
@@ -3543,40 +3767,54 @@ anonymousClassBodyDeclarations returns [NodeUnion<? extends AnonymousClassMember
         scope Rule;
         @init {
             ruleStart("anonymousClassBodyDeclarations");
-            List<NodeUnion<? extends AnonymousClassMemberNode>> list =
-                    new ArrayList<NodeUnion<? extends AnonymousClassMemberNode>>();
+            List<NodeUnion<? extends AnonymousClassMemberNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeAnonymousClassMemberListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=anonymousClassBodyDeclaration
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "anonymousClassBodyDeclaration", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=anonymousClassBodyDeclaration
+            splice[AnonymousClassMemberListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "anonymousClassBodyDeclaration", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, AnonymousClassMemberListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends AnonymousClassMemberNode>>();
+                }
+		        a=anonymousClassBodyDeclaration
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "anonymousClassBodyDeclaration", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=anonymousClassBodyDeclaration
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "anonymousClassBodyDeclaration", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeAnonymousClassMemberListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalAnonymousClassBodyDeclarations returns [NodeUnion<? extends AnonymousClassMemberListNode> ret]
@@ -3858,40 +4096,54 @@ interfaceBodyDeclarations returns [NodeUnion<? extends InterfaceMemberListNode> 
         scope Rule;
         @init {
             ruleStart("interfaceBodyDeclarations");
-            List<NodeUnion<? extends InterfaceMemberNode>> list =
-                    new ArrayList<NodeUnion<? extends InterfaceMemberNode>>();
+            List<NodeUnion<? extends InterfaceMemberNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeInterfaceMemberListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=interfaceBodyDeclaration
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "interfaceBodyDeclaration", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=interfaceBodyDeclaration
+            splice[InterfaceMemberListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "interfaceBodyDeclaration", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, InterfaceMemberListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends InterfaceMemberNode>>();
+                }
+		        a=interfaceBodyDeclaration
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "interfaceBodyDeclaration", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=interfaceBodyDeclaration
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "interfaceBodyDeclaration", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeInterfaceMemberListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalInterfaceBodyDeclarations returns [NodeUnion<? extends InterfaceMemberListNode> ret]
@@ -4053,41 +4305,55 @@ variableDeclarators returns [NodeUnion<? extends VariableDeclaratorListNode> ret
         scope Rule;
         @init {
             ruleStart("variableDeclarators");
-            List<NodeUnion<? extends VariableDeclaratorNode>> list =
-                    new ArrayList<NodeUnion<? extends VariableDeclaratorNode>>();
+            List<NodeUnion<? extends VariableDeclaratorNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeVariableDeclaratorListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=variableDeclarator
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "variableDeclarator", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=variableDeclarator
+            splice[VariableDeclaratorListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "variableDeclarator", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, VariableDeclaratorListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends VariableDeclaratorNode>>();
+                }
+		        a=variableDeclarator
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "variableDeclarator", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=variableDeclarator
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "variableDeclarator", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeVariableDeclaratorListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalVariableDeclarators returns [NodeUnion<? extends VariableDeclaratorListNode> ret]
@@ -4177,41 +4443,55 @@ unparameterizedTypeList returns [NodeUnion<? extends UnparameterizedTypeListNode
         scope Rule;
         @init {
             ruleStart("unparameterizedTypeList");
-            List<NodeUnion<? extends UnparameterizedTypeNode>> list =
-                    new ArrayList<NodeUnion<? extends UnparameterizedTypeNode>>();
+            List<NodeUnion<? extends UnparameterizedTypeNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=unparameterizedType
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "unparameterizedType", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=unparameterizedType
+            splice[UnparameterizedTypeListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "unparameterizedType", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, UnparameterizedTypeListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends UnparameterizedTypeNode>>();
+                }
+		        a=unparameterizedType
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "unparameterizedType", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=unparameterizedType
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "unparameterizedType", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeUnparameterizedTypeListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalUnparameterizedTypeList returns [NodeUnion<? extends UnparameterizedTypeListNode> ret]
@@ -4458,42 +4738,56 @@ typeArguments returns [NodeUnion<? extends TypeArgumentListNode> ret]
         scope Rule;
         @init {
             ruleStart("typeArguments");
-            List<NodeUnion<? extends TypeArgumentNode>> list =
-                    new ArrayList<NodeUnion<? extends TypeArgumentNode>>();
+            List<NodeUnion<? extends TypeArgumentNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeTypeArgumentListNodeWithUnions(list));
             ruleStop();
         }
     :
         '<'
-        a=typeArgument
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "typeArgument", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=typeArgument
+            splice[TypeArgumentListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "typeArgument", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, TypeArgumentListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends TypeArgumentNode>>();
+                }
+		        a=typeArgument
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "typeArgument", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=typeArgument
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "typeArgument", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeTypeArgumentListNodeWithUnions(list));
+		        }
+            )
+        )
         '>'
     ;
 
@@ -4649,41 +4943,55 @@ normalParameterDecls returns [NodeUnion<? extends VariableListNode> ret]
         scope Rule;
         @init {
             ruleStart("normalParameterDecls");
-            List<NodeUnion<? extends VariableNode>> list =
-                    new ArrayList<NodeUnion<? extends VariableNode>>();
+            List<NodeUnion<? extends VariableNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeVariableListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=normalParameterDecl
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "normalParameterDecl", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=normalParameterDecl
+            splice[VariableListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "normalParameterDecl", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, VariableListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends VariableNode>>();
+                }
+		        a=normalParameterDecl
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "normalParameterDecl", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=normalParameterDecl
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "normalParameterDecl", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeVariableListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalNormalParameterDecls returns [NodeUnion<? extends VariableListNode> ret]
@@ -4840,40 +5148,54 @@ annotations returns [NodeUnion<? extends AnnotationListNode> ret]
         scope Rule;
         @init {
             ruleStart("annotations");
-            List<NodeUnion<? extends AnnotationNode>> list =
-                    new ArrayList<NodeUnion<? extends AnnotationNode>>();
+            List<NodeUnion<? extends AnnotationNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=annotation
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "annotation", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=annotation
+            splice[AnnotationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "annotation", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, AnnotationListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends AnnotationNode>>();
+                }
+		        a=annotation
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "annotation", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=annotation
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "annotation", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeAnnotationListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalAnnotations returns [NodeUnion<? extends AnnotationListNode> ret]
@@ -4960,41 +5282,55 @@ elementValuePairs returns [NodeUnion<? extends AnnotationElementListNode> ret]
         scope Rule;
         @init {
             ruleStart("elementValuePairs");
-            List<NodeUnion<? extends AnnotationElementNode>> list =
-                    new ArrayList<NodeUnion<? extends AnnotationElementNode>>();
+            List<NodeUnion<? extends AnnotationElementNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationElementListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=elementValuePair
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "elementValuePair", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=elementValuePair
+            splice[AnnotationElementListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "elementValuePair", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, AnnotationElementListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends AnnotationElementNode>>();
+                }
+		        a=elementValuePair
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "elementValuePair", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=elementValuePair
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "elementValuePair", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeAnnotationElementListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalElementValuePairs returns [NodeUnion<? extends AnnotationElementListNode> ret]
@@ -5094,42 +5430,56 @@ elementValues returns [NodeUnion<? extends AnnotationValueListNode> ret]
         scope Rule;
         @init {
             ruleStart("elementValues");
-            List<NodeUnion<? extends AnnotationValueNode>> list =
-                    new ArrayList<NodeUnion<? extends AnnotationValueNode>>();
+            List<NodeUnion<? extends AnnotationValueNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationValueListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=elementValue
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "elementValue", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=elementValue
+            splice[AnnotationValueListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "elementValue", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, AnnotationValueListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends AnnotationValueNode>>();
+                }
+		        a=elementValue
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "elementValue", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=elementValue
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "elementValue", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeAnnotationValueListNodeWithUnions(list));
+		        }
+            )
         ','?
+        )
     ;
 
 optionalElementValues returns [NodeUnion<? extends AnnotationValueListNode> ret]
@@ -5247,40 +5597,54 @@ annotationTypeElementDeclarations returns [NodeUnion<? extends AnnotationMemberL
         scope Rule;
         @init {
             ruleStart("annotationTypeElementDeclarations");
-            List<NodeUnion<? extends AnnotationMemberNode>> list =
-                    new ArrayList<NodeUnion<? extends AnnotationMemberNode>>();
+            List<NodeUnion<? extends AnnotationMemberNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeAnnotationMemberListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=annotationTypeElementDeclaration
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "annotationTypeElementDeclaration", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=annotationTypeElementDeclaration
+            splice[AnnotationMemberListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "annotationTypeElementDeclaration", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, AnnotationMemberListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends AnnotationMemberNode>>();
+                }
+		        a=annotationTypeElementDeclaration
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "annotationTypeElementDeclaration", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=annotationTypeElementDeclaration
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "annotationTypeElementDeclaration", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeAnnotationMemberListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalAnnotationTypeElementDeclarations returns [NodeUnion<? extends AnnotationMemberListNode> ret]
@@ -5412,40 +5776,54 @@ blockStatementList returns [NodeUnion<? extends BlockStatementListNode> ret]
         scope Rule;
         @init {
             ruleStart("blockStatementList");
-            List<NodeUnion<? extends BlockStatementNode>> list =
-                    new ArrayList<NodeUnion<? extends BlockStatementNode>>();
+            List<NodeUnion<? extends BlockStatementNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeBlockStatementListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=blockStatement
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "blockStatement", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=blockStatement
+            splice[BlockStatementListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "blockStatement", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, BlockStatementListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends BlockStatementNode>>();
+                }
+		        a=blockStatement
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "blockStatement", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=blockStatement
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "blockStatement", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeBlockStatementListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalBlockStatementList returns [NodeUnion<? extends BlockStatementListNode> ret]
@@ -6044,40 +6422,54 @@ catches returns [NodeUnion<? extends CatchListNode> ret]
         scope Rule;
         @init {
             ruleStart("catches");
-            List<NodeUnion<? extends CatchNode>> list =
-                    new ArrayList<NodeUnion<? extends CatchNode>>();
+            List<NodeUnion<? extends CatchNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeCatchListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=catchClause
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "catchClause", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=catchClause
+            splice[CatchListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "catchClause", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, CatchListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends CatchNode>>();
+                }
+		        a=catchClause
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "catchClause", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=catchClause
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "catchClause", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeCatchListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalCatches returns [NodeUnion<? extends CatchListNode> ret]
@@ -6149,40 +6541,54 @@ switchBlockStatementGroups returns [NodeUnion<? extends CaseListNode> ret]
         scope Rule;
         @init {
             ruleStart("switchBlockStatementGroups");
-            List<NodeUnion<? extends CaseNode>> list =
-                    new ArrayList<NodeUnion<? extends CaseNode>>();
+            List<NodeUnion<? extends CaseNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeCaseListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=switchBlockStatementGroup
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "switchBlockStatementGroup", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=switchBlockStatementGroup
+            splice[CaseListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "switchBlockStatementGroup", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, CaseListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends CaseNode>>();
+                }
+		        a=switchBlockStatementGroup
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "switchBlockStatementGroup", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=switchBlockStatementGroup
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "switchBlockStatementGroup", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeCaseListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalSwitchBlockStatementGroups returns [NodeUnion<? extends CaseListNode> ret]
@@ -6334,41 +6740,55 @@ statementExpressionList returns [NodeUnion<? extends StatementExpressionListNode
         scope Rule;
         @init {
             ruleStart("statementExpressionList");
-            List<NodeUnion<? extends StatementExpressionNode>> list =
-                    new ArrayList<NodeUnion<? extends StatementExpressionNode>>();
+            List<NodeUnion<? extends StatementExpressionNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeStatementExpressionListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=statementExpression
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "statementExpression", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=statementExpression
+            splice[StatementExpressionListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "statementExpression", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, StatementExpressionListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends StatementExpressionNode>>();
+                }
+		        a=statementExpression
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "statementExpression", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=statementExpression
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "statementExpression", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeStatementExpressionListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalStatementExpressionList returns [NodeUnion<? extends StatementExpressionListNode> ret]
@@ -6399,41 +6819,55 @@ expressionList returns [NodeUnion<? extends ExpressionListNode> ret]
         scope Rule;
         @init {
             ruleStart("expressionList");
-            List<NodeUnion<? extends ExpressionNode>> list =
-                    new ArrayList<NodeUnion<? extends ExpressionNode>>();
+            List<NodeUnion<? extends ExpressionNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeExpressionListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=expression
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "expression", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=expression
+            splice[ExpressionListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "expression", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, ExpressionListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends ExpressionNode>>();
+                }
+		        a=expression
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "expression", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=expression
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "expression", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeExpressionListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalExpressionList returns [NodeUnion<? extends ExpressionListNode> ret]
@@ -7763,40 +8197,54 @@ arrayInstantiatorExpressionList returns [NodeUnion<? extends ExpressionListNode>
         scope Rule;
         @init {
             ruleStart("arrayInstantiatorExpressionList");
-            List<NodeUnion<? extends ExpressionNode>> list =
-                    new ArrayList<NodeUnion<? extends ExpressionNode>>();
+            List<NodeUnion<? extends ExpressionNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeExpressionListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=arrayInstantiatorExpression
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "arrayInstantiatorExpression", getSourceLocation($a.stop)));
-            }
-        }
         (
-            b=arrayInstantiatorExpression
+            splice[ExpressionListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "arrayInstantiatorExpression", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, ExpressionListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends ExpressionNode>>();
+                }
+		        a=arrayInstantiatorExpression
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "arrayInstantiatorExpression", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+                    b=arrayInstantiatorExpression
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "arrayInstantiatorExpression", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeExpressionListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalArrayInstantiatorExpressionList returns [NodeUnion<? extends ExpressionListNode> ret]
@@ -7871,41 +8319,55 @@ variableInitializers returns [NodeUnion<? extends VariableInitializerListNode> r
         scope Rule;
         @init {
             ruleStart("variableInitializers");
-            List<NodeUnion<? extends VariableInitializerNode>> list =
-                    new ArrayList<NodeUnion<? extends VariableInitializerNode>>();
+            List<NodeUnion<? extends VariableInitializerNode>> list = null;
         }
         @after {
-            $ret = factory.makeNormalNodeUnion(factory.makeVariableInitializerListNodeWithUnions(list));
             ruleStop();
         }
     :
-        a=variableInitializer
-        {
-            // TODO: fix this with error nodes
-            if ($a.ret != null && $a.ret.getNodeValue() != null)
-            {
-                list.add($a.ret);
-            } else
-            {
-                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-                        getSourceLocation($a.start), "variableInitializer", getSourceLocation($a.stop)));
-            }
-        }
         (
-            ','
-            b=variableInitializer
+            splice[VariableInitializerListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-	            // TODO: fix this with error nodes
-	            if ($b.ret != null && $b.ret.getNodeValue() != null)
-	            {
-	                list.add($b.ret);
-	            } else
-	            {
-	                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
-	                        getSourceLocation($b.start), "variableInitializer", getSourceLocation($b.stop)));
-	            }
+                if ($splice.ret != null)
+                    $ret = $splice.ret.castNodeType(factory, VariableInitializerListNode.class);
             }
-        )*
+        |
+            (
+                {
+                    list = new ArrayList<NodeUnion<? extends VariableInitializerNode>>();
+                }
+		        a=variableInitializer
+		        {
+		            // TODO: fix this with error nodes
+		            if ($a.ret != null && $a.ret.getNodeValue() != null)
+		            {
+		                list.add($a.ret);
+		            } else
+		            {
+		                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+		                        getSourceLocation($a.start), "variableInitializer", getSourceLocation($a.stop)));
+		            }
+		        }
+		        (
+            ','
+                    b=variableInitializer
+		            {
+			            // TODO: fix this with error nodes
+			            if ($b.ret != null && $b.ret.getNodeValue() != null)
+			            {
+			                list.add($b.ret);
+			            } else
+			            {
+			                reportDiagnostic(new RuleParseFailureDiagnosticImpl(
+			                        getSourceLocation($b.start), "variableInitializer", getSourceLocation($b.stop)));
+			            }
+		            }
+		        )*
+		        {
+                    $ret = factory.makeNormalNodeUnion(factory.makeVariableInitializerListNodeWithUnions(list));
+		        }
+            )
+        )
     ;
 
 optionalVariableInitializers returns [NodeUnion<? extends VariableInitializerListNode> ret]

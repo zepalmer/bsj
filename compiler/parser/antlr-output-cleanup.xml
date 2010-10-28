@@ -11,6 +11,8 @@
 	<description>
             The ANTLR parser used by the BSJ compiler.
     </description>
+	
+    <taskdef name="antlrCleanup" classname="edu.jhu.cs.bsj.buildtools.FixBsjAntlrParserTask" classpath="antlib/bsj-antlr-output-cleanup.jar"/>
 
 	<!-- Names the source folder containing generated files. -->
 	<property name="src" value="src" />
@@ -19,19 +21,20 @@
           target: do-cleanup                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="do-cleanup" description="Cleans up the generated code.">
-        <replaceregexp byline="true">
-            <regexp pattern="^public class BsjAntlr" />
-            <substitution expression="@javax.annotation.Generated(&quot;org.antlr.Tool&quot;) @SuppressWarnings(&quot;unused&quot;) public class BsjAntlr" />
-            <fileset dir="${src}">
-                <include name="**/BsjAntlrLexer.java" />
-            </fileset>
-        </replaceregexp>
-        <replaceregexp byline="true">
-            <regexp pattern="^public class BsjAntlr" />
-            <substitution expression="@javax.annotation.Generated(&quot;org.antlr.Tool&quot;) @SuppressWarnings({&quot;unchecked&quot;,&quot;unused&quot;,&quot;rawtypes&quot;}) public class BsjAntlr" />
-            <fileset dir="${src}">
-                <include name="**/BsjAntlrParser.java" />
-            </fileset>
-        </replaceregexp>
+		<replaceregexp byline="true">
+			<regexp pattern="^public class BsjAntlr" />
+			<substitution expression="@javax.annotation.Generated(&quot;org.antlr.Tool&quot;) @SuppressWarnings(&quot;unused&quot;) public class BsjAntlr" />
+			<fileset dir="${src}">
+				<include name="**/BsjAntlrLexer.java" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp byline="true">
+			<regexp pattern="^public class BsjAntlr" />
+			<substitution expression="@javax.annotation.Generated(&quot;org.antlr.Tool&quot;) @SuppressWarnings({&quot;unchecked&quot;,&quot;unused&quot;,&quot;rawtypes&quot;}) public class BsjAntlr" />
+			<fileset dir="${src}">
+				<include name="**/BsjAntlrParser.java" />
+			</fileset>
+		</replaceregexp>
+		<antlrCleanup parserfile="src/edu/jhu/cs/bsj/compiler/impl/tool/parser/antlr/BsjAntlrParser.java"/>
 	</target>
 </project>

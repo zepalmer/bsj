@@ -1922,6 +1922,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		p.println("[:");
 		p.incPrependCount();
+		// TODO: fix this!
 		if (node != null && node.getBody() != null)
 		{
 			for (BlockStatementNode blockStatementNode : node.getBody().getChildren())
