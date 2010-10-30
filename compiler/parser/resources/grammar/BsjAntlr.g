@@ -776,7 +776,7 @@ bsjMetaprogram returns [NodeUnion<? extends MetaprogramNode> ret]
     :
         splice[MetaprogramNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaprogramNode.class);
         }
     |
@@ -804,7 +804,7 @@ preamble returns [NodeUnion<? extends MetaprogramPreambleNode> ret]
     :
         splice[MetaprogramPreambleNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaprogramPreambleNode.class);
         }
     |
@@ -836,7 +836,7 @@ metaprogramImport returns [NodeUnion<? extends MetaprogramImportNode> ret]
     :   
         splice[MetaprogramImportNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaprogramImportNode.class);
         }
     |
@@ -860,7 +860,7 @@ metaprogramImportBody returns [NodeUnion<? extends ImportNode> ret]
     :
         splice[ImportNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ImportNode.class);
         }
     |
@@ -913,7 +913,7 @@ metaprogramDependencyDeclarationList returns [NodeUnion<? extends MetaprogramDep
         (
             splice[MetaprogramDependencyDeclarationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, MetaprogramDependencyDeclarationListNode.class);
             }
         |
@@ -989,7 +989,7 @@ metaprogramDependencyDeclaration returns [NodeUnion<? extends MetaprogramDepende
     :   
         splice[MetaprogramDependencyDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaprogramDependencyDeclarationNode.class);
         }
     |
@@ -1015,7 +1015,7 @@ metaprogramDependencyList returns [NodeUnion<? extends MetaprogramDependencyList
         (
             splice[MetaprogramDependencyListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, MetaprogramDependencyListNode.class);
             }
         |
@@ -1094,7 +1094,7 @@ metaprogramDependency returns [NodeUnion<? extends MetaprogramDependencyNode> re
     :
         splice[MetaprogramDependencyNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaprogramDependencyNode.class);
         }
     |
@@ -1123,7 +1123,7 @@ metaprogramTargetList returns [NodeUnion<? extends MetaprogramTargetListNode> re
         (
             splice[MetaprogramTargetListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, MetaprogramTargetListNode.class);
             }
         |
@@ -1199,7 +1199,7 @@ metaprogramTarget returns [NodeUnion<? extends MetaprogramTargetNode> ret]
     :
         splice[MetaprogramTargetNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaprogramTargetNode.class);
         }
     |   
@@ -1239,7 +1239,7 @@ identifierList returns [NodeUnion<? extends IdentifierListNode> ret]
         (
             splice[IdentifierListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, IdentifierListNode.class);
             }
         |
@@ -1412,7 +1412,7 @@ metaAnnotationList returns [NodeUnion<? extends MetaAnnotationListNode> ret]
         (
             splice[MetaAnnotationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, MetaAnnotationListNode.class);
             }
         |
@@ -1496,7 +1496,7 @@ metaAnnotation returns [NodeUnion<? extends MetaAnnotationNode> ret]
         (
             splice[MetaAnnotationNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, MetaAnnotationNode.class);
             }
         |
@@ -1552,7 +1552,7 @@ metaAnnotationElementValuePairs returns [NodeUnion<? extends MetaAnnotationEleme
         (
             splice[MetaAnnotationElementListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, MetaAnnotationElementListNode.class);
             }
         |
@@ -1636,7 +1636,7 @@ metaAnnotationElementValuePair returns [NodeUnion<? extends MetaAnnotationElemen
     :
         splice[MetaAnnotationElementNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaAnnotationElementNode.class);
         }
     |
@@ -1667,7 +1667,7 @@ metaAnnotationElementValue returns [NodeUnion<? extends MetaAnnotationValueNode>
     :
         splice[MetaAnnotationValueNode.class, Arrays.<Class<? extends Node>>asList(MetaAnnotationArrayValueNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaAnnotationValueNode.class);
         }
     |   
@@ -1709,7 +1709,7 @@ metaAnnotationElementValues returns [NodeUnion<? extends MetaAnnotationValueList
         (
             splice[MetaAnnotationValueListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, MetaAnnotationValueListNode.class);
             }
         |
@@ -1795,7 +1795,7 @@ metaAnnotationElementValueArrayInitializer returns [NodeUnion<? extends MetaAnno
     :   
         splice[MetaAnnotationArrayValueNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MetaAnnotationArrayValueNode.class);
         }
     |
@@ -1823,7 +1823,7 @@ codeLiteral returns [NodeUnion<? extends RawCodeLiteralNode> ret]
         (
             splice[RawCodeLiteralNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, RawCodeLiteralNode.class);
             }
         |
@@ -1947,7 +1947,7 @@ compilationUnit[String name] returns [NodeUnion<? extends CompilationUnitNode> r
     :
         splice[CompilationUnitNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, CompilationUnitNode.class);
         }
     |
@@ -1977,7 +1977,7 @@ packageDeclaration returns [NodeUnion<? extends PackageDeclarationNode> ret]
     :
         splice[PackageDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, PackageDeclarationNode.class);
         }
     |
@@ -2004,7 +2004,7 @@ metaImportDeclarations returns [NodeUnion<? extends MetaprogramImportListNode> r
         (
             splice[MetaprogramImportListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, MetaprogramImportListNode.class);
             }
         |
@@ -2082,7 +2082,7 @@ importDeclarations returns [NodeUnion<? extends ImportListNode> ret]
         (
             splice[ImportListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, ImportListNode.class);
             }
         |
@@ -2252,7 +2252,7 @@ importDeclaration returns [NodeUnion<? extends ImportNode> ret]
     :
         splice[ImportNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ImportNode.class);
         }
     |
@@ -2311,7 +2311,7 @@ typeDeclarations returns [NodeUnion<? extends TypeDeclarationListNode> ret]
         (
             splice[TypeDeclarationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, TypeDeclarationListNode.class);
             }
         |
@@ -2387,7 +2387,7 @@ typeDeclaration returns [NodeUnion<? extends TypeDeclarationNode> ret]
     :
         splice[TypeDeclarationNode.class, Arrays.<Class<? extends Node>>asList(ClassDeclarationNode.class, EnumDeclarationNode.class, InterfaceDeclarationNode.class, AnnotationDeclarationNode.class, NoOperationNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, TypeDeclarationNode.class);
         }
     |
@@ -2418,7 +2418,7 @@ noOp returns [NodeUnion<? extends NoOperationNode> ret]
     :
         splice[NoOperationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, NoOperationNode.class);
         }
     |
@@ -2862,7 +2862,7 @@ normalClassDeclaration returns [NodeUnion<? extends ClassDeclarationNode> ret]
     :   
         splice[ClassDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ClassDeclarationNode.class);
         }
     |
@@ -2902,7 +2902,7 @@ localClassDeclaration returns [NodeUnion<? extends LocalClassDeclarationNode> re
     :   
         splice[LocalClassDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, LocalClassDeclarationNode.class);
         }
     |
@@ -2943,7 +2943,7 @@ typeParameters returns [NodeUnion<? extends TypeParameterListNode> ret]
         (
             splice[TypeParameterListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, TypeParameterListNode.class);
             }
         |
@@ -3023,7 +3023,7 @@ typeParameter returns [NodeUnion<? extends TypeParameterNode> ret]
     :
         splice[TypeParameterNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, TypeParameterNode.class);
         }
     |
@@ -3052,7 +3052,7 @@ typeBound returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         (
             splice[DeclaredTypeListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, DeclaredTypeListNode.class);
             }
         |
@@ -3131,7 +3131,7 @@ enumDeclaration returns [NodeUnion<? extends EnumDeclarationNode> ret]
     :   
         splice[EnumDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, EnumDeclarationNode.class);
         }
     |
@@ -3168,7 +3168,7 @@ enumBody returns [NodeUnion<? extends EnumBodyNode> ret]
     :   
         splice[EnumBodyNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, EnumBodyNode.class);
         }
     |
@@ -3201,7 +3201,7 @@ enumConstants returns [NodeUnion<? extends EnumConstantDeclarationListNode> ret]
         (
             splice[EnumConstantDeclarationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, EnumConstantDeclarationListNode.class);
             }
         |
@@ -3286,7 +3286,7 @@ enumConstant returns [NodeUnion<? extends EnumConstantDeclarationNode> ret]
     :   
         splice[EnumConstantDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, EnumConstantDeclarationNode.class);
         }
     |
@@ -3363,7 +3363,7 @@ normalInterfaceDeclaration returns [NodeUnion<? extends InterfaceDeclarationNode
     :   
         splice[InterfaceDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, InterfaceDeclarationNode.class);
         }
     |
@@ -3401,7 +3401,7 @@ declaredTypeList returns [NodeUnion<? extends DeclaredTypeListNode> ret]
         (
             splice[DeclaredTypeListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, DeclaredTypeListNode.class);
             }
         |
@@ -3480,7 +3480,7 @@ referenceTypeList returns [NodeUnion<? extends ReferenceTypeListNode> ret]
         (
             splice[ReferenceTypeListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, ReferenceTypeListNode.class);
             }
         |
@@ -3557,7 +3557,7 @@ classBody returns [NodeUnion<? extends ClassBodyNode> ret]
     :
         splice[ClassBodyNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ClassBodyNode.class);
         }
     |
@@ -3580,7 +3580,7 @@ anonymousClassBody returns [NodeUnion<? extends AnonymousClassBodyNode> ret]
     :   
         splice[AnonymousClassBodyNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnonymousClassBodyNode.class);
         }
     |
@@ -3603,7 +3603,7 @@ interfaceBody returns [NodeUnion<? extends InterfaceBodyNode> ret]
     :
         splice[InterfaceBodyNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, InterfaceBodyNode.class);
         }
     |   
@@ -3626,7 +3626,7 @@ initializerBlock returns [NodeUnion<? extends InitializerDeclarationNode> ret]
     :
         splice[InitializerDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, InitializerDeclarationNode.class);
         }
     |
@@ -3654,7 +3654,7 @@ classBodyDeclarations returns [NodeUnion<? extends ClassMemberListNode> ret]
         (
             splice[ClassMemberListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, ClassMemberListNode.class);
             }
         |
@@ -3730,7 +3730,7 @@ classBodyDeclaration returns [NodeUnion<? extends ClassMemberNode> ret]
     :
         splice[ClassMemberNode.class, Arrays.<Class<? extends Node>>asList(InitializerDeclarationNode.class, ConstructorDeclarationNode.class, FieldDeclarationNode.class, MethodDeclarationNode.class, ClassDeclarationNode.class, EnumDeclarationNode.class, InterfaceDeclarationNode.class, AnnotationDeclarationNode.class, NoOperationNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ClassMemberNode.class);
         }
     |
@@ -3776,7 +3776,7 @@ anonymousClassBodyDeclarations returns [NodeUnion<? extends AnonymousClassMember
         (
             splice[AnonymousClassMemberListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, AnonymousClassMemberListNode.class);
             }
         |
@@ -3852,7 +3852,7 @@ anonymousClassBodyDeclaration returns [NodeUnion<? extends AnonymousClassMemberN
     :
         splice[AnonymousClassMemberNode.class, Arrays.<Class<? extends Node>>asList(InitializerDeclarationNode.class, FieldDeclarationNode.class, MethodDeclarationNode.class, ClassDeclarationNode.class, EnumDeclarationNode.class, InterfaceDeclarationNode.class, AnnotationDeclarationNode.class, NoOperationNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnonymousClassMemberNode.class);
         }
     |
@@ -3918,7 +3918,7 @@ methodReturnType returns [NodeUnion<? extends TypeNode> ret]
     :
         splice[VoidTypeNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, VoidTypeNode.class);
         }
     |
@@ -3946,7 +3946,7 @@ constructorDeclaration returns [NodeUnion<? extends ConstructorDeclarationNode> 
     :
         splice[ConstructorDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ConstructorDeclarationNode.class);
         }
     |
@@ -3985,7 +3985,7 @@ constructorBody returns [NodeUnion<? extends ConstructorBodyNode> ret]
     :
         splice[ConstructorBodyNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ConstructorBodyNode.class);
         }
     |
@@ -4018,7 +4018,7 @@ methodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> ret]
     :
         splice[MethodDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MethodDeclarationNode.class);
         }
     |
@@ -4075,7 +4075,7 @@ fieldDeclaration returns [NodeUnion<? extends FieldDeclarationNode> ret]
     :   
         splice[FieldDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, FieldDeclarationNode.class);
         }
     |
@@ -4105,7 +4105,7 @@ interfaceBodyDeclarations returns [NodeUnion<? extends InterfaceMemberListNode> 
         (
             splice[InterfaceMemberListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, InterfaceMemberListNode.class);
             }
         |
@@ -4181,7 +4181,7 @@ interfaceBodyDeclaration returns [NodeUnion<? extends InterfaceMemberNode> ret]
     :
         splice[InterfaceMemberNode.class, Arrays.<Class<? extends Node>>asList(ConstantDeclarationNode.class, MethodDeclarationNode.class, ClassDeclarationNode.class, EnumDeclarationNode.class, InterfaceDeclarationNode.class, AnnotationDeclarationNode.class, NoOperationNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, InterfaceMemberNode.class);
         }
     |
@@ -4232,7 +4232,7 @@ interfaceMethodDeclaration returns [NodeUnion<? extends MethodDeclarationNode> r
         // TODO: replace with an interface-specific node type
         splice[MethodDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, MethodDeclarationNode.class);
         }
     |
@@ -4283,7 +4283,7 @@ constantDeclaration returns [NodeUnion<? extends ConstantDeclarationNode> ret]
     :   
         splice[ConstantDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ConstantDeclarationNode.class);
         }
     |
@@ -4314,7 +4314,7 @@ variableDeclarators returns [NodeUnion<? extends VariableDeclaratorListNode> ret
         (
             splice[VariableDeclaratorListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, VariableDeclaratorListNode.class);
             }
         |
@@ -4396,7 +4396,7 @@ variableDeclarator returns [NodeUnion<? extends VariableDeclaratorNode> ret]
     :
         splice[VariableDeclaratorNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, VariableDeclaratorNode.class);
         }
     |
@@ -4429,7 +4429,7 @@ unparameterizedType returns [NodeUnion<? extends UnparameterizedTypeNode> ret]
     :
         splice[UnparameterizedTypeNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, UnparameterizedTypeNode.class);
         }
     |   
@@ -4452,7 +4452,7 @@ unparameterizedTypeList returns [NodeUnion<? extends UnparameterizedTypeListNode
         (
             splice[UnparameterizedTypeListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, UnparameterizedTypeListNode.class);
             }
         |
@@ -4580,7 +4580,7 @@ type returns [NodeUnion<? extends TypeNode> ret]
         (
             splice[TypeNode.class, Arrays.<Class<? extends Node>>asList(PrimitiveTypeNode.class, DeclaredTypeNode.class, VoidTypeNode.class)]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, TypeNode.class);
             }
         |   
@@ -4647,7 +4647,7 @@ classOrInterfaceType returns [NodeUnion<? extends DeclaredTypeNode> ret]
     |
         splice[ParameterizedTypeNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ParameterizedTypeNode.class);
             parameterizedTypeNode = $ret.castNodeType(factory, ParameterizedTypeNode.class);
         }
@@ -4661,7 +4661,7 @@ classOrInterfaceType returns [NodeUnion<? extends DeclaredTypeNode> ret]
     |
         splice[DeclaredTypeNode.class, Arrays.<Class<? extends Node>>asList(UnparameterizedTypeNode.class, ParameterizedTypeNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, DeclaredTypeNode.class);
         }
     ;
@@ -4684,7 +4684,7 @@ primitiveType returns [NodeUnion<? extends PrimitiveTypeNode> ret]
     :   
         splice[PrimitiveTypeNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, PrimitiveTypeNode.class);
         }
     |   
@@ -4748,7 +4748,7 @@ typeArguments returns [NodeUnion<? extends TypeArgumentListNode> ret]
         (
             splice[TypeArgumentListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, TypeArgumentListNode.class);
             }
         |
@@ -4833,7 +4833,7 @@ typeArgument returns [NodeUnion<? extends TypeArgumentNode> ret]
     :
         splice[TypeArgumentNode.class, Arrays.<Class<? extends Node>>asList(ReferenceTypeNode.class, WildcardTypeNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, TypeArgumentNode.class);
         }
     |
@@ -4860,7 +4860,7 @@ wildcard returns [NodeUnion<? extends WildcardTypeNode> ret]
     :
         splice[WildcardTypeNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, WildcardTypeNode.class);
         }
     |
@@ -4952,7 +4952,7 @@ normalParameterDecls returns [NodeUnion<? extends VariableListNode> ret]
         (
             splice[VariableListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, VariableListNode.class);
             }
         |
@@ -5030,7 +5030,7 @@ normalParameterDecl returns [NodeUnion<? extends VariableNode> ret]
     :
         splice[VariableNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, VariableNode.class);
         }
     |
@@ -5129,7 +5129,7 @@ explicitConstructorInvocation returns [NodeUnion<? extends ConstructorInvocation
     :
         splice[ConstructorInvocationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ConstructorInvocationNode.class);
         }
     |
@@ -5157,7 +5157,7 @@ annotations returns [NodeUnion<? extends AnnotationListNode> ret]
         (
             splice[AnnotationListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, AnnotationListNode.class);
             }
         |
@@ -5239,7 +5239,7 @@ annotation returns [NodeUnion<? extends AnnotationNode> ret]
     :
         splice[AnnotationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnnotationNode.class);
         }
     |
@@ -5291,7 +5291,7 @@ elementValuePairs returns [NodeUnion<? extends AnnotationElementListNode> ret]
         (
             splice[AnnotationElementListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, AnnotationElementListNode.class);
             }
         |
@@ -5375,7 +5375,7 @@ elementValuePair returns [NodeUnion<? extends AnnotationElementNode> ret]
     :
         splice[AnnotationElementNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnnotationElementNode.class);
         }
     |
@@ -5405,7 +5405,7 @@ elementValue returns [NodeUnion<? extends AnnotationValueNode> ret]
     :   
         splice[AnnotationValueNode.class, Arrays.<Class<? extends Node>>asList(AnnotationArrayValueNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnnotationValueNode.class);
         }
     |
@@ -5439,7 +5439,7 @@ elementValues returns [NodeUnion<? extends AnnotationValueListNode> ret]
         (
             splice[AnnotationValueListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, AnnotationValueListNode.class);
             }
         |
@@ -5526,7 +5526,7 @@ elementValueArrayInitializer returns [NodeUnion<? extends AnnotationArrayValueNo
     :   
         splice[AnnotationArrayValueNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnnotationArrayValueNode.class);
         }
     |
@@ -5552,7 +5552,7 @@ annotationTypeDeclaration returns [NodeUnion<? extends AnnotationDeclarationNode
     :   
         splice[AnnotationDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnnotationDeclarationNode.class);
         }
     |
@@ -5580,7 +5580,7 @@ annotationTypeBody returns [NodeUnion<? extends AnnotationBodyNode> ret]
     :   
         splice[AnnotationBodyNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnnotationBodyNode.class);
         }
     |
@@ -5606,7 +5606,7 @@ annotationTypeElementDeclarations returns [NodeUnion<? extends AnnotationMemberL
         (
             splice[AnnotationMemberListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, AnnotationMemberListNode.class);
             }
         |
@@ -5732,7 +5732,7 @@ annotationMethodDeclaration returns [NodeUnion<? extends AnnotationMethodDeclara
     :   
         splice[AnnotationMethodDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, AnnotationMethodDeclarationNode.class);
         }
     |
@@ -5785,7 +5785,7 @@ blockStatementList returns [NodeUnion<? extends BlockStatementListNode> ret]
         (
             splice[BlockStatementListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, BlockStatementListNode.class);
             }
         |
@@ -5862,7 +5862,7 @@ blockStatement returns [NodeUnion<? extends BlockStatementNode> ret]
     :   
         splice[BlockStatementNode.class, Arrays.<Class<? extends Node>>asList(LocalVariableDeclarationNode.class, LocalClassDeclarationNode.class, StatementNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, BlockStatementNode.class);
         }
     |
@@ -5901,7 +5901,7 @@ localVariableDeclarationStatement returns [NodeUnion<? extends LocalVariableDecl
     :
         splice[LocalVariableDeclarationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, LocalVariableDeclarationNode.class);
         }
     |
@@ -5945,7 +5945,7 @@ statement returns [NodeUnion<? extends StatementNode> ret]
     :
         splice[StatementNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, StatementNode.class);
         }
     |
@@ -6431,7 +6431,7 @@ catches returns [NodeUnion<? extends CatchListNode> ret]
         (
             splice[CatchListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, CatchListNode.class);
             }
         |
@@ -6507,7 +6507,7 @@ catchClause returns [NodeUnion<? extends CatchNode> ret]
     :   
         splice[CatchNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, CatchNode.class);
         }
     |
@@ -6550,7 +6550,7 @@ switchBlockStatementGroups returns [NodeUnion<? extends CaseListNode> ret]
         (
             splice[CaseListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, CaseListNode.class);
             }
         |
@@ -6626,7 +6626,7 @@ switchBlockStatementGroup returns [NodeUnion<? extends CaseNode> ret]
     :
         splice[CaseNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, CaseNode.class);
         }
     |
@@ -6705,7 +6705,7 @@ forInit returns [NodeUnion<? extends ForInitializerNode> ret]
     :   
         splice[ForInitializerNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ForInitializerNode.class);
         }
     |
@@ -6749,7 +6749,7 @@ statementExpressionList returns [NodeUnion<? extends StatementExpressionListNode
         (
             splice[StatementExpressionListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, StatementExpressionListNode.class);
             }
         |
@@ -6828,7 +6828,7 @@ expressionList returns [NodeUnion<? extends ExpressionListNode> ret]
         (
             splice[ExpressionListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, ExpressionListNode.class);
             }
         |
@@ -6945,7 +6945,7 @@ assignmentExpression returns [NodeUnion<? extends ExpressionNode> ret]
         (
             splice[ExpressionNode.class, Arrays.<Class<? extends Node>>asList(NonAssignmentExpressionNode.class)]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, ExpressionNode.class);
             }
         |
@@ -7538,7 +7538,7 @@ postfixExpression returns [NodeUnion<? extends NonAssignmentExpressionNode> ret]
         (
             splice[NonAssignmentExpressionNode.class, Arrays.<Class<? extends Node>>asList(PrimaryExpressionNode.class)]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, NonAssignmentExpressionNode.class);
             }
         |
@@ -7579,7 +7579,7 @@ primary returns [NodeUnion<? extends PrimaryExpressionNode> ret]
         (
             splice[PrimaryExpressionNode.class, Arrays.<Class<? extends Node>>asList(RestrictedPrimaryExpressionNode.class, ArrayCreationNode.class)]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, PrimaryExpressionNode.class);
             }
         |
@@ -7615,7 +7615,7 @@ restrictedPrimary returns [NodeUnion<? extends RestrictedPrimaryExpressionNode> 
     :
         splice[RestrictedPrimaryExpressionNode.class, Arrays.<Class<? extends Node>>asList(UnqualifiedClassInstantiationNode.class, SuperFieldAccessNode.class, SuperMethodInvocationNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, RestrictedPrimaryExpressionNode.class);
         }
     |
@@ -7768,7 +7768,7 @@ unqualifiedClassInstantiation returns [NodeUnion<? extends UnqualifiedClassInsta
     :
         splice[UnqualifiedClassInstantiationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, UnqualifiedClassInstantiationNode.class);
         }
     |
@@ -7802,7 +7802,7 @@ superFieldAccess returns [NodeUnion<? extends SuperFieldAccessNode> ret]
     :
         splice[SuperFieldAccessNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, SuperFieldAccessNode.class);
         }
     |
@@ -7871,7 +7871,7 @@ superMethodInvocation returns [NodeUnion<? extends SuperMethodInvocationNode> re
     :
         splice[SuperMethodInvocationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, SuperMethodInvocationNode.class);
         }
     |
@@ -8119,7 +8119,7 @@ arrayCreator returns [NodeUnion<? extends ArrayCreationNode> ret]
     :   
         splice[ArrayCreationNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ArrayCreationNode.class);
         }
     |
@@ -8206,7 +8206,7 @@ arrayInstantiatorExpressionList returns [NodeUnion<? extends ExpressionListNode>
         (
             splice[ExpressionListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, ExpressionListNode.class);
             }
         |
@@ -8297,7 +8297,7 @@ variableInitializer returns [NodeUnion<? extends VariableInitializerNode> ret]
     :   
         splice[VariableInitializerNode.class, Arrays.<Class<? extends Node>>asList(ArrayInitializerNode.class, ExpressionNode.class)]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, VariableInitializerNode.class);
         }
     |   
@@ -8328,7 +8328,7 @@ variableInitializers returns [NodeUnion<? extends VariableInitializerListNode> r
         (
             splice[VariableInitializerListNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, VariableInitializerListNode.class);
             }
         |
@@ -8405,7 +8405,7 @@ arrayInitializer returns [NodeUnion<? extends ArrayInitializerNode> ret]
     :
         splice[ArrayInitializerNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, ArrayInitializerNode.class);
         }
     |   
@@ -8507,7 +8507,7 @@ name returns [NodeUnion<? extends NameNode> ret]
         (
             splice[NameNode.class, Arrays.<Class<? extends Node>>asList()]
             {
-                if ($splice.ret != null)
+                if ($splice.ret != null) // TODO: fix this with error nodes
                     $ret = $splice.ret.castNodeType(factory, NameNode.class);
             }
         |
@@ -8686,7 +8686,7 @@ identifier returns [NodeUnion<? extends IdentifierNode> ret]
     :
         splice[IdentifierNode.class, Arrays.<Class<? extends Node>>asList()]
         {
-            if ($splice.ret != null)
+            if ($splice.ret != null) // TODO: fix this with error nodes
                 $ret = $splice.ret.castNodeType(factory, IdentifierNode.class);
         }
     |
