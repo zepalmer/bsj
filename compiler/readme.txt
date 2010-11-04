@@ -3,6 +3,7 @@ Each subdirectory in this directory (with the exception of "docs") represents a 
 Project Name        Dependencies               Purpose
 ===============================================================================
 api                                            public API for BSJ
+build-tools                                    provide BSJ-specific build utils
 devutils            api, generator, parser,
                     utils                      developer utilities
 generator           api, parser, utils         BSJ compiler implementation
