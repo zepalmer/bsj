@@ -212,7 +212,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 						this.metacompilationContext.getDiagnosticListener(), this.anchor.getStartLocation()), loader,
 						this.metacompilationContext.getToolkit().getTypecheckerFactory());
 
-		Metaprogram<ExplicitMetaprogramAnchorNode<R>, R> metaprogram = compileMetaprogram(metaprogramNode,
+		Metaprogram<ExplicitMetaprogramAnchorNode<R>, R> metaprogram = compileMetaprogram(metaprogramNode, anchor,
 				anchor.getClass().getName(), anchor.getReplacementType().getName(),
 				this.metacompilationContext.getDiagnosticListener());
 
@@ -226,7 +226,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 	}
 
 	private <A extends ExplicitMetaprogramAnchorNode<B>, B extends Node> Metaprogram<A, B> compileMetaprogram(
-			MetaprogramNode metaprogramNode, String anchorClassName, String replacementClassName,
+			MetaprogramNode metaprogramNode, A anchor, String anchorClassName, String replacementClassName,
 			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException
 	{
 		String metaprogramDescription = null;
@@ -246,18 +246,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		}
 
 		// Find compilation unit
-		CompilationUnitNode compilationUnitNode = null;
-		{
-			Node node = metaprogramNode;
-			while (node != null && !(node instanceof CompilationUnitNode))
-			{
-				node = node.getParent();
-			}
-			if (node != null)
-			{
-				compilationUnitNode = (CompilationUnitNode) node;
-			}
-		}
+		CompilationUnitNode compilationUnitNode = anchor.getNearestAncestorOfType(CompilationUnitNode.class);
 
 		// Get global imports
 		if (compilationUnitNode != null)
