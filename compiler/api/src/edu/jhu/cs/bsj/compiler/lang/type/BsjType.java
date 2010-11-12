@@ -145,7 +145,7 @@ public interface BsjType extends TypeMirror
 
 	/**
 	 * Determines whether or not there exists a narrowing reference conversion (JLSv3 §5.1.6) from this type to another
-	 * type.
+	 * type.  If this type and the other type represent the same type, this method returns <code>true</code>.
 	 * 
 	 * @param type The other type.
 	 * @return <code>true</code> if a narrowing reference conversion exists; <code>false</code> if not.
@@ -154,7 +154,7 @@ public interface BsjType extends TypeMirror
 
 	/**
 	 * Determines whether or not there exists a widening reference conversion (JLSv3 §5.1.5) from this type to another
-	 * type.
+	 * type.  If this type and the other type represent the same type, this method returns <code>true</code>.
 	 * 
 	 * @param type The other type.
 	 * @return <code>true</code> if a widening reference conversion exists; <code>false</code> if not.

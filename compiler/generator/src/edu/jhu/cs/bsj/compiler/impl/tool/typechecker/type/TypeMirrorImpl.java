@@ -132,7 +132,7 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 		if (boxed != null && boxed.isWideningReferenceConversionTo(type))
 			return true;
 
-		if (this.unboxConvert().isWideningPrimitiveConversionTo(type))
+		if (this.unboxConvert().equals(type) || this.unboxConvert().isWideningPrimitiveConversionTo(type))
 			return true;
 		
 		if (this.isSelectionConversionTo(type))
