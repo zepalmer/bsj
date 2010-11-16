@@ -1,0 +1,40 @@
+#import edu.jhu.cs.bsj.stdlib.metaannotations.BigIntegerOperatorOverloading;
+
+import java.math.BigInteger;
+import java.lang.Long;
+
+public class BigIntegerOperatorOverloadingClass{
+
+	public static void main(String[] args) {
+		
+	}
+	@@BigIntegerOperatorOverloading
+	public void Foo(){
+		BigInteger b1 = new BigInteger("134311");
+		BigInteger b2 = new BigInteger("24343");
+		Long b4 = new Long("134311");
+		BigInteger b5 = new BigInteger("24343");
+	
+		BigInteger b3;
+		 b3= b1+b2+b4+b5;
+		 b3++;
+		 //b3 < b2;
+		 if(b5 < b2){
+			 System.out.println("hmmmmmmmm");
+		 }else if(b3 >= b2){
+			 System.out.println("hqf");
+		 }else if(b5==b5){
+			 System.out.println("ok");
+		 }
+		
+	}
+/*	public void bar(){
+		BigInteger b1 = new BigInteger("134311");
+		BigInteger b2 = new BigInteger("24343");
+		BigInteger b3;
+		@@OperatorOverloading
+		 b3= b1+b2;
+
+	}*/
+
+}
