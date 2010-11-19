@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="BSJ Generator/dist/bsj-full.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/BSJ Generator/descriptors/bsj-full-export-jar-descriptor.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" mainClassHandleIdentifier="=BSJ Generator/src&lt;edu.jhu.cs.bsj.compiler.impl.tool.bsjc{BsjC.java[BsjC" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <javaElement handleIdentifier="=BSJ Standard Libraries/src"/>
+        <javaElement handleIdentifier="=BSJ Parser/src"/>
+        <javaElement handleIdentifier="=BSJ Generator/src"/>
+        <javaElement handleIdentifier="=BSJ Generator/classpath"/>
+        <javaElement handleIdentifier="=BSJ Utilities/classpath"/>
+        <javaElement handleIdentifier="=BSJ Utilities/src"/>
+        <javaElement handleIdentifier="=BSJ Compiler API/src"/>
+    </selectedElements>
+</jardesc>

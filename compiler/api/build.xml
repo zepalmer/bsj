@@ -1,45 +1,57 @@
-<project name="BSJ API" default="build" basedir=".">
-	<property name="src" location="src"/>
-	<property name="bin" location="bin"/>
-	<property name="lib" location="lib"/>
-	<property name="javadoc" location="javadoc"/>
-	
-	<path id="build.classpath">
-		<fileset dir="lib">
-			<include name="*.jar"/>
-		</fileset>
-	</path>
-	
-	<target name="javadoc">
-        <delete dir="${javadoc}"/>
-        <mkdir dir="${javadoc}"/>
-        <javadoc
-            access="protected"
-            destdir="${javadoc}"
-            author="true"
-            version="true"
-            windowtitle="BSJ Compiler API">
-            <link href="http://java.sun.com/javase/6/docs/api/"/>
-            <fileset dir="${src}">
-                <include name="**/*.java"/>
-            </fileset>
-        </javadoc>
-	</target>
-
-	<target name="build">
-        <mkdir dir="${bin}"/>
-        <javac srcdir="${src}" destdir="${bin}" debug="${build.debug}">
-			<classpath refid="build.classpath"/>
-		</javac>
-        <copy todir="${bin}">
-            <fileset dir="classpath/">
-                <include name="**"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="BSJ Compiler API">
+    <property environment="env"/>
+    <property name="BSJ Generator.location" value="../generator"/>
+    <property name="BSJ Parser.location" value="../parser"/>
+    <property name="BSJ Standard Libraries.location" value="../stdlib"/>
+    <property name="BSJ Utilities.location" value="../utils"/>
+    <property name="Dev Utilities.location" value="../devutils"/>
+    <property name="Tests.location" value="../tests"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="BSJ Compiler API.classpath">
+        <pathelement location="bin"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
             </fileset>
         </copy>
-	</target>
-	
-	<target name="clean">
-		<delete dir="${bin}"/>
-        <delete dir="${javadoc}"/>
-	</target>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="BSJ Compiler API.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
+        <ant antfile="build.xml" dir="${BSJ Generator.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${BSJ Generator.location}" inheritAll="false" target="build"/>
+        <ant antfile="build.xml" dir="${BSJ Parser.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${BSJ Parser.location}" inheritAll="false" target="build"/>
+        <ant antfile="build.xml" dir="${BSJ Standard Libraries.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${BSJ Standard Libraries.location}" inheritAll="false" target="build"/>
+        <ant antfile="build.xml" dir="${BSJ Utilities.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${BSJ Utilities.location}" inheritAll="false" target="build"/>
+        <ant antfile="build.xml" dir="${Dev Utilities.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${Dev Utilities.location}" inheritAll="false" target="build"/>
+        <ant antfile="build.xml" dir="${Tests.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${Tests.location}" inheritAll="false" target="build"/>
+    </target>
 </project>

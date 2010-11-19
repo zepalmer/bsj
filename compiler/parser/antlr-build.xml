@@ -13,9 +13,7 @@
     </description>
 
 	<!-- Names the ANTLR grammar file. -->
-	<property name="grammar" value="src/edu/jhu/cs/bsj/compiler/grammar/BsjAntlr.g" />
-	<!-- Names the directory which should contain the sources on which the parser depends. -->
-	<property name="presrc" value="src-pre" />
+	<property name="grammar" value="resources/grammar/BsjAntlr.g" />
 	<!-- Names the directory which will contain the generated sources. -->
 	<property name="gensrc" value=".gen/src" />
 	<!-- Names the directory which will contain the compiled ANTLR parser. -->
@@ -60,24 +58,13 @@
 	</taskdef>
 
 	<!-- - - - - - - - - - - - - - - - - - 
-          target: prebuild                      
-         - - - - - - - - - - - - - - - - - -->
-	<target name="prebuild" description="Builds the sources on which the ANTLR parser depends">
-		<mkdir dir="${genbin}" />
-		<javac destdir="${genbin}" srcdir="${presrc}" debug="true">
-			<classpath refid="parser.classpath" />
-		</javac>
-	</target>
-
-	<!-- - - - - - - - - - - - - - - - - - 
           target: antlr                      
          - - - - - - - - - - - - - - - - - -->
-	<target name="antlr" depends="prebuild" description="Uses ANTLR to generate the parser's source files">
+	<target name="antlr" description="Uses ANTLR to generate the parser's source files">
 		<mkdir dir="${parserPackage}" />
 		<antlr xmlns:antlr="antlib:org/apache/tools/ant/antlr" target="${grammar}" outputdirectory="${parserPackage}" conversiontimeout="100000">
 			<jvmarg value="-Xmx1024m" />
 		</antlr>
-		<mkdir dir="${genbin}" />
 		<javac destdir="${genbin}" srcdir="${gensrc}" debug="true">
 			<classpath refid="parser.classpath" />
 		</javac>
@@ -88,9 +75,5 @@
           target: clean                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="clean" description="Cleans the project">
-		<delete dir="${gensrc}" />
-		<mkdir dir="${gensrc}" />
-		<delete dir="${genbin}" />
-		<mkdir dir="${genbin}" />
 	</target>
 </project>

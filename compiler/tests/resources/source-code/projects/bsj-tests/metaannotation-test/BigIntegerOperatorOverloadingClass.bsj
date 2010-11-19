@@ -20,11 +20,11 @@ public class BigIntegerOperatorOverloadingClass{
 		 b3++;
 		 //b3 < b2;
 		 if(b5 < b2){
-			 System.out.println("hmmmmmmmm");
+			 
 		 }else if(b3 >= b2){
-			 System.out.println("hqf");
+			 
 		 }else if(b5==b5){
-			 System.out.println("ok");
+			 
 		 }
 		
 	}

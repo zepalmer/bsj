@@ -1,29 +1,60 @@
-<project name="BSJ Standard Libraries" default="build" basedir=".">
-	<property name="src" location="src"/>
-	<property name="bin" location="bin"/>
-	<property name="lib" location="lib"/>
-	
-	<path id="build.classpath">
-		<fileset dir="lib">
-			<include name="*.jar"/>
-		</fileset>
-		<path refid="api.bin"/>
-		<path refid="utils.bin"/>
-	</path>
-
-	<target name="build">
-        <mkdir dir="${bin}"/>
-        <javac srcdir="${src}" destdir="${bin}" debug="${build.debug}">
-			<classpath refid="build.classpath"/>
-		</javac>
-        <copy todir="${bin}">
-            <fileset dir="classpath/">
-                <include name="**"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="BSJ Standard Libraries">
+    <property environment="env"/>
+    <property name="Tests.location" value="../tests"/>
+    <property name="BSJ Compiler API.location" value="../api"/>
+    <property name="BSJ Utilities.location" value="../utils"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="BSJ Compiler API.classpath">
+        <pathelement location="${BSJ Compiler API.location}/bin"/>
+    </path>
+    <path id="BSJ Utilities.classpath">
+        <pathelement location="${BSJ Utilities.location}/bin"/>
+        <path refid="BSJ Compiler API.classpath"/>
+        <pathelement location="${BSJ Utilities.location}/lib/log4j-1.2.15.jar"/>
+    </path>
+    <path id="BSJ Standard Libraries.classpath">
+        <pathelement location="bin"/>
+        <path refid="BSJ Compiler API.classpath"/>
+        <path refid="BSJ Utilities.classpath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
             </fileset>
         </copy>
-	</target>
-	
-	<target name="clean">
-		<delete dir="${bin}"/>
-	</target>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall">
+        <ant antfile="build.xml" dir="${BSJ Compiler API.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${BSJ Utilities.location}" inheritAll="false" target="clean"/>
+    </target>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects">
+        <ant antfile="build.xml" dir="${BSJ Compiler API.location}" inheritAll="false" target="build-project"/>
+        <ant antfile="build.xml" dir="${BSJ Utilities.location}" inheritAll="false" target="build-project"/>
+    </target>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="BSJ Standard Libraries.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
+        <ant antfile="build.xml" dir="${Tests.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${Tests.location}" inheritAll="false" target="build"/>
+    </target>
 </project>
