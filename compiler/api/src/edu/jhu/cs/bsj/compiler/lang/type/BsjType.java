@@ -168,4 +168,13 @@ public interface BsjType extends TypeMirror
 	 */
 	public boolean isSelectionConversionTo(BsjType type);
 
+	/**
+	 * Determines whether this type is equal to another type.
+	 */
+	public boolean equals(Object o);
+	
+	/**
+	 * Calculates a hash code for this type.
+	 */
+	public int hashCode();
 }

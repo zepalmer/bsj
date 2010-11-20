@@ -1,11 +1,15 @@
 package edu.jhu.cs.bsj.compiler.lang;
 
+import java.util.Collection;
 import java.util.List;
 
+import edu.jhu.cs.bsj.compiler.ast.TypedValue;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
 
 /**
  * This factory is capable of producing objects which model the BSJ language. TODO: more complete interface
@@ -37,4 +41,19 @@ public interface BsjModelingFactory
 	 * @throws IllegalArgumentException If the specified class is not on the metaprogram classpath.
 	 */
 	public BsjActualType makeMetaprogramClasspathType(Class<?> clazz) throws IllegalArgumentException;
+
+	/**
+	 * Creates a {@link BsjIntersectionType} to represent an intersection type (as per JLSv3 &#A7;4.9).
+	 * @param supertypes The supertypes of the intersection type.
+	 * @return The resulting intersection type.
+	 */
+    public BsjIntersectionType makeIntersectionType(List<BsjTypeArgument> supertypes);
+    
+    /**
+     * Creates a BSJ {@link SelectionBag} value.
+     * @param elements The elements for the selection bag.  Each element is tagged with the type it has in the bag,
+     * which may be less specific that its actual type.
+     * @return The selection bag representing these elements.
+     */
+    public <T> SelectionBag<T> makeSelectionBag(Collection<? extends TypedValue<T>> elements);
 }

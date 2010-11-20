@@ -11,14 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.tools.Diagnostic.Kind;
-
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
-import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
+import edu.jhu.cs.bsj.compiler.ast.TypedValue;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
@@ -73,27 +70,22 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
-import edu.jhu.cs.bsj.compiler.impl.diagnostic.NoOperationDiagnosticListener;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.codeliteral.CodeLiteralEvaluator;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.VariableNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ErrorTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PackagePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.value.CodeLiteralSelectionBagImpl;
-import edu.jhu.cs.bsj.compiler.impl.utils.HashBag;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
-import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.impl.utils.TwoElementImmutableSet;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
-import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
@@ -114,7 +106,6 @@ import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
 import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.ParseRule;
-import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
 import edu.jhu.cs.bsj.compiler.utils.Bag;
 
 /**
@@ -1549,53 +1540,11 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
     {
         TypecheckerMetadataImpl metadata = new TypecheckerMetadataImpl();
 
-        // TODO: perform these parsing operations lazily; create a specialized type which will only evaluate these
-        // parse values on demand
+        CodeLiteralEvaluator evaluator = new CodeLiteralEvaluator(this.manager.getTypechecker(),
+                this.parser);
+        Bag<TypedValue<Node>> parseResultBag = evaluator.evaluateRawCodeLiteral(node);
 
-        Bag<Pair<NodeUnion<?>, BsjActualType>> parseResultBag = new HashBag<Pair<NodeUnion<?>, BsjActualType>>();
-        for (ParseRule<?> rule : ParseRule.values())
-        {
-            CountingDiagnosticProxyListener<BsjSourceLocation> listener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
-                    new NoOperationDiagnosticListener<BsjSourceLocation>());
-            final BsjTypechecker typechecker = this.manager.getTypechecker();
-            final Node typecheckingContextNode = node;
-            NodeUnion<?> result = this.parser.parse(node.getValue(), rule, typechecker, typecheckingContextNode,
-                    listener);
-            if (listener.getCount(Kind.ERROR) > 0)
-            {
-                // TODO: perhaps preserve these diagnostics for use later?
-                continue;
-            }
-
-            // Establish component type
-            List<BsjTypeArgument> baseTypes = new ArrayList<BsjTypeArgument>();
-            for (Class<?> clazz : rule.getBottomMostClasses())
-            {
-                BsjType type = this.manager.getModelingFactory().makeMetaprogramClasspathType(clazz);
-                if (type instanceof BsjTypeArgument)
-                {
-                    baseTypes.add((BsjTypeArgument) type);
-                } else
-                {
-                    throw new IllegalStateException("Code literal bottom-most type is not usable as a type argument: "
-                            + clazz);
-                }
-            }
-
-            // TODO: fix this bit - it breaks down if the top-level node in the literal is not a normal node
-            // this fix is going to involve a change to the spec somehow since the parse rule return types specified
-            // in the BLS don't say anything about returning a node union
-            BsjActualType resultType = this.manager.getModelingFactory().makeMetaprogramClasspathType(
-                    result.getNodeValue().getClass());
-
-            // Reduce the type of the captured literal to something implementation-independent
-            resultType = codeLiteralTypeReduction(resultType, baseTypes);
-
-            // Aggregate data for the raw code literal record
-            parseResultBag.add(new Pair<NodeUnion<?>, BsjActualType>(result, resultType));
-        }
-
-        SelectionBag<NodeUnion<?>> codeLiteralValueBag = new CodeLiteralSelectionBagImpl<NodeUnion<?>>(this.manager,
+        SelectionBag<Node> codeLiteralValueBag = new CodeLiteralSelectionBagImpl<Node>(this.manager,
                 parseResultBag);
         metadata.addRawCodeLiteralParseResult(node, new RawCodeLiteralParseResultImpl(codeLiteralValueBag));
         if (env.getExpectedType() != null)
@@ -2879,38 +2828,6 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
             }
         }
         return rules;
-    }
-
-    /**
-     * Reduces the specified type based on the provided collection of types. The resulting type will be either a type
-     * from that collection (if the specified type is a subtype of exactly one of the types in the collection) or an
-     * intersection of several of the collection types (if the type is a subtype of multiple types in the collection).
-     * If the provided type is not a subtype of any of the types in the collection, an exception is raised.
-     * 
-     * @param type The starting type.
-     * @param types The base types.
-     * @return The resulting reduced type.
-     */
-    private BsjTypeArgument codeLiteralTypeReduction(BsjType type, Collection<? extends BsjTypeArgument> types)
-    {
-        List<BsjTypeArgument> supertypes = new ArrayList<BsjTypeArgument>();
-        for (BsjTypeArgument baseType : types)
-        {
-            if (type.isSubtypeOf(baseType))
-            {
-                supertypes.add(baseType);
-            }
-        }
-        if (supertypes.size() == 0)
-        {
-            throw new IllegalStateException("Cannot reduce: no subtypes apply.");
-        } else if (supertypes.size() == 1)
-        {
-            return supertypes.get(0);
-        } else
-        {
-            return new IntersectionTypeImpl(this.manager, supertypes);
-        }
     }
 
     /**

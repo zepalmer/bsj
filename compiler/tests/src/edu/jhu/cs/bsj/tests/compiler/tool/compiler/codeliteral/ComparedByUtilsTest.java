@@ -49,7 +49,7 @@ public class ComparedByUtilsTest extends AbstractBsjCompilerTest
         expectNoErrors(diagnostics);
 
         // Ensure that the Person class compiled
-        Class<?> c = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass("Person");
+        bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass("Person");
     }
 
     protected void expectNoErrors(List<Diagnostic<? extends BsjSourceLocation>> diagnostics)

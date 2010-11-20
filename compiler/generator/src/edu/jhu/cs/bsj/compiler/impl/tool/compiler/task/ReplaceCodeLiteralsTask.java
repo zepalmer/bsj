@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
@@ -46,16 +46,32 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 		final int[] count = new int[] { 0 };
 		this.root.receiveTyped(new BsjTypedNodeNoOpVisitor()
 		{
+		    private int metaAnnotationLevels = 0;
+		    
 			@Override
+            public void visitMetaAnnotationNodeStart(MetaAnnotationNode node)
+            {
+                this.metaAnnotationLevels++;
+            }
+
+            @Override
+            public void visitMetaAnnotationNodeStop(MetaAnnotationNode node)
+            {
+                this.metaAnnotationLevels--;
+            }
+
+            @Override
 			public void visitCodeLiteralNodeStart(CodeLiteralNode node, boolean mostSpecific)
 			{
-				count[0]++;
+                if (this.metaAnnotationLevels == 0)
+                    count[0]++;
 			}
 
 			@Override
 			public void visitRawCodeLiteralNodeStart(RawCodeLiteralNode node, boolean mostSpecific)
 			{
-				count[0]++;
+                if (this.metaAnnotationLevels == 0)
+                    count[0]++;
 			}
 		});
 		if (count[0] == 0)
@@ -87,7 +103,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 	 * @param metadata The metadata from typechecking.
 	 * @return The code literal to use.
 	 */
-	private NodeUnion<?> interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node,
+	private Node interpretRawCodeLiteral(MetacompilationContext context, RawCodeLiteralNode node,
 			TypecheckerMetadata metadata)
 	{
 		BsjType inContextType;
@@ -99,7 +115,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 		{
 			inContextType = metadata.getInContextType(node);
 		}
-		Collection<? extends NodeUnion<?>> results = metadata.getParseResult(node).getSelectionBag().selectAll(
+		Collection<? extends Node> results = metadata.getParseResult(node).getSelectionBag().selectAll(
 				inContextType);
 		if (results.size() == 0)
 		{
@@ -211,9 +227,26 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 			if (levels == 0 && node.getParent() != null)
 			{
 				nodeReplacementMap.put(node,
-						liftNode(context, interpretRawCodeLiteral(context, node, metadata).getNodeValue()));
+						liftNode(context, interpretRawCodeLiteral(context, node, metadata)));
 			}
 		}
+		
+		// NOTE: the below methods are present because code literals which appear in meta-annotations do not need to
+		// be replaced - they're going to be stripped later anyway and there's no sensible way to create a factory
+		// expression for them.
+
+        @Override
+        public void visitMetaAnnotationNodeStart(MetaAnnotationNode node)
+        {
+            this.levels++;
+        }
+
+        @Override
+        public void visitMetaAnnotationNodeStop(MetaAnnotationNode node)
+        {
+            this.levels--;
+        }
+
 	}
 
 }
