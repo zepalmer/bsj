@@ -24,6 +24,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.NodeListAdapter;
 import edu.jhu.cs.bsj.compiler.impl.ast.NodeListImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.ConversionList;
@@ -41,12 +42,12 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(ListNodeImpl.this);
+            attribute = new ReadWriteAttribute(ListNodeImpl.this, attributeName);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
     }
-    private static enum LocalAttribute
+    private static enum LocalAttribute implements AttributeName
     {
         /** Attribute identifier for the children property. */
         CHILDREN,

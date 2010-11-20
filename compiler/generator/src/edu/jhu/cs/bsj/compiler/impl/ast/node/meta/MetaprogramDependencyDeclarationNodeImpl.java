@@ -20,6 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNod
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -35,12 +36,12 @@ public class MetaprogramDependencyDeclarationNodeImpl extends NodeImpl implement
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(MetaprogramDependencyDeclarationNodeImpl.this);
+            attribute = new ReadWriteAttribute(MetaprogramDependencyDeclarationNodeImpl.this, attributeName);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
     }
-    private static enum LocalAttribute
+    private static enum LocalAttribute implements AttributeName
     {
         /** Attribute identifier for the targets property. */
         TARGETS,

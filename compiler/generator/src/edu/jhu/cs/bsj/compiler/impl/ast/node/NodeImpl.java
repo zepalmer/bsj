@@ -21,7 +21,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNameBindingNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.StringName;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MultipleParentNodeExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.EmptyIterator;
@@ -46,12 +48,12 @@ public abstract class NodeImpl implements Node
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(NodeImpl.this);
+            attribute = new ReadWriteAttribute(NodeImpl.this, attributeName);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
     }
-    private static enum LocalAttribute
+    private static enum LocalAttribute implements AttributeName
     {
         /** Attribute identifier for the startLocation property. */
         START_LOCATION,
@@ -178,10 +180,12 @@ public abstract class NodeImpl implements Node
     
     
     
-	/**
-	 * The parent attribute for this node.
-	 */
-	private ReadWriteAttribute parentAttribute = new ReadWriteAttribute(this);
+    private static final StringName PARENT_NAME = new StringName("parent");
+    
+    /**
+     * The parent attribute for this node.
+     */
+    private ReadWriteAttribute parentAttribute = new ReadWriteAttribute(this, PARENT_NAME);
 
 	/**
 	 * The next globally unique UID to assign.

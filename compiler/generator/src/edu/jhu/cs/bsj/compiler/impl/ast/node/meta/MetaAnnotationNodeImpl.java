@@ -19,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
@@ -38,12 +39,12 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(MetaAnnotationNodeImpl.this);
+            attribute = new ReadWriteAttribute(MetaAnnotationNodeImpl.this, attributeName);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
     }
-    private static enum LocalAttribute
+    private static enum LocalAttribute implements AttributeName
     {
         /** Attribute identifier for the annotationType property. */
         ANNOTATION_TYPE,

@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -31,12 +32,12 @@ public class NullLiteralNodeImpl extends NodeImpl implements NullLiteralNode
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(NullLiteralNodeImpl.this);
+            attribute = new ReadWriteAttribute(NullLiteralNodeImpl.this, attributeName);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
     }
-    private static enum LocalAttribute
+    private static enum LocalAttribute implements AttributeName
     {
         /** Attribute identifier for the value property. */
         VALUE,

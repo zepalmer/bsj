@@ -21,4 +21,10 @@ public interface MetaprogramAttributeConflictDiagnostic extends MetaprogramConfl
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.compiler.metaprogram.failure.conflict.attribute";
     
+    /**
+     * Retrieves the name of the attribute in conflict.
+     * @return The name of the attribute in conflict.
+     */
+    public String getAttributeName();
+    
 }

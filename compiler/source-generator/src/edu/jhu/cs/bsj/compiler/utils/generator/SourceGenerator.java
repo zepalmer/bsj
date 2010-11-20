@@ -1355,12 +1355,12 @@ public class SourceGenerator
                 ps.println("    ReadWriteAttribute attribute = localAttributes.get(attributeName);");
                 ps.println("    if (attribute == null)");
                 ps.println("    {");
-                ps.println("        attribute = new ReadWriteAttribute(" + rawclassname + ".this);");
+                ps.println("        attribute = new ReadWriteAttribute(" + rawclassname + ".this, attributeName);");
                 ps.println("        localAttributes.put(attributeName, attribute);");
                 ps.println("    }");
                 ps.println("    return attribute;");
                 ps.println("}");
-                ps.println("private static enum LocalAttribute");
+                ps.println("private static enum LocalAttribute implements AttributeName");
                 ps.println("{");
                 ps.incPrependCount();
                 for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))

@@ -18,12 +18,15 @@ public abstract class AbstractAttribute<T extends AccessType<T>> implements Attr
 	protected Set<AccessRecord<T>> accessRecords;
 	/** The node for which this attribute is being tracked. */
 	protected NodeImpl node;
+	/** The name for which this attribute was created. */
+	protected AttributeName name;
 
-	public AbstractAttribute(NodeImpl node)
+	public AbstractAttribute(NodeImpl node, AttributeName name)
 	{
 		super();
 		this.accessRecords = new HashSet<AccessRecord<T>>(0);
 		this.node = node;
+		this.name = name;
 	}
 	
 	@Override
@@ -43,7 +46,7 @@ public abstract class AbstractAttribute<T extends AccessType<T>> implements Attr
 		{
 			if (type.conflicts(record.getType()))
 			{
-				this.node.getManager().assertCooperation(record.getMetaprogramId(), this.node);
+				this.node.getManager().assertOrdering(record.getMetaprogramId(), this.node, this);
 			}
 		}
 		this.accessRecords.add(new AccessRecord<T>(type, metaprogramId));
@@ -120,4 +123,10 @@ public abstract class AbstractAttribute<T extends AccessType<T>> implements Attr
 		}
 		
 	}
+
+    @Override
+    public String getName()
+    {
+        return this.name.toString();
+    }
 }

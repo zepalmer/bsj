@@ -479,6 +479,7 @@
             <diagnostic name="MetaprogramAttributeConflictDiagnostic" super="MetaprogramConflictDiagnostic"
                 superTypeArg="MetaprogramAttributeConflictException" code="bsj.compiler.metaprogram.failure.conflict.attribute">
                 <exception />
+                <prop name="attributeName" type="String" desc="the name of the attribute in conflict" />
                 <doc><![CDATA[
                     Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
                     attribute of a given node.

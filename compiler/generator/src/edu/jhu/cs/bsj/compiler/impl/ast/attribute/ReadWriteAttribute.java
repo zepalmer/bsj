@@ -8,9 +8,9 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
  */
 public class ReadWriteAttribute extends AbstractAttribute<ReadWriteAttribute.AccessType>
 {
-	public ReadWriteAttribute(NodeImpl node)
+	public ReadWriteAttribute(NodeImpl node, AttributeName name)
 	{
-		super(node);
+		super(node, name);
 	}
 
 	/**

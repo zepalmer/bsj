@@ -29,9 +29,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.NonConflictingReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.PackageCompilationUnitAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.StringName;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.DuplicatePackageMemberExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
@@ -48,12 +50,12 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         ReadWriteAttribute attribute = localAttributes.get(attributeName);
         if (attribute == null)
         {
-            attribute = new ReadWriteAttribute(PackageNodeImpl.this);
+            attribute = new ReadWriteAttribute(PackageNodeImpl.this, attributeName);
             localAttributes.put(attributeName, attribute);
         }
         return attribute;
     }
-    private static enum LocalAttribute
+    private static enum LocalAttribute implements AttributeName
     {
         /** Attribute identifier for the name property. */
         NAME,
@@ -295,10 +297,12 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 * The attributes which are tracking access to compilation units.
 	 */
 	private Map<String, PackageCompilationUnitAttribute> compilationUnitAttributes = new HashMap<String, PackageCompilationUnitAttribute>();
+	private static final StringName ITERATOR_NAME = new StringName("<iterator>");
 	/**
 	 * An attribute to track the iterator for this node.
 	 */
-	private NonConflictingReadWriteAttribute iteratorAttribute = new NonConflictingReadWriteAttribute(this);
+	private NonConflictingReadWriteAttribute iteratorAttribute =
+	        new NonConflictingReadWriteAttribute(this, ITERATOR_NAME);
 
 	protected void fireCompilationUnitAdded(CompilationUnitNode compilationUnitNode, boolean purelyInjected)
 	{
@@ -323,7 +327,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		PackageCompilationUnitAttribute ret = this.compilationUnitAttributes.get(compilationUnitName);
 		if (ret == null)
 		{
-			ret = new PackageCompilationUnitAttribute(this);
+			ret = new PackageCompilationUnitAttribute(this, new StringName(compilationUnitName));
 			this.compilationUnitAttributes.put(compilationUnitName, ret);
 		}
 		return ret;

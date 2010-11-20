@@ -29,9 +29,10 @@ public class MetaprogramAttributeConflictExceptionImpl extends MetaprogramAttrib
     public MetaprogramAttributeConflictExceptionImpl(
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
-            Node conflictNode)
+            Node conflictNode,
+            String attributeName)
     {
-        super(firstAnchor, secondAnchor, conflictNode);
+        super(firstAnchor, secondAnchor, conflictNode, attributeName);
     }
     @Override
     public MetaprogramAttributeConflictDiagnostic getDiagnostic(BsjSourceLocation source)

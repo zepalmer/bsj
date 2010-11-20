@@ -50,7 +50,7 @@ public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
 
 	public Memoized()
 	{
-		super(Arrays.asList("memoized"), Collections.<String> emptyList(), Collections.<String> emptyList(),
+		super(Arrays.asList("memoized"), Collections.<String> emptyList(), Arrays.asList("operatorOverloading"),
 				MetaprogramLocalMode.MUTATE, MetaprogramPackageMode.READ_ONLY);
 	}
 

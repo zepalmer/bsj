@@ -26,4 +26,9 @@ public interface Attribute<T extends AccessType<T>>
 	 * @throws MetaprogramAttributeConflictException If a conflict has occurred.
 	 */
 	public void recordAccess(T type, Integer metaprogramId) throws MetaprogramAttributeConflictException;
+	
+	/**
+	 * Retrieves the name of this attribute.
+	 */
+	public String getName();
 }

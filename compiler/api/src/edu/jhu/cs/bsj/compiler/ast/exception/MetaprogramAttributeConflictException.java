@@ -25,12 +25,26 @@ public abstract class MetaprogramAttributeConflictException extends MetaprogramC
 {
     private static final long serialVersionUID = 1L;
     
+    /** The name of the attribute in conflict. */
+    private String attributeName;
+    
     public MetaprogramAttributeConflictException(
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
-            Node conflictNode)
+            Node conflictNode,
+            String attributeName)
     {
         super(firstAnchor, secondAnchor, conflictNode);
+        this.attributeName = attributeName;
+    }
+    
+    /**
+     * Retrieves the name of the attribute in conflict.
+     * @return The name of the attribute in conflict.
+     */
+    public String getAttributeName()
+    {
+        return this.attributeName;
     }
     
     /**

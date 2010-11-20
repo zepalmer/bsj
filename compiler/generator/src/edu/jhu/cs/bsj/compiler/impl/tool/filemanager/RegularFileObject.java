@@ -39,8 +39,9 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 		throws IOException
 	{
 		super(encodingName);
-		this.file = file.getCanonicalFile();
-		this.root = root.getCanonicalFile();
+		// these two were previously calling getCanonicalFile(), but that caused problems with symlinks
+		this.file = file;
+		this.root = root;
 		// validate root
 		StringBuilder binaryNameBuilder = new StringBuilder();
 		File f = this.file;

@@ -10,9 +10,9 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
  */
 public class PackageCompilationUnitAttribute extends AbstractAttribute<PackageCompilationUnitAttribute.AccessType>
 {
-	public PackageCompilationUnitAttribute(NodeImpl node)
+	public PackageCompilationUnitAttribute(NodeImpl node, AttributeName name)
 	{
-		super(node);
+		super(node, name);
 	}
 
 	@Override

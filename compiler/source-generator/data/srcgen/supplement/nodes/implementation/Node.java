@@ -2,6 +2,8 @@
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.StringName;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.*;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
@@ -12,10 +14,12 @@ import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
 public abstract class NodeImpl
 {
 	/* GEN:start */
-	/**
-	 * The parent attribute for this node.
-	 */
-	private ReadWriteAttribute parentAttribute = new ReadWriteAttribute(this);
+    private static final StringName PARENT_NAME = new StringName("parent");
+    
+    /**
+     * The parent attribute for this node.
+     */
+    private ReadWriteAttribute parentAttribute = new ReadWriteAttribute(this, PARENT_NAME);
 
 	/**
 	 * The next globally unique UID to assign.

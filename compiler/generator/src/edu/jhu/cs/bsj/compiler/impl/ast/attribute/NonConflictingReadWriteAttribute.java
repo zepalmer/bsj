@@ -8,9 +8,9 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
  */
 public class NonConflictingReadWriteAttribute extends AbstractAttribute<NonConflictingReadWriteAttribute.AccessType>
 {
-	public NonConflictingReadWriteAttribute(NodeImpl node)
+	public NonConflictingReadWriteAttribute(NodeImpl node, AttributeName name)
 	{
-		super(node);
+		super(node, name);
 	}
 
 	/**

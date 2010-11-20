@@ -28,6 +28,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.InsufficientPermissionExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramAttributeConflictExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.NoOperationDiagnosticListener;
@@ -301,7 +302,7 @@ public class BsjNodeManager
 	 * @param id The ID of the metaprogram to check.
 	 * @return <code>true</code> if the metaprograms cooperate; <code>false</code> if they do not.
 	 */
-	public boolean hasCooperation(int id)
+	public boolean hasOrdering(int id)
 	{
 		if (this.getDependencyManager() == null || getCurrentMetaprogramId() == null)
 			return true;
@@ -317,12 +318,13 @@ public class BsjNodeManager
 	 * 
 	 * @param id The ID of the metaprogram to check.
 	 * @param node The node that the two metaprograms are modifying.
+	 * @param attribute The attribute over which we are asserting ordering.
 	 * @throws MetaprogramConflictException If the metaprogram with the specified ID does not cooperate with the current
 	 *             metaprogram.
 	 */
-	public void assertCooperation(int id, Node node) throws MetaprogramConflictException
+	public void assertOrdering(int id, Node node, Attribute<?> attribute) throws MetaprogramConflictException
 	{
-		if (!hasCooperation(id))
+		if (!hasOrdering(id))
 		{
 			if (LOGGER.isDebugEnabled())
 			{
@@ -331,7 +333,8 @@ public class BsjNodeManager
 			}
 			throw new MetaprogramAttributeConflictExceptionImpl(this.getDependencyManager().getMetaprogramProfileByID(
 					id).getAnchor(),
-					this.getDependencyManager().getMetaprogramProfileByID(getCurrentMetaprogramId()).getAnchor(), node);
+					this.getDependencyManager().getMetaprogramProfileByID(getCurrentMetaprogramId()).getAnchor(), node,
+					attribute.getName());
 		}
 	}
 
