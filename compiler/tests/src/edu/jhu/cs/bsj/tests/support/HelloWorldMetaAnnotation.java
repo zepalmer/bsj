@@ -28,20 +28,50 @@ public class HelloWorldMetaAnnotation extends AbstractBsjMetaAnnotationMetaprogr
         System.out.println("*****************");
         System.out.println("* HELLO, WORLD! *");
         System.out.println("*****************");
-        System.out.println("I got the following identifier: " + id.getIdentifier());
+        if (this.id != null)
+        {
+            System.out.println("I got the following identifier: " + id.getIdentifier());
+        }
+        if (this.ids != null)
+        {
+            StringBuilder sb = new StringBuilder();
+            boolean first = true;
+            for (IdentifierNode id : this.ids)
+            {
+                if (!first)
+                    sb.append(',');
+                sb.append(id.getIdentifier());
+                first = false;
+            }
+            System.out.println("I got the following identifiers: " + sb.toString());
+        }
     }
-    
+
     private IdentifierNode id;
-    
+
     @BsjMetaAnnotationElementGetter
     public IdentifierNode getId()
     {
         return this.id;
     }
-    
+
     @BsjMetaAnnotationElementSetter
     public void setId(IdentifierNode id)
     {
         this.id = id;
+    }
+
+    private IdentifierNode[] ids;
+
+    @BsjMetaAnnotationElementGetter
+    public IdentifierNode[] getIds()
+    {
+        return this.ids;
+    }
+
+    @BsjMetaAnnotationElementSetter
+    public void setIds(IdentifierNode[] ids)
+    {
+        this.ids = ids;
     }
 }
