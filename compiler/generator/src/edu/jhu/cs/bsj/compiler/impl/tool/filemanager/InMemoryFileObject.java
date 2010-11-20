@@ -126,7 +126,7 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	@Override
 	public boolean exists()
 	{
-		return true;
+		return this.bytes != null;
 	}
 
 	@Override

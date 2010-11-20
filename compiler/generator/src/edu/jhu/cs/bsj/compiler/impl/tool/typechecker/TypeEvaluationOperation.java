@@ -812,8 +812,8 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
     @Override
     public TypecheckerResultImpl executeEnhancedForLoopNode(EnhancedForLoopNode node, TypecheckerEnvironment env)
     {
-        // TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled EnhancedForLoopNode.");
+        // TODO: ensure that the variable type is the type over which the expression iterates!
+        return expectNoError(env, new NonePseudoTypeImpl(this.manager), node.getChildIterable());
     }
 
     @Override
@@ -1263,9 +1263,22 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
         {
             // Establish the type of the qualifying expression and use that class.
             BsjType qualifyingType = executeComposingMetadata(node.getExpression(), env, metadata);
-            while (qualifyingType instanceof BsjTypeVariable)
+            while (qualifyingType instanceof BsjTypeVariable || qualifyingType instanceof BsjWildcardType)
             {
-                qualifyingType = ((BsjTypeVariable) qualifyingType).getUpperBound();
+                if (qualifyingType instanceof BsjTypeVariable)
+                {
+                    qualifyingType = ((BsjTypeVariable) qualifyingType).getUpperBound();
+                } else if (qualifyingType instanceof BsjWildcardType)
+                {
+                    BsjType bound = ((BsjWildcardType) qualifyingType).getExtendsBound();
+                    if (bound == null)
+                    {
+                        qualifyingType = this.manager.getToolkit().getObjectElement().asType();
+                    } else
+                    {
+                        qualifyingType = bound;
+                    }
+                }
             }
             if (qualifyingType instanceof BsjExplicitlyDeclaredType)
             {
@@ -1417,11 +1430,24 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
         // Once a method has been selected, impose the appropriate context on each of the code literals
         Iterator<Set<RawCodeLiteralNode>> lackingContextIterator = responsibleCodeLiterals.iterator();
         Iterator<? extends BsjType> parameterTypeIterator = mostSpecificMethod.getParameterTypes().iterator();
+        BsjType parameterType = null;
         while (lackingContextIterator.hasNext())
         {
-            // TODO: handle varargs
             Set<RawCodeLiteralNode> lackingContext = lackingContextIterator.next();
-            BsjType parameterType = parameterTypeIterator.next();
+            if (mostSpecificMethod.isVarargs())
+            {
+                if (parameterTypeIterator.hasNext())
+                {
+                    parameterType = parameterTypeIterator.next();
+                    if (!parameterTypeIterator.hasNext())
+                    {
+                        parameterType = ((BsjArrayType)parameterType).getComponentType();
+                    }
+                }
+            } else
+            {
+                parameterType = parameterTypeIterator.next();
+            }
             for (RawCodeLiteralNode literal : lackingContext)
             {
                 metadata.addRawCodeLiteralInContextType(literal, parameterType);
@@ -2671,8 +2697,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
                         final BsjType paramType;
                         if (i >= executableType.getParameterTypes().size() - 1)
                         {
-                            BsjArrayType arrayType = (BsjArrayType)(executableType.getParameterTypes().get(
-                                    executableType.getParameterTypes().size() - 1));
+                            BsjArrayType arrayType = (BsjArrayType) (executableType.getParameterTypes().get(executableType.getParameterTypes().size() - 1));
                             paramType = arrayType.getComponentType();
                         } else
                         {

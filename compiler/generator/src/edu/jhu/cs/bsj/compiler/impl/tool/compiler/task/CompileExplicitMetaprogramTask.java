@@ -362,7 +362,10 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
             return null;
         }
 
-        ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
+        // TODO: Consider: Leaving out the object program system classpath is good, right?  Otherwise, multiple versions
+        // of java.lang.Object would show up?
+        ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT,
+                BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH);
         Class<? extends Metaprogram<A, B>> metaprogramClass;
         try
         {

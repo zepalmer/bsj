@@ -7,7 +7,6 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
@@ -148,9 +147,7 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
 				}
 			} else
 			{
-				// TODO: It seems that the JLSv3 §4.5.1.1 is unclear on this point. What do we do?
-				// Is it the case that (? extends T <= ?) or can we not assume that?
-				throw new NotImplementedYetException();
+				return true;
 			}
 		} else
 		{
@@ -162,9 +159,7 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
 				return this.getSuperBound().isSubtypeOf(argument);
 			} else
 			{
-				// TODO: It seems that the JLSv3 §4.5.1.1 is unclear on this point. What do we do?
-				// Is it the case that (T <= ?) or can we not assume that?
-				throw new NotImplementedYetException();
+				return true;
 			}
 		}
 	}

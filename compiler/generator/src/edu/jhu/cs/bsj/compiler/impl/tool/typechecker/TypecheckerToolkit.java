@@ -512,6 +512,8 @@ public class TypecheckerToolkit
 	 */
 	public NamedTypeDeclarationNode<?> getAccessibleTypeFromFullyQualifiedName(NameNode name)
 	{
+	    final NameNode originalName = name;
+	    
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Attempting to load accessible type " + name.getNameString());
@@ -542,7 +544,7 @@ public class TypecheckerToolkit
 		{
 			// The type does not exist
 			// TODO: raise an appropriate diagnostic
-			throw new NotImplementedYetException("The type " + name.getNameString() + " could not be resolved; this case is not yet handled.");
+			throw new NotImplementedYetException("The type " + originalName.getNameString() + " could not be resolved; this case is not yet handled.");
 		}
 		for (int index = 1; index < typeNames.size(); index++)
 		{

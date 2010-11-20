@@ -86,6 +86,23 @@ public class LocationMappedFileManager implements BsjFileManager
 	}
 
 	@Override
+    public ClassLoader getClassLoader(Location... locations)
+    {
+        if (locations.length == 1)
+        {
+            return this.getClassLoader(locations[0]);
+        }
+        // TODO: is it okay to just drop encoding like this?
+        List<LocationManager> managers = new ArrayList<LocationManager>(locations.length);
+        for (Location location : locations)
+        {
+            managers.add(this.getLocationManager(location));
+        }
+        UnionLocationManager union = new UnionLocationManager(null, managers);
+        return union.getClassLoader();
+    }
+
+    @Override
 	public BsjFileObject getFileForInput(Location location, String packageName, String relativeName) throws IOException
 	{
 		if (LOGGER.isTraceEnabled())

@@ -9,3 +9,11 @@ class ExampleNamespace2
 {
 	
 }
+
+class ExampleNamespace_OverloadingTest
+{
+    public void foo() { }
+    public void foo(int x) { }
+    public void foo(String s) { }
+    public void foo(Object o) { }
+}

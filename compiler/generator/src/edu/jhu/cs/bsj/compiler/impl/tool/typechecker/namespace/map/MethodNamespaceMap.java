@@ -116,14 +116,34 @@ public class MethodNamespaceMap extends NamespaceMap<ErasedMethodSignature, BsjE
 		super.notifyNewKey(key);
 		if (this.overlapMode == OverlapMode.BY_NAME)
 		{
-			for (ErasedMethodSignature signature : this.getKeys())
-			{
-				if (!signature.equals(key) && signature.getName().equals(key.getName()))
-				{
-					// Same name but different signature.  Block it.
-					getBlockedKeySet().add(signature);
-				}
-			}
+		    // TODO: this is incorrect 
+		    // 1. it's breaking method overloading
+		    // 2. it's inefficient
+		    // Instead, a scheme by which the name itself is recorded in this class should be used; the superclass
+		    // should have a template method for ascertaining whether or not a missing key should be found in the
+		    // deference map.  By default, that template method returns true; for MethodNamespaceMap, it returns true
+		    // if and only if the key in question has a name which is not in the blocked name set.  That set would be
+		    // updated here.
+		    // For now, this is commented out as it only really serves to fix code of the form:
+		    //    public class C {
+		    //        public void foo() { }
+		    //        public class D {
+		    //            public void foo(int i) { }
+		    //            public void bar() { foo(); }
+		    //        }
+		    //    }
+		    // According to the JLS, bar() should not compile because it refers to a foo() which has been hidden by
+		    // the nearer foo even though their signatures differ.
+		    
+		    // Below: the broken mechanism
+//			for (ErasedMethodSignature signature : this.getKeys())
+//			{
+//				if (!signature.equals(key) && signature.getName().equals(key.getName()))
+//				{
+//					// Same name but different signature.  Block it.
+//					getBlockedKeySet().add(signature);
+//				}
+//			}
 		}
 	}
 

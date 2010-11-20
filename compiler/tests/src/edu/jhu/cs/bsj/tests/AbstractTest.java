@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.tests;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -26,133 +27,153 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
  */
 public abstract class AbstractTest
 {
-	/** The directory containing the example sources. */
-	public static final File EXAMPLES = new File("resources" + File.separator + "source-code");
-	/** The directory containing individual sources for specific tests. */
-	public static final File SPECIFIC_SOURCE_DIR = new File(EXAMPLES + File.separator + "individual-files"
-			+ File.separator + "hand-written");
+    /** The directory containing the example sources. */
+    public static final File EXAMPLES = new File("resources" + File.separator + "source-code");
+    /** The directory containing individual sources for specific tests. */
+    public static final File SPECIFIC_SOURCE_DIR = new File(EXAMPLES + File.separator + "individual-files"
+            + File.separator + "hand-written");
 
-	/** The logger for this class. */
-	protected Logger LOGGER = null;
-	{
-		String s = System.getProperty("bsj.tests.logging");
-		if (s == null || s.length() == 0)
-		{
-			log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
-					"edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug",
-					"edu.jhu.cs.bsj.compiler.impl.tool.compiler.names/debug",
-					"edu.jhu.cs.bsj.compiler.impl.ast.NodeListImpl/debug",
-					"edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl/debug");
-		} else
-		{
-			String[] values = s.split("&");
-			String level = values[0];
-			values = Arrays.copyOfRange(values, 1, values.length);
-			log4jConfigure(level, values);
-		}
-	}
+    /** The logger for this class. */
+    protected Logger LOGGER = null;
+    {
+        String s = System.getProperty("bsj.tests.logging");
+        if (s == null || s.length() == 0)
+        {
+            log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
+                    "edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug",
+                    "edu.jhu.cs.bsj.compiler.impl.tool.compiler.names/debug",
+                    "edu.jhu.cs.bsj.compiler.impl.ast.NodeListImpl/debug",
+                    "edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl/debug");
+        } else
+        {
+            String[] values = s.split("&");
+            String level = values[0];
+            values = Arrays.copyOfRange(values, 1, values.length);
+            log4jConfigure(level, values);
+        }
+    }
 
-	/**
-	 * Configures Log4J using the specified information.
-	 * 
-	 * @param level The default level for logging messages.
-	 * @param loggerSpecifics An array of "logger specifics" strings. Such a string contains exactly one slash and is a
-	 *            terse way of configuring the logger to modify how logging messages from a certain package and its
-	 *            subpackages are logged. For instance, "edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug" will set the
-	 *            BSJ ANTLR parser's logger in debug mode.
-	 */
-	protected void log4jConfigure(String level, String... loggerSpecifics)
-	{
-		LOGGER = Logger.getLogger(this.getClass());
-		Properties loggingProperties = new Properties();
-		loggingProperties.setProperty("log4j.rootLogger", level + ", stdout");
-		loggingProperties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
-		loggingProperties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
-		loggingProperties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
-		for (String loggerSpecific : loggerSpecifics)
-		{
-			String[] s = loggerSpecific.split("/");
-			String logger = s[0];
-			String llevel = s[1];
-			loggingProperties.setProperty("log4j.logger." + logger, llevel + ", stdout");
-			loggingProperties.setProperty("log4j.additivity.logger." + logger, "false");
-		}
-		PropertyConfigurator.configure(loggingProperties);
-	}
+    /**
+     * Configures Log4J using the specified information.
+     * 
+     * @param level The default level for logging messages.
+     * @param loggerSpecifics An array of "logger specifics" strings. Such a string contains exactly one slash and is a
+     *            terse way of configuring the logger to modify how logging messages from a certain package and its
+     *            subpackages are logged. For instance, "edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug" will set the
+     *            BSJ ANTLR parser's logger in debug mode.
+     */
+    protected void log4jConfigure(String level, String... loggerSpecifics)
+    {
+        LOGGER = Logger.getLogger(this.getClass());
+        Properties loggingProperties = new Properties();
+        loggingProperties.setProperty("log4j.rootLogger", level + ", stdout");
+        loggingProperties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
+        loggingProperties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
+        loggingProperties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
+        for (String loggerSpecific : loggerSpecifics)
+        {
+            String[] s = loggerSpecific.split("/");
+            String logger = s[0];
+            String llevel = s[1];
+            loggingProperties.setProperty("log4j.logger." + logger, llevel + ", stdout");
+            loggingProperties.setProperty("log4j.additivity.logger." + logger, "false");
+        }
+        PropertyConfigurator.configure(loggingProperties);
+    }
 
-	private static File getTestDir(String suffix)
-	{
-		return new File("." + File.separator + "local" + File.separator + suffix);
-	}
-	
-	private static void delete(File f)
-	{
-		if (f.isDirectory())
-		{
-			for (File ff : f.listFiles())
-			{
-				delete(ff);
-			}
-		}
-		f.delete();
-	}
-	
-	private static LocationManager getTestLocationManager(String suffix, boolean clear)
-	{
-		File dir = getTestDir(suffix);
-		if (clear)
-		{
-			delete(dir);
-		}
-		dir.mkdirs();
-		return new RegularFileLocationManager(null, dir);
-		
-	}
+    private static File getTestDir(String suffix)
+    {
+        return new File("." + File.separator + "local" + File.separator + suffix);
+    }
 
-	private static LocationManager getTestLocationManager(String suffix)
-	{
-		return getTestLocationManager(suffix, false);
-	}
+    private static void delete(File f)
+    {
+        if (f.isDirectory())
+        {
+            for (File ff : f.listFiles())
+            {
+                delete(ff);
+            }
+        }
+        f.delete();
+    }
 
-	protected static BsjFileManager getFileManager(File sourcePath) throws Exception
-	{
-		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.newFileManagerFactory();
+    private static LocationManager getTestLocationManager(String suffix, boolean clear)
+    {
+        File dir = getTestDir(suffix);
+        if (clear)
+        {
+            delete(dir);
+        }
+        dir.mkdirs();
+        return new RegularFileLocationManager(null, dir);
 
-		Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
+    }
 
-		File test = new File("." + File.separator + "local");
-		test.mkdir();
+    private static LocationManager getTestLocationManager(String suffix)
+    {
+        return getTestLocationManager(suffix, false);
+    }
 
-		LocationManager sourceLocationManager;
-		if (sourcePath == null)
-		{
-			sourceLocationManager = getTestLocationManager("src");
-		} else
-		{
-			sourceLocationManager = new RegularFileLocationManager(null, sourcePath);
-		}
-		map.put(BsjCompilerLocation.SOURCE_PATH, sourceLocationManager);
-		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, getTestLocationManager("gensrc", true));
-		map.put(BsjCompilerLocation.CLASS_OUTPUT, getTestLocationManager("bin", true));
+    protected static BsjFileManager getFileManager(File sourcePath) throws Exception
+    {
+        return getFileManager(sourcePath, Collections.<BsjCompilerLocation, LocationManager> emptyMap(), false);
+    }
 
-		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("sun.boot.class.path")));
-		map.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("java.class.path")));
+    protected static BsjFileManager getFileManager(File sourcePath,
+            Map<? extends BsjCompilerLocation, ? extends LocationManager> overrides, boolean unionOverrides)
+            throws Exception
+    {
+        BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.newFileManagerFactory();
 
-		map.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("sun.boot.class.path")));
-		map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("java.class.path")));
+        Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
 
-		fileManagerFactory.setLocationManagerMappingsByManager(map);
-		return fileManagerFactory.newFileManager();
-	}
+        File test = new File("." + File.separator + "local");
+        test.mkdir();
 
-	protected static BsjToolkit getToolkit(File sourcePath) throws Exception
-	{
-		BsjToolkitFactory bsjToolkitFactory = BsjServiceRegistry.newToolkitFactory();
-		bsjToolkitFactory.setFileManager(getFileManager(sourcePath));
-		return bsjToolkitFactory.newToolkit();
-	}
+        LocationManager sourceLocationManager;
+        if (sourcePath == null)
+        {
+            sourceLocationManager = getTestLocationManager("src");
+        } else
+        {
+            sourceLocationManager = new RegularFileLocationManager(null, sourcePath);
+        }
+        map.put(BsjCompilerLocation.SOURCE_PATH, sourceLocationManager);
+        map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, getTestLocationManager("gensrc", true));
+        map.put(BsjCompilerLocation.CLASS_OUTPUT, getTestLocationManager("bin", true));
+
+        map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
+                new UnionLocationManager(null, System.getProperty("sun.boot.class.path")));
+        map.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH,
+                new UnionLocationManager(null, System.getProperty("java.class.path")));
+
+        map.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
+                new UnionLocationManager(null, System.getProperty("sun.boot.class.path")));
+        map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH,
+                new UnionLocationManager(null, System.getProperty("java.class.path")));
+
+        if (unionOverrides)
+        {
+            map.putAll(overrides);
+        } else
+        {
+            for (Map.Entry<? extends BsjCompilerLocation, ? extends LocationManager> entry : overrides.entrySet())
+            {
+                LocationManager manager = new UnionLocationManager(null, Arrays.asList(map.get(entry.getKey()),
+                        entry.getValue()));
+                map.put(entry.getKey(), manager);
+            }
+        }
+
+        fileManagerFactory.setLocationManagerMappingsByManager(map);
+        return fileManagerFactory.newFileManager();
+    }
+
+    protected static BsjToolkit getToolkit(File sourcePath) throws Exception
+    {
+        BsjToolkitFactory bsjToolkitFactory = BsjServiceRegistry.newToolkitFactory();
+        bsjToolkitFactory.setFileManager(getFileManager(sourcePath));
+        return bsjToolkitFactory.newToolkit();
+    }
 }

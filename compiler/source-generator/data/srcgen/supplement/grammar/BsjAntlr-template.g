@@ -2244,7 +2244,10 @@ referenceType /*%% standardRuleIntro= type=ReferenceTypeNode %%*/
     |
         primitiveType arrayTypeCounter
         {
-            $ret = wrapArrayLevels($primitiveType.ret, $arrayTypeCounter.ret);
+            if ($arrayTypeCounter.ret > 0)
+            {
+                $ret = wrapArrayLevels($primitiveType.ret, $arrayTypeCounter.ret);
+            }
         }
     ;
 

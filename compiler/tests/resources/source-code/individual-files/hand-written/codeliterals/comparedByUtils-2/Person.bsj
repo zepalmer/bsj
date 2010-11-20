@@ -1,0 +1,10 @@
+#import foo.ComparedByUtils;
+public class Person {
+    private String givenName;
+    private String surname;
+    private String middleName;
+    [:
+        ComparedByUtils.generateComparedBy(context,
+            <:surname:>, <:givenName:>, <:middleName:>);
+    :]
+}

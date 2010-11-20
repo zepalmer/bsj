@@ -72,4 +72,11 @@ public interface BsjFileManager extends JavaFileManager
 	 *         the specified location.
 	 */
 	public LocationManager getLocationManager(Location location);
+	
+	/**
+	 * Creates a classloader for a union of the specified locations managed by this file manager.
+	 * @param locations The locations in question.
+	 * @return The classloader for the specified locations or <code>null</code> if one of those locations is unrecognized.
+	 */
+	public ClassLoader getClassLoader(Location... locations);
 }

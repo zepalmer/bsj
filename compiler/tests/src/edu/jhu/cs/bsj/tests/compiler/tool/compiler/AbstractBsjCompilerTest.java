@@ -96,7 +96,7 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 	 * @return The diagnostics which were observed.
 	 * @throws Exception If anything goes wrong.
 	 */
-	private List<Diagnostic<? extends BsjSourceLocation>> performTest(BsjFileManager fileManager, List<String> paths)
+	protected List<Diagnostic<? extends BsjSourceLocation>> performTest(BsjFileManager fileManager, List<String> paths)
 			throws Exception
 	{
 		List<BsjFileObject> files = new ArrayList<BsjFileObject>();

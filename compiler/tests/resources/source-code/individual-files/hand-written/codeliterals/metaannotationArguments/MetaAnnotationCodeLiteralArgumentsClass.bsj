@@ -1,0 +1,10 @@
+#import edu.jhu.cs.bsj.tests.support.HelloWorldMetaAnnotation;
+
+@@HelloWorldMetaAnnotation(id=<:x:>)
+public class MetaAnnotationCodeLiteralArgumentsClass
+{
+    public static void main(String[] args)
+    {
+        
+    }
+}
