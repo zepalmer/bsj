@@ -8,9 +8,9 @@ import java.util.Map;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjAbortableNodeOperation;
+import edu.jhu.cs.bsj.compiler.ast.BsjAbortableNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation2Arguments;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
@@ -261,7 +261,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      * @return The result of the operation.
      */
     @Override
-    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
+    public <P,R,X extends Exception> R executeOperation(BsjAbortableNodeOperation<P,R,X> operation, P p) throws X
     {
         return operation.executeMetaprogramImportNode(this, p);
     }
@@ -274,7 +274,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      * @return The result of the operation.
      */
     @Override
-    public <P1,P2,R> R executeOperation(BsjNodeOperation2Arguments<P1,P2,R> operation, P1 p1, P2 p2)
+    public <P1,P2,R,X extends Exception> R executeOperation(BsjAbortableNodeOperation2Arguments<P1,P2,R,X> operation, P1 p1, P2 p2) throws X
     {
         return operation.executeMetaprogramImportNode(this, p1, p2);
     }

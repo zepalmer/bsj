@@ -715,9 +715,10 @@ public class SourceGenerator
                     }
                     ps.println(" * @return The result of the operation.");
                     ps.println(" */");
-                    ps.println("public <" + strings.inputTypeParams + ",R> R executeOperation(BsjNodeOperation"
-                            + strings.suffix + "<" + strings.inputTypeParams + ",R> operation, " + strings.methodParams
-                            + ");");
+                    ps.println("public <" + strings.inputTypeParams
+                            + ",R,X extends Exception> R executeOperation(BsjAbortableNodeOperation" + strings.suffix
+                            + "<" + strings.inputTypeParams + ",R,X> operation, " + strings.methodParams
+                            + ") throws X;");
                     ps.println();
                 }
             }
@@ -2104,9 +2105,9 @@ public class SourceGenerator
                     ps.println(" * @return The result of the operation.");
                     ps.println(" */");
                     ps.println("@Override");
-                    ps.println("public <" + strings.inputTypeParams + ",R> R executeOperation(BsjNodeOperation"
-                            + strings.suffix + "<" + strings.inputTypeParams + ",R> operation, " + strings.methodParams
-                            + ")");
+                    ps.println("public <" + strings.inputTypeParams
+                            + ",R,X extends Exception> R executeOperation(BsjAbortableNodeOperation" + strings.suffix
+                            + "<" + strings.inputTypeParams + ",R,X> operation, " + strings.methodParams + ") throws X");
                     ps.println("{");
                     ps.println("    return operation.execute" + def.getBaseName() + "(this, " + strings.methodArgs
                             + ");");
@@ -2806,6 +2807,16 @@ public class SourceGenerator
             final String methodParams;
             final String methodArgs;
 
+            final String typeParams;
+            final String typeParamsA;
+            final String typeParamsANoBounds;
+            final String typeParamsNew;
+            final String typeParamsNewA;
+            final String typeParamsNewANoBounds;
+            final String typeParamsOrig;
+            final String typeParamsOrigA;
+            final String typeParamsOrigANoBounds;
+
             protected String getParameterName(int index)
             {
                 if (index <= 0 || index > argCount)
@@ -2836,6 +2847,16 @@ public class SourceGenerator
                 }
             }
 
+            protected String getReturnTypeParameterName()
+            {
+                return "R";
+            }
+
+            protected String getExceptionTypeParameterName()
+            {
+                return "X";
+            }
+
             protected Strings(int argCount)
             {
                 this.argCount = argCount;
@@ -2846,24 +2867,61 @@ public class SourceGenerator
                 {
                     suffix = argCount + "Arguments";
                 }
-                StringBuilder inputTypeParamsBuilder = new StringBuilder();
+
+                // create type parameter lists
+                List<String> pTypeParameters = new ArrayList<String>();
+                List<String> prTypeParameters = new ArrayList<String>();
+                List<String> prxTypeParameters = new ArrayList<String>();
+                for (int i = 1; i <= argCount; i++)
+                {
+                    pTypeParameters.add(getTypeParameterName(i));
+                    prTypeParameters.add(getTypeParameterName(i));
+                    prxTypeParameters.add(getTypeParameterName(i));
+                }
+                prTypeParameters.add(getReturnTypeParameterName());
+                prxTypeParameters.add(getReturnTypeParameterName());
+                prxTypeParameters.add(getExceptionTypeParameterName());
+
+                // join inputTypeParams
+                inputTypeParams = StringUtilities.join(pTypeParameters, ",");
+
+                // create method strings
                 StringBuilder methodParamsBuilder = new StringBuilder();
                 StringBuilder methodArgsBuilder = new StringBuilder();
                 for (int i = 1; i <= argCount; i++)
                 {
                     if (i > 1)
                     {
-                        inputTypeParamsBuilder.append(",");
                         methodParamsBuilder.append(", ");
                         methodArgsBuilder.append(", ");
                     }
-                    inputTypeParamsBuilder.append(getTypeParameterName(i));
                     methodParamsBuilder.append(getTypeParameterName(i) + " " + getParameterName(i));
                     methodArgsBuilder.append(getParameterName(i));
                 }
-                inputTypeParams = inputTypeParamsBuilder.toString();
                 methodParams = methodParamsBuilder.toString();
                 methodArgs = methodArgsBuilder.toString();
+
+                final String exceptionSuffix = " extends Exception";
+
+                typeParams = StringUtilities.join(prTypeParameters, ",");
+                typeParamsANoBounds = StringUtilities.join(prxTypeParameters, ",");
+                typeParamsA = typeParamsANoBounds + exceptionSuffix;
+                typeParamsNew = StringUtilities.join(addSuffix(prTypeParameters, "New"), ",");
+                typeParamsNewANoBounds = typeParamsNew + "," + getExceptionTypeParameterName();
+                typeParamsNewA = typeParamsNewANoBounds + exceptionSuffix;
+                typeParamsOrig = StringUtilities.join(addSuffix(prTypeParameters, "Orig"), ",");
+                typeParamsOrigANoBounds = typeParamsOrig + "," + getExceptionTypeParameterName();
+                typeParamsOrigA = typeParamsOrigANoBounds + exceptionSuffix;
+            }
+
+            private List<String> addSuffix(List<String> list, String suffix)
+            {
+                List<String> ret = new ArrayList<String>(list.size());
+                for (String s : list)
+                {
+                    ret.add(s + suffix);
+                }
+                return ret;
             }
         }
 
@@ -2905,15 +2963,13 @@ public class SourceGenerator
                 final int argCount = index;
                 final Strings strings = new Strings(argCount);
 
-                String inputTypeParams = strings.inputTypeParams;
-                String typeParams = inputTypeParams + ",R";
-                String typeParamDecl = "<" + typeParams + ">";
+                final String typeParamDecl = "<" + strings.typeParamsA + ">";
+                final String typeParamNoBoundsDecl = "<" + strings.typeParamsANoBounds + ">";
 
-                String newTypeParams = typeParams.replace(",", "New,") + "New";
-                String newTypeParamsDecl = "<" + newTypeParams + ">";
-                String origTypeParams = typeParams.replaceAll(",", "Orig,") + "Orig";
-                String proxyTypeParams = origTypeParams + "," + newTypeParams;
-                String proxyTypeParamsDecl = "<" + proxyTypeParams + ">";
+                final String newTypeParamsNoBoundsDecl = "<" + strings.typeParamsNewANoBounds + ">";
+                final String origTypeParamsDecl = "<" + strings.typeParamsOrigANoBounds + ">";
+                final String proxyTypeParamsDecl = "<" + strings.typeParamsOrig + "," + strings.typeParamsNew + ","
+                        + strings.getExceptionTypeParameterName() + " extends Exception>";
 
                 String suffix = strings.suffix;
 
@@ -2934,9 +2990,10 @@ public class SourceGenerator
                     " * {@link java.lang.Void}.\n";
                 }
                 bsjNodeOperationHeader +=
-                    " * @param <R> A return type for all methods to return.  If no return type is desired, use\n"+
-                    " * {@link java.lang.Void}.\n"+
-                    " *\n"+
+                    " * @param <R> A return type for all methods to return.  If no return type is\n" +
+                    " *            desired, use {@link java.lang.Void}.\n"+
+                    " * @param <X> An exception type for all methods to raise.  If no exception\n"+
+                    " *            type is desired, use {@link java.lang.RuntimeException}.\n"+
                     " * @author Zachary Palmer\n"+
                     " */\n";
                 
@@ -2958,15 +3015,17 @@ public class SourceGenerator
                 for (int i=1;i<=argCount;i++)
                 {
                     bsjNodeOperationProxyHeader +=
-                        " * @param <" + strings.getParameterName(i) + "Orig> A data parameter type for the original backing operation.\n";
+                        " * @param <" + strings.getTypeParameterName(i) + "Orig> A data parameter type for the original backing operation.\n";
                 }
                 bsjNodeOperationProxyHeader +=
                     " * @param <ROrig> The return type for the original backing operation.\n";
+                // TODO: <XOrig> docs
                 for (int i=1;i<=argCount;i++)
                 {
                     bsjNodeOperationProxyHeader +=
-                        " * @param <" + strings.getParameterName(i) + "New> A data parameter type for the new decorated operation.\n";
+                        " * @param <" + strings.getTypeParameterName(i) + "New> A data parameter type for the new decorated operation.\n";
                 }
+                // TODO: <XNew> docs
                 bsjNodeOperationProxyHeader +=
                     " * @param <RNew> The return type for the decorated operation.\n" +
                     " *\n" +
@@ -2995,24 +3054,26 @@ public class SourceGenerator
                 // @formatter:on
 
                 PrependablePrintStream ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast",
-                        TypeDefinition.Mode.INTERFACE, Project.API, SupplementCategory.GENERAL, "BsjNodeOperation"
-                                + suffix + typeParamDecl, false, bsjNodeOperationHeader, null);
+                        TypeDefinition.Mode.INTERFACE, Project.API, SupplementCategory.GENERAL,
+                        "BsjAbortableNodeOperation" + suffix + typeParamDecl, false, bsjNodeOperationHeader, null);
                 PrependablePrintStream nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
-                        TypeDefinition.Mode.CONCRETE, Project.API, SupplementCategory.GENERAL, "BsjNodeNoOpOperation"
-                                + suffix + typeParamDecl, false, bsjNoOpNodeOperationHeader, null, "BsjNodeOperation"
-                                + suffix + typeParamDecl);
+                        TypeDefinition.Mode.CONCRETE, Project.API, SupplementCategory.GENERAL,
+                        "BsjAbortableNodeNoOpOperation" + suffix + typeParamDecl, false, bsjNoOpNodeOperationHeader,
+                        null, "BsjAbortableNodeOperation" + suffix + typeParamNoBoundsDecl);
                 PrependablePrintStream pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
-                        TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL, "BsjNodeOperationProxy"
-                                + suffix + proxyTypeParamsDecl, false, bsjNodeOperationProxyHeader, null,
-                        "BsjNodeOperation" + suffix + newTypeParamsDecl);
+                        TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL,
+                        "BsjAbortableNodeOperationProxy" + suffix + proxyTypeParamsDecl, false,
+                        bsjNodeOperationProxyHeader, null, "BsjAbortableNodeOperation" + suffix
+                                + newTypeParamsNoBoundsDecl);
                 PrependablePrintStream dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
                         TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL,
-                        "BsjDefaultNodeOperation" + suffix + typeParamDecl, false, bsjDefaultNodeOperationHeader, null,
-                        "BsjNodeOperation" + suffix + typeParamDecl);
+                        "BsjAbortableDefaultNodeOperation" + suffix + typeParamDecl, false,
+                        bsjDefaultNodeOperationHeader, null, "BsjAbortableNodeOperation" + suffix
+                                + typeParamNoBoundsDecl);
                 PrependablePrintStream jps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
-                        TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL, "JavaNodeOperation"
-                                + suffix + typeParamDecl, false, javaNodeOperationHeader, null, "BsjNodeOperation"
-                                + suffix + typeParamDecl);
+                        TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL,
+                        "JavaAbortableNodeOperation" + suffix + typeParamDecl, false, javaNodeOperationHeader, null,
+                        "BsjAbortableNodeOperation" + suffix + typeParamNoBoundsDecl);
 
                 ipsList.add(ips);
                 npsList.add(nps);
@@ -3022,14 +3083,14 @@ public class SourceGenerator
 
                 pps.incPrependCount();
                 pps.println("/** The backing operation to proxy. */");
-                pps.println("private BsjNodeOperation" + strings.suffix + "<" + origTypeParams + "> backingOp;");
+                pps.println("private BsjAbortableNodeOperation" + strings.suffix + origTypeParamsDecl + " backingOp;");
                 pps.println();
                 pps.println("/**");
                 pps.println(" * Creates a new node operation proxy.");
                 pps.println(" * @param backingOp The backing operation to proxy.");
                 pps.println(" */");
-                pps.println("public BsjNodeOperationProxy" + strings.suffix + "(BsjNodeOperation" + strings.suffix
-                        + "<" + origTypeParams + "> backingOp)");
+                pps.println("public BsjAbortableNodeOperationProxy" + strings.suffix + "(BsjAbortableNodeOperation"
+                        + strings.suffix + origTypeParamsDecl + " backingOp)");
                 pps.println("{");
                 pps.println("    this.backingOp = backingOp;");
                 pps.println("}");
@@ -3043,7 +3104,7 @@ public class SourceGenerator
                     pps.println(" */");
                     pps.println("protected abstract " + strings.getTypeParameterName(i) + "Orig before"
                             + (argCount == 1 ? "" : String.valueOf(i)) + "(" + strings.getTypeParameterName(i) + "New "
-                            + strings.getParameterName(i) + ");");
+                            + strings.getParameterName(i) + ") throws X;");
                     pps.println();
                 }
                 pps.println("/**");
@@ -3051,7 +3112,7 @@ public class SourceGenerator
                 pps.println(" * @param r The incoming return data (compatible with the backing interface).");
                 pps.println(" * @return The resulting return data (compatible with the return interface).");
                 pps.println(" */");
-                pps.println("protected abstract RNew after(ROrig r);");
+                pps.println("protected abstract RNew after(ROrig r) throws X;");
                 pps.decPrependCount();
 
                 dps.incPrependCount();
@@ -3063,7 +3124,7 @@ public class SourceGenerator
                     dps.println(" * @param " + strings.getParameterName(i) + " The parameter to the execution method.");
                 }
                 dps.println(" */");
-                dps.println("public abstract R executeDefault(Node node, " + strings.methodParams + ");");
+                dps.println("public abstract R executeDefault(Node node, " + strings.methodParams + ") throws X;");
                 dps.println();
                 dps.decPrependCount();
 
@@ -3078,10 +3139,77 @@ public class SourceGenerator
                 }
                 jps.println(" */");
                 jps.println("public abstract R handleBsjSpecificNode(BsjSpecificNode node, " + strings.methodParams
-                        + ");");
+                        + ") throws X;");
                 jps.println();
                 jps.decPrependCount();
+
+                // Now write the non-exception versions
+                writeNoExceptionWrapper(strings, "BsjAbortableNodeOperation", "edu.jhu.cs.bsj.compiler.ast",
+                        TypeDefinition.Mode.INTERFACE, true);
+
+                writeNoExceptionWrapper(strings, "BsjAbortableNodeNoOpOperation", "edu.jhu.cs.bsj.compiler.ast.util",
+                        TypeDefinition.Mode.CONCRETE, true);
+
+                PrependablePrintStream ps = writeNoExceptionWrapper(strings, "BsjAbortableNodeOperationProxy",
+                        "edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false, strings.typeParamsOrig
+                                + "," + strings.typeParamsNew, strings.typeParamsOrig + "," + strings.typeParamsNew
+                                + ",RuntimeException", strings.typeParamsNew);
+                ps.println("/**");
+                ps.println(" * Creates a new node operation proxy.");
+                ps.println(" * @param backingOp The backing operation to proxy.");
+                ps.println(" */");
+                ps.println("public BsjNodeOperationProxy" + strings.suffix + "(BsjNodeOperation" + strings.suffix + "<"
+                        + strings.typeParamsOrig + "> backingOp)");
+                ps.println("{");
+                ps.println("    super(backingOp);");
+                ps.println("}");
+                ps.println();
+                ps.decPrependCount();
+                ps.println("}");
+                ps.close();
+
+                writeNoExceptionWrapper(strings, "BsjAbortableDefaultNodeOperation",
+                        "edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, true);
+
+                writeNoExceptionWrapper(strings, "JavaAbortableNodeOperation", "edu.jhu.cs.bsj.compiler.ast.util",
+                        TypeDefinition.Mode.ABSTRACT, true);
             }
+        }
+
+        private PrependablePrintStream writeNoExceptionWrapper(Strings strings, String name, String pkg,
+                TypeDefinition.Mode mode, boolean emptyBody) throws IOException
+        {
+            return writeNoExceptionWrapper(strings, name, pkg, mode, emptyBody, strings.typeParams, strings.typeParams
+                    + ",RuntimeException", name.equals("BsjAbortableNodeOperation") ? null : strings.typeParams);
+        }
+
+        private PrependablePrintStream writeNoExceptionWrapper(Strings strings, String name, String pkg,
+                TypeDefinition.Mode mode, boolean emptyBody, String typeParams, String superTypeArgs,
+                String superInterfaceArgs) throws IOException
+        {
+            // @formatter:off
+            String headerString =
+                "/**\n" +
+                " * This is a convenience class which assumes that no checked exceptions will be\n" +
+                " * raised by this operation.\n" +
+                " *\n" + 
+                " * @author Zachary Palmer\n" +
+                " */\n";
+            // @formatter:on
+
+            final String typeName = name.replaceAll("Abortable", "") + strings.suffix + "<" + typeParams + ">";
+            final String supertypeName = name + strings.suffix + "<" + superTypeArgs + ">";
+            final String[] superinterfaceNames = superInterfaceArgs == null ? new String[0]
+                    : new String[] { "BsjNodeOperation" + strings.suffix + "<" + superInterfaceArgs + ">" };
+            PrependablePrintStream pps = createOutputFile(pkg, mode, Project.API, SupplementCategory.GENERAL, typeName,
+                    false, headerString, supertypeName, superinterfaceNames);
+            if (emptyBody)
+            {
+                pps.decPrependCount();
+                pps.println("}");
+                pps.close();
+            }
+            return pps;
         }
 
         @Override
@@ -3141,7 +3269,7 @@ public class SourceGenerator
                     ips.println(" * @return The result of the operation.");
                     ips.println(" */");
                     ips.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, "
-                            + paramDecls + ");");
+                            + paramDecls + ") throws X;");
                     ips.println();
 
                     nps.println("/**");
@@ -3151,7 +3279,7 @@ public class SourceGenerator
                     nps.println(" * @return <code>null</code>, always.");
                     nps.println(" */");
                     nps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, "
-                            + paramDecls + ")");
+                            + paramDecls + ") throws X");
                     nps.println("{");
                     nps.println("    return null;");
                     nps.println("}");
@@ -3164,7 +3292,7 @@ public class SourceGenerator
                     pps.println(" * @return The result of this operation (after being passed through the proxy filter).");
                     pps.println(" */");
                     pps.println("public " + typeParamS + "RNew execute" + def.getBaseName() + "(" + typeName
-                            + " node, " + paramDecls.replaceAll(" p", "New p") + ")");
+                            + " node, " + paramDecls.replaceAll(" p", "New p") + ") throws X");
                     pps.println("{");
                     if (argCount == 1)
                     {
@@ -3193,7 +3321,7 @@ public class SourceGenerator
                     dps.println(" * @param p The parameter to this node operation.");
                     dps.println(" */");
                     dps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName + " node, "
-                            + paramDecls + ")");
+                            + paramDecls + ") throws X");
                     dps.println("{");
                     dps.println("    return executeDefault(node, " + methodArgs + ");");
                     dps.println("}");
@@ -3207,7 +3335,7 @@ public class SourceGenerator
                         jps.println(" * @param p The parameter to this node operation.");
                         jps.println(" */");
                         jps.println("public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
-                                + " node, " + paramDecls + ")");
+                                + " node, " + paramDecls + ") throws X");
                         jps.println("{");
                         jps.println("    return handleBsjSpecificNode(node, " + methodArgs + ");");
                         jps.println("}");
@@ -5155,10 +5283,10 @@ public class SourceGenerator
                 String optionPart = "";
                 if (options.size() > 0)
                 {
-                for (String option : options)
-                {
-                    optionPart += "            " + option + "\n";
-                }
+                    for (String option : options)
+                    {
+                        optionPart += "            " + option + "\n";
+                    }
                     optionPart = "        options {\n" + optionPart + "        }";
                 }
 
@@ -5313,11 +5441,10 @@ public class SourceGenerator
 
                 final String replacement = fillFragment(
                         "generateListRule",
-                        new MapBuilder<String, String>().add("rule", ruleName).add("nodeType",
-                                returnTypeName).add("componentType", componentTypeName).add("componentRule",
-                                componentRuleName).add("prefixPart", prefixPart).add("postfixPart", postfixPart).add(
-                                "separatorPart", separatorPart).add("lastSeparatorPart", lastSeparatorPart).add(
-                                "capRule", capRuleName).getMap());
+                        new MapBuilder<String, String>().add("rule", ruleName).add("nodeType", returnTypeName).add(
+                                "componentType", componentTypeName).add("componentRule", componentRuleName).add(
+                                "prefixPart", prefixPart).add("postfixPart", postfixPart).add("separatorPart",
+                                separatorPart).add("lastSeparatorPart", lastSeparatorPart).add("capRule", capRuleName).getMap());
 
                 return grammarTemplate.substring(0, startIndex) + replacement + grammarTemplate.substring(endIndex);
             }
