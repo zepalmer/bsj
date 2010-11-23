@@ -1,7 +1,5 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler.metaannotation;
 
-import java.io.File;
-
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.tests.compiler.tool.compiler.AbstractBsjCompilerTest;
@@ -13,9 +11,8 @@ import edu.jhu.cs.bsj.tests.compiler.tool.compiler.AbstractBsjCompilerTest;
 public class MetaAnnotationBuilderMetaprogramTest extends AbstractBsjCompilerTest
 {
 	@Test
-	public void testBsjCompiler() throws Exception
+	public void testBuilder() throws Exception
 	{
-		performTest(new File(EXAMPLES + File.separator + "projects" + File.separator + "bsj-tests" + File.separator
-				+ "metaannotation-test"), "BuilderMain", "BuilderClass", "BuilderClassOther");
+	    performTest(new String[]{"projects","bsj-tests","Builder"}, "BuilderMain", "BuilderClass", "BuilderClassOther");
 	}
 }

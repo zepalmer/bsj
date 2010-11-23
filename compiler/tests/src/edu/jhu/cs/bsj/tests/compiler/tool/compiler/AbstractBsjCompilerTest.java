@@ -29,6 +29,20 @@ import edu.jhu.cs.bsj.tests.AbstractTest;
 
 public abstract class AbstractBsjCompilerTest extends AbstractTest
 {
+    /**
+     * Convenience method which performs a compilation operation test using the provided array of pathnames as
+     * subdirectories of the examples directory.
+     */
+    protected void performTest(String[] sourcePathElements, String... paths) throws Exception
+    {
+        File dir = EXAMPLES;
+        for (String element : sourcePathElements)
+        {
+            dir = new File(dir.getPath() + File.separator + element);
+        }
+        performTest(dir, paths);
+    }
+    
 	/**
 	 * Performs a BSJ compilation operation test. This method compiles and runs a BSJ program.
 	 * 

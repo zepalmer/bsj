@@ -1,7 +1,5 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler.metaannotation;
 
-import java.io.File;
-
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.tests.compiler.tool.compiler.AbstractBsjCompilerTest;
@@ -15,7 +13,6 @@ public class MetaAnnotationNullCheckMetaprogramTest extends AbstractBsjCompilerT
 	@Test
 	public void testBsjCompiler() throws Exception
 	{
-		performTest(new File(EXAMPLES + File.separator + "projects" + File.separator + "bsj-tests" + File.separator
-				+ "metaannotation-test"), "NullCheckMain", "NullCheck");
+	    performTest(new String[]{"projects","bsj-tests","NullCheck"}, "NullCheckMain", "NullCheck");
 	}
 }

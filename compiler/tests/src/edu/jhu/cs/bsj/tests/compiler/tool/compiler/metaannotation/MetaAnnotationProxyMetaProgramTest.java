@@ -1,7 +1,5 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler.metaannotation;
 
-import java.io.File;
-
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.tests.compiler.tool.compiler.AbstractBsjCompilerTest;
@@ -15,9 +13,7 @@ public class MetaAnnotationProxyMetaProgramTest  extends AbstractBsjCompilerTest
 	@Test
 	public void testBsjCompiler() throws Exception
 	{
-					
-		performTest(new File(EXAMPLES + File.separator + "projects" + File.separator + "bsj-tests" + File.separator
-				+ "metaannotation-test"), "com/bar/FooImpl","ProxyClass");
+	    performTest(new String[]{"projects","bsj-tests","Proxy"},"com/bar/FooImpl","ProxyClass");
 			
 	}
 

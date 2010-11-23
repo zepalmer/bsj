@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
@@ -19,17 +20,17 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 public abstract class AbstractPropertyListMetaannotationMetaprogram extends
 		AbstractBsjMetaAnnotationMetaprogram {
 
-    private String[] properties = null;
+    private IdentifierNode[] properties = null;
 
 
     @BsjMetaAnnotationElementGetter
-    public String[] getProperties()
+    public IdentifierNode[] getProperties()
     {
         return this.properties;
     }
 
     @BsjMetaAnnotationElementSetter
-    public void setProperties(String[] properties)
+    public void setProperties(IdentifierNode[] properties)
     {
         this.properties = properties;
     }

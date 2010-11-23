@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureExceptio
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -58,6 +59,15 @@ public class MetaannotationMetaprogramToolkit {
 			throw new MetaprogramExecutionFailureException();
 		}
 	}
+	
+	public List<Pair<String, TypeNode>> getGettersFromNames(IdentifierNode[] properties) {
+	    String[] names = new String[properties.length];
+	    for (int i=0;i<properties.length;i++)
+	    {
+	        names[i] = properties[i].getIdentifier();
+	    }
+	    return getGettersFromNames(names);
+	}
 
 	public List<Pair<String, TypeNode>> getGettersFromNames(String[] properties) {
 		ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, program);
@@ -96,6 +106,7 @@ public class MetaannotationMetaprogramToolkit {
 			if (extender instanceof ParameterizedTypeNode) {
 				ParameterizedTypeNode parameterizedVersion = (ParameterizedTypeNode) extender;
 				// TODO flesh this out
+                throw new NotImplementedYetException();
 			} else if (extender instanceof UnparameterizedTypeNode) {
 				UnparameterizedTypeNode unparameterizedVersion = (UnparameterizedTypeNode) extender;
 				NameNode name = unparameterizedVersion.getName();

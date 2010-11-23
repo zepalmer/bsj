@@ -1,7 +1,5 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler.metaannotation;
 
-import java.io.File;
-
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.tests.compiler.tool.compiler.AbstractBsjCompilerTest;
@@ -16,8 +14,7 @@ public class MetaAnnotationBigIntegerOperatorOverloadingMetaProgramTest  extends
 	@Test
 	public void testBasicOperatorOverloading() throws Exception
 	{
-		performTest(new File(EXAMPLES + File.separator + "projects" + File.separator + "bsj-tests" + File.separator
-				+ "metaannotation-test"), "BigIntegerOperatorOverloadingClass");
+	    performTest(new String[]{"projects","bsj-tests","BigIntegerOperatorOverloading"}, "BigIntegerOperatorOverloadingClass");
 	}
 	
 	@Test

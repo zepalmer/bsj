@@ -2680,8 +2680,32 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
     {
         if (candidateMethod.equals(competitorMethod))
             return true;
-
-        throw new NotImplementedYetException("Have not yet implemented isMoreSpecific for methods");
+        
+        if (candidateMethod.getParameterTypes().size() != competitorMethod.getParameterTypes().size())
+            return false;
+        
+        if (candidateMethod.isVarargs() && competitorMethod.isVarargs())
+        {
+            throw new NotImplementedYetException("Have not yet implemented isMoreSpecific for varargs methods");
+        } else if (!candidateMethod.isVarargs() && !competitorMethod.isVarargs())
+        {
+            if (candidateMethod.getTypeVariables().size() > 0 || competitorMethod.getTypeVariables().size() > 0)
+            {
+                throw new NotImplementedYetException("Have not yet implemented isMoreSpecific for generic methods");
+            }
+            
+            Iterator<? extends BsjType> it1 = candidateMethod.getParameterTypes().iterator();
+            Iterator<? extends BsjType> it2 = competitorMethod.getParameterTypes().iterator();
+            
+            while (it1.hasNext())
+            {
+                if (!it1.next().isSubtypeOf(it2.next()))
+                    return false;
+            }
+            return true;
+        }
+        
+        return false;
     }
 
     private Map<BsjExecutableType, GenericMethodData> extractGenericMethodData(MethodInvocationNode node,
