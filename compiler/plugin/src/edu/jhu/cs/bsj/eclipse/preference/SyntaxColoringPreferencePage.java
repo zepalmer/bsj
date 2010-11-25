@@ -6,12 +6,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import edu.jhu.cs.bsj.eclipse.BSJPlugin;
 
-public class EditorPreferencePage 
+public class SyntaxColoringPreferencePage
 	extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	
-	public EditorPreferencePage() {
+	public SyntaxColoringPreferencePage() {
 		setPreferenceStore(BSJPlugin.getDefault().getPreferenceStore());
-		setDescription("editor decription put here");
 	}
 	
 	@Override
@@ -25,5 +24,16 @@ public class EditorPreferencePage
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	@Override
+	protected void performDefaults() {
+		// TODO Auto-generated method stub
+		super.performDefaults();
+	}
+	
+	@Override
+	public boolean performOk() {
+		// TODO Auto-generated method stub
+		return super.performOk();
+	}
 }

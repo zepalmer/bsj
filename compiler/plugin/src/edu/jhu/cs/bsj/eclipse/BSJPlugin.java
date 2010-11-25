@@ -46,5 +46,5 @@ public class BSJPlugin extends AbstractUIPlugin {
 	public static BSJPlugin getDefault() {
 		return plugin;
 	}
-
+	
 }

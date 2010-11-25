@@ -50,6 +50,23 @@
             id="edu.jhu.cs.bsj.eclipse.preferences.EditorPreferencePage"
             name="Editor">
       </page>
+      <page
+            category="edu.jhu.cs.bsj.eclipse.preferences.EditorPreferencePage"
+            class="edu.jhu.cs.bsj.eclipse.preference.SyntaxColoringPreferencePage"
+            id="edu.jhu.cs.bsj.eclipse.preference.SyntaxColoringPreferencePage"
+            name="Syntax Coloring">
+      </page>
+      <page
+            class="edu.jhu.cs.bsj.eclipse.plugin.preferences.SamplePreferencePage"
+            id="edu.jhu.cs.bsj.eclipse.plugin.preferences.SamplePreferencePage"
+            name="Sample Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="edu.jhu.cs.bsj.eclipse.preference.SyntaxColoringPreferenceInitializer">
+      </initializer>
    </extension>
    
 </plugin>

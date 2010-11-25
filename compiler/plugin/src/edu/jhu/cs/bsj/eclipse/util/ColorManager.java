@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Display;
 /**
  * Maintains a table of rgb-color pairs for reuse
  */
-public class ColorManager {
+public class ColorManager implements IColorManager {
 	protected Map<RGB,Color> colorTable = new HashMap<RGB,Color>(10);
 
 	public void dispose() {
