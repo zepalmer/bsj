@@ -1,5 +1,10 @@
 package edu.jhu.cs.bsj.eclipse.text;
 
+import junk.BSJMetaprogramScanner;
+import junk.BSJPartitionConstants;
+import junk.JavaCodeScanner;
+
+import org.eclipse.jdt.ui.text.IColorManager;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -21,6 +26,7 @@ import edu.jhu.cs.bsj.eclipse.util.ColorManager;
 
 public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	
+	private IColorManager colorManager;
 	private AbstractBSJScanner codeScanner;
 	private AbstractBSJScanner multiLineCommentScanner;
 	private AbstractBSJScanner singleLineCommentScanner;
@@ -28,6 +34,20 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	private AbstractBSJScanner javadocScanner;
 	
 	public BSJSourceViewerConfiguration() {
+		initColorManager();
+		initScanners();
+	}
+	
+	protected void initColorManager() {
+		
+	}
+	
+	protected void initScanners() {
+		
+	}
+	
+	protected IColorManager getColorManager() {
+		return colorManager;
 	}
 	
 	protected AbstractBSJScanner getCodeScanner() {

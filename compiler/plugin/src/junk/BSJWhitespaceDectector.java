@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.eclipse.text;
+package junk;
 
 import org.eclipse.jface.text.rules.IWhitespaceDetector;
 

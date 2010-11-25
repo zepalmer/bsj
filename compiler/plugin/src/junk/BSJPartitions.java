@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.eclipse.text;
+package junk;
 
 public interface BSJPartitions {
 	

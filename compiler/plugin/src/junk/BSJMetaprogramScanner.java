@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.eclipse.text;
+package junk;
 
 import java.util.ArrayList;
 import java.util.List;

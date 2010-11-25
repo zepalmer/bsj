@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package edu.jhu.cs.bsj.eclipse.text;
+package junk;
 
 
 import org.eclipse.jface.text.rules.IWordDetector;
