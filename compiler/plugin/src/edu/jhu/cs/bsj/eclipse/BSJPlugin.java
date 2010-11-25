@@ -3,6 +3,9 @@ package edu.jhu.cs.bsj.eclipse;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import edu.jhu.cs.bsj.eclipse.util.ColorManager;
+import edu.jhu.cs.bsj.eclipse.util.IColorManager;
+
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -13,6 +16,9 @@ public class BSJPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static BSJPlugin plugin;
+	
+	// color manager shared by the plug-in
+	private IColorManager colorManager;
 	
 	/**
 	 * The constructor
@@ -27,6 +33,7 @@ public class BSJPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		colorManager = new ColorManager();
 	}
 
 	/*
@@ -35,6 +42,7 @@ public class BSJPlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		colorManager.dispose();
 		super.stop(context);
 	}
 
@@ -45,6 +53,13 @@ public class BSJPlugin extends AbstractUIPlugin {
 	 */
 	public static BSJPlugin getDefault() {
 		return plugin;
+	}
+
+	/**
+	 * @return the color manager shared by the plug-in
+	 */
+	public IColorManager getColorManager() {
+		return colorManager;
 	}
 	
 }

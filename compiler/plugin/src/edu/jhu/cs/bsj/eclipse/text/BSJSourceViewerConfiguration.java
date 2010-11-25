@@ -4,7 +4,6 @@ import junk.BSJMetaprogramScanner;
 import junk.BSJPartitionConstants;
 import junk.JavaCodeScanner;
 
-import org.eclipse.jdt.ui.text.IColorManager;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -21,8 +20,10 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import edu.jhu.cs.bsj.eclipse.BSJPlugin;
 import edu.jhu.cs.bsj.eclipse.text.scanners.AbstractBSJScanner;
 import edu.jhu.cs.bsj.eclipse.util.ColorManager;
+import edu.jhu.cs.bsj.eclipse.util.IColorManager;
 
 public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	
@@ -39,7 +40,7 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	}
 	
 	protected void initColorManager() {
-		
+		colorManager = BSJPlugin.getDefault().getColorManager();
 	}
 	
 	protected void initScanners() {
