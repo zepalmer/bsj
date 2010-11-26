@@ -1,6 +1,6 @@
-package junk;
+package edu.jhu.cs.bsj.eclipse.text.scanners;
 
-public interface BSJPartitions {
+public interface BSJPartitionConstants {
 	
 	String BSJ_PARTITIONING = "__bsj_partitioning";
 	

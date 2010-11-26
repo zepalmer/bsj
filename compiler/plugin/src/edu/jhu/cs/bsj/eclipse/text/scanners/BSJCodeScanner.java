@@ -37,11 +37,11 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		
 		// Add rule whitespace rule.
 		token = defaultToken;
-		rules.add(new WhitespaceRule(new BSJWhitespaceDetector(), defaultToken));
+		rules.add(new WhitespaceRule(new BSJWhitespaceDetector(), token));
 		
 		// Add rule for character constants
 		token = getToken(BSJTokenKeys.JAVA_STRING);
-		rules.add(new SingleLineRule("\"", "\"", token, '\\'));
+		rules.add(new SingleLineRule("\'", "\'", token, '\\'));
 		
 		// Word detector
 		BSJWordDetector wordDetector = new BSJWordDetector();
@@ -69,7 +69,7 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		WordRule javaConstantRule = new WordRule(wordDetector, token);
 		for (int i= 0; i <  javaConstants.length; i++)
 			javaConstantRule.addWord(javaConstants[i], token);
-		rules.add(javaKeywordRule);
+		rules.add(javaConstantRule);
 		
 		return rules;
 	}
