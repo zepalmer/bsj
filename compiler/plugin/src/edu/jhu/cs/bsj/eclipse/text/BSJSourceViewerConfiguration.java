@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Display;
 import edu.jhu.cs.bsj.eclipse.BSJPlugin;
 import edu.jhu.cs.bsj.eclipse.text.scanners.AbstractBSJScanner;
 import edu.jhu.cs.bsj.eclipse.text.scanners.BSJCodeScanner;
+import edu.jhu.cs.bsj.eclipse.text.scanners.BSJCommentScanner;
 import edu.jhu.cs.bsj.eclipse.util.IColorManager;
 
 public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
@@ -46,6 +47,8 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	
 	protected void initScanners() {
 		codeScanner = new BSJCodeScanner(colorManager, preferenceStore);
+		multiLineCommentScanner = new BSJCommentScanner(colorManager, preferenceStore, BSJTokenKeys.JAVA_MULTI_LINE_COMMENT);
+		singleLineCommentScanner = new BSJCommentScanner(colorManager, preferenceStore, BSJTokenKeys.JAVA_SINGLE_LINE_COMMENT);
 	}
 	
 	protected IColorManager getColorManager() {
@@ -91,10 +94,13 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 		reconciler.setDamager(dr, BSJPartitionConstants.BSJ_JAVADOC);
 		reconciler.setRepairer(dr, BSJPartitionConstants.BSJ_JAVADOC);
 		
-		dr = new DefaultDamagerRepairer(new SingleTokenScanner(
-				new TextAttribute(new Color(Display.getCurrent(), new RGB(0,100,0)))));
+		dr = new DefaultDamagerRepairer(getMultiLineCommentScanner());
 		reconciler.setDamager(dr, BSJPartitionConstants.BSJ_MULTILINE_COMMENT);
 		reconciler.setRepairer(dr, BSJPartitionConstants.BSJ_MULTILINE_COMMENT);
+		
+		dr = new DefaultDamagerRepairer(getSingleLineCommentScanner());
+		reconciler.setDamager(dr, BSJPartitionConstants.BSJ_SINGLELINE_COMMENT);
+		reconciler.setRepairer(dr, BSJPartitionConstants.BSJ_SINGLELINE_COMMENT);
 		
 		return reconciler;
 	}

@@ -19,6 +19,7 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 	public BSJCodeScanner(IColorManager colorManager,
 			IPreferenceStore preferenceStore) {
 		super(colorManager, preferenceStore);
+		initialize();
 	}
 	
 	@Override
@@ -37,14 +38,14 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		
 		// Add rule whitespace rule.
 		token = defaultToken;
-		rules.add(new WhitespaceRule(new BSJWhitespaceDetector(), token));
+		rules.add(new WhitespaceRule(new BSJDetectorWhitespace(), token));
 		
 		// Add rule for characters
 		token = getToken(BSJTokenKeys.JAVA_STRING);
 		rules.add(new SingleLineRule("\'", "\'", token, '\\'));
 		
 		// Word detector
-		BSJWordDetector wordDetector = new BSJWordDetector();
+		BSJDetectorKeyword wordDetector = new BSJDetectorKeyword();
 		
 		// Add rule for return keyword
 		token = getToken(BSJTokenKeys.JAVA_KEYWORD_RETURN);

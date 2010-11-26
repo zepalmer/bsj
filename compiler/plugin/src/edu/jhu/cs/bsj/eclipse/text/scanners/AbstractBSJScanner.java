@@ -71,9 +71,6 @@ public abstract class AbstractBSJScanner extends BufferedRuleBasedScanner{
 		super();
 		this.colorManager = colorManager;
 		this.preferenceStore = preferenceStore;
-		this.tokenKeys = getTokenProperties();
-		initPreferenceKeys();
-		initScannerRules();
 	}
 	
 	public IColorManager getColorManager() {
@@ -82,6 +79,12 @@ public abstract class AbstractBSJScanner extends BufferedRuleBasedScanner{
 	
 	public IPreferenceStore getPreferenceStore() {
 		return preferenceStore;
+	}
+	
+	protected void initialize() {
+		tokenKeys = getTokenProperties();
+		initPreferenceKeys();
+		initScannerRules();
 	}
 	
 	private void initPreferenceKeys() {
@@ -145,15 +148,6 @@ public abstract class AbstractBSJScanner extends BufferedRuleBasedScanner{
 					javaPreferenceLocation, strikethroughPrefKeys[tokenIndex], false, null);
 			underline = preferenceService.getBoolean(
 					javaPreferenceLocation, underlinePrefKeys[tokenIndex], false, null);
-			
-			System.out.print(tokenKeys[tokenIndex] + " ");
-			System.out.print(rgb + " ");
-			System.out.print(bold + " ");
-			System.out.print(italic + " ");
-			System.out.print(strikethrough + " ");
-			System.out.print(underline + " ");
-			System.out.println();
-			
 		} else {
 			// TODO : fix this
 			rgb = new RGB(0,0,0);
@@ -162,6 +156,14 @@ public abstract class AbstractBSJScanner extends BufferedRuleBasedScanner{
 			strikethrough = false;
 			underline = false;
 		}
+		
+		System.out.print(tokenKeys[tokenIndex] + " ");
+		System.out.print(rgb + " ");
+		System.out.print(bold + " ");
+		System.out.print(italic + " ");
+		System.out.print(strikethrough + " ");
+		System.out.print(underline + " ");
+		System.out.println();
 		
 		Color color = colorManager.getColor(rgb);
 		int style = bold ? SWT.BOLD : SWT.NORMAL;
