@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.eclipse.text.scanners;
+package edu.jhu.cs.bsj.eclipse.text;
 
 public interface BSJPartitionConstants {
 	

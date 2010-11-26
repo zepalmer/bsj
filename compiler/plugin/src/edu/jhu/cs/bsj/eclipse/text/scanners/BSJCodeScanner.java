@@ -39,7 +39,7 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		token = defaultToken;
 		rules.add(new WhitespaceRule(new BSJWhitespaceDetector(), token));
 		
-		// Add rule for character constants
+		// Add rule for characters
 		token = getToken(BSJTokenKeys.JAVA_STRING);
 		rules.add(new SingleLineRule("\'", "\'", token, '\\'));
 		
@@ -48,25 +48,25 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		
 		// Add rule for return keyword
 		token = getToken(BSJTokenKeys.JAVA_KEYWORD_RETURN);
-		WordRule returnKeywordRule = new WordRule(wordDetector, token);
+		WordRule returnKeywordRule = new WordRule(wordDetector);
 		returnKeywordRule.addWord(returnKeyword, token);
 		rules.add(returnKeywordRule);
 		
 		// Add rule for java keywords
 		token = getToken(BSJTokenKeys.JAVA_KEYWORD);
-		WordRule javaKeywordRule = new WordRule(wordDetector, token);
+		WordRule javaKeywordRule = new WordRule(wordDetector);
 		for (int i= 0; i <  javaKeywords.length; i++)
 			javaKeywordRule.addWord(javaKeywords[i], token);
 		rules.add(javaKeywordRule);
 		
 		// Add rule for java types
-		WordRule javaTypeRule = new WordRule(wordDetector, token);
+		WordRule javaTypeRule = new WordRule(wordDetector);
 		for (int i= 0; i <  javaTypes.length; i++)
 			javaTypeRule.addWord(javaTypes[i], token);
 		rules.add(javaTypeRule);
 		
 		// Add rule for constants
-		WordRule javaConstantRule = new WordRule(wordDetector, token);
+		WordRule javaConstantRule = new WordRule(wordDetector);
 		for (int i= 0; i <  javaConstants.length; i++)
 			javaConstantRule.addWord(javaConstants[i], token);
 		rules.add(javaConstantRule);

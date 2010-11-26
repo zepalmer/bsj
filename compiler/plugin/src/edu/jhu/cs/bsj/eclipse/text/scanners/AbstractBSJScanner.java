@@ -145,6 +145,15 @@ public abstract class AbstractBSJScanner extends BufferedRuleBasedScanner{
 					javaPreferenceLocation, strikethroughPrefKeys[tokenIndex], false, null);
 			underline = preferenceService.getBoolean(
 					javaPreferenceLocation, underlinePrefKeys[tokenIndex], false, null);
+			
+			System.out.print(tokenKeys[tokenIndex] + " ");
+			System.out.print(rgb + " ");
+			System.out.print(bold + " ");
+			System.out.print(italic + " ");
+			System.out.print(strikethrough + " ");
+			System.out.print(underline + " ");
+			System.out.println();
+			
 		} else {
 			// TODO : fix this
 			rgb = new RGB(0,0,0);
