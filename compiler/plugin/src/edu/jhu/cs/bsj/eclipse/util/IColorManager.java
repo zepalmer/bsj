@@ -1,9 +1,10 @@
 package edu.jhu.cs.bsj.eclipse.util;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 
 public interface IColorManager {
 	public void dispose();
-	public Color getColor(String key);
-	public void putColor(String key, Color color);
+	public Color getColor(RGB key);
+	public void putColor(RGB key, Color color);
 }

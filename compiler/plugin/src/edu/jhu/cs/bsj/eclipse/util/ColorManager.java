@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 
 /**
  * Maintains a table of rgb-color pairs for reuse
  */
 public class ColorManager implements IColorManager {
-	protected Map<String,Color> colorTable = new HashMap<String,Color>(10);
+	protected Map<RGB,Color> colorTable = new HashMap<RGB,Color>(10);
 
 	@Override
 	public void dispose() {
@@ -18,7 +19,7 @@ public class ColorManager implements IColorManager {
 	}
 	
 	@Override
-	public Color getColor(String key) {
+	public Color getColor(RGB key) {
 		Color color = colorTable.get(key);
 		if (color == null) {
 			throw new RuntimeException("Cannot find color for the given key.");
@@ -27,7 +28,7 @@ public class ColorManager implements IColorManager {
 	}
 
 	@Override
-	public void putColor(String key, Color color) {
+	public void putColor(RGB key, Color color) {
 		colorTable.put(key, color);
 	}
 	
