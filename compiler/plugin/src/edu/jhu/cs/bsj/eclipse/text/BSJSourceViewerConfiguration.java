@@ -82,7 +82,8 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {	
 		PresentationReconciler reconciler = new PresentationReconciler();
 		
-		DefaultDamagerRepairer dr= new DefaultDamagerRepairer(getCodeScanner());
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(getCodeScanner());
+		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		
 		dr = new DefaultDamagerRepairer(new SingleTokenScanner(
