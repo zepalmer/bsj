@@ -6,7 +6,7 @@ import org.eclipse.jdt.ui.text.IJavaColorConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.rules.IRule;
 
-import edu.jhu.cs.bsj.eclipse.text.BSJColorKeys;
+import edu.jhu.cs.bsj.eclipse.text.BSJTokenKeys;
 import edu.jhu.cs.bsj.eclipse.util.IColorManager;
 
 
@@ -18,12 +18,12 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 	}
 	
 	private final static String[] colorKeys= {
-		BSJColorKeys.JAVA_KEYWORD,
-		BSJColorKeys.JAVA_STRING,
-		BSJColorKeys.JAVA_DEFAULT,
-		BSJColorKeys.JAVA_KEYWORD_RETURN,
-		BSJColorKeys.JAVA_OPERATOR,
-		BSJColorKeys.JAVA_BRACKET,
+		BSJTokenKeys.JAVA_KEYWORD,
+		BSJTokenKeys.JAVA_STRING,
+		BSJTokenKeys.JAVA_DEFAULT,
+		BSJTokenKeys.JAVA_KEYWORD_RETURN,
+		BSJTokenKeys.JAVA_OPERATOR,
+		BSJTokenKeys.JAVA_BRACKET,
 		};
 	
 	private final static String[] keywords = { 
@@ -44,7 +44,7 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		};
 
 	@Override
-	protected String[] getColorKeys() {
+	protected String[] getTokenProperties() {
 		// TODO Auto-generated method stub
 		return null;
 	}

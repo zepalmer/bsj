@@ -34,6 +34,8 @@ public class BSJPlugin extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		colorManager = new ColorManager();
+		
+		Test.main(null);
 	}
 
 	/*

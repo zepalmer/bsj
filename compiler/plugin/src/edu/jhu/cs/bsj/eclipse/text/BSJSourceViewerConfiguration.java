@@ -4,6 +4,7 @@ import junk.BSJMetaprogramScanner;
 import junk.BSJPartitionConstants;
 import junk.JavaCodeScanner;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -28,6 +29,8 @@ import edu.jhu.cs.bsj.eclipse.util.IColorManager;
 public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	
 	private IColorManager colorManager;
+	private IPreferenceStore preferenceStore;
+	
 	private AbstractBSJScanner codeScanner;
 	private AbstractBSJScanner multiLineCommentScanner;
 	private AbstractBSJScanner singleLineCommentScanner;
@@ -36,11 +39,16 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	
 	public BSJSourceViewerConfiguration() {
 		initColorManager();
+		initPreferenceStore();
 		initScanners();
 	}
 	
 	protected void initColorManager() {
 		colorManager = BSJPlugin.getDefault().getColorManager();
+	}
+	
+	protected void initPreferenceStore() {
+		preferenceStore = BSJPlugin.getDefault().getPreferenceStore();	
 	}
 	
 	protected void initScanners() {
@@ -79,6 +87,10 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	
 	@Override
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
+		
+		if(true)
+			return super.getPresentationReconciler(sourceViewer);
+			
 		PresentationReconciler reconciler = new PresentationReconciler();
 		DefaultDamagerRepairer dr;
 		
