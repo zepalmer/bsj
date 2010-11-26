@@ -14,8 +14,4 @@ public class SyntaxColoringPreferenceInitializer extends AbstractPreferenceIniti
 		//store.setDefault(BSJPreferenceConstants.P_CHOICE, "choice2");
 		//store.setDefault(BSJPreferenceConstants.P_STRING, "Default value");
 	}
-	
-	protected void initializeSyntaxHighting(IPreferenceStore store) {
-		
-	}
 }

@@ -128,8 +128,11 @@ public abstract class AbstractBSJScanner extends BufferedRuleBasedScanner{
 		RGB rgb;
 		boolean bold, italic, strikethrough, underline;
 		
+		/*
 		boolean useJavaDefault = preferenceStore.getBoolean(
 				BSJPreferenceKeys.getUseJavaPreferenceKey(tokenKeys[tokenIndex]));
+		*/
+		boolean useJavaDefault = true;
 		if(useJavaDefault) {
 			rgb = BSJPreferenceConverter.getRGB(
 					preferenceService.getString(
