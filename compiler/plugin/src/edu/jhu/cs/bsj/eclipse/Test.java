@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChange
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.text.IJavaColorConstants;
 import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.Preferences;
 
 import edu.jhu.cs.bsj.eclipse.preference.BSJPreferenceKeys;
@@ -23,7 +24,6 @@ public class Test {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
 		System.out.println(Character.isJavaIdentifierPart('*'));
 		
 		//System.out.println(JavaCore.COMPILER_TASK_TAGS);
