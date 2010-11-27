@@ -72,6 +72,16 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 			javaConstantRule.addWord(javaConstants[i], token);
 		rules.add(javaConstantRule);
 		
+		// Add rule for operators
+		token = getToken(BSJTokenKeys.JAVA_OPERATOR);
+		rules.add(new BSJRuleJavaOperators(token));
+		
+		// Add rule for brackets
+		rules.add(new BSJRuleBrackets(
+				getToken(BSJTokenKeys.JAVA_BRACKET), 
+				getToken(BSJTokenKeys.JAVA_BRACKET)
+				));
+		
 		return rules;
 	}
 	
