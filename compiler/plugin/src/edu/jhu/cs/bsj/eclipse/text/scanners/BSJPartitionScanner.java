@@ -12,7 +12,8 @@ import org.eclipse.jface.text.rules.Token;
 import edu.jhu.cs.bsj.eclipse.text.BSJPartitionConstants;
 
 /**
- * At the first step, partition the document into javaDocs, multiline comments, and default content 
+ * At the first step, partition the document into:
+ * javaDocs, multiline comments, singleline comments, strings, and default content. 
  */
 public class BSJPartitionScanner extends RuleBasedPartitionScanner {
 	

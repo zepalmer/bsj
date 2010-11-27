@@ -12,6 +12,6 @@ public interface BSJPartitionConstants {
 	
 	String BSJ_STRING = "__bsj_string";
 	
-	String BSJ_CHARACTER = "__bsj_character";
+	//String BSJ_CHARACTER = "__bsj_character";
 	
 }
