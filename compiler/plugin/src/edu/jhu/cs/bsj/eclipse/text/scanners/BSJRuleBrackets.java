@@ -13,11 +13,12 @@ public class BSJRuleBrackets extends WordRule {
 		super(new IWordDetector() {
 			@Override
 			public boolean isWordStart(char c) {
-				return c=='(' || c==')' || c=='{' || c=='}' || c=='[' || c==']';
+				return c=='(' || c==')' || c=='{' || c=='}' || c=='[' || c==']' 
+					|| c==':' || c=='~' || c=='<';
 			}
 			@Override
 			public boolean isWordPart(char c) {
-				return c==':' || c==']'; 
+				return c==':' || c==']' || c=='>' || c=='~';
 			}
 		});
 		
@@ -30,6 +31,10 @@ public class BSJRuleBrackets extends WordRule {
 	private void createBrackets() {
 		addWord("[:", bsjBracketToken);
 		addWord(":]", bsjBracketToken);
+		addWord("<:", bsjBracketToken);
+		addWord(":>", bsjBracketToken);
+		addWord("~:", bsjBracketToken);
+		addWord(":~", bsjBracketToken);
 		
 		addWord("(", javaBracketToken);
 		addWord(")", javaBracketToken);
