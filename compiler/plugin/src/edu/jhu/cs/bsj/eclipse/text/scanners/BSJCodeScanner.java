@@ -36,7 +36,7 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		
 		Token token;
 		
-		// Add rule whitespace rule.
+		// Add whitespace rule.
 		token = defaultToken;
 		rules.add(new WhitespaceRule(new BSJDetectorWhitespace(), token));
 		

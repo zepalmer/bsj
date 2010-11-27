@@ -24,7 +24,9 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 		
-		System.out.println(JavaCore.COMPILER_TASK_TAGS);
+		System.out.println(Character.isJavaIdentifierPart('*'));
+		
+		//System.out.println(JavaCore.COMPILER_TASK_TAGS);
 		
 		String location = "org.eclipse.jdt.ui";
 		IPreferencesService service = Platform.getPreferencesService();
