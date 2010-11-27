@@ -9,6 +9,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import edu.jhu.cs.bsj.eclipse.editor.BSJEditor;
+import edu.jhu.cs.bsj.eclipse.text.BSJSourceViewerConfiguration;
 
 public class SyntaxColoringPreferenceChangeListener implements
 		IPreferenceChangeListener {
@@ -24,8 +25,13 @@ public class SyntaxColoringPreferenceChangeListener implements
 					IEditorPart editor = editorRefs[k].getEditor(true);
 					if(editor instanceof BSJEditor) {
 						BSJEditor bsjEditor = (BSJEditor)editor;
+						BSJSourceViewerConfiguration svConfig = bsjEditor.getOpenSourceViewerConfiguration();
+						svConfig.getCodeScanner().invalidateTokens();
+						svConfig.getMultiLineCommentScanner().invalidateTokens();
+						svConfig.getSingleLineCommentScanner().invalidateTokens();
+						svConfig.getStringScanner().invalidateTokens();
+						svConfig.getJavadocScanner().invalidateTokens();
 						bsjEditor.invalidateTextPresentation();
-						// TODO: FIGURE THIS OUT
 					}
 				}
 			}

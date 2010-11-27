@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.eclipse.editor;
 
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.ui.editors.text.TextEditor;
 
 import edu.jhu.cs.bsj.eclipse.text.BSJSourceViewerConfiguration;
@@ -27,7 +26,7 @@ public class BSJEditor extends TextEditor {
 		return getSourceViewer();
 	}
 	
-	public SourceViewerConfiguration getOpenSourceViewerConfiguration() {
-		return getSourceViewerConfiguration();
+	public BSJSourceViewerConfiguration getOpenSourceViewerConfiguration() {
+		return (BSJSourceViewerConfiguration)getSourceViewerConfiguration();
 	}
 }

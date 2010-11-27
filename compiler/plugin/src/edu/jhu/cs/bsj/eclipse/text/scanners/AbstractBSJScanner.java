@@ -26,6 +26,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 
+import edu.jhu.cs.bsj.eclipse.BSJPluginService;
 import edu.jhu.cs.bsj.eclipse.preference.BSJPreferenceConverter;
 import edu.jhu.cs.bsj.eclipse.preference.BSJPreferenceKeys;
 import edu.jhu.cs.bsj.eclipse.util.IColorManager;
@@ -38,7 +39,7 @@ public abstract class AbstractBSJScanner extends BufferedRuleBasedScanner{
 	private IColorManager colorManager;
 	private IPreferenceStore preferenceStore;
 	private static IPreferencesService preferenceService = Platform.getPreferencesService();
-	private static String javaPreferenceLocation = "org.eclipse.jdt.ui";
+	private static String javaPreferenceLocation = BSJPluginService.JavaPreferenceLocation;
 	
 	private String[] tokenKeys;
 	private Map<String,Token> tokenMap = new HashMap<String,Token>();
@@ -79,6 +80,26 @@ public abstract class AbstractBSJScanner extends BufferedRuleBasedScanner{
 	
 	public IPreferenceStore getPreferenceStore() {
 		return preferenceStore;
+	}
+	
+	public void invalidateTokens() {
+		int length = tokenKeys.length;
+		for(int tokenIndex=0; tokenIndex<length; tokenIndex++) {
+			Token token = tokenMap.get(tokenKeys[tokenIndex]);
+			if(token!=null) {
+				token.setData(
+					createTextAttribute(tokenIndex));
+			}
+		}
+	}
+	
+	public void invalidateRules() {
+		List<IRule> rules= createRules();
+		if (rules != null) {
+			IRule[] result= new IRule[rules.size()];
+			rules.toArray(result);
+			setRules(result);
+		}
 	}
 	
 	protected void initialize() {

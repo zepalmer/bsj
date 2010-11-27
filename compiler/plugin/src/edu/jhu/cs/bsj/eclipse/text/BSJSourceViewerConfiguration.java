@@ -9,7 +9,6 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
 import edu.jhu.cs.bsj.eclipse.BSJPlugin;
-import edu.jhu.cs.bsj.eclipse.text.scanners.AbstractBSJScanner;
 import edu.jhu.cs.bsj.eclipse.text.scanners.BSJCodeScanner;
 import edu.jhu.cs.bsj.eclipse.text.scanners.BSJCommentScanner;
 import edu.jhu.cs.bsj.eclipse.text.scanners.BSJJavaDocScanner;
@@ -21,11 +20,11 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	private IColorManager colorManager;
 	private IPreferenceStore preferenceStore;
 	
-	private AbstractBSJScanner codeScanner;
-	private AbstractBSJScanner multiLineCommentScanner;
-	private AbstractBSJScanner singleLineCommentScanner;
-	private AbstractBSJScanner stringScanner;
-	private AbstractBSJScanner javadocScanner;
+	private BSJCodeScanner codeScanner;
+	private BSJCommentScanner multiLineCommentScanner;
+	private BSJCommentScanner singleLineCommentScanner;
+	private BSJStringScanner stringScanner;
+	private BSJJavaDocScanner javadocScanner;
 	
 	public BSJSourceViewerConfiguration() {
 		initColorManager();
@@ -49,27 +48,27 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 		javadocScanner = new BSJJavaDocScanner(colorManager, preferenceStore);
 	}
 	
-	protected IColorManager getColorManager() {
+	public IColorManager getColorManager() {
 		return colorManager;
 	}
 	
-	protected AbstractBSJScanner getCodeScanner() {
+	public BSJCodeScanner getCodeScanner() {
 		return codeScanner;
 	}
 
-	protected AbstractBSJScanner getMultiLineCommentScanner() {
+	public BSJCommentScanner getMultiLineCommentScanner() {
 		return multiLineCommentScanner;
 	}
 
-	protected AbstractBSJScanner getSingleLineCommentScanner() {
+	public BSJCommentScanner getSingleLineCommentScanner() {
 		return singleLineCommentScanner;
 	}
 
-	protected AbstractBSJScanner getStringScanner() {
+	public BSJStringScanner getStringScanner() {
 		return stringScanner;
 	}
 
-	protected AbstractBSJScanner getJavadocScanner() {
+	public BSJJavaDocScanner getJavadocScanner() {
 		return javadocScanner;
 	}
 	
