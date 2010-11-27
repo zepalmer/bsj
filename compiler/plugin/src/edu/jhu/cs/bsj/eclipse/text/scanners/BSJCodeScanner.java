@@ -47,12 +47,6 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		// Word detector
 		BSJDetectorKeyword wordDetector = new BSJDetectorKeyword();
 		
-		// Add rule for return keyword
-		token = getToken(BSJTokenKeys.JAVA_KEYWORD_RETURN);
-		WordRule returnKeywordRule = new WordRule(wordDetector);
-		returnKeywordRule.addWord(returnKeyword, token);
-		rules.add(returnKeywordRule);
-		
 		// Add rule for java keywords
 		token = getToken(BSJTokenKeys.JAVA_KEYWORD);
 		WordRule javaKeywordRule = new WordRule(wordDetector);
@@ -60,13 +54,28 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 			javaKeywordRule.addWord(javaKeywords[i], token);
 		rules.add(javaKeywordRule);
 		
+		// Add rule for return keyword
+		token = getToken(BSJTokenKeys.JAVA_KEYWORD_RETURN);
+		WordRule returnKeywordRule = new WordRule(wordDetector);
+		returnKeywordRule.addWord(returnKeyword, token);
+		rules.add(returnKeywordRule);
+		
+		// Add rule for bsj keywords
+		token = getToken(BSJTokenKeys.JAVA_KEYWORD);
+		WordRule bsjKeywordRule = new WordRule(wordDetector);
+		for (int i= 0; i <  bsjKeywords.length; i++)
+			bsjKeywordRule.addWord(bsjKeywords[i], token);
+		rules.add(bsjKeywordRule);
+		
 		// Add rule for java types
+		token = getToken(BSJTokenKeys.JAVA_KEYWORD);
 		WordRule javaTypeRule = new WordRule(wordDetector);
 		for (int i= 0; i <  javaTypes.length; i++)
 			javaTypeRule.addWord(javaTypes[i], token);
 		rules.add(javaTypeRule);
 		
 		// Add rule for constants
+		//token = getToken(BSJTokenKeys.JAVA_KEYWORD);
 		WordRule javaConstantRule = new WordRule(wordDetector);
 		for (int i= 0; i <  javaConstants.length; i++)
 			javaConstantRule.addWord(javaConstants[i], token);
@@ -104,6 +113,10 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 	
 	private static final String returnKeyword = "return";
 
+	private static final String[] bsjKeywords = {
+		"#depends", "#import", "#mode", "#target", "#weak",
+		};
+	
 	private final static String[] javaTypes = { 
 		"void", "boolean", "char", "byte", "short", 
 		"int", "long", "float", "double" 
@@ -112,5 +125,5 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 	private final static String[] javaConstants = { 
 		"false", "null", "true" 
 		};
-
+	
 }
