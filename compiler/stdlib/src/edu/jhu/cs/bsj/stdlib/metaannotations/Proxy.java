@@ -101,8 +101,9 @@ public class Proxy extends AbstractBsjMetaAnnotationMetaprogram {
 		BlockStatementListNode body = factory.makeBlockStatementListNode();
 		BlockStatementNode expNode = factory
 				.makeExpressionStatementNode(factory.makeAssignmentNode(
-						(ExpressionNode) factory.makeVariableAccessNode(factory
-								.makeIdentifierNode(("this."+proxyObject))),
+						factory.makeVariableAccessNode(
+								factory.makeThisNode(),
+								factory.makeIdentifierNode(proxyObject)),
 						AssignmentOperator.ASSIGNMENT, (ExpressionNode) factory
 								.makeVariableAccessNode(factory
 										.makeIdentifierNode((proxyObject)))));
