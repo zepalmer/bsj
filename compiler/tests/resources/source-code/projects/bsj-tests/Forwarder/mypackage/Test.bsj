@@ -1,6 +1,7 @@
 package mypackage;
 
 public class Test {
+	public int sayGood =0;
 	public String sayHello(int i) {
 		return "hello";
 	}
