@@ -1,0 +1,30 @@
+package edu.jhu.cs.oose.fall2010.invasion.ui;
+
+/**
+ * This class contains common utilities for the reference implementation of Invasion.
+ * @author Zachary Palmer
+ */
+@UITag
+public final class StandardInvasionUIUtilities
+{
+	static
+	{
+		assertUITag(StandardInvasionUIUtilities.class);
+	}
+	
+	private StandardInvasionUIUtilities()
+	{
+	}
+	
+	/**
+	 * Actively checks to ensure that the {@link UITag} annotation is on the classes in the reference implementation.
+	 * This is primarily intended to mess with students who decompile code.
+	 */
+	public static void assertUITag(Class<?> clazz)
+	{
+		if (!clazz.isAnnotationPresent(UITag.class))
+		{
+			throw new IllegalStateException();
+		}
+	}
+}

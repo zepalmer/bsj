@@ -1,0 +1,81 @@
+package edu.jhu.cs.oose.fall2010.invasion.ui;
+
+import javax.swing.JFrame;
+
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModel;
+
+/**
+ * Acts as a container for the main method of the standard Invasion application.
+ * @author Zachary Palmer
+ */
+public final class StandardInvasionMain
+{
+	private StandardInvasionMain()
+	{
+	}
+	
+	/**
+	 * The main method for an Invasion application.  The first argument to the application, if present, is the fully
+	 * qualified name of an Invasion model implementation.
+	 * @param args The arguments to the application.
+	 */
+	public static void main(String[] args)
+	{
+        if (args.length>1)
+        {
+            System.err.println("This application accepts only one optional argument: the name of an Invasion");
+            System.err.println("model class.");
+            System.exit(1);
+        }
+        
+        String className;
+        if (args.length==1)
+        {
+            className = args[0];
+        } else
+        {
+            className = "edu.jhu.cs.oose.fall2010.invasion.model.StandardInvasionModel";
+        }
+        
+        Class<?> modelClass = null;
+        try
+        {
+            modelClass = Class.forName(className);
+        } catch (ClassNotFoundException e)
+        {
+            System.err.println("The class " + className + " was not found.");
+            System.exit(2);
+        }
+        
+        Object modelObject = null;
+        try
+        {
+            modelObject = modelClass.newInstance();
+        } catch (InstantiationException e)
+        {
+            System.err.println("The class " + className + " could not be instantiated using a no-args constructor: " +
+                    e.getMessage());
+            System.exit(2);
+        } catch (IllegalAccessException e)
+        {
+            System.err.println("The class " + className + " could not be instantiated using a no-args constructor: " +
+                    e.getMessage());
+            System.exit(2);
+        }
+        
+        InvasionModel model = null;
+        try
+        {
+            model = (InvasionModel)modelObject;
+        } catch (ClassCastException e)
+        {
+            System.err.println("The class " + className + " is not assignable to InvasionModel.");
+            System.exit(2);
+        }
+        
+        StandardInvasionFrame frame = new StandardInvasionFrame(model);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+}

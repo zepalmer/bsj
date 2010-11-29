@@ -1,0 +1,96 @@
+package edu.jhu.cs.oose.fall2010.invasion.iface;
+
+/**
+ * A simple class representing a location on the Invasion game board.
+ * 
+ * @author Zachary Palmer
+ */
+public class Location
+{
+	/** The X coordinate of this location. */
+	private int x;
+	/** The Y coordinate of this location. */
+	private int y;
+
+	/**
+	 * Creates a new location object.
+	 * 
+	 * @param x The X coordinate of the new location.
+	 * @param y The Y coordinate of the new location.
+	 */
+	public Location(int x, int y)
+	{
+		super();
+		this.x = x;
+		this.y = y;
+	}
+
+	/**
+	 * Retrieves the X coordinate of this location.
+	 * 
+	 * @return The X coordinate of this location.
+	 */
+	public int getX()
+	{
+		return x;
+	}
+
+	/**
+	 * Retrieves the Y coordinate of this location.
+	 * 
+	 * @return The Y coordinate of this location.
+	 */
+	public int getY()
+	{
+		return y;
+	}
+
+	/**
+	 * Calculates a hash code for this location object.
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
+	}
+
+	/**
+	 * Compares this location object to another object for equality. Location objects are only equal to other Location
+	 * objects which represent the same place on the game board.
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Location other = (Location) obj;
+		if (x != other.x)
+			return false;
+		if (y != other.y)
+			return false;
+		return true;
+	}
+	
+	/**
+	 * Creates a user-readable string of this location.  This is intended for debugging purposes.
+	 * @return A string describing this location.
+	 */
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append('(');
+		sb.append(this.x);
+		sb.append(',');
+		sb.append(this.y);
+		sb.append(')');
+		return sb.toString();
+	}
+}

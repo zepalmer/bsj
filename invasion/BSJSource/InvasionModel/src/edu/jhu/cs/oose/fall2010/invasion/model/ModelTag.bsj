@@ -1,0 +1,15 @@
+package edu.jhu.cs.oose.fall2010.invasion.model;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+/**
+ * Used to annotate the reference implementation of the Invasion model. Largely used as a canary to detect students who
+ * have reverse engineered the reference implementation.
+ * 
+ * @author Zachary Palmer
+ */
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ModelTag
+{
+}

@@ -1,0 +1,439 @@
+package edu.jhu.cs.oose.fall2010.invasion.ui;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JComponent;
+
+import edu.jhu.cs.oose.fall2010.invasion.iface.IllegalMoveException;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModel;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModelEvent;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModelListener;
+import edu.jhu.cs.oose.fall2010.invasion.iface.Location;
+import edu.jhu.cs.oose.fall2010.invasion.iface.Player;
+
+/**
+ * This custom component displays a game board for Invasion.
+ * 
+ * @author Zachary Palmer
+ */
+@UITag
+public class StandardInvasionBoard extends JComponent
+{
+	private static final long serialVersionUID = 1L;
+
+	private static final int EDGE_PADDING = 10;
+
+	/** Indicates the width of the board. */
+	private static final int BOARD_WIDTH = 7;
+	/** Indicates the height of the board. */
+	private static final int BOARD_HEIGHT = 7;
+
+	/** Indicates the minimum width of the board (the width at its narrowest point). */
+	private static final int BOARD_WIDTH_MIN = 3;
+	/** Indicates the minimum height of the board (the height at its shortest point). */
+	private static final int BOARD_HEIGHT_MIN = 3;
+
+	/** Indicates the minimum legal X value in the narrow portion of the board. */
+	private static final int MIN_NARROW_X = (BOARD_WIDTH - BOARD_WIDTH_MIN) / 2;
+	/** Indicates the maximum legal X value in the narrow portion of the board. */
+	private static final int MAX_NARROW_X = MIN_NARROW_X + BOARD_WIDTH_MIN - 1;
+	/** Indicates the minimum legal Y value in the short portion of the board. */
+	private static final int MIN_SHORT_Y = (BOARD_HEIGHT - BOARD_HEIGHT_MIN) / 2;
+	/** Indicates the maximum legal Y value in the short portion of the board. */
+	private static final int MAX_SHORT_Y = MIN_SHORT_Y + BOARD_HEIGHT_MIN - 1;
+
+	static
+	{
+		StandardInvasionUIUtilities.assertUITag(StandardInvasionBoard.class);
+		StandardInvasionUIUtilities.assertUITag(SelectionModeListener.class);
+	}
+
+	private InvasionModel model;
+	private Set<ErrorListener> errorListeners;
+
+	private SelectionModel selectionModel;
+
+	/**
+	 * Creates a new game board for displaying an invasion model and issuing commands.
+	 * 
+	 * @param model The model to use.
+	 */
+	public StandardInvasionBoard(InvasionModel model)
+	{
+		super();
+		this.model = model;
+		this.errorListeners = new HashSet<StandardInvasionBoard.ErrorListener>();
+		this.selectionModel = new SelectionModel();
+
+		this.selectionModel.addListener(new SelectionModeListener()
+		{
+			@Override
+			public void selectionChanged(Location newSelection)
+			{
+				StandardInvasionBoard.this.repaint();
+			}
+		});
+		this.model.addListener(new InvasionModelListener()
+		{
+			@Override
+			public void receiveEvent(InvasionModelEvent event)
+			{
+				if (event.isBoardChanged())
+				{
+					StandardInvasionBoard.this.repaint();
+				}
+				if (event.isTurnChanged())
+				{
+					StandardInvasionBoard.this.selectionModel.setSelectedPiece(null);
+				}
+			}
+		});
+		this.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (StandardInvasionBoard.this.model.getWinner() != null)
+				{
+					return;
+				}
+
+				if (e.getButton() != MouseEvent.BUTTON1)
+				{
+					return;
+				}
+
+				int cx = getCellOfX((int) e.getPoint().getX());
+				int cy = getCellOfY((int) e.getPoint().getY());
+
+				if (!inBounds(cx, cy))
+				{
+					return;
+				}
+
+				// The click selects a valid location - use it
+				Location location = new Location(cx, cy);
+				Player p = StandardInvasionBoard.this.model.getPieceOwner(location);
+				if (p != null)
+				{
+					// Select the clicked piece
+					if (location.equals(StandardInvasionBoard.this.selectionModel.getSelectedPiece()))
+					{
+						StandardInvasionBoard.this.selectionModel.setSelectedPiece(null);
+					} else
+					{
+						StandardInvasionBoard.this.selectionModel.setSelectedPiece(location);
+					}
+				} else
+				{
+					// Move the selected piece
+					Location selected = StandardInvasionBoard.this.selectionModel.getSelectedPiece();
+					if (selected != null)
+					{
+						try
+						{
+							StandardInvasionBoard.this.model.move(selected, location);
+							StandardInvasionBoard.this.selectionModel.setSelectedPiece(location);
+						} catch (IllegalMoveException e1)
+						{
+							for (ErrorListener errorListener : StandardInvasionBoard.this.errorListeners)
+							{
+								errorListener.reportError(e1.getMessage());
+							}
+						}
+					}
+				}
+			}
+		});
+	}
+
+	private int getCellWidth()
+	{
+		return (getWidth() - 2 * EDGE_PADDING) / BOARD_WIDTH;
+	}
+
+	private int getCellHeight()
+	{
+		return (getHeight() - 2 * EDGE_PADDING) / BOARD_HEIGHT;
+	}
+
+	private int getXOfCell(int cx)
+	{
+		return this.getCellWidth() * cx + this.getCellWidth() / 2;
+	}
+
+	private int getYOfCell(int cy)
+	{
+		return this.getCellHeight() * cy + this.getCellHeight() / 2;
+	}
+
+	private int getCellOfX(int x)
+	{
+		return x / getCellWidth();
+	}
+
+	private int getCellOfY(int y)
+	{
+		return y / getCellHeight();
+	}
+
+	private boolean inBounds(int x, int y)
+	{
+		return ((y >= MIN_SHORT_Y && y <= MAX_SHORT_Y) || (x >= MIN_NARROW_X && x <= MAX_NARROW_X)) && x >= 0 && y >= 0
+				&& x < BOARD_WIDTH && y < BOARD_HEIGHT;
+	}
+
+	@Override
+	protected void paintComponent(Graphics g)
+	{
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, getWidth(), getHeight());
+
+		// Define the rendering tool class
+		class RenderingTool
+		{
+			private Graphics graphics;
+			private static final int DOT_RADIUS_FACTOR = 9;
+			private static final int COIN_RADIUS_FACTOR = 4;
+			private static final int MIN_DOT_SIZE = 3;
+			private static final int MIN_COIN_SIZE = 6;
+			private static final int BOX_DISTANCE = 2;
+
+			public RenderingTool(Graphics graphics)
+			{
+				super();
+				this.graphics = graphics;
+			}
+
+			private void drawLine(int cx1, int cy1, int cx2, int cy2)
+			{
+				this.graphics.drawLine(getXOfCell(cx1), getYOfCell(cy1), getXOfCell(cx2), getYOfCell(cy2));
+			}
+
+			private void drawDot(int cx, int cy)
+			{
+				this.graphics.setColor(Color.BLACK);
+				final int w = Math.max(MIN_DOT_SIZE, getCellWidth() / DOT_RADIUS_FACTOR);
+				final int h = Math.max(MIN_DOT_SIZE, getCellHeight() / DOT_RADIUS_FACTOR);
+				this.graphics.fillOval(getXOfCell(cx) - w / 2, getYOfCell(cy) - h / 2, w, h);
+			}
+
+			private void drawCoin(int cx, int cy, Player p)
+			{
+				Color c = p == Player.BULGAR ? new Color(0, 128, 255) : new Color(255, 32, 32);
+				final int w = Math.max(MIN_COIN_SIZE, getCellWidth() / COIN_RADIUS_FACTOR);
+				final int h = Math.max(MIN_COIN_SIZE, getCellHeight() / COIN_RADIUS_FACTOR);
+				this.graphics.setColor(c);
+				this.graphics.fillOval(getXOfCell(cx) - w / 2, getYOfCell(cy) - h / 2, w, h);
+				this.graphics.setColor(Color.BLACK);
+				this.graphics.drawOval(getXOfCell(cx) - w / 2, getYOfCell(cy) - h / 2, w, h);
+			}
+
+			private void drawBox(int cx, int cy)
+			{
+				this.graphics.setColor(Color.YELLOW);
+				final int w = Math.max(MIN_COIN_SIZE, getCellWidth() / COIN_RADIUS_FACTOR) + BOX_DISTANCE * 2;
+				final int h = Math.max(MIN_COIN_SIZE, getCellHeight() / COIN_RADIUS_FACTOR) + BOX_DISTANCE * 2;
+				this.graphics.drawRect(getXOfCell(cx) - w / 2, getYOfCell(cy) - h / 2, w, h);
+			}
+
+			public void renderBackground()
+			{
+				this.graphics.setColor(Color.GREEN.darker());
+				this.graphics.fillRect(getXOfCell(MIN_NARROW_X), getYOfCell(0), getXOfCell(MAX_NARROW_X)
+						- getXOfCell(MIN_NARROW_X), getYOfCell(BOARD_HEIGHT - 1) - getYOfCell(0));
+				this.graphics.fillRect(getXOfCell(0), getYOfCell(MIN_SHORT_Y), getXOfCell(BOARD_WIDTH - 1)
+						- getXOfCell(0), getYOfCell(MAX_SHORT_Y) - getYOfCell(MIN_SHORT_Y));
+			}
+
+			public void renderLines()
+			{
+				// Draw the grid's vertical lines
+				graphics.setColor(Color.BLACK);
+				for (int x = 0; x < BOARD_WIDTH; x++)
+				{
+					int topRow;
+					int bottomRow;
+					if (x >= MIN_NARROW_X && x <= MAX_NARROW_X)
+					{
+						topRow = 0;
+						bottomRow = BOARD_HEIGHT - 1;
+					} else
+					{
+						topRow = MIN_SHORT_Y;
+						bottomRow = MAX_SHORT_Y;
+					}
+					drawLine(x, topRow, x, bottomRow);
+				}
+
+				// Draw the grid's horizontal lines
+				graphics.setColor(Color.BLACK);
+				for (int y = 0; y < BOARD_HEIGHT; y++)
+				{
+					int leftColumn;
+					int rightColumn;
+					if (y >= MIN_SHORT_Y && y <= MAX_SHORT_Y)
+					{
+						leftColumn = 0;
+						rightColumn = BOARD_WIDTH - 1;
+					} else
+					{
+						leftColumn = MIN_NARROW_X;
+						rightColumn = MAX_NARROW_X;
+					}
+					drawLine(leftColumn, y, rightColumn, y);
+				}
+
+				// Draw the grid's diagonal lines
+				for (int x = 0; x < BOARD_WIDTH; x++)
+				{
+					for (int y = 0; y < BOARD_HEIGHT - 1; y++)
+					{
+						if ((x + y) % 2 == 0 && inBounds(x, y))
+						{
+							// Consider drawing down-right
+							if (inBounds(x + 1, y + 1))
+							{
+								drawLine(x, y, x + 1, y + 1);
+							}
+							// Consider drawing down-left
+							if (inBounds(x - 1, y + 1))
+							{
+								drawLine(x, y, x - 1, y + 1);
+							}
+						}
+					}
+				}
+			}
+
+			public void renderPieces()
+			{
+				for (int y = 0; y < BOARD_HEIGHT; y++)
+				{
+					for (int x = 0; x < BOARD_WIDTH; x++)
+					{
+						if (inBounds(x, y))
+						{
+							Player p = model.getPieceOwner(new Location(x, y));
+							if (p != null)
+							{
+								drawCoin(x, y, p);
+								Location selected = StandardInvasionBoard.this.selectionModel.getSelectedPiece();
+								if (selected != null && selected.getX() == x && selected.getY() == y)
+								{
+									drawBox(x, y);
+								}
+							} else
+							{
+								drawDot(x, y);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		RenderingTool tool = new RenderingTool(g);
+		tool.renderBackground();
+		tool.renderLines();
+		tool.renderPieces();
+	}
+
+	@Override
+	public Dimension getPreferredSize()
+	{
+		return new Dimension(600, 600);
+	}
+
+	/**
+	 * Used to add an error listener to an invasion board.
+	 * 
+	 * @param listener The error listener to add.
+	 */
+	public void addErrorListener(ErrorListener listener)
+	{
+		this.errorListeners.add(listener);
+	}
+
+	/**
+	 * Used to remove an error listener from an invasion board.
+	 * 
+	 * @param listener The error listener to remove.
+	 */
+	public void removeErrorListener(ErrorListener listener)
+	{
+		this.errorListeners.remove(listener);
+	}
+
+	/**
+	 * This interface defines an error listener which can be used to capture errors that are received by the board.
+	 */
+	static interface ErrorListener
+	{
+		/**
+		 * Reports an error to the listener.
+		 * 
+		 * @param error The text of the error message.
+		 */
+		public void reportError(String error);
+	}
+
+	/**
+	 * This class represents the selection model for an Invasion board. It is separated simply as a matter of form and
+	 * for potential future expansion.
+	 */
+	static class SelectionModel
+	{
+		/** The location of the selected piece. */
+		private Location selectedPiece;
+		/** The listeners for this model. */
+		private Set<SelectionModeListener> listeners;
+
+		public SelectionModel()
+		{
+			this.listeners = new HashSet<StandardInvasionBoard.SelectionModeListener>();
+		}
+
+		public Location getSelectedPiece()
+		{
+			return selectedPiece;
+		}
+
+		public void setSelectedPiece(Location selectedPiece)
+		{
+			this.selectedPiece = selectedPiece;
+			for (SelectionModeListener listener : this.listeners)
+			{
+				listener.selectionChanged(selectedPiece);
+			}
+		}
+
+		public void addListener(SelectionModeListener listener)
+		{
+			this.listeners.add(listener);
+		}
+
+		public void removeListener(SelectionModeListener listener)
+		{
+			this.listeners.remove(listener);
+		}
+	}
+
+	/**
+	 * This interface defines a selection model listener interface used to notify modules of selection changes.
+	 */
+	@UITag
+	static interface SelectionModeListener
+	{
+		/**
+		 * Notifies this listener of a selection change.
+		 */
+		public void selectionChanged(Location newSelection);
+	}
+}

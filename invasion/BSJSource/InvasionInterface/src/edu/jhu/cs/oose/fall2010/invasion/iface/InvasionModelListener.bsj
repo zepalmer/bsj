@@ -1,0 +1,17 @@
+package edu.jhu.cs.oose.fall2010.invasion.iface;
+
+/**
+ * This interface represents a listener for an Invasion model.  The model contains a collection of these listeners
+ * without specific knowledge of which implementations have been provided (allowing the model not to be dependent upon
+ * those code modules that wish to observe it).  Whenever any event occurs on the model, the model will send an event
+ * object describing that event to each listener.
+ * @author Zachary Palmer
+ */
+public interface InvasionModelListener
+{
+	/**
+	 * Notifies this listener that an event has occurred.
+	 * @param event The event which occurred.
+	 */
+	public void receiveEvent(InvasionModelEvent event);
+}

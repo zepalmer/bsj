@@ -1,0 +1,87 @@
+package edu.jhu.cs.oose.fall2010.invasion.ui;
+
+import edu.jhu.cs.oose.fall2010.invasion.iface.IllegalMoveException;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModel;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModelListener;
+import edu.jhu.cs.oose.fall2010.invasion.iface.Location;
+import edu.jhu.cs.oose.fall2010.invasion.iface.Player;
+
+/**
+ * Performs defensive checking on the behavior of an underlying model. This is intended to catch errors on the part of
+ * the students and provide error messages with a stack trace which is useful to them (as opposed to one which appears
+ * later in the GUI's painting operations, for instance).
+ * 
+ * @author Zachary Palmer
+ */
+public class RuntimeCheckingInvasionModel implements InvasionModel
+{
+	private InvasionModel backingModel;
+
+	public RuntimeCheckingInvasionModel(InvasionModel backingModel)
+	{
+		super();
+		this.backingModel = backingModel;
+	}
+
+	@Override
+	public Player getCurrentPlayer()
+	{
+		Player ret = this.backingModel.getCurrentPlayer();
+		if (ret == null)
+		{
+			throw new IllegalStateException("Model returned null for getCurrentPlayer()");
+		}
+		return ret;
+	}
+
+	@Override
+	public Player getPieceOwner(Location location)
+	{
+		Player ret = this.backingModel.getPieceOwner(location);
+		if (ret != null)
+		{
+			if (!isInRange(location))
+			{
+				throw new IllegalStateException("Model returned non-null value for location off the board: " + location);
+			}
+		}
+		return ret;
+	}
+
+	private boolean isInRange(Location location)
+	{
+		final int x = location.getX();
+		final int y = location.getY();
+		return !(x < 0 || y < 0 || x >= 7 || y >= 7 || ((x < 2 || x > 4) && (y < 2 || y > 4)));
+	}
+
+	@Override
+	public Player getWinner()
+	{
+		return this.backingModel.getWinner();
+	}
+
+	@Override
+	public void endTurn() throws IllegalMoveException
+	{
+		this.backingModel.endTurn();
+	}
+
+	@Override
+	public void move(Location currentLocation, Location newLocation) throws IllegalMoveException
+	{
+		this.backingModel.move(currentLocation, newLocation);
+	}
+
+	@Override
+	public void addListener(InvasionModelListener listener)
+	{
+		this.backingModel.addListener(listener);
+	}
+
+	@Override
+	public void removeListener(InvasionModelListener listener)
+	{
+		this.backingModel.removeListener(listener);
+	}
+}

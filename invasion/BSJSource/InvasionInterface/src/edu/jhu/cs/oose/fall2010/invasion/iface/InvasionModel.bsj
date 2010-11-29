@@ -1,0 +1,66 @@
+package edu.jhu.cs.oose.fall2010.invasion.iface;
+
+/**
+ * This interface represents the behavioral contract of a model for the Invasion game. An implementation of this
+ * interface contains the logic of Invasion as well as the state for a specific Invasion game.
+ * 
+ * @author Zachary Palmer
+ */
+public interface InvasionModel
+{
+	/**
+	 * Determines which player is currently moving.
+	 * 
+	 * @return The current player.
+	 */
+	public Player getCurrentPlayer();
+
+	/**
+	 * Determines the player who controls the piece at the specified location.
+	 * 
+	 * @param location The location for which a piece is desired.
+	 * @return The player who owns a piece at that location. Returns <code>null</code> if the location is empty or if
+	 *         the location is not on the board.
+	 */
+	public Player getPieceOwner(Location location);
+
+	/**
+	 * Determines which player has won the game.
+	 * 
+	 * @return The player who won the game or <code>null</code> if neither player has yet won the game.
+	 */
+	public Player getWinner();
+
+	/**
+	 * Indicates that the current player would like to end his or her turn. It is only legal for a player to end his or
+	 * her turn if he or she has moved exactly one piece at least once.
+	 * 
+	 * @throws IllegalMoveException If this is not legal.
+	 */
+	public void endTurn() throws IllegalMoveException;
+
+	/**
+	 * Indicates that the current player would like to move the piece at the given location to a new location.
+	 * 
+	 * @param currentLocation The current location of the piece.
+	 * @param newLocation The location to which the player wishes to move the piece.
+	 * @throws IllegalMoveException If this move is not legal.
+	 */
+	public void move(Location currentLocation, Location newLocation) throws IllegalMoveException;
+
+	/**
+	 * Adds a new listener to this model. This model will now report any events that occur to this listener as well as
+	 * any others it has received.
+	 * 
+	 * @param listener The listener to add to this model.
+	 */
+	public void addListener(InvasionModelListener listener);
+
+	/**
+	 * Removes a listener from this model. This model will no longer report events that occur to the specified listener.
+	 * Any other listeners which have been added to this model but not yet removed will still receive events.
+	 * 
+	 * @param listener The listener to remove from this model.
+	 */
+	public void removeListener(InvasionModelListener listener);
+}

@@ -1,0 +1,13 @@
+package edu.jhu.cs.oose.fall2010.invasion.iface;
+
+/**
+ * This enumeration lists the different players in the Invasion game.
+ * @author Zachary Palmer
+ */
+public enum Player
+{
+	/** Indicates the player controlling the pirates. */
+	PIRATE,
+	/** Indicates the player controlling the bulgars. */
+	BULGAR
+}

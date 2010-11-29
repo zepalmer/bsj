@@ -1,0 +1,468 @@
+package edu.jhu.cs.oose.fall2010.invasion.model;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import edu.jhu.cs.oose.fall2010.invasion.iface.IllegalMoveException;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModel;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModelEvent;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModelListener;
+import edu.jhu.cs.oose.fall2010.invasion.iface.Location;
+import edu.jhu.cs.oose.fall2010.invasion.iface.Player;
+
+/**
+ * Represents a reference implementation of the Invasion model. This class is to be used in binary format by the
+ * students of the Fall 2010 Object-Oriented Software Engineering course during the development of their Invasion GUIs.
+ * 
+ * @author Zachary Palmer
+ */
+@ModelTag
+public final class StandardInvasionModel implements InvasionModel
+{
+	/** Indicates the width of the board. */
+	private static final int BOARD_WIDTH = 7;
+	/** Indicates the height of the board. */
+	private static final int BOARD_HEIGHT = 7;
+
+	/** Indicates the minimum width of the board (the width at its narrowest point). */
+	private static final int BOARD_WIDTH_MIN = 3;
+	/** Indicates the minimum height of the board (the height at its shortest point). */
+	private static final int BOARD_HEIGHT_MIN = 3;
+
+	/** Indicates the minimum legal X value in the narrow portion of the board. */
+	private static final int MIN_NARROW_X = (BOARD_WIDTH - BOARD_WIDTH_MIN) / 2;
+	/** Indicates the maximum legal X value in the narrow portion of the board. */
+	private static final int MAX_NARROW_X = MIN_NARROW_X + BOARD_WIDTH_MIN - 1;
+	/** Indicates the minimum legal Y value in the short portion of the board. */
+	private static final int MIN_SHORT_Y = (BOARD_HEIGHT - BOARD_HEIGHT_MIN) / 2;
+	/** Indicates the maximum legal Y value in the short portion of the board. */
+	private static final int MAX_SHORT_Y = MIN_SHORT_Y + BOARD_HEIGHT_MIN - 1;
+
+	static
+	{
+		if (!StandardInvasionModel.class.isAnnotationPresent(ModelTag.class))
+		{
+			throw new IllegalStateException();
+		}
+	}
+
+	/** Indicates which player is currently playing. */
+	private Player currentPlayer;
+	/** Indicates the winner of the game. */
+	private Player winningPlayer;
+	/** Indicates the contents of the board. */
+	private Player[][] board;
+
+	/**
+	 * Describes the location of the piece which was moved on this turn or <code>null</code> if no piece has yet been
+	 * moved.
+	 */
+	private Location currentPiece;
+	/**
+	 * Indicates whether or not the last move was a jump.
+	 */
+	private boolean wasJump;
+
+	/** The set of listeners to use. */
+	private Set<InvasionModelListener> listenerSet;
+
+	public StandardInvasionModel()
+	{
+		super();
+		this.currentPlayer = Player.PIRATE;
+		this.winningPlayer = null;
+		this.board = new Player[BOARD_HEIGHT][BOARD_WIDTH];
+		this.currentPiece = null;
+		this.listenerSet = new HashSet<InvasionModelListener>();
+
+		for (int y = 0; y < MAX_SHORT_Y; y++)
+		{
+			for (int x = 0; x < BOARD_WIDTH; x++)
+			{
+				if (locationOnBoard(new Location(x, y)))
+				{
+					this.board[y][x] = Player.PIRATE;
+				}
+			}
+		}
+		this.board[MAX_SHORT_Y + (BOARD_HEIGHT - MAX_SHORT_Y) / 2][MIN_NARROW_X] = Player.BULGAR;
+		this.board[MAX_SHORT_Y + (BOARD_HEIGHT - MAX_SHORT_Y) / 2][MAX_NARROW_X] = Player.BULGAR;
+	}
+
+	@Override
+	public Player getCurrentPlayer()
+	{
+		return this.currentPlayer;
+	}
+
+	private boolean locationOnBoard(Location location)
+	{
+		int x = location.getX();
+		int y = location.getY();
+
+		return !(((x < MIN_NARROW_X || x > MAX_NARROW_X) && (y < MIN_SHORT_Y || y > MAX_SHORT_Y)) || x < 0
+				|| x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT);
+	}
+
+	@Override
+	public Player getPieceOwner(Location location)
+	{
+		if (!locationOnBoard(location))
+		{
+			return null;
+		}
+
+		return this.board[location.getY()][location.getX()];
+	}
+
+	@Override
+	public Player getWinner()
+	{
+		return this.winningPlayer;
+	}
+
+	@Override
+	public void endTurn() throws IllegalMoveException
+	{
+		// Make sure the game is still running
+		if (this.winningPlayer != null)
+		{
+			throw new IllegalMoveException("The game is over!");
+		}
+
+		// Make sure the player actually moved
+		if (this.currentPiece == null)
+		{
+			throw new IllegalMoveException("Player did not move a piece.");
+		}
+
+		// Check the number of pirates
+		int pirateCount = 0;
+		for (Player[] parr : this.board)
+		{
+			for (Player p : parr)
+			{
+				if (Player.PIRATE.equals(p))
+				{
+					pirateCount++;
+				}
+			}
+		}
+		if (pirateCount < BOARD_HEIGHT_MIN * BOARD_WIDTH_MIN)
+		{
+			this.winningPlayer = Player.BULGAR;
+		}
+
+		// Check the town
+		boolean piratesWin = true;
+		for (int y = MAX_SHORT_Y; y < BOARD_HEIGHT; y++)
+		{
+			for (int x = MIN_NARROW_X; x <= MAX_NARROW_X; x++)
+			{
+				if (this.board[y][x] != Player.PIRATE)
+				{
+					piratesWin = false;
+				}
+			}
+		}
+		if (piratesWin)
+		{
+			this.winningPlayer = Player.PIRATE;
+		}
+
+		this.currentPlayer = Player.values()[(this.currentPlayer.ordinal() + 1) % Player.values().length];
+		this.currentPiece = null;
+		this.wasJump = false;
+
+		fireEvent(new InvasionModelEvent(false, true, this.winningPlayer != null));
+	}
+
+	private boolean areLocationsConnected(Location a, Location b)
+	{
+		final int xa = a.getX();
+		final int xb = b.getX();
+		final int ya = a.getY();
+		final int yb = b.getY();
+
+		final boolean xEqual = (xa == xb);
+		final boolean yEqual = (ya == yb);
+		final boolean x1d = (xb - xa == 1 || xb - xa == -1);
+		final boolean y1d = (yb - ya == 1 || yb - ya == -1);
+
+		if ((xEqual && y1d) || (yEqual && x1d))
+		{
+			// Then the locations are orthogonal
+			return true;
+		}
+
+		if (y1d && x1d)
+		{
+			// Then the locations are diagonal. Is this okay?
+			return (xa + ya) % 2 == 0 && (xb + yb) % 2 == 0;
+		}
+
+		return false;
+	}
+
+	private int calculateDistanceFromFortress(Location location)
+	{
+		int x = location.getX();
+		int y = location.getY();
+
+		int xd;
+		int yd;
+
+		if (y < MAX_SHORT_Y)
+		{
+			yd = MAX_SHORT_Y - y;
+		} else
+		{
+			yd = 0;
+		}
+
+		if (x < MIN_NARROW_X)
+		{
+			xd = MIN_NARROW_X - x;
+		} else if (x > MAX_NARROW_X)
+		{
+			xd = x - MAX_NARROW_X;
+		} else
+		{
+			xd = 0;
+		}
+
+		// NOTE: fixed after delivered to class - was xd + yd
+		return Math.max(xd, yd);
+	}
+
+	/**
+	 * Determines the location between two other locations. If no single location is between them or if the two
+	 * locations are not connected to the location between them, <code>null</code> is returned.
+	 */
+	private Location getLocationBetween(Location from, Location to)
+	{
+		int fx = from.getX();
+		int fy = from.getY();
+		int tx = to.getX();
+		int ty = to.getY();
+
+		if (fx - tx != 2 && tx - fx != 2 && tx != fx)
+			return null;
+		if (fy - ty != 2 && ty - fy != 2 && ty != fy)
+			return null;
+		if (from.equals(to))
+			return null;
+
+		Location candidate = new Location((fx + tx) / 2, (fy + ty) / 2);
+
+		if (areLocationsConnected(from, candidate) && areLocationsConnected(to, candidate) && getPieceOwner(to) == null)
+		{
+			return candidate;
+		} else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * Determines if the specified jump is legal.
+	 * 
+	 * @param from The source of the jump.
+	 * @param to The target of the jump.
+	 * @return <code>true</code> if it's legal; <code>false</code> if it's not.
+	 */
+	private boolean isLegalJump(Location from, Location to)
+	{
+		if (!locationOnBoard(from) || !locationOnBoard(to))
+		{
+			return false;
+		}
+		Location between = getLocationBetween(from, to);
+		if (between == null || !locationOnBoard(between))
+		{
+			return false;
+		}
+		return getPieceOwner(between) == Player.PIRATE;
+	}
+
+	/**
+	 * Determines if the Bulgar in the specified location can make any jump.
+	 * 
+	 * @param location The location to test.
+	 * @return <code>true</code> if a jump can be made; <code>false</code> if it cannot.
+	 */
+	private boolean canMakeJump(Location location)
+	{
+		final int[] deltas = { -2, 0, 2 };
+		for (int dx : deltas)
+		{
+			for (int dy : deltas)
+			{
+				if (isLegalJump(location, new Location(location.getX() + dx, location.getY() + dy)))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void move(Location currentLocation, Location newLocation) throws IllegalMoveException
+	{
+		// Make sure the game is still running
+		if (this.winningPlayer != null)
+		{
+			throw new IllegalMoveException("The game is over!");
+		}
+
+		// Ensure that the piece is owned by the current player
+		if (getPieceOwner(currentLocation) != getCurrentPlayer())
+		{
+			throw new IllegalMoveException("That piece is not a " + getCurrentPlayer().toString().toLowerCase() + ".");
+		}
+
+		if (!locationOnBoard(currentLocation))
+		{
+			throw new IllegalMoveException("Source location is not on board.");
+		} else if (!locationOnBoard(newLocation))
+		{
+			throw new IllegalMoveException("Target location is not on board.");
+		}
+
+		if (this.currentPlayer == Player.PIRATE)
+		{
+			// The pirates cannot move more than once per turn under any circumstances
+			if (this.currentPiece != null)
+			{
+				throw new IllegalMoveException("Pirate has already moved this turn.");
+			}
+
+			// Ensure that the move is moving over a connected part of the grid
+			if (!areLocationsConnected(currentLocation, newLocation))
+			{
+				throw new IllegalMoveException("Pirate cannot reach that location.");
+			}
+
+			// Ensure that the target location is empty
+			if (getPieceOwner(newLocation) != null)
+			{
+				throw new IllegalMoveException("That location contains another piece.");
+			}
+
+			// Ensure that the new location is at least as close to the fortress as the old one.
+			if (calculateDistanceFromFortress(currentLocation) < calculateDistanceFromFortress(newLocation))
+			{
+				throw new IllegalMoveException("Pirate cannot move away from fortress.");
+			}
+
+			// Make the move
+			this.board[newLocation.getY()][newLocation.getX()] = Player.PIRATE;
+			this.board[currentLocation.getY()][currentLocation.getX()] = null;
+			this.currentPiece = newLocation;
+			this.wasJump = false;
+			fireEvent(new InvasionModelEvent(true, false, false));
+		} else
+		{
+			// Determine if we think that the player is trying to move or jump
+			int dx = Math.abs(currentLocation.getX() - newLocation.getX());
+			int dy = Math.abs(currentLocation.getY() - newLocation.getY());
+			if (dx < 2 && dy < 2)
+			{
+				// This looks like a move
+
+				// Make sure the two locations are connected
+				if (!areLocationsConnected(currentLocation, newLocation))
+				{
+					throw new IllegalMoveException("Bulgar cannot reach that location.");
+				}
+
+				// If the bulgars have already moved a piece this turn, this is not legal
+				if (this.currentPiece != null)
+				{
+					throw new IllegalMoveException("Bulgars have already moved this turn.");
+				}
+
+				// Ensure that there are no jumping opportunities for the bulgars
+				for (int y = 0; y < BOARD_HEIGHT; y++)
+				{
+					for (int x = 0; x < BOARD_WIDTH; x++)
+					{
+						if (this.board[y][x] == Player.BULGAR && canMakeJump(new Location(x, y)))
+						{
+							throw new IllegalMoveException("Cannot move a Bulgar when there is a legal jump.");
+						}
+					}
+				}
+
+				// Ensure that the target location is empty
+				if (getPieceOwner(newLocation) != null)
+				{
+					throw new IllegalMoveException("That location contains another piece.");
+				}
+
+				// Make the move
+				this.board[newLocation.getY()][newLocation.getX()] = Player.BULGAR;
+				this.board[currentLocation.getY()][currentLocation.getX()] = null;
+				this.currentPiece = newLocation;
+				this.wasJump = false;
+				fireEvent(new InvasionModelEvent(true, false, false));
+			} else
+			{
+				// This looks like a jump
+
+				// If the bulgars have already jumped this turn, then the piece must be that jumping piece
+				if (this.currentPiece != null)
+				{
+					if (this.wasJump)
+					{
+						if (!this.currentPiece.equals(currentLocation))
+						{
+							throw new IllegalMoveException("Multiple jumps must be performed by the same piece.");
+						}
+					} else
+					{
+						// It's not legal to jump after a move
+						throw new IllegalMoveException("You cannot jump and move on the same turn.");
+					}
+				}
+
+				// Make sure the jump is legal
+				if (!isLegalJump(currentLocation, newLocation))
+				{
+					throw new IllegalMoveException("That jump is not legal.");
+				}
+
+				// Make the jump
+				Location between = getLocationBetween(currentLocation, newLocation);
+				this.board[newLocation.getY()][newLocation.getX()] = Player.BULGAR;
+				this.board[currentLocation.getY()][currentLocation.getX()] = null;
+				this.board[between.getY()][between.getX()] = null;
+				this.currentPiece = newLocation;
+				this.wasJump = true;
+				fireEvent(new InvasionModelEvent(true, false, false));
+			}
+		}
+	}
+
+	protected void fireEvent(InvasionModelEvent event)
+	{
+		for (InvasionModelListener listener : this.listenerSet)
+		{
+			listener.receiveEvent(event);
+		}
+	}
+
+	@Override
+	public void addListener(InvasionModelListener listener)
+	{
+		this.listenerSet.add(listener);
+	}
+
+	@Override
+	public void removeListener(InvasionModelListener listener)
+	{
+		this.listenerSet.remove(listener);
+	}
+
+}

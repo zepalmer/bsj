@@ -1,0 +1,58 @@
+package edu.jhu.cs.oose.fall2010.invasion.iface;
+
+/**
+ * A simple class containing the information pertinent to an event in the Invasion model.
+ * 
+ * @author Zachary Palmer
+ */
+public class InvasionModelEvent
+{
+	private boolean boardChanged;
+	private boolean turnChanged;
+	private boolean gameOver;
+
+	/**
+	 * Creates a new Invasion model event.
+	 * 
+	 * @param boardChanged <code>true</code> if the board was changed as a result of the event; <code>false</code>
+	 *            otherwise.
+	 * @param turnChanged <code>true</code> if the turn was changed as a result of the event; <code>false</code>
+	 *            otherwise.
+	 * @param gameOver <code>true</code> if the game ended as a result of the event; <code>false</code> otherwise.
+	 */
+	public InvasionModelEvent(boolean boardChanged, boolean turnChanged, boolean gameOver)
+	{
+		super();
+		this.boardChanged = boardChanged;
+		this.turnChanged = turnChanged;
+		this.gameOver = gameOver;
+	}
+
+	/**
+	 * Determines whether or not the board changed as a result of this event.
+	 * @return <code>true</code> if the board changed; <code>false</code> if it did not.
+	 */
+	public boolean isBoardChanged()
+	{
+		return boardChanged;
+	}
+
+	/**
+	 * Determines whether or not the active player changed as a result of this event.
+	 * @return <code>true</code> if the active player changed; <code>false</code> if it did not.
+	 */
+	public boolean isTurnChanged()
+	{
+		return turnChanged;
+	}
+
+	/**
+	 * Determines whether or not the game was over after this event occurred.
+	 * @return <code>true</code> if the game is over; <code>false</code> if it is not.
+	 */
+	public boolean isGameOver()
+	{
+		return gameOver;
+	}
+
+}

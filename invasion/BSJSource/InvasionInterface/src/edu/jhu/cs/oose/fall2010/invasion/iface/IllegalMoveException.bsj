@@ -1,0 +1,31 @@
+package edu.jhu.cs.oose.fall2010.invasion.iface;
+
+/**
+ * This exception type is raised by an {@link InvasionModel} when the command it receives violates the rules of the
+ * game.
+ * @author Zachary Palmer
+ */
+public class IllegalMoveException extends Exception
+{
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Creates an exception describing an illegal move.
+	 * @param message A human-readable text description of what the player did wrong.
+	 */
+	public IllegalMoveException(String message)
+	{
+		super(message);
+	}
+
+	/**
+	 * Creates an exception describing an illegal move.  This constructor should be used if the illegality of the move
+	 * was discovered due to the raise of another exception.
+	 * @param message A human-readable text description of what the player did wrong.
+	 * @param cause The throwable object which caused this exception.
+	 */
+	public IllegalMoveException(String message, Throwable cause)
+	{
+		super(message, cause);
+	}
+}

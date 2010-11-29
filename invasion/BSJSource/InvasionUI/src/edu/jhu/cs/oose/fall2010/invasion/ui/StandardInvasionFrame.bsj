@@ -1,0 +1,148 @@
+package edu.jhu.cs.oose.fall2010.invasion.ui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+
+import edu.jhu.cs.oose.fall2010.invasion.iface.IllegalMoveException;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModel;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModelEvent;
+import edu.jhu.cs.oose.fall2010.invasion.iface.InvasionModelListener;
+import edu.jhu.cs.oose.fall2010.invasion.iface.Player;
+
+/**
+ * Represents the main frame for a standard Invasion game.
+ * 
+ * @author Zachary Palmer
+ */
+@UITag
+public class StandardInvasionFrame extends JFrame
+{
+	private static final long serialVersionUID = 1L;
+	
+	static
+	{
+		StandardInvasionUIUtilities.assertUITag(StandardInvasionFrame.class);
+	}
+
+	private InvasionModel model;
+
+	/** The label used to indicate the status of the game. */
+	private JLabel statusLabel;
+	/** The button used to end the current player's turn. */
+	private JButton endTurnButton;
+	/** The board used to display the game in progress. */
+	private StandardInvasionBoard board;
+
+	/**
+	 * Creates a new Invasion UI using the provided model.
+	 * 
+	 * @param model The model to use.
+	 */
+	public StandardInvasionFrame(InvasionModel model)
+	{
+		super();
+		
+		String title = "Invasion! - " + model.getClass().getSimpleName();
+		this.setTitle(title);
+		
+		this.model = new RuntimeCheckingInvasionModel(model);
+
+		this.statusLabel = new JLabel(" ");
+		this.endTurnButton = new JButton("End Turn");
+		this.endTurnButton.setMnemonic(KeyEvent.VK_E);
+		this.board = new StandardInvasionBoard(this.model);
+
+		// Construct the UI
+		JPanel controlPanel = new JPanel(new BorderLayout());
+		controlPanel.add(this.statusLabel, BorderLayout.CENTER);
+		controlPanel.add(this.endTurnButton, BorderLayout.EAST);
+		controlPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(this.board, BorderLayout.CENTER);
+		mainPanel.add(controlPanel, BorderLayout.SOUTH);
+
+		this.setContentPane(mainPanel);
+
+		// Configure listeners
+		final StandardInvasionBoard.ErrorListener errorListener = new StandardInvasionBoard.ErrorListener()
+		{
+			@Override
+			public void reportError(String error)
+			{
+				updateErrorLabel(error);
+			}
+		};
+		this.board.addErrorListener(errorListener);
+		this.model.addListener(new InvasionModelListener()
+		{
+			@Override
+			public void receiveEvent(InvasionModelEvent event)
+			{
+				updateErrorLabel("");
+				updateStatusLabel();
+				if (event.isGameOver())
+				{
+					StandardInvasionFrame.this.endTurnButton.setEnabled(false);
+				}
+			}
+		});
+		this.endTurnButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					StandardInvasionFrame.this.model.endTurn();
+				} catch (IllegalMoveException ime)
+				{
+					updateErrorLabel(ime.getMessage());
+				}
+			}
+		});
+		updateStatusLabel();
+
+		// Pack the frame
+		pack();
+	}
+
+	private static String getPlayerName(Player p)
+	{
+		String playerName = p.toString();
+		playerName = playerName.charAt(0) + playerName.substring(1).toLowerCase();		
+		return playerName;
+	}
+
+
+	private void updateStatusLabel()
+	{
+		if (StandardInvasionFrame.this.model.getWinner() == null)
+		{
+			String playerName = getPlayerName(StandardInvasionFrame.this.model.getCurrentPlayer());
+			StandardInvasionFrame.this.statusLabel.setText(playerName + "s' turn.");
+			StandardInvasionFrame.this.statusLabel.setForeground(Color.BLACK);
+		} else
+		{
+			String playerName = getPlayerName(StandardInvasionFrame.this.model.getWinner());
+			StandardInvasionFrame.this.statusLabel.setText(playerName + "s win!");
+			StandardInvasionFrame.this.statusLabel.setForeground(Color.GREEN.darker());
+		}
+	}
+
+	private void updateErrorLabel(String string)
+	{
+		StandardInvasionFrame.this.statusLabel.setText(string);
+		this.statusLabel.setForeground(Color.RED);
+	}
+}
