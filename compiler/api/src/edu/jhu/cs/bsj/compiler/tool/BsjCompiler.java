@@ -25,7 +25,7 @@ public interface BsjCompiler
 	 *            listener is used which reports diagnostic messages to standard error.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<BsjSourceLocation> listener)
+	public void compile(Iterable<? extends BsjFileObject> units, DiagnosticListener<BsjSourceLocation> listener)
 			throws IOException;
 
 	/**
@@ -40,6 +40,6 @@ public interface BsjCompiler
 	 *            the same code always produces the same order of execution. This is intended for debugging purposes.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<BsjSourceLocation> listener, Random random)
+	public void compile(Iterable<? extends BsjFileObject> units, DiagnosticListener<BsjSourceLocation> listener, Random random)
 			throws IOException;
 }
