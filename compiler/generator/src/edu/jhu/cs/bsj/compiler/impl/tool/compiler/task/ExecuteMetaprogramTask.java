@@ -318,14 +318,12 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 				while (node != null)
 				{
 					// * If the metaprogram’s anchor is in the top level of a compilation unit, it is given permission
-					// to
-					// that compilation unit.
+					// to that compilation unit.
 					// * If the metaprogram’s anchor is a member of a type declaration, it is given permission to the
-					// type
-					// declaration.
-					if (node instanceof CompilationUnitNode || node instanceof TypeDeclarationNode)
+					// type declaration.
+					if (node.getParent() instanceof CompilationUnitNode || node.getParent() instanceof TypeDeclarationNode)
 					{
-						targetNode = node;
+						targetNode = node.getParent();
 						break;
 					}
 					// * If the metaprogram’s anchor is a member of a block of statements, then

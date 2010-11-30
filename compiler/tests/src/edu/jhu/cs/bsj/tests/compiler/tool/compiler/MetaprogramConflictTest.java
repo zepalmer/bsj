@@ -12,12 +12,19 @@ public class MetaprogramConflictTest extends AbstractBsjCompilerTest
 {
 	private static final File SOURCE_DIR = new File(SPECIFIC_SOURCE_DIR + File.separator + "conflicts");
 
-	@Test
-	public void testPermissionViolation() throws Exception
-	{
-		performTest(SOURCE_DIR, Arrays.asList("MetaprogramConflict"),
-				Collections.singletonList(MetaprogramConflictDiagnostic.class));
-	}
+    @Test
+    public void testPermissionViolation() throws Exception
+    {
+        performTest(SOURCE_DIR, Arrays.asList("MetaprogramConflict"),
+                Collections.singletonList(MetaprogramConflictDiagnostic.class));
+    }
+
+    @Test
+    public void testTopLevelPermissionViolation() throws Exception
+    {
+        performTest(SOURCE_DIR, Arrays.asList("MetaprogramTopLevelConflict"),
+                Collections.singletonList(MetaprogramConflictDiagnostic.class));
+    }
 
 	@Test
 	public void testPermissionsWithExplicitOrder() throws Exception

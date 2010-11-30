@@ -1,0 +1,17 @@
+[:
+    CompilationUnitNode c = context.getAnchor().<CompilationUnitNode>getNearestAncestorOfType(CompilationUnitNode.class);
+    c.getTypeDecls().addFirst(<:enum E { A, B }:>);
+:]
+
+[:
+    CompilationUnitNode c = context.getAnchor().<CompilationUnitNode>getNearestAncestorOfType(CompilationUnitNode.class);
+    if (c.getTypeDecls().getFirst() instanceof EnumDeclarationNode)
+        c.getTypeDecls().addFirst(<:enum F { C, D }:>);
+:]
+
+public class MetaprogramConflict
+{
+    public static void main(String[] arg)
+    {
+    }
+}
