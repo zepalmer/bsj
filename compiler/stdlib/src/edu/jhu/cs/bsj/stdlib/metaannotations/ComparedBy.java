@@ -10,9 +10,11 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BinaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -23,7 +25,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
@@ -45,6 +50,18 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
         super(Arrays.asList("comparedBy"), Arrays.asList("property", "equalsAndHashCode"));
     }
 
+    @BsjMetaAnnotationElementGetter
+    public IdentifierNode[] getValue()
+    {
+        return super.getProperties();
+    }
+
+    @BsjMetaAnnotationElementSetter
+    public void setValue(IdentifierNode[] properties)
+    {
+        super.setProperties(properties);
+    }
+    
     public void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
     		List<Pair<String, TypeNode>> getterDescriptions)
     {
@@ -123,8 +140,8 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
         {
             String getterName = getter.getFirst();
             TypeNode type = getter.getSecond();
-            ExpressionNode lessThanExpression = null;
-            ExpressionNode greaterThanExpression = null;
+            ExpressionNode lessThanExpression;
+            ExpressionNode greaterThanExpression;
             
             PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
             PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationNode(
@@ -144,9 +161,23 @@ public class ComparedBy extends AbstractPropertyListMetaannotationMetaprogram
                 // TODO better error handling
                 throw new IllegalStateException("Arrays not supported by @@ComparedBy meta-annotation");
             } 
-            else
+            else if (type instanceof DeclaredTypeNode)
             {
-                throw new IllegalStateException();
+                // TODO: confirm that the type in question is a subtype of Comparable<X> where X is a supertype of it
+                // TODO: should we restructure this?  we might want to store the compared value locally rather than
+                // recompute it.
+                lessThanExpression = factory.makeBinaryExpressionNode(
+                        factory.makeMethodInvocationNode(
+                                thisGetterNode, factory.makeIdentifierNode("compareTo"),
+                                factory.makeExpressionListNode(otherGetterNode)),
+                        factory.makeIntLiteralNode(0),
+                        BinaryOperator.LESS_THAN);
+                greaterThanExpression = lessThanExpression.deepCopy(factory);
+                ((BinaryExpressionNode)greaterThanExpression).setOperator(BinaryOperator.GREATER_THAN);
+            } else
+            {
+                // TODO
+                throw new NotImplementedYetException();
             }
             
             // if (this.getX() < o.getX()) {return -1;}

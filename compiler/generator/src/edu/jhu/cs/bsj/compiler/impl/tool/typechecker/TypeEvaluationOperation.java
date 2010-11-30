@@ -920,8 +920,50 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
     @Override
     public TypecheckerResultImpl executeIfNode(IfNode node, TypecheckerEnvironment env)
     {
-        // TODO Auto-generated method stub
-        throw new NotImplementedYetException("Have not yet handled IfNode.");
+        TypecheckerMetadataImpl metadata = new TypecheckerMetadataImpl();
+        TypecheckerResultImpl result = null;
+
+        TypecheckerResultImpl conditionResult = node.getCondition().executeOperation(this, env);
+        metadata.add(conditionResult.getMetadata());
+        BsjType conditionType = conditionResult.getType();
+        if (conditionType instanceof BsjErrorType)
+        {
+            // TODO: diagnostic
+            if (result == null)
+                result = new TypecheckerResultImpl(conditionType, metadata);
+        }
+
+        BsjType thenType = expectNoErrorComposingMetadata(metadata, env, node.getThenStatement());
+        if (thenType instanceof BsjErrorType)
+        {
+            // TODO: diagnostic
+            if (result == null)
+                result = new TypecheckerResultImpl(thenType, metadata);
+        }
+
+        BsjType elseType = expectNoErrorComposingMetadata(metadata, env, node.getElseStatement());
+        if (elseType instanceof BsjErrorType)
+        {
+            // TODO: diagnostic
+            if (result == null)
+                result = new TypecheckerResultImpl(elseType, metadata);
+        }
+
+        // Condition must be a boolean
+        if (!conditionType.equals(this.manager.getToolkit().getBooleanType())
+                && !conditionType.equals(this.manager.getToolkit().getBooleanWrapperType()))
+        {
+            // TODO: diagnostic
+            if (result == null)
+                result = new TypecheckerResultImpl(new ErrorTypeImpl(this.manager), metadata);
+        }
+        
+        if (result != null)
+        {
+            return result;
+        }
+
+        return new TypecheckerResultImpl(new VoidPseudoTypeImpl(this.manager), metadata);
     }
 
     @Override
@@ -1432,7 +1474,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
                     parameterType = parameterTypeIterator.next();
                     if (!parameterTypeIterator.hasNext())
                     {
-                        parameterType = ((BsjArrayType)parameterType).getComponentType();
+                        parameterType = ((BsjArrayType) parameterType).getComponentType();
                     }
                 }
             } else
@@ -1540,12 +1582,10 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
     {
         TypecheckerMetadataImpl metadata = new TypecheckerMetadataImpl();
 
-        CodeLiteralEvaluator evaluator = new CodeLiteralEvaluator(this.manager.getTypechecker(),
-                this.parser);
+        CodeLiteralEvaluator evaluator = new CodeLiteralEvaluator(this.manager.getTypechecker(), this.parser);
         Bag<TypedValue<Node>> parseResultBag = evaluator.evaluateRawCodeLiteral(node);
 
-        SelectionBag<Node> codeLiteralValueBag = new CodeLiteralSelectionBagImpl<Node>(this.manager,
-                parseResultBag);
+        SelectionBag<Node> codeLiteralValueBag = new CodeLiteralSelectionBagImpl<Node>(this.manager, parseResultBag);
         metadata.addRawCodeLiteralParseResult(node, new RawCodeLiteralParseResultImpl(codeLiteralValueBag));
         if (env.getExpectedType() != null)
         {
@@ -2680,10 +2720,10 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
     {
         if (candidateMethod.equals(competitorMethod))
             return true;
-        
+
         if (candidateMethod.getParameterTypes().size() != competitorMethod.getParameterTypes().size())
             return false;
-        
+
         if (candidateMethod.isVarargs() && competitorMethod.isVarargs())
         {
             throw new NotImplementedYetException("Have not yet implemented isMoreSpecific for varargs methods");
@@ -2693,10 +2733,10 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
             {
                 throw new NotImplementedYetException("Have not yet implemented isMoreSpecific for generic methods");
             }
-            
+
             Iterator<? extends BsjType> it1 = candidateMethod.getParameterTypes().iterator();
             Iterator<? extends BsjType> it2 = competitorMethod.getParameterTypes().iterator();
-            
+
             while (it1.hasNext())
             {
                 if (!it1.next().isSubtypeOf(it2.next()))
@@ -2704,7 +2744,7 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
             }
             return true;
         }
-        
+
         return false;
     }
 
@@ -2821,6 +2861,14 @@ public class TypeEvaluationOperation implements BsjNodeOperation<TypecheckerEnvi
     private TypecheckerResultImpl expectNoError(TypecheckerEnvironment env, Node... nodes)
     {
         return expectNoError(env, Arrays.asList(nodes));
+    }
+
+    private BsjType expectNoErrorComposingMetadata(TypecheckerMetadataImpl metadata, TypecheckerEnvironment env,
+            Node... nodes)
+    {
+        TypecheckerResultImpl result = expectNoError(env, Arrays.asList(nodes));
+        metadata.add(result.getMetadata());
+        return result.getType();
     }
 
     /**

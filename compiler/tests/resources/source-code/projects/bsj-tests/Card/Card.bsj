@@ -1,0 +1,11 @@
+#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
+@@GenerateEqualsAndHashCode
+@@GenerateToString
+@@ComparedBy({<:rank:>,<:suit:>})
+@@GenerateConstructorFromProperties
+public class Card {
+    public enum Rank { TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE }
+    public enum Suit { CLUBS, DIAMONDS, HEARTS, SPADES }
+    @@Property(readOnly=true) private Rank rank;
+    @@Property(readOnly=true) private Suit suit;
+}

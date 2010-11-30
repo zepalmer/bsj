@@ -21,6 +21,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
@@ -35,9 +37,23 @@ import edu.jhu.cs.bsj.stdlib.metaannotations.utils.AbstractDeclarationMetaannota
  */
 public class Property extends AbstractDeclarationMetaannotationMetaprogram<FieldDeclarationNode> 
 {
+    private boolean readOnly = false;
+    
 	public Property()
 	{
 		super(Collections.singletonList("property"), Collections.<String> emptyList(), FieldDeclarationNode.class);
+	}
+	
+	@BsjMetaAnnotationElementGetter
+	public boolean getReadOnly()
+	{
+	    return this.readOnly;
+	}
+	
+	@BsjMetaAnnotationElementSetter
+	public void setReadOnly(boolean readOnly)
+	{
+	    this.readOnly = readOnly;
 	}
 
 	// TODO: boolean properties for "getter" and "setter" for read-only or write-only properties
@@ -73,7 +89,10 @@ public class Property extends AbstractDeclarationMetaannotationMetaprogram<Field
 		for (VariableDeclaratorNode var : fieldNode.getDeclarators())
 		{
 			list.add(createGetter(factory, var));
-			list.add(createSetter(factory, var));
+			if (!this.readOnly)
+			{
+			    list.add(createSetter(factory, var));
+			}
 		}
 	}
 

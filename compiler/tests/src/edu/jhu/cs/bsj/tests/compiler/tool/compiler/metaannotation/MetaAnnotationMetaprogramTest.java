@@ -6,13 +6,20 @@ import edu.jhu.cs.bsj.tests.compiler.tool.compiler.AbstractBsjCompilerTest;
 
 /**
  * Tests some sources that make simplistic use of meta-annotation metaprograms.
+ * 
  * @author Zachary Palmer
  */
 public class MetaAnnotationMetaprogramTest extends AbstractBsjCompilerTest
 {
-	@Test
-	public void testPointClass() throws Exception
-	{
-	    performTest(new String[]{"projects","bsj-tests","Point"}, "Main", "Point");
-	}
+    @Test
+    public void testPointClass() throws Exception
+    {
+        performTest(new String[] { "projects", "bsj-tests", "Point" }, "Main", "Point");
+    }
+
+    @Test
+    public void testCardClass() throws Exception
+    {
+        performTest(new String[] { "projects", "bsj-tests", "Card" }, "Main", "Card");
+    }
 }
