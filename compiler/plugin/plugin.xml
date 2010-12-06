@@ -68,5 +68,39 @@
             class="edu.jhu.cs.bsj.eclipse.preference.SyntaxColoringPreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         id="edu.jhu.cs.bsj.eclipse.builder"
+         name="BSJBuilder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="edu.jhu.cs.bsj.eclipse.builder.BSJBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="edu.jhu.cs.bsj.eclipse.marker"
+         name="BSJMarker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         id="edu.jhu.cs.bsj.eclipse.nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="edu.jhu.cs.bsj.eclipse.builder.BSJNature">
+         </run>
+      </runtime>
+      <builder
+            id="edu.jhu.cs.bsj.eclipse.builder">
+      </builder>
+   </extension>
    
 </plugin>
