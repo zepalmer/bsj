@@ -1,33 +1,63 @@
 package edu.jhu.cs.bsj.eclipse.builder;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 
+/**
+ * Associate a project with BSJBuilder
+ */
 public class BSJNature implements IProjectNature {
-
+	
+	public static final String NATURE_ID = "edu.jhu.cs.bsj.eclipse.nature";
+	
+	private IProject project;
+	
 	@Override
 	public void configure() throws CoreException {
-		// TODO Auto-generated method stub
-
+		IProjectDescription desc = getProject().getDescription();
+		ICommand[] commands = desc.getBuildSpec();
+		for (int i = 0; i < commands.length; ++i) {
+			if (commands[i].getBuilderName().equals(BSJBuilder.BUILDER_ID)) {
+				return;
+			}
+		}
+		ICommand[] newCommands = new ICommand[commands.length + 1];
+		System.arraycopy(commands, 0, newCommands, 0, commands.length);
+		ICommand command = desc.newCommand();
+		command.setBuilderName(BSJBuilder.BUILDER_ID);
+		newCommands[newCommands.length - 1] = command;
+		desc.setBuildSpec(newCommands);
+		project.setDescription(desc, null);
 	}
 
 	@Override
 	public void deconfigure() throws CoreException {
-		// TODO Auto-generated method stub
-
+		IProjectDescription description = getProject().getDescription();
+		ICommand[] commands = description.getBuildSpec();
+		for (int i = 0; i < commands.length; ++i) {
+			if (commands[i].getBuilderName().equals(BSJBuilder.BUILDER_ID)) {
+				ICommand[] newCommands = new ICommand[commands.length - 1];
+				System.arraycopy(commands, 0, newCommands, 0, i);
+				System.arraycopy(commands, i + 1, newCommands, i,
+						commands.length - i - 1);
+				description.setBuildSpec(newCommands);
+				project.setDescription(description, null);			
+				return;
+			}
+		}
 	}
 
 	@Override
 	public IProject getProject() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.project;
 	}
 
 	@Override
 	public void setProject(IProject project) {
-		// TODO Auto-generated method stub
-
+		this.project = project;
 	}
 
 }

@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.eclipse.util.IColorManager;
 public class BSJPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "BSJ_Eclipse_Plugin"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "edu.jhu.cs.bsj.eclipse.plugin"; //$NON-NLS-1$
 
 	// The shared instance
 	private static BSJPlugin plugin;

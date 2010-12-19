@@ -23,8 +23,13 @@ import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
+/**
+ * Builds a bsj project
+ */
 public class BSJBuilder extends IncrementalProjectBuilder {
-
+	
+	public static final String BUILDER_ID = "edu.jhu.cs.bsj.eclipse.builder";
+	
 	public BSJBuilder() {
 	}
 	

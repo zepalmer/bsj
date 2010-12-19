@@ -102,5 +102,21 @@
             id="edu.jhu.cs.bsj.eclipse.builder">
       </builder>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="BSJ Eclipse Plugin.objectContribution1"
+            nameFilter="*"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="edu.jhu.cs.bsj.eclipse.builder.junk.ToggleNatureAction"
+               enablesFor="+"
+               id="BSJ Eclipse Plugin.action1"
+               label="Add/Remove BSJ Nature"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
    
 </plugin>
