@@ -41,16 +41,22 @@ public class BSJBuilderConfig {
 
 		Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
 
-		File test = new File("." + File.separator + "local");
-		test.mkdir();
-
-		File sourcePath = null;
+		String projectPath = bsjProject.getFullPath().toString();
+		projectPath.replaceAll("/", File.separator);
+		
+		File sourcePath = new File(projectPath + File.separator + srcFolder);
 		LocationManager sourceLocationManager = 
 			new RegularFileLocationManager(null, sourcePath);
-		File genSourcePath = null;
+		
+		File genSourcePath = new File(projectPath + File.separator + genSrcFolder);
+		if(!genSourcePath.exists())
+			genSourcePath.mkdirs();
 		LocationManager genSourceLocationManager = 
 			new RegularFileLocationManager(null, genSourcePath);
-		File classPath = null;
+		
+		File classPath = new File(projectPath + File.separator + classFolder);
+		if(!classPath.exists())
+			classPath.mkdirs();
 		LocationManager classLocationManager = 
 			new RegularFileLocationManager(null, classPath);
 		
