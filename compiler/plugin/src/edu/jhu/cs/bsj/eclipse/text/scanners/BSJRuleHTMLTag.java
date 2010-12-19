@@ -65,6 +65,7 @@ public class BSJRuleHTMLTag extends SingleLineRule {
 	/*
 	 * @see PatternRule#evaluate(ICharacterScanner)
 	 */
+	@Override
 	public IToken evaluate(ICharacterScanner scanner) {
 		IToken result = super.evaluate(scanner);
 		if (result == fToken)

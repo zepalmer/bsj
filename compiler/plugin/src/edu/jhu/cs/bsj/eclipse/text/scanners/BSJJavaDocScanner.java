@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.eclipse.text.scanners;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.ui.text.IJavaColorConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IRule;
@@ -19,15 +20,15 @@ public class BSJJavaDocScanner extends BSJCommentScanner {
 
 	public BSJJavaDocScanner(IColorManager colorManager,
 			IPreferenceStore preferenceStore) {
-		super(colorManager, preferenceStore, BSJTokenKeys.JAVADOC_DEFAULT);
+		super(colorManager, preferenceStore, IJavaColorConstants.JAVADOC_DEFAULT);
 	}
 	
 	@Override
 	protected void initTokenKeys() {
 		super.initTokenKeys();
-		tokenKeys.add(BSJTokenKeys.JAVADOC_KEYWORD);
-		tokenKeys.add(BSJTokenKeys.JAVADOC_TAG);
-		tokenKeys.add(BSJTokenKeys.JAVADOC_LINK);
+		tokenKeys.add(IJavaColorConstants.JAVADOC_KEYWORD);
+		tokenKeys.add(IJavaColorConstants.JAVADOC_TAG);
+		tokenKeys.add(IJavaColorConstants.JAVADOC_LINK);
 	}
 	
 	@Override
@@ -44,11 +45,11 @@ public class BSJJavaDocScanner extends BSJCommentScanner {
 		rules.add(new WhitespaceRule(new BSJDetectorWhitespace(), token));
 		
 		// Add rule for java doc keywords
-		token = getToken(BSJTokenKeys.JAVADOC_KEYWORD);
+		token = getToken(IJavaColorConstants.JAVADOC_KEYWORD);
 		rules.add(new BSJRuleJavaDocTag(token, defaultToken));
 		
 		// add simple rules for HTML
-		token = getToken(BSJTokenKeys.JAVADOC_TAG);
+		token = getToken(IJavaColorConstants.JAVADOC_TAG);
 		WordRule commentTag = new WordRule(new IWordDetector() {
 			@Override
 			public boolean isWordStart(char c) {
@@ -65,7 +66,7 @@ public class BSJJavaDocScanner extends BSJCommentScanner {
 		rules.add(new BSJRuleHTMLTag(token, defaultToken, this));
 		
 		// Add rule for links.
-		token = getToken(BSJTokenKeys.JAVADOC_LINK);
+		token = getToken(IJavaColorConstants.JAVADOC_LINK);
 		rules.add(new SingleLineRule("{@link", "}", token));
 		rules.add(new SingleLineRule("{@value", "}", token));
 		rules.add(new SingleLineRule("{@inheritDoc", "}", token));

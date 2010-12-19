@@ -49,6 +49,7 @@ public class BSJRuleJavaOperators implements IRule {
 	/*
 	 * @see org.eclipse.jface.text.rules.IRule#evaluate(org.eclipse.jface.text.rules.ICharacterScanner)
 	 */
+	@Override
 	public IToken evaluate(ICharacterScanner scanner) {
 
 		int character= scanner.read();

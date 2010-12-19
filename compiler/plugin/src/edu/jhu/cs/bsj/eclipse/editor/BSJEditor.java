@@ -12,6 +12,7 @@ public class BSJEditor extends TextEditor {
 		setDocumentProvider(new BSJDocumentProvider());
 	}
 	
+	@Override
 	public void dispose() {
 		super.dispose();
 	}

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.ui.text.IJavaColorConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IWordDetector;
@@ -32,7 +33,7 @@ public class BSJCommentScanner extends AbstractBSJScanner {
 	
 	protected void initTokenKeys() {
 		tokenKeys.add(defaultTokenKey);
-		tokenKeys.add(BSJTokenKeys.TASK_TAG);
+		tokenKeys.add(IJavaColorConstants.TASK_TAG);
 	}
 	
 	// TODO: retrieve from the java environment
@@ -59,7 +60,7 @@ public class BSJCommentScanner extends AbstractBSJScanner {
 		Token token;
 		
 		// Add rule for task words
-		token = getToken(BSJTokenKeys.TASK_TAG);
+		token = getToken(IJavaColorConstants.TASK_TAG);
 		WordRule taskTagRule = new WordRule(new IWordDetector() {
 			@Override
 			public boolean isWordStart(char c) {

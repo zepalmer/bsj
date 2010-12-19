@@ -11,7 +11,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
@@ -57,7 +56,7 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 		}
 		BSJSourceFileVisitor visitor = new BSJSourceFileVisitor(srcFolder, fmanager);
 		srcFolder.accept(visitor);
-		List<BsjFileObject> files = visitor.getFiles();
+		List<BsjFileObject> files = visitor.getSourceFiles();
 		try {
 			compile(fmanager, files);
 		} catch (Exception e) {

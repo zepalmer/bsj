@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.eclipse.text.scanners.BSJPartitionScanner;
  */
 public class BSJDocumentProvider extends FileDocumentProvider{
 	
+	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
 		

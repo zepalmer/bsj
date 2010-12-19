@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.eclipse.text;
 
+import org.eclipse.jdt.ui.text.IJavaColorConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -42,8 +43,8 @@ public class BSJSourceViewerConfiguration extends SourceViewerConfiguration {
 	
 	protected void initScanners() {
 		codeScanner = new BSJCodeScanner(colorManager, preferenceStore);
-		multiLineCommentScanner = new BSJCommentScanner(colorManager, preferenceStore, BSJTokenKeys.JAVA_MULTI_LINE_COMMENT);
-		singleLineCommentScanner = new BSJCommentScanner(colorManager, preferenceStore, BSJTokenKeys.JAVA_SINGLE_LINE_COMMENT);
+		multiLineCommentScanner = new BSJCommentScanner(colorManager, preferenceStore, IJavaColorConstants.JAVA_MULTI_LINE_COMMENT);
+		singleLineCommentScanner = new BSJCommentScanner(colorManager, preferenceStore, IJavaColorConstants.JAVA_SINGLE_LINE_COMMENT);
 		stringScanner = new BSJStringScanner(colorManager, preferenceStore);
 		javadocScanner = new BSJJavaDocScanner(colorManager, preferenceStore);
 	}

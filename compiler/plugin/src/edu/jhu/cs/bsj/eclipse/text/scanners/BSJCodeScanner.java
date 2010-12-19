@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.eclipse.text.scanners;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.ui.text.IJavaColorConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.SingleLineRule;
@@ -31,7 +32,7 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 	protected List<IRule> createRules() {
 		List<IRule> rules= new ArrayList<IRule>();
 		
-		Token defaultToken = getToken(BSJTokenKeys.JAVA_DEFAULT);
+		Token defaultToken = getToken(IJavaColorConstants.JAVA_DEFAULT);
 		setDefaultReturnToken(defaultToken);
 		
 		Token token;
@@ -41,34 +42,34 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		rules.add(new WhitespaceRule(new BSJDetectorWhitespace(), token));
 		
 		// Add rule for characters
-		token = getToken(BSJTokenKeys.JAVA_STRING);
+		token = getToken(IJavaColorConstants.JAVA_STRING);
 		rules.add(new SingleLineRule("\'", "\'", token, '\\'));
 		
 		// Word detector
 		BSJDetectorKeyword wordDetector = new BSJDetectorKeyword();
 		
 		// Add rule for java keywords
-		token = getToken(BSJTokenKeys.JAVA_KEYWORD);
+		token = getToken(IJavaColorConstants.JAVA_KEYWORD);
 		WordRule javaKeywordRule = new WordRule(wordDetector);
 		for (int i= 0; i <  javaKeywords.length; i++)
 			javaKeywordRule.addWord(javaKeywords[i], token);
 		rules.add(javaKeywordRule);
 		
 		// Add rule for return keyword
-		token = getToken(BSJTokenKeys.JAVA_KEYWORD_RETURN);
+		token = getToken(IJavaColorConstants.JAVA_KEYWORD_RETURN);
 		WordRule returnKeywordRule = new WordRule(wordDetector);
 		returnKeywordRule.addWord(returnKeyword, token);
 		rules.add(returnKeywordRule);
 		
 		// Add rule for bsj keywords
-		token = getToken(BSJTokenKeys.JAVA_KEYWORD);
+		token = getToken(IJavaColorConstants.JAVA_KEYWORD);
 		WordRule bsjKeywordRule = new WordRule(wordDetector);
 		for (int i= 0; i <  bsjKeywords.length; i++)
 			bsjKeywordRule.addWord(bsjKeywords[i], token);
 		rules.add(bsjKeywordRule);
 		
 		// Add rule for java types
-		token = getToken(BSJTokenKeys.JAVA_KEYWORD);
+		token = getToken(IJavaColorConstants.JAVA_KEYWORD);
 		WordRule javaTypeRule = new WordRule(wordDetector);
 		for (int i= 0; i <  javaTypes.length; i++)
 			javaTypeRule.addWord(javaTypes[i], token);
@@ -83,12 +84,12 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		
 		// Add rule for brackets
 		rules.add(new BSJRuleBrackets(
-				getToken(BSJTokenKeys.JAVA_BRACKET), 
-				getToken(BSJTokenKeys.JAVA_BRACKET)
+				getToken(IJavaColorConstants.JAVA_BRACKET), 
+				getToken(IJavaColorConstants.JAVA_BRACKET)
 				));
 		
 		// Add rule for operators
-		token = getToken(BSJTokenKeys.JAVA_OPERATOR);
+		token = getToken(IJavaColorConstants.JAVA_OPERATOR);
 		rules.add(new BSJRuleJavaOperators(token));
 		
 		return rules;
