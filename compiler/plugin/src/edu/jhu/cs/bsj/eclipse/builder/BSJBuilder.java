@@ -1,15 +1,28 @@
 package edu.jhu.cs.bsj.eclipse.builder;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticListener;
+
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramDetectedErrorDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.RecordingDiagnosticProxyListener;
+import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 public class BSJBuilder extends IncrementalProjectBuilder {
 
@@ -17,7 +30,7 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	}
 	
 	@Override
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) 
+	protected IProject[] build(int kind, @SuppressWarnings("rawtypes") Map args, IProgressMonitor monitor) 
 	throws CoreException {
 		switch(kind) {
 			case FULL_BUILD:
@@ -34,8 +47,22 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	
 	protected void fullBuild(final IProgressMonitor monitor) 
 	throws CoreException {
-		BSJResourceVisitor vistor = new BSJResourceVisitor();
-		getProject().accept(vistor);
+		BSJBuilderConfig bconfig = new BSJBuilderConfig(getProject());
+		IFolder srcFolder = getProject().getFolder(bconfig.getSourcePathStr());
+		BsjFileManager fmanager;
+		try {
+			fmanager = bconfig.getFileManager();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		BSJSourceFileVisitor visitor = new BSJSourceFileVisitor(srcFolder, fmanager);
+		srcFolder.accept(visitor);
+		List<BsjFileObject> files = visitor.getFiles();
+		try {
+			compile(fmanager, files);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	protected void incrementalBuild(final IProgressMonitor monitor) 
@@ -46,6 +73,7 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	
 	protected void cleanBuild(final IProgressMonitor monitor) 
 	throws CoreException {
+		//TODO get clean build to work
 	}
 	
 	protected void autoBuild(final IProgressMonitor monitor) 
@@ -53,17 +81,38 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 		incrementalBuild(monitor);
 	}
 	
-	protected class BSJResourceVisitor implements IResourceVisitor {
-		@Override
-		public boolean visit(IResource resource) throws CoreException {
-			return false;
+	/**
+	 * Compiles the given files managed by the file manager
+	 */
+	protected List<Diagnostic<? extends BsjSourceLocation>> compile(
+			BsjFileManager fileManager, List<BsjFileObject> files) throws Exception {
+		
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		toolkitFactory.setFileManager(fileManager);
+		BsjToolkit toolkit = toolkitFactory.newToolkit();
+
+		BsjCompiler compiler = toolkit.getCompiler();
+		RecordingDiagnosticProxyListener<BsjSourceLocation> diagnosticListener = new RecordingDiagnosticProxyListener<BsjSourceLocation>(
+				new DiagnosticListener<BsjSourceLocation>() {
+					@Override
+					public void report(Diagnostic<? extends BsjSourceLocation> diagnostic) {
+						System.err.println(diagnostic.getMessage(null));
+						if (diagnostic instanceof MetaprogramDetectedErrorDiagnostic<?>) {
+							MetaprogramDetectedErrorDiagnostic<?> d = (MetaprogramDetectedErrorDiagnostic<?>) diagnostic;
+							System.err.println("Exception is: ");
+							d.getException().printStackTrace();
+						}
+					}
+				});
+		Random random;
+		if (System.getProperty("bsj.tests.seed") == null) {
+			random = null;
+		} else {
+			random = new Random(Integer.parseInt(System
+					.getProperty("bsj.tests.seed")));
 		}
-	}
-	
-	protected class BSJDeltaVisitor implements IResourceDeltaVisitor {
-		@Override
-		public boolean visit(IResourceDelta delta) throws CoreException {
-			return false;
-		}
+		compiler.compile(files, diagnosticListener, random);
+
+		return diagnosticListener.getDiagnostics();
 	}
 }

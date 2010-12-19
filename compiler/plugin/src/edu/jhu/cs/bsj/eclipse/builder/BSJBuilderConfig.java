@@ -20,12 +20,24 @@ public class BSJBuilderConfig {
 	
 	private IProject bsjProject;
 	
-	private String srcFolder = "src";
-	private String genSrcFolder = "local";
-	private String classFolder = "local";
+	private String sourcePathStr = "src";
+	private String genSourcePathStr = "local" + File.separator + "gensrc";
+	private String classPathSrc = "local" + File.separator + "bin";
 	
 	public BSJBuilderConfig(IProject bsjProject) {
 		this.bsjProject = bsjProject;
+	}
+	
+	public String getSourcePathStr() {
+		return sourcePathStr;
+	}
+
+	public String getGenSourcePathStr() {
+		return genSourcePathStr;
+	}
+
+	public String getClassPathSrc() {
+		return classPathSrc;
 	}
 	
 	public BsjFileManager getFileManager() throws Exception {
@@ -44,17 +56,17 @@ public class BSJBuilderConfig {
 		String projectPath = bsjProject.getFullPath().toString();
 		projectPath.replaceAll("/", File.separator);
 		
-		File sourcePath = new File(projectPath + File.separator + srcFolder);
+		File sourcePath = new File(projectPath + File.separator + sourcePathStr);
 		LocationManager sourceLocationManager = 
 			new RegularFileLocationManager(null, sourcePath);
 		
-		File genSourcePath = new File(projectPath + File.separator + genSrcFolder);
+		File genSourcePath = new File(projectPath + File.separator + genSourcePathStr);
 		if(!genSourcePath.exists())
 			genSourcePath.mkdirs();
 		LocationManager genSourceLocationManager = 
 			new RegularFileLocationManager(null, genSourcePath);
 		
-		File classPath = new File(projectPath + File.separator + classFolder);
+		File classPath = new File(projectPath + File.separator + classPathSrc);
 		if(!classPath.exists())
 			classPath.mkdirs();
 		LocationManager classLocationManager = 
