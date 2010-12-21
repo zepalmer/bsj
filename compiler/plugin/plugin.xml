@@ -125,6 +125,7 @@
             name="BSJ">
       </category>
       <wizard
+            canFinishEarly="false"
             category="edu.jhu.cs.bsj.eclipse.wizards.bsjcreation"
             class="edu.jhu.cs.bsj.eclipse.wizards.NewBSJProjectWizard"
             finalPerspective="edu.jhu.cs.bsj.eclipse.perspective.bsjperspective"
@@ -132,6 +133,15 @@
             id="edu.jhu.cs.bsj.eclipse.wizards.newbsjproject"
             name="BSJ Project"
             project="true">
+      </wizard>
+      <wizard
+            canFinishEarly="false"
+            category="edu.jhu.cs.bsj.eclipse.wizards.bsjcreation"
+            class="edu.jhu.cs.bsj.eclipse.wizards.NewBSJClassWizard"
+            hasPages="true"
+            id="edu.jhu.cs.bsj.eclipse.wizards.newbsjclass"
+            name="BSJ Class"
+            project="false">
       </wizard>
    </extension>
    
