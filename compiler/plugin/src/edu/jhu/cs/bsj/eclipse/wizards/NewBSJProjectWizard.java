@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.eclipse.wizards;
 
+import java.net.URI;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -31,15 +33,23 @@ public class NewBSJProjectWizard extends Wizard implements INewWizard, IExecutab
 		super.addPages();
 		
 		setWindowTitle(WIZARD_NAME);
+		setHelpAvailable(false);
 		
 		pageOne = new WizardNewProjectCreationPage(PAGE_ONE_NAME);
 		pageOne.setTitle(PAGE_ONE_TITLE);
 		pageOne.setDescription("Enter a project name");
 		addPage(pageOne);
 	}
-
+	
 	@Override
 	public boolean performFinish() {
+		String projectName = pageOne.getProjectName();
+		URI projectLocation = null; // null is default location
+		
+		if(!pageOne.useDefaults()) {
+			projectLocation = pageOne.getLocationURI();
+		}
+		BSJCreationUtilities.createProject(projectName, projectLocation);
 		
 		// change to BSJ perspective
 		BasicNewProjectResourceWizard.updatePerspective(configurationElement);
