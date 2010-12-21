@@ -1,16 +1,12 @@
 package edu.jhu.cs.bsj.eclipse.builder;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManagerFactory;
@@ -51,58 +47,32 @@ public class BSJBuilderConfig {
 		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry
 				.newFileManagerFactory();
 
-		Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
-
-		String projectPath = bsjProject.getFullPath().toString();
+		String projectPath = bsjProject.getFullPath().toFile().getPath();
 		projectPath.replaceAll("/", File.separator);
-		
-		File sourcePath = new File(projectPath + File.separator + sourcePathStr);
-		LocationManager sourceLocationManager = 
-			new RegularFileLocationManager(null, sourcePath);
+		fileManagerFactory.setLocationManager(BsjCompilerLocation.SOURCE_PATH,
+				projectPath +  File.separator + sourcePathStr);
 		
 		File genSourcePath = new File(projectPath + File.separator + genSourcePathStr);
 		if(!genSourcePath.exists())
 			genSourcePath.mkdirs();
-		LocationManager genSourceLocationManager = 
-			new RegularFileLocationManager(null, genSourcePath);
+		fileManagerFactory.setLocationManager(BsjCompilerLocation.GENERATED_SOURCE_PATH,
+				genSourcePath.getPath());		
 		
 		File classPath = new File(projectPath + File.separator + classPathSrc);
 		if(!classPath.exists())
 			classPath.mkdirs();
-		LocationManager classLocationManager = 
-			new RegularFileLocationManager(null, classPath);
+		fileManagerFactory.setLocationManager(BsjCompilerLocation.CLASS_OUTPUT,
+				classPath.getPath());
 		
-		map.put(BsjCompilerLocation.SOURCE_PATH, sourceLocationManager);
-		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, genSourceLocationManager);
-		map.put(BsjCompilerLocation.CLASS_OUTPUT, classLocationManager);
-
-		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
-				new UnionLocationManager(null, System
-						.getProperty("sun.boot.class.path")));
-		map.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH,
-				new UnionLocationManager(null, System
-						.getProperty("java.class.path")));
-
-		map.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
-				new UnionLocationManager(null, System
-						.getProperty("sun.boot.class.path")));
-		map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH,
-				new UnionLocationManager(null, System
-						.getProperty("java.class.path")));
-
-		if (unionOverrides) {
-			map.putAll(overrides);
-		} else {
-			for (Map.Entry<? extends BsjCompilerLocation, ? extends LocationManager> entry : overrides
-					.entrySet()) {
-				LocationManager manager = new UnionLocationManager(
-						null,
-						Arrays.asList(map.get(entry.getKey()), entry.getValue()));
-				map.put(entry.getKey(), manager);
-			}
-		}
-
-		fileManagerFactory.setLocationManagerMappingsByManager(map);
+		fileManagerFactory.setLocationManager(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
+				System.getProperty("sun.boot.class.path"));
+		fileManagerFactory.setLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH,
+				System.getProperty("java.class.path"));
+		fileManagerFactory.setLocationManager(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
+				System.getProperty("sun.boot.class.path"));
+		fileManagerFactory.setLocationManager(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH,
+				System.getProperty("java.class.path"));
+		
 		return fileManagerFactory.newFileManager();
 	}
 	

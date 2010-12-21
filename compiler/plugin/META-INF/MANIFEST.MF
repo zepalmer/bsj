@@ -17,3 +17,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.jdt.core,
  org.eclipse.jdt.ui,
  org.eclipse.jdt.ui.text
+Bundle-ClassPath: .,
+ lib/BSJCompilerAPI.jar,
+ lib/BSJGenerator.jar,
+ lib/BSJParser.jar,
+ lib/BSJUtilities.jar
