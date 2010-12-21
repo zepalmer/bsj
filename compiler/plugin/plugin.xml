@@ -15,7 +15,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="edu.jhu.cs.bsj.eclipse.perspective.BSJPerspectiveFactory"
-            id="edu.jhu.cs.bsj.eclipse.perspective.BSJPerspectiveFactory"
+            id="edu.jhu.cs.bsj.eclipse.perspective.bsjperspective"
             name="BSJ">
       </perspective>
    </extension>
@@ -117,6 +117,22 @@
                menubarPath="additions">
          </action>
       </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="edu.jhu.cs.bsj.eclipse.wizards.bsjcreation"
+            name="BSJ">
+      </category>
+      <wizard
+            category="edu.jhu.cs.bsj.eclipse.wizards.bsjcreation"
+            class="edu.jhu.cs.bsj.eclipse.wizards.NewBSJProjectWizard"
+            finalPerspective="edu.jhu.cs.bsj.eclipse.perspective.bsjperspective"
+            hasPages="true"
+            id="edu.jhu.cs.bsj.eclipse.wizards.newbsjproject"
+            name="BSJ Project"
+            project="true">
+      </wizard>
    </extension>
    
 </plugin>
