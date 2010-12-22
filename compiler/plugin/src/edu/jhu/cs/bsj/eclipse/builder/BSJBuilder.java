@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.eclipse.builder;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected IProject[] build(int kind, @SuppressWarnings("rawtypes") Map args, IProgressMonitor monitor) 
 	throws CoreException {
+		System.out.println("A build of type "+kind+" is initiated.");
+		
 		switch(kind) {
 			case FULL_BUILD:
 				fullBuild(monitor); break;
@@ -67,13 +70,13 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	
 	protected void incrementalBuild(final IProgressMonitor monitor) 
 	throws CoreException {
-		//TODO get incremental build to work
+		// TODO: part incremental builder
 		fullBuild(monitor);
 	}
 	
 	protected void cleanBuild(final IProgressMonitor monitor) 
 	throws CoreException {
-		//TODO get clean build to work
+		fullBuild(monitor);
 	}
 	
 	protected void autoBuild(final IProgressMonitor monitor) 
@@ -98,5 +101,37 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected void clean(final IProgressMonitor monitor) 
+	throws CoreException {
+		System.out.println("A clean is initiated.");
+		
+		BSJBuilderConfig bconfig = new BSJBuilderConfig(getProject());
+		String projectPath = getProject().getLocation().toFile().getPath();
+		
+		// NOTE using eclipse workspace to delete generated files doesn't work
+		
+		// delete generated java sources
+		File genSrcPath = new File(projectPath + File.separator + bconfig.getGenSourcePathStr());
+		if(genSrcPath.exists()) {
+			for(File child : genSrcPath.listFiles())
+				deleteFile(child);
+		}
+		
+		// delete generated bsj classes
+		File classOutPath = new File(projectPath + File.separator + bconfig.getClassOutputPathSrc());
+		if(classOutPath.exists()) {
+			for(File child : classOutPath.listFiles())
+				deleteFile(child);
+		}
+	}
+	
+	private void deleteFile(File file) {
+		if(file.isDirectory())
+			for(File child : file.listFiles())
+				deleteFile(child);
+		file.delete();
 	}
 }

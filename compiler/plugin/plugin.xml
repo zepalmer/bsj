@@ -73,7 +73,9 @@
          name="BSJBuilder"
          point="org.eclipse.core.resources.builders">
       <builder
-            hasNature="true">
+            callOnEmptyDelta="true"
+            hasNature="true"
+            isConfigurable="true">
          <run
                class="edu.jhu.cs.bsj.eclipse.builder.BSJBuilder">
          </run>

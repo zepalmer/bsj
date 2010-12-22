@@ -10,7 +10,7 @@ import org.eclipse.core.runtime.CoreException;
 public class BSJSourceFileDeltaVisitor implements IResourceDeltaVisitor {
 	@Override
 	public boolean visit(IResourceDelta delta) throws CoreException {
-		// TODO Auto-generated method stub
+		// TODO: part incremental builder
 		return false;
 	}
 }
