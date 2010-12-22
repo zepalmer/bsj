@@ -9,6 +9,8 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 
+import edu.jhu.cs.bsj.eclipse.builder.BSJNature;
+
 /**
  * Assist creating BSJ projects and files
  */
@@ -24,8 +26,10 @@ public class BSJCreationUtilities {
 	 */
 	public static IProject createProject(String projectName, URI projectLocation) {
 		IProject project;
+		
 		try {
 			project = createBaseProject(projectName, projectLocation);
+			addNature(project);
 		} catch (CoreException e) {
 			throw new RuntimeException(e);
 		}
@@ -99,6 +103,14 @@ public class BSJCreationUtilities {
 	 */
 	public static void addNature(IProject project) 
 	throws CoreException {
-		
+		if (!project.hasNature(BSJNature.NATURE_ID)) {
+			IProjectDescription description = project.getDescription();
+			String[] prevNatures = description.getNatureIds();
+			String[] newNatures = new String[prevNatures.length + 1];
+			System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
+			newNatures[prevNatures.length] = BSJNature.NATURE_ID;
+			description.setNatureIds(newNatures);
+			project.setDescription(description, null);
+		}
 	}
 }

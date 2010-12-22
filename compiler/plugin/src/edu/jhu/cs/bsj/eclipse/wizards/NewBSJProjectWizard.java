@@ -45,10 +45,10 @@ public class NewBSJProjectWizard extends Wizard implements INewWizard, IExecutab
 	public boolean performFinish() {
 		String projectName = pageOne.getProjectName();
 		URI projectLocation = null; // null is default location
-		
 		if(!pageOne.useDefaults()) {
 			projectLocation = pageOne.getLocationURI();
 		}
+		
 		BSJCreationUtilities.createProject(projectName, projectLocation);
 		
 		// change to BSJ perspective

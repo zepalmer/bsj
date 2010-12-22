@@ -62,7 +62,8 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 		srcFolder.accept(visitor);
 		List<BsjFileObject> files = visitor.getSourceFiles();
 		try {
-			compile(fmanager, files);
+			clean(monitor);
+			compile(fmanager, files, monitor);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -87,9 +88,13 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	/**
 	 * Compiles the given files managed by the file manager
 	 */
-	protected void compile(BsjFileManager fileManager, List<BsjFileObject> files) 
+	protected void compile(BsjFileManager fileManager, List<BsjFileObject> files, IProgressMonitor monitor) 
 	throws Exception {	
 		try {
+		if(files.isEmpty()) {
+			return;
+		}
+		
 		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
 		toolkitFactory.setFileManager(fileManager);
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
@@ -98,6 +103,7 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 		DiagnosticListener<BsjSourceLocation> diagnosticListener = null;
 		
 		compiler.compile(files, diagnosticListener);
+		getProject().refreshLocal(IProject.DEPTH_INFINITE, monitor);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

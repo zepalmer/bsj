@@ -17,8 +17,8 @@ public class BSJBuilderConfig {
 	private IProject bsjProject;
 	
 	private final String sourcePathStr = "src";
-	private final String genSourcePathStr = "local" + File.separator + "gensrc";
-	private final String classOutputPathSrc = "local" + File.separator + "bin";
+	private final String genSourcePathStr = "out" + File.separator + "gensrc";
+	private final String classOutputPathSrc = "out" + File.separator + "bin";
 	
 	public BSJBuilderConfig(IProject bsjProject) {
 		this.bsjProject = bsjProject;
