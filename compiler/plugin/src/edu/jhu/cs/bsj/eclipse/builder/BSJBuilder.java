@@ -84,9 +84,9 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	/**
 	 * Compiles the given files managed by the file manager
 	 */
-	protected void compile(
-			BsjFileManager fileManager, List<BsjFileObject> files) throws Exception {
-		
+	protected void compile(BsjFileManager fileManager, List<BsjFileObject> files) 
+	throws Exception {	
+		try {
 		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
 		toolkitFactory.setFileManager(fileManager);
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
@@ -94,6 +94,9 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 		BsjCompiler compiler = toolkit.getCompiler();
 		DiagnosticListener<BsjSourceLocation> diagnosticListener = null;
 		
-		compiler.compile(files, diagnosticListener, null);
+		compiler.compile(files, diagnosticListener);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -18,7 +18,7 @@ public class BSJBuilderConfig {
 	
 	private String sourcePathStr = "src";
 	private String genSourcePathStr = "local" + File.separator + "gensrc";
-	private String classPathSrc = "local" + File.separator + "bin";
+	private String classOutputPathSrc = "local" + File.separator + "bin";
 	
 	public BSJBuilderConfig(IProject bsjProject) {
 		this.bsjProject = bsjProject;
@@ -32,8 +32,8 @@ public class BSJBuilderConfig {
 		return genSourcePathStr;
 	}
 
-	public String getClassPathSrc() {
-		return classPathSrc;
+	public String getClassOutputPathSrc() {
+		return classOutputPathSrc;
 	}
 	
 	public BsjFileManager getFileManager() throws Exception {
@@ -46,9 +46,8 @@ public class BSJBuilderConfig {
 		
 		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry
 				.newFileManagerFactory();
-
-		String projectPath = bsjProject.getFullPath().toFile().getPath();
-		projectPath.replaceAll("/", File.separator);
+		String projectPath = bsjProject.getLocation().toFile().getPath();
+		
 		fileManagerFactory.setLocationManager(BsjCompilerLocation.SOURCE_PATH,
 				projectPath +  File.separator + sourcePathStr);
 		
@@ -58,11 +57,11 @@ public class BSJBuilderConfig {
 		fileManagerFactory.setLocationManager(BsjCompilerLocation.GENERATED_SOURCE_PATH,
 				genSourcePath.getPath());		
 		
-		File classPath = new File(projectPath + File.separator + classPathSrc);
-		if(!classPath.exists())
-			classPath.mkdirs();
+		File classOutputPath = new File(projectPath + File.separator + classOutputPathSrc);
+		if(!classOutputPath.exists())
+			classOutputPath.mkdirs();
 		fileManagerFactory.setLocationManager(BsjCompilerLocation.CLASS_OUTPUT,
-				classPath.getPath());
+				classOutputPath.getPath());
 		
 		fileManagerFactory.setLocationManager(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
 				System.getProperty("sun.boot.class.path"));

@@ -32,10 +32,12 @@ public class BSJSourceFileVisitor implements IResourceVisitor {
 	public boolean visit(IResource resource) throws CoreException {
 		if(resource instanceof IFile) {
 			String ext = resource.getFileExtension();
-			if( ext!=null && (ext.equals(".bsj") || ext.equals(".java")) ) {
+			if( ext!=null && (ext.equals("bsj") || ext.equals("java")) ) {
 				String srcStr = srcFolder.getProjectRelativePath().toString();
 				String fileStr = resource.getProjectRelativePath().toString();
 				String fullName = fileStr.substring(srcStr.length());
+				if(fullName.startsWith("/"))
+					fullName = fullName.substring(1);
 				
 				String packageString;
 				String filename;
@@ -46,9 +48,6 @@ public class BSJSourceFileVisitor implements IResourceVisitor {
 				} else {
 					packageString = "";
 					filename = fullName;
-				}
-				if(filename.lastIndexOf(".java")!=-1) {
-					filename = filename.replace(".java", ".bsj");
 				}
 				
 				try {
