@@ -19,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.eclipse.util.ResourceUtilities;
 
 /**
  * Builds a bsj project
@@ -134,10 +135,11 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 		}
 	}
 	
-	private void deleteFile(File file) {
-		if(file.isDirectory())
-			for(File child : file.listFiles())
-				deleteFile(child);
-		file.delete();
+	/**
+	 * Deletes a file and its content
+	 * @param file a file
+	 */
+	private final void deleteFile(File file) {
+		ResourceUtilities.deleteFile(file);
 	}
 }

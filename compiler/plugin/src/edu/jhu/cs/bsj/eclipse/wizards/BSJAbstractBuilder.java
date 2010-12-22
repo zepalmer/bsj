@@ -2,11 +2,12 @@ package edu.jhu.cs.bsj.eclipse.wizards;
 
 import java.net.URI;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import edu.jhu.cs.bsj.eclipse.util.ResourceUtilities;
 
 /**
  * Abstract parent for creating a resource
@@ -53,12 +54,6 @@ public abstract class BSJAbstractBuilder {
 	 */
 	public static void createFolder(IFolder folder, IProgressMonitor monitor)
 	throws CoreException  {
-		IContainer parent = folder.getParent();
-		if (parent instanceof IFolder) {
-			createFolder((IFolder) parent, monitor);
-		}
-		if (!folder.exists()) {
-			folder.create(false, true, monitor);
-		}
+		ResourceUtilities.createFolder(folder, monitor);
 	}
 }

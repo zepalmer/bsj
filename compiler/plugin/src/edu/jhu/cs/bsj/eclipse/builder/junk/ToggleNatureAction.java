@@ -14,6 +14,10 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import edu.jhu.cs.bsj.eclipse.builder.BSJNature;
 
+/**
+ * Meant to be deleted later. 
+ * For now, this allows the user to use a menu to ADD/REMOVE BSJNATURE
+ */
 public class ToggleNatureAction implements IObjectActionDelegate {
 
 	private ISelection selection;
