@@ -8,6 +8,7 @@ import javax.tools.DiagnosticListener;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,118 +29,125 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	
 	public static final String BUILDER_ID = "edu.jhu.cs.bsj.eclipse.builder";
 	
-	public BSJBuilder() {
-	}
-	
 	@Override
 	protected IProject[] build(int kind, @SuppressWarnings("rawtypes") Map args, IProgressMonitor monitor) 
 	throws CoreException {
 		System.out.println("A build of type "+kind+" is initiated.");
 		
+		BSJBuilderConfig bsjConfig = new BSJBuilderConfig(getProject());
 		switch(kind) {
 			case FULL_BUILD:
-				fullBuild(monitor); break;
+				fullBuild(bsjConfig, monitor); break;
 			case INCREMENTAL_BUILD:
-				incrementalBuild(monitor); break;
+				incrementalBuild(bsjConfig, monitor); break;
 			case CLEAN_BUILD:
-				cleanBuild(monitor); break;
+				cleanBuild(bsjConfig, monitor); break;
 			default:
-				autoBuild(monitor);
+				autoBuild(bsjConfig, monitor);
 		}
 		return null;
 	}
 	
-	protected void fullBuild(final IProgressMonitor monitor) 
+	protected void fullBuild(BSJBuilderConfig bsjConfig, IProgressMonitor monitor) 
 	throws CoreException {
-		BSJBuilderConfig bconfig = new BSJBuilderConfig(getProject());
-		IFolder srcFolder = getProject().getFolder(bconfig.getSourcePathStr());
-		BsjFileManager fmanager;
-		try {
-			fmanager = bconfig.getFileManager();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		IFolder srcFolder = getProject().getFolder(bsjConfig.getSourcePathStr());
+		BsjFileManager fmanager = bsjConfig.getFileManager();
 		BSJSourceFileVisitor visitor = new BSJSourceFileVisitor(srcFolder, fmanager);
 		srcFolder.accept(visitor);
 		List<BsjFileObject> files = visitor.getSourceFiles();
 		try {
-			clean(monitor);
-			compile(fmanager, files, monitor);
+			clean(bsjConfig, monitor);
+			compile(files, bsjConfig, monitor);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	protected void incrementalBuild(final IProgressMonitor monitor) 
+	protected void incrementalBuild(BSJBuilderConfig bsjConfig, IProgressMonitor monitor) 
 	throws CoreException {
 		// TODO: part incremental builder
-		fullBuild(monitor);
+		fullBuild(bsjConfig, monitor);
 	}
 	
-	protected void cleanBuild(final IProgressMonitor monitor) 
+	protected void cleanBuild(BSJBuilderConfig bsjConfig, IProgressMonitor monitor) 
 	throws CoreException {
-		fullBuild(monitor);
+		fullBuild(bsjConfig, monitor);
 	}
 	
-	protected void autoBuild(final IProgressMonitor monitor) 
+	protected void autoBuild(BSJBuilderConfig bsjConfig, IProgressMonitor monitor) 
 	throws CoreException {
-		incrementalBuild(monitor);
+		fullBuild(bsjConfig, monitor);
 	}
 	
 	/**
 	 * Compiles the given files managed by the file manager
 	 */
-	protected void compile(BsjFileManager fileManager, List<BsjFileObject> files, IProgressMonitor monitor) 
-	throws Exception {	
-		try {
+	protected void compile(List<BsjFileObject> files, BSJBuilderConfig bsjConfig, IProgressMonitor monitor) 
+	throws Exception {
 		if(files.isEmpty()) {
 			return;
 		}
 		
+		try {
+		
 		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
-		toolkitFactory.setFileManager(fileManager);
+		toolkitFactory.setFileManager(bsjConfig.getFileManager());
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
 
 		BsjCompiler compiler = toolkit.getCompiler();
 		DiagnosticListener<BsjSourceLocation> diagnosticListener = null;
 		
 		compiler.compile(files, diagnosticListener);
-		getProject().refreshLocal(IProject.DEPTH_INFINITE, monitor);
+		refreshGenSourceFolder(bsjConfig, monitor);
+		refreshClassOutputFolder(bsjConfig, monitor);
+		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Override
-	protected void clean(final IProgressMonitor monitor) 
+	protected void clean(IProgressMonitor monitor)
 	throws CoreException {
 		System.out.println("A clean is initiated.");
 		
-		BSJBuilderConfig bconfig = new BSJBuilderConfig(getProject());
-		String projectPath = getProject().getLocation().toFile().getPath();
-		
-		// NOTE using eclipse workspace to delete generated files doesn't work
+		clean(new BSJBuilderConfig(getProject()), monitor);
+	}
+	
+	protected void clean(BSJBuilderConfig bsjConfig, IProgressMonitor monitor)
+	throws CoreException {
+		// NOTE using eclipse workspace to delete generated files doesn't seem to work
 		
 		// delete generated java sources
-		File genSrcPath = new File(projectPath + File.separator + bconfig.getGenSourcePathStr());
+		File genSrcPath = bsjConfig.getGenSourcePath().toFile();
 		if(genSrcPath.exists()) {
 			for(File child : genSrcPath.listFiles())
 				deleteFile(child);
 		}
+		refreshGenSourceFolder(bsjConfig, monitor);
 		
 		// delete generated bsj classes
-		File classOutPath = new File(projectPath + File.separator + bconfig.getClassOutputPathSrc());
+		File classOutPath = bsjConfig.getClassOutputPath().toFile();
 		if(classOutPath.exists()) {
 			for(File child : classOutPath.listFiles())
 				deleteFile(child);
 		}
+		refreshClassOutputFolder(bsjConfig, monitor);
 	}
 	
-	/**
-	 * Deletes a file and its content
-	 * @param file a file
-	 */
 	private final void deleteFile(File file) {
 		ResourceUtilities.deleteFile(file);
+	}
+	
+	protected void refreshGenSourceFolder(BSJBuilderConfig bsjConfig, IProgressMonitor monitor) 
+	throws CoreException {
+		getProject().getFolder(bsjConfig.getGenSourcePathStr())
+			.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+	}
+	
+	protected void refreshClassOutputFolder(BSJBuilderConfig bsjConfig, IProgressMonitor monitor) 
+	throws CoreException {
+		getProject().getFolder(bsjConfig.getClassOutputPathStr())
+			.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 	}
 }
