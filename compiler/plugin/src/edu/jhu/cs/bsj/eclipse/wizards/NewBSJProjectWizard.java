@@ -49,7 +49,11 @@ public class NewBSJProjectWizard extends Wizard implements INewWizard, IExecutab
 			projectLocation = pageOne.getLocationURI();
 		}
 		
-		BSJCreationUtilities.createProject(projectName, projectLocation);
+		// build the project
+		BSJProjectBuilder builder = new BSJProjectBuilder();
+		builder.setName(projectName);
+		builder.setLocation(projectLocation);
+		builder.build();
 		
 		// change to BSJ perspective
 		BasicNewProjectResourceWizard.updatePerspective(configurationElement);
