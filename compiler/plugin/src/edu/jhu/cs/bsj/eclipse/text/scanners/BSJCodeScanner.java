@@ -37,47 +37,40 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		
 		Token token;
 		
-		// Add whitespace rule.
-		token = defaultToken;
-		rules.add(new WhitespaceRule(new BSJDetectorWhitespace(), token));
-		
 		// Add rule for characters
 		token = getToken(IJavaColorConstants.JAVA_STRING);
 		rules.add(new SingleLineRule("\'", "\'", token, '\\'));
 		
-		// Word detector
-		BSJDetectorKeyword wordDetector = new BSJDetectorKeyword();
-		
 		// Add rule for java keywords
 		token = getToken(IJavaColorConstants.JAVA_KEYWORD);
-		WordRule javaKeywordRule = new WordRule(wordDetector);
+		WordRule javaKeywordRule = new WordRule(new BSJDetectorKeyword());
 		for (int i= 0; i <  javaKeywords.length; i++)
 			javaKeywordRule.addWord(javaKeywords[i], token);
 		rules.add(javaKeywordRule);
 		
 		// Add rule for return keyword
 		token = getToken(IJavaColorConstants.JAVA_KEYWORD_RETURN);
-		WordRule returnKeywordRule = new WordRule(wordDetector);
+		WordRule returnKeywordRule = new WordRule(new BSJDetectorKeyword());
 		returnKeywordRule.addWord(returnKeyword, token);
 		rules.add(returnKeywordRule);
 		
 		// Add rule for bsj keywords
 		token = getToken(IJavaColorConstants.JAVA_KEYWORD);
-		WordRule bsjKeywordRule = new WordRule(wordDetector);
+		WordRule bsjKeywordRule = new WordRule(new BSJDetectorKeyword());
 		for (int i= 0; i <  bsjKeywords.length; i++)
 			bsjKeywordRule.addWord(bsjKeywords[i], token);
 		rules.add(bsjKeywordRule);
 		
 		// Add rule for java types
 		token = getToken(IJavaColorConstants.JAVA_KEYWORD);
-		WordRule javaTypeRule = new WordRule(wordDetector);
+		WordRule javaTypeRule = new WordRule(new BSJDetectorKeyword());
 		for (int i= 0; i <  javaTypes.length; i++)
 			javaTypeRule.addWord(javaTypes[i], token);
 		rules.add(javaTypeRule);
 		
 		// Add rule for constants
 		//token = getToken(BSJTokenKeys.JAVA_KEYWORD);
-		WordRule javaConstantRule = new WordRule(wordDetector);
+		WordRule javaConstantRule = new WordRule(new BSJDetectorKeyword());
 		for (int i= 0; i <  javaConstants.length; i++)
 			javaConstantRule.addWord(javaConstants[i], token);
 		rules.add(javaConstantRule);
@@ -91,6 +84,10 @@ public class BSJCodeScanner extends AbstractBSJScanner {
 		// Add rule for operators
 		token = getToken(IJavaColorConstants.JAVA_OPERATOR);
 		rules.add(new BSJRuleJavaOperators(token));
+		
+		// Add whitespace rule.
+		token = defaultToken;
+		rules.add(new WhitespaceRule(new BSJDetectorWhitespace(), token));
 		
 		return rules;
 	}
