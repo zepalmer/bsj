@@ -22,8 +22,12 @@ public class BSJClassBuilder extends BSJFileBuilder {
 			return newFile;
 		}
 		
-		String content = "public class " + getName() + " {\n\n}";
+		String content = "";
+		if(!getPackageName().isEmpty())
+			content += "package " + getPackageName() + ";\n\n";
+		content += "public class " + getName() + " {\n\n}\n";
 		InputStream contentStream = new ByteArrayInputStream(content.getBytes());
+		
 		try {
 			newFile.create(contentStream, false, getProgressMonitor());
 		} catch (CoreException e) {

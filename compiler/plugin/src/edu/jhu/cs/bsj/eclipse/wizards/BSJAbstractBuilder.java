@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.eclipse.util.ResourceUtilities;
  * 
  */
 public abstract class BSJAbstractBuilder {
-	private String name;
+	private String name = "";
 	private IPath location;
 	private IProgressMonitor progressMonitor;
 	

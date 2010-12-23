@@ -45,8 +45,8 @@ public class NewBSJClassWizard extends Wizard implements INewWizard {
 				.replace("."+pageOne.getFileExtension(), ""));
 		builder.setExtension(pageOne.getFileExtension());
 		builder.setLocation(pageOne.getContainerFullPath());
+		builder.setPackageName(BSJClassBuilder.extractPackageName(structSelection));
 		builder.build();
 		return true;
 	}
-	
 }
