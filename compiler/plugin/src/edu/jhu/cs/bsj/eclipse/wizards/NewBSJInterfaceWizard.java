@@ -6,17 +6,17 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
-public class NewBSJClassWizard extends Wizard implements INewWizard {
+public class NewBSJInterfaceWizard extends Wizard implements INewWizard {
 	
-	private static final String WIZARD_NAME = "New BSJ Class";
-	private static final String PAGE_ONE_NAME = "Creating a BSJ class.";
-	private static final String PAGE_ONE_TITLE = "Create a new BSJ class.";
-	private static final String PAGE_ONE_DESCRIPT = "Enter a class name.";
+	private static final String WIZARD_NAME = "New BSJ Interface";
+	private static final String PAGE_ONE_NAME = "Creating a BSJ interface.";
+	private static final String PAGE_ONE_TITLE = "Create a new BSJ interface.";
+	private static final String PAGE_ONE_DESCRIPT = "Enter an interface name.";
 	private WizardNewFileCreationPage pageOne;
 	
 	private IStructuredSelection structSelection;
 	
-	public NewBSJClassWizard() {
+	public NewBSJInterfaceWizard() {
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class NewBSJClassWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
-		BSJClassBuilder builder = new BSJClassBuilder();
+		BSJInterfaceBuilder builder = new BSJInterfaceBuilder();
 		builder.setName(pageOne.getFileName()
 				.replace("."+pageOne.getFileExtension(), ""));
 		builder.setExtension(pageOne.getFileExtension());

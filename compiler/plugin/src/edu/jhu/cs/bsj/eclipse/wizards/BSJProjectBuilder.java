@@ -17,18 +17,16 @@ public class BSJProjectBuilder extends BSJAbstractBuilder {
 	@Override
 	public IResource build() {
 		IProject project;
-		
 		try {
 			project = createBaseProject();
 			addNature(project);
 		} catch (CoreException e) {
 			throw new RuntimeException(e);
 		}
-		
 		return project;
 	}
 	
-	public IProject createBaseProject() 
+	protected IProject createBaseProject() 
 	throws CoreException {
 		IProject newProject = ResourcesPlugin.getWorkspace().getRoot()
 				.getProject(getName());
@@ -38,9 +36,9 @@ public class BSJProjectBuilder extends BSJAbstractBuilder {
 					newProject.getName());
 			if(getLocation()!=null && ResourcesPlugin.getWorkspace().getRoot()
 					.getLocationURI().equals(getLocation())) {
-				desc.setLocationURI(null);
+				desc.setLocation(null);
 			} else {
-				desc.setLocationURI(getLocation());
+				desc.setLocation(getLocation());
 			}
 			newProject.create(desc, getProgressMonitor());
 			if(!newProject.isOpen()) {

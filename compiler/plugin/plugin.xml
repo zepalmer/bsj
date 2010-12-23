@@ -145,6 +145,15 @@
             name="BSJ Class"
             project="false">
       </wizard>
+      <wizard
+            canFinishEarly="false"
+            category="edu.jhu.cs.bsj.eclipse.wizards.bsjcreation"
+            class="edu.jhu.cs.bsj.eclipse.wizards.NewBSJInterfaceWizard"
+            hasPages="true"
+            id="edu.jhu.cs.bsj.eclipse.wizards.newbsjinterface"
+            name="BSJ Interface"
+            project="false">
+      </wizard>
    </extension>
    
 </plugin>

@@ -1,10 +1,9 @@
 package edu.jhu.cs.bsj.eclipse.wizards;
 
-import java.net.URI;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -16,7 +15,8 @@ public class NewBSJProjectWizard extends Wizard implements INewWizard, IExecutab
 	
 	private static final String WIZARD_NAME = "New BSJ Project";
 	private static final String PAGE_ONE_NAME = "Creating a BSJ Project.";
-	private static final String PAGE_ONE_TITLE = "Create a BSJ Project."; 
+	private static final String PAGE_ONE_TITLE = "Create a BSJ Project.";
+	private static final String PAGE_ONE_DESCRIPT = "Enter a project name.";
 	private WizardNewProjectCreationPage pageOne;
 	
 	private IConfigurationElement configurationElement;
@@ -31,22 +31,21 @@ public class NewBSJProjectWizard extends Wizard implements INewWizard, IExecutab
 	@Override
 	public void addPages() {
 		super.addPages();
-		
 		setWindowTitle(WIZARD_NAME);
 		setHelpAvailable(false);
 		
 		pageOne = new WizardNewProjectCreationPage(PAGE_ONE_NAME);
 		pageOne.setTitle(PAGE_ONE_TITLE);
-		pageOne.setDescription("Enter a project name");
+		pageOne.setDescription(PAGE_ONE_DESCRIPT);
 		addPage(pageOne);
 	}
 	
 	@Override
 	public boolean performFinish() {
 		String projectName = pageOne.getProjectName();
-		URI projectLocation = null; // null is default location
+		IPath projectLocation = null; // null is default location
 		if(!pageOne.useDefaults()) {
-			projectLocation = pageOne.getLocationURI();
+			projectLocation = pageOne.getLocationPath();
 		}
 		
 		// build the project

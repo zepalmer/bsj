@@ -32,8 +32,6 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected IProject[] build(int kind, @SuppressWarnings("rawtypes") Map args, IProgressMonitor monitor) 
 	throws CoreException {
-		System.out.println("A build of type "+kind+" is initiated.");
-		
 		BSJBuilderConfig bsjConfig = new BSJBuilderConfig(getProject());
 		switch(kind) {
 			case FULL_BUILD:
@@ -109,8 +107,6 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected void clean(IProgressMonitor monitor)
 	throws CoreException {
-		System.out.println("A clean is initiated.");
-		
 		clean(new BSJBuilderConfig(getProject()), monitor);
 	}
 	
