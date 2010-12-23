@@ -20,6 +20,41 @@
       </perspective>
    </extension>
    <extension
+         name="Allows File-&gt;New-&gt;New BSJ Stuff"
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="edu.jhu.cs.bsj.eclipse.perspective.bsjperspective">
+         <newWizardShortcut
+               id="edu.jhu.cs.bsj.eclipse.wizards.newbsjproject">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="edu.jhu.cs.bsj.eclipse.wizards.newbsjclass">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="edu.jhu.cs.bsj.eclipse.wizards.newbsjinterface">
+         </newWizardShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         name="Allows Right Click New-&gt;New BSJ Stuff"
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <commonWizard
+            type="new"
+            wizardId="edu.jhu.cs.bsj.eclipse.wizards.newbsjproject">
+         <enablement></enablement>
+      </commonWizard>
+      <commonWizard
+            type="new"
+            wizardId="edu.jhu.cs.bsj.eclipse.wizards.newbsjclass">
+         <enablement></enablement>
+      </commonWizard>
+      <commonWizard
+            type="new"
+            wizardId="edu.jhu.cs.bsj.eclipse.wizards.newbsjinterface">
+         <enablement></enablement>
+      </commonWizard>
+   </extension>
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="edu.jhu.cs.bsj.eclipse.preference.BSJPreferencePage"
@@ -105,22 +140,6 @@
       </builder>
    </extension>
    <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="false"
-            id="BSJ Eclipse Plugin.objectContribution1"
-            nameFilter="*"
-            objectClass="org.eclipse.core.resources.IProject">
-         <action
-               class="edu.jhu.cs.bsj.eclipse.builder.junk.ToggleNatureAction"
-               enablesFor="+"
-               id="BSJ Eclipse Plugin.action1"
-               label="Add/Remove BSJ Nature"
-               menubarPath="additions">
-         </action>
-      </objectContribution>
-   </extension>
-   <extension
          point="org.eclipse.ui.newWizards">
       <category
             id="edu.jhu.cs.bsj.eclipse.wizards.bsjcreation"
@@ -154,6 +173,22 @@
             name="BSJ Interface"
             project="false">
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="BSJ Eclipse Plugin.objectContribution1"
+            nameFilter="*"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="edu.jhu.cs.bsj.eclipse.builder.junk.ToggleNatureAction"
+               enablesFor="+"
+               id="BSJ Eclipse Plugin.action1"
+               label="Add/Remove BSJ Nature"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
    </extension>
    
 </plugin>

@@ -6,7 +6,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 
 public class BSJPerspectiveFactory implements IPerspectiveFactory {
 
-	final static String ID_CONSOLE ="org.eclipse.ui.console.ConsoleView";
+	private final static String ID_CONSOLE ="org.eclipse.ui.console.ConsoleView";
 	
 	@Override
 	public void createInitialLayout(IPageLayout layout) {
