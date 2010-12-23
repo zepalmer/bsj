@@ -6,18 +6,18 @@ import java.util.List;
 
 public class DelegateClass {
 	
-	//@@Delegate(methodName="Good")
+	//@@Delegate(method="Good")
 	private Test member;
 
 	
-	@@Delegate(methodName="length", delegateMethodName="newLength")
+	@@Delegate(method="length", as="newLength")
 	private java.lang.String s;
 
 	//@@Delegate(methodName="put", delegateMethodName="addChildren")
 	private HashMap<Test,Test> children1;
 	
-	//@@Delegate(methodName="add", delegateMethodName="addChildren")
-	//@@Delegate(fieldName="size", delegateMethodName="mySize")
+	@@Delegate(method="add", as="addChildren")
+	//@@Delegate(method="size", as="mySize")
 	
 	private List<Test> children;
 	
