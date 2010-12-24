@@ -4,6 +4,7 @@ import javax.lang.model.type.TypeKind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypePseudoType;
 
@@ -38,6 +39,8 @@ public class TypePseudoTypeImpl extends PseudoTypeImpl implements BsjTypePseudoT
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		if (obj instanceof BsjTypePseudoType)
 		{
 			BsjTypePseudoType other = (BsjTypePseudoType) obj;
@@ -53,4 +56,10 @@ public class TypePseudoTypeImpl extends PseudoTypeImpl implements BsjTypePseudoT
 	{
 		return "(pseudo:" + this.declaration.getFullyQualifiedName() + ")";
 	}
+    
+    @Override
+    public BsjTypePseudoType evaluate()
+    {
+        return this;
+    }
 }

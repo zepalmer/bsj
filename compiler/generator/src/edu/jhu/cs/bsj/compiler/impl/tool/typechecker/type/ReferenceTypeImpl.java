@@ -12,12 +12,6 @@ public abstract class ReferenceTypeImpl extends TypeArgumentImpl implements BsjR
 	}
 
 	@Override
-	public boolean isWideningReferenceConversionTo(BsjType type)
-	{
-		return this.isSubtypeOf(type);
-	}
-
-	@Override
 	public boolean isNarrowingPrimitiveConversionTo(BsjType type)
 	{
 		return false;
@@ -40,4 +34,10 @@ public abstract class ReferenceTypeImpl extends TypeArgumentImpl implements BsjR
 	{
 		return false;
 	}
+	
+    @Override
+    public BsjReferenceType evaluate()
+    {
+        return this;
+    }
 }

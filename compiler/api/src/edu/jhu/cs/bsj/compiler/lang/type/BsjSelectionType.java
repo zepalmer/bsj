@@ -13,4 +13,9 @@ public interface BsjSelectionType extends BsjActualType
 	 * Permits iteration over the component types of this selection type.
 	 */
 	public Bag<? extends BsjActualType> getComponentTypes();
+	
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjSelectionType evaluate();
 }

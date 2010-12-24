@@ -1,10 +1,11 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
 
-public abstract class ActualTypeImpl extends TypeMirrorImpl
+public abstract class ActualTypeImpl extends TypeMirrorImpl implements BsjActualType
 {
 
 	public ActualTypeImpl(TypecheckerManager manager)
@@ -50,5 +51,11 @@ public abstract class ActualTypeImpl extends TypeMirrorImpl
 		
 		return CastCompatibility.INCOMPATIBLE;
 	}
+    
+    @Override
+    public BsjActualType evaluate()
+    {
+        return this;
+    }
 
 }

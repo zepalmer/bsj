@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ExplicitTypeVariableImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.thunk.BsjTypeArgumentThunk;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.lazy.LazyTypeArgumentContainerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.Converter;
 import edu.jhu.cs.bsj.compiler.impl.utils.UnmodifiableLazyList;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
@@ -55,7 +55,7 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 					@Override
 					public BsjTypeArgument convert(final DeclaredTypeNode t)
 					{
-						return new BsjTypeArgumentThunk(new Function<Void, BsjTypeArgument>()
+						return new LazyTypeArgumentContainerImpl(new Function<Void, BsjTypeArgument>()
 						{
 							@Override
 							public BsjTypeArgument execute(Void argument)

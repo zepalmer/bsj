@@ -17,4 +17,9 @@ public interface BsjTypePseudoType extends BsjNoType
 	 * @return The declaration in question.
 	 */
 	public NamedTypeDeclarationNode<?> getDeclaration();
+	
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjTypePseudoType evaluate();
 }

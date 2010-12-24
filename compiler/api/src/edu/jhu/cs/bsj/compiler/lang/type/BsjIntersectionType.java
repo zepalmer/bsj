@@ -15,4 +15,9 @@ public interface BsjIntersectionType extends BsjDeclaredType
 	 * Retrieves a list of the supertypes of which this type is an intersection.
 	 */
 	public List<? extends BsjTypeArgument> getSupertypes();
+	
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjIntersectionType evaluate();
 }

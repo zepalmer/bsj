@@ -8,6 +8,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjArrayType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
@@ -53,6 +54,8 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		if (this == obj)
 			return true;
 		if (getClass() != obj.getClass())
@@ -135,4 +138,10 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 		
 		return false;
 	}
+    
+    @Override
+    public BsjArrayType evaluate()
+    {
+        return this;
+    }
 }

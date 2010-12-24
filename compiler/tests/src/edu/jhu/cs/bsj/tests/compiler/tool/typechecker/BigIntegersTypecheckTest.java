@@ -11,7 +11,8 @@ public class BigIntegersTypecheckTest extends AbstractBsjCompilerTest
     @Test
     public void testBigIntegerTypechecking() throws Exception
     {
-        performTest(new File(SPECIFIC_SOURCE_DIR.getPath() + File.separator + "typechecking"), "BigIntegersCheck");
+        performTest(new File(SPECIFIC_SOURCE_DIR.getPath() + File.separator + "typechecking" + File.separator
+                + "biginteger"), "BigIntegersCheck");
     }
 
 }

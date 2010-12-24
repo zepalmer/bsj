@@ -8,4 +8,8 @@ import javax.lang.model.type.NullType;
  */
 public interface BsjNullType extends NullType, BsjReferenceType
 {
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjNullType evaluate();
 }

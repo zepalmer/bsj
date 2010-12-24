@@ -8,4 +8,8 @@ import javax.lang.model.type.NoType;
  */
 public interface BsjNoType extends NoType, BsjType
 {
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjNoType evaluate();
 }

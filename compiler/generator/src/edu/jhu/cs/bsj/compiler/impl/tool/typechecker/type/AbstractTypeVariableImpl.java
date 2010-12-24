@@ -5,6 +5,7 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
@@ -86,6 +87,8 @@ public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl impl
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		if (this == obj)
 			return true;
 		if (getClass() != obj.getClass())
@@ -130,13 +133,16 @@ public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl impl
 	@Override
 	public boolean isNarrowingReferenceConversionTo(BsjType type)
 	{
-		if (this.equals(type))
-			return false; // this is the identity conversion, not the narrowing reference conversion
-
 		if (this.isSupertypeOf(type) && type instanceof BsjReferenceType)
 			return true;
 
 		return false;
 	}
+    
+    @Override
+    public BsjTypeVariable evaluate()
+    {
+        return this;
+    }
 	
 }

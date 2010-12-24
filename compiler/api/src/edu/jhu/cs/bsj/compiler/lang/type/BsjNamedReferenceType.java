@@ -9,4 +9,10 @@ package edu.jhu.cs.bsj.compiler.lang.type;
 public interface BsjNamedReferenceType extends BsjReferenceType
 {
 	public BsjTypeArgument calculateErasure();
+	
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjNamedReferenceType evaluate();
+
 }

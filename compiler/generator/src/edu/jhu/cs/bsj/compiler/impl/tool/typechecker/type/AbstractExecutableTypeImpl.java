@@ -8,6 +8,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
@@ -53,6 +54,8 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		if (this == obj)
 			return true;
 		if (getClass() != obj.getClass())
@@ -150,4 +153,10 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
 	{
 		return false;
 	}
+
+    @Override
+    public BsjExecutableType evaluate()
+    {
+        return this;
+    }
 }

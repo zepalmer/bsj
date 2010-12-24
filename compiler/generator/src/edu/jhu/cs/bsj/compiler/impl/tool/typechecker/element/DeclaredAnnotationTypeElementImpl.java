@@ -66,7 +66,7 @@ public class DeclaredAnnotationTypeElementImpl extends DeclaredTypeElementImpl<A
 	}
 
 	@Override
-	protected List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
+	public List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
 	{
 		return Collections.emptyList();
 	}

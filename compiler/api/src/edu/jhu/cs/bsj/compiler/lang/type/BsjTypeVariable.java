@@ -21,4 +21,9 @@ public interface BsjTypeVariable extends TypeVariable, BsjNamedReferenceType
 	public BsjTypeArgument getUpperBound();
 	
 	public BsjTypeArgument getLowerBound();
+	
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjTypeVariable evaluate();
 }

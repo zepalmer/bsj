@@ -44,13 +44,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjDeclaredType;
-import edu.jhu.cs.bsj.compiler.lang.type.BsjErrorType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckingException;
 
 /**
  * Rewrites the annotated AST to implement BigInteger operator overloading. Instances of class are not thread-safe.
@@ -313,7 +313,14 @@ public class BigIntegerOperatorOverloading extends AbstractBsjMetaAnnotationMeta
      */
     public ExpressionNode convertExpressionToBigInteger(ExpressionNode expr)
     {
-        final BsjType type = typechecker.getType(expr);
+        final BsjType type;
+        try
+        {
+            type = typechecker.getType(expr);
+        } catch (TypecheckingException e)
+        {
+            return null;
+        }
         if (isBigIntegerType(type))
         {
             return expr.deepCopy(factory);
@@ -417,8 +424,14 @@ public class BigIntegerOperatorOverloading extends AbstractBsjMetaAnnotationMeta
      */
     private boolean isBigIntegerType(ExpressionNode expr)
     {
-        final BsjType type = typechecker.typecheck(expr).getType();
-        return isBigIntegerType(type);
+        try
+        {
+            final BsjType type = typechecker.typecheck(expr).getType();
+            return isBigIntegerType(type);
+        } catch (TypecheckingException e)
+        {
+            return false;
+        }
     }
 
     private boolean isBigIntegerType(BsjType type)
@@ -428,10 +441,6 @@ public class BigIntegerOperatorOverloading extends AbstractBsjMetaAnnotationMeta
 
     private boolean isClassType(BsjType type, String fullyQualifiedName)
     {
-        if (type instanceof BsjErrorType)
-        {
-            return false;
-        }
         if (type instanceof BsjDeclaredType)
         {
             final BsjDeclaredType declaredType = (BsjDeclaredType) type;
@@ -450,10 +459,6 @@ public class BigIntegerOperatorOverloading extends AbstractBsjMetaAnnotationMeta
 
     private boolean isPrimitiveType(BsjType type, PrimitiveType primitiveType)
     {
-        if (type instanceof BsjErrorType)
-        {
-            return false;
-        }
         if (type instanceof BsjPrimitiveType)
         {
             final BsjPrimitiveType pType = (BsjPrimitiveType) type;

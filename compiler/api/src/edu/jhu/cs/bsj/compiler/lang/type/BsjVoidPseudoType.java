@@ -6,4 +6,8 @@ package edu.jhu.cs.bsj.compiler.lang.type;
  */
 public interface BsjVoidPseudoType extends BsjNoType
 {
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjVoidPseudoType evaluate();
 }

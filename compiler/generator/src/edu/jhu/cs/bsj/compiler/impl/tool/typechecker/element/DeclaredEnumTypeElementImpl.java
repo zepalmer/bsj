@@ -16,8 +16,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
-import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
@@ -56,10 +56,10 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 	@Override
 	public TypeMirror getSuperclass()
 	{
-		BsjTypeElement enumElement = getManager().getToolkit().getEnumElement();
+		BsjDeclaredTypeElement enumElement = getManager().getToolkit().getEnumElement();
 		NamedTypeDeclarationNode<?> enclosingTypeDeclaration = this.getBackingNode().getNearestAncestorOfType(
 				NamedTypeDeclarationNode.class);
-		BsjTypeElement enclosingTypeElement = makeElement(enclosingTypeDeclaration);
+		BsjDeclaredTypeElement enclosingTypeElement = makeElement(enclosingTypeDeclaration);
 		BsjExplicitlyDeclaredType enclosingTypeMirror = (BsjExplicitlyDeclaredType) enclosingTypeElement.asType();
 		BsjTypeArgument selfType = getManager().getModelingFactory().makeExplicitlyDeclaredType(this,
 				Collections.<BsjTypeArgument> emptyList(), enclosingTypeMirror);
@@ -86,7 +86,7 @@ public class DeclaredEnumTypeElementImpl extends DeclaredTypeElementImpl<EnumDec
 	}
 
 	@Override
-	protected List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
+	public List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
 	{
 		return Collections.emptyList();
 	}

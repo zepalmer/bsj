@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 import javax.lang.model.type.TypeKind;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjNonePseudoType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 
@@ -29,6 +30,8 @@ public class NonePseudoTypeImpl extends PseudoTypeImpl implements BsjNonePseudoT
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		return obj instanceof BsjNonePseudoType;
 	}
 
@@ -37,4 +40,10 @@ public class NonePseudoTypeImpl extends PseudoTypeImpl implements BsjNonePseudoT
 	{
 		return "(no type)";
 	}
+    
+    @Override
+    public BsjNonePseudoType evaluate()
+    {
+        return this;
+    }
 }

@@ -8,6 +8,7 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
@@ -72,6 +73,8 @@ public class PrimitiveTypeImpl extends ActualTypeImpl implements BsjPrimitiveTyp
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		if (this == obj)
 			return true;
 		if (getClass() != obj.getClass())
@@ -279,4 +282,10 @@ public class PrimitiveTypeImpl extends ActualTypeImpl implements BsjPrimitiveTyp
 	{
 		return false;
 	}
+	
+    @Override
+    public BsjPrimitiveType evaluate()
+    {
+        return this;
+    }
 }

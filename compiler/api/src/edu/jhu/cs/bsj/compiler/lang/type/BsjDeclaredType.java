@@ -34,4 +34,9 @@ public interface BsjDeclaredType extends DeclaredType, BsjReferenceType
 	 * @see BsjType#calculateErasure()
 	 */
 	public BsjDeclaredType calculateErasure();
+	
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjDeclaredType evaluate();
 }

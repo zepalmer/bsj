@@ -4,6 +4,7 @@ import javax.lang.model.type.TypeKind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjPackagePseudoType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 
@@ -38,6 +39,8 @@ public class PackagePseudoTypeImpl extends PseudoTypeImpl implements BsjPackageP
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		if (obj instanceof BsjPackagePseudoType)
 		{
 			BsjPackagePseudoType other = (BsjPackagePseudoType) obj;
@@ -60,4 +63,10 @@ public class PackagePseudoTypeImpl extends PseudoTypeImpl implements BsjPackageP
 		}
 	}
 
+    
+    @Override
+    public BsjPackagePseudoType evaluate()
+    {
+        return this;
+    }
 }

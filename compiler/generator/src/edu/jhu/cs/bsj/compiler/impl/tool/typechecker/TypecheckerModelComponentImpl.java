@@ -5,8 +5,8 @@ import javax.lang.model.element.Element;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuilder;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
-import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
 
 /**
  * This class is intended to represent a typechecker model component.  It contains functionality which is useful to
@@ -41,7 +41,7 @@ public class TypecheckerModelComponentImpl
 	 * Delegation method to toolkit.
 	 * @see TypecheckerToolkit#makeElement(NamedTypeDeclarationNode)
 	 */
-	protected BsjTypeElement makeElement(NamedTypeDeclarationNode<?> node)
+	protected BsjDeclaredTypeElement makeElement(NamedTypeDeclarationNode<?> node)
 	{
 		return getManager().getToolkit().makeElement(node);
 	}

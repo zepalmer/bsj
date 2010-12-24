@@ -25,16 +25,18 @@ public interface BsjTypechecker
 	 * Calculates the type for a provided AST node.
 	 * @param node The node to use.
 	 * @return The resulting type.
+	 * @throws TypecheckingException If no type could be established for the provided AST node.
 	 */
-	public BsjType getType(Node node);
+	public BsjType getType(Node node) throws TypecheckingException;
 
 	/**
 	 * Calculates a typechecking result for the provided AST node.
 	 * 
 	 * @param node The node to use.
 	 * @return The typechecking results for this node.
+     * @throws TypecheckingException If no type could be established for the provided AST node.
 	 */
-	public TypecheckerResult typecheck(Node node);
+	public TypecheckerResult typecheck(Node node) throws TypecheckingException;
 
 	/**
 	 * Calculates a typechecking result for the provided AST node.  This method is useful if the node which should be
@@ -42,8 +44,9 @@ public interface BsjTypechecker
 	 * @param node The node to typecheck.
 	 * @param namespaceNode The node to use to build namespaces during typechecking.
 	 * @return The typechecking results for this node.
+     * @throws TypecheckingException If no type could be established for the provided AST node.
 	 */
-	public TypecheckerResult typecheck(Node node, Node namespaceNode);
+	public TypecheckerResult typecheck(Node node, Node namespaceNode) throws TypecheckingException;
 
 	/**
 	 * Retrieves a modeling factory which can be used to create language modeling elements for this typechecker.

@@ -73,7 +73,7 @@ public abstract class AbstractlyUnmodifiedClassTypeElementImpl<T extends Abstrac
 	}
 
 	@Override
-	protected List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
+	public List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
 	{
 		return makeTypeMirrorsFromTypeParameters(getBackingNode().getTypeParameters());
 	}

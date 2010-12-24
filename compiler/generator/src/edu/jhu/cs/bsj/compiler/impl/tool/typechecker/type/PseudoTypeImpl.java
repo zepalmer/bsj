@@ -105,5 +105,10 @@ public abstract class PseudoTypeImpl extends TypeMirrorImpl implements BsjNoType
 	{
 		return false;
 	}
-	
+    
+    @Override
+    public BsjNoType evaluate()
+    {
+        return this;
+    }	
 }

@@ -37,8 +37,8 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.MethodNamespa
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.filter.FilterByNodeTypes;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
-import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjNamedReferenceType;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
@@ -247,7 +247,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 		} else if (declarationNode.getParent() instanceof EnumConstantDeclarationNode)
 		{
 			EnumDeclarationNode enumDeclarationNode = declarationNode.getNearestAncestorOfType(EnumDeclarationNode.class);
-			BsjTypeElement typeElement = getToolkit().makeElement(enumDeclarationNode);
+			BsjDeclaredTypeElement typeElement = getToolkit().makeElement(enumDeclarationNode);
 			return makeInheritedMapFromSupertypes(map, Collections.singleton(typeElement));
 		} else
 		{
@@ -268,7 +268,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 */
 	protected T makeInheritedMapFor(AnnotationDeclarationNode declarationNode, T map)
 	{
-		BsjTypeElement annotationElement = toolkit.getAnnotationElement();
+		BsjDeclaredTypeElement annotationElement = toolkit.getAnnotationElement();
 		return makeInheritedMapFromSupertypes(map, Collections.singleton(annotationElement));
 	}
 
@@ -290,14 +290,14 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 			LOGGER.trace("Populating inherited members for " + declarationNode.getFullyQualifiedName());
 		}
 
-		BsjTypeElement objectElement = toolkit.getObjectElement();
+		BsjDeclaredTypeElement objectElement = toolkit.getObjectElement();
 		if (objectElement.equals(toolkit.makeElement(declarationNode)))
 		{
 			// Then we're already done; Object inherits nothing.
 			return makeMap(map, EnvType.INHERITED);
 		}
 
-		Set<BsjTypeElement> supertypes = new HashSet<BsjTypeElement>();
+		Set<BsjDeclaredTypeElement> supertypes = new HashSet<BsjDeclaredTypeElement>();
 
 		// include the superclass
 		if (declarationNode.getExtendsClause() != null)
@@ -342,9 +342,9 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 */
 	protected T makeInheritedMapFor(EnumDeclarationNode declarationNode, T map)
 	{
-		BsjTypeElement enumElement = toolkit.getEnumElement();
+		BsjDeclaredTypeElement enumElement = toolkit.getEnumElement();
 
-		Set<BsjTypeElement> supertypes = new HashSet<BsjTypeElement>();
+		Set<BsjDeclaredTypeElement> supertypes = new HashSet<BsjDeclaredTypeElement>();
 		supertypes.add(enumElement);
 
 		if (declarationNode.getImplementsClause().size() > 0)
@@ -380,7 +380,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 	 */
 	protected T makeInheritedMapFor(InterfaceDeclarationNode declarationNode, T map)
 	{
-		Set<BsjTypeElement> supertypes = new HashSet<BsjTypeElement>();
+		Set<BsjDeclaredTypeElement> supertypes = new HashSet<BsjDeclaredTypeElement>();
 
 		if (declarationNode.getExtendsClause().size() > 0)
 		{
@@ -402,18 +402,18 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
 		return makeInheritedMapFromSupertypes(map, supertypes);
 	}
 
-	private T makeInheritedMapFromSupertypes(T map, Set<BsjTypeElement> supertypes)
+	private T makeInheritedMapFromSupertypes(T map, Set<BsjDeclaredTypeElement> supertypes)
 	{
 		// ensure that there is at least one supertype
 		if (supertypes.size() == 0)
 		{
-			BsjTypeElement objectElement = (BsjTypeElement) toolkit.getObjectElement();
+			BsjDeclaredTypeElement objectElement = (BsjDeclaredTypeElement) toolkit.getObjectElement();
 			supertypes.add(objectElement);
 		}
 
 		// create an inherited map for each of these types
 		List<T> inheritedMaps = new ArrayList<T>(supertypes.size());
-		for (BsjTypeElement element : supertypes)
+		for (BsjDeclaredTypeElement element : supertypes)
 		{
 			inheritedMaps.add(makeInheritedMapWithDynamicDispatchFor(element.getDeclarationNode(), map));
 		}

@@ -23,4 +23,10 @@ public interface BsjExecutableType extends ExecutableType, BsjActualType
 	public BsjExecutableType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
 	
 	public boolean isVarargs();
+	
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjExecutableType evaluate();
+
 }

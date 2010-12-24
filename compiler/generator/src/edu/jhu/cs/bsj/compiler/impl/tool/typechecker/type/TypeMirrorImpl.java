@@ -149,5 +149,9 @@ public abstract class TypeMirrorImpl extends TypecheckerModelComponentImpl imple
 		return false;
 	}
 	
-	
+    @Override
+    public BsjType evaluate()
+    {
+        return this;
+    }	
 }

@@ -1,0 +1,147 @@
+public class Capture
+{
+    static class MainTest
+    {
+        static class DataSuper
+        {
+        }
+
+        static class DataSub extends DataSuper
+        {
+        }
+
+        static class ContainerSuper<T extends DataSuper>
+        {
+            public T get()
+            {
+                return null;
+            }
+        }
+
+        static class ContainerSub extends ContainerSuper<DataSub>
+        {
+        }
+
+        static interface Receiver<T extends DataSuper>
+        {
+            public void receive(ContainerSuper<T> container);
+        }
+
+        static class ReceiverSuper<T extends DataSuper> implements Receiver<T>
+        {
+            public void receive(ContainerSuper<T> container)
+            {
+            }
+        }
+
+        static class ReceiverSub extends ReceiverSuper<DataSub>
+        {
+        }
+
+        static class WildReceiver
+        {
+            public void receive(ContainerSuper<?> container)
+            {
+                DataSuper s = container.get();
+            }
+        }
+
+        static class ReceiverSub2<T extends DataSuper> extends ReceiverSuper<T>
+        {
+            public void receive(ContainerSuper<T> container)
+            {
+                wildcardMethod(container);
+            }
+        }
+
+        public static void wildcardMethod(ContainerSuper<?> container)
+        {
+            DataSuper s = container.get();
+        }
+
+        // Ensure that DataSub can be used as a DataSuper
+        public void test1()
+        {
+            DataSuper dRaw = new DataSub();
+        }
+
+        // Ensure that ContainerSub can be used as a ContainerSuper
+        public void test2()
+        {
+            ContainerSuper<?> c = new ContainerSub();
+            ContainerSuper<DataSub> c2 = new ContainerSub();
+        }
+
+        // Ensure that a ReceiverSub can receive a ContainerSub
+        public void test3()
+        {
+            ReceiverSuper<DataSub> r = new ReceiverSub();
+            ContainerSuper<DataSub> c = new ContainerSub();
+            r.receive(c);
+        }
+
+        // Ensure that a WildReceiver can actually receive any container
+        public void test4()
+        {
+            WildReceiver r = new WildReceiver();
+            ContainerSuper<DataSub> c = new ContainerSub();
+            r.receive(c);
+        }
+
+        // Ensure that a ReceiverSub2 can send its ContainerSuper<T> to a ContainerSuper<?>-demanding method
+        public void test5()
+        {
+            ReceiverSub2<DataSub> r = new ReceiverSub2<DataSub>();
+            ContainerSuper<DataSub> c = new ContainerSub();
+            r.receive(c);
+        }
+    }
+    
+    static class MetaprogramTest
+    {
+        static interface Data
+        {
+        }
+        
+        static class SomeData implements Data
+        {
+        }
+        
+        static interface Anchor<T extends Data>
+        {
+        }
+        
+        static class SomeAnchor implements Anchor<SomeData>
+        {
+        }
+        
+        static interface Context<T extends Anchor<U>, U extends Data>
+        {
+        }
+        
+        static class Utils
+        {
+            public static void exec(Context<?,?> context)
+            {
+            }
+        }
+        
+        static interface Operation<T extends Anchor<U>, U extends Data>
+        {
+            public void exec(Context<T,U> context);
+        }
+        
+        static abstract class AbstractOperation<T extends Anchor<U>, U extends Data> implements Operation<T,U>
+        {
+            public abstract void exec(Context<T,U> context);
+        }
+
+        static class SomeOperation extends AbstractOperation<SomeAnchor, SomeData>
+        {
+            public void exec(Context<SomeAnchor,SomeData> context)
+            {
+                Utils.exec(context);
+            }
+        }
+    }
+}

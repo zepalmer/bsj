@@ -167,6 +167,14 @@ public interface BsjType extends TypeMirror
 	 * @return <code>true</code> if a selection conversion exists; <code>false</code> if not.
 	 */
 	public boolean isSelectionConversionTo(BsjType type);
+	
+	/**
+	 * Performs evaluation on this type.  This method is used to force evaluation of lazy type containers in a general
+	 * fashion.  If this type is not a lazy type container, it returns itself; otherwise, it returns the type it
+	 * represents.
+	 * @return An evaluated type representation of this Java type.
+	 */
+	public BsjType evaluate();
 
 	/**
 	 * Determines whether this type is equal to another type.

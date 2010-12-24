@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
@@ -90,6 +91,8 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -186,4 +189,10 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
 
 		return false;
 	}
+    
+    @Override
+    public BsjIntersectionType evaluate()
+    {
+        return this;
+    }
 }

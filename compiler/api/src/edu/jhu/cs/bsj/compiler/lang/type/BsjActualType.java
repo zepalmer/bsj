@@ -7,5 +7,8 @@ package edu.jhu.cs.bsj.compiler.lang.type;
  */
 public interface BsjActualType extends BsjType
 {
-
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjActualType evaluate();
 }

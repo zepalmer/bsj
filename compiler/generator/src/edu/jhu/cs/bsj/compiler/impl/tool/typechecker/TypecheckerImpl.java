@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckerResult;
+import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckingException;
 
 /**
  * This module performs type checking as per the Java Language Specification v3. It also includes the modifications
@@ -41,24 +42,24 @@ public class TypecheckerImpl implements BsjTypechecker
 	 * is returned. If the AST node has no type due to a type calculation failure, an error type is returned.
 	 */
 	@Override
-	public BsjType getType(Node node)
+	public BsjType getType(Node node) throws TypecheckingException
 	{
 		return typecheck(node, new TypecheckerEnvironment()).getType();
 	}
 	
 	@Override
-	public TypecheckerResult typecheck(Node node)
+	public TypecheckerResult typecheck(Node node) throws TypecheckingException
 	{
 		return typecheck(node, new TypecheckerEnvironment());
 	}
 
 	@Override
-	public TypecheckerResult typecheck(Node node, Node namespaceNode)
+	public TypecheckerResult typecheck(Node node, Node namespaceNode) throws TypecheckingException
 	{
 		return typecheck(node, new TypecheckerEnvironment().deriveWithNamespaceNode(namespaceNode));
 	}
 	
-	private TypecheckerResult typecheck(Node node, TypecheckerEnvironment env)
+	private TypecheckerResult typecheck(Node node, TypecheckerEnvironment env) throws TypecheckingException
 	{
 		return node.executeOperation(this.typeEvaluationOperation, env);
 	}

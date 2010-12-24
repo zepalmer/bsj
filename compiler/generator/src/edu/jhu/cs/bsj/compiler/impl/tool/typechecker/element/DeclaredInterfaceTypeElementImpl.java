@@ -78,7 +78,7 @@ public class DeclaredInterfaceTypeElementImpl extends DeclaredTypeElementImpl<In
 	}
 
 	@Override
-	protected List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
+	public List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList()
 	{
 		return makeTypeMirrorsFromTypeParameters(getBackingNode().getTypeParameters());
 	}

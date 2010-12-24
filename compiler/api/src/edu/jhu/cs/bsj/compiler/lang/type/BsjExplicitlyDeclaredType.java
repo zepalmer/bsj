@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.lang.model.type.DeclaredType;
 
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
-import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 
 /**
  * Represents an explicitly declared type in the BSJ type checker. This interface also provides an extension to the
@@ -30,7 +30,7 @@ public interface BsjExplicitlyDeclaredType extends BsjDeclaredType, BsjNamedRefe
 	 * 
 	 * @see DeclaredType#asElement()
 	 */
-	public BsjTypeElement asElement();
+	public BsjDeclaredTypeElement asElement();
 
 	/**
 	 * Creates an erasure for this declared type which is guaranteed to be another declared type.
@@ -68,4 +68,9 @@ public interface BsjExplicitlyDeclaredType extends BsjDeclaredType, BsjNamedRefe
 	 * @return The executable types which may be invoked.
 	 */
 	public Collection<? extends BsjExecutableType> getExecutableTypesOfName(String name);
+
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjExplicitlyDeclaredType evaluate();
 }

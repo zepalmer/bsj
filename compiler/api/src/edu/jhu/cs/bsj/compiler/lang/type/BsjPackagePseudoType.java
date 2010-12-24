@@ -9,4 +9,9 @@ public interface BsjPackagePseudoType extends BsjNoType
 	 * @return The package named by this type.
 	 */
 	public PackageNode getPackage();
+	
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjPackagePseudoType evaluate();
 }

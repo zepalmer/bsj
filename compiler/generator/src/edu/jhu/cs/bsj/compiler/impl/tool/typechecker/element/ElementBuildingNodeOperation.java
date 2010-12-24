@@ -30,8 +30,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.TwoElementImmutableSet;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
-import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
 
 public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, BsjElement>
@@ -88,7 +88,7 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 	public BsjElement executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, Void p)
 	{
 		return new AnnotationMethodExecutableElementImpl(this.manager, node,
-				(BsjTypeElement) findImmediatelyEnclosingType(node).executeOperation(this, null));
+				(BsjDeclaredTypeElement) findImmediatelyEnclosingType(node).executeOperation(this, null));
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 	@Override
 	public BsjElement executeConstructorDeclarationNode(ConstructorDeclarationNode node, Void p)
 	{
-		return new ConstructorExecutableElementImpl(this.manager, node, (BsjTypeElement) findImmediatelyEnclosingType(
+		return new ConstructorExecutableElementImpl(this.manager, node, (BsjDeclaredTypeElement) findImmediatelyEnclosingType(
 				node).executeOperation(this, null));
 	}
 
@@ -131,7 +131,7 @@ public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, 
 	@Override
 	public BsjElement executeInitializerDeclarationNode(InitializerDeclarationNode node, Void p)
 	{
-		return new InitializerExecutableElementImpl(this.manager, node, (BsjTypeElement) findImmediatelyEnclosingType(
+		return new InitializerExecutableElementImpl(this.manager, node, (BsjDeclaredTypeElement) findImmediatelyEnclosingType(
 				node).executeOperation(this, null));
 	}
 

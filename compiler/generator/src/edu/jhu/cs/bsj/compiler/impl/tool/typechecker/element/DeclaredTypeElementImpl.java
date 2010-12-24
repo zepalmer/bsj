@@ -119,11 +119,8 @@ public abstract class DeclaredTypeElementImpl<T extends NamedTypeDeclarationNode
 		}
 		BsjExplicitlyDeclaredType enclosingType = enclosingElement == null ? null
 				: ((BsjDeclaredTypeElement) enclosingElement).asType();
-		return getManager().getModelingFactory().makeExplicitlyDeclaredType(this, getPrototypicalTypeArgumentList(),
-				enclosingType);
+		return getManager().getModelingFactory().makeExplicitlyDeclaredType(this, getPrototypicalTypeArgumentList(), enclosingType);
 	}
-
-	protected abstract List<? extends BsjTypeArgument> getPrototypicalTypeArgumentList();
 
 	@Override
 	public List<? extends AnnotationMirror> getAnnotationMirrors()

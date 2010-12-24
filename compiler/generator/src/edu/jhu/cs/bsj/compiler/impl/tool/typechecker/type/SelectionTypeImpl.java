@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.UnmodifiableBag;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjSelectionType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
@@ -137,6 +138,8 @@ public class SelectionTypeImpl extends ActualTypeImpl implements BsjSelectionTyp
 	@Override
 	public boolean equals(Object obj)
 	{
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
 		if (obj == this)
 		{
 			return true;
@@ -156,4 +159,10 @@ public class SelectionTypeImpl extends ActualTypeImpl implements BsjSelectionTyp
 	{
 		return "{" + StringUtilities.join(componentTypes, ",") + "}";
 	}
+    
+    @Override
+    public BsjSelectionType evaluate()
+    {
+        return this;
+    }
 }

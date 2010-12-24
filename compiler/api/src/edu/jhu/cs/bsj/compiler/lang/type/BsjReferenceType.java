@@ -9,4 +9,9 @@ import javax.lang.model.type.ReferenceType;
  */
 public interface BsjReferenceType extends ReferenceType, BsjActualType, BsjTypeArgument
 {
+    /**
+     * @see BsjType#evaluate()
+     */
+    public BsjReferenceType evaluate();
+
 }

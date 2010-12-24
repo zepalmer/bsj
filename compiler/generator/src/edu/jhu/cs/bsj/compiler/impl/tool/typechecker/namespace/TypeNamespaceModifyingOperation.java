@@ -42,7 +42,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
-import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
@@ -352,7 +351,7 @@ public class TypeNamespaceModifyingOperation extends
 				&& (name == null || memberType.getIdentifier().getIdentifier().equals(name)))
 		{
 			typeNamespaceMap.add(memberType.getIdentifier().getIdentifier(),
-					(BsjTypeElement) this.getToolkit().makeElement(memberType), indicator);
+					this.getToolkit().makeElement(memberType), indicator);
 		}
 	}
 
@@ -435,7 +434,7 @@ public class TypeNamespaceModifyingOperation extends
 					throw new NotImplementedYetException();
 				} else
 				{
-					map.add(type.getIdentifier().getIdentifier(), (BsjTypeElement) this.getToolkit().makeElement(type),
+					map.add(type.getIdentifier().getIdentifier(), this.getToolkit().makeElement(type),
 							importNode);
 				}
 			}
@@ -471,7 +470,7 @@ public class TypeNamespaceModifyingOperation extends
 							// then this sibling is a publically accessible type and is available in the namespace
 							// by default
 							map.add(namedTypeDeclarationNode.getIdentifier().getIdentifier(),
-									(BsjTypeElement) this.getToolkit().makeElement(namedTypeDeclarationNode), indicator);
+									this.getToolkit().makeElement(namedTypeDeclarationNode), indicator);
 						}
 					}
 				}

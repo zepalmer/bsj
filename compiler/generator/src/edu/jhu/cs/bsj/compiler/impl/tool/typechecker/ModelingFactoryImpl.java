@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.value.CodeLiteralSelectionBagImpl;
 import edu.jhu.cs.bsj.compiler.lang.BsjModelingFactory;
-import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
@@ -37,11 +37,11 @@ public class ModelingFactoryImpl implements BsjModelingFactory
 
     private static class MakeExplicitlyDeclaredTypeCacheKey
     {
-        private BsjTypeElement typeElement;
+        private BsjDeclaredTypeElement typeElement;
         private List<? extends BsjTypeArgument> typeArguments;
         private BsjExplicitlyDeclaredType enclosingType;
 
-        public MakeExplicitlyDeclaredTypeCacheKey(BsjTypeElement typeElement,
+        public MakeExplicitlyDeclaredTypeCacheKey(BsjDeclaredTypeElement typeElement,
                 List<? extends BsjTypeArgument> typeArguments, BsjExplicitlyDeclaredType enclosingType)
         {
             super();
@@ -96,7 +96,7 @@ public class ModelingFactoryImpl implements BsjModelingFactory
     private Map<MakeExplicitlyDeclaredTypeCacheKey, BsjExplicitlyDeclaredType> makeExplicitlyDeclaredTypeCache = new HashMap<MakeExplicitlyDeclaredTypeCacheKey, BsjExplicitlyDeclaredType>();
 
     @Override
-    public BsjExplicitlyDeclaredType makeExplicitlyDeclaredType(BsjTypeElement typeElement,
+    public BsjExplicitlyDeclaredType makeExplicitlyDeclaredType(BsjDeclaredTypeElement typeElement,
             List<? extends BsjTypeArgument> typeArguments, BsjExplicitlyDeclaredType enclosingType)
     {
         // TODO: defensive programming checks raising IllegalArgumentException as necessary - see interface

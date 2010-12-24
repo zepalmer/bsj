@@ -18,6 +18,10 @@ public class TypecheckerEnvironment
 	 * which is currently being typechecked should be used instead.
 	 */
 	private Node namespaceNode;
+	/**
+	 * The type expected in context to be used in a return statement.
+	 */
+	private BsjType expectedReturnType;
 	
 	/**
 	 * Creates a new, empty typechecker environment.
@@ -27,18 +31,21 @@ public class TypecheckerEnvironment
 		super();
 		this.expectedType = null;
 		this.namespaceNode = null;
+		this.expectedReturnType = null;
 	}
 	
 	/**
 	 * Creates a new typechecker environment configured with the provided parameters.
 	 * @param expectedType The expected type defined by context.
 	 * @param namespaceNode The node to use when ascertaining the namespace of this node.
+	 * @param expectedReturnType The type expected for return statements.
 	 */
-	public TypecheckerEnvironment(BsjType expectedType, Node namespaceNode)
+	public TypecheckerEnvironment(BsjType expectedType, Node namespaceNode, BsjType expectedReturnType)
 	{
 		super();
 		this.expectedType = expectedType;
 		this.namespaceNode = namespaceNode;
+		this.expectedReturnType = expectedReturnType;
 	}
 
 	public BsjType getExpectedType()
@@ -51,19 +58,30 @@ public class TypecheckerEnvironment
 		return namespaceNode;
 	}
 
-	public TypecheckerEnvironment deriveWithExpectedType(BsjType expectedType)
+	public BsjType getExpectedReturnType()
+    {
+        return expectedReturnType;
+    }
+
+    public TypecheckerEnvironment deriveWithExpectedType(BsjType expectedType)
 	{
-		return new TypecheckerEnvironment(expectedType, this.namespaceNode);
+		return new TypecheckerEnvironment(expectedType, this.namespaceNode, this.expectedReturnType);
 	}
 	
-	public TypecheckerEnvironment deriveWithNamespaceNode(Node namespaceNode)
-	{
-		return new TypecheckerEnvironment(this.expectedType, namespaceNode);
-	}
+    public TypecheckerEnvironment deriveWithNamespaceNode(Node namespaceNode)
+    {
+        return new TypecheckerEnvironment(this.expectedType, namespaceNode, this.expectedReturnType);
+    }
 
-	@Override
-	public String toString()
-	{
-		return "TypecheckerEnvironment [expectedType=" + expectedType + ", namespaceNode=" + namespaceNode + "]";
-	}
+    public TypecheckerEnvironment deriveWithExpectedReturnType(BsjType expectedReturnType)
+    {
+        return new TypecheckerEnvironment(this.expectedType, this.namespaceNode, expectedReturnType);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "TypecheckerEnvironment [expectedType=" + expectedType + ", namespaceNode=" + namespaceNode
+                + ", expectedReturnType=" + expectedReturnType + "]";
+    }
 }

@@ -6,6 +6,7 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjNullType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
@@ -40,7 +41,9 @@ public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 	@Override
 	public boolean equals(Object obj)
 	{
-		return getClass() == obj.getClass();
+        while (obj instanceof BsjLazyTypeContainer<?>)
+            obj = ((BsjLazyTypeContainer<?>)obj).evaluate();
+		return obj instanceof BsjNullType;
 	}
 
 	@Override
@@ -81,4 +84,11 @@ public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 
 		return false;
 	}
+	
+    
+    @Override
+    public BsjNullType evaluate()
+    {
+        return this;
+    }
 }
