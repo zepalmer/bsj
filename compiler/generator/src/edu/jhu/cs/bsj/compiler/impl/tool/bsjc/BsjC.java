@@ -310,7 +310,7 @@ public class BsjC
 		map.put(BsjCompilerLocation.ANNOTATION_PROCESSOR_OUTPUT, map.get(BsjCompilerLocation.CLASS_OUTPUT));
 
 		// create file manager from registry service
-		BsjFileManagerFactory factory = BsjServiceRegistry.newFileManagerFactory();
+		BsjFileManagerFactory factory = BsjServiceRegistry.getInstance().newFileManagerFactory();
 		factory.setLocationManagerMappingsByManager(map);
 
 		// create a new file manager from the options selected
@@ -369,7 +369,7 @@ public class BsjC
 	 */
 	public void compile() throws IOException
 	{
-		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.getInstance().newToolkitFactory();
 		toolkitFactory.setFileManager(bsjFileManager);
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
 

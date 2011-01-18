@@ -585,7 +585,7 @@ public class MetaAnnotationObjectInstantiator
         BsjFileManager manager = new LocationMappedFileManager(locationMap);
 
         // Put our file in place
-        String expressionClassCode = BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer().executeCompilationUnitNode(
+        String expressionClassCode = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit().getSerializer().executeCompilationUnitNode(
                 compilationUnitNode, null);
         BsjFileObject fileObject = null;
         try

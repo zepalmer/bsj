@@ -124,7 +124,7 @@ public abstract class AbstractTest
             Map<? extends BsjCompilerLocation, ? extends LocationManager> overrides, boolean unionOverrides)
             throws Exception
     {
-        BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.newFileManagerFactory();
+        BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.getInstance().newFileManagerFactory();
 
         Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
 
@@ -172,7 +172,7 @@ public abstract class AbstractTest
 
     protected static BsjToolkit getToolkit(File sourcePath) throws Exception
     {
-        BsjToolkitFactory bsjToolkitFactory = BsjServiceRegistry.newToolkitFactory();
+        BsjToolkitFactory bsjToolkitFactory = BsjServiceRegistry.getInstance().newToolkitFactory();
         bsjToolkitFactory.setFileManager(getFileManager(sourcePath));
         return bsjToolkitFactory.newToolkit();
     }

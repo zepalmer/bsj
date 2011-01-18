@@ -8,7 +8,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.Token;
 
-import edu.jhu.cs.bsj.eclipse.text.BSJTokenKeys;
 import edu.jhu.cs.bsj.eclipse.util.IColorManager;
 
 public class BSJStringScanner extends AbstractBSJScanner {

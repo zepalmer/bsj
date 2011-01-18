@@ -48,7 +48,7 @@ public class RegeneratorTest extends AbstractPerFileTest
 	 */
 	private boolean regenerateJavaFile(File file) throws Exception
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 
 		// read the java file in
 		FileInputStream input = new FileInputStream(file);

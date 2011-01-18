@@ -16,7 +16,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorMultiplicativeAndAdditive()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.MINUS),
@@ -27,7 +27,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorAdditiveAndShift()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.LEFT_SHIFT),
@@ -38,7 +38,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorShiftAndGreaterThan()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.GREATER_THAN),
@@ -49,7 +49,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorGreaterThanAndEqual()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.EQUAL),
@@ -60,7 +60,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorEqualAndLogicalAnd()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.LOGICAL_AND),
@@ -71,7 +71,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorLogicalAndAndXor()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.XOR),
@@ -82,7 +82,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorXorAndLogicalOr()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.LOGICAL_OR),
@@ -93,7 +93,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorLogicalOrAndConditionalAnd()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.CONDITIONAL_AND),
@@ -104,7 +104,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorConditionalAndAndConditionalOr()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeBinaryExpressionNode(
 				factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5), BinaryOperator.CONDITIONAL_OR),
@@ -115,7 +115,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorAndConditionalExpression()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5),
 				factory.makeConditionalExpressionNode(factory.makeIntLiteralNode(5), factory.makeIntLiteralNode(5),
@@ -126,7 +126,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testBinaryOperatorAndAssignment()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeBinaryExpressionNode(factory.makeIntLiteralNode(5), factory.makeAssignmentNode(
 				factory.makeIntLiteralNode(5), AssignmentOperator.MODULUS_ASSIGNMENT, factory.makeIntLiteralNode(5)),
@@ -137,7 +137,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testConditionalExpressionAndAssignment()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeConditionalExpressionNode(factory.makeAssignmentNode(factory.makeIntLiteralNode(5),
 				AssignmentOperator.MODULUS_ASSIGNMENT, factory.makeIntLiteralNode(5)), factory.makeAssignmentNode(
@@ -150,7 +150,7 @@ public class OperatorPrecedenceTest
 	@Test
 	public void testIfThenElseGrouping()
 	{
-		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+		BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 		BsjNodeFactory factory = toolkit.getNodeFactory();
 		Node node = factory.makeIfNode(factory.makeBooleanLiteralNode(true), factory.makeIfNode(
 				factory.makeBooleanLiteralNode(false), factory.makeNoOperationNode()), factory.makeNoOperationNode());

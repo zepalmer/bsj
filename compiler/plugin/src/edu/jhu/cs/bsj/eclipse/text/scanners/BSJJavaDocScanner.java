@@ -13,7 +13,6 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 
-import edu.jhu.cs.bsj.eclipse.text.BSJTokenKeys;
 import edu.jhu.cs.bsj.eclipse.util.IColorManager;
 
 public class BSJJavaDocScanner extends BSJCommentScanner {

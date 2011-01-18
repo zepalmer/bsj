@@ -15,7 +15,7 @@ public class AstNodeMemoryLeakTest extends AbstractTest
 	public void leakTest()
 	{
 		Assume.assumeTrue(Boolean.getBoolean("bsj.tests.run.slow"));
-		BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
+		BsjNodeFactory factory = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit().getNodeFactory();
 
 		long memory = Runtime.getRuntime().maxMemory();
 

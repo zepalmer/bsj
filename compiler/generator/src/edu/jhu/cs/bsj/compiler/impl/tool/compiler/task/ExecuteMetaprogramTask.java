@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import javax.tools.Diagnostic.Kind;
 
-import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
@@ -125,8 +124,8 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		context.getNodeManager().pushPermissionPolicyManager(policyManager);
 		context.getNodeManager().pushCurrentMetaprogram(profile);
 		context.getNodeManager().setDependencyManager(context.getDependencyManager());
-		BsjServiceRegistry.getThreadLocalData().push(BsjThreadLocalData.Element.CONTEXT, profile.getContext());
-		BsjServiceRegistry.getThreadLocalData().push(BsjThreadLocalData.Element.NODE_FACTORY,
+		BsjThreadLocalData.getInstance().push(BsjThreadLocalData.Element.CONTEXT, profile.getContext());
+		BsjThreadLocalData.getInstance().push(BsjThreadLocalData.Element.NODE_FACTORY,
 				profile.getContext().getFactory());
 
 		// Run the metaprogram
@@ -135,8 +134,8 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		// Release the managers
 		context.getNodeManager().popPermissionPolicyManager();
 		context.getNodeManager().popCurrentMetaprogram();
-		BsjServiceRegistry.getThreadLocalData().pop(BsjThreadLocalData.Element.CONTEXT);
-		BsjServiceRegistry.getThreadLocalData().pop(BsjThreadLocalData.Element.NODE_FACTORY);
+		BsjThreadLocalData.getInstance().pop(BsjThreadLocalData.Element.CONTEXT);
+		BsjThreadLocalData.getInstance().pop(BsjThreadLocalData.Element.NODE_FACTORY);
 
 		// Respond to error as necessary
 		if (diagnostic != null)

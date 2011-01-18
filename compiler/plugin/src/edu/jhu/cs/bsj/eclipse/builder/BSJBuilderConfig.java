@@ -72,7 +72,8 @@ public class BSJBuilderConfig {
 	}
 	
 	private BsjFileManager createFileManager() throws IOException {
-		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry
+	    // TODO: change to permit user to provide JARs to BSJ compiler implementation - then use URLClassLoader here
+		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.getInstance()
 				.newFileManagerFactory();
 		String projectPath = bsjProject.getLocation().toFile().getPath();
 		

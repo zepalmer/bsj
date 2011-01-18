@@ -1,13 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.lazy.LazyTypeArgumentContainerImpl;
-import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;

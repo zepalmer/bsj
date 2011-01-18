@@ -88,7 +88,7 @@ public class BSJBuilder extends IncrementalProjectBuilder {
 		
 		try {
 		
-		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.getInstance().newToolkitFactory();
 		toolkitFactory.setFileManager(bsjConfig.getFileManager());
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
 

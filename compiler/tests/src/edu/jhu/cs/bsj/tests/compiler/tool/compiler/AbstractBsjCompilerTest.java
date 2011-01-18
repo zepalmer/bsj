@@ -133,7 +133,7 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 			files.add(bfo);
 		}
 
-		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.getInstance().newToolkitFactory();
 		toolkitFactory.setFileManager(fileManager);
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
 

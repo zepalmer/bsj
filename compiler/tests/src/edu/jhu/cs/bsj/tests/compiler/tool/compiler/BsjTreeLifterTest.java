@@ -49,7 +49,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	private static final String[] META_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl",
 			"edu.jhu.cs.bsj.compiler.ast.node.list.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
-	private BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+	private BsjToolkit toolkit = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit();
 	private String factoryName = "factory";
 
 	/**
@@ -187,7 +187,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 			List<BsjFileObject> fileObjects = Arrays.asList(bfo);
 
 			// create a toolkit
-			BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+			BsjToolkitFactory toolkitFactory = BsjServiceRegistry.getInstance().newToolkitFactory();
 			toolkitFactory.setFileManager(bfm);
 			BsjToolkit toolkit = toolkitFactory.newToolkit();
 

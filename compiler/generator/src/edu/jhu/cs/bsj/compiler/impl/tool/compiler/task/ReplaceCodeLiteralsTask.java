@@ -110,7 +110,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
                         protected Pair<List<Object>, Map<String, Integer>> getMessageArgs(Locale locale)
                         {
                             return new Pair<List<Object>, Map<String, Integer>>(Collections.emptyList(),
-                                    Collections.<String,Integer>emptyMap());
+                                    Collections.<String, Integer> emptyMap());
                         }
 
                         @Override
@@ -124,7 +124,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
                             }
                             return sb.toString();
                         }
-                        
+
                     });
             return;
         }
@@ -197,13 +197,17 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
                                                 factory.makeVariableAccessNode(
                                                         factory.makeVariableAccessNode(
                                                                 factory.makeVariableAccessNode(
-                                                                        factory.makeVariableAccessNode(factory.makeIdentifierNode("edu")),
-                                                                        factory.makeIdentifierNode("jhu")),
-                                                                factory.makeIdentifierNode("cs")),
-                                                        factory.makeIdentifierNode("bsj")),
-                                                factory.makeIdentifierNode("compiler")),
-                                        factory.makeIdentifierNode("BsjServiceRegistry")),
-                                factory.makeIdentifierNode("getThreadLocalData")),
+                                                                        factory.makeVariableAccessNode(
+                                                                                factory.makeVariableAccessNode(
+                                                                                        factory.makeVariableAccessNode(factory.makeIdentifierNode("edu")),
+                                                                                        factory.makeIdentifierNode("jhu")),
+                                                                                factory.makeIdentifierNode("cs")),
+                                                                        factory.makeIdentifierNode("bsj")),
+                                                                factory.makeIdentifierNode("compiler")),
+                                                        factory.makeIdentifierNode("tool")),
+                                                factory.makeIdentifierNode("data")),
+                                        factory.makeIdentifierNode("BsjThreadLocalData")),
+                                factory.makeIdentifierNode("getInstance")),
                         factory.makeIdentifierNode("get"),
                         factory.makeExpressionListNode(factory.makeVariableAccessNode(
                                 factory.makeVariableAccessNode(

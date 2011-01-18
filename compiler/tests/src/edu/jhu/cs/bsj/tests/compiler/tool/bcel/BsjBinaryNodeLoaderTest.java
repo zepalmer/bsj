@@ -56,7 +56,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         log4jConfigure("trace");
         
         // setup factory, loader, and location (Java's own class path)
-        BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
+        BsjNodeFactory factory = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit().getNodeFactory();
         BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
         LocationManager javaLocation = new UnionLocationManager(null, System.getProperty("sun.boot.class.path"));
 
@@ -206,7 +206,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         bfm.close();
 
         // initialize a factory and BCEL node loader
-        BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
+        BsjNodeFactory factory = BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit().getNodeFactory();
         BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
         
         // load the ASTs from the binaries
@@ -224,10 +224,10 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         
         // print out the ASTs (for debugging)
         System.out.println(joe.executeOperation(
-                BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
+                BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit().getSerializer(), null));
         System.out.println(sc.executeOperation(
-                BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
+                BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit().getSerializer(), null));
         System.out.println(e.executeOperation(
-                BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
+                BsjServiceRegistry.getInstance().newToolkitFactory().newToolkit().getSerializer(), null));
     }
 }

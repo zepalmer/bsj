@@ -16,7 +16,7 @@ public class BsjToolkitFactoryImpl implements BsjToolkitFactory
 	
 	public BsjToolkitFactoryImpl()
 	{
-		this.fileManager = BsjServiceRegistry.newFileManagerFactory().newFileManager();
+		this.fileManager = BsjServiceRegistry.getInstance().newFileManagerFactory().newFileManager();
 	}
 
 	@Override

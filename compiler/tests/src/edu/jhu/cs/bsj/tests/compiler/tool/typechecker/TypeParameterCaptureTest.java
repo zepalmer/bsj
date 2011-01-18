@@ -19,7 +19,6 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
-import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckerResult;
 import edu.jhu.cs.bsj.tests.AbstractTest;
 
 public class TypeParameterCaptureTest extends AbstractTest
@@ -29,7 +28,7 @@ public class TypeParameterCaptureTest extends AbstractTest
     {
         BsjFileManager fileManager = getFileManager(new File(SPECIFIC_SOURCE_DIR.getPath() + File.separator
                 + "typechecking" + File.separator + "capture"));
-        BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+        BsjToolkitFactory toolkitFactory = BsjServiceRegistry.getInstance().newToolkitFactory();
         toolkitFactory.setFileManager(fileManager);
         BsjToolkit toolkit = toolkitFactory.newToolkit();
         

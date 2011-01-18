@@ -347,7 +347,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
         SerializedNodeMap nodeMap = serialized.getSecond();
         metaprogramSourceFile.setCharContent(source);
 
-        BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+        BsjToolkitFactory toolkitFactory = BsjServiceRegistry.getInstance().newToolkitFactory();
         toolkitFactory.setFileManager(fileManager);
         BsjToolkit toolkit = toolkitFactory.newToolkit();
 
