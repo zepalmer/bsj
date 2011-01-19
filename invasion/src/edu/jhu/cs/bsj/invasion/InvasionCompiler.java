@@ -2,9 +2,7 @@ package edu.jhu.cs.bsj.invasion;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;
@@ -30,8 +28,7 @@ public class InvasionCompiler {
 			sb.append(f.getPath() + File.separator + "src");
 		}
 
-		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry
-				.newFileManagerFactory();
+		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.getInstance().newFileManagerFactory();
 		fileManagerFactory.setLocationManager(
 				BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
 				System.getProperty("sun.boot.class.path"));
@@ -58,7 +55,7 @@ public class InvasionCompiler {
 				BsjCompilerLocation.SOURCE_PATH).listFiles("",
 				Collections.singleton(JavaFileObject.Kind.OTHER), true);
 
-		BsjToolkitFactory toolkitFactory = BsjServiceRegistry
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.getInstance()
 				.newToolkitFactory();
 		toolkitFactory.setFileManager(fileManager);
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
