@@ -2,6 +2,9 @@ package edu.jhu.cs.bsj.eclipse.builder;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -17,11 +20,16 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManagerFactory;
  */
 public class BSJBuilderConfig {
 	
-	private final String sourcePathStr = "src";
-	private final String genSourcePathStr = "out" + File.separator + "gensrc";
-	private final String classOutputPathStr = "out" + File.separator + "bin";
+	private String sourcePathStr = "src";
+	
+	private String genSourcePathStr = "out" + File.separator + "gensrc";
+	
+	private String classOutputPathStr = "out" + File.separator + "bin";
+	
+	private String bsjJarUrlStr = "."; // TODO Set bsj jar url
 	
 	private IProject bsjProject;
+	
 	private BsjFileManager bsjFileManager;
 	
 	public BSJBuilderConfig(IProject bsjProject) {
@@ -71,9 +79,19 @@ public class BSJBuilderConfig {
 		return bsjFileManager;
 	}
 	
+	public URL getBsjJarUrl() {
+		try {
+			return new URL(bsjJarUrlStr);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	private BsjFileManager createFileManager() throws IOException {
-	    // TODO: change to permit user to provide JARs to BSJ compiler implementation - then use URLClassLoader here
-		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.getInstance()
+		URL[] urls = new URL[] {getBsjJarUrl()};
+		URLClassLoader jarClassLoader = new URLClassLoader(urls);
+		
+		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.getInstance(jarClassLoader)
 				.newFileManagerFactory();
 		String projectPath = bsjProject.getLocation().toFile().getPath();
 		
