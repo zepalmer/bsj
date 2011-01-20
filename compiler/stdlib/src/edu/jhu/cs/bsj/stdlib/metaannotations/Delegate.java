@@ -63,12 +63,12 @@ import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
  */
 public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 
-	private String methodName;
-	private String delegateMethodName;
+	private String method;
+	private String as;
 	private String fieldNameOverride;
 	private boolean onFieldDeclaration = false;
 	BsjTypechecker typeChecker;
-	private String fieldName;
+	private String field;
 
 	public Delegate() {
 		super(Arrays.asList("Delegate"), new ArrayList<String>(), Arrays
@@ -76,23 +76,23 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	@BsjMetaAnnotationElementGetter
-	public String getMethodName() {
-		return this.methodName;
+	public String getMethod() {
+		return this.method;
 	}
 
 	@BsjMetaAnnotationElementSetter
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
+	public void setMethod(String methodName) {
+		this.method = methodName;
 	}
 
 	@BsjMetaAnnotationElementGetter
-	public String getFieldName() {
-		return this.fieldName;
+	public String getField() {
+		return this.field;
 	}
 
 	@BsjMetaAnnotationElementSetter
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
+	public void setField(String fieldName) {
+		this.field = fieldName;
 	}
 
 	@BsjMetaAnnotationElementSetter
@@ -120,13 +120,13 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	@BsjMetaAnnotationElementGetter
-	public String getDelegateMethodName() {
-		return delegateMethodName;
+	public String getAs() {
+		return as;
 	} // TODO add specify arbitrary targets
 
 	@BsjMetaAnnotationElementSetter
-	public void setDelegateMethodName(String forwardedMethodName) {
-		this.delegateMethodName = forwardedMethodName;
+	public void setAs(String forwardedMethodName) {
+		this.as = forwardedMethodName;
 	}
 
 	@BsjMetaAnnotationElementSetter
@@ -216,7 +216,7 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 		int i = 0;
 		IdentifierNode fieldName = context.getFactory().makeIdentifierNode(
 				fieldNameString);
-		String methodName = getMethodName();
+		String methodName = getMethod();
 		if (methodName != null) {
 				String forwardedMethodName = getDelegateMethodName(
 						fieldName.getIdentifier(), i);
@@ -225,7 +225,7 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 						methodName, forwardedMethodName));
 			}
 		i = 0;
-		String localFieldName = getFieldName();
+		String localFieldName = getField();
 		if (localFieldName != null) {
 				String forwardedMethodName = getDelegateMethodName(
 						fieldName.getIdentifier(), i);
@@ -328,7 +328,7 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 			ExpressionListNode someArgs = factory
 					.makeExpressionListNode(listOfArguments);
 			ReturnNode returnNode = getReturnNode(factory, methodToAdd,
-					fieldExpression, listOfArguments, methodName, someArgs);
+					fieldIdentifier, listOfArguments, methodName, someArgs);
 			List<BlockStatementNode> listOfStatements = new ArrayList<BlockStatementNode>();
 			if (returnNode == null) {
 				StatementNode node = factory
@@ -433,11 +433,7 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 					return parameter;
 				}
 			} else {
-				UnparameterizedTypeNode newParameter = (UnparameterizedTypeNode) parameter
-						.deepCopy(factory);
-				newParameter.setName(factory.makeSimpleNameNode(factory
-						.makeIdentifierNode("java.lang.Object")));
-				return newParameter;
+				return parameter;
 			}
 		}
 	}
@@ -458,7 +454,7 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 
 	private ReturnNode getReturnNode(BsjNodeFactory factory,
 			MethodDeclarationNode methodToAdd,
-			PrimaryExpressionNode fieldExpression,
+			IdentifierNode fieldIdentifier,
 			List<ExpressionNode> listOfArguments, String methodName,
 			ExpressionListNode someArgs) {
 		TypeNode temp = methodToAdd.getReturnType();
@@ -466,7 +462,9 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 			return null;
 		} else {
 			return factory.makeReturnNode(factory.makeMethodInvocationNode(
-					fieldExpression, factory.makeIdentifierNode(methodName),
+					factory.makeVariableAccessNode(
+							factory.makeThisNode(),factory.makeIdentifierNode(fieldIdentifier.getIdentifier())),
+					 factory.makeIdentifierNode(methodName),
 					someArgs));
 		}
 	}
@@ -515,8 +513,8 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram {
 	}
 
 	public String getDelegateMethodName(String fieldName, int i) {
-		if (delegateMethodName != null && delegateMethodName != null) {
-			return delegateMethodName;
+		if (as != null && as != null) {
+			return as;
 		} else {
 			if (fieldNameOverride != null) {
 				fieldName = fieldNameOverride;
