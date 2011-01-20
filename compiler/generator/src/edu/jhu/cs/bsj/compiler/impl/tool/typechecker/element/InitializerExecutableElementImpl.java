@@ -14,7 +14,6 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.InitializerExecutableTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
@@ -23,7 +22,10 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
 
 public class InitializerExecutableElementImpl extends AbstractExecutableElementImpl<InitializerDeclarationNode>
 {
-	public InitializerExecutableElementImpl(TypecheckerManager manager, InitializerDeclarationNode backingNode,
+	/** The fake method name assigned to static initializers. */
+    public static final String STATIC_INITIALIZER_NAME = "<clinit>";
+
+    public InitializerExecutableElementImpl(TypecheckerManager manager, InitializerDeclarationNode backingNode,
 			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
@@ -62,7 +64,7 @@ public class InitializerExecutableElementImpl extends AbstractExecutableElementI
 	@Override
 	public Name getSimpleName()
 	{
-		return new NameImpl(getBackingNode().getStaticInitializer() ? NamespaceUtilities.STATIC_INITIALIZER_NAME : "");
+		return new NameImpl(getBackingNode().getStaticInitializer() ? InitializerExecutableElementImpl.STATIC_INITIALIZER_NAME : "");
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import javax.lang.model.type.TypeMirror;
 
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ConstructorExecutableTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
@@ -18,7 +17,10 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
 
 public class ConstructorExecutableElementImpl extends AbstractInvokableExecutableElementImpl<ConstructorDeclarationNode>
 {
-	public ConstructorExecutableElementImpl(TypecheckerManager manager, ConstructorDeclarationNode backingNode,
+	/** The fake method name assigned to constructors. */
+    public static final String CONSTRUCTOR_NAME = "<init>";
+
+    public ConstructorExecutableElementImpl(TypecheckerManager manager, ConstructorDeclarationNode backingNode,
 			BsjElement enclosingElement)
 	{
 		super(manager, backingNode, enclosingElement);
@@ -52,7 +54,7 @@ public class ConstructorExecutableElementImpl extends AbstractInvokableExecutabl
 	@Override
 	public Name getSimpleName()
 	{
-		return new NameImpl(NamespaceUtilities.CONSTRUCTOR_NAME);
+		return new NameImpl(ConstructorExecutableElementImpl.CONSTRUCTOR_NAME);
 	}
 
 }
