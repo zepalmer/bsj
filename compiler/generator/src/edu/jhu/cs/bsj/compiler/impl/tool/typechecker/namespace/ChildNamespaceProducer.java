@@ -12,10 +12,11 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
  * @param <T>
  * @author Zachary Palmer
  */
-public interface ChildNamespaceProducer<K, V extends BsjElement, T extends NamespaceMap<K,V>>
+// TODO: remove T parameter?
+public interface ChildNamespaceProducer<K, V extends BsjElement>
 {
 	/**
 	 * Retrieves the namespace map appropriate to the specified child for this producer.
 	 */
-	public T getNamespaceFor(Node node);
+	public NamespaceMap<K,V> getNamespaceFor(Node node);
 }

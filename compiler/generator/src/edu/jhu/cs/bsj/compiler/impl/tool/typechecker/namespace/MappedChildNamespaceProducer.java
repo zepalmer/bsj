@@ -13,14 +13,14 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
  *
  * @param <T>
  */
-public class MappedChildNamespaceProducer<K, V extends BsjElement, T extends NamespaceMap<K, V>> implements ChildNamespaceProducer<K, V, T>
+public class MappedChildNamespaceProducer<K, V extends BsjElement> implements ChildNamespaceProducer<K, V>
 {
 	/** The default namespace. */
-	private T defaultNamespace;
+	private NamespaceMap<K, V> defaultNamespace;
 	/** The namespace mapping. */
-	private Map<Node, T> namespaceMapping;
+	private Map<Node, NamespaceMap<K, V>> namespaceMapping;
 	
-	public MappedChildNamespaceProducer(T defaultNamespace, Map<Node, T> namespaceMapping)
+	public MappedChildNamespaceProducer(NamespaceMap<K, V> defaultNamespace, Map<Node, NamespaceMap<K, V>> namespaceMapping)
 	{
 		super();
 		this.defaultNamespace = defaultNamespace;
@@ -28,9 +28,9 @@ public class MappedChildNamespaceProducer<K, V extends BsjElement, T extends Nam
 	}
 
 	@Override
-	public T getNamespaceFor(Node node)
+	public NamespaceMap<K, V> getNamespaceFor(Node node)
 	{
-		T namespace = this.namespaceMapping.get(node);
+	    NamespaceMap<K, V> namespace = this.namespaceMapping.get(node);
 		if (namespace == null)
 		{
 			return this.defaultNamespace;

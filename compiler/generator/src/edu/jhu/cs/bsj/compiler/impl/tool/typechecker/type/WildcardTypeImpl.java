@@ -210,6 +210,7 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
             return null;
         } else
         {
+            // TODO: replace with Thunk type
             return new LazyTypeArgumentContainerImpl(new Function<Void, BsjTypeArgument>()
             {
                 @Override

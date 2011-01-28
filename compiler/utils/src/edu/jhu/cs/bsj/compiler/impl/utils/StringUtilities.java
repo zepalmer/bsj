@@ -87,7 +87,7 @@ public class StringUtilities
 			{
 				sb.append(delimiter);
 			}
-			sb.append(o.toString());
+			sb.append(String.valueOf(o));
 			first = false;
 		}
 		return sb.toString();

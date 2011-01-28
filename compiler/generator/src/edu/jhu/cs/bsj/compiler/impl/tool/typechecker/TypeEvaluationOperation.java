@@ -71,8 +71,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.codeliteral.CodeLiteralEvaluator;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.VariableNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NullTypeImpl;
@@ -2165,7 +2164,7 @@ public class TypeEvaluationOperation implements
                 // type is used.
                 // TODO: this approach would also include statically imported fields in the target type's
                 // declaration as if they were members. Fix that.
-                VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
+                NamespaceMap<String, BsjVariableElement> variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
                         typePseudoType.getDeclaration().getBody().getMembers());
                 BsjVariableElement variableElement = variableNamespaceMap.lookup(id, node.getStartLocation());
                 if (variableElement != null)
@@ -2187,7 +2186,7 @@ public class TypeEvaluationOperation implements
                     // as a pseudo-type.
                     // TODO: this approach would also include imported types (static and otherwise) in the target
                     // type's declaration as if they were members. Fix that.
-                    TypeNamespaceMap typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(
+                    NamespaceMap<String, BsjTypeLikeElement> typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(
                             typePseudoType.getDeclaration().getBody().getMembers());
                     BsjTypeLikeElement typeLikeElement = typeNamespaceMap.lookup(id, node.getStartLocation());
                     if (typeLikeElement != null)
@@ -2228,7 +2227,7 @@ public class TypeEvaluationOperation implements
                 {
                     BsjExplicitlyDeclaredType explicitlyDeclaredType = (BsjExplicitlyDeclaredType) expressionType;
                     NamedTypeDeclarationNode<?> declarationNode = explicitlyDeclaredType.asElement().getDeclarationNode();
-                    VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
+                    NamespaceMap<String, BsjVariableElement> variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
                             declarationNode.getBody().getMembers());
                     BsjVariableElement variableElement = variableNamespaceMap.lookup(id, node.getStartLocation());
                     if (variableElement == null)
@@ -2275,14 +2274,14 @@ public class TypeEvaluationOperation implements
         {
             // This variable access is qualified by the existing context.
             Node namespaceNode = env.getNamespaceNode() == null ? node : env.getNamespaceNode();
-            VariableNamespaceMap variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
+            NamespaceMap<String, BsjVariableElement> variableNamespaceMap = this.manager.getNamespaceBuilder().getVariableNamespace(
                     namespaceNode);
             BsjVariableElement variableElement = variableNamespaceMap.lookup(id,
                     node.getIdentifier().getStartLocation());
             if (variableElement == null)
             {
                 // Then there is no variable with that name in scope. Is there a type?
-                TypeNamespaceMap typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(namespaceNode);
+                NamespaceMap<String, BsjTypeLikeElement> typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(namespaceNode);
                 BsjTypeLikeElement typeLikeElement = typeNamespaceMap.lookup(id,
                         node.getIdentifier().getStartLocation());
                 if (typeLikeElement != null)

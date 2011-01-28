@@ -11,20 +11,20 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
  * 
  * @param <T>
  */
-public class ConsistentChildNamespaceProducer<K, V extends BsjElement, T extends NamespaceMap<K, V>> implements
-		ChildNamespaceProducer<K, V, T>
+public class ConsistentChildNamespaceProducer<K, V extends BsjElement> implements
+		ChildNamespaceProducer<K, V>
 {
 	/** The namespace returned by this producer. */
-	private T namespace;
+	private NamespaceMap<K,V> namespace;
 
-	public ConsistentChildNamespaceProducer(T namespace)
+	public ConsistentChildNamespaceProducer(NamespaceMap<K,V> namespace)
 	{
 		super();
 		this.namespace = namespace;
 	}
 
 	@Override
-	public T getNamespaceFor(Node node)
+	public NamespaceMap<K,V> getNamespaceFor(Node node)
 	{
 		return this.namespace;
 	}

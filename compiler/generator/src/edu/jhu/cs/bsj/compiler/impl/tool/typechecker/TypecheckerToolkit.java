@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.element.ElementBuildingNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.PrimitiveTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypeBuilder;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
@@ -444,7 +445,7 @@ public class TypecheckerToolkit
 	 * @param typeNamespaceMap The namespace map from which to obtain types.
 	 * @return The resulting type-like element or <code>null</code> if no such element could be found.
 	 */
-	public BsjTypeLikeElement getAccessibleTypeFromName(NameNode name, TypeNamespaceMap typeNamespaceMap)
+	public BsjTypeLikeElement getAccessibleTypeFromName(NameNode name, NamespaceMap<String,BsjTypeLikeElement> typeNamespaceMap)
 	{
 		List<NameNode> typeNames = new ArrayList<NameNode>();
 		NameNode packageName = extractTypePortionOfName(name, typeNames);
@@ -467,7 +468,7 @@ public class TypecheckerToolkit
 				while (it.hasNext())
 				{
 					NameNode nextName = it.next();
-					TypeNamespaceMap nextNamespace;
+					NamespaceMap<String,BsjTypeLikeElement> nextNamespace;
 					if (element.getDeclarationNode() instanceof NamedTypeDeclarationNode<?>)
 					{
 						NamedTypeDeclarationNode<?> typeDeclarationNode = (NamedTypeDeclarationNode<?>) element.getDeclarationNode();

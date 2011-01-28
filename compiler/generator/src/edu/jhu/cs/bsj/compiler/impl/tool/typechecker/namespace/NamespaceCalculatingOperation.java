@@ -6,6 +6,7 @@ import java.util.WeakHashMap;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.EmptyNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
@@ -15,40 +16,33 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
  * 
  * @author Zachary Palmer
  */
-public abstract class NamespaceCalculatingOperation<K, V extends BsjElement, T extends NamespaceMap<K, V>> extends
-		BsjDefaultNodeOperation<Void, T>
+public class NamespaceCalculatingOperation<K, V extends BsjElement> extends
+		BsjDefaultNodeOperation<Void, NamespaceMap<K,V>>
 {
 	/** The operation which determines the environment parent for a node. */
 	private BsjNodeOperation<Void, Node> parentLocator;
 	/** The operation which applies modifications to a parent environment to produce a child environment. */
-	private BsjNodeOperation<T, ChildNamespaceProducer<K, V, T>> modifier;
+	private BsjNodeOperation<NamespaceMap<K,V>, ChildNamespaceProducer<K, V>> modifier;
 
 	/** The cache for this operation. */
-	private Map<Node, T> cache;
+	private Map<Node, NamespaceMap<K,V>> cache;
 	/** The cache from parent nodes to child namespace producers. */
-	private Map<Node, ChildNamespaceProducer<K, V, T>> producerCache;
+	private Map<Node, ChildNamespaceProducer<K, V>> producerCache;
 
-	public NamespaceCalculatingOperation(BsjNodeOperation<T, ChildNamespaceProducer<K, V, T>> modifier)
+	public NamespaceCalculatingOperation(BsjNodeOperation<NamespaceMap<K,V>, ChildNamespaceProducer<K, V>> modifier)
 	{
 		super();
 		this.modifier = modifier;
 
 		this.parentLocator = new ParentEnvironmentNodeIdentifyingOperation();
-		this.cache = new WeakHashMap<Node, T>();
-		this.producerCache = new WeakHashMap<Node, ChildNamespaceProducer<K, V, T>>();
+		this.cache = new WeakHashMap<Node, NamespaceMap<K,V>>();
+		this.producerCache = new WeakHashMap<Node, ChildNamespaceProducer<K, V>>();
 	}
 
-	/**
-	 * Creates a new, empty namespace.
-	 * 
-	 * @return The new, empty namespace.
-	 */
-	protected abstract T createEmpty();
-
 	@Override
-	public T executeDefault(Node node, Void p)
+	public NamespaceMap<K,V> executeDefault(Node node, Void p)
 	{
-		T namespace = this.cache.get(node);
+	    NamespaceMap<K,V> namespace = this.cache.get(node);
 		if (namespace == null)
 		{
 			// *** Actually calculate the environment.
@@ -59,14 +53,14 @@ public abstract class NamespaceCalculatingOperation<K, V extends BsjElement, T e
 			if (parentEnvironmentNode == null)
 			{
 				// There is no parent environment; create a dummy blank one.
-				namespace = createEmpty();
+				namespace = EmptyNamespaceMap.instance();
 			} else
 			{
 				// Find the parent environment
-				T parentNamespace = parentEnvironmentNode.executeOperation(this, null);
+			    NamespaceMap<K,V> parentNamespace = parentEnvironmentNode.executeOperation(this, null);
 
 				// Obtain the producer for this node - cached to prevent unnecessary replication
-				ChildNamespaceProducer<K, V, T> producer = this.producerCache.get(parentEnvironmentNode);
+				ChildNamespaceProducer<K, V> producer = this.producerCache.get(parentEnvironmentNode);
 
 				// If it wasn't in the cache, build it from the modifier
 				if (producer == null)
@@ -86,21 +80,6 @@ public abstract class NamespaceCalculatingOperation<K, V extends BsjElement, T e
 				{
 					throw new IllegalStateException("Parent namespace produced by node of type "
 							+ parentEnvironmentNode.getClass() + " was null for child of type " + node.getClass());
-				}
-
-				// Lock the namespace to ensure that it does not change
-				namespace.lock();
-
-				// Make sure that the namespace is really useful
-				if (namespace.definitelyReplacableBy(parentNamespace))
-				{
-					namespace = parentNamespace;
-					// Optimization - make sure we don't hang onto namespaces we don't need in the producers
-					if (producer instanceof ConsistentChildNamespaceProducer<?, ?, ?>)
-					{
-						this.producerCache.put(parentEnvironmentNode, new ConsistentChildNamespaceProducer<K, V, T>(
-								parentNamespace));
-					}
 				}
 			}
 

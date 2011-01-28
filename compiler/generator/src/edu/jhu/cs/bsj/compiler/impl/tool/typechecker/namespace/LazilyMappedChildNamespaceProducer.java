@@ -6,6 +6,7 @@ import java.util.Map;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.Thunk;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 
 /**
@@ -15,30 +16,30 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
  *
  * @param <T>
  */
-public class LazilyMappedChildNamespaceProducer<K, V extends BsjElement, T extends NamespaceMap<K, V>> implements ChildNamespaceProducer<K, V, T>
+public class LazilyMappedChildNamespaceProducer<K, V extends BsjElement> implements ChildNamespaceProducer<K, V>
 {
 	/** The default namespace. */
-	private T defaultNamespace;
+	private NamespaceMap<K,V> defaultNamespace;
 	/** The namespace mapping. */
-	private Map<Node, Function<Void, T>> namespaceMapping;
+	private Map<Node, Thunk<NamespaceMap<K,V>>> namespaceMapping;
 	/** The map containing retrieved values. */
-	private Map<Node, T> evaluatedMapping;
+	private Map<Node, NamespaceMap<K,V>> evaluatedMapping;
 	
-	public LazilyMappedChildNamespaceProducer(T defaultNamespace, Map<Node, Function<Void,T>> namespaceMapping)
+	public LazilyMappedChildNamespaceProducer(NamespaceMap<K,V> defaultNamespace, Map<Node, Thunk<NamespaceMap<K,V>>> namespaceMapping)
 	{
 		super();
 		this.defaultNamespace = defaultNamespace;
 		this.namespaceMapping = namespaceMapping;
-		this.evaluatedMapping = new HashMap<Node, T>();
+		this.evaluatedMapping = new HashMap<Node, NamespaceMap<K,V>>();
 	}
 
 	@Override
-	public T getNamespaceFor(Node node)
+	public NamespaceMap<K,V> getNamespaceFor(Node node)
 	{
-		T namespace;
+	    NamespaceMap<K,V> namespace;
 		if (!this.evaluatedMapping.containsKey(node))
 		{
-			Function<Void,T> thunk = this.namespaceMapping.get(node);
+			Function<Void,NamespaceMap<K,V>> thunk = this.namespaceMapping.get(node);
 			if (thunk == null)
 			{
 				namespace = this.defaultNamespace;

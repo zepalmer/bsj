@@ -25,6 +25,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
  */
 public class LazyTypeArgumentContainerImpl implements BsjLazyTypeArgumentContainer
 {
+    // TODO: replace with Thunk type
     private Function<Void, BsjTypeArgument> thinkFunction;
     private BsjTypeArgument thunkValue;
     private Map<BsjTypeVariable, BsjTypeArgument> typeSubstitutionMap;

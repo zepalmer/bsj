@@ -27,7 +27,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.MethodNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.ErasedMethodSignature;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
@@ -679,9 +680,9 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
         // (such as when the method being investigated is unqualified) but not always. Handle this; a new parameter
         // will definitely be necessary.
 
-        MethodNamespaceMap methodNamespaceMap = getManager().getNamespaceBuilder().getMethodNamespace(
+        NamespaceMap<ErasedMethodSignature, BsjExecutableElement> methodNamespaceMap = getManager().getNamespaceBuilder().getMethodNamespace(
                 asElement().getDeclarationNode().getBody().getMembers());
-        Collection<? extends BsjExecutableElement> executables = methodNamespaceMap.getValues(name);
+        Collection<? extends BsjExecutableElement> executables = methodNamespaceMap.getValuesBySimpleName(name);
         Set<BsjExecutableType> ret = new HashSet<BsjExecutableType>();
         Map<BsjTypeVariable, BsjTypeArgument> substitutionMap = calculateSubstitutionMap();
         for (BsjExecutableElement element : executables)

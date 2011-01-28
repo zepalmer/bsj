@@ -25,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
@@ -58,7 +58,7 @@ public class TypeBuilder
         this.manager = manager;
     }
 
-    private TypeNamespaceMap getTypeNamespaceMap(Node node)
+    private NamespaceMap<String, BsjTypeLikeElement> getTypeNamespaceMap(Node node)
     {
         return this.manager.getNamespaceBuilder().getTypeNamespace(node);
     }

@@ -55,6 +55,7 @@ public class TypeParameterElementImpl extends AbstractElementImpl<TypeParameterN
 					@Override
 					public BsjTypeArgument convert(final DeclaredTypeNode t)
 					{
+					    // TODO: replace with Thunk type
 						return new LazyTypeArgumentContainerImpl(new Function<Void, BsjTypeArgument>()
 						{
 							@Override

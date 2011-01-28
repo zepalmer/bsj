@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.RecordingDiagnosticProxyListener;
@@ -25,13 +26,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceBuilder;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.ErasedMethodSignature;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.MethodNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.TypeNamespaceMap;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.VariableNamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -145,7 +146,7 @@ public class NamespaceTest extends AbstractTest
     @Test
     public void testTopLevelTypeFromCompilationUnit() throws Exception
     {
-        TypeNamespaceMap map = builder.getTypeNamespace(exampleNamespaceClassNode);
+        NamespaceMap<String, BsjTypeLikeElement> map = builder.getTypeNamespace(exampleNamespaceClassNode);
 
         getUniqueMapping(map, "ExampleNamespace", exampleNamespaceClassNode.getStartLocation());
     }
@@ -153,7 +154,7 @@ public class NamespaceTest extends AbstractTest
     @Test
     public void testAutoImportTypeFromCompilationUnit() throws Exception
     {
-        TypeNamespaceMap map = builder.getTypeNamespace(exampleNamespaceClassNode);
+        NamespaceMap<String, BsjTypeLikeElement> map = builder.getTypeNamespace(exampleNamespaceClassNode);
 
         getUniqueMapping(map, "String", exampleNamespaceClassNode.getStartLocation());
     }
@@ -161,7 +162,7 @@ public class NamespaceTest extends AbstractTest
     @Test
     public void testPeerTopLevelType() throws Exception
     {
-        TypeNamespaceMap map = builder.getTypeNamespace(exampleNamespaceClassNode);
+        NamespaceMap<String, BsjTypeLikeElement> map = builder.getTypeNamespace(exampleNamespaceClassNode);
 
         getUniqueMapping(map, "ExampleNamespace2", exampleNamespaceClassNode.getStartLocation());
     }
@@ -169,7 +170,7 @@ public class NamespaceTest extends AbstractTest
     @Test
     public void testMemberMethodFromClassMemberList() throws Exception
     {
-        MethodNamespaceMap map = builder.getMethodNamespace(exampleNamespaceClassNode.getBody().getMembers());
+        NamespaceMap<ErasedMethodSignature, BsjExecutableElement> map = builder.getMethodNamespace(exampleNamespaceClassNode.getBody().getMembers());
 
         getUniqueMapping(map, new ErasedMethodSignature("test", Collections.<BsjType> emptyList()),
                 exampleNamespaceClassNode.getStartLocation());
@@ -178,7 +179,7 @@ public class NamespaceTest extends AbstractTest
     @Test
     public void testMemberFieldFromClassMemberList() throws Exception
     {
-        VariableNamespaceMap map = builder.getVariableNamespace(exampleNamespaceClassNode.getBody().getMembers());
+        NamespaceMap<String, BsjVariableElement> map = builder.getVariableNamespace(exampleNamespaceClassNode.getBody().getMembers());
 
         getUniqueMapping(map, "x", exampleNamespaceClassNode.getStartLocation());
     }
@@ -186,19 +187,38 @@ public class NamespaceTest extends AbstractTest
     @Test
     public void testMethodOverloading() throws Exception
     {
-        MethodNamespaceMap map = builder.getMethodNamespace(getClassDeclaration("ExampleNamespace_OverloadingTest").getBody().getMembers());
-        Collection<BsjExecutableElement> execs = map.getValues("foo");
+        NamespaceMap<ErasedMethodSignature, BsjExecutableElement> map = builder.getMethodNamespace(getClassDeclaration(
+                "ExampleNamespace_OverloadingTest").getBody().getMembers());
+        Collection<BsjExecutableElement> execs = map.getValuesBySimpleName("foo");
         Assert.assertEquals(4, execs.size());
     }
-    
+
+    @Test
+    public void testTypeParameterPopulation() throws Exception
+    {
+        ClassDeclarationNode typeParameterTestDeclaration = getClassDeclaration("ExampleNamespace_TypeParameterTest");
+        ClassDeclarationNode emptyIteratorDeclaration = (ClassDeclarationNode) typeParameterTestDeclaration.getBody().getMembers().get(
+                0);
+        MethodDeclarationNode nextMethodDeclaration = (MethodDeclarationNode) emptyIteratorDeclaration.getBody().getMembers().get(
+                0);
+        NamespaceMap<String, BsjTypeLikeElement> map = builder.getTypeNamespace(nextMethodDeclaration);
+        Collection<BsjTypeLikeElement> typeParams = map.getValues("T");
+        Assert.assertEquals(1, typeParams.size());
+        BsjTypeLikeElement element = typeParams.iterator().next();
+        Assert.assertTrue(element instanceof BsjTypeParameterElement);
+        BsjTypeParameterElement typeParameter = (BsjTypeParameterElement) element;
+        Assert.assertTrue(typeParameter.getDeclarationNode().getNearestAncestorOfType(ClassDeclarationNode.class).equals(
+                emptyIteratorDeclaration));
+    }
+
     // TODO: add a test which determines the following:
-    //    public class C {
-    //        public void foo() { }
-    //        public class D {
-    //            public void foo(int i) { }
-    //            public void bar() { foo(); }
-    //        }
-    //    }
+    // public class C {
+    // public void foo() { }
+    // public class D {
+    // public void foo(int i) { }
+    // public void bar() { foo(); }
+    // }
+    // }
     // According to the JLS, bar() should not compile because it refers to a foo() which has been hidden by
-    // the nearer foo even though their signatures differ.    
+    // the nearer foo even though their signatures differ.
 }

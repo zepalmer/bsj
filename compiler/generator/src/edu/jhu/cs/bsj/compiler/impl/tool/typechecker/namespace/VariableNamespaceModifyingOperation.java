@@ -1,15 +1,16 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.node.AbstractlyUnmodifiedClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
@@ -17,25 +18,38 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnhancedForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
+import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.EmptyNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.VariableNamespaceMap;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.population.DeclaratorNameFilter;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.population.FilteredListNodeVariablePopulationStrategy;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.population.LazyPopulationStrategy;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.population.PopulationRecordImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.population.PopulationStrategy;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.population.PopulationStrategy.PopulationRecord;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.population.SingleValuePopulationStrategy;
+import edu.jhu.cs.bsj.compiler.impl.utils.CollectionUtilities;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.AbstractThunk;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.IdentityFunction;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.Thunk;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 
@@ -45,430 +59,425 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
  * @author Zachary Palmer
  */
 public class VariableNamespaceModifyingOperation extends
-		AbstractNamespaceModifyingOperation<String, BsjVariableElement, VariableNamespaceMap>
+        AbstractNamespaceModifyingOperation<String, BsjVariableElement>
 {
-	public VariableNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoader loader,
-			DiagnosticListener<BsjSourceLocation> listener)
-	{
-		super(toolkit, loader, listener);
-	}
+    public VariableNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoader loader,
+            DiagnosticListener<BsjSourceLocation> listener)
+    {
+        super(toolkit, loader, listener);
+    }
 
-	/**
-	 * Performs a default operation for nodes which do not affect the variable namespace.
-	 */
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeDefault(Node node,
-			VariableNamespaceMap map)
-	{
-		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
-	}
+    /**
+     * Performs a default operation for nodes which do not affect the variable namespace.
+     */
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeDefault(Node node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        return new ConsistentChildNamespaceProducer<String, BsjVariableElement>(map);
+    }
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeAnnotationBodyNode(
-			AnnotationBodyNode node, VariableNamespaceMap map)
-	{
-		// *** Populate elements inherited from java.lang.annotation.Annotation
-		AnnotationDeclarationNode declarationNode = (AnnotationDeclarationNode) node.getParent();
-		map = makeInheritedMapFor(declarationNode, map);
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeAnnotationBodyNode(AnnotationBodyNode node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        // *** Populate elements inherited from java.lang.annotation.Annotation
+        AnnotationDeclarationNode declarationNode = (AnnotationDeclarationNode) node.getParent();
+        map = makeInheritedMapFor(declarationNode, map);
 
-		// *** Create a new scope for declared member elements
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
+        // *** Create a new scope for declared member elements
+        // * Populate member elements
+        PopulationStrategy<String, BsjVariableElement> memberStrategy = populateElements(new BodyMembersThunk(node),
+                AccessModifier.PRIVATE);
+        // * Create the map
+        map = makeMap(map, EnvType.TYPE_OR_MEMBER, memberStrategy);
 
-		// *** Populate member elements
-		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
+        // *** Finished!
+        return new ConsistentChildNamespaceProducer<String, BsjVariableElement>(map);
+    }
 
-		// *** Finished!
-		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
-	}
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeAnonymousClassBodyNode(
+            AnonymousClassBodyNode node, NamespaceMap<String, BsjVariableElement> map)
+    {
+        // *** Populate inherited members
+        map = makeInheritedMapFor(node, map);
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeAnonymousClassBodyNode(
-			AnonymousClassBodyNode node, VariableNamespaceMap map)
-	{
-		// *** Populate inherited members
-		map = makeInheritedMapFor(node, map);
+        // *** Create a new environment for declared members
+        // * Populate declared members
+        PopulationStrategy<String, BsjVariableElement> memberStrategy = populateElements(new BodyMembersThunk(node),
+                AccessModifier.PRIVATE);
+        // * Create the map
+        map = makeMap(map, EnvType.TYPE_OR_MEMBER, memberStrategy);
 
-		// *** Create a new environment for declared members
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
+        // *** Finished!
+        return new ConsistentChildNamespaceProducer<String, BsjVariableElement>(map);
+    }
 
-		// *** Populate declared members
-		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeCatchNode(final CatchNode node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        // *** The scope of the parameter in a catch block is the body of that catch block
+        Map<Node, NamespaceMap<String, BsjVariableElement>> namespaceMap;
+        final NamespaceMap<String, BsjVariableElement> defaultMap = map;
 
-		// *** Finished!
-		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
-	}
+        PopulationStrategy<String, BsjVariableElement> strategy = new SingleVariableNodePopulationStrategy(
+                node.getParameter());
+        map = makeMap(map, EnvType.STATEMENT, strategy);
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeCatchNode(CatchNode node,
-			VariableNamespaceMap map)
-	{
-		// *** The scope of the parameter in a catch block is the body of that catch block
-		Map<Node, VariableNamespaceMap> namespaceMap;
-		VariableNamespaceMap defaultMap = map;
+        namespaceMap = Collections.<Node, NamespaceMap<String, BsjVariableElement>> singletonMap(node.getBody(), map);
 
-		map = makeMap(map, EnvType.STATEMENT);
-		populateParameters(map, Collections.singletonList(node.getParameter()));
+        return new MappedChildNamespaceProducer<String, BsjVariableElement>(defaultMap, namespaceMap);
+    }
 
-		namespaceMap = Collections.<Node, VariableNamespaceMap> singletonMap(node.getBody(), map);
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeClassBodyNode(ClassBodyNode node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        // *** Inherit member elements
+        AbstractlyUnmodifiedClassDeclarationNode<?> declarationNode = (AbstractlyUnmodifiedClassDeclarationNode<?>) node.getParent();
+        map = makeInheritedMapFor(declarationNode, map);
 
-		return new MappedChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(defaultMap,
-				namespaceMap);
-	}
+        // *** Create a new scope for declared member elements
+        // * Populate member elements
+        PopulationStrategy<String, BsjVariableElement> memberStrategy = populateElements(new BodyMembersThunk(node),
+                AccessModifier.PRIVATE);
+        // * Create the map
+        map = makeMap(map, EnvType.TYPE_OR_MEMBER, memberStrategy);
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeClassBodyNode(
-			ClassBodyNode node, VariableNamespaceMap map)
-	{
-		// *** Inherit member elements
-		AbstractlyUnmodifiedClassDeclarationNode<?> declarationNode = (AbstractlyUnmodifiedClassDeclarationNode<?>) node.getParent();
-		map = makeInheritedMapFor(declarationNode, map);
+        // *** Finished!
+        return new ConsistentChildNamespaceProducer<String, BsjVariableElement>(map);
+    }
 
-		// *** Create a new scope for declared member elements
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeCompilationUnitNode(CompilationUnitNode node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        // Only the type declarations contained in a compilation unit benefit from the declarations contained within
+        // it; import statements, for instance, do not apply to other import statements.
+        NamespaceMap<String, BsjVariableElement> defaultMap = map;
 
-		// *** Populate member elements
-		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
+        // *** Create a new scope for the on-demand imports
+        // * Process on-demand static imports.
+        PopulationStrategy<String, BsjVariableElement> strategy = populateOnDemandStaticImports(new ImportByTypeThunk<StaticImportOnDemandNode>(
+                node, StaticImportOnDemandNode.class));
+        // * Make the map
+        map = makeMap(map, EnvType.ON_DEMAND_IMPORT, strategy);
 
-		// *** Finished!
-		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
-	}
+        // *** Create a new scope for the single imports
+        // * Process single static imports.
+        strategy = populateSingleStaticImports(new ImportByTypeThunk<SingleStaticImportNode>(node,
+                SingleStaticImportNode.class));
+        // * Make the map
+        map = makeMap(map, EnvType.TYPE_OR_MEMBER, strategy);
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeCompilationUnitNode(
-			CompilationUnitNode node, VariableNamespaceMap map)
-	{
-		// Only the type declarations contained in a compilation unit benefit from the declarations contained within
-		// it; import statements, for instance, do not apply to other import statements.
-		VariableNamespaceMap defaultMap = map;
+        // *** Finished!
+        Map<Node, NamespaceMap<String, BsjVariableElement>> namespaceMap = Collections.<Node, NamespaceMap<String, BsjVariableElement>> singletonMap(
+                node.getTypeDecls(), map);
+        return new MappedChildNamespaceProducer<String, BsjVariableElement>(defaultMap, namespaceMap);
+    }
 
-		// *** Create a new scope for the on-demand imports
-		map = makeMap(map, EnvType.ON_DEMAND_IMPORT);
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeConstructorDeclarationNode(
+            final ConstructorDeclarationNode node, NamespaceMap<String, BsjVariableElement> map)
+    {
+        NamespaceMap<String, BsjVariableElement> defaultMap = map;
 
-		// *** Process on-demand static imports.
-		populateOnDemandStaticImports(map, node.getImports());
+        // *** Populate constructor parameters into constructor invocation and constructor body
+        PopulationStrategy<String, BsjVariableElement> strategy = populateElements(new AbstractThunk<ListNode<?>>()
+        {
+            @Override
+            protected ListNode<?> calculate()
+            {
+                return node.getParameters();
+            }
+        }, AccessModifier.PRIVATE);
+        map = makeMap(map, EnvType.TYPE_OR_MEMBER, strategy);
 
-		// *** Create a new scope for the single imports
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
+        // *** Finished!
+        Map<Node, NamespaceMap<String, BsjVariableElement>> namespaceMap = Collections.<Node, NamespaceMap<String, BsjVariableElement>> singletonMap(
+                node.getBody(), map);
+        return new MappedChildNamespaceProducer<String, BsjVariableElement>(defaultMap, namespaceMap);
+    }
 
-		// *** Process single static imports.
-		populateSingleStaticImports(map, node.getImports());
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeEnhancedForLoopNode(
+            final EnhancedForLoopNode node, NamespaceMap<String, BsjVariableElement> map)
+    {
+        NamespaceMap<String, BsjVariableElement> defaultMap = map;
 
-		// *** Finished!
-		Map<Node, VariableNamespaceMap> namespaceMap = Collections.<Node, VariableNamespaceMap> singletonMap(
-				node.getTypeDecls(), map);
-		return new MappedChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(defaultMap,
-				namespaceMap);
-	}
+        // *** The scope of the parameter to the enhanced for loop is the body of that loop
+        PopulationStrategy<String, BsjVariableElement> strategy = new SingleVariableNodePopulationStrategy(
+                node.getVariable());
+        map = makeMap(map, EnvType.STATEMENT, strategy);
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeConstructorDeclarationNode(
-			ConstructorDeclarationNode node, VariableNamespaceMap map)
-	{
-		VariableNamespaceMap defaultMap = map;
+        // *** Finished!
+        Map<Node, NamespaceMap<String, BsjVariableElement>> namespaceMap = Collections.<Node, NamespaceMap<String, BsjVariableElement>> singletonMap(
+                node.getStatement(), map);
+        return new MappedChildNamespaceProducer<String, BsjVariableElement>(defaultMap, namespaceMap);
+    }
 
-		// *** Populate constructor parameters into constructor invocation and constructor body
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
-		populateParameters(map, node.getParameters());
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeEnumBodyNode(final EnumBodyNode node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        // *** Inherit member elements
+        EnumDeclarationNode declarationNode = (EnumDeclarationNode) node.getParent();
+        map = makeInheritedMapFor(declarationNode, map);
 
-		// *** Finished!
-		Map<Node, VariableNamespaceMap> namespaceMap = Collections.<Node, VariableNamespaceMap> singletonMap(
-				node.getBody(), map);
-		return new MappedChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(defaultMap,
-				namespaceMap);
-	}
+        // *** Create a new scope for declared member elements
+        PopulationStrategy<String, BsjVariableElement> constantsStrategy, membersStrategy;
+        // * Populate enum constants
+        constantsStrategy = populateElements(new AbstractThunk<ListNode<?>>()
+        {
+            @Override
+            protected ListNode<?> calculate()
+            {
+                return node.getConstants();
+            }
+        }, AccessModifier.PRIVATE);
+        // * Populate member elements
+        membersStrategy = populateElements(new AbstractThunk<ListNode<?>>()
+        {
+            @Override
+            protected ListNode<?> calculate()
+            {
+                return node.getMembers();
+            }
+        }, AccessModifier.PRIVATE);
+        // * Create the map
+        map = makeMap(map, EnvType.TYPE_OR_MEMBER, CollectionUtilities.listOf(constantsStrategy, membersStrategy));
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeEnhancedForLoopNode(
-			EnhancedForLoopNode node, VariableNamespaceMap map)
-	{
-		VariableNamespaceMap defaultMap = map;
+        // *** Finished!
+        return new ConsistentChildNamespaceProducer<String, BsjVariableElement>(map);
+    }
 
-		// *** The scope of the parameter to the enhanced for loop is the body of that loop
-		map = makeMap(map, EnvType.STATEMENT);
-		populateParameters(map, Collections.singletonList(node.getVariable()));
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeForLoopNode(final ForLoopNode node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        // The initializer is addressed by its children. Either it's a statement expression list (in which case
+        // no changes occur) or it's a local variable declaration (in which case the local variable declaration
+        // handler will populate things properly).
+        NamespaceMap<String, BsjVariableElement> initializerMap = map;
 
-		// *** Finished!
-		Map<Node, VariableNamespaceMap> namespaceMap = Collections.<Node, VariableNamespaceMap> singletonMap(
-				node.getStatement(), map);
-		return new MappedChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(defaultMap,
-				namespaceMap);
-	}
+        // Populate all of the contents of the initializer
+        PopulationStrategy<String, BsjVariableElement> strategy = new LazyPopulationStrategy<String, BsjVariableElement>(
+                new AbstractThunk<PopulationStrategy<String, BsjVariableElement>>()
+                {
+                    @Override
+                    protected PopulationStrategy<String, BsjVariableElement> calculate()
+                    {
+                        if (node.getInitializer() instanceof ForInitializerDeclarationNode)
+                        {
+                            ForInitializerDeclarationNode initializer = (ForInitializerDeclarationNode) node.getInitializer();
+                            return new SingleDeclaratorOwnerNodePopulationStrategy(initializer.getDeclaration());
+                        } else
+                        {
+                            return null;
+                        }
+                    }
+                });
+        map = makeMap(map, EnvType.STATEMENT, strategy);
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeEnumBodyNode(
-			EnumBodyNode node, VariableNamespaceMap map)
-	{
-		// *** Create a new scope for inherited member elements
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
+        // *** Finished!
+        Map<Node, NamespaceMap<String, BsjVariableElement>> namespaceMap = Collections.<Node, NamespaceMap<String, BsjVariableElement>> singletonMap(
+                node.getInitializer(), initializerMap);
+        return new MappedChildNamespaceProducer<String, BsjVariableElement>(map, namespaceMap);
+    }
 
-		// *** Inherit member elements
-		EnumDeclarationNode declarationNode = (EnumDeclarationNode) node.getParent();
-		map = makeInheritedMapFor(declarationNode, map);
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeInterfaceBodyNode(InterfaceBodyNode node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        // *** Inherit member elements
+        InterfaceDeclarationNode declarationNode = (InterfaceDeclarationNode) node.getParent();
+        map = makeInheritedMapFor(declarationNode, map);
 
-		// *** Create a new scope for declared member elements
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
+        // *** Create a new scope for declared member elements
+        // * Populate member elements
+        PopulationStrategy<String, BsjVariableElement> memberStrategy = populateElements(new BodyMembersThunk(node),
+                AccessModifier.PRIVATE);
+        // * Create the map
+        map = makeMap(map, EnvType.TYPE_OR_MEMBER, memberStrategy);
 
-		// *** Populate enum constants
-		populateElements(map, node.getConstants(), AccessModifier.PRIVATE);
+        // *** Finished!
+        return new ConsistentChildNamespaceProducer<String, BsjVariableElement>(map);
+    }
 
-		// *** Populate member elements
-		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
+    /*
+     * *** NOTE: local variable declaration is not handled here. This is because of the fashion in which the parent
+     * environments are assigned. The structural children of the local variable declaration do not have a consistent
+     * scope change based on the declaration node; for instance, each declarator has different variables in scope.
+     * Furthermore, to prevent redundant diagnostic production, nodes immediately following a variable declaration are
+     * environmental children of the last declarator in a local variable declaration. Thus, none of the nodes which are
+     * affected by a local variable declaration node are the environmental children of the declaration node itself and
+     * it does not need to be handled here.
+     */
 
-		// *** Finished!
-		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
-	}
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeMetaprogramNode(MetaprogramNode node,
+            NamespaceMap<String, BsjVariableElement> map)
+    {
+        // TODO: complete this section.
+        /*
+         * Properly implementing this code would require the following:
+         * 
+         * 1. Metaprogram imports both from the compilation unit as well as the preamble would need to apply to the
+         * preamble's non-import section and the metaprogram body. Note that these imports would be coming from the
+         * *metaprogram's* classpath, not the object program's classpath.
+         * 
+         * 2. The metaprogram body needs to have a local variable be defined of type Context<T>. Note that, to be a
+         * correct implementation, the type of T must be properly filled out.
+         * 
+         * There is some question as to whether or not this method should ever be implemented; it probably wouldn't be
+         * necessary for a metaprogram to do this kind of analysis and the modeling of the imported types would get
+         * tedious at best. For now, we're just clearing out the environment to make clear the fact that none of the
+         * object program logic applies.
+         */
+        map = EmptyNamespaceMap.instance();
+        return new ConsistentChildNamespaceProducer<String, BsjVariableElement>(map);
+    }
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeForLoopNode(
-			ForLoopNode node, VariableNamespaceMap map)
-	{
-		// The initializer is addressed by its children. Either it's a statement expression list (in which case
-		// no changes occur) or it's a local variable declaration (in which case the local variable declaration
-		// handler will populate things properly).
-		VariableNamespaceMap initializerMap = map;
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeMethodDeclarationNode(
+            final MethodDeclarationNode node, NamespaceMap<String, BsjVariableElement> map)
+    {
+        NamespaceMap<String, BsjVariableElement> defaultMap = map;
 
-		// Populate all of the contents of the initializer
-		if (node.getInitializer() instanceof ForInitializerDeclarationNode)
-		{
-			map = makeMap(map, EnvType.STATEMENT);
-			tryPopulateLocalVariable(map, ((ForInitializerDeclarationNode) node.getInitializer()).getDeclaration());
-		}
+        // *** Populate method parameters into method body
+        PopulationStrategy<String, BsjVariableElement> strategy = populateElements(new AbstractThunk<ListNode<?>>()
+        {
+            @Override
+            protected ListNode<?> calculate()
+            {
+                return node.getParameters();
+            }
+        }, AccessModifier.PRIVATE);
+        map = makeMap(map, EnvType.TYPE_OR_MEMBER, strategy);
 
-		// *** Finished!
-		Map<Node, VariableNamespaceMap> namespaceMap = Collections.<Node, VariableNamespaceMap> singletonMap(
-				node.getInitializer(), initializerMap);
-		return new MappedChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map, namespaceMap);
-	}
+        // *** Finished!
+        Map<Node, NamespaceMap<String, BsjVariableElement>> namespaceMap = Collections.<Node, NamespaceMap<String, BsjVariableElement>> singletonMap(
+                node.getBody(), map);
+        return new MappedChildNamespaceProducer<String, BsjVariableElement>(defaultMap, namespaceMap);
+    }
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeInterfaceBodyNode(
-			InterfaceBodyNode node, VariableNamespaceMap map)
-	{
-		// *** Create a new scope for inherited member elements
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
+    @Override
+    public ChildNamespaceProducer<String, BsjVariableElement> executeVariableDeclaratorNode(
+            final VariableDeclaratorNode node, NamespaceMap<String, BsjVariableElement> map)
+    {
+        // *** The scope of a variable declarator includes its own initializer.
+        // We're also going to include the variable name here. This has no appreciable effect on the behavior of the
+        // system except in that it encourages the generation of appropriate diagnostics which are otherwise not
+        // generated when no initializer is present.
+        PopulationStrategy<String, BsjVariableElement> strategy = new SingleValuePopulationStrategy<String, BsjVariableElement>(
+                new AbstractThunk<PopulationRecord<String, BsjVariableElement>>()
+                {
+                    @Override
+                    protected PopulationRecord<String, BsjVariableElement> calculate()
+                    {
+                        return new PopulationRecordImpl<String, BsjVariableElement>(
+                                node.getIdentifier().getIdentifier(), (BsjVariableElement) getToolkit().makeElement(
+                                        node), node);
+                    }
+                }, IdentityFunction.<String>instance());
+        map = makeMap(map, EnvType.STATEMENT, strategy);
 
-		// *** Inherit member elements
-		InterfaceDeclarationNode declarationNode = (InterfaceDeclarationNode) node.getParent();
-		map = makeInheritedMapFor(declarationNode, map);
+        return new ConsistentChildNamespaceProducer<String, BsjVariableElement>(map);
+    }
 
-		// *** Create a new scope for declared member elements
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
+    // ***** UTILITY METHODS **************************************************
 
-		// *** Populate member elements
-		populateElements(map, node.getMembers(), AccessModifier.PRIVATE);
+    @Override
+    protected NamespaceMap<String, BsjVariableElement> makeInheritanceMapFromSubmaps(
+            Collection<NamespaceMap<String, BsjVariableElement>> submaps,
+            Collection<? extends PopulationStrategy<String, BsjVariableElement>> strategies)
+    {
+        return new VariableNamespaceMap(submaps, getListener(), EnvType.INHERITED.isPassiveError(),
+                EnvType.INHERITED.isProhibitsOverlap(), strategies);
+    }
 
-		// *** Finished!
-		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
-	}
+    @Override
+    protected PopulationStrategy<String, BsjVariableElement> populateElements(Thunk<ListNode<?>> nodesThunk,
+            AccessModifier access, boolean skipNonMembers, String name)
+    {
+        return new FilteredListNodeVariablePopulationStrategy(nodesThunk, access, name, getToolkit());
+    }
 
-	/*
-	 * *** NOTE: local variable declaration is not handled here. This is because of the fashion in which the parent
-	 * environments are assigned. The structural children of the local variable declaration do not have a consistent
-	 * scope change based on the declaration node; for instance, each declarator has different variables in scope.
-	 * Furthermore, to prevent redundant diagnostic production, nodes immediately following a variable declaration are
-	 * environmental children of the last declarator in a local variable declaration. Thus, none of the nodes which are
-	 * affected by a local variable declaration node are the environmental children of the declaration node itself and
-	 * it does not need to be handled here.
-	 */
+    @Override
+    protected NamespaceMap<String, BsjVariableElement> makeMap(NamespaceMap<String, BsjVariableElement> deferenceMap,
+            EnvType envType, Collection<? extends PopulationStrategy<String, BsjVariableElement>> strategies)
+    {
+        return new VariableNamespaceMap(Collections.singleton(deferenceMap), getListener(),
+                envType.isPassiveError(), envType.isProhibitsOverlap(), strategies);
+    }
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeMetaprogramNode(
-			MetaprogramNode node, VariableNamespaceMap map)
-	{
-		// TODO: complete this section.
-		/*
-		 * Properly implementing this code would require the following:
-		 * 
-		 * 1. Metaprogram imports both from the compilation unit as well as the preamble would need to apply to the
-		 * preamble's non-import section and the metaprogram body. Note that these imports would be coming from the
-		 * *metaprogram's* classpath, not the object program's classpath.
-		 * 
-		 * 2. The metaprogram body needs to have a local variable be defined of type Context<T>. Note that, to be a
-		 * correct implementation, the type of T must be properly filled out.
-		 * 
-		 * There is some question as to whether or not this method should ever be implemented; it probably wouldn't be
-		 * necessary for a metaprogram to do this kind of analysis and the modeling of the imported types would get
-		 * tedious at best. For now, we're just clearing out the environment to make clear the fact that none of the
-		 * object program logic applies.
-		 */
-		map = new VariableNamespaceMap(Collections.<VariableNamespaceMap> emptySet(), getListener(), true, false);
-		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
-	}
+    private class SingleVariableNodePopulationStrategy extends
+            SingleValuePopulationStrategy<String, BsjVariableElement>
+    {
+        public SingleVariableNodePopulationStrategy(final VariableNode variableNode)
+        {
+            super(new AbstractThunk<PopulationStrategy.PopulationRecord<String, BsjVariableElement>>()
+            {
+                @Override
+                protected PopulationStrategy.PopulationRecord<String, BsjVariableElement> calculate()
+                {
+                    return new PopulationRecordImpl<String, BsjVariableElement>(
+                            variableNode.getIdentifier().getIdentifier(),
+                            (BsjVariableElement) getToolkit().makeElement(variableNode), variableNode);
+                }
+            }, IdentityFunction.<String>instance());
+        }
+    }
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeMethodDeclarationNode(
-			MethodDeclarationNode node, VariableNamespaceMap map)
-	{
-		VariableNamespaceMap defaultMap = map;
+    private class SingleDeclaratorOwnerNodePopulationStrategy implements PopulationStrategy<String, BsjVariableElement>
+    {
+        private VariableDeclaratorOwnerNode node;
 
-		// *** Populate method parameters into method body
-		map = makeMap(map, EnvType.TYPE_OR_MEMBER);
-		populateParameters(map, node.getParameters());
+        public SingleDeclaratorOwnerNodePopulationStrategy(final VariableDeclaratorOwnerNode node)
+        {
+            this.node = node;
+        }
 
-		// *** Finished!
-		Map<Node, VariableNamespaceMap> namespaceMap = Collections.<Node, VariableNamespaceMap> singletonMap(
-				node.getBody(), map);
-		return new MappedChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(defaultMap,
-				namespaceMap);
-	}
+        @Override
+        public Collection<PopulationRecord<String, BsjVariableElement>> get(String key)
+        {
+            return calculate(new DeclaratorNameFilter(key));
+        }
 
-	@Override
-	public ChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap> executeVariableDeclaratorNode(
-			VariableDeclaratorNode node, VariableNamespaceMap map)
-	{
-		// *** The scope of a variable declarator includes its own initializer.
-		// We're also going to include the variable name here. This has no appreciable effect on the behavior of the
-		// system except in that it encourages the generation of diagnostics when no initializer exists.
-		map = makeMap(map, EnvType.STATEMENT);
-		tryPopulateVariableDeclarator(map, node);
+        @Override
+        public Collection<PopulationRecord<String, BsjVariableElement>> getBySimpleName(String name)
+        {
+            return calculate(new DeclaratorNameFilter(name));
+        }
 
-		return new ConsistentChildNamespaceProducer<String, BsjVariableElement, VariableNamespaceMap>(map);
-	}
+        @Override
+        public Collection<PopulationRecord<String, BsjVariableElement>> getAll()
+        {
+            return calculate(null);
+        }
 
-	// ***** UTILITY METHODS **************************************************
-
-	protected VariableNamespaceMap makeMap(VariableNamespaceMap deferenceMap, EnvType envType)
-	{
-		return new VariableNamespaceMap(Collections.singleton(deferenceMap), this.getListener(), envType.isEager(),
-				envType.isProhibitsOverlap());
-	}
-
-	@Override
-	protected VariableNamespaceMap makeInheritanceMapFromSubmaps(Collection<VariableNamespaceMap> submaps)
-	{
-		return new VariableNamespaceMap(submaps, getListener(), EnvType.INHERITED.isEager(),
-				EnvType.INHERITED.isProhibitsOverlap());
-	}
-
-	@Override
-	public void populateElement(VariableNamespaceMap map, Node node, AccessModifier access, boolean skipNonMembers,
-			String name)
-	{
-		if (node instanceof FieldDeclarationNode)
-		{
-			tryPopulateMemberField(map, node, (FieldDeclarationNode) node, access, name);
-		} else if (node instanceof ConstantDeclarationNode)
-		{
-			tryPopulateMemberConstant(map, node, (ConstantDeclarationNode) node, name);
-		} else if (node instanceof EnumConstantDeclarationNode)
-		{
-			tryPopulateMemberEnumConstant(map, node, (EnumConstantDeclarationNode) node, name);
-		}
-	}
-
-	@Override
-	public Iterable<? extends Class<? extends Node>> getPopulationTypes()
-	{
-		List<Class<? extends Node>> list = new ArrayList<Class<? extends Node>>();
-		list.add(FieldDeclarationNode.class);
-		list.add(ConstantDeclarationNode.class);
-		list.add(EnumConstantDeclarationNode.class);
-		return list;
-	}
-
-	/**
-	 * Populates the specified parameters into the current namespace.
-	 */
-	protected void populateParameters(VariableNamespaceMap map, List<VariableNode> parameters)
-	{
-		for (VariableNode parameter : parameters)
-		{
-			map.add(parameter.getIdentifier().getIdentifier(),
-					(BsjVariableElement) this.getToolkit().makeElement(parameter), parameter);
-		}
-	}
-
-	/**
-	 * Attempts to populate a member variable into the provided method namespace map. This will succeed if and only if
-	 * the variable's access modifier is less restrictive or equally restrictive to the level of access provided.
-	 * 
-	 * @param variableNamespaceMap The namespace into which to populate the variable.
-	 * @param indicator The node responsible for indicating this mapping.
-	 * @param memberField The declaration which is being populated.
-	 * @param access The maximum level of restriction this mapping can tolerate.
-	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
-	 */
-	protected void tryPopulateMemberField(VariableNamespaceMap variableNamespaceMap, Node indicator,
-			FieldDeclarationNode memberField, AccessModifier access, String name)
-	{
-		if ((memberField.getModifiers()).getAccess().compareTo(access) <= 0)
-		{
-			for (VariableDeclaratorNode declaratorNode : memberField.getDeclarators())
-			{
-				if (name == null || declaratorNode.getIdentifier().getIdentifier().equals(name))
-				{
-					variableNamespaceMap.add(declaratorNode.getIdentifier().getIdentifier(),
-							(BsjVariableElement) this.getToolkit().makeElement(declaratorNode), declaratorNode);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Populates a member constant into the provided method namespace map.
-	 * 
-	 * @param variableNamespaceMap The namespace into which to populate the variable.
-	 * @param indicator The node responsible for indicating this mapping.
-	 * @param memberConstant The declaration which is being populated.
-	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
-	 */
-	protected void tryPopulateMemberConstant(VariableNamespaceMap variableNamespaceMap, Node indicator,
-			ConstantDeclarationNode memberConstant, String name)
-	{
-		for (VariableDeclaratorNode declaratorNode : memberConstant.getDeclarators())
-		{
-			if ((name == null || declaratorNode.getIdentifier().getIdentifier().equals(name)))
-			{
-				variableNamespaceMap.add(declaratorNode.getIdentifier().getIdentifier(),
-						(BsjVariableElement) this.getToolkit().makeElement(declaratorNode), declaratorNode);
-			}
-		}
-	}
-
-	/**
-	 * Populates a local variable into the provided method namespace map.
-	 * 
-	 * @param variableNamespaceMap The namespace into which to populate the variable.
-	 * @param memberConstant The declaration which is being populated.
-	 */
-	protected void tryPopulateLocalVariable(VariableNamespaceMap variableNamespaceMap,
-			LocalVariableDeclarationNode declarationNode)
-	{
-		for (VariableDeclaratorNode declaratorNode : declarationNode.getDeclarators())
-		{
-			variableNamespaceMap.add(declaratorNode.getIdentifier().getIdentifier(),
-					(BsjVariableElement) this.getToolkit().makeElement(declaratorNode), declaratorNode);
-		}
-	}
-
-	/**
-	 * Populates a local variable into the provided method namespace map.
-	 * 
-	 * @param variableNamespaceMap The namespace into which to populate the variable.
-	 * @param memberConstant The declaration which is being populated.
-	 */
-	protected void tryPopulateVariableDeclarator(VariableNamespaceMap variableNamespaceMap,
-			VariableDeclaratorNode declaratorNode)
-	{
-		variableNamespaceMap.add(declaratorNode.getIdentifier().getIdentifier(),
-				(BsjVariableElement) this.getToolkit().makeElement(declaratorNode), declaratorNode);
-	}
-
-	/**
-	 * Populates a member constant into the provided method namespace map.
-	 * 
-	 * @param variableNamespaceMap The namespace into which to populate the variable.
-	 * @param indicator The node responsible for indicating this mapping.
-	 * @param memberConstant The declaration which is being populated.
-	 * @param name The name the member must have in order to be included or <code>null</code> to accept any name.
-	 */
-	protected void tryPopulateMemberEnumConstant(VariableNamespaceMap variableNamespaceMap, Node indicator,
-			EnumConstantDeclarationNode memberConstant, String name)
-	{
-		if ((name == null || memberConstant.getIdentifier().getIdentifier().equals(name)))
-		{
-			variableNamespaceMap.add(memberConstant.getIdentifier().getIdentifier(),
-					(BsjVariableElement) this.getToolkit().makeElement(memberConstant), memberConstant);
-		}
-	}
+        private Collection<PopulationRecord<String, BsjVariableElement>> calculate(NodeFilter<? super VariableDeclaratorNode> filter)
+        {
+            Collection<VariableDeclaratorNode> decls;
+            if (filter == null)
+            {
+                decls = node.getDeclarators();
+            } else
+            {
+                decls = node.getDeclarators().filter(filter);
+            }
+            if (decls.size() == 0)
+                return Collections.emptySet();
+            Set<PopulationRecord<String, BsjVariableElement>> ret = new HashSet<PopulationRecord<String, BsjVariableElement>>(
+                    decls.size());
+            for (VariableDeclaratorNode decl : decls)
+            {
+                ret.add(new PopulationRecordImpl<String, BsjVariableElement>(decl.getIdentifier().getIdentifier(),
+                        (BsjVariableElement) getToolkit().makeElement(decl), decl));
+            }
+            return ret;
+        }
+    }
 }

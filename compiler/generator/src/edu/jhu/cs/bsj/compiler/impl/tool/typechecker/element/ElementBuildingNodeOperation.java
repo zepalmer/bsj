@@ -34,6 +34,9 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
 
+// TODO: this didn't really work out the way we wanted; we should just have different methods for each element we build
+// (probably in the modeling factory) to better ensure type safety rather than having an operation.  Eliminate this
+// class.
 public class ElementBuildingNodeOperation extends BsjDefaultNodeOperation<Void, BsjElement>
 {
 	public static final Collection<Class<? extends Node>> VALID_NODE_TYPES;
