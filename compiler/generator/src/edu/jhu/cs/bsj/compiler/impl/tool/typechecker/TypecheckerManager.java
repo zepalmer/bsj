@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.NamespaceBuilder;
 import edu.jhu.cs.bsj.compiler.lang.BsjModelingFactory;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
 
@@ -23,7 +23,7 @@ public class TypecheckerManager
 	/** This manager's toolkit. */
 	private TypecheckerToolkit toolkit;
 	/** The compilation unit loader to use. */
-	private CompilationUnitLoader loader;
+	private CompilationUnitLoadingInfo loader;
 	/** The environment manager for this typechecker manager. */
 	private NamespaceBuilder namespaceBuilder;
 	/** The type checker for this typechecker manager. */
@@ -36,7 +36,7 @@ public class TypecheckerManager
 	 * @param rootPackage The root package over which type checking will be performed.
 	 * @param diagnosticListener The diagnostic listener to which to report errors.
 	 */
-	public TypecheckerManager(PackageNode rootPackage, BsjParser parser, CompilationUnitLoader loader, DiagnosticListener<BsjSourceLocation> diagnosticListener)
+	public TypecheckerManager(PackageNode rootPackage, BsjParser parser, CompilationUnitLoadingInfo loader, DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		super();
 		this.rootPackage = rootPackage;
@@ -48,7 +48,7 @@ public class TypecheckerManager
 		this.typechecker = new TypecheckerImpl(this, parser);
 	}
 
-	public CompilationUnitLoader getLoader()
+	public CompilationUnitLoadingInfo getLoader()
 	{
 		return loader;
 	}

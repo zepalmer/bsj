@@ -56,7 +56,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.serializer.NodeMappingSerializationOper
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.SerializedNodeMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -111,7 +111,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
         List<String> qualifiedTargetNames = new ArrayList<String>();
         List<Dependency> dependencies = new ArrayList<Dependency>();
         final String metaprogramTypeName = getMetaprogramTypeName();
-        CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
+        CompilationUnitLoadingInfo loader = this.metacompilationContext.getToolkit().getCompilationUnitLoadingInfoFactory().makeLoadingInfo(
                 this.metacompilationContext.getDiagnosticListener());
 
         // if there's a preamble, deal with it

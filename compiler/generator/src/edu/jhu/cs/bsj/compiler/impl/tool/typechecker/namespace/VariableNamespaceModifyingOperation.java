@@ -51,7 +51,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.function.AbstractThunk;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.IdentityFunction;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Thunk;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 
 /**
  * Provides variable namespace modification.
@@ -61,7 +61,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
 public class VariableNamespaceModifyingOperation extends
         AbstractNamespaceModifyingOperation<String, BsjVariableElement>
 {
-    public VariableNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoader loader,
+    public VariableNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoadingInfo loader,
             DiagnosticListener<BsjSourceLocation> listener)
     {
         super(toolkit, loader, listener);

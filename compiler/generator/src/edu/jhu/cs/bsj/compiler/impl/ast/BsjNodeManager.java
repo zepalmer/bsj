@@ -28,10 +28,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AccessType;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.InsufficientPermissionExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramAttributeConflictExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.NoOperationDiagnosticListener;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
@@ -43,7 +45,7 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 
 /**
@@ -70,6 +72,10 @@ public class BsjNodeManager
      * The current dependency manager.
      */
     private DependencyManager dependencyManager;
+    /**
+     * A module containing logic for compilation unit loading.
+     */
+    private CompilationUnitLoader compilationUnitLoader;
 
     /**
      * The stack of running metaprograms. This is specifically in place to permit code to temporarily suspend the
@@ -96,6 +102,7 @@ public class BsjNodeManager
         this.permissionPolicyStack = new Stack<PermissionPolicyManager>();
         this.packageNodeManager = new PackageNodeManager(toolkit);
         this.instantiator = new MetaAnnotationObjectInstantiator(toolkit);
+        this.compilationUnitLoader = new CompilationUnitLoader(toolkit, this);
 
         this.toolkit = toolkit;
 
@@ -192,6 +199,11 @@ public class BsjNodeManager
     public PackageNodeManager getPackageNodeManager()
     {
         return packageNodeManager;
+    }
+
+    public CompilationUnitLoader getCompilationUnitLoader()
+    {
+        return compilationUnitLoader;
     }
 
     // *** Other methods
@@ -317,10 +329,13 @@ public class BsjNodeManager
      * @param id The ID of the metaprogram to check.
      * @param node The node that the two metaprograms are modifying.
      * @param attribute The attribute over which we are asserting ordering.
+     * @param ourAccess The access performed by the current metaprogram.
+     * @param theirAccess The access performed by the metaprogram whose ID was specified.
      * @throws MetaprogramConflictException If the metaprogram with the specified ID does not cooperate with the current
      *             metaprogram.
      */
-    public void assertOrdering(int id, Node node, Attribute<?> attribute) throws MetaprogramConflictException
+    public <T extends AccessType<T>> void assertOrdering(int id, Node node, Attribute<T> attribute, T ourAccess,
+            T theirAccess) throws MetaprogramConflictException
     {
         if (!hasOrdering(id))
         {
@@ -332,7 +347,7 @@ public class BsjNodeManager
             throw new MetaprogramAttributeConflictExceptionImpl(this.getDependencyManager().getMetaprogramProfileByID(
                     id).getAnchor(),
                     this.getDependencyManager().getMetaprogramProfileByID(getCurrentMetaprogramId()).getAnchor(), node,
-                    attribute.getName());
+                    attribute.getName(), ourAccess.toString(), theirAccess.toString());
         }
     }
 
@@ -396,7 +411,8 @@ public class BsjNodeManager
     public Collection<? extends Node> getDeclarationsInScope(Node node, NameNode name)
     {
         DiagnosticListener<BsjSourceLocation> listener = new NoOperationDiagnosticListener<BsjSourceLocation>();
-        CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener);
+        CompilationUnitLoadingInfo loader = this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(
+                listener);
         if (name instanceof SimpleNameNode)
         {
             SimpleNameNode simpleName = (SimpleNameNode) name;
@@ -451,7 +467,7 @@ public class BsjNodeManager
             PackageNode packageNode = (PackageNode) node;
             return Collections.singleton(packageNode.getTopLevelTypeDeclaration(
                     name,
-                    this.toolkit.getCompilationUnitLoaderFactory().makeLoader(
+                    this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(
                             new NoOperationDiagnosticListener<BsjSourceLocation>())));
         } else
         {
@@ -525,6 +541,6 @@ public class BsjNodeManager
         }
         DiagnosticListener<BsjSourceLocation> listener = new NoOperationDiagnosticListener<BsjSourceLocation>();
         return new TypecheckerManager(rootPackage, toolkit.getParser(),
-                this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener), listener);
+                this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(listener), listener);
     }
 }

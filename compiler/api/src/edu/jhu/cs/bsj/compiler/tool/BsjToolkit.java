@@ -2,8 +2,8 @@ package edu.jhu.cs.bsj.compiler.tool;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoaderFactory;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfoFactory;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
@@ -46,10 +46,10 @@ public interface BsjToolkit
 	public BsjSourceSerializer getSerializer();
 	
 	/**
-	 * Retrieves a {@link CompilationUnitLoader} which can be used to read compilation units from the file manager.
+	 * Retrieves a {@link CompilationUnitLoadingInfo} which can be used to read compilation units from the file manager.
 	 * @param listener The listener to use to report diagnostics.
 	 */
-	public CompilationUnitLoaderFactory getCompilationUnitLoaderFactory();
+	public CompilationUnitLoadingInfoFactory getCompilationUnitLoadingInfoFactory();
 	
 	/**
 	 * Retrieves a {@link BsjTypechecker} which can be used to typecheck ASTs produced by this toolkit's node factory.

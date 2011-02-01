@@ -32,16 +32,26 @@ public class MetaprogramAttributeConflictDiagnosticImpl extends MetaprogramConfl
     /** The name of the attribute in conflict. */
     private String attributeName;
     
+    /** A description of the access performed by the first metaprogram. */
+    private String firstAccess;
+    
+    /** A description of the access performed by the second metaprogram. */
+    private String secondAccess;
+    
     public MetaprogramAttributeConflictDiagnosticImpl(
             BsjSourceLocation source,
             MetaprogramAttributeConflictException exception,
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
             Node conflictNode,
-            String attributeName)
+            String attributeName,
+            String firstAccess,
+            String secondAccess)
     {
         super(source, MetaprogramAttributeConflictDiagnostic.CODE, Kind.ERROR, exception, firstAnchor, secondAnchor, conflictNode);
         this.attributeName = attributeName;
+        this.firstAccess = firstAccess;
+        this.secondAccess = secondAccess;
     }
     
     /**
@@ -52,18 +62,38 @@ public class MetaprogramAttributeConflictDiagnosticImpl extends MetaprogramConfl
         return this.attributeName;
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public String getFirstAccess()
+    {
+        return this.firstAccess;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public String getSecondAccess()
+    {
+        return this.secondAccess;
+    }
+    
     @Override
     protected Pair<List<Object>,Map<String,Integer>> getMessageArgs(Locale locale)
     {
         Pair<List<Object>,Map<String,Integer>> args = super.getMessageArgs(locale);
         args.getFirst().add(this.attributeName);
         args.getSecond().put("attributeName", args.getFirst().size());
+        args.getFirst().add(this.firstAccess);
+        args.getSecond().put("firstAccess", args.getFirst().size());
+        args.getFirst().add(this.secondAccess);
+        args.getSecond().put("secondAccess", args.getFirst().size());
         return args;
     }
     
     public MetaprogramAttributeConflictDiagnosticImpl(BsjSourceLocation source, MetaprogramAttributeConflictException exception)
     {
-        this(source, exception, exception.getFirstAnchor(), exception.getSecondAnchor(), exception.getConflictNode(), exception.getAttributeName());
+        this(source, exception, exception.getFirstAnchor(), exception.getSecondAnchor(), exception.getConflictNode(), exception.getAttributeName(), exception.getFirstAccess(), exception.getSecondAccess());
     }
     
 }

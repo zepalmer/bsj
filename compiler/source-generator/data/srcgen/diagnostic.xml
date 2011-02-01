@@ -480,6 +480,8 @@
                 superTypeArg="MetaprogramAttributeConflictException" code="bsj.compiler.metaprogram.failure.conflict.attribute">
                 <exception />
                 <prop name="attributeName" type="String" desc="the name of the attribute in conflict" />
+                <prop name="firstAccess" type="String" desc="a description of the access performed by the first metaprogram" />
+                <prop name="secondAccess" type="String" desc="a description of the access performed by the second metaprogram" />
                 <doc><![CDATA[
                     Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
                     attribute of a given node.

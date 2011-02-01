@@ -32,7 +32,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.population.Po
 import edu.jhu.cs.bsj.compiler.impl.utils.function.AbstractThunk;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Thunk;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 
 /**
  * Provides method namespace modification.
@@ -49,7 +49,7 @@ public class MethodNamespaceModifyingOperation extends
      * @param loader The compilation unit loader to use when loading of compilation units is necessary.
      * @param listener The listener to which diagnostics will be reported.
      */
-    public MethodNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoader loader,
+    public MethodNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoadingInfo loader,
             DiagnosticListener<BsjSourceLocation> listener)
     {
         super(toolkit, loader, listener);

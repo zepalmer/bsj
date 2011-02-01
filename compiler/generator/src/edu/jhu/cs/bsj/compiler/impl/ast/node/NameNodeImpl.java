@@ -20,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.NameCategorizer;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NameNodeImpl extends NodeImpl implements NameNode
 {
@@ -245,11 +245,11 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     
 	private NameCategory nameCategoryCacheValue = null;
 	private long nameCategoryCacheModificationCount = 0;
-	public NameCategory getCategory(CompilationUnitLoader loader)
+	public NameCategory getCategory(CompilationUnitLoadingInfo info)
 	{
 		if (nameCategoryCacheModificationCount != getManager().getModificationCount() || nameCategoryCacheValue == null)
 		{
-			nameCategoryCacheValue = NameCategorizer.SINGLETON.categorize(this, loader);
+			nameCategoryCacheValue = NameCategorizer.SINGLETON.categorize(this, info);
 			nameCategoryCacheModificationCount = getManager().getModificationCount();
 		}
 		return nameCategoryCacheValue;

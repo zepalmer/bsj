@@ -27,4 +27,16 @@ public interface MetaprogramAttributeConflictDiagnostic extends MetaprogramConfl
      */
     public String getAttributeName();
     
+    /**
+     * Retrieves a description of the access performed by the first metaprogram.
+     * @return A description of the access performed by the first metaprogram.
+     */
+    public String getFirstAccess();
+    
+    /**
+     * Retrieves a description of the access performed by the second metaprogram.
+     * @return A description of the access performed by the second metaprogram.
+     */
+    public String getSecondAccess();
+    
 }

@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.Dependency;
 import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaprogram;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 public class PrepareMetaAnnotationMetaprorgamTask
@@ -53,7 +53,7 @@ public class PrepareMetaAnnotationMetaprorgamTask
 			return null;
 
 		// TODO: validate that the target names and dependency names are not bogus
-		CompilationUnitLoader loader = this.metacompilationContext.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
+		CompilationUnitLoadingInfo loader = this.metacompilationContext.getToolkit().getCompilationUnitLoadingInfoFactory().makeLoadingInfo(
 				this.metacompilationContext.getDiagnosticListener());
 		Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(
 				this.anchor, null, this.metacompilationContext.getToolkit().getNodeFactory(),

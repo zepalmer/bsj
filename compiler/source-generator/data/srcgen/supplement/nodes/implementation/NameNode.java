@@ -9,11 +9,11 @@ public abstract class NameNodeImpl
 	/* GEN:start */
 	private NameCategory nameCategoryCacheValue = null;
 	private long nameCategoryCacheModificationCount = 0;
-	public NameCategory getCategory(CompilationUnitLoader loader)
+	public NameCategory getCategory(CompilationUnitLoadingInfo info)
 	{
 		if (nameCategoryCacheModificationCount != getManager().getModificationCount() || nameCategoryCacheValue == null)
 		{
-			nameCategoryCacheValue = NameCategorizer.SINGLETON.categorize(this, loader);
+			nameCategoryCacheValue = NameCategorizer.SINGLETON.categorize(this, info);
 			nameCategoryCacheModificationCount = getManager().getModificationCount();
 		}
 		return nameCategoryCacheValue;

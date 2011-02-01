@@ -34,7 +34,7 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjVariableElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.tests.AbstractTest;
 
@@ -100,8 +100,9 @@ public class NamespaceTest extends AbstractTest
         BsjToolkit toolkit = getToolkit(SPECIFIC_SOURCE_DIR);
         final BsjNodeFactory factory = toolkit.getNodeFactory();
         rootPackage = factory.makePackageNode((IdentifierNode) null);
-        final CompilationUnitLoader loader = toolkit.getCompilationUnitLoaderFactory().makeLoader(diagnosticListener);
-        compilationUnitNode = loader.load(rootPackage, "ExampleNamespace");
+        final CompilationUnitLoadingInfo loadingInfo = toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(diagnosticListener);
+        rootPackage.loadCompilationUnit("ExampleNamespace", loadingInfo);
+        compilationUnitNode = rootPackage.getCompilationUnit("ExampleNamespace");
         assertNoNewErrorDiagnostics("Error while loading ExampleNamespace.bsj");
 
         if (!(compilationUnitNode.getTypeDecls().getFirst() instanceof ClassDeclarationNode))
@@ -110,10 +111,10 @@ public class NamespaceTest extends AbstractTest
         }
         exampleNamespaceClassNode = (ClassDeclarationNode) compilationUnitNode.getTypeDecls().getFirst();
 
-        final TypecheckerManager typecheckerManager = new TypecheckerManager(rootPackage, toolkit.getParser(), loader,
+        final TypecheckerManager typecheckerManager = new TypecheckerManager(rootPackage, toolkit.getParser(), loadingInfo,
                 diagnosticListener);
-        final NamespaceBuilder namespaceBuilder = new NamespaceBuilder(rootPackage, diagnosticListener, loader,
-                new TypecheckerToolkit(typecheckerManager, loader));
+        final NamespaceBuilder namespaceBuilder = new NamespaceBuilder(rootPackage, diagnosticListener, loadingInfo,
+                new TypecheckerToolkit(typecheckerManager, loadingInfo));
 
         return namespaceBuilder;
     }

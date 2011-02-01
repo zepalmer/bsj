@@ -26,7 +26,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
@@ -131,7 +131,8 @@ public class StandardBsjCompiler implements BsjCompiler
         try
         {
             // Initialize the compilation unit manager with the names of the files it must compile
-            CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(diagnosticListener);
+            CompilationUnitLoadingInfo loadingInfo = this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(
+                    diagnosticListener);
             for (BsjFileObject file : units)
             {
                 String binaryName = file.inferBinaryName();
@@ -145,7 +146,7 @@ public class StandardBsjCompiler implements BsjCompiler
                     String packageName = StringUtilities.removeSuffix(binaryName, '.');
                     packageNode = this.rootPackage.getSubpackage(packageName);
                 }
-                loader.load(packageNode, compilationUnitName);
+                packageNode.loadCompilationUnit(compilationUnitName, loadingInfo);
             }
 
             // If there were no errors in parsing, attempt metacompilation

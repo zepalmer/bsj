@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 
 /**
  * This visitor categorizes <i>PackageOrTypeName</i>s as specified by &#xA7;6.5.3 of the JLS v3. To do so, it must have
@@ -32,10 +32,10 @@ public class PackageOrTypeNameCategorizer
 	 * &#xA7;6.5.1.
 	 * 
 	 * @param name The name to categorize.
-	 * @param loader The {@link CompilationUnitLoader} to use if loading becomes necessary.
+	 * @param info The {@link CompilationUnitLoadingInfo} to use if loading becomes necessary.
 	 * @return An indication of whether the name is a package name or a type name.
 	 */
-	public NameCategory categorize(NameNode name, CompilationUnitLoader loader)
+	public NameCategory categorize(NameNode name, CompilationUnitLoadingInfo info)
 	{
 		if (LOGGER.isTraceEnabled())
 		{
@@ -60,7 +60,7 @@ public class PackageOrTypeNameCategorizer
 			// If the base name of this node refers to a package or type containing a member type matching the name of
 			// this node's identifier, then this node refers to a type. Otherwise, it refers to a package.
 			QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) name;
-			if (qualifiedNameNode.getBase().getCategory(loader) == NameCategory.PACKAGE)
+			if (qualifiedNameNode.getBase().getCategory(info) == NameCategory.PACKAGE)
 			{
 				category = NameCategory.PACKAGE;
 				PackageNode rootPackage = name.getRootPackage();
@@ -69,13 +69,13 @@ public class PackageOrTypeNameCategorizer
 					PackageNode packageNode = rootPackage.getSubpackageByQualifiedName(qualifiedNameNode.getBase());
 					if (packageNode != null)
 					{
-						if (packageNode.getTopLevelTypeDeclaration(name.getIdentifier().getIdentifier(), loader) != null)
+						if (packageNode.getTopLevelTypeDeclaration(name.getIdentifier().getIdentifier(), info) != null)
 						{
 							category = NameCategory.TYPE;
 						}
 					}
 				}
-			} else if (qualifiedNameNode.getBase().getCategory(loader) == NameCategory.TYPE)
+			} else if (qualifiedNameNode.getBase().getCategory(info) == NameCategory.TYPE)
 			{
 				// If the qualified name is classified as a type, then this name either refers to an existing member
 				// type of that type or it does not make sense. In light of this, we can just assume that it should
@@ -87,7 +87,7 @@ public class PackageOrTypeNameCategorizer
 			{
 				throw new IllegalStateException(
 						"Typing to disambiguate PACKAGE_OR_TYPE category for name with base of "
-								+ name.getCategory(loader));
+								+ name.getCategory(info));
 			}
 		} else
 		{

@@ -28,14 +28,24 @@ public abstract class MetaprogramAttributeConflictException extends MetaprogramC
     /** The name of the attribute in conflict. */
     private String attributeName;
     
+    /** A description of the access performed by the first metaprogram. */
+    private String firstAccess;
+    
+    /** A description of the access performed by the second metaprogram. */
+    private String secondAccess;
+    
     public MetaprogramAttributeConflictException(
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
             Node conflictNode,
-            String attributeName)
+            String attributeName,
+            String firstAccess,
+            String secondAccess)
     {
         super(firstAnchor, secondAnchor, conflictNode);
         this.attributeName = attributeName;
+        this.firstAccess = firstAccess;
+        this.secondAccess = secondAccess;
     }
     
     /**
@@ -45,6 +55,24 @@ public abstract class MetaprogramAttributeConflictException extends MetaprogramC
     public String getAttributeName()
     {
         return this.attributeName;
+    }
+    
+    /**
+     * Retrieves a description of the access performed by the first metaprogram.
+     * @return A description of the access performed by the first metaprogram.
+     */
+    public String getFirstAccess()
+    {
+        return this.firstAccess;
+    }
+    
+    /**
+     * Retrieves a description of the access performed by the second metaprogram.
+     * @return A description of the access performed by the second metaprogram.
+     */
+    public String getSecondAccess()
+    {
+        return this.secondAccess;
     }
     
     /**

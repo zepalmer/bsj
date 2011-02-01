@@ -23,7 +23,7 @@ public class BsjTypecheckerFactoryImpl implements BsjTypecheckerFactory
 			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		TypecheckerManager manager = new TypecheckerManager(rootPackage, this.toolkit.getParser(),
-				this.toolkit.getCompilationUnitLoaderFactory().makeLoader(diagnosticListener), diagnosticListener);
+				this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(diagnosticListener), diagnosticListener);
 		return new TypecheckerImpl(manager, this.toolkit.getParser());
 	}
 }

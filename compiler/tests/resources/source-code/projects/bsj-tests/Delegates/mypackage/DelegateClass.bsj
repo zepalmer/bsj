@@ -10,13 +10,13 @@ public class DelegateClass {
 	private Test member;
 
 	
-	@@Delegate(method="length", as="newLength",targets = "a")
+	@@Delegate(method="length", as="newLength")
 	private java.lang.String s;
 
 	//@@Delegate(methodName="put", delegateMethodName="addChildren")
 	private HashMap<Test,Test> children1;
 	
-	@@Delegate(method="add", as="addChildren",depends ="a")
+	@@Delegate(method="add", as="addChildren")
 	//@@Delegate(method="size", as="mySize")
 	
 	private List<Test> children;

@@ -51,7 +51,7 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjNamedReferenceType;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 
 /**
  * Applies the environment changes that a parent environment node has on its environment child. This operation operates
@@ -74,16 +74,16 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
     /** The typechecker toolkit to use. */
     private TypecheckerToolkit toolkit;
     /** The compilation unit loader to use. */
-    private CompilationUnitLoader loader;
+    private CompilationUnitLoadingInfo loadingInfo;
     /** The diagnostic listener to use. */
     private DiagnosticListener<BsjSourceLocation> listener;
 
-    public AbstractNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoader loader,
+    public AbstractNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoadingInfo loadingInfo,
             DiagnosticListener<BsjSourceLocation> listener)
     {
         super();
         this.toolkit = toolkit;
-        this.loader = loader;
+        this.loadingInfo = loadingInfo;
         this.listener = listener;
     }
 
@@ -92,9 +92,9 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
         return toolkit;
     }
 
-    protected CompilationUnitLoader getLoader()
+    protected CompilationUnitLoadingInfo getLoadingInfo()
     {
-        return loader;
+        return loadingInfo;
     }
 
     protected DiagnosticListener<BsjSourceLocation> getListener()
@@ -111,7 +111,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
                     @Override
                     public PopulationStrategy<K, V> execute(StaticImportOnDemandNode importNode)
                     {
-                        if (importNode.getName().getCategory(loader) != NameCategory.TYPE)
+                        if (importNode.getName().getCategory(loadingInfo) != NameCategory.TYPE)
                         {
                             // On-demand static imports can only name types.
                             // TODO: report an appropriate diagnostic
@@ -142,7 +142,7 @@ public abstract class AbstractNamespaceModifyingOperation<K, V extends BsjElemen
                     @Override
                     public PopulationStrategy<K, V> execute(SingleStaticImportNode importNode)
                     {
-                        if (importNode.getName().getCategory(loader) != NameCategory.TYPE)
+                        if (importNode.getName().getCategory(loadingInfo) != NameCategory.TYPE)
                         {
                             // On-demand static imports can only name types.
                             // TODO: report an appropriate diagnostic

@@ -57,7 +57,7 @@ public interface Context<T extends MetaprogramAnchorNode<U>, U extends Node>
 	 * wish to create entirely new compilation units should use
 	 * {@link PackageNode#addCompilationUnit(CompilationUnitNode)} instead.
 	 */
-	public CompilationUnitLoader getCompilationUnitLoader();
+	public CompilationUnitLoadingInfo getCompilationUnitLoadingInfo();
 
 	/**
 	 * Retrieves the AST node which is currently slated to be used as a replacement for the anchor of this metaprogram

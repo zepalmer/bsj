@@ -90,7 +90,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
 
         // Typecheck the AST and then use the typechecking metadata to perform code literal replacement.
         TypecheckerManager typecheckerManager = new TypecheckerManager(this.root.getRootPackage(),
-                context.getToolkit().getParser(), context.getToolkit().getCompilationUnitLoaderFactory().makeLoader(
+                context.getToolkit().getParser(), context.getToolkit().getCompilationUnitLoadingInfoFactory().makeLoadingInfo(
                         context.getDiagnosticListener()), context.getDiagnosticListener());
 
         TypecheckerResult result;

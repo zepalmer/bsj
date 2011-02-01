@@ -29,14 +29,14 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 
 public class TypecheckerToolkit
 {
 	private static Logger LOGGER = Logger.getLogger(TypecheckerToolkit.class);
 
 	private TypecheckerManager manager;
-	private CompilationUnitLoader loader;
+	private CompilationUnitLoadingInfo loader;
 
 	private ElementBuildingNodeOperation elementBuilder;
 	private TypeBuilder typeBuilder;
@@ -96,7 +96,7 @@ public class TypecheckerToolkit
 	/** A field to hold the element for the <tt>Void</tt> wrapper type. */
 	private BsjExplicitlyDeclaredType voidWrapperType;
 
-	public TypecheckerToolkit(TypecheckerManager manager, CompilationUnitLoader loader)
+	public TypecheckerToolkit(TypecheckerManager manager, CompilationUnitLoadingInfo loader)
 	{
 		super();
 		this.manager = manager;

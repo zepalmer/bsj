@@ -51,7 +51,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.IdentityFunction;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Thunk;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 
 /**
  * Provides type namespace modification.
@@ -69,7 +69,7 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
      * @param loader The compilation unit loader to use when loading of compilation units is necessary.
      * @param listener The listener to which diagnostics will be reported.
      */
-    public TypeNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoader loader,
+    public TypeNamespaceModifyingOperation(TypecheckerToolkit toolkit, CompilationUnitLoadingInfo loader,
             DiagnosticListener<BsjSourceLocation> listener)
     {
         super(toolkit, loader, listener);
@@ -194,7 +194,7 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
 
                 // Automatic import of java.lang.* is treated as an on-demand import
                 PackageNode javaLangPackage = node.getRootPackage().getSubpackageByQualifiedName("java.lang");
-                getLoader().loadAll(javaLangPackage);
+                javaLangPackage.loadAllCompilationUnits(getLoadingInfo());
                 strategies.add(createPackagePopulationStrategy(javaLangPackage, node, AccessModifier.PUBLIC));
 
                 // * Process on-demand static imports.
@@ -416,12 +416,12 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
                             LOGGER.trace("Processing type namespace for ImportOnDemandNode for name "
                                     + importNode.getName().getNameString());
                         }
-                        switch (importNode.getName().getCategory(getLoader()))
+                        switch (importNode.getName().getCategory(getLoadingInfo()))
                         {
                             case PACKAGE:
                                 PackageNode packageNode = importNode.getRootPackage().getSubpackageByQualifiedName(
                                         importNode.getName());
-                                getLoader().loadAll(packageNode);
+                                packageNode.loadAllCompilationUnits(getLoadingInfo());
                                 return createPackagePopulationStrategy(packageNode, importNode, AccessModifier.PUBLIC);
                             case TYPE:
                                 NamedTypeDeclarationNode<?> type = getToolkit().getAccessibleTypeFromFullyQualifiedName(
@@ -441,7 +441,7 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
                                 throw new IllegalStateException(
                                         "Name categorizer gave non-package, non-type category to import name: "
                                                 + importNode.getName().getNameString() + " has category "
-                                                + importNode.getName().getCategory(getLoader()));
+                                                + importNode.getName().getCategory(getLoadingInfo()));
                         }
                     }
                 });

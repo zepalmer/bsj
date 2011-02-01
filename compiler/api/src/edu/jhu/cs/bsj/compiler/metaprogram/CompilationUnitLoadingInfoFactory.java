@@ -5,16 +5,16 @@ import javax.tools.DiagnosticListener;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 
 /**
- * Objects meeting this interface are capable of producing {@link CompilationUnitLoader} units for use with the
+ * Objects meeting this interface are capable of producing {@link CompilationUnitLoadingInfo} units for use with the
  * associated toolkit.
  * @author Zachary Palmer
  */
-public interface CompilationUnitLoaderFactory
+public interface CompilationUnitLoadingInfoFactory
 {
 	/**
-	 * Creates a {@link CompilationUnitLoader}.
+	 * Creates a {@link CompilationUnitLoadingInfo}.
 	 * @param listener The {@link DiagnosticListener} to which messages will be reported when the loader is used.
 	 * @return The resulting loader.
 	 */
-	public CompilationUnitLoader makeLoader(DiagnosticListener<BsjSourceLocation> diagnosticListener);
+	public CompilationUnitLoadingInfo makeLoadingInfo(DiagnosticListener<BsjSourceLocation> diagnosticListener);
 }

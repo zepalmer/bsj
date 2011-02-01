@@ -78,7 +78,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
@@ -263,7 +263,7 @@ public class MetaAnnotationObjectInstantiator
         Class<?> clazz = null;
 
         // If the base name is a type, then an import might apply
-        CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener);
+        CompilationUnitLoadingInfo loader = this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(listener);
         if (baseNameNode.getCategory(loader).equals(NameCategory.TYPE))
         {
             // Next, see if we can find a suitable class using a single type import
@@ -361,7 +361,7 @@ public class MetaAnnotationObjectInstantiator
         StringBuilder sb = new StringBuilder();
 
         // For each name, remove the components and build the binary name appropriately
-        CompilationUnitLoader loader = this.toolkit.getCompilationUnitLoaderFactory().makeLoader(listener);
+        CompilationUnitLoadingInfo loader = this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(listener);
         for (NameNode nameNode : names)
         {
             while (nameNode != null)

@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.user.BsjUserDiagnosticListener;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypecheckerFactory;
 
@@ -25,7 +25,7 @@ public class ContextImpl<T extends MetaprogramAnchorNode<U>, U extends Node> imp
 	/** The diagnostic listener for this context. */
 	private BsjUserDiagnosticListener diagnosticListener;
 	/** The compilation unit loader for this context. */
-	private CompilationUnitLoader compilationUnitLoader;
+	private CompilationUnitLoadingInfo compilationUnitLoadingInfo;
 	/** The typechecker factory for this context. */
 	private BsjTypecheckerFactory typecheckerFactory;
 	
@@ -33,14 +33,14 @@ public class ContextImpl<T extends MetaprogramAnchorNode<U>, U extends Node> imp
 	 * Creates a standard context implementation.
 	 */
 	public ContextImpl(T anchor, U replacement, BsjNodeFactory factory, BsjUserDiagnosticListener diagnosticListener,
-			CompilationUnitLoader compilationUnitLoader, BsjTypecheckerFactory typecheckerFactory)
+			CompilationUnitLoadingInfo compilationUnitLoadingInfo, BsjTypecheckerFactory typecheckerFactory)
 	{
 		super();
 		this.anchor = anchor;
 		this.replacement = replacement;
 		this.factory = factory;
 		this.diagnosticListener = diagnosticListener;
-		this.compilationUnitLoader = compilationUnitLoader;
+		this.compilationUnitLoadingInfo = compilationUnitLoadingInfo;
 		this.typecheckerFactory = typecheckerFactory;
 	}	
 
@@ -63,9 +63,9 @@ public class ContextImpl<T extends MetaprogramAnchorNode<U>, U extends Node> imp
 	}
 
 	@Override
-	public CompilationUnitLoader getCompilationUnitLoader()
+	public CompilationUnitLoadingInfo getCompilationUnitLoadingInfo()
 	{
-		return compilationUnitLoader;
+		return compilationUnitLoadingInfo;
 	}
 
 	@Override

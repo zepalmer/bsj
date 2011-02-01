@@ -30,13 +30,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.NonConflictingReadWriteAttribute;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.PackageCompilationUnitAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.attribute.PackageCompilationUnitsAttribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.StringName;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.DuplicatePackageMemberExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoader;
+import edu.jhu.cs.bsj.compiler.impl.utils.FilteringIterator;
+import edu.jhu.cs.bsj.compiler.impl.utils.TwoElementImmutableList;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
+import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PackageNodeImpl extends NodeImpl implements PackageNode
@@ -291,18 +292,14 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     
 	/** The subpackages we are currently maintaining. */
 	private Map<String, PackageNode> packageNodes = new HashMap<String, PackageNode>();
-	/** The compilation units we are currently maintaining. */
-	private Map<String, CompilationUnitNode> compilationUnitNodes = new HashMap<String, CompilationUnitNode>();
-	/**
-	 * The attributes which are tracking access to compilation units.
-	 */
-	private Map<String, PackageCompilationUnitAttribute> compilationUnitAttributes = new HashMap<String, PackageCompilationUnitAttribute>();
-	private static final StringName ITERATOR_NAME = new StringName("<iterator>");
-	/**
-	 * An attribute to track the iterator for this node.
-	 */
-	private NonConflictingReadWriteAttribute iteratorAttribute =
-	        new NonConflictingReadWriteAttribute(this, ITERATOR_NAME);
+	/** The compilation units which were added via loading.  Values are <code>null</code> when a load was performed but
+	 *  did not succeed. */
+	private Map<String, CompilationUnitNode> loadedCompilationUnits = new HashMap<String, CompilationUnitNode>();
+	/** The compilation units which were added via addition. */
+	private Map<String, CompilationUnitNode> storedCompilationUnits = new HashMap<String, CompilationUnitNode>();
+	/** The attribute representing compilation units for this package. */
+	private PackageCompilationUnitsAttribute compilationUnitsAttribute = new PackageCompilationUnitsAttribute(
+	        this);
 
 	protected void fireCompilationUnitAdded(CompilationUnitNode compilationUnitNode, boolean purelyInjected)
 	{
@@ -317,25 +314,6 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	protected void fireRegisterAsInjector(CompilationUnitNode compilationUnitNode)
 	{
 		this.getManager().getPackageNodeManager().fireRegisterAsInjector(compilationUnitNode);
-	}
-
-	/**
-	 * Lazily creates compilation unit attributes.
-	 */
-	public PackageCompilationUnitAttribute getPackageCompilationUnitAttribute(String compilationUnitName)
-	{
-		PackageCompilationUnitAttribute ret = this.compilationUnitAttributes.get(compilationUnitName);
-		if (ret == null)
-		{
-			ret = new PackageCompilationUnitAttribute(this, new StringName(compilationUnitName));
-			this.compilationUnitAttributes.put(compilationUnitName, ret);
-		}
-		return ret;
-	}
-	
-	public NonConflictingReadWriteAttribute getIteratorAttribute()
-	{
-		return this.iteratorAttribute;
 	}
 
 	/**
@@ -375,31 +353,62 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public void addCompilationUnit(CompilationUnitNode compilationUnit)
 	{
-		this.addCompilationUnit(compilationUnit, true);
-	}
-	
-	public void addCompilationUnit(CompilationUnitNode compilationUnit, boolean purelyInjected)
-	{
 		getManager().assertInsertable(this);
-		getPackageCompilationUnitAttribute(compilationUnit.getName()).recordAccess(
-				PackageCompilationUnitAttribute.AccessType.WRITE);
-		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.WRITE);
-		if (this.compilationUnitNodes.containsKey(compilationUnit.getName()))
+		this.compilationUnitsAttribute.recordPutAccess(compilationUnit.getName());
+		if (this.loadedCompilationUnits.containsKey(compilationUnit.getName()) ||
+		        this.storedCompilationUnits.containsKey(compilationUnit.getName()))
 		{
 			throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
 		}
-		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);
+		this.storedCompilationUnits.put(compilationUnit.getName(), compilationUnit);
 		setAsChild(compilationUnit, true);
-		fireCompilationUnitAdded(compilationUnit, purelyInjected);
+		fireCompilationUnitAdded(compilationUnit, true);
 	}
+	
+    public boolean loadCompilationUnit(String name, CompilationUnitLoadingInfo info)
+    {
+        if (this.loadedCompilationUnits.containsKey(name))
+        {
+            boolean success = this.loadedCompilationUnits.get(name) != null;
+            this.compilationUnitsAttribute.recordLoadAccess(name, success);
+            return success;
+        }
+        
+        CompilationUnitNode node = getManager().getCompilationUnitLoader().load(this.getFullyQualifiedName(), name,
+                    info);
+        this.loadedCompilationUnits.put(name, node);
+        boolean success = node != null;
+        this.compilationUnitsAttribute.recordLoadAccess(name, success);
+        if (success)
+        {
+            setAsChild(node, true);
+            fireCompilationUnitAdded(node, false);
+            fireRegisterAsInjector(node);
+        }
+        return node != null;
+    }
+    
+    public void loadAllCompilationUnits(CompilationUnitLoadingInfo info)
+    {
+        for (String name : getManager().getCompilationUnitLoader().listCompilationUnitNames(this, false))
+        {
+            this.loadCompilationUnit(name, info);
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public CompilationUnitNode getCompilationUnit(String name)
 	{
-		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.READ);
-		return this.compilationUnitNodes.get(name);
+	    this.compilationUnitsAttribute.recordGetAccess(name);
+	    if (this.loadedCompilationUnits.containsKey(name))
+	    {
+	        return this.loadedCompilationUnits.get(name);
+	    } else
+	    {
+	        return this.storedCompilationUnits.get(name);
+	    }
 	}
 
 	/**
@@ -407,8 +416,20 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public Iterator<CompilationUnitNode> getCompilationUnitIterator()
 	{
-		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.READ);
-		return Collections.unmodifiableMap(compilationUnitNodes).values().iterator();
+	    this.compilationUnitsAttribute.recordIteratorAccess();
+	    return new CompoundIterator<CompilationUnitNode>(
+	            new TwoElementImmutableList<Iterator<? extends CompilationUnitNode>>(
+	                    new FilteringIterator<CompilationUnitNode>(
+	                            Collections.unmodifiableMap(this.loadedCompilationUnits).values().iterator(),
+	                            new Function<CompilationUnitNode, Boolean>()
+	                            {
+	                                public Boolean execute(CompilationUnitNode node)
+	                                {
+	                                    return node != null;
+	                                }
+	                            }),
+	                    Collections.unmodifiableMap(this.storedCompilationUnits).values().iterator()
+	                    ).iterator());
 	}
 
 	/**
@@ -478,9 +499,10 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	/**
 	 * {@inheritDoc}
 	 */
-	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name, CompilationUnitLoader loader)
+	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name, CompilationUnitLoadingInfo info)
 	{
-		CompilationUnitNode compilationUnitNode = loader.load(this, name);
+	    this.loadCompilationUnit(name, info);
+		CompilationUnitNode compilationUnitNode = this.getCompilationUnit(name);
 		if (compilationUnitNode != null)
 		{
 			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(compilationUnitNode, name);
@@ -491,7 +513,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		}
 
 		// If we couldn't find it in its own compilation unit node, let's go find it by searching the package
-		loader.loadAll(this);
+		this.loadAllCompilationUnits(info);
 		Iterator<CompilationUnitNode> it = getCompilationUnitIterator();
 		while (it.hasNext())
 		{
@@ -556,20 +578,6 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 				return null;
 			}
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean contains(String name)
-	{
-		getPackageCompilationUnitAttribute(name).recordAccess(PackageCompilationUnitAttribute.AccessType.READ);
-		this.iteratorAttribute.recordAccess(NonConflictingReadWriteAttribute.AccessType.READ);
-		if (compilationUnitNodes.get(name) != null)
-		{
-			return true;
-		}
-		return this.getManager().getPackageNodeManager().contains(this, name);
 	}
 
 }
