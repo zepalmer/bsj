@@ -6,11 +6,11 @@ import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtil
 import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.METAPROG_PREFIX;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ContainmentInvariantKnowledge;
+import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ContainmentEffectKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.SymbolicElement;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.source.KnowledgeSource;
 
-public class ContainmentEffectKnowledgeImpl<T extends Node> extends AbstractUnaryKnowledgeImpl<T> implements ContainmentInvariantKnowledge<T>
+public class ContainmentEffectKnowledgeImpl<T extends Node> extends AbstractUnaryKnowledgeImpl<T> implements ContainmentEffectKnowledge<T>
 {
 	public ContainmentEffectKnowledgeImpl(int metaprogramId, BsjSourceLocation metaprogramSourceLocation,
 			KnowledgeSource<T> knowledgeSource, SymbolicElement<T> element)
