@@ -58,633 +58,640 @@ import edu.jhu.cs.bsj.compiler.impl.utils.ProxyList;
  */
 public class NodeListImpl<T extends Node> implements NodeList<T>
 {
-	/** The logger to use for this class. */
-	private static final Logger LOGGER = Logger.getLogger(NodeListImpl.class);
+    /** The logger to use for this class. */
+    private static final Logger LOGGER = Logger.getLogger(NodeListImpl.class);
 
-	/** The next UID to give to a list node implementation. */
-	private static final AtomicLong NEXT_UID = new AtomicLong(0);
+    /** The next UID to give to a list node implementation. */
+    private static final AtomicLong NEXT_UID = new AtomicLong(0);
 
-	/** The UID for this list. */
-	private final long uid = NEXT_UID.getAndIncrement();
+    /** The UID for this list. */
+    private final long uid = NEXT_UID.getAndIncrement();
 
-	/** The node manager for this list. */
-	private BsjNodeManager manager;
-	/** The backing list that actually contains the data. */
-	private List<NodeUnion<? extends T>> backing;
-	/** The current knowledge base. */
-	private Set<SingleMetaprogramListKnowledge<T>> base;
-	/** The node which should be marked as the parent of any node entering this list. */
-	private Node parent;
-	/** Indicates whether or not the contents of this list are implicitly order dependent. */
-	private boolean orderDependent;
+    /** The node manager for this list. */
+    private BsjNodeManager manager;
+    /** The backing list that actually contains the data. */
+    private List<NodeUnion<? extends T>> backing;
+    /** The current knowledge base. */
+    private Set<SingleMetaprogramListKnowledge<T>> base;
+    /** The node which should be marked as the parent of any node entering this list. */
+    private Node parent;
+    /** Indicates whether or not the contents of this list are implicitly order dependent. */
+    private boolean orderDependent;
 
-	/**
-	 * Indicates whether or not the list is in the process of initializing. If not, permission checks occur and history
-	 * is recorded. During initialization, these events do not occur.
-	 */
-	private boolean initializing;
+    /**
+     * Indicates whether or not the list is in the process of initializing. If not, permission checks occur and history
+     * is recorded. During initialization, these events do not occur.
+     */
+    private boolean initializing;
 
-	public NodeListImpl(BsjNodeManager manager, Node parent, boolean orderDepedent, List<NodeUnion<? extends T>> initial)
-	{
-		super();
-		this.manager = manager;
-		this.parent = parent;
-		this.orderDependent = orderDepedent;
-		this.backing = new ProxyList<NodeUnion<? extends T>>(new ArrayList<NodeUnion<? extends T>>())
-		{
+    public NodeListImpl(BsjNodeManager manager, Node parent, boolean orderDepedent, List<NodeUnion<? extends T>> initial)
+    {
+        super();
+        this.manager = manager;
+        this.parent = parent;
+        this.orderDependent = orderDepedent;
+        this.backing = new ProxyList<NodeUnion<? extends T>>(new ArrayList<NodeUnion<? extends T>>())
+        {
 
-			@Override
-			protected void elementAdded(int index, NodeUnion<? extends T> element, boolean replaced)
-			{
-				if (!NodeListImpl.this.initializing)
-				{
-					NodeListImpl.this.manager.assertInsertable(NodeListImpl.this.parent);
-				}
-				if (element.getNodeValue() instanceof NodeImpl)
-				{
-					((NodeImpl) element.getNodeValue()).setParent(NodeListImpl.this.parent);
-				}
-				NodeListImpl.this.manager.notifyChange(NodeListImpl.this.parent);
-			}
+            @Override
+            protected void elementAdded(int index, NodeUnion<? extends T> element, boolean replaced)
+            {
+                if (!NodeListImpl.this.initializing)
+                {
+                    NodeListImpl.this.manager.assertInsertable(NodeListImpl.this.parent);
+                }
+                if (element.getNodeValue() instanceof NodeImpl)
+                {
+                    ((NodeImpl) element.getNodeValue()).setParent(NodeListImpl.this.parent);
+                }
+                NodeListImpl.this.manager.notifyChange(NodeListImpl.this.parent);
+            }
 
-			@Override
-			protected void elementRemoved(int index, NodeUnion<? extends T> element, boolean replaced)
-			{
-				if (!NodeListImpl.this.initializing)
-				{
-					NodeListImpl.this.manager.assertMutatable(NodeListImpl.this.parent);
-				}
-				if (element.getNodeValue() instanceof NodeImpl)
-				{
-					((NodeImpl) element.getNodeValue()).setParent(null);
-				}
-				NodeListImpl.this.manager.notifyChange(NodeListImpl.this.parent);
-			}
+            @Override
+            protected void elementRemoved(int index, NodeUnion<? extends T> element, boolean replaced)
+            {
+                if (!NodeListImpl.this.initializing)
+                {
+                    NodeListImpl.this.manager.assertMutatable(NodeListImpl.this.parent);
+                }
+                if (element.getNodeValue() instanceof NodeImpl)
+                {
+                    ((NodeImpl) element.getNodeValue()).setParent(null);
+                }
+                NodeListImpl.this.manager.notifyChange(NodeListImpl.this.parent);
+            }
 
-			@Override
-			protected void elementRetrieved(int index, NodeUnion<? extends T> element)
-			{
-			}
+            @Override
+            protected void elementRetrieved(int index, NodeUnion<? extends T> element)
+            {
+            }
 
-			@Override
-			protected void sizeChecked()
-			{
-			}
-		};
-		this.base = new HashSet<SingleMetaprogramListKnowledge<T>>();
+            @Override
+            protected void sizeChecked()
+            {
+            }
+        };
+        this.base = new HashSet<SingleMetaprogramListKnowledge<T>>();
 
-		// initialize the list
-		this.initializing = true;
-		for (NodeUnion<? extends T> t : initial)
-		{
-			addLastUnion(t);
-		}
-		this.initializing = false;
-	}
+        // initialize the list
+        this.initializing = true;
+        for (NodeUnion<? extends T> t : initial)
+        {
+            addLastUnion(t);
+        }
+        this.initializing = false;
+    }
 
-	/**
-	 * Used to determine whether or not list operations record knowledge. If the manipulations are occurring because of
-	 * the BSJ compiler itself or if this list is still in initialization, knowledge recording will produce false
-	 * positives in the conflict detection system.
-	 * 
-	 * @return <code>true</code> to record knowledge; <code>false</code> otherwise.
-	 */
-	private boolean isRecordingKnowledge()
-	{
-		return this.manager.getCurrentMetaprogram() != null && !this.initializing;
-	}
+    /**
+     * Used to determine whether or not list operations record knowledge. If the manipulations are occurring because of
+     * the BSJ compiler itself or if this list is still in initialization, knowledge recording will produce false
+     * positives in the conflict detection system.
+     * 
+     * @return <code>true</code> to record knowledge; <code>false</code> otherwise.
+     */
+    private boolean isRecordingKnowledge()
+    {
+        return this.manager.getCurrentMetaprogram() != null && !this.initializing;
+    }
 
-	@Override
-	public void addFirst(T node)
-	{
-		addFirstUnion(new NormalNodeUnion<T>(node));
-	}
+    @Override
+    public void addFirst(T node)
+    {
+        addFirstUnion(new NormalNodeUnion<T>(node));
+    }
 
-	@Override
-	public void addLast(T node)
-	{
-		addLastUnion(new NormalNodeUnion<T>(node));
-	}
+    @Override
+    public void addLast(T node)
+    {
+        addLastUnion(new NormalNodeUnion<T>(node));
+    }
 
-	@Override
-	public void addBefore(T member, T node) throws MetaprogramListMissingElementException
-	{
-		addBeforeUnion(new NormalNodeUnion<T>(member), new NormalNodeUnion<T>(node));
-	}
+    @Override
+    public void addBefore(T member, T node) throws MetaprogramListMissingElementException
+    {
+        addBeforeUnion(new NormalNodeUnion<T>(member), new NormalNodeUnion<T>(node));
+    }
 
-	@Override
-	public void addAfter(T member, T node) throws MetaprogramListMissingElementException
-	{
-		addAfterUnion(new NormalNodeUnion<T>(member), new NormalNodeUnion<T>(node));
-	}
+    @Override
+    public void addAfter(T member, T node) throws MetaprogramListMissingElementException
+    {
+        addAfterUnion(new NormalNodeUnion<T>(member), new NormalNodeUnion<T>(node));
+    }
 
-	@Override
-	public boolean remove(T node)
-	{
-		return removeUnion(new NormalNodeUnion<T>(node));
-	}
+    @Override
+    public boolean remove(T node)
+    {
+        return removeUnion(new NormalNodeUnion<T>(node));
+    }
 
-	@Override
-	public T getFirst()
-	{
-		NodeUnion<? extends T> union = getFirstUnion();
-		return (union == null) ? null : union.getNormalNode();
-	}
+    @Override
+    public T getFirst()
+    {
+        NodeUnion<? extends T> union = getFirstUnion();
+        return (union == null) ? null : union.getNormalNode();
+    }
 
-	@Override
-	public T getLast()
-	{
-		NodeUnion<? extends T> union = getLastUnion();
-		return (union == null) ? null : union.getNormalNode();
-	}
+    @Override
+    public T getLast()
+    {
+        NodeUnion<? extends T> union = getLastUnion();
+        return (union == null) ? null : union.getNormalNode();
+    }
 
-	@Override
-	public T getBefore(T member) throws MetaprogramListMissingElementException
-	{
-		NodeUnion<? extends T> union = getBeforeUnion(new NormalNodeUnion<T>(member));
-		return (union == null) ? null : union.getNormalNode();
-	}
+    @Override
+    public T getBefore(T member) throws MetaprogramListMissingElementException
+    {
+        NodeUnion<? extends T> union = getBeforeUnion(new NormalNodeUnion<T>(member));
+        return (union == null) ? null : union.getNormalNode();
+    }
 
-	@Override
-	public T getAfter(T member) throws MetaprogramListMissingElementException
-	{
-		NodeUnion<? extends T> union = getAfterUnion(new NormalNodeUnion<T>(member));
-		return (union == null) ? null : union.getNormalNode();
-	}
+    @Override
+    public T getAfter(T member) throws MetaprogramListMissingElementException
+    {
+        NodeUnion<? extends T> union = getAfterUnion(new NormalNodeUnion<T>(member));
+        return (union == null) ? null : union.getNormalNode();
+    }
 
-	@Override
-	public Set<T> filter(final NodeFilter<? super T> filter)
-	{
-		Set<T> set = new HashSet<T>();
-		NodeUnionFilter<T> unionFilter = new NodeUnionFilter<T>()
-		{
-			@Override
-			public boolean filter(NodeUnion<? extends T> node)
-			{
-				return filter.filter(node.getNormalNode());
-			}
-		};
-		Set<NodeUnion<? extends T>> unionSet = filterUnions(unionFilter);
-		for (NodeUnion<? extends T> union : unionSet)
-		{
-			set.add(union.getNormalNode());
-		}
-		return set;
-	}
+    @Override
+    public Set<T> filter(final NodeFilter<? super T> filter)
+    {
+        Set<T> set = new HashSet<T>();
+        NodeUnionFilter<T> unionFilter = new NodeUnionFilter<T>()
+        {
+            @Override
+            public boolean filter(NodeUnion<? extends T> node)
+            {
+                return filter.filter(node.getNormalNode());
+            }
+        };
+        Set<NodeUnion<? extends T>> unionSet = filterUnions(unionFilter);
+        for (NodeUnion<? extends T> union : unionSet)
+        {
+            set.add(union.getNormalNode());
+        }
+        return set;
+    }
 
-	@Override
-	public void addAfterUnion(NodeUnion<? extends T> member, NodeUnion<? extends T> node)
-			throws MetaprogramListMissingElementException
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".addAfter(" + member + "," + node + ")");
-		}
+    @Override
+    public void addAfterUnion(NodeUnion<? extends T> member, NodeUnion<? extends T> node)
+            throws MetaprogramListMissingElementException
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".addAfter(" + member + "," + node + ")");
+        }
 
-		if (member == null || member.getNodeValue() == null)
-			throw new NullPointerException();
-		if (node == null || node.getNodeValue() == null)
-			throw new NullPointerException();
-		int index = this.backing.indexOf(member);
-		if (index == -1)
-		{
-			throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
-					this.manager.getCurrentMetaprogram().getLocation(), member);
-		}
-		this.backing.add(index + 1, node);
-		if (isRecordingKnowledge())
-		{
-			ValueElement<T> anchorElement = new ValueElementImpl<T>(member, isOrderDependent(member));
-			ValueElement<T> nodeElement = new ValueElementImpl<T>(node, isOrderDependent(node));
-			List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
-			KnowledgeSource<T> knowledgeSource = new AddAfterOperationKnowledgeSourceImpl<T>(stackTrace, anchorElement,
-					nodeElement);
-			addKnowledge(new AfterEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, nodeElement));
-		}
-	}
+        if (member == null || member.getNodeValue() == null)
+            throw new NullPointerException();
+        if (node == null || node.getNodeValue() == null)
+            throw new NullPointerException();
+        int index = this.backing.indexOf(member);
+        if (index == -1)
+        {
+            throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
+                    this.manager.getCurrentMetaprogram().getLocation(), member);
+        }
+        this.backing.add(index + 1, node);
+        if (isRecordingKnowledge())
+        {
+            ValueElement<T> anchorElement = new ValueElementImpl<T>(member, isOrderDependent(member));
+            ValueElement<T> nodeElement = new ValueElementImpl<T>(node, isOrderDependent(node));
+            List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
+            KnowledgeSource<T> knowledgeSource = new AddAfterOperationKnowledgeSourceImpl<T>(stackTrace, anchorElement,
+                    nodeElement);
+            addKnowledge(new AfterEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, nodeElement));
+        }
+    }
 
-	@Override
-	public void addBeforeUnion(NodeUnion<? extends T> member, NodeUnion<? extends T> node)
-			throws MetaprogramListMissingElementException
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".addBefore(" + member + "," + node + ")");
-		}
+    @Override
+    public void addBeforeUnion(NodeUnion<? extends T> member, NodeUnion<? extends T> node)
+            throws MetaprogramListMissingElementException
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".addBefore(" + member + "," + node + ")");
+        }
 
-		if (member == null || member.getNodeValue() == null)
-			throw new NullPointerException();
-		if (node == null || node.getNodeValue() == null)
-			throw new NullPointerException();
-		int index = this.backing.indexOf(member);
-		if (index == -1)
-		{
-			throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
-					this.manager.getCurrentMetaprogram().getLocation(), member);
-		}
-		this.backing.add(index, node);
-		if (isRecordingKnowledge())
-		{
-			ValueElement<T> anchorElement = new ValueElementImpl<T>(member, isOrderDependent(member));
-			ValueElement<T> nodeElement = new ValueElementImpl<T>(node, isOrderDependent(node));
-			List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
-			KnowledgeSource<T> knowledgeSource = new AddBeforeOperationKnowledgeSourceImpl<T>(stackTrace,
-					anchorElement, nodeElement);
-			addKnowledge(new BeforeEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, nodeElement));
-		}
-	}
+        if (member == null || member.getNodeValue() == null)
+            throw new NullPointerException();
+        if (node == null || node.getNodeValue() == null)
+            throw new NullPointerException();
+        int index = this.backing.indexOf(member);
+        if (index == -1)
+        {
+            throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
+                    this.manager.getCurrentMetaprogram().getLocation(), member);
+        }
+        this.backing.add(index, node);
+        if (isRecordingKnowledge())
+        {
+            ValueElement<T> anchorElement = new ValueElementImpl<T>(member, isOrderDependent(member));
+            ValueElement<T> nodeElement = new ValueElementImpl<T>(node, isOrderDependent(node));
+            List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
+            KnowledgeSource<T> knowledgeSource = new AddBeforeOperationKnowledgeSourceImpl<T>(stackTrace,
+                    anchorElement, nodeElement);
+            addKnowledge(new BeforeEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, nodeElement));
+        }
+    }
 
-	@Override
-	public void addFirstUnion(NodeUnion<? extends T> node)
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".addFirst(" + node + ")");
-		}
+    @Override
+    public void addFirstUnion(NodeUnion<? extends T> node)
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".addFirst(" + node + ")");
+        }
 
-		if (node == null || node.getNodeValue() == null)
-			throw new NullPointerException();
-		this.backing.add(0, node);
-		if (isRecordingKnowledge())
-		{
-			StartElement<T> anchorElement = new StartElementImpl<T>();
-			ValueElement<T> nodeElement = new ValueElementImpl<T>(node, isOrderDependent(node));
-			List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
-			KnowledgeSource<T> knowledgeSource = new AddAfterOperationKnowledgeSourceImpl<T>(stackTrace, anchorElement,
-					nodeElement);
-			addKnowledge(new AfterEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, nodeElement));
-		}
-	}
+        if (node == null || node.getNodeValue() == null)
+            throw new NullPointerException();
+        this.backing.add(0, node);
+        if (isRecordingKnowledge())
+        {
+            StartElement<T> anchorElement = new StartElementImpl<T>();
+            ValueElement<T> nodeElement = new ValueElementImpl<T>(node, isOrderDependent(node));
+            List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
+            KnowledgeSource<T> knowledgeSource = new AddAfterOperationKnowledgeSourceImpl<T>(stackTrace, anchorElement,
+                    nodeElement);
+            addKnowledge(new AfterEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, nodeElement));
+        }
+    }
 
-	@Override
-	public void addLastUnion(NodeUnion<? extends T> node)
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".addLast(" + node + ")");
-		}
+    @Override
+    public void addLastUnion(NodeUnion<? extends T> node)
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".addLast(" + node + ")");
+        }
 
-		if (node == null || node.getNodeValue() == null)
-			throw new NullPointerException();
-		this.backing.add(node);
-		if (isRecordingKnowledge())
-		{
-			EndElement<T> memberElement = new EndElementImpl<T>();
-			ValueElement<T> nodeElement = new ValueElementImpl<T>(node, isOrderDependent(node));
-			List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
-			KnowledgeSource<T> knowledgeSource = new AddBeforeOperationKnowledgeSourceImpl<T>(stackTrace,
-					memberElement, nodeElement);
-			addKnowledge(new BeforeEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, memberElement, nodeElement));
-		}
-	}
+        if (node == null || node.getNodeValue() == null)
+            throw new NullPointerException();
+        this.backing.add(node);
+        if (isRecordingKnowledge())
+        {
+            EndElement<T> memberElement = new EndElementImpl<T>();
+            ValueElement<T> nodeElement = new ValueElementImpl<T>(node, isOrderDependent(node));
+            List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
+            KnowledgeSource<T> knowledgeSource = new AddBeforeOperationKnowledgeSourceImpl<T>(stackTrace,
+                    memberElement, nodeElement);
+            addKnowledge(new BeforeEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, memberElement, nodeElement));
+        }
+    }
 
-	@Override
-	public Set<NodeUnion<? extends T>> filterUnions(NodeUnionFilter<? super T> filter)
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".filter(" + filter + ")");
-		}
+    @Override
+    public Set<NodeUnion<? extends T>> filterUnions(NodeUnionFilter<? super T> filter)
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".filter(" + filter + ")");
+        }
 
-		PermissionPolicyManager permissionPolicyManager = new PermissionPolicyManager(this.parent.getFurthestAncestor());
-		this.manager.pushPermissionPolicyManager(permissionPolicyManager);
+        PermissionPolicyManager permissionPolicyManager = new PermissionPolicyManager(
+                this.parent.getFurthestAncestor(), "NodeList filtering policy; metaprogram="
+                        + String.valueOf(this.manager.getCurrentMetaprogram()));
+        this.manager.pushPermissionPolicyManager(permissionPolicyManager);
 
-		Set<NodeUnion<? extends T>> ret = new HashSet<NodeUnion<? extends T>>();
-		for (NodeUnion<? extends T> t : this.backing)
-		{
-			// TODO: catch the permission exceptions that fall out of this call and translate to a more contextual
-			// error. (Instead of "no permission on node X", we should have "predicate P tried to modify node X".)
-			boolean use = filter.filter(t); // TODO need NodeUnionFilter
-			if (use)
-			{
-				ret.add(t);
-			}
-		}
+        Set<NodeUnion<? extends T>> ret;
+        try
+        {
+            ret = new HashSet<NodeUnion<? extends T>>();
+            for (NodeUnion<? extends T> t : this.backing)
+            {
+                // TODO: catch the permission exceptions that fall out of this call and translate to a more contextual
+                // error. (Instead of "no permission on node X", we should have "predicate P tried to modify node X".)
+                boolean use = filter.filter(t); // TODO need NodeUnionFilter
+                if (use)
+                {
+                    ret.add(t);
+                }
+            }
+        } finally
+        {
+            this.manager.popPermissionPolicyManager();
+        }
 
-		this.manager.popPermissionPolicyManager();
+        if (isRecordingKnowledge())
+        {
+            addKnowledge(new PredicateKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), new FilterOperationKnowledgeSourceImpl<T>(
+                            KnowledgeUtilities.getStackTrace(), filter), filter));
+        }
+        return ret;
+    }
 
-		if (isRecordingKnowledge())
-		{
-			addKnowledge(new PredicateKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), new FilterOperationKnowledgeSourceImpl<T>(
-							KnowledgeUtilities.getStackTrace(), filter), filter));
-		}
-		return ret;
-	}
+    @Override
+    public NodeUnion<? extends T> getAfterUnion(NodeUnion<? extends T> member)
+            throws MetaprogramListMissingElementException
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".getAfter(" + member + ")");
+        }
 
-	@Override
-	public NodeUnion<? extends T> getAfterUnion(NodeUnion<? extends T> member)
-			throws MetaprogramListMissingElementException
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".getAfter(" + member + ")");
-		}
+        if (member == null || member.getNodeValue() == null)
+            throw new NullPointerException();
+        NodeUnion<? extends T> ret;
+        SymbolicElement<T> retElement;
+        int index = this.backing.indexOf(member);
+        if (index == -1)
+        {
+            throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
+                    this.manager.getCurrentMetaprogram().getLocation(), member);
+        }
+        if (index == this.backing.size() - 1)
+        {
+            ret = null;
+            retElement = new EndElementImpl<T>();
+        } else
+        {
+            ret = this.backing.get(index + 1);
+            retElement = new ValueElementImpl<T>(ret, isOrderDependent(ret));
+        }
+        if (isRecordingKnowledge())
+        {
+            ValueElement<T> anchorElement = new ValueElementImpl<T>(member, isOrderDependent(member));
+            List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
+            KnowledgeSource<T> knowledgeSource = new GetAfterOperationKnowledgeSourceImpl<T>(stackTrace, anchorElement,
+                    retElement);
+            addKnowledge(new AfterInvariantKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, retElement));
+        }
+        return ret;
+    }
 
-		if (member == null || member.getNodeValue() == null)
-			throw new NullPointerException();
-		NodeUnion<? extends T> ret;
-		SymbolicElement<T> retElement;
-		int index = this.backing.indexOf(member);
-		if (index == -1)
-		{
-			throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
-					this.manager.getCurrentMetaprogram().getLocation(), member);
-		}
-		if (index == this.backing.size() - 1)
-		{
-			ret = null;
-			retElement = new EndElementImpl<T>();
-		} else
-		{
-			ret = this.backing.get(index + 1);
-			retElement = new ValueElementImpl<T>(ret, isOrderDependent(ret));
-		}
-		if (isRecordingKnowledge())
-		{
-			ValueElement<T> anchorElement = new ValueElementImpl<T>(member, isOrderDependent(member));
-			List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
-			KnowledgeSource<T> knowledgeSource = new GetAfterOperationKnowledgeSourceImpl<T>(stackTrace, anchorElement,
-					retElement);
-			addKnowledge(new AfterInvariantKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, retElement));
-		}
-		return ret;
-	}
+    @Override
+    public NodeUnion<? extends T> getBeforeUnion(NodeUnion<? extends T> member)
+            throws MetaprogramListMissingElementException
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".getBefore(" + member + ")");
+        }
 
-	@Override
-	public NodeUnion<? extends T> getBeforeUnion(NodeUnion<? extends T> member)
-			throws MetaprogramListMissingElementException
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".getBefore(" + member + ")");
-		}
+        if (member == null || member.getNodeValue() == null)
+            throw new NullPointerException();
+        NodeUnion<? extends T> ret;
+        SymbolicElement<T> retElement;
+        int index = this.backing.indexOf(member);
+        if (index == -1)
+        {
+            throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
+                    this.manager.getCurrentMetaprogram().getLocation(), member);
+        }
+        if (index == 0)
+        {
+            ret = null;
+            retElement = new StartElementImpl<T>();
+        } else
+        {
+            ret = this.backing.get(index - 1);
+            retElement = new ValueElementImpl<T>(ret, isOrderDependent(ret));
+        }
+        if (isRecordingKnowledge())
+        {
+            ValueElement<T> anchorElement = new ValueElementImpl<T>(member, isOrderDependent(member));
+            List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
+            KnowledgeSource<T> knowledgeSource = new GetBeforeOperationKnowledgeSourceImpl<T>(stackTrace,
+                    anchorElement, retElement);
+            addKnowledge(new BeforeInvariantKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, retElement));
+        }
+        return ret;
+    }
 
-		if (member == null || member.getNodeValue() == null)
-			throw new NullPointerException();
-		NodeUnion<? extends T> ret;
-		SymbolicElement<T> retElement;
-		int index = this.backing.indexOf(member);
-		if (index == -1)
-		{
-			throw new MetaprogramListMissingElementExceptionImpl(this.manager.getCurrentMetaprogram().getAnchor(),
-					this.manager.getCurrentMetaprogram().getLocation(), member);
-		}
-		if (index == 0)
-		{
-			ret = null;
-			retElement = new StartElementImpl<T>();
-		} else
-		{
-			ret = this.backing.get(index - 1);
-			retElement = new ValueElementImpl<T>(ret, isOrderDependent(ret));
-		}
-		if (isRecordingKnowledge())
-		{
-			ValueElement<T> anchorElement = new ValueElementImpl<T>(member, isOrderDependent(member));
-			List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
-			KnowledgeSource<T> knowledgeSource = new GetBeforeOperationKnowledgeSourceImpl<T>(stackTrace,
-					anchorElement, retElement);
-			addKnowledge(new BeforeInvariantKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, retElement));
-		}
-		return ret;
-	}
+    @Override
+    public NodeUnion<? extends T> getFirstUnion()
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".getFirst()");
+        }
 
-	@Override
-	public NodeUnion<? extends T> getFirstUnion()
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".getFirst()");
-		}
+        NodeUnion<? extends T> ret;
+        SymbolicElement<T> retElement;
+        if (this.backing.size() > 0)
+        {
+            ret = this.backing.get(0);
+            retElement = new ValueElementImpl<T>(ret, isOrderDependent(ret));
+        } else
+        {
+            ret = null;
+            retElement = new EndElementImpl<T>();
+        }
+        if (isRecordingKnowledge())
+        {
+            StartElement<T> anchorElement = new StartElementImpl<T>();
+            List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
+            KnowledgeSource<T> knowledgeSource = new GetAfterOperationKnowledgeSourceImpl<T>(stackTrace, anchorElement,
+                    retElement);
+            addKnowledge(new AfterInvariantKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, retElement));
+        }
+        return ret;
+    }
 
-		NodeUnion<? extends T> ret;
-		SymbolicElement<T> retElement;
-		if (this.backing.size() > 0)
-		{
-			ret = this.backing.get(0);
-			retElement = new ValueElementImpl<T>(ret, isOrderDependent(ret));
-		} else
-		{
-			ret = null;
-			retElement = new EndElementImpl<T>();
-		}
-		if (isRecordingKnowledge())
-		{
-			StartElement<T> anchorElement = new StartElementImpl<T>();
-			List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
-			KnowledgeSource<T> knowledgeSource = new GetAfterOperationKnowledgeSourceImpl<T>(stackTrace, anchorElement,
-					retElement);
-			addKnowledge(new AfterInvariantKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, anchorElement, retElement));
-		}
-		return ret;
-	}
+    @Override
+    public NodeUnion<? extends T> getLastUnion()
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".getLast()");
+        }
 
-	@Override
-	public NodeUnion<? extends T> getLastUnion()
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".getLast()");
-		}
+        NodeUnion<? extends T> ret;
+        SymbolicElement<T> retElement;
+        if (this.backing.size() > 0)
+        {
+            ret = this.backing.get(this.backing.size() - 1);
+            retElement = new ValueElementImpl<T>(ret, isOrderDependent(ret));
+        } else
+        {
+            ret = null;
+            retElement = new StartElementImpl<T>();
+        }
+        if (isRecordingKnowledge())
+        {
+            EndElement<T> memberElement = new EndElementImpl<T>();
+            List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
+            KnowledgeSource<T> knowledgeSource = new GetBeforeOperationKnowledgeSourceImpl<T>(stackTrace,
+                    memberElement, retElement);
+            addKnowledge(new BeforeInvariantKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, memberElement, retElement));
+        }
+        return ret;
+    }
 
-		NodeUnion<? extends T> ret;
-		SymbolicElement<T> retElement;
-		if (this.backing.size() > 0)
-		{
-			ret = this.backing.get(this.backing.size() - 1);
-			retElement = new ValueElementImpl<T>(ret, isOrderDependent(ret));
-		} else
-		{
-			ret = null;
-			retElement = new StartElementImpl<T>();
-		}
-		if (isRecordingKnowledge())
-		{
-			EndElement<T> memberElement = new EndElementImpl<T>();
-			List<StackTraceElement> stackTrace = KnowledgeUtilities.getStackTrace();
-			KnowledgeSource<T> knowledgeSource = new GetBeforeOperationKnowledgeSourceImpl<T>(stackTrace,
-					memberElement, retElement);
-			addKnowledge(new BeforeInvariantKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), knowledgeSource, memberElement, retElement));
-		}
-		return ret;
-	}
+    @Override
+    public boolean removeUnion(NodeUnion<? extends T> node)
+    {
+        if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
+        {
+            LOGGER.trace(uid + ".remove(" + node + ")");
+        }
 
-	@Override
-	public boolean removeUnion(NodeUnion<? extends T> node)
-	{
-		if (LOGGER.isTraceEnabled() && isRecordingKnowledge())
-		{
-			LOGGER.trace(uid + ".remove(" + node + ")");
-		}
+        if (node == null || node.getNodeValue() == null)
+            throw new NullPointerException();
 
-		if (node == null || node.getNodeValue() == null)
-			throw new NullPointerException();
+        boolean ret = this.backing.remove(node);
+        if (isRecordingKnowledge())
+        {
+            SymbolicElement<T> element = new ValueElementImpl<T>(node, isOrderDependent(node));
+            addKnowledge(new ContainmentEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
+                    this.manager.getCurrentMetaprogram().getLocation(), new RemoveOperationKnowledgeSourceImpl<T>(
+                            KnowledgeUtilities.getStackTrace(), element), element));
+        }
+        return ret;
+    }
 
-		boolean ret = this.backing.remove(node);
-		if (isRecordingKnowledge())
-		{
-			SymbolicElement<T> element = new ValueElementImpl<T>(node, isOrderDependent(node));
-			addKnowledge(new ContainmentEffectKnowledgeImpl<T>(this.manager.getCurrentMetaprogramId(),
-					this.manager.getCurrentMetaprogram().getLocation(), new RemoveOperationKnowledgeSourceImpl<T>(
-							KnowledgeUtilities.getStackTrace(), element), element));
-		}
-		return ret;
-	}
+    /**
+     * Determines whether or not the provided element is order dependent.
+     * 
+     * @param node The node to check.
+     * @return <code>true</code> if that node is order dependent; <code>false</code> otherwise.
+     */
+    private boolean isOrderDependent(NodeUnion<? extends T> nodeUnion)
+    {
+        if (this.orderDependent)
+            return true;
 
-	/**
-	 * Determines whether or not the provided element is order dependent.
-	 * 
-	 * @param node The node to check.
-	 * @return <code>true</code> if that node is order dependent; <code>false</code> otherwise.
-	 */
-	private boolean isOrderDependent(NodeUnion<? extends T> nodeUnion)
-	{
-		if (this.orderDependent)
-			return true;
+        if (!nodeUnion.getType().equals(NodeUnion.Type.NORMAL))
+            return false;
 
-		if (!nodeUnion.getType().equals(NodeUnion.Type.NORMAL))
-			return false;
+        if (nodeUnion.getNormalNode() instanceof InitializerDeclarationNode)
+            return true;
 
-		if (nodeUnion.getNormalNode() instanceof InitializerDeclarationNode)
-			return true;
+        return false;
+    }
 
-		return false;
-	}
+    /**
+     * A convenience function for computing a closure with one additional piece of information.
+     * 
+     * @param knowledge The new information to use.
+     */
+    private void addKnowledge(ListKnowledge<T> knowledge)
+    {
+        if (LOGGER.isTraceEnabled())
+        {
+            LOGGER.trace("Adding knowledge " + knowledge + " to knowledge base " + this.base + " from operation");
+        }
 
-	/**
-	 * A convenience function for computing a closure with one additional piece of information.
-	 * 
-	 * @param knowledge The new information to use.
-	 */
-	private void addKnowledge(ListKnowledge<T> knowledge)
-	{
-		if (LOGGER.isTraceEnabled())
-		{
-			LOGGER.trace("Adding knowledge " + knowledge + " to knowledge base " + this.base + " from operation");
-		}
+        Set<ConflictKnowledge<T>> conflictKnowledge = new HashSet<ConflictKnowledge<T>>(); // used for conflicts only
+        Set<SingleMetaprogramListKnowledge<T>> closureKnowledge = new HashSet<SingleMetaprogramListKnowledge<T>>();
+        categorizeNewKnowledge(knowledge, closureKnowledge, conflictKnowledge, null);
+        while (closureKnowledge.size() > 0)
+        {
+            // Select a new knowledge from the waiting pool
+            Iterator<SingleMetaprogramListKnowledge<T>> it = closureKnowledge.iterator();
+            SingleMetaprogramListKnowledge<T> newKnowledge = it.next();
+            it.remove();
+            LOGGER.trace("Now processing knowledge " + newKnowledge + " with knowledge base " + this.base);
 
-		Set<ConflictKnowledge<T>> conflictKnowledge = new HashSet<ConflictKnowledge<T>>(); // used for conflicts only
-		Set<SingleMetaprogramListKnowledge<T>> closureKnowledge = new HashSet<SingleMetaprogramListKnowledge<T>>();
-		categorizeNewKnowledge(knowledge, closureKnowledge, conflictKnowledge, null);
-		while (closureKnowledge.size() > 0)
-		{
-			// Select a new knowledge from the waiting pool
-			Iterator<SingleMetaprogramListKnowledge<T>> it = closureKnowledge.iterator();
-			SingleMetaprogramListKnowledge<T> newKnowledge = it.next();
-			it.remove();
-			LOGGER.trace("Now processing knowledge " + newKnowledge + " with knowledge base " + this.base);
+            // Close over all unary rules with this new knowledge
+            for (UnaryKnowledgeClosureRule rule : KnowledgeUtilities.UNARY_CLOSURE_RULES)
+            {
+                categorizeNewKnowledge(rule.calculateClosure(newKnowledge), closureKnowledge, conflictKnowledge, rule);
+            }
 
-			// Close over all unary rules with this new knowledge
-			for (UnaryKnowledgeClosureRule rule : KnowledgeUtilities.UNARY_CLOSURE_RULES)
-			{
-				categorizeNewKnowledge(rule.calculateClosure(newKnowledge), closureKnowledge, conflictKnowledge, rule);
-			}
+            // Close over all binary rules with this new knowledge
+            for (BinaryKnowledgeClosureRule rule : KnowledgeUtilities.BINARY_CLOSURE_RULES)
+            {
+                for (SingleMetaprogramListKnowledge<T> baseKnowledge : this.base)
+                {
+                    // Note: the assumption here is that the resulting knowledge only applies if the metaprograms
+                    // are not cooperative. This holds for the current set of closure rules, especially as binary rules
+                    // are always used to produce conflicts and nothing else.
+                    if (!this.manager.hasOrdering(baseKnowledge.getMetaprogramId()))
+                    {
+                        categorizeNewKnowledge(rule.calculateClosure(newKnowledge, baseKnowledge), closureKnowledge,
+                                conflictKnowledge, rule);
+                        categorizeNewKnowledge(rule.calculateClosure(baseKnowledge, newKnowledge), closureKnowledge,
+                                conflictKnowledge, rule);
+                    }
+                }
+            }
 
-			// Close over all binary rules with this new knowledge
-			for (BinaryKnowledgeClosureRule rule : KnowledgeUtilities.BINARY_CLOSURE_RULES)
-			{
-				for (SingleMetaprogramListKnowledge<T> baseKnowledge : this.base)
-				{
-					// Note: the assumption here is that the resulting knowledge only applies if the metaprograms
-					// are not cooperative. This holds for the current set of closure rules, especially as binary rules
-					// are always used to produce conflicts and nothing else.
-					if (!this.manager.hasOrdering(baseKnowledge.getMetaprogramId()))
-					{
-						categorizeNewKnowledge(rule.calculateClosure(newKnowledge, baseKnowledge), closureKnowledge,
-								conflictKnowledge, rule);
-						categorizeNewKnowledge(rule.calculateClosure(baseKnowledge, newKnowledge), closureKnowledge,
-								conflictKnowledge, rule);
-					}
-				}
-			}
+            // Finally, commit this new knowledge to the knowledge base
+            this.base.add(newKnowledge);
+        }
 
-			// Finally, commit this new knowledge to the knowledge base
-			this.base.add(newKnowledge);
-		}
+        if (conflictKnowledge.size() > 0)
+        {
+            // find an example conflict knowledge to use for metaprogram IDs
+            ConflictKnowledge<T> twoMetaprogramConflictKnowledge = null;
+            int firstMetaprogramId = 0;
+            int secondMetaprogramId = 0;
+            for (ConflictKnowledge<T> candidate : conflictKnowledge)
+            {
+                int count = 0;
+                for (ListKnowledge<T> element : candidate.getKnowledgeSource().getKnowledge())
+                {
+                    if (element instanceof SingleMetaprogramListKnowledge<?>)
+                    {
+                        SingleMetaprogramListKnowledge<T> singleMetaprogramListKnowledge = (SingleMetaprogramListKnowledge<T>) element;
+                        switch (count)
+                        {
+                            case 0:
+                                firstMetaprogramId = singleMetaprogramListKnowledge.getMetaprogramId();
+                                break;
+                            case 1:
+                                secondMetaprogramId = singleMetaprogramListKnowledge.getMetaprogramId();
+                                break;
+                        }
+                        count++;
+                    }
+                }
+                if (count == 2)
+                {
+                    twoMetaprogramConflictKnowledge = candidate;
+                    break;
+                }
+            }
+            MetaprogramAnchorNode<?> firstAnchor;
+            MetaprogramAnchorNode<?> secondAnchor;
+            if (twoMetaprogramConflictKnowledge == null)
+            {
+                firstAnchor = null;
+                secondAnchor = null;
+            } else
+            {
+                firstAnchor = this.manager.getAnchorByID(firstMetaprogramId);
+                secondAnchor = this.manager.getAnchorByID(secondMetaprogramId);
+            }
 
-		if (conflictKnowledge.size() > 0)
-		{
-			// find an example conflict knowledge to use for metaprogram IDs
-			ConflictKnowledge<T> twoMetaprogramConflictKnowledge = null;
-			int firstMetaprogramId = 0;
-			int secondMetaprogramId = 0;
-			for (ConflictKnowledge<T> candidate : conflictKnowledge)
-			{
-				int count = 0;
-				for (ListKnowledge<T> element : candidate.getKnowledgeSource().getKnowledge())
-				{
-					if (element instanceof SingleMetaprogramListKnowledge<?>)
-					{
-						SingleMetaprogramListKnowledge<T> singleMetaprogramListKnowledge = (SingleMetaprogramListKnowledge<T>) element;
-						switch (count)
-						{
-							case 0:
-								firstMetaprogramId = singleMetaprogramListKnowledge.getMetaprogramId();
-								break;
-							case 1:
-								secondMetaprogramId = singleMetaprogramListKnowledge.getMetaprogramId();
-								break;
-						}
-						count++;
-					}
-				}
-				if (count == 2)
-				{
-					twoMetaprogramConflictKnowledge = candidate;
-					break;
-				}
-			}
-			MetaprogramAnchorNode<?> firstAnchor;
-			MetaprogramAnchorNode<?> secondAnchor;
-			if (twoMetaprogramConflictKnowledge == null)
-			{
-				firstAnchor = null;
-				secondAnchor = null;
-			} else
-			{
-				firstAnchor = this.manager.getAnchorByID(firstMetaprogramId);
-				secondAnchor = this.manager.getAnchorByID(secondMetaprogramId);
-			}
+            // Now throw the exception with our example anchors
+            throw new MetaprogramListConflictExceptionImpl(firstAnchor, secondAnchor, this.parent, conflictKnowledge);
+        }
+    }
 
-			// Now throw the exception with our example anchors
-			throw new MetaprogramListConflictExceptionImpl(firstAnchor, secondAnchor, this.parent, conflictKnowledge);
-		}
-	}
+    private void categorizeNewKnowledge(ListKnowledge<T> learnedKnowledge,
+            Set<SingleMetaprogramListKnowledge<T>> closureKnowledge, Set<ConflictKnowledge<T>> conflictKnowledge,
+            ClosureRule rule)
+    {
+        if (learnedKnowledge != null && !closureKnowledge.contains(learnedKnowledge)
+                && !this.base.contains(learnedKnowledge))
+        {
+            LOGGER.trace("Learned knowledge " + learnedKnowledge + " from "
+                    + (rule != null ? ("rule " + rule) : "operation") + "; deferring for processing");
+            if (learnedKnowledge instanceof SingleMetaprogramListKnowledge<?>)
+            {
+                closureKnowledge.add((SingleMetaprogramListKnowledge<T>) learnedKnowledge);
+            } else if (learnedKnowledge instanceof ConflictKnowledge<?>)
+            {
+                conflictKnowledge.add((ConflictKnowledge<T>) learnedKnowledge);
+            } else
+            {
+                throw new IllegalStateException("Unknown knowledge type: " + learnedKnowledge.getClass());
+            }
+        }
+    }
 
-	private void categorizeNewKnowledge(ListKnowledge<T> learnedKnowledge,
-			Set<SingleMetaprogramListKnowledge<T>> closureKnowledge, Set<ConflictKnowledge<T>> conflictKnowledge,
-			ClosureRule rule)
-	{
-		if (learnedKnowledge != null && !closureKnowledge.contains(learnedKnowledge)
-				&& !this.base.contains(learnedKnowledge))
-		{
-			LOGGER.trace("Learned knowledge " + learnedKnowledge + " from "
-					+ (rule != null ? ("rule " + rule) : "operation") + "; deferring for processing");
-			if (learnedKnowledge instanceof SingleMetaprogramListKnowledge<?>)
-			{
-				closureKnowledge.add((SingleMetaprogramListKnowledge<T>) learnedKnowledge);
-			} else if (learnedKnowledge instanceof ConflictKnowledge<?>)
-			{
-				conflictKnowledge.add((ConflictKnowledge<T>) learnedKnowledge);
-			} else
-			{
-				throw new IllegalStateException("Unknown knowledge type: " + learnedKnowledge.getClass());
-			}
-		}
-	}
-
-	@Override
-	public String toString()
-	{
-		return "NodeListImpl [backing=" + backing + ", base=" + base + "]";
-	}
+    @Override
+    public String toString()
+    {
+        return "NodeListImpl [backing=" + backing + ", base=" + base + "]";
+    }
 }
