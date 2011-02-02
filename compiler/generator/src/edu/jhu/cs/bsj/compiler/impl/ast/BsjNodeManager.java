@@ -146,11 +146,19 @@ public class BsjNodeManager
     public void pushPermissionPolicyManager(PermissionPolicyManager permissionPolicyManager)
     {
         this.permissionPolicyStack.push(permissionPolicyManager);
+        if (LOGGER.isTraceEnabled())
+        {
+            LOGGER.trace("Permission policy push - stack = " + this.permissionPolicyStack.toString());
+        }
     }
 
     public void popPermissionPolicyManager()
     {
         this.permissionPolicyStack.pop();
+        if (LOGGER.isTraceEnabled())
+        {
+            LOGGER.trace("Permission policy pop - stack = " + this.permissionPolicyStack.toString());
+        }
     }
 
     // *** Dependency management methods
@@ -314,6 +322,7 @@ public class BsjNodeManager
      */
     public boolean hasOrdering(int id)
     {
+        // TODO: caching?
         if (this.getDependencyManager() == null || getCurrentMetaprogramId() == null)
             return true;
 
