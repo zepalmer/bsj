@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -339,7 +340,7 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
                         return new PopulationRecordImpl<String, BsjTypeLikeElement>(
                                 node.getIdentifier().getIdentifier(), getToolkit().makeElement(node), node);
                     }
-                }, IdentityFunction.<String>instance());
+                }, IdentityFunction.<String> instance());
         // * Create the map
         map = makeMap(map, EnvType.STATEMENT, strategy);
 
@@ -474,7 +475,7 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
                                                     type.getIdentifier().getIdentifier(),
                                                     getToolkit().makeElement(type), type);
                                         }
-                                    }, IdentityFunction.<String>instance());
+                                    }, IdentityFunction.<String> instance());
                         }
                     }
                 });
@@ -491,35 +492,101 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
     protected PopulationStrategy<String, BsjTypeLikeElement> createPackagePopulationStrategy(
             final PackageNode packageNode, final Node indicator, final AccessModifier access)
     {
-        return new TranslationDelegatingPopulationStrategy<String, BsjTypeLikeElement, CompilationUnitNode>(
-                new AbstractThunk<Iterable<CompilationUnitNode>>()
+        if (access == AccessModifier.PUBLIC)
+        {
+            // In this case, use a version that knows that compilation unit names correspond to type-like elements.
+            // This reduces false positives considerably.
+            return new PopulationStrategy<String, BsjTypeLikeElement>()
+            {
+                private Map<String, PopulationStrategy<String, BsjTypeLikeElement>> strategyMap = new HashMap<String, PopulationStrategy<String, BsjTypeLikeElement>>();
+
+                private PopulationStrategy<String, BsjTypeLikeElement> getStrategyFor(String key)
                 {
-                    protected Iterable<CompilationUnitNode> calculate()
+                    if (!this.strategyMap.containsKey(key))
                     {
-                        return new Iterable<CompilationUnitNode>()
+                        final CompilationUnitNode node = packageNode.getCompilationUnit(key);
+                        if (node == null)
                         {
-                            public Iterator<CompilationUnitNode> iterator()
-                            {
-                                return packageNode.getCompilationUnitIterator();
-                            }
-                        };
-                    };
-                }, new Function<CompilationUnitNode, PopulationStrategy<String, BsjTypeLikeElement>>()
-                {
-                    @Override
-                    public PopulationStrategy<String, BsjTypeLikeElement> execute(
-                            final CompilationUnitNode compilationUnit)
-                    {
-                        return populateElements(new AbstractThunk<ListNode<?>>()
+                            this.strategyMap.put(key, null);
+                        } else
                         {
-                            @Override
-                            protected ListNode<?> calculate()
+                            this.strategyMap.put(key, populateElements(new AbstractThunk<ListNode<?>>()
                             {
-                                return compilationUnit.getTypeDecls();
-                            }
-                        }, access);
+                                @Override
+                                protected ListNode<?> calculate()
+                                {
+                                    return node.getTypeDecls();
+                                }
+                            }, access, false, key));
+                        }
                     }
-                });
+                    return this.strategyMap.get(key);
+                }
+
+                @Override
+                public Collection<PopulationRecord<String, BsjTypeLikeElement>> get(String key)
+                {
+                    PopulationStrategy<String, BsjTypeLikeElement> strategy = getStrategyFor(key);
+                    if (strategy != null)
+                    {
+                        return strategy.get(key);
+                    } else
+                    {
+                        return Collections.emptySet();
+                    }
+                }
+
+                @Override
+                public Collection<PopulationRecord<String, BsjTypeLikeElement>> getBySimpleName(String name)
+                {
+                    return this.get(name);
+                }
+
+                @Override
+                public Collection<PopulationRecord<String, BsjTypeLikeElement>> getAll()
+                {
+                    Collection<PopulationRecord<String, BsjTypeLikeElement>> ret = new ArrayList<PopulationRecord<String, BsjTypeLikeElement>>();
+                    Iterator<CompilationUnitNode> it = packageNode.getCompilationUnitIterator();
+                    while (it.hasNext())
+                    {
+                        CompilationUnitNode node = it.next();
+                        ret.addAll(get(node.getName()));
+                    }
+                    return ret;
+                }
+            };
+        } else
+        {
+            return new TranslationDelegatingPopulationStrategy<String, BsjTypeLikeElement, CompilationUnitNode>(
+                    new AbstractThunk<Iterable<CompilationUnitNode>>()
+                    {
+                        protected Iterable<CompilationUnitNode> calculate()
+                        {
+                            return new Iterable<CompilationUnitNode>()
+                            {
+                                public Iterator<CompilationUnitNode> iterator()
+                                {
+                                    return packageNode.getCompilationUnitIterator();
+                                }
+                            };
+                        };
+                    }, new Function<CompilationUnitNode, PopulationStrategy<String, BsjTypeLikeElement>>()
+                    {
+                        @Override
+                        public PopulationStrategy<String, BsjTypeLikeElement> execute(
+                                final CompilationUnitNode compilationUnit)
+                        {
+                            return populateElements(new AbstractThunk<ListNode<?>>()
+                            {
+                                @Override
+                                protected ListNode<?> calculate()
+                                {
+                                    return compilationUnit.getTypeDecls();
+                                }
+                            }, access);
+                        }
+                    });
+        }
     }
 
     @Override

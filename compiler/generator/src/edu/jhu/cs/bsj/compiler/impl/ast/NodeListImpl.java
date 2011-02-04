@@ -602,7 +602,7 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
                 for (SingleMetaprogramListKnowledge<T> baseKnowledge : this.base)
                 {
                     // Note: the assumption here is that the resulting knowledge only applies if the metaprograms
-                    // are not cooperative. This holds for the current set of closure rules, especially as binary rules
+                    // are not ordered. This holds for the current set of closure rules, especially as binary rules
                     // are always used to produce conflicts and nothing else.
                     if (!this.manager.hasOrdering(baseKnowledge.getMetaprogramId()))
                     {

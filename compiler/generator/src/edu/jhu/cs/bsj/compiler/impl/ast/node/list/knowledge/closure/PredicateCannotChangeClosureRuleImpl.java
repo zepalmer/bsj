@@ -1,17 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.closure;
 
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.AND;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.CONTAINMENT;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.CONTRADICTION;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.EFFECT_LEFT;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.EFFECT_RIGHT;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.EXPR;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.IMPLIES;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.INVARIANT_LEFT;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.INVARIANT_RIGHT;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.METAPROG;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.METAPROG2;
-import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.PREDICATE;
+import static edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities.*;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ContainmentEffectKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ListKnowledge;
@@ -42,6 +31,8 @@ public class PredicateCannotChangeClosureRuleImpl extends AbstractBinaryKnowledg
 			if (containmentEffectKnowledge.getElement() instanceof ValueElement<?>)
 			{
 				ValueElement<T> element = (ValueElement<T>) containmentEffectKnowledge.getElement();
+				// TODO: this filtering operation should record on behalf of the metaprogram that used the predicate,
+				// not on the part of the metaprogram causing the invocation of this closure
 				if (predicateKnowledge.getPredicate().filter(element.getData()))
 				{
 					return new ConflictKnowledgeImpl<T>(new RuleKnowledgeSourceImpl<T>(this,

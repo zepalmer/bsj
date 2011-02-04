@@ -147,4 +147,10 @@ public class BsjThreadLocalData
     {
         return INSTANCE;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.dataMap.toString();
+    }
 }

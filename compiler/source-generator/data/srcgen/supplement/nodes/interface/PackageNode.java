@@ -54,6 +54,13 @@ public interface PackageNode
      * @param info The information used for compilation unit loading.
      */
     public void loadAllCompilationUnits(CompilationUnitLoadingInfo info);
+    
+    /**
+     * Retrieves all compilation units which are contained in this package that meet the provided filter.
+     * @param filter The filter to use.
+     * @return The resulting mapping of names to compilation units.
+     */
+    public Map<String, CompilationUnitNode> filterCompilationUnits(NodeFilter<? super CompilationUnitNode> filter);
 
     /**
      * Retrieves an iterator over all loaded compilation units in this package.

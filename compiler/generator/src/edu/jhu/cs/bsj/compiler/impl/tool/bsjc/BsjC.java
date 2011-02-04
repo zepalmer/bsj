@@ -1,15 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.bsjc;
 
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.ANNOTATION_PROCESSOR_PATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.DEBUG_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.DESTINATION_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.GEN_SOURCEPATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.HELP_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.META_CLASSPATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.OBJECT_CLASSPATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.SOURCEPATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.TRACE_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.VERSION_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -36,7 +36,7 @@ public class TypecheckerToolkit
 	private static Logger LOGGER = Logger.getLogger(TypecheckerToolkit.class);
 
 	private TypecheckerManager manager;
-	private CompilationUnitLoadingInfo loader;
+	private CompilationUnitLoadingInfo loadingInfo;
 
 	private ElementBuildingNodeOperation elementBuilder;
 	private TypeBuilder typeBuilder;
@@ -96,13 +96,13 @@ public class TypecheckerToolkit
 	/** A field to hold the element for the <tt>Void</tt> wrapper type. */
 	private BsjExplicitlyDeclaredType voidWrapperType;
 
-	public TypecheckerToolkit(TypecheckerManager manager, CompilationUnitLoadingInfo loader)
+	public TypecheckerToolkit(TypecheckerManager manager, CompilationUnitLoadingInfo loadingInfo)
 	{
 		super();
 		this.manager = manager;
 		// TODO: what does it mean if we need to load compilation units during type-checking? what if they contain
 		// metaprograms?
-		this.loader = loader;
+		this.loadingInfo = loadingInfo;
 		this.elementBuilder = new ElementBuildingNodeOperation(getManager());
 		this.typeBuilder = new TypeBuilder(getManager());
 	}
@@ -400,7 +400,7 @@ public class TypecheckerToolkit
 		{
 			packageNode = packageNode.getSubpackage(name[i]);
 		}
-		return packageNode.getTopLevelTypeDeclaration(name[name.length - 1], loader);
+		return packageNode.getTopLevelTypeDeclaration(name[name.length - 1], loadingInfo);
 	}
 
 	/**
@@ -416,12 +416,12 @@ public class TypecheckerToolkit
 	 */
 	private NameNode extractTypePortionOfName(NameNode name, List<NameNode> typeNames)
 	{
-		while (name != null && name.getCategory(loader) != NameCategory.PACKAGE)
+		while (name != null && name.getCategory(loadingInfo) != NameCategory.PACKAGE)
 		{
-			if (name.getCategory(loader) != NameCategory.TYPE)
+			if (name.getCategory(loadingInfo) != NameCategory.TYPE)
 			{
 				throw new IllegalStateException("Name categorizer gave non-package, non-type category to type name: "
-						+ name.getNameString() + " has category " + name.getCategory(loader));
+						+ name.getNameString() + " has category " + name.getCategory(loadingInfo));
 			}
 			typeNames.add(name);
 			if (name instanceof SimpleNameNode)
@@ -540,7 +540,7 @@ public class TypecheckerToolkit
 
 		// Obtain the type from the package
 		NamedTypeDeclarationNode<?> type = packageNode.getTopLevelTypeDeclaration(
-				typeNames.get(0).getIdentifier().getIdentifier(), loader);
+				typeNames.get(0).getIdentifier().getIdentifier(), loadingInfo);
 		if (type == null)
 		{
 			// The type does not exist

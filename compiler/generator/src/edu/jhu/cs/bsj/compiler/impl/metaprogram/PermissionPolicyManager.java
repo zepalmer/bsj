@@ -13,51 +13,64 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  */
 public class PermissionPolicyManager
 {
-	/**
-	 * The permission thresholds which have been recorded. Each of these mappings indicate the permissions which should
-	 * be applied to the key node and its descendents except for those descendents with a nearer ancestor also in this
-	 * map.
-	 */
-	private Map<Node, NodePermission> thresholdMap;
-	
-	/**
-	 * Creates a new permission policy manager with read-only permission to all nodes.
-	 * @param root The node for the root of the AST.
-	 */
-	public PermissionPolicyManager(Node root)
-	{
-		this.thresholdMap = new HashMap<Node, NodePermission>();
-		this.thresholdMap.put(root, NodePermission.READ);
-	}
-	
-	/**
-	 * Adds a threshold to this policy manager.
-	 * @param node The node in question.
-	 * @param permission The permission to apply to that node and all of its descendents.
-	 */
-	public void addThreshold(Node node, NodePermission permission)
-	{
-		this.thresholdMap.put(node, permission);
-	}
+    /**
+     * The permission thresholds which have been recorded. Each of these mappings indicate the permissions which should
+     * be applied to the key node and its descendents except for those descendents with a nearer ancestor also in this
+     * map.
+     */
+    private Map<Node, NodePermission> thresholdMap;
+    /**
+     * An identifying name for this permission policy manager (for debugging purposes).
+     */
+    private String name;
 
-	/**
-	 * Determines the level of permission that a metaprogram has to the specified node.
-	 * 
-	 * @param node The node in question.
-	 * @return The permission available to the caller.
-	 */
-	public NodePermission getPermission(Node node)
-	{
-		while (node != null)
-		{
-			NodePermission permission = this.thresholdMap.get(node);
-			if (permission != null)
-			{
-				return permission;
-			}
-			node = node.getParent();
-		}
-		// Allow any operations on a node not connected to the root package.
-		return NodePermission.MUTATE;
-	}
+    /**
+     * Creates a new permission policy manager with read-only permission to all nodes.
+     * 
+     * @param root The node for the root of the AST.
+     */
+    public PermissionPolicyManager(Node root, String name)
+    {
+        this.thresholdMap = new HashMap<Node, NodePermission>();
+        this.thresholdMap.put(root, NodePermission.READ);
+        this.name = name;
+    }
+
+    /**
+     * Adds a threshold to this policy manager.
+     * 
+     * @param node The node in question.
+     * @param permission The permission to apply to that node and all of its descendents.
+     */
+    public void addThreshold(Node node, NodePermission permission)
+    {
+        this.thresholdMap.put(node, permission);
+    }
+
+    /**
+     * Determines the level of permission that a metaprogram has to the specified node.
+     * 
+     * @param node The node in question.
+     * @return The permission available to the caller.
+     */
+    public NodePermission getPermission(Node node)
+    {
+        while (node != null)
+        {
+            NodePermission permission = this.thresholdMap.get(node);
+            if (permission != null)
+            {
+                return permission;
+            }
+            node = node.getParent();
+        }
+        // Allow any operations on a node not connected to the root package.
+        return NodePermission.MUTATE;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "PermissionPolicyManager[name=" + this.name + ",thresholdMap=" + this.thresholdMap.toString() + "]";
+    }
 }

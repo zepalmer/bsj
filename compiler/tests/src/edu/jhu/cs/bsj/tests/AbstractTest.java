@@ -43,7 +43,8 @@ public abstract class AbstractTest
                     "edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug",
                     "edu.jhu.cs.bsj.compiler.impl.tool.compiler.names/debug",
                     "edu.jhu.cs.bsj.compiler.impl.ast.NodeListImpl/debug",
-                    "edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoaderImpl/debug");
+                    "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager/debug",
+                    "edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoader/debug");
         } else
         {
             String[] values = s.split("&");

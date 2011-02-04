@@ -30,6 +30,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AccessType;
 import edu.jhu.cs.bsj.compiler.impl.ast.attribute.Attribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.conflict.MetaprogramOrderingRecord;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.InsufficientPermissionExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramAttributeConflictExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.NoOperationDiagnosticListener;
@@ -55,7 +56,7 @@ import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
  * 
  * @author Zachary Palmer
  */
-public class BsjNodeManager
+public class BsjNodeManager implements MetaprogramOrderingRecord
 {
     /** A logger for this object. */
     private Logger LOGGER = Logger.getLogger(this.getClass());
@@ -313,34 +314,41 @@ public class BsjNodeManager
         MetaprogramProfile<?, ?> profile = this.getDependencyManager().getMetaprogramProfileByID(id);
         return profile == null ? null : profile.getAnchor();
     }
-
+    
     /**
-     * Determines whether or not the metaprogram with the specified ID cooperates with the current metaprogram.
-     * 
-     * @param id The ID of the metaprogram to check.
-     * @return <code>true</code> if the metaprograms cooperate; <code>false</code> if they do not.
+     * Determines whether or not two metaprograms are ordered.
+     * @param id1 The first metaprogram's ID.
+     * @param id2 The second metaprogram's ID.
+     * @return <code>true</code> if the metaprograms are ordered; <code>false</code> if they are not.
      */
-    public boolean hasOrdering(int id)
+    public boolean checkOrdering(int id1, int id2)
     {
-        // TODO: caching?
-        if (this.getDependencyManager() == null || getCurrentMetaprogramId() == null)
-            return true;
-
-        if (this.getDependencyManager().checkCooperation(getCurrentMetaprogramId(), id))
-            return true;
-
-        return false;
+        return this.getDependencyManager().checkOrdering(id1, id2);
     }
 
     /**
-     * Asserts that the metaprogram with the specified ID cooperates with the current metaprogram.
+     * Determines whether or not the metaprogram with the specified ID is ordered with respect to the current metaprogram.
+     * 
+     * @param id The ID of the metaprogram to check.
+     * @return <code>true</code> if the metaprograms are ordered; <code>false</code> if they do not.
+     */
+    public boolean hasOrdering(int id)
+    {
+        if (this.getDependencyManager() == null || getCurrentMetaprogramId() == null)
+            return true;
+
+        return checkOrdering(id, getCurrentMetaprogramId());
+    }
+
+    /**
+     * Asserts that the metaprogram with the specified ID is ordered with respect to the current metaprogram.
      * 
      * @param id The ID of the metaprogram to check.
      * @param node The node that the two metaprograms are modifying.
      * @param attribute The attribute over which we are asserting ordering.
      * @param ourAccess The access performed by the current metaprogram.
      * @param theirAccess The access performed by the metaprogram whose ID was specified.
-     * @throws MetaprogramConflictException If the metaprogram with the specified ID does not cooperate with the current
+     * @throws MetaprogramConflictException If the metaprogram with the specified ID is not ordered with respect to the current
      *             metaprogram.
      */
     public <T extends AccessType<T>> void assertOrdering(int id, Node node, Attribute<T> attribute, T ourAccess,
@@ -350,7 +358,7 @@ public class BsjNodeManager
         {
             if (LOGGER.isDebugEnabled())
             {
-                LOGGER.debug("Attempted to assert cooperation between " + id + " and " + getCurrentMetaprogramId()
+                LOGGER.debug("Attempted to assert ordering between " + id + " and " + getCurrentMetaprogramId()
                         + " over node " + node.getUid() + " and failed.");
             }
             throw new MetaprogramAttributeConflictExceptionImpl(this.getDependencyManager().getMetaprogramProfileByID(

@@ -49,8 +49,8 @@ public class DependencyManager
 	/** A multimap from compilation units to the metaprograms which were registered in them. */
 	private MultiMap<CompilationUnitNode, MetaprogramProfile<?,?>> compilationUnitMap;
 
-	/** A cache of responses to cooperation queries. */
-	private Map<Pair<Integer, Integer>, Boolean> cooperationCache;
+	/** A cache of responses to ordering queries. */
+	private Map<Pair<Integer, Integer>, Boolean> orderingCache;
 
 	/** A random number generator used to select the order in which metaprograms are executed. */
 	private Random random;
@@ -76,7 +76,7 @@ public class DependencyManager
 		this.profileToNodeMap = new HashMap<MetaprogramProfile<?,?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
 		this.nameToTargetNodeMap = new HashMap<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, TargetEdgeData, MetaprogramEdgeData>>();
 		this.waitingNodes = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData>>();
-		this.cooperationCache = new HashMap<Pair<Integer, Integer>, Boolean>();
+		this.orderingCache = new HashMap<Pair<Integer, Integer>, Boolean>();
 		this.compilationUnitMap = new HashMultiMap<CompilationUnitNode, MetaprogramProfile<?,?>>();
 		this.random = r;
 	}
@@ -424,17 +424,17 @@ public class DependencyManager
 	}
 
 	/**
-	 * Determines whether or not two metaprograms cooperate. Metaprograms cooperate if there exists a path on the
+	 * Determines whether or not two metaprograms are ordered. Metaprograms are ordered if there exists a path on the
 	 * dependency graph which contains both of them.
 	 * 
 	 * @param a The ID of the first metaprogram.
 	 * @param b The ID of the second metaprogram.
-	 * @return <code>true</code> if these metaprograms cooperate; <code>false</code> if they do not.
+	 * @return <code>true</code> if these metaprograms are ordered; <code>false</code> if they do not.
 	 */
-	public boolean checkCooperation(int a, int b)
+	public boolean checkOrdering(int a, int b)
 	{
 		Pair<Integer, Integer> key = new Pair<Integer, Integer>(a, b);
-		Boolean value = this.cooperationCache.get(key);
+		Boolean value = this.orderingCache.get(key);
 		if (value == null)
 		{
 			MetaprogramProfile<?,?> ma = this.idMap.get(a);
@@ -454,8 +454,8 @@ public class DependencyManager
 			BipartiteNode<MetaprogramNodeData, TargetNodeData, MetaprogramEdgeData, TargetEdgeData> nodeB = this.profileToNodeMap.get(mb);
 
 			value = checkPath(nodeA, nodeB) || checkPath(nodeB, nodeA);
-			this.cooperationCache.put(key, value);
-			this.cooperationCache.put(new Pair<Integer, Integer>(b, a), value);
+			this.orderingCache.put(key, value);
+			this.orderingCache.put(new Pair<Integer, Integer>(b, a), value);
 		}
 		return value;
 	}

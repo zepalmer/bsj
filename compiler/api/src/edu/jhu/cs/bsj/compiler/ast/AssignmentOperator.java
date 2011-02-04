@@ -1,16 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast;
 
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.DIVIDE;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.LEFT_SHIFT;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.LOGICAL_AND;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.LOGICAL_OR;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.MINUS;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.MODULUS;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.MULTIPLY;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.PLUS;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.RIGHT_SHIFT;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.UNSIGNED_RIGHT_SHIFT;
-import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.XOR;
+import static edu.jhu.cs.bsj.compiler.ast.BinaryOperator.*;
 
 public enum AssignmentOperator
 {

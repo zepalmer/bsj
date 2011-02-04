@@ -1,10 +1,12 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.exception.DuplicatePackageMemberException;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
@@ -93,6 +95,13 @@ public interface PackageNode extends Node
      * @param info The information used for compilation unit loading.
      */
     public void loadAllCompilationUnits(CompilationUnitLoadingInfo info);
+    
+    /**
+     * Retrieves all compilation units which are contained in this package that meet the provided filter.
+     * @param filter The filter to use.
+     * @return The resulting mapping of names to compilation units.
+     */
+    public Map<String, CompilationUnitNode> filterCompilationUnits(NodeFilter<? super CompilationUnitNode> filter);
 
     /**
      * Retrieves an iterator over all loaded compilation units in this package.

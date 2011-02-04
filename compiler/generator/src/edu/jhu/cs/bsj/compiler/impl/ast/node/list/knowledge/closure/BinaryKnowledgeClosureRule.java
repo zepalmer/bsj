@@ -13,7 +13,7 @@ public interface BinaryKnowledgeClosureRule extends ClosureRule
 {
 	/**
 	 * Calculates the closure of the provided knowledge terms.  It is assumed that the provided terms' metaprograms
-	 * do not cooperate.
+	 * are not ordered.
 	 * 
 	 * @param termA The first input knowledge term.
 	 * @param termB The second input knowledge term.

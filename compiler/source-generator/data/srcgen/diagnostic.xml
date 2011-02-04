@@ -502,6 +502,20 @@
                 ]]></doc>
             </diagnostic>
 
+            <diagnostic name="MetaprogramPackageConflictDiagnostic" super="MetaprogramConflictDiagnostic"
+                superTypeArg="MetaprogramPackageConflictException" code="bsj.compiler.metaprogram.failure.conflict.package">
+                <exception />
+                <prop name="conflicts" type="Set&lt;? extends edu.jhu.cs.bsj.compiler.ast.conflict.knowledge.ConflictKnowledge&gt;" desc="the conflicts which were detected" />
+                <messageProp name="conflictKnowledge"
+                    expression="&quot;    &quot; + DiagnosticMessageUtilities.getDescriptionForConflicts(conflicts,locale).replaceAll(&quot;\n&quot;, &quot;\n    &quot;).replaceAll(&quot;\n +$&quot;, &quot;\n&quot;)" />
+                <doc><![CDATA[
+                    Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
+                    {@link ListNode}.  Note that this diagnostic has the ability to represent multiple failures
+                    detected in a closure.  As a result, the anchors provided are merely advisory and represent one
+                    of the possible conflicts contained within.
+                ]]></doc>
+            </diagnostic>
+
             <diagnostic name="MultipleParentNodeDiagnostic" super="MetaprogramDetectedErrorDiagnostic"
                 superTypeArg="MultipleParentNodeException" code="bsj.compiler.metaprogram.node.parent.multiple">
                 <exception>

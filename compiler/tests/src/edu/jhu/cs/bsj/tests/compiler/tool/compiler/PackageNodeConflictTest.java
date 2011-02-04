@@ -6,7 +6,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramAttributeConflictDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramPackageConflictDiagnostic;
 
 public class PackageNodeConflictTest extends AbstractBsjCompilerTest
 {
@@ -16,6 +16,6 @@ public class PackageNodeConflictTest extends AbstractBsjCompilerTest
 	public void testPackageConflict() throws Exception
 	{
 		performTest(SOURCE_DIR, Arrays.asList("PackageConflict"),
-				Collections.singletonList(MetaprogramAttributeConflictDiagnostic.class));
+				Collections.singletonList(MetaprogramPackageConflictDiagnostic.class));
 	}
 }

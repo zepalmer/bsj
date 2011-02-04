@@ -1,10 +1,14 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.attribute;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramAttributeConflictException;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.list.knowledge.KnowledgeUtilities;
 
 /**
  * A base class for attributes containing common functionality.
@@ -46,11 +50,21 @@ public abstract class AbstractAttribute<T extends AccessType<T>> implements Attr
         {
             if (type.conflicts(record.getType()))
             {
+                // TODO: this is a bug - we're assuming that the other metaprogram ID is the currently-running
+                // metaprogram even though we were passed a metaprogramId.  Doesn't currently break anything, but needs
+                // fixed.
                 this.node.getManager().assertOrdering(record.getMetaprogramId(), this.node, this, type,
                         record.getType());
             }
         }
-        this.accessRecords.add(new AccessRecord<T>(type, metaprogramId));
+        
+        List<StackTraceElement> trace = new ArrayList<StackTraceElement>(KnowledgeUtilities.getStackTrace());
+        // delete elements as long as they refer to this class
+        while (trace.size() > 0 && trace.get(0).getFileName().endsWith("AbstractAttribute.java"))
+        {
+            trace.remove(0);
+        }
+        this.accessRecords.add(new AccessRecord<T>(type, metaprogramId, Collections.unmodifiableList(trace)));
     }
 
     /**
@@ -64,12 +78,15 @@ public abstract class AbstractAttribute<T extends AccessType<T>> implements Attr
         private T type;
         /** The metaprogram performing the access. */
         private Integer metaprogramId;
+        /** The stack trace indicating the source of this record. */
+        private List<StackTraceElement> trace;
 
-        public AccessRecord(T type, Integer metaprogramId)
+        public AccessRecord(T type, Integer metaprogramId, List<StackTraceElement> trace)
         {
             super();
             this.type = type;
             this.metaprogramId = metaprogramId;
+            this.trace = trace;
         }
 
         public T getType()
@@ -80,6 +97,11 @@ public abstract class AbstractAttribute<T extends AccessType<T>> implements Attr
         public Integer getMetaprogramId()
         {
             return metaprogramId;
+        }
+
+        public List<StackTraceElement> getTrace()
+        {
+            return trace;
         }
 
         @Override
