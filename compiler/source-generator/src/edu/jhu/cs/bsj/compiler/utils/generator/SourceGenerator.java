@@ -1725,17 +1725,6 @@ public class SourceGenerator
                     ps.println("{");
                     ps.println("    this." + p.getName() + ".receive(visitor);");
                     ps.println("}");
-                } else if (p.getBaseType().equals("List"))
-                {
-                    // Let's assume that the list contains node objects!
-                    // TODO: this is pretty shoddy - can we improve on this?
-                    ps.println("if (this." + p.getName() + " != null)");
-                    ps.println("{");
-                    ps.println("    for (Node node : this." + p.getName() + ")");
-                    ps.println("    {");
-                    ps.println("        node.receive(visitor);");
-                    ps.println("    }");
-                    ps.println("}");
                 }
             }
             ps.println("Iterator<? extends Node> extras = getHiddenVisitorChildren();");
@@ -1800,43 +1789,6 @@ public class SourceGenerator
                     ps.println("{");
                     ps.println("    this." + p.getName() + ".receiveTyped(visitor);");
                     ps.println("}");
-                } else if (p.getBaseType().equals("List"))
-                {
-                    // Let's assume that the list contains node objects!
-                    // TODO: this is pretty shoddy - can we improve on this?
-                    ps.println("if (this." + p.getName() + " != null)");
-                    ps.println("{");
-                    ps.println("    for (Node node : this." + p.getName() + ")");
-                    ps.println("    {");
-                    ps.println("        node.receiveTyped(visitor);");
-                    ps.println("    }");
-                    ps.println("}");
-                } else if (p.getBaseType().equals(def.getUnboundedTypeParameter()))
-                {
-                    // Try to extract a type bound from the type parameter
-                    // TODO: abstract some of this logic somehow?
-                    String bound = def.getTypeParameterUpperBound();
-                    if (bound != null)
-                    {
-                        TypeDefinition tdef = def.getNamespaceMap().get(bound);
-                        boolean isNode = false;
-                        while (tdef != null)
-                        {
-                            if (tdef.getBaseName().equals("Node"))
-                            {
-                                isNode = true;
-                                break;
-                            }
-                            tdef = tdef.getParent();
-                        }
-                        if (isNode)
-                        {
-                            ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
-                            ps.println("{");
-                            ps.println("    this." + p.getName() + ".getNodeValue().receiveTyped(visitor);");
-                            ps.println("}");
-                        }
-                    }
                 }
             }
             ps.println("Iterator<? extends Node> extras = getHiddenVisitorChildren();");
