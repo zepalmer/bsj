@@ -71,6 +71,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.codeliteral.CodeLiteralEvaluator;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.MethodTypeInferrer;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
@@ -2281,7 +2282,8 @@ public class TypeEvaluationOperation implements
             if (variableElement == null)
             {
                 // Then there is no variable with that name in scope. Is there a type?
-                NamespaceMap<String, BsjTypeLikeElement> typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(namespaceNode);
+                NamespaceMap<String, BsjTypeLikeElement> typeNamespaceMap = this.manager.getNamespaceBuilder().getTypeNamespace(
+                        namespaceNode);
                 BsjTypeLikeElement typeLikeElement = typeNamespaceMap.lookup(id,
                         node.getIdentifier().getStartLocation());
                 if (typeLikeElement != null)
@@ -2829,7 +2831,14 @@ public class TypeEvaluationOperation implements
                 if (node.getTypeArguments().size() == 0)
                 {
                     // Infer type arguments as per §15.12.2.7
-                    throw new NotImplementedYetException();
+                    MethodTypeInferrer inferrer = new MethodTypeInferrer(node, executableType);
+                    substitutionMap = inferrer.infer();
+                    BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
+                    for (int i = 0; i < executableType.getTypeVariables().size(); i++)
+                    {
+                        typeArgs[i] = substitutionMap.get(executableType.getTypeVariables().get(i));
+                    }
+                    typeArguments = Arrays.asList(typeArgs);
                 } else
                 {
                     typeArguments = new ArrayList<BsjTypeArgument>();
