@@ -13,6 +13,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
@@ -31,6 +33,7 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
  * 
  * @author Zachary Palmer
  */
+@RunWith(JUnit4.class)
 public abstract class AbstractTest
 {
     /** The directory containing the example sources. */
